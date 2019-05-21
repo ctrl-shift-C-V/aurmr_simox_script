@@ -700,26 +700,21 @@ elseif (Simox_VISUALIZATION AND Simox_USE_OPENSCENEGRAPH_VISUALIZATION)
 endif ()
 
 #check for URDF
-if (Simox_USE_URDF)
-    include(SearchForTinyXML)
-    FIND_PACKAGE(urdfdom)
+if (tinyxml_library AND URDF_FOUND)
+    MESSAGE(STATUS " ** Including URDF importer")
 
-    if (tinyxml_library AND URDF_FOUND)
-        MESSAGE(STATUS " ** Including URDF importer")
+    SET(SOURCES
+      ${SOURCES}
+        Import/URDF/SimoxURDFFactory.cpp
+        )
+    SET(INCLUDES
+      ${INCLUDES}
+        Import/URDF/SimoxURDFFactory.h
+        )
 
-        SET(SOURCES
-          ${SOURCES}
-            Import/URDF/SimoxURDFFactory.cpp
-            )
-        SET(INCLUDES
-          ${INCLUDES}
-            Import/URDF/SimoxURDFFactory.h
-            )
-
-        target_link_libraries(VirtualRobot PUBLIC ${URDFDOM_LIBRARIES})
-    else()
-        MESSAGE(STATUS " *** urdfDom or TinyXML not found: skipping URDF importer...")
-    endif()
+    target_link_libraries(VirtualRobot PUBLIC ${URDFDOM_LIBRARIES})
+else()
+    MESSAGE(STATUS " *** urdfDom or TinyXML not found: skipping URDF importer...")
 endif()
 
 # include collision detection
@@ -762,7 +757,7 @@ if (Simox_USE_NLOPT AND NLOPT_FOUND)
 endif()
 
 
-if (Simox_USE_URDF AND tinyxml_library AND URDF_FOUND)
+if (tinyxml_library AND URDF_FOUND)
         target_include_directories(VirtualRobot SYSTEM PUBLIC ${tinyxml_include_dirs})
         target_compile_options(VirtualRobot PUBLIC ${tinyxml_library_dirs})
         target_compile_definitions(VirtualRobot PUBLIC ${tinyxml_cflags} -DTIXML_USE_STL)
