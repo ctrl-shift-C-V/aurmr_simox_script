@@ -21,6 +21,11 @@ if (tinyxml_library AND URDF_FOUND)
   MESSAGE( STATUS " ** Simox application ${PROJECT_NAME} will be placed into " ${Simox_BIN_DIR})
   MESSAGE( STATUS " ** Simox application ${PROJECT_NAME} will be installed into " bin)
 
+else()
+    message(STATUS "Not building loadURDFRobot")
+    message(STATUS "    URDF_FOUND     : ${URDF_FOUND}")
+    message(STATUS "    tinyxml_library: ${tinyxml_library}")
+
 endif()
 
 

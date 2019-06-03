@@ -46,7 +46,6 @@ endif()
 #######################################################################################
 #options
 OPTION (Simox_USE_RBDL "Use RBDL" OFF)
-OPTION (Simox_USE_URDF "Use URDF" OFF)
 OPTION (Simox_USE_NLOPT "Use NLOPT" ON)
 OPTION(SimDynamics_USE_BULLET "Use Bullet Physics Engine" ON)
 OPTION(Simox_USE_COIN_VISUALIZATION "Use Coin3D for visualization" ON)
@@ -87,6 +86,9 @@ MESSAGE (STATUS "** SIMOX INSTALL DATA DIR  : ${Simox_INSTALL_DATA_DIR}")
 MESSAGE (STATUS "** SIMOX INSTALL HEADER DIR: ${Simox_INSTALL_HEADER_DIR}")
 
 MESSAGE(STATUS "** Simox build directory: ${CMAKE_BINARY_DIR}")
+###########################################################
+include(SearchForTinyXML)
+FIND_PACKAGE(urdfdom)
 ########################### IDE settings ################################
 # use virtual folders for grouping projects in IDEs
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
