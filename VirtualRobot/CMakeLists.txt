@@ -18,14 +18,9 @@ target_link_libraries(VirtualRobot PUBLIC
 #######################################################################
 ### RBDL
 if (Simox_USE_RBDL)
-    FIND_PACKAGE (RBDL)
-    if (RBDL_FOUND)
-        MESSAGE(STATUS "RBDL found at: ${RBDL_INCLUDE_DIR}")
-        target_include_directories(VirtualRobot PUBLIC ${RBDL_INCLUDE_DIR})
-        target_link_libraries(VirtualRobot PUBLIC ${RBDL_LIBRARIES})
-    else ()
-        MESSAGE(STATUS "RBDL not found!")
-    endif ()
+#    target_include_directories(VirtualRobot PUBLIC "../3rdParty/rbdl/src")
+#    target_include_directories(VirtualRobot PUBLIC "../3rdParty/rbdl/include")
+    target_link_libraries(VirtualRobot LINK_PUBLIC rbdl)
 endif()
 
 #### NLOPT
@@ -175,10 +170,6 @@ endif()
 ##########################################################################################################
 
 MESSAGE (STATUS "\n***** CONFIGURING Simox project VirtualRobot *****")
-
-if (Simox_USE_RBDL)
-    FIND_PACKAGE (RBDL)
-endif()
 
 if (Simox_USE_NLOPT)
     FIND_PACKAGE (NLOPT)
@@ -608,15 +599,15 @@ SET(INCLUDES
     
 )
 
-if (Simox_USE_RBDL AND RBDL_FOUND)
+if (Simox_USE_RBDL)
     SET(SOURCES
         ${SOURCES}
-        Dynamics/dynamics.cpp
+        Dynamics/Dynamics.cpp
     )
 
     SET(INCLUDES
         ${INCLUDES}
-        Dynamics/dynamics.h
+        Dynamics/Dynamics.h
     )
 
     if(BUILD_TESTING)

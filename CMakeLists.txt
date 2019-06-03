@@ -8,10 +8,8 @@ MESSAGE (STATUS "** Simox version: ${Simox_VERSION}")
 # Set up build type
 
 IF(NOT CMAKE_BUILD_TYPE)
-    SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
-        "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
-        FORCE)
-ENDIF()
+    SET_PROPERTY(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
 
 # cmake 3.10 does not understand c++2a, so we tell it we will handle the standard flag
 set(CMAKE_CXX_STANDARD_DEFAULT)
@@ -146,12 +144,21 @@ INCLUDE(CTest)
 MESSAGE(STATUS "** Test output directory: ${Simox_TEST_DIR}")
 ADD_DEFINITIONS(-DSimox_TEST_DIR=\"${Simox_TEST_DIR}/\")
 
+set (SIMOX_EXPORT_TARGET_LIST "")
+
+if (Simox_USE_RBDL)
+    message(STATUS "Using rbdl")
+    add_subdirectory(3rdParty/rbdl)
+    list (APPEND SIMOX_EXPORT_TARGET_LIST rbdl)
+    list (APPEND Simox_LIBRARIES rbdl)
+endif()
+
 #######################################################################################
 add_subdirectory(VirtualRobot)
 
 
 #######################################################################################
-set (SIMOX_EXPORT_TARGET_LIST VirtualRobot)
+list (APPEND SIMOX_EXPORT_TARGET_LIST VirtualRobot)
 list (APPEND Simox_LIBRARIES VirtualRobot)
 list(APPEND SIMOX_EXPORT_TARGET_LIST ColCheckerPQP)
 
@@ -185,6 +192,8 @@ if (Simox_BUILD_SimDynamics)
         message("NOT building SimDynamics since bullet was not found")
     endif()
 endif()
+
+
 
 add_subdirectory(doc)
 
