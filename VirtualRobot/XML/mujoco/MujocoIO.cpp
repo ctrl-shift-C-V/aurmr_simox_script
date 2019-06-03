@@ -117,7 +117,7 @@ void MujocoIO::saveMJCF(const std::string& filename, const std::string& basePath
         std::cout << "===========================" << std::endl;
     }
     
-    assert(!outputFileName.empty());
+    VR_ASSERT(!outputFileName.empty());
     std::cout << "Writing to " << (outputDirectory / outputFileName) << std::endl;
     document->saveFile((outputDirectory / outputFileName).string());
 }
@@ -234,7 +234,7 @@ void MujocoIO::makeNodeBodies()
     nodeBodies.clear();
     
     RobotNodePtr rootNode = robot->getRootNode();
-    assert(rootNode);
+    VR_ASSERT(rootNode);
     
     // add root
     robotRoot = document->worldbody().addBody(robot->getName(), robot->getName());
@@ -248,7 +248,7 @@ void MujocoIO::makeNodeBodies()
     
     mjcf::Body root = addNodeBody(robotRoot, rootNode);
     nodeBodies[rootNode->getName()] = root;
-    assert(root);
+    VR_ASSERT(root);
     
     for (RobotNodePtr node : robot->getRobotNodes())
     {
@@ -279,7 +279,7 @@ mjcf::Body MujocoIO::addNodeBody(mjcf::Body parent, RobotNodePtr node)
 
 mjcf::Joint MujocoIO::addNodeJoint(mjcf::Body body, RobotNodePtr node)
 {
-    assert(node->isRotationalJoint() xor node->isTranslationalJoint());
+    VR_ASSERT(node->isRotationalJoint() xor node->isTranslationalJoint());
     
     mjcf::Joint joint = body.addJoint();
     joint.name = node->getName();
@@ -289,13 +289,13 @@ mjcf::Joint MujocoIO::addNodeJoint(mjcf::Body body, RobotNodePtr node)
     if (node->isRotationalJoint())
     {
         RobotNodeRevolutePtr revolute = boost::dynamic_pointer_cast<RobotNodeRevolute>(node);
-        assert(revolute);
+        VR_ASSERT(revolute);
         axis = revolute->getJointRotationAxisInJointCoordSystem();
     }
     else if (node->isTranslationalJoint())
     {
         RobotNodePrismaticPtr prismatic = boost::dynamic_pointer_cast<RobotNodePrismatic>(node);
-        assert(prismatic);
+        VR_ASSERT(prismatic);
         axis = prismatic->getJointTranslationDirectionJointCoordSystem();
     }
     
@@ -484,7 +484,7 @@ bool ParentChildContactExcludeVisitor::visitEnter(const mjcf::AnyElement& elemen
     }
     
     const mjcf::Body parent = body.parent<mjcf::Body>();
-    assert(parent);
+    VR_ASSERT(parent);
     excludePairs.emplace_back(parent.name.get(), body.name.get());
     
     return true;
@@ -589,7 +589,7 @@ void MujocoIO::addActuators()
 
 void MujocoIO::scaleLengths(mjcf::AnyElement element)
 {
-    assert(elem);
+    VR_ASSERT(element);
     if (verbose)
     {
         std::cout << "Traversing element " << element.actualTag() << std::endl;
