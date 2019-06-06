@@ -2,7 +2,7 @@
 FIND_PACKAGE (RBDL)
 FIND_PACKAGE (NLOPT)
 
-if (Simox_USE_RBDL)
+if (Simox_USE_RBDL_LIB)
     ADD_SUBDIRECTORY(InverseDynamics)
 endif ()
 

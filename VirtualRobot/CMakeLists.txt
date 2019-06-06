@@ -17,7 +17,7 @@ target_link_libraries(VirtualRobot PUBLIC
 # Setup dependencies
 #######################################################################
 ### RBDL
-if (Simox_USE_RBDL)
+if (Simox_USE_RBDL_LIB)
 #    target_include_directories(VirtualRobot PUBLIC "../3rdParty/rbdl/src")
 #    target_include_directories(VirtualRobot PUBLIC "../3rdParty/rbdl/include")
     target_link_libraries(VirtualRobot LINK_PUBLIC rbdl)
@@ -599,7 +599,7 @@ SET(INCLUDES
     
 )
 
-if (Simox_USE_RBDL)
+if (Simox_USE_RBDL_LIB)
     SET(SOURCES
         ${SOURCES}
         Dynamics/Dynamics.cpp
