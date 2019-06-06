@@ -100,7 +100,7 @@ IF(UNIX)
         set(Simox_OS_compile_options ${Simox_OS_compile_options} -fPIC)
     ENDIF()
 
-    IF(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    IF("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
         MESSAGE(STATUS "Configuring Debug build")
         set(Simox_OS_compile_options ${Simox_OS_compile_options} -D_DEBUG)
     ELSE()
