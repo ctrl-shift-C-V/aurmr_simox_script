@@ -52,6 +52,8 @@ namespace math
         static Eigen::Vector3f CwiseMin(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
         static Eigen::Vector3f CwiseMax(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
         static Eigen::Vector3f CwiseDivide(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
+        static Eigen::Vector3f CwiseClamp(const Eigen::Vector3f& min, const Eigen::Vector3f& max, const Eigen::Vector3f& val);
+        static Eigen::Vector3f CwiseClamp(float min, float max, const Eigen::Vector3f& val);
         static Eigen::Vector3f Average(const std::vector<Eigen::Vector3f>& vectors);
         static void Swap(float& a,float& b);
 
