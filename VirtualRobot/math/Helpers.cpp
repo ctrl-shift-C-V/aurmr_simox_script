@@ -178,6 +178,24 @@ Eigen::Vector3f Helpers::CwiseDivide(const Eigen::Vector3f& a, const Eigen::Vect
     return a.cwiseQuotient(b);
 }
 
+Eigen::Vector3f Helpers::CwiseClamp(const Eigen::Vector3f& min, const Eigen::Vector3f& max, const Eigen::Vector3f& val)
+{
+    return Eigen::Vector3f(
+                Clamp(min(0), max(0), val(0)),
+                Clamp(min(1), max(1), val(1)),
+                Clamp(min(2), max(2), val(2))
+                );
+}
+
+Eigen::Vector3f Helpers::CwiseClamp(float min, float max, const Eigen::Vector3f& val)
+{
+    return Eigen::Vector3f(
+                Clamp(min, max, val(0)),
+                Clamp(min, max, val(1)),
+                Clamp(min, max, val(2))
+                );
+}
+
 Eigen::Vector3f Helpers::Average(const std::vector<Eigen::Vector3f>& vectors)
 {
     Eigen::Vector3f avg = Eigen::Vector3f::Zero();
