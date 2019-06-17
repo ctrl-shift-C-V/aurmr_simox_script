@@ -300,3 +300,103 @@ BOOST_AUTO_TEST_CASE(test_orthogonalize_arbitrary_rotation)
 
 BOOST_AUTO_TEST_SUITE_END()
 
+
+
+struct DegreeRadianConversionFixture
+{
+    const double rad2degd = static_cast<double>(180. / M_PI);
+    const float rad2degf = static_cast<float>(rad2degd);
+
+    const double deg2radd = static_cast<double>(M_PI / 180.);
+    const float deg2radf = static_cast<float>(deg2radd);
+    
+    const float prec = 1e-5f;
+    
+    const Eigen::Vector2f vector2f = {0, 1};
+    const Eigen::Vector2d vector2d = {0, 1};
+    
+    const Eigen::Vector3f vector3f = {0, 1, -2};
+    const Eigen::Vector3d vector3d = {0, 1, -2};
+};
+
+BOOST_FIXTURE_TEST_SUITE(DegreeRadianConversion, DegreeRadianConversionFixture)
+
+
+BOOST_AUTO_TEST_CASE(test_rad2deg_scalar)
+{
+    // float
+    BOOST_CHECK_CLOSE(Helpers::rad2deg( 0.0f), 0.0f, prec);
+    BOOST_CHECK_CLOSE(Helpers::rad2deg( 1.0f), rad2degf, prec);
+    BOOST_CHECK_CLOSE(Helpers::rad2deg(-2.0f), -2 * rad2degf, prec);
+    
+    // double
+    BOOST_CHECK_CLOSE(Helpers::rad2deg( 0.0), 0.0, prec);
+    BOOST_CHECK_CLOSE(Helpers::rad2deg( 1.0), rad2degd, prec);
+    BOOST_CHECK_CLOSE(Helpers::rad2deg(-2.0), -2 * rad2degd, prec);
+    
+    // int
+    BOOST_CHECK_CLOSE(Helpers::rad2deg( 0), 0.0f, prec);
+    BOOST_CHECK_CLOSE(Helpers::rad2deg( 1), rad2degf, prec);
+    BOOST_CHECK_CLOSE(Helpers::rad2deg(-2), -2 * rad2degf, prec);
+    
+    // long
+    BOOST_CHECK_CLOSE(Helpers::rad2deg( 0l), 0.0f, prec);
+    BOOST_CHECK_CLOSE(Helpers::rad2deg( 1l), rad2degf, prec);
+    BOOST_CHECK_CLOSE(Helpers::rad2deg(-2l), -2 * rad2degf, prec);
+}
+
+
+BOOST_AUTO_TEST_CASE(test_rad2deg_vector)
+{
+    BOOST_CHECK(math::Helpers::rad2deg(vector2f).isApprox(vector2f * rad2degf));
+    BOOST_CHECK(math::Helpers::rad2deg(vector2d).isApprox(vector2d * rad2degd));
+    
+    BOOST_CHECK(math::Helpers::rad2deg(vector3f).isApprox(vector3f * rad2degf));
+    BOOST_CHECK(math::Helpers::rad2deg(vector3d).isApprox(vector3d * rad2degd));
+    
+    // Insert expression instead of value.
+    BOOST_CHECK(math::Helpers::rad2deg(3*vector3f).isApprox(3 * vector3f * rad2degf));
+    BOOST_CHECK(math::Helpers::rad2deg(3*vector3d).isApprox(3 * vector3d * rad2degd));
+}
+
+
+BOOST_AUTO_TEST_CASE(test_deg2rad_scalar)
+{
+    // float
+    BOOST_CHECK_CLOSE(Helpers::deg2rad( 0.0f), 0.0f, prec);
+    BOOST_CHECK_CLOSE(Helpers::deg2rad( 1.0f), deg2radf, prec);
+    BOOST_CHECK_CLOSE(Helpers::deg2rad(-2.0f), -2 * deg2radf, prec);
+    
+    // double
+    BOOST_CHECK_CLOSE(Helpers::deg2rad( 0.0), 0.0, prec);
+    BOOST_CHECK_CLOSE(Helpers::deg2rad( 1.0), deg2radd, prec);
+    BOOST_CHECK_CLOSE(Helpers::deg2rad(-2.0), -2 * deg2radf, prec);
+    
+    // int
+    BOOST_CHECK_CLOSE(Helpers::deg2rad( 0), 0, prec);
+    BOOST_CHECK_CLOSE(Helpers::deg2rad( 1), deg2radf, prec);
+    BOOST_CHECK_CLOSE(Helpers::deg2rad(-2), -2 * deg2radf, prec);
+    
+    // long
+    BOOST_CHECK_CLOSE(Helpers::deg2rad( 0l), 0.0f, prec);
+    BOOST_CHECK_CLOSE(Helpers::deg2rad( 1l), deg2radf, prec);
+    BOOST_CHECK_CLOSE(Helpers::deg2rad(-2l), -2 * deg2radf, prec);
+}
+
+
+BOOST_AUTO_TEST_CASE(test_deg2rad_vector)
+{
+    BOOST_CHECK(math::Helpers::deg2rad(vector2f).isApprox(vector2f * deg2radf));
+    BOOST_CHECK(math::Helpers::deg2rad(vector2d).isApprox(vector2d * deg2radd));
+    
+    BOOST_CHECK(math::Helpers::deg2rad(vector3f).isApprox(vector3f * deg2radf));
+    BOOST_CHECK(math::Helpers::deg2rad(vector3d).isApprox(vector3d * deg2radd));
+    
+    // Insert expression instead of value.
+    BOOST_CHECK(math::Helpers::deg2rad(3*vector3f).isApprox(3 * vector3f * deg2radf));
+    BOOST_CHECK(math::Helpers::deg2rad(3*vector3d).isApprox(3 * vector3d * deg2radd));
+}
+
+
+BOOST_AUTO_TEST_SUITE_END()
+
