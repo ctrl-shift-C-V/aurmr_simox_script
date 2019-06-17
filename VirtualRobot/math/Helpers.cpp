@@ -78,6 +78,13 @@ float Helpers::Clamp(float min, float max, float value)
     return value;
 }
 
+int Helpers::Clampi(int min, int max, int value)
+{
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+}
+
 float Helpers::Lerp(float a, float b, float f)
 {
     return a * (1 - f) + b * f;

@@ -35,6 +35,7 @@ namespace math
         static float AngleModPI(float value);
         static void GetIndex(float t, float minT, float maxT, int count, int& i, float& f);
         static float Clamp(float min, float max, float value);
+        static int Clampi(int min, int max, int value);
         static float Lerp(float a, float b, float f);
         static Eigen::Vector3f Lerp(const Eigen::Vector3f& a, const Eigen::Vector3f& b, float f);
         static Eigen::Quaternionf Lerp(const Eigen::Quaternionf& a, const Eigen::Quaternionf& b, float f);
