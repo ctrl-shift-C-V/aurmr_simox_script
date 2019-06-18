@@ -10,8 +10,9 @@
 
 #include "json.hpp"
 
+
 /**
- * Provide to_json() and from_json() overloads for nlohmann::json,
+ * Provide `to_json()` and `from_json()` overloads for `nlohmann::json`,
  * which allows simple syntax like:
  * 
  * @code
@@ -30,7 +31,7 @@ namespace Eigen
 {
     
 
-    // MatrixBase (non-specialized)
+    // MatrixBase (non-specialized).
 
     /// Writes the matrix as list of rows.
     template <typename Derived>
@@ -43,44 +44,30 @@ namespace Eigen
 
     // Specialization for Vector3f (implemented in .cpp)
     
-    /// Writes vector with x, y, z keys.
-    template <>
-    void to_json<Vector3f>(nlohmann::json& j, const MatrixBase<Vector3f>& vector);
-    
-    /// Reads vector from x, y, z keys.
+    /// If `j` is an object, reads vector from `x, y, z` keys. Otherwise, reads it as matrix.
     template <>
     void from_json<Vector3f>(const nlohmann::json& j, MatrixBase<Vector3f>& vector);
     
     
-    // Specialization for Matrix4f as Transformation matrix (implemented in .cpp)
+    // Specialization for Matrix4f as transformation matrix (implemented in .cpp).
     
     /**
-     * @brief Write a 4x4 matrix, with optimization for transformation matrices.
+     * @brief Reads a 4x4 matrix from list of rows or `pos` and `ori` keys.
      * 
-     * If the matrix is a transformation matrix, writes it as position
-     * (Vector3f) and orientation (Matrix3f).
-     * Otherwise, uses the non-specialized method (list of rows).
+     * If `j` is an object, reads `matrix` as transformation matrix from `pos` and `ori` keys.
+     * Otherweise, reads it from list of rows.
      */
     template <>
-    void to_json<Matrix4f>(nlohmann::json& j, const MatrixBase<Matrix4f>& vector);
-    
-    /**
-     * @brief Reads a 4x4 matrix as written by to_json<Matrix4f>().
-     * 
-     * Reads the matrix as transformation matrix from position and orientation
-     * or from list of rows, depending on j's contents.
-     */
-    template <>
-    void from_json<Matrix4f>(const nlohmann::json& j, MatrixBase<Matrix4f>& vector);
+    void from_json<Matrix4f>(const nlohmann::json& j, MatrixBase<Matrix4f>& matrix);
     
     
     // Quaternion
     
-    /// Writes the quaternion with qw, qx, qy, qz keys.
+    /// Writes the quaternion with `qw, qx, qy, qz` keys.
     template <typename Derived>
     void to_json(nlohmann::json& j, const QuaternionBase<Derived>& quat);
     
-    /// Reads the quaternion from qw, qx, qy, qz keys.
+    /// Reads the quaternion from `qw, qx, qy, qz` keys.
     template <typename Derived>
     void from_json(const nlohmann::json& j, QuaternionBase<Derived>& quat);
 
