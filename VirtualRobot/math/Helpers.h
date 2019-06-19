@@ -111,6 +111,8 @@ namespace math
         
         /// Translate the given pose by the given offset.
         static Eigen::Matrix4f TranslatePose(const Eigen::Matrix4f& pose, const Eigen::Vector3f& offset);
+
+        static Eigen::Matrix4f TranslateAndRotatePose(const Eigen::Matrix4f& pose, const Eigen::Vector3f& offset, const Eigen::Matrix3f& rotation);
         
         /// Invert the given pose in-place.
         static void InvertPose(Eigen::Matrix4f& pose);

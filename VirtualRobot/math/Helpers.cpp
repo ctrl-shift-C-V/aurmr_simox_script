@@ -248,6 +248,14 @@ Eigen::Matrix4f math::Helpers::TranslatePose(const Eigen::Matrix4f& pose, const 
     return p;
 }
 
+Eigen::Matrix4f Helpers::TranslateAndRotatePose(const Eigen::Matrix4f &pose, const Eigen::Vector3f &offset, const Eigen::Matrix3f &rotation)
+{
+    Eigen::Matrix4f p = pose;
+    Position(p) += offset;
+    p = CreatePose(Eigen::Vector3f::Zero(), rotation) * p;
+    return p;
+}
+
 void Helpers::InvertPose(Eigen::Matrix4f& pose)
 {
     Orientation(pose).transposeInPlace();
