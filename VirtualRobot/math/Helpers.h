@@ -43,6 +43,7 @@ namespace math
         static float ILerp(float a, float b, float f);
         static float Lerp(float a, float b, int min, int max, int val);
         static float Angle(Eigen::Vector2f v);
+        static float Angle(const Eigen::Vector3f& a, const Eigen::Vector3f& b, const Eigen::Vector3f& up);
         static int Sign(float x);
         static void AssertNormalized(Eigen::Vector3f vec, float epsilon = 0.05f);
         static std::vector<float> FloatRange(float start, float end, int steps);
@@ -98,6 +99,9 @@ namespace math
         static Eigen::Matrix4f 
         Pose(const Eigen::MatrixBase<PosDerived>& pos);
         
+        static Eigen::Matrix4f CreateTranslationPose(const Eigen::Vector3f& pos);
+        static Eigen::Matrix4f CreateRotationPose(const Eigen::Matrix3f& ori);
+        static Eigen::Matrix4f CreateTranslationRotationTranslationPose(const Eigen::Vector3f& translation1, const Eigen::Matrix3f& rotation, const Eigen::Vector3f& translation2);
         
         /// Legacy shortcut for Pose().
         static Eigen::Matrix4f CreatePose(const Eigen::Vector3f& pos, const Eigen::Quaternionf& ori);

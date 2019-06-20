@@ -120,7 +120,14 @@ float Helpers::Lerp(float a, float b, int min, int max, int val)
 
 float Helpers::Angle(Eigen::Vector2f v) 
 { 
-    return static_cast<float>(std::atan2(v.y(), v.x())); 
+    return static_cast<float>(std::atan2(v.y(), v.x()));
+}
+
+float Helpers::Angle(const Eigen::Vector3f &a, const Eigen::Vector3f &b, const Eigen::Vector3f &up)
+{
+    Eigen::Vector3f side = a.cross(up);
+    float sign = Sign(b.dot(side));
+    return (float)std::atan2(a.cross(b).norm() * sign, a.dot(b));
 }
 
 int Helpers::Sign(float x)
@@ -218,6 +225,21 @@ Eigen::Vector3f Helpers::Average(const std::vector<Eigen::Vector3f>& vectors)
 void Helpers::Swap(float& a,float& b)
 {
     std::swap(a, b);
+}
+
+Eigen::Matrix4f Helpers::CreateTranslationPose(const Eigen::Vector3f &pos)
+{
+    return Pose(pos, Eigen::Matrix3f::Identity());
+}
+
+Eigen::Matrix4f Helpers::CreateRotationPose(const Eigen::Matrix3f &ori)
+{
+    return Pose(Eigen::Vector3f::Zero(), ori);
+}
+
+Eigen::Matrix4f Helpers::CreateTranslationRotationTranslationPose(const Eigen::Vector3f &translation1, const Eigen::Matrix3f &rotation, const Eigen::Vector3f &translation2)
+{
+    return CreateTranslationPose(translation2) *  CreateRotationPose(rotation) * CreateTranslationPose(translation1);
 }
 
 Eigen::Matrix4f Helpers::CreatePose(const Eigen::Vector3f& pos, const Eigen::Quaternionf& ori)
