@@ -422,6 +422,22 @@ Eigen::Matrix3f Helpers::RotationVectorToOrientation(const Eigen::Vector3f& rota
     return aa.toRotationMatrix();
 }
 
+float Helpers::ScalarProjection(const Eigen::Vector3f &a, const Eigen::Vector3f &b)
+{
+    return a.dot(b) / b.norm();
+}
+
+Eigen::Vector3f Helpers::VectorProjection(const Eigen::Vector3f &a, const Eigen::Vector3f &b)
+{
+    return a.dot(b) / b.dot(b) * b;
+}
+
+Eigen::Vector3f Helpers::VectorRejection(const Eigen::Vector3f &a, const Eigen::Vector3f &b)
+{
+    return a - VectorProjection(a, b);
+}
+
+
 float Helpers::rad2deg(float rad)
 {
     return rad * (180.0f / M_PI_F);

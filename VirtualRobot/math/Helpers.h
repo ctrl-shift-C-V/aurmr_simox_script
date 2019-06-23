@@ -174,7 +174,11 @@ namespace math
         static Eigen::Vector3f GetRotationVector(const Eigen::Matrix3f& start, const Eigen::Matrix3f& target);
         static Eigen::Matrix3f RotationVectorToOrientation(const Eigen::Vector3f& rotation);
 
-        
+        // Vector projections:
+        static float ScalarProjection(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
+        static Eigen::Vector3f VectorProjection(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
+        static Eigen::Vector3f VectorRejection(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
+
         
         /// Convert a value from radian to degree.
         static float rad2deg(float rad);
