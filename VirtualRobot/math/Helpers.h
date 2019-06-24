@@ -195,6 +195,20 @@ namespace math
         static Eigen::Matrix<typename Derived::Scalar, Derived::RowsAtCompileTime, Derived::ColsAtCompileTime>
         deg2rad(const Eigen::MatrixBase<Derived>& deg);
 
+        static std::vector<Eigen::Matrix4f> CreatePoses(const std::vector<Eigen::Vector3f>& positions, const Eigen::Matrix3f& orientation);
+
+        static std::vector<Eigen::Matrix4f> CreatePoses(const Eigen::Vector3f& position, const std::vector<Eigen::Matrix3f>& orientations);
+
+        static std::vector<Eigen::Matrix4f> CreatePoses(const std::vector<Eigen::Vector3f>& positions, const std::vector<Eigen::Matrix3f>& orientations);
+
+        // Conversions
+        static std::vector<float> VectorToStd(const Eigen::VectorXf& vec){
+            std::vector<float> res;
+            res.resize(vec.size());
+            Eigen::VectorXf::Map(res.data(), vec.size()) = vec;
+            return res;
+        }
+
         
     private:
         

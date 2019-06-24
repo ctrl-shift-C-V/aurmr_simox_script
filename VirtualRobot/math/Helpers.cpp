@@ -447,3 +447,30 @@ float Helpers::deg2rad(float deg)
 {
     return deg * (M_PI_F / 180.0f);
 }
+
+std::vector<Eigen::Matrix4f> Helpers::CreatePoses(const std::vector<Eigen::Vector3f> &positions, const Eigen::Matrix3f &orientation)
+{
+    std::vector<Eigen::Matrix3f> orientations;
+    orientations.push_back(orientation);
+    return CreatePoses(positions, orientations);
+}
+
+std::vector<Eigen::Matrix4f> Helpers::CreatePoses(const Eigen::Vector3f &position, const std::vector<Eigen::Matrix3f> &orientations)
+{
+    std::vector<Eigen::Vector3f> positions;
+    positions.push_back(position);
+    return CreatePoses(positions, orientations);
+}
+
+std::vector<Eigen::Matrix4f> Helpers::CreatePoses(const std::vector<Eigen::Vector3f> &positions, const std::vector<Eigen::Matrix3f> &orientations)
+{
+    std::vector<Eigen::Matrix4f> poses;
+    for(const Eigen::Vector3f& pos : positions)
+    {
+        for(const Eigen::Matrix3f& ori : orientations)
+        {
+            poses.emplace_back(CreatePose(pos, ori));
+        }
+    }
+    return poses;
+}
