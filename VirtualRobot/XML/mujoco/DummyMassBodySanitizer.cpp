@@ -19,13 +19,15 @@ DummyMassVisitor::DummyMassVisitor(mjcf::Document& document, const std::string& 
 
 bool DummyMassVisitor::visitEnter(const mjcf::AnyElement& element)
 {
+    static const bool front = true;
+    
     if (element.is<mjcf::Body>())
     {
         mjcf::Body body = element.as<mjcf::Body>();
         if (!body.hasMass())
         {
-            body.addDummyInertial();
             std::cout << t << "Body '" << body.name << ": \tAdd dummy inertial." << std::endl;
+            body.addDummyInertial(front);
         }
     }
     return true;
