@@ -124,7 +124,7 @@ namespace mujoco
         bool useRelativePaths = false;
         
         /// Scaling for lengths, such as positions and translations (to m).
-        float lengthScale = 0.001f;
+        float lengthScale = 1.f;
         /// Scaling for lengths, such as positions and translations (to m).
         float meshScale = 1.f;
         /// Scaling for mass (to kg).
