@@ -372,7 +372,7 @@ void MujocoIO::addNodeBodyMeshes()
         
         if (!fs::exists(dstMeshPath))
         {
-            if (srcMeshPath.extension().string() != ".stl")
+            if (srcMeshPath.extension() != ".stl")
             {
                 std::cout << "Converting to .stl: " << srcMeshPath << std::endl;
                 
@@ -380,9 +380,10 @@ void MujocoIO::addNodeBodyMeshes()
                 {
                     if (!notAvailableReported)
                     {
-                        std::cout << std::endl 
-                                  << "Command 'meshlabserver' not available, "
-                                     "cannot convert meshes." << std::endl;
+                        std::cerr << std::endl 
+                                  << "Command 'meshlabserver' not available, cannot convert meshes."
+                                  << " (This error is only reported once.)"
+                                  << std::endl;
                         notAvailableReported = true;
                     }
                     continue;
