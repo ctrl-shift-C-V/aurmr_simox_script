@@ -66,7 +66,12 @@ namespace mjcf
         SensorSection    sensor()    { return section<SensorSection>();     } 
         KeyframeSection  keyframe()  { return section<KeyframeSection>();   }
 
-        Include addInclude(const std::string& filename);
+        /**
+         * @brief Add an include element including the file specified by `relativePath`.
+         * The given path must be relative to the directory where the model will be stored.
+         * @see http://www.mujoco.org/book/XMLreference.html#include
+         */
+        Include addInclude(const std::string& relativePath);
         
         /**
          * @brief Set the class attribute of all new applicable elements

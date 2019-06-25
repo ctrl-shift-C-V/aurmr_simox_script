@@ -63,10 +63,10 @@ void Document::setModelName(const std::string& name)
     root->setAttribute("model", name);
 }
 
-Include Document::addInclude(const std::string& filename)
+Include Document::addInclude(const std::string& relativePath)
 {
     Include include = root->addChild<Include>();
-    include.file = filename;
+    include.file = relativePath;
     return include;
 }
 
