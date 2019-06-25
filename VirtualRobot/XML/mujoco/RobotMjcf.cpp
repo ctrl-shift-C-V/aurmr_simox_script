@@ -8,6 +8,8 @@
 #include <VirtualRobot/Nodes/RobotNodeRevolute.h>
 
 
+namespace fs = std::filesystem;
+
 
 namespace VirtualRobot::mujoco
 {
@@ -34,6 +36,11 @@ const mjcf::Document& RobotMjcf::getDocument() const
 RobotPtr RobotMjcf::getRobot() const
 {
     return robot;
+}
+
+mjcf::Body RobotMjcf::getRobotNodeBody(const std::string& nodeName) const
+{
+    return nodeBodies.at(nodeName);
 }
 
 void RobotMjcf::setOutputFile(const std::filesystem::path& filePath)
@@ -203,16 +210,16 @@ mjcf::Body RobotMjcf::addNodeBody(RobotNodePtr node, bool addJoint, bool addIner
     return body;
 }
 
-
 void RobotMjcf::addNodeBodies()
 {
     addNodeBodies(robot->getRobotNodeNames());
 }
 
-void RobotMjcf::addNodeBodies(const RobotNodeSet& nodeSet)
+void RobotMjcf::addNodeBodies(RobotNodeSetPtr nodeSet)
 {
-    addNodeBodies(nodeSet.getNodeNames());
+    addNodeBodies(nodeSet->getNodeNames());
 }
+
 
 void RobotMjcf::addNodeBodies(const std::vector<std::string>& nodeNames)
 {
@@ -222,5 +229,115 @@ void RobotMjcf::addNodeBodies(const std::vector<std::string>& nodeNames)
     }
 }
 
+void RobotMjcf::addNodeBodyMesh(RobotNodePtr node)
+{
+    mjcf::Body body = getRobotNodeBody(node->getName());
+    
+    const bool meshlabserverAviable = true; // system("which meshlabserver > /dev/null 2>&1") == 0;
+    bool notAvailableReported = false;
+    
+    
+}
+
+void RobotMjcf::convertNodeMeshToSTL(RobotNodePtr node)
+{
+    
+}
+
+void RobotMjcf::convertNodeMeshToSTL(
+        const std::filesystem::path& sourceFile,
+        const std::filesystem::path& _targetPath,
+        bool skipIfExists)
+{
+    fs::path targetFile = _targetPath;
+    
+    VR_ASSERT();
+    
+    // Add a file name if none was passed.
+    if (!targetFile.has_filename())
+    {
+        fs::path filename = sourceFile.filename();
+        filename.replace_extension("stl");
+        targetFile = targetFile / filename;
+    }
+    
+    // Make sure parent directory exists.
+    if (!fs::exists(targetFile.parent_path()))
+    {
+        fs::create_directories(targetFile.parent_path());
+    }
+    
+    // Check if file already exists.
+    if (skipIfExists && fs::exists(targetFile))
+    {
+        std::cout << "skipping (" << targetFile << " already exists)";
+        return;
+    }
+    
+    // Check if file has to be converted.
+    if (sourceFile.extension() != ".stl")
+    {
+        std::cout << "Copying: " << sourceFile << "\n"
+                  << "     to: " << targetFile;
+        fs::copy_file(sourceFile, targetFile);
+        
+        return;
+    }
+    
+    
+    std::cout << "Converting to .stl: " << sourceFile << std::endl;
+    
+    const bool meshlabserverAvailable = system("which meshlabserver > /dev/null 2>&1") == 0;
+    bool notAvailableReported = false;
+    
+    if (!meshlabserverAvailable)
+    {
+        if (!notAvailableReported)
+        {
+            std::cerr << std::endl 
+                      << "Command 'meshlabserver' not available, cannot convert meshes."
+                      << " (This error is reported only once.)"
+                      << std::endl;
+            notAvailableReported = true;
+        }
+        
+        return;
+    }
+    
+    // meshlabserver available
+    std::stringstream convertCommand;
+    convertCommand << "meshlabserver"
+                   << " -i " << sourceFile
+                   << " -o " << targetFile;
+    
+    // run command
+    std::cout << "----------------------------------------------------------" << std::endl;
+    std::cout << "Running command: " << convertCommand.str() << std::endl;
+    const int r = system(convertCommand.str().c_str());
+    std::cout << "----------------------------------------------------------" << std::endl;
+    if (r != 0)
+    {
+        std::cout << "Command returned with error: " << r << "\n"
+                  << "Command was: " << convertCommand.str() << std::endl;
+    }
+}
+
+void RobotMjcf::addNodeBodyMeshes()
+{
+    addNodeBodyMeshes(robot->getRobotNodeNames());
+}
+
+void RobotMjcf::addNodeBodyMeshes(RobotNodeSetPtr nodeSet)
+{
+    addNodeBodyMeshes(nodeSet->getNodeNames());
+}
+
+void RobotMjcf::addNodeBodyMeshes(const std::vector<std::string>& nodeNames)
+{
+    for (const std::string& nodeName : nodeNames)
+    {
+        addNodeBody(robot->getRobotNode(nodeName));
+    }    
+}
 
 }

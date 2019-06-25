@@ -9,7 +9,10 @@
 namespace VirtualRobot::mujoco
 {
 
-
+    /**
+     * @brief The RobotMjcf class allows building a MuJoCo MJCF model from a 
+     * VirtualRobot robot model.
+     */
     class RobotMjcf
     {
     public:
@@ -28,7 +31,12 @@ namespace VirtualRobot::mujoco
         /// Get the robot.
         RobotPtr getRobot() const;
         
+        /// Get the body encapsulating the robot structure.
+        mjcf::Body getRobotBody() const;
         
+        /// Get the body of the given robot node, if it exists.
+        /// @throw std::range_error If no body has been added for this node.
+        mjcf::Body getRobotNodeBody(const std::string& nodeName) const;
         
         
         /// Set the path to the output XML file.
@@ -79,9 +87,29 @@ namespace VirtualRobot::mujoco
         /// Add bodies for all robot nodes.
         void addNodeBodies();
         /// Add bodies for the specified nodes.
-        void addNodeBodies(const RobotNodeSet& nodeSet);
+        void addNodeBodies(RobotNodeSetPtr nodeSet);
         /// Add bodies for the specified nodes.
         void addNodeBodies(const std::vector<std::string>& nodeNames);
+        
+        
+        /**
+         * @brief Add a mesh asset for the given node and a mesh geom to the node's body.
+         * @param node The node.
+         * @throws std::range_error If no body has been added for `node`.
+         */
+        void addNodeBodyMesh(RobotNodePtr node);
+        
+        /// Convert the mesh model of the given node to STL, which can be loaded by MuJoCo.
+        void convertNodeMeshToSTL(RobotNodePtr node);
+        
+        static void convertNodeMeshToSTL(const std::filesystem::path& sourceFile,
+                                         const std::filesystem::path& targetPath,
+                                         bool skipIfExists = true);
+        
+        void addNodeBodyMeshes();
+        void addNodeBodyMeshes(RobotNodeSetPtr nodeSet);
+        void addNodeBodyMeshes(const std::vector<std::string>& nodeNames);
+        
         
         
     private:

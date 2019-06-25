@@ -84,7 +84,7 @@ WorldMountMode toWorldMountMode(const std::string& string)
 
 
 
-MujocoIO::MujocoIO(RobotPtr robot) : robot(robot) 
+MujocoIO::MujocoIO(RobotPtr robot) : robot(robot), mjcf(robot)
 {
     THROW_VR_EXCEPTION_IF(!robot, "Given RobotPtr robot is null.");
 }
