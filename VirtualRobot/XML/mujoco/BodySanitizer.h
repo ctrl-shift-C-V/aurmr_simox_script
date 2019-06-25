@@ -33,6 +33,12 @@ namespace VirtualRobot::mujoco
          */
         virtual void sanitize(mjcf::Document& document, mjcf::Body root) = 0;
         
+        
+    protected:
+        
+        /// "Tab" string for logging.
+        static const std::string t;
+        
     };
 
 }

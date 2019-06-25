@@ -6,9 +6,16 @@ namespace VirtualRobot::mujoco
 
 struct DummyMassVisitor : public mjcf::Visitor
 {
-    using mjcf::Visitor::Visitor;
+    DummyMassVisitor(mjcf::Document& document, const std::string& t = "| ");
+    
     virtual bool visitEnter(const mjcf::AnyElement& element) override;
+    
+    const std::string& t;
 };
+
+DummyMassVisitor::DummyMassVisitor(mjcf::Document& document, const std::string& t) :
+    mjcf::Visitor(document), t(t)
+{}
 
 bool DummyMassVisitor::visitEnter(const mjcf::AnyElement& element)
 {
@@ -18,6 +25,7 @@ bool DummyMassVisitor::visitEnter(const mjcf::AnyElement& element)
         if (!body.hasMass())
         {
             body.addDummyInertial();
+            std::cout << t << "Body '" << body.name << ": \tAdd dummy inertial." << std::endl;
         }
     }
     return true;
@@ -30,7 +38,7 @@ DummyMassBodySanitizer::DummyMassBodySanitizer()
 
 void DummyMassBodySanitizer::sanitize(mjcf::Document& document, mjcf::Body root)
 {
-    DummyMassVisitor visitor(document);
+    DummyMassVisitor visitor(document, t);
     root.accept(visitor);
 }
 

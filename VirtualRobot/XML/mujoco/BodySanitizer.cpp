@@ -4,6 +4,9 @@
 namespace VirtualRobot::mujoco
 {
 
+const std::string BodySanitizer::t = "| ";
+        
+
 BodySanitizer::BodySanitizer() = default;
 
 BodySanitizer::~BodySanitizer() = default;

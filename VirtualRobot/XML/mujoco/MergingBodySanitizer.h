@@ -73,9 +73,6 @@ namespace VirtualRobot::mujoco
         
         void mergeBodies(mjcf::Body body, mjcf::Body childBody, Eigen::Matrix4f& accChildPose);
         
-        const std::string t = "| ";
-        
-        
         /// The robot.
         RobotPtr robot;
         
