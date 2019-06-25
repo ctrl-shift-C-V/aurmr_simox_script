@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
     }
     
     const fs::path outputDir = RuntimeEnvironment::checkParameter(
-                "outdir", (inputFilename.parent_path() / "mjcf").string());
+                "outdir", (inputFilename.parent_path() / "mjcf"));
     const std::string meshRelDir = RuntimeEnvironment::checkParameter("mesh_rel_dir", "mesh");
     
     
@@ -144,7 +144,7 @@ int main(int argc, char* argv[])
     try
     {
         std::cout << "Loading robot from " << inputFilename << " ..." << std::endl;
-        robot = RobotIO::loadRobot(inputFilename.string(), RobotIO::eFull);
+        robot = RobotIO::loadRobot(inputFilename, RobotIO::eFull);
         assert(robot);
     }
     catch (const VirtualRobotException&)
@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
     if (/* DISABLES CODE */ (false))
     {
         // using RobotIO
-        RobotIO::saveMJCF(robot, inputFilename.filename().string(), outputDir.string(), meshRelDir);
+        RobotIO::saveMJCF(robot, inputFilename.filename(), outputDir, meshRelDir);
     }
     else
     {
@@ -174,6 +174,6 @@ int main(int argc, char* argv[])
         
         mujocoIO.setVerbose(verbose);
         
-        mujocoIO.saveMJCF(inputFilename.filename().string(), outputDir.string(), meshRelDir);
+        mujocoIO.saveMJCF(inputFilename.filename(), outputDir, meshRelDir);
     }
 }
