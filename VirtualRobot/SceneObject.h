@@ -225,13 +225,13 @@ namespace VirtualRobot
         /*!
             Returns the transformation matrix from this object to otherObject
         */
-        Eigen::Matrix4f getTransformationTo(const SceneObjectPtr otherObject);
+        Eigen::Matrix4f getTransformationTo(const SceneObjectPtr otherObject) const;
 
 
         /*!
             Returns the transformation matrix from otherObject to this object
         */
-        Eigen::Matrix4f getTransformationFrom(const SceneObjectPtr otherObject);
+        Eigen::Matrix4f getTransformationFrom(const SceneObjectPtr otherObject) const;
 
         /*!
             Transform pose to local coordinate system of this object
@@ -374,7 +374,7 @@ namespace VirtualRobot
         /*!
             \return true, if this object is attached to another object.
         */
-        virtual bool hasParent();
+        virtual bool hasParent() const;
 
         /*!
             \return If this object is attached, the parent is returned. Otherwise an empty object is returned.

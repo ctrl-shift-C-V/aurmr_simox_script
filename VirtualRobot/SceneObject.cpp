@@ -571,12 +571,12 @@ namespace VirtualRobot
         return math::Helpers::Position(t);
     }
 
-    Eigen::Matrix4f SceneObject::getTransformationTo(const SceneObjectPtr otherObject)
+    Eigen::Matrix4f SceneObject::getTransformationTo(const SceneObjectPtr otherObject) const
     {
         return math::Helpers::InvertedPose(getGlobalPose()) * otherObject->getGlobalPose();
     }
 
-    Eigen::Matrix4f SceneObject::getTransformationFrom(const SceneObjectPtr otherObject)
+    Eigen::Matrix4f SceneObject::getTransformationFrom(const SceneObjectPtr otherObject) const
     {
         return math::Helpers::InvertedPose(otherObject->getGlobalPose()) * getGlobalPose();
     }
@@ -1176,7 +1176,7 @@ namespace VirtualRobot
         return true;
     }
 
-    bool SceneObject::hasParent()
+    bool SceneObject::hasParent() const
     {
         SceneObjectPtr p = getParent();
 
