@@ -318,6 +318,12 @@ mjcf::Joint MujocoIO::addNodeJoint(mjcf::Body body, RobotNodePtr node)
         {
             range *= lengthScale;
         }
+        
+        // Mujoco does not like ranges where min >= max.
+        if (std::abs(range(0) - range(1)) < 1e-6f)
+        {
+            range(1) = range(0) + 1e-6f;
+        }
         joint.range = range;
     }
     
