@@ -211,6 +211,7 @@ SET(SOURCES
     SphereApproximator.cpp
     Trajectory.cpp
     VirtualRobot.cpp
+    VirtualRobotChecks.cpp
     VirtualRobotException.cpp
     
     CollisionDetection/CDManager.cpp
@@ -401,6 +402,7 @@ SET(INCLUDES
     SphereApproximator.h
     Trajectory.h
     VirtualRobot.h
+    VirtualRobotChecks.h
     VirtualRobotException.h
     VirtualRobotImportExport.h
     VirtualRobotTest.h
