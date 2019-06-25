@@ -145,11 +145,12 @@ int main(int argc, char* argv[])
     }
     
     
-    std::cout << "Input file:      " << inputFilename << std::endl;
-    std::cout << "Output dir:      " << outputDir << std::endl;
-    std::cout << "Output mesh dir: " << outputDir / meshRelDir << std::endl;
-    std::cout << "Actuator type:   " << actuatorTypeStr << std::endl;
-    std::cout << "Mocap body:      " << (mocap ? "yes" : "no ") << std::endl;
+    std::cout << "Input file:         " << inputFilename << std::endl;
+    std::cout << "Output dir:         " << outputDir << std::endl;
+    std::cout << "Output mesh dir:    " << outputDir / meshRelDir << std::endl;
+    std::cout << "Actuator type:      " << actuatorTypeStr << std::endl;
+    std::cout << "Body Sanitize Mode: " << bodySanitizeModeStr << std::endl;
+    std::cout << "Mocap body:         " << (mocap ? "yes" : "no ") << std::endl;
     
     std::cout << "Scaling: " <<  std::endl
               << "  - length: " << scaleLength << std::endl

@@ -397,7 +397,7 @@ void MujocoIO::addNodeBodyMeshes()
             continue;
         }
         
-        std::cout << t << "Node " << node->getName() << ":\t";
+        std::cout << t << "Node '" << node->getName() << "':\t";
         
         const fs::path srcMeshPath = visualization->getFilename();
         
