@@ -140,4 +140,7 @@ struct ActuatorSection : public Element<ActuatorSection>
     
 };
 
+
+#undef mjcf_ActuatorAttributes
+
 }
