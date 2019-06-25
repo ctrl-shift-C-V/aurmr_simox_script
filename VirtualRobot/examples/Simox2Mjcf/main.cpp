@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
     try
     {
         scaleLength = parseFloatParameter("scale_length", "1");
-        scaleMesh = parseFloatParameter("mesh_length", "1");
+        scaleMesh = parseFloatParameter("scale_mesh", "1");
         scaleMass = parseFloatParameter("scale_mass", "1");
     }
     catch (const std::invalid_argument&)
