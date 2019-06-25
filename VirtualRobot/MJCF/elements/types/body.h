@@ -190,11 +190,11 @@ struct Body : public Element<Body>
     Body addBody(const std::string& name = "");
     
     /// Add an inertial element.
-    Inertial addInertial();
+    Inertial addInertial(bool front = false);
     /// Add an inertial element with given settings.
-    Inertial addInertial(const Eigen::Vector3f& pos, float mass, const Eigen::Matrix3f& matrix);
+    Inertial addInertial(const Eigen::Vector3f& pos, float mass, const Eigen::Matrix3f& matrix, bool front = false);
     /// Add a dummy inertial element with small mass and identity inertia matrix.
-    Inertial addDummyInertial();
+    Inertial addDummyInertial(bool front = false);
     
     
     /// Add a joint element to a body.

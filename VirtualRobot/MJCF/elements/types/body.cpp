@@ -14,7 +14,7 @@ const std::string Site::tag         = "site";
 const std::string Camera::tag       = "camera";
 const std::string Light::tag        = "light";
 const std::string Body::tag         = "body";
-const std::string Worldbody::tag        = "worldbody";
+const std::string Worldbody::tag    = "worldbody";
 
 
 void Inertial::inertiaFromMatrix(const Eigen::Matrix3f& matrix)
@@ -55,14 +55,15 @@ Body Body::addBody(const std::string& name)
     return body;
 }
 
-Inertial Body::addInertial()
+Inertial Body::addInertial(bool front)
 {
-    return addChild<Inertial>();
+    return addChild<Inertial>("", front);
 }
 
-Inertial Body::addInertial(const Eigen::Vector3f& pos, float mass, const Eigen::Matrix3f& matrix)
+Inertial Body::addInertial(const Eigen::Vector3f& pos, float mass, const Eigen::Matrix3f& matrix, 
+                           bool front)
 {
-    Inertial inertial = addInertial();
+    Inertial inertial = addInertial(front);
     
     inertial.pos = pos;
     inertial.mass = mass;
@@ -76,7 +77,7 @@ Inertial Body::addInertial(const Eigen::Vector3f& pos, float mass, const Eigen::
         /* from mujoco xml reference:
          * "Full inertia matrix M. Since M is 3-by-3 and symmetric, it is
          * specified using only 6 numbers in the following order:
-         * M(1,1), M(2,2), M(3,3), M(1,2), M(1,3), M(2,3)."*/
+         * M(1,1), M(2,2), M(3,3), M(1,2), M(1,3), M(2,3)." */
         Eigen::Vector6f inertia;
         inertia << matrix(0, 0), matrix(1, 1), matrix(2, 2),
                 matrix(0, 1), matrix(0, 2), matrix(1, 2);
@@ -86,11 +87,11 @@ Inertial Body::addInertial(const Eigen::Vector3f& pos, float mass, const Eigen::
     return inertial;
 }
 
-Inertial Body::addDummyInertial()
+Inertial Body::addDummyInertial(bool front)
 {
-    Inertial inertial = addInertial();
+    Inertial inertial = addInertial(front);
 
-    inertial.pos = Eigen::Vector3f(0, 0, 0);
+    inertial.pos = Eigen::Vector3f::Zero();
     inertial.mass = document()->getDummyMass();
     inertial.diaginertia = Eigen::Vector3f::Ones();
 
