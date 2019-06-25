@@ -34,8 +34,9 @@ namespace mujoco
          * @param filename   the output filename (without directory)
          * @param basePath   the output directory
          * @param meshRelDir the directory relative to basePath where meshes shall be placed
+         * @return Absolute path to saved robot model file.
          */
-        void saveMJCF(const std::string& filename, const std::string& basePath, 
+        std::string saveMJCF(const std::string& filename, const std::string& basePath, 
                       const std::string& meshRelDir);
         
         

@@ -47,8 +47,8 @@ MujocoIO::MujocoIO(RobotPtr robot) : robot(robot)
     THROW_VR_EXCEPTION_IF(!robot, "Given RobotPtr robot is null.");
 }
 
-void MujocoIO::saveMJCF(const std::string& filename, const std::string& basePath, 
-                        const std::string& meshRelDir)
+std::string MujocoIO::saveMJCF(
+        const std::string& filename, const std::string& basePath, const std::string& meshRelDir)
 {
     THROW_VR_EXCEPTION_IF(filename.empty(), "Given filename is empty.");
     
@@ -118,8 +118,13 @@ void MujocoIO::saveMJCF(const std::string& filename, const std::string& basePath
     }
     
     VR_ASSERT(!outputFileName.empty());
-    std::cout << "Writing to " << (outputDirectory / outputFileName) << std::endl;
-    document->saveFile((outputDirectory / outputFileName).string());
+    
+    const fs::path outputFilePath = outputDirectory / outputFileName;
+    
+    std::cout << "Writing to " << outputFilePath << std::endl;
+    document->saveFile(outputFilePath);
+    
+    return outputFilePath;
 }
 
 void MujocoIO::setUseRelativePaths(bool useRelative)
@@ -127,7 +132,10 @@ void MujocoIO::setUseRelativePaths(bool useRelative)
     this->useRelativePaths = useRelative;
 }
 
-void MujocoIO::setPaths(const std::string& filename, const std::string& basePath, const std::string& meshRelDir)
+void MujocoIO::setPaths(
+        const std::string& filename,
+        const std::string& basePath,
+        const std::string& meshRelDir)
 {
     outputDirectory = basePath;
     outputFileName = filename;
