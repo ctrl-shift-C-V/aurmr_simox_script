@@ -9,6 +9,9 @@
 #include <VirtualRobot/Visualization/TriMeshModel.h>
 #include <VirtualRobot/XML/RobotIO.h>
 
+#include "DummyMassBodySanitizer.h"
+#include "MergingBodySanitizer.h"
+
 
 namespace fs = std::filesystem;
 
@@ -32,9 +35,23 @@ ActuatorType toActuatorType(const std::string& string)
 {
     static const std::map<std::string, ActuatorType> map
     {
-        {"motor",    ActuatorType::MOTOR},
-        {"position", ActuatorType::POSITION},
-        {"velocity", ActuatorType::VELOCITY}
+        { "motor",    ActuatorType::MOTOR },
+        { "position", ActuatorType::POSITION },
+        { "velocity", ActuatorType::VELOCITY }
+    };
+    std::string lower = string;
+    std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+    return map.at(lower);
+}
+
+
+BodySanitizeMode toBodySanitizeMode(const std::string& string)
+{
+    static const std::map<std::string, BodySanitizeMode> map
+    {
+        { "dummy_mass", BodySanitizeMode::DUMMY_MASS },
+        { "dummymass",  BodySanitizeMode::DUMMY_MASS },
+        { "merge",      BodySanitizeMode::MERGE },
     };
     std::string lower = string;
     std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
@@ -86,9 +103,30 @@ std::string MujocoIO::saveMJCF(
         std::cout << "===========================" << std::endl;
     }
     
-    std::cout << "Merging massless bodies ..." << std::endl;
-    masslessBodySanitizer.setLengthScale(lengthScale);
-    masslessBodySanitizer.sanitize(robotRoot);
+    
+    std::cout << "Sanitizing massless bodies ..." << std::endl;
+    switch (bodySanitizeMode)
+    {
+    case BodySanitizeMode::DUMMY_MASS:
+    {
+        std::cout << t << "Adding dummy masses ..." << std::endl;
+        bodySanitizer.reset(new DummyMassBodySanitizer());
+    }
+        break;
+        
+    case BodySanitizeMode::MERGE:
+    {        
+        std::cout << t << "Merging massless bodies ..." << std::endl;
+        
+        std::unique_ptr<MergingBodySanitizer> sanitizer(new MergingBodySanitizer(robot));
+        sanitizer->setLengthScale(lengthScale);
+        
+        bodySanitizer = std::move(sanitizer);
+    }    
+        break;
+    }
+    bodySanitizer->sanitize(*document, robotRoot);
+    
     
     std::cout << "Adding contact excludes ..." << std::endl;
     addContactExcludes();
@@ -101,10 +139,6 @@ std::string MujocoIO::saveMJCF(
     
     std::cout << "Adding actuators ..." << std::endl;
     addActuators();
-    
-    // this is now done directly when constructing the respective elements
-    //std::cout << "Scaling lengths by " << lengthScale << " ..." << std::endl;
-    //scaleLengths(robotRoot);
     
     std::cout << "Done." << std::endl;
     
@@ -351,7 +385,7 @@ mjcf::Inertial MujocoIO::addNodeInertial(mjcf::Body body, RobotNodePtr node)
 
 void MujocoIO::addNodeBodyMeshes()
 {
-    bool meshlabserverAviable = system("which meshlabserver > /dev/null 2>&1") == 0;
+    const bool meshlabserverAviable = true; // system("which meshlabserver > /dev/null 2>&1") == 0;
     bool notAvailableReported = false;
     
     for (RobotNodePtr node : robot->getRobotNodes())
@@ -529,8 +563,17 @@ void MujocoIO::addContactExcludes()
     // resolve body names and add exludes
     for (const auto& excludePair : excludePairs)
     {
-        const std::string body1 = masslessBodySanitizer.getMergedBodyName(excludePair.first);
-        const std::string body2 = masslessBodySanitizer.getMergedBodyName(excludePair.second);
+        std::string body1, body2;
+        
+        if (dynamic_cast<MergingBodySanitizer*>(bodySanitizer.get()) != nullptr)
+        {
+            MergingBodySanitizer* sanitizer = dynamic_cast<MergingBodySanitizer*>(bodySanitizer.get());
+            body1 = sanitizer->getMergedBodyName(excludePair.first);
+            body2 = sanitizer->getMergedBodyName(excludePair.second);
+        }
+        
+        // assert !body1.empty()
+        // assert !body2.empty()
         document->contact().addExclude(body1, body2);
     }
     
@@ -694,7 +737,6 @@ void MujocoIO::setVerbose(bool value)
 {
     this->verbose = value;
 }
-
 
 
 }

@@ -5,7 +5,7 @@
 #include <VirtualRobot/Robot.h>
 #include <VirtualRobot/MJCF/Document.h>
 
-#include "MasslessBodySanitizer.h"
+#include "BodySanitizer.h"
 
 
 namespace VirtualRobot
@@ -16,11 +16,19 @@ namespace mujoco
 
     enum class ActuatorType
     {
-        MOTOR, POSITION, VELOCITY
+        MOTOR, POSITION, VELOCITY,
     };
     ActuatorType toActuatorType(const std::string& string);
     
-
+    /// Body sanitization mode.
+    enum class BodySanitizeMode
+    {
+        DUMMY_MASS,     ///< Add dummy mass to massless bodies.
+        MERGE,          ///< Merge massless bodies.
+    };
+    BodySanitizeMode toBodySanitizeMode(const std::string& string);
+    
+    
     class MujocoIO
     {
     public:
@@ -146,6 +154,10 @@ namespace mujoco
         /// Add a mocap
         bool withMocapBody = false;
         
+        /// Sanitize mode.
+        BodySanitizeMode bodySanitizeMode = BodySanitizeMode::DUMMY_MASS;
+        
+        
         /// Verbose printing.
         bool verbose = false;
         
@@ -179,7 +191,7 @@ namespace mujoco
         // Processing
         
         /// Sanitizes massless bodies.
-        mujoco::MasslessBodySanitizer masslessBodySanitizer { robot };
+        std::unique_ptr<mujoco::BodySanitizer> bodySanitizer;
         
         /// Map of robot node names to XML elements.
         std::map<std::string, mjcf::Body> nodeBodies;
