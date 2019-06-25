@@ -31,32 +31,57 @@ namespace
 namespace VirtualRobot::mujoco
 {
 
+template <typename EnumT>
+EnumT stringToEnum(const std::map<std::string, EnumT>& map, const std::string& string)
+{
+    std::string lower = string;
+    std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+    try
+    {
+        return map.at(lower);
+    }
+    catch (const std::out_of_range&)
+    {
+        std::stringstream msg;
+        msg << "Invalid key '" << string << "'. Valid keys are: ";
+        for (const auto& item : map)
+        {
+            msg << item.first << " ";
+        }
+        throw std::out_of_range(msg.str());
+    }
+}
+
 ActuatorType toActuatorType(const std::string& string)
 {
-    static const std::map<std::string, ActuatorType> map
+    return stringToEnum<ActuatorType>(
     {
         { "motor",    ActuatorType::MOTOR },
         { "position", ActuatorType::POSITION },
         { "velocity", ActuatorType::VELOCITY }
-    };
-    std::string lower = string;
-    std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
-    return map.at(lower);
+    }, string);
 }
-
 
 BodySanitizeMode toBodySanitizeMode(const std::string& string)
 {
-    static const std::map<std::string, BodySanitizeMode> map
+    return stringToEnum<BodySanitizeMode>(
     {
         { "dummy_mass", BodySanitizeMode::DUMMY_MASS },
         { "dummymass",  BodySanitizeMode::DUMMY_MASS },
         { "merge",      BodySanitizeMode::MERGE },
-    };
-    std::string lower = string;
-    std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
-    return map.at(lower);
+    }, string);
 }
+
+WorldMountMode toWorldMountMode(const std::string& string)
+{
+    return stringToEnum<WorldMountMode>(
+    {
+        { "fixed", WorldMountMode::FIXED },
+        { "free",  WorldMountMode::FREE },
+        { "mocap", WorldMountMode::MOCAP },
+    }, string);
+}
+
 
 
 MujocoIO::MujocoIO(RobotPtr robot) : robot(robot) 
@@ -82,7 +107,7 @@ std::string MujocoIO::saveMJCF(
     addSkybox();
     
     mjcf::Body mocapBody;
-    if (withMocapBody)
+    if (worldMountMode == WorldMountMode::MOCAP)
     {
         std::cout << "Adding mocap body ..." << std::endl;
         mocapBody = addMocapBody();
@@ -115,7 +140,7 @@ std::string MujocoIO::saveMJCF(
         break;
         
     case BodySanitizeMode::MERGE:
-    {        
+    {
         std::cout << t << "Merging massless bodies ..." << std::endl;
         
         std::unique_ptr<MergingBodySanitizer> sanitizer(new MergingBodySanitizer(robot));
@@ -131,7 +156,7 @@ std::string MujocoIO::saveMJCF(
     std::cout << "Adding contact excludes ..." << std::endl;
     addContactExcludes();
 
-    if (withMocapBody)
+    if (worldMountMode == WorldMountMode::MOCAP)
     {
         std::cout << "Adding mocap body contact excludes ..." << std::endl;
         addMocapContactExcludes(mocapBody);
@@ -197,38 +222,17 @@ void MujocoIO::ensureDirectoriesExist()
 
 void MujocoIO::makeCompiler()
 {
-    document->compiler().angle = "radian";
-    document->compiler().balanceinertia = true;
+    mjcf.addCompiler();
 }
 
 void MujocoIO::makeDefaultsClass()
 {
-    mjcf::DefaultClass defaultsClass = document->default_().addClass(robot->getName());
-    
-    defaultsClass.insertComment("Add default values for " + robot->getName() + " here.", true);
-    
-    mjcf::Joint joint = defaultsClass.getElement<mjcf::Joint>();
-    joint.frictionloss = 1;
-    joint.damping = 0;
-    
-    mjcf::Mesh mesh = defaultsClass.getElement<mjcf::Mesh>();
-    mesh.scale = Eigen::Vector3f::Constant(meshScale);
-    
-    mjcf::Geom geom = defaultsClass.getElement<mjcf::Geom>();
-    geom.condim = 4;
-    
-    mjcf::ActuatorPosition actPos = defaultsClass.getElement<mjcf::ActuatorPosition>();
-    actPos.kp = 1;
-    
-    mjcf::ActuatorVelocity actVel = defaultsClass.getElement<mjcf::ActuatorVelocity >();
-    actVel.kv = 1;
+    mjcf.addDefaultsClass(meshScale);
 }
-
 
 void MujocoIO::addSkybox()
 {
-    document->asset().addSkyboxTexture(Eigen::Vector3f(.8f, .9f, .95f), 
-                                       Eigen::Vector3f(.4f, .6f, .8f));
+    mjcf.addSkybox();
 }
 
 
@@ -282,11 +286,21 @@ void MujocoIO::makeNodeBodies()
     // add root
     robotRoot = document->worldbody().addBody(robot->getName(), robot->getName());
     
-    if (withMocapBody)
+    switch (worldMountMode)
     {
-        robotRoot.addDummyInertial();
+    case WorldMountMode::FREE:
+    case WorldMountMode::MOCAP:
+    {
+        if (!robotRoot.hasMass())
+        {
+            robotRoot.addDummyInertial();
+        }
         mjcf::FreeJoint joint = robotRoot.addFreeJoint();
         joint.name = robot->getName();
+    }        
+        break;
+    default:
+        break;
     }
     
     mjcf::Body root = addNodeBody(robotRoot, rootNode);
@@ -301,86 +315,17 @@ void MujocoIO::makeNodeBodies()
 
 mjcf::Body MujocoIO::addNodeBody(mjcf::Body parent, RobotNodePtr node)
 {
-    mjcf::Body body = parent.addBody(node->getName());
-
-    if (node->hasParent())
-    {
-        Eigen::Matrix4f pose = node->getTransformationFrom(node->getParent());
-        math::Helpers::ScaleTranslation(pose, lengthScale);
-        body.setPose(pose);
-    }
-    
-    if (node->isRotationalJoint() || node->isTranslationalJoint())
-    {
-        addNodeJoint(body, node);
-    }
-    
-    addNodeInertial(body, node);
-    
-    return body;
+    mjcf.addNodeBody(node, parent);
 }
 
 mjcf::Joint MujocoIO::addNodeJoint(mjcf::Body body, RobotNodePtr node)
 {
-    VR_ASSERT(node->isRotationalJoint() xor node->isTranslationalJoint());
-    
-    mjcf::Joint joint = body.addJoint();
-    joint.name = node->getName();
-    
-    // get the axis
-    Eigen::Vector3f axis;
-    if (node->isRotationalJoint())
-    {
-        RobotNodeRevolutePtr revolute = boost::dynamic_pointer_cast<RobotNodeRevolute>(node);
-        VR_ASSERT(revolute);
-        axis = revolute->getJointRotationAxisInJointCoordSystem();
-    }
-    else if (node->isTranslationalJoint())
-    {
-        RobotNodePrismaticPtr prismatic = boost::dynamic_pointer_cast<RobotNodePrismatic>(node);
-        VR_ASSERT(prismatic);
-        axis = prismatic->getJointTranslationDirectionJointCoordSystem();
-    }
-    
-    joint.type = node->isRotationalJoint() ? "hinge" : "slide";
-    joint.axis = axis;
-    joint.limited = !node->isLimitless();
-    
-    if (!node->isLimitless())
-    {
-        Eigen::Vector2f range = { node->getJointLimitLow(), node->getJointLimitHigh() };
-        if (node->isTranslationalJoint())
-        {
-            range *= lengthScale;
-        }
-        
-        // Mujoco does not like ranges where min >= max.
-        if (std::abs(range(0) - range(1)) < 1e-6f)
-        {
-            range(1) = range(0) + 1e-6f;
-        }
-        joint.range = range;
-    }
-    
-    return joint;
+    return mjcf.addNodeJoint(node, body);
 }
 
 mjcf::Inertial MujocoIO::addNodeInertial(mjcf::Body body, RobotNodePtr node)
 {
-    const Eigen::Matrix3f matrix = node->getInertiaMatrix();
-    if (matrix.isIdentity(document->getFloatCompPrecision()) 
-        && node->getMass() < document->getFloatCompPrecision())
-    {
-        // dont set an inertial element and let it be derived automatically
-        return { };
-    }
-    
-    mjcf::Inertial inertial = body.addInertial();
-    inertial.pos = node->getCoMLocal() * lengthScale;
-    inertial.mass = node->getMass() * massScale;
-    inertial.inertiaFromMatrix(matrix);
-    
-    return inertial;
+    return mjcf.addNodeInertial(node, body);
 }
 
 void MujocoIO::addNodeBodyMeshes()
@@ -476,33 +421,7 @@ void MujocoIO::addNodeBodyMeshes()
 
 mjcf::Body MujocoIO::addNodeBody(RobotNodePtr node)
 {
-    // see whether body for the node already exists
-    auto find = nodeBodies.find(node->getName());
-    if (find != nodeBodies.end())
-    {
-        // exists => break recursion
-        return find->second;
-    }
-    
-    // check whether body exists for parent node
-    mjcf::Body parent;
-    find = nodeBodies.find(node->getParent()->getName());
-    if (find == nodeBodies.end())
-    {
-        // parent does not exist => create it first
-        parent = addNodeBody(robot->getRobotNode(node->getParent()->getName()));
-    }
-    else
-    {
-        // parent exists
-        parent = find->second;
-    }
-    
-    // add body as child of parent
-    mjcf::Body body = addNodeBody(parent, node);
-    nodeBodies[node->getName()] = body;
-
-    return body;
+    mjcf.addNodeBody(node);
 }
 
 struct ParentChildContactExcludeVisitor : public mjcf::Visitor
@@ -735,9 +654,14 @@ void MujocoIO::setBodySanitizeMode(BodySanitizeMode mode)
     this->bodySanitizeMode = mode;
 }
 
-void MujocoIO::setWithMocapBody(bool enabled)
+WorldMountMode MujocoIO::getWorldMountMode() const
 {
-    this->withMocapBody = enabled;
+    return worldMountMode;
+}
+
+void MujocoIO::setWorldMountMode(const WorldMountMode& value)
+{
+    worldMountMode = value;
 }
 
 void MujocoIO::setVerbose(bool value)

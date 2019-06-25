@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
     RuntimeEnvironment::considerKey(
                 "sanitize_bodies", "How to sanitize massless bodies (dummymass, merge). (default: merge)");
     RuntimeEnvironment::considerFlag(
-                "mocap", "Add a mocap body to which the robot root body is welded.");
+                "mount", "How to mount the robot at the world body (fixed, free, mocap). (default: fixed)");
     
     RuntimeEnvironment::considerFlag(
                 "rel_paths", "Store relative mesh paths instead of absolute ones. (This can "
@@ -82,33 +82,23 @@ int main(int argc, char* argv[])
     
     const std::string actuatorTypeStr = RuntimeEnvironment::checkParameter("actuator", "motor");
     mujoco::ActuatorType actuatorType;
+    const std::string bodySanitizeModeStr = RuntimeEnvironment::checkParameter("sanitize_bodies", "merge");
+    mujoco::BodySanitizeMode bodySanitizeMode;
+    const std::string worldMountModeStr = RuntimeEnvironment::checkParameter("mount", "fixed");
+    mujoco::WorldMountMode worldMountMode;
+    
     try
     {
         actuatorType = mujoco::toActuatorType(actuatorTypeStr);
-    }
-    catch (const std::out_of_range&)
-    {
-        std::cout << "No actuator type '" << actuatorTypeStr << "'" << std::endl;
-        std::cout << "Avaliable: motor|position|velocity" << std::endl;
-        return -1;
-    }
-
-    
-    const std::string bodySanitizeModeStr = RuntimeEnvironment::checkParameter("sanitize_bodies", "merge");
-    mujoco::BodySanitizeMode bodySanitizeMode;
-    try
-    {
         bodySanitizeMode = mujoco::toBodySanitizeMode(bodySanitizeModeStr);
+        worldMountMode = mujoco::toWorldMountMode(worldMountModeStr);
     }
-    catch (const std::out_of_range&)
+    catch (const std::out_of_range& e)
     {
-        std::cout << "No sanitize mode '" << bodySanitizeModeStr << "'" << std::endl;
-        std::cout << "Avaliable: dummymass|merge" << std::endl;
+        std::cerr << e.what() << std::endl;
         return -1;
     }
     
-    
-    const bool mocap = RuntimeEnvironment::hasFlag("mocap");
     const bool verbose = RuntimeEnvironment::hasFlag("verbose");
     const bool addActuatorSuffix = RuntimeEnvironment::hasFlag("actuator_suffix");
     
@@ -150,7 +140,7 @@ int main(int argc, char* argv[])
     std::cout << "Output mesh dir:    " << outputDir / meshRelDir << std::endl;
     std::cout << "Actuator type:      " << actuatorTypeStr << std::endl;
     std::cout << "Body Sanitize Mode: " << bodySanitizeModeStr << std::endl;
-    std::cout << "Mocap body:         " << (mocap ? "yes" : "no ") << std::endl;
+    std::cout << "World Mount Mode:   " << worldMountModeStr << std::endl;
     
     std::cout << "Scaling: " <<  std::endl
               << "  - length: " << scaleLength << std::endl
@@ -186,7 +176,7 @@ int main(int argc, char* argv[])
         mujocoIO.setBodySanitizeMode(bodySanitizeMode);
         
         mujocoIO.setUseRelativePaths(useRelativePaths);
-        mujocoIO.setWithMocapBody(mocap);
+        mujocoIO.setWorldMountMode(worldMountMode);
         
         mujocoIO.setLengthScale(scaleLength);
         mujocoIO.setMeshScale(scaleMesh);

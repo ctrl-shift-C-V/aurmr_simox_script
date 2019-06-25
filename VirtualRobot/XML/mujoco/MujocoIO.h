@@ -6,6 +6,7 @@
 #include <VirtualRobot/MJCF/Document.h>
 
 #include "BodySanitizer.h"
+#include "RobotMjcf.h"
 
 
 namespace VirtualRobot::mujoco
@@ -28,6 +29,16 @@ namespace VirtualRobot::mujoco
     BodySanitizeMode toBodySanitizeMode(const std::string& string);
     
     
+    /// How the robot is mounted at the world body.
+    enum class WorldMountMode
+    {
+        FIXED,  ///< No joint, i.e. fixed to world body.
+        FREE,   ///< Add a free body at the robot (but no mocap body).
+        MOCAP,  ///< Add a mocap body the robot is attached to.
+    };
+    WorldMountMode toWorldMountMode(const std::string& string);
+    
+    
     /**
      * @brief Converts a VirtualRobot robot model to MuJoCo MJCF format.
      */
@@ -46,8 +57,8 @@ namespace VirtualRobot::mujoco
          * @param meshRelDir the directory relative to basePath where meshes shall be placed
          * @return Absolute path to saved robot model file.
          */
-        std::string saveMJCF(const std::string& filename, const std::string& basePath, 
-                      const std::string& meshRelDir);
+        std::string saveMJCF(const std::string& filename, const std::string& basePath,
+                             const std::string& meshRelDir);
         
         
         /// Set whether paths (e.g. meshes) shall be relative instead of absolute.
@@ -71,15 +82,10 @@ namespace VirtualRobot::mujoco
         /// Set the body sanitize mode.
         void setBodySanitizeMode(BodySanitizeMode mode);
         
-        /**
-         * @brief Enable or disable adding of a mocap body controlling the robot pose.
-         * 
-         * @param enabled If true:
-         * - Add a free joint to the robot root body mocap body
-         * - Add a mocap body in the world body (called <RobotName>_Mocap)
-         * - Add a weld constraint welding them together.
-         */
-        void setWithMocapBody(bool enabled);
+        /// Get the world mount mode.
+        WorldMountMode getWorldMountMode() const;
+        /// Set the world mount mode.
+        void setWorldMountMode(const WorldMountMode& value);
         
         void setVerbose(bool value);
         
@@ -154,13 +160,11 @@ namespace VirtualRobot::mujoco
             { ActuatorType::VELOCITY, "_velocity" },
         };
         
-        
-        /// Add a mocap
-        bool withMocapBody = false;
-        
         /// Sanitize mode.
         BodySanitizeMode bodySanitizeMode = BodySanitizeMode::DUMMY_MASS;
         
+        /// World mount mode.
+        WorldMountMode worldMountMode = WorldMountMode::FIXED;
         
         /// Verbose printing.
         bool verbose = false;
@@ -180,6 +184,8 @@ namespace VirtualRobot::mujoco
         
         // Input
         
+        RobotMjcf mjcf;
+        
         /// The input robot.
         RobotPtr robot;
         
@@ -191,6 +197,7 @@ namespace VirtualRobot::mujoco
         /// The robot root body.
         mjcf::Body robotRoot;
 
+        
         
         // Processing
         
