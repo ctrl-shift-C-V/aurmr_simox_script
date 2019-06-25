@@ -728,6 +728,11 @@ void MujocoIO::setActuatorTypeSuffixes(const std::map<ActuatorType, std::string>
     this->actuatorTypeSuffixes = suffixes;
 }
 
+void MujocoIO::setBodySanitizeMode(BodySanitizeMode mode)
+{
+    this->bodySanitizeMode = mode;
+}
+
 void MujocoIO::setWithMocapBody(bool enabled)
 {
     this->withMocapBody = enabled;

@@ -8,17 +8,16 @@
 #include "BodySanitizer.h"
 
 
-namespace VirtualRobot
+namespace VirtualRobot::mujoco
 {
 
-namespace mujoco
-{
-
+    /// Actuator type.
     enum class ActuatorType
     {
         MOTOR, POSITION, VELOCITY,
     };
     ActuatorType toActuatorType(const std::string& string);
+    
     
     /// Body sanitization mode.
     enum class BodySanitizeMode
@@ -29,6 +28,9 @@ namespace mujoco
     BodySanitizeMode toBodySanitizeMode(const std::string& string);
     
     
+    /**
+     * @brief Converts a VirtualRobot robot model to MuJoCo MJCF format.
+     */
     class MujocoIO
     {
     public:
@@ -66,6 +68,8 @@ namespace mujoco
         /// Set suffixes appended to actuator names if adding actuator type suffixes is enabled.
         void setActuatorTypeSuffixes(const std::map<ActuatorType, std::string>& suffixes);
         
+        /// Set the body sanitize mode.
+        void setBodySanitizeMode(BodySanitizeMode mode);
         
         /**
          * @brief Enable or disable adding of a mocap body controlling the robot pose.
@@ -201,4 +205,4 @@ namespace mujoco
     };
     
     
-}}
+}
