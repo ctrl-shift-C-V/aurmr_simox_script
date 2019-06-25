@@ -27,8 +27,11 @@ int main(int argc, char* argv[])
                 "outdir", "The output directory. (default: 'mjcf')");
     RuntimeEnvironment::considerKey(
                 "mesh_rel_dir", "The mesh directory relative to outdir. (default: 'mesh')");
+    
     RuntimeEnvironment::considerKey(
                 "actuator", "The actuator type to add (motor, position, velocity). (default: motor)");
+    RuntimeEnvironment::considerKey(
+                "sanitize_bodies", "How to sanitize massless bodies (dummymass, merge). (default: merge)");
     RuntimeEnvironment::considerFlag(
                 "mocap", "Add a mocap body to which the robot root body is welded.");
     
@@ -89,6 +92,21 @@ int main(int argc, char* argv[])
         std::cout << "Avaliable: motor|position|velocity" << std::endl;
         return -1;
     }
+
+    
+    const std::string bodySanitizeModeStr = RuntimeEnvironment::checkParameter("sanitize_bodies", "merge");
+    mujoco::BodySanitizeMode bodySanitizeMode;
+    try
+    {
+        bodySanitizeMode = mujoco::toBodySanitizeMode(bodySanitizeModeStr);
+    }
+    catch (const std::out_of_range&)
+    {
+        std::cout << "No sanitize mode '" << bodySanitizeModeStr << "'" << std::endl;
+        std::cout << "Avaliable: dummymass|merge" << std::endl;
+        return -1;
+    }
+    
     
     const bool mocap = RuntimeEnvironment::hasFlag("mocap");
     const bool verbose = RuntimeEnvironment::hasFlag("verbose");
@@ -164,6 +182,7 @@ int main(int argc, char* argv[])
         
         mujocoIO.setActuatorType(actuatorType);
         mujocoIO.setAddActuatorTypeSuffix(addActuatorSuffix);
+        mujocoIO.setBodySanitizeMode(bodySanitizeMode);
         
         mujocoIO.setUseRelativePaths(useRelativePaths);
         mujocoIO.setWithMocapBody(mocap);
