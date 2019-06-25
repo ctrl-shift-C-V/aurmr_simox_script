@@ -563,13 +563,15 @@ void MujocoIO::addContactExcludes()
     // resolve body names and add exludes
     for (const auto& excludePair : excludePairs)
     {
-        std::string body1, body2;
+        std::string body1 = excludePair.first;
+        std::string body2 = excludePair.second;
         
-        if (dynamic_cast<MergingBodySanitizer*>(bodySanitizer.get()) != nullptr)
+        MergingBodySanitizer* mergingSanitizer = 
+                dynamic_cast<MergingBodySanitizer*>(bodySanitizer.get());
+        if (mergingSanitizer)
         {
-            MergingBodySanitizer* sanitizer = dynamic_cast<MergingBodySanitizer*>(bodySanitizer.get());
-            body1 = sanitizer->getMergedBodyName(excludePair.first);
-            body2 = sanitizer->getMergedBodyName(excludePair.second);
+            body1 = mergingSanitizer->getMergedBodyName(body1);
+            body2 = mergingSanitizer->getMergedBodyName(body2);
         }
         
         // assert !body1.empty()
