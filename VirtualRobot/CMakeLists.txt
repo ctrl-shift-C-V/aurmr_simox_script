@@ -377,6 +377,7 @@ SET(SOURCES
     XML/mujoco/DummyMassBodySanitizer.cpp
     XML/mujoco/MergingBodySanitizer.cpp
     XML/mujoco/MujocoIO.cpp
+    XML/mujoco/RobotMjcf.cpp
 )
 
 SET(INCLUDES
@@ -600,6 +601,7 @@ SET(INCLUDES
     XML/mujoco/DummyMassBodySanitizer.h
     XML/mujoco/MergingBodySanitizer.h
     XML/mujoco/MujocoIO.h
+    XML/mujoco/RobotMjcf.h
     
 )
 
