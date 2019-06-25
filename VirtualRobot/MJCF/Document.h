@@ -214,9 +214,10 @@ namespace mjcf
     // definition of Document.
     template <class D>
     template <class ParentD, class ElementD>
-    ElementD Element<D>::createElement(Element<ParentD> parent, const std::string& className)
+    ElementD Element<D>::createElement(Element<ParentD> parent, const std::string& className, 
+                                       bool front)
     {
-        return _document->createElement<ElementD, ParentD>(parent, className);
+        return _document->createElement<ElementD, ParentD>(parent, className, front);
     }
     
     template <class D>

@@ -131,9 +131,9 @@ namespace mjcf
         
         // INSERTION & DELETION
 
-        /// Add a new child of this with of given type.
+        /// Add a new child of this of given type.
         template <class OtherDerived>
-        OtherDerived addChild(const std::string& className = "");
+        OtherDerived addChild(const std::string& className = "", bool front = false);
         
         /// Get the first child of type OtherDerived. If there is none, add one.
         template <class OtherDerived>
@@ -221,7 +221,8 @@ namespace mjcf
         
         /// Use document to create a new element of type ElementD with given parent.
         template <class ParentD, class ElementD>
-        ElementD createElement(Element<ParentD> parent, const std::string& className = "");
+        ElementD createElement(Element<ParentD> parent, const std::string& className = "",
+                               bool front = false);
         
         void assertElemValueEqualsTag();
         
@@ -399,9 +400,9 @@ namespace mjcf
     
     template <class D>
     template <class OtherD>
-    OtherD Element<D>::addChild(const std::string& className)
+    OtherD Element<D>::addChild(const std::string& className, bool front)
     {
-        return createElement<D, OtherD>(*this, className);
+        return createElement<D, OtherD>(*this, className, front);
     }
     
     template <class D>
