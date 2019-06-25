@@ -37,6 +37,9 @@ namespace mujoco
     public:
         
         MasslessBodySanitizer(RobotPtr& robot);
+       
+        /// Set the scaling for lengths (e.g. positions) (to m).
+        void setLengthScale(float toMeter);
         
         void sanitize(mjcf::Body root);
         
@@ -49,14 +52,17 @@ namespace mujoco
         
     private:
         
-        void sanitizeRecursion(mjcf::Body body);
+        void sanitizeRecursive(mjcf::Body body);
         void sanitizeLeafBody(mjcf::Body body);
         
         void mergeBodies(mjcf::Body body, mjcf::Body childBody, Eigen::Matrix4f& accChildPose);
         
         const std::string t = "| ";
         
+        /// Scaling factor of lengths (to m).
+        float lengthScale = 1.0f;
         
+        /// The robot.
         RobotPtr& robot;
         
         std::vector<MergedBodySet> mergedBodySets;

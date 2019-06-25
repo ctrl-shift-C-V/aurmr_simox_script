@@ -44,9 +44,9 @@ namespace mujoco
         /// This can cause problems when including the generated model from another directory.
         void setUseRelativePaths(bool useRelative);
         
-        /// Set the scaling for lengths.
+        /// Set the scaling for lengths (to m).
         void setLengthScale(float value);
-        /// Set the scaling for meshes.
+        /// Set the scaling for meshes (to m).
         void setMeshScale(float value);
         /// Set the scaling for mass (to kg).
         void setMassScale(float value);
@@ -152,9 +152,13 @@ namespace mujoco
         
         // Paths
         
+        /// The directory where the output model is stored.
         std::filesystem::path outputDirectory;
+        /// The filename of the output file (without parent path).
         std::filesystem::path outputFileName;
+        /// The directory where meshes are stored, relative to `outputDirectory`.
         std::filesystem::path outputMeshRelDirectory;
+        /// The directory where meshes are stored (including `outputDirectory`).
         std::filesystem::path outputMeshDirectory() { return outputDirectory / outputMeshRelDirectory; }
         
         
@@ -168,6 +172,7 @@ namespace mujoco
         
         /// The built MJCF document.
         mjcf::DocumentPtr document = nullptr;
+        /// The robot root body.
         mjcf::Body robotRoot;
 
         

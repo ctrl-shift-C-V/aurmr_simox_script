@@ -87,6 +87,7 @@ std::string MujocoIO::saveMJCF(
     }
     
     std::cout << "Merging massless bodies ..." << std::endl;
+    masslessBodySanitizer.setLengthScale(lengthScale);
     masslessBodySanitizer.sanitize(robotRoot);
     
     std::cout << "Adding contact excludes ..." << std::endl;

@@ -15,19 +15,24 @@ MasslessBodySanitizer::MasslessBodySanitizer(RobotPtr& robot) :
     robot(robot)
 {}
 
+void MasslessBodySanitizer::setLengthScale(float toMeter)
+{
+    this->lengthScale = toMeter;
+}
+
 void MasslessBodySanitizer::sanitize(Body root)
 {
-    // merge body leaf nodes with parent if they do not have a mass (inertial or geom)
+    // Merge body leaf nodes with parent if they do not have a mass (inertial or geom).
     
     for (Body body = root.firstChild<Body>();
          body; body = body.nextSiblingElement<Body>())
     {
-        sanitizeRecursion(body);
+        sanitizeRecursive(body);
     }
 }
 
 
-void MasslessBodySanitizer::sanitizeRecursion(mjcf::Body body)
+void MasslessBodySanitizer::sanitizeRecursive(mjcf::Body body)
 {
     RobotNodePtr bodyNode = robot->getRobotNode(body.name);
     Eigen::Matrix4f accChildPose = Eigen::Matrix4f::Identity();
@@ -38,13 +43,13 @@ void MasslessBodySanitizer::sanitizeRecursion(mjcf::Body body)
         
         if (!body.hasChild<Body>())
         {
-            // leaf => end of recursion
+            // Leaf => end of recursion.
             sanitizeLeafBody(body);
             return;
         }
         
-        // non-leaf body
-        // check whether there is only one child body
+        // Non-leaf body.
+        // Check whether there is only one child body.
         Body childBody = body.firstChild<Body>();
         if (!childBody.nextSiblingElement<Body>())
         {
@@ -63,7 +68,7 @@ void MasslessBodySanitizer::sanitizeRecursion(mjcf::Body body)
     for (Body child = body.firstChild<Body>();
          child; child = child.nextSiblingElement<Body>())
     {
-        sanitizeRecursion(child);
+        sanitizeRecursive(child);
     }
 }
 
@@ -95,12 +100,12 @@ static void updateOri(AnyElement element, const Eigen::Matrix3f& accChildOri)
 
 void copyChildren(Body body, Body child, const Eigen::Matrix4f& childPose)
 {
-    // merge childBody into body => move all its elements here
-    // while doing this, apply accChildPose to elements
+    // Merge childBody into body => move all its elements here.
+    // While doing this, apply accChildPose to elements.
     for (AnyElement grandChild = child.firstChild<AnyElement>();
          grandChild; grandChild = grandChild.template nextSiblingElement<AnyElement>())
     {
-        // clone grandchild
+        // Clone grandchild.
         AnyElement elem = grandChild.deepClone();
         
         if (elem)
@@ -114,7 +119,7 @@ void copyChildren(Body body, Body child, const Eigen::Matrix4f& childPose)
             updateOri(elem, math::Helpers::Orientation(childPose));
         }
         
-        // insert to body
+        // Insert to body
         body.insertEndChild(elem);
     }
 }
@@ -128,22 +133,25 @@ void MasslessBodySanitizer::mergeBodies(Body body, Body childBody, Eigen::Matrix
     RobotNodePtr childNode = robot->getRobotNode(childBody.name);
     Eigen::Matrix4f childPose = childNode->getTransformationFrom(childNode->getParent());
     
-    // update accumulated child pose
-    // merged child's frame w.r.t. body's frame
+    // Scale position.
+    math::Helpers::Position(childPose) = lengthScale * math::Helpers::Position(childPose);
+    
+    // Update accumulated child pose.
+    // Merged child's frame w.r.t. body's frame.
     accChildPose = childPose * accChildPose;
     
-    // merge childBody into body => move all its elements here
-    // while doing this, apply accChildPose to elements
+    // Merge childBody into body => move all its elements here.
+    // While doing this, apply accChildPose to elements.
     copyChildren(body, childBody, accChildPose);
     
-    // update body name
+    // Update body name.
     MergedBodySet& bodySet = getMergedBodySetWith(body.name);
     bodySet.addBody(childBody.name);
     body.name = bodySet.getMergedBodyName();
     
     std::cout << t << "\t(new name: '" << bodySet.getMergedBodyName() << "')" << std::endl;
     
-    // delete child
+    // Delete child.
     body.deleteChild(childBody);
 }
 
@@ -155,13 +163,13 @@ void MasslessBodySanitizer::sanitizeLeafBody(Body body)
     
     if (!body.hasChildren()) // is completely empty?
     {
-        // leaf without geom: make it a site
+        // Leaf without geom: make it a site.
         std::cout << "Changing to site." << std::endl;
         body.transform<Site>();
     }
     else
     {
-        // add a small mass
+        // Add a small mass.
         std::cout << "Adding dummy inertial to massless leaf body with children." << std::endl;
         body.addDummyInertial();
     }
@@ -187,7 +195,7 @@ MergedBodySet&MasslessBodySanitizer::getMergedBodySetWith(const std::string& bod
         }
     }
     
-    // not found => add
+    // Not found => add.
     mergedBodySets.push_back(MergedBodySet(bodyName));
     
     return mergedBodySets.back();
