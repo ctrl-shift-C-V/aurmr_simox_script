@@ -374,9 +374,12 @@ SET(SOURCES
     XML/ObjectIO.cpp
     XML/RobotIO.cpp
     XML/SceneIO.cpp
+    
     XML/mujoco/BodySanitizer.cpp
     XML/mujoco/DummyMassBodySanitizer.cpp
     XML/mujoco/MergingBodySanitizer.cpp
+    XML/mujoco/Mesh.cpp
+    XML/mujoco/MeshConverter.cpp
     XML/mujoco/MujocoIO.cpp
     XML/mujoco/RobotMjcf.cpp
 )
@@ -599,9 +602,12 @@ SET(INCLUDES
     XML/ObjectIO.h
     XML/RobotIO.h
     XML/SceneIO.h
+    
     XML/mujoco/BodySanitizer.h
     XML/mujoco/DummyMassBodySanitizer.h
     XML/mujoco/MergingBodySanitizer.h
+    XML/mujoco/Mesh.h
+    XML/mujoco/MeshConverter.h
     XML/mujoco/MujocoIO.h
     XML/mujoco/RobotMjcf.h
     
