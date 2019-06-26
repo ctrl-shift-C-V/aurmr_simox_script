@@ -2,10 +2,15 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <VirtualRobotChecks.h>
+
 #include <VirtualRobot/RobotNodeSet.h>
 
 #include <VirtualRobot/Nodes/RobotNodePrismatic.h>
 #include <VirtualRobot/Nodes/RobotNodeRevolute.h>
+
+
+#include "MeshConverter.h"
 
 
 namespace fs = std::filesystem;
@@ -14,11 +19,44 @@ namespace fs = std::filesystem;
 namespace VirtualRobot::mujoco
 {
 
+
+template <typename EnumT>
+static EnumT stringToEnum(const std::map<std::string, EnumT>& map, const std::string& string)
+{
+    std::string lower = string;
+    std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+    try
+    {
+        return map.at(lower);
+    }
+    catch (const std::out_of_range&)
+    {
+        std::stringstream msg;
+        msg << "Invalid key '" << string << "'. Valid keys are: ";
+        for (const auto& item : map)
+        {
+            msg << item.first << " ";
+        }
+        throw std::out_of_range(msg.str());
+    }
+}
+
+ActuatorType toActuatorType(const std::string& string)
+{
+    return stringToEnum<ActuatorType>(
+    {
+        { "motor",    ActuatorType::MOTOR },
+        { "position", ActuatorType::POSITION },
+        { "velocity", ActuatorType::VELOCITY }
+    }, string);
+}
+
+
 RobotMjcf::RobotMjcf(RobotPtr robot) : robot(robot)
 {
     document->setModelName(robot->getName());
     
-    // Add robot root.
+    // Add robot body.
     robotBody = document->worldbody().addBody(robot->getName(), robot->getName());
     nodeBodies[robot->getName()] = robotBody;
 }
@@ -40,7 +78,19 @@ RobotPtr RobotMjcf::getRobot() const
 
 mjcf::Body RobotMjcf::getRobotNodeBody(const std::string& nodeName) const
 {
-    return nodeBodies.at(nodeName);
+    try
+    {
+        return nodeBodies.at(nodeName);
+    }
+    catch (const std::range_error&)
+    {
+        throw error::NoBodyOfRobotNode(nodeName);
+    }
+}
+
+bool RobotMjcf::hasRobotNodeBody(const std::string& nodeName) const
+{
+    return nodeBodies.find(nodeName) != nodeBodies.end();
 }
 
 void RobotMjcf::setOutputFile(const std::filesystem::path& filePath)
@@ -48,10 +98,20 @@ void RobotMjcf::setOutputFile(const std::filesystem::path& filePath)
     this->outputFile = filePath;
 }
 
-void RobotMjcf::addCompiler(const std::string& angle, bool balanceIneratia)
+void RobotMjcf::setOutputMeshDirectory(const std::filesystem::path& path)
 {
-    document->compiler().angle = angle;
-    document->compiler().balanceinertia = balanceIneratia;
+    this->outputMeshDir = path;
+}
+
+void RobotMjcf::addCompiler(bool angleRadian, bool boundMass, bool balanceIneratia)
+{
+    mjcf::CompilerSection compiler = document->compiler();
+    compiler.angle = angleRadian ? "radian" : "degree";
+    if (boundMass)
+    {
+        compiler.boundmass = document->getDummyMass();
+    }
+    compiler.balanceinertia = balanceIneratia;
 }
 
 void RobotMjcf::addDefaultsClass(float meshScale)
@@ -109,7 +169,13 @@ mjcf::Body RobotMjcf::addNodeBody(RobotNodePtr node, mjcf::Body parent,
 
 mjcf::Joint RobotMjcf::addNodeJoint(RobotNodePtr node, mjcf::Body body)
 {
-    VR_ASSERT(node->isRotationalJoint() xor node->isTranslationalJoint());
+    if (!node->isRotationalJoint() || node->isTranslationalJoint())
+    {
+        throw error::NodeIsNoJoint(node->getName());
+    }
+    VR_CHECK_HINT(!(node->isRotationalJoint() && node->isTranslationalJoint()),
+                  "Node must not be both rotational and translational joint.");
+
     
     mjcf::Joint joint = body.addJoint();
     joint.name = node->getName();
@@ -119,13 +185,13 @@ mjcf::Joint RobotMjcf::addNodeJoint(RobotNodePtr node, mjcf::Body body)
     if (node->isRotationalJoint())
     {
         RobotNodeRevolutePtr revolute = boost::dynamic_pointer_cast<RobotNodeRevolute>(node);
-        VR_ASSERT(revolute);
+        VR_CHECK(revolute);
         axis = revolute->getJointRotationAxisInJointCoordSystem();
     }
     else if (node->isTranslationalJoint())
     {
         RobotNodePrismaticPtr prismatic = boost::dynamic_pointer_cast<RobotNodePrismatic>(node);
-        VR_ASSERT(prismatic);
+        VR_CHECK(prismatic);
         axis = prismatic->getJointTranslationDirectionJointCoordSystem();
     }
     
@@ -233,94 +299,57 @@ void RobotMjcf::addNodeBodyMesh(RobotNodePtr node)
 {
     mjcf::Body body = getRobotNodeBody(node->getName());
     
-    const bool meshlabserverAviable = true; // system("which meshlabserver > /dev/null 2>&1") == 0;
-    bool notAvailableReported = false;
+    const fs::path meshPath = convertNodeMeshToSTL(node);
     
+    if (meshPath.empty())
+    {
+        VR_ERROR << "Failed to add mesh to body for node '" << node->getName();
+        return;
+    }
     
+    // Add asset.
+    const std::string meshName = node->getName();
+    document->asset().addMesh(meshName, meshPath);
+    
+    // Add mesh geom to body.
+    mjcf::Geom geom = body.addGeomMesh(meshName);
+    geom.name = node->getName();
 }
 
-void RobotMjcf::convertNodeMeshToSTL(RobotNodePtr node)
+std::filesystem::path RobotMjcf::convertNodeMeshToSTL(RobotNodePtr node)
 {
+    VisualizationNodePtr visualization = node->getVisualization(SceneObject::VisualizationType::Full);
     
+    if (!visualization)
+    {
+        VR_INFO << "Node '" << node->getName() << "': No visualization." << std::endl;
+        return "";
+    }
+    
+    std::cout << "Node '" << node->getName() << "':\t";
+    
+    const fs::path sourceFile = visualization->getFilename();
+    
+    if (sourceFile.empty())
+    {
+        VR_INFO << "Node '" << node->getName() << "': No visualization file." << std::endl;
+    }
+    if (!fs::is_regular_file(sourceFile))
+    {
+        VR_INFO << "Node '" << node->getName() << "': Visualization file " << sourceFile 
+                << " does not exist." << std::endl;
+        return "";
+    }
+    
+    fs::path targetFilename = sourceFile.filename();
+    targetFilename.replace_extension("stl");
+    const fs::path targetFile = outputMeshDir / targetFilename;
+    
+    MeshConverter::toSTL(sourceFile, targetFile, true);
+    
+    return targetFile;
 }
 
-void RobotMjcf::convertNodeMeshToSTL(
-        const std::filesystem::path& sourceFile,
-        const std::filesystem::path& _targetPath,
-        bool skipIfExists)
-{
-    fs::path targetFile = _targetPath;
-    
-    VR_ASSERT();
-    
-    // Add a file name if none was passed.
-    if (!targetFile.has_filename())
-    {
-        fs::path filename = sourceFile.filename();
-        filename.replace_extension("stl");
-        targetFile = targetFile / filename;
-    }
-    
-    // Make sure parent directory exists.
-    if (!fs::exists(targetFile.parent_path()))
-    {
-        fs::create_directories(targetFile.parent_path());
-    }
-    
-    // Check if file already exists.
-    if (skipIfExists && fs::exists(targetFile))
-    {
-        std::cout << "skipping (" << targetFile << " already exists)";
-        return;
-    }
-    
-    // Check if file has to be converted.
-    if (sourceFile.extension() != ".stl")
-    {
-        std::cout << "Copying: " << sourceFile << "\n"
-                  << "     to: " << targetFile;
-        fs::copy_file(sourceFile, targetFile);
-        
-        return;
-    }
-    
-    
-    std::cout << "Converting to .stl: " << sourceFile << std::endl;
-    
-    const bool meshlabserverAvailable = system("which meshlabserver > /dev/null 2>&1") == 0;
-    bool notAvailableReported = false;
-    
-    if (!meshlabserverAvailable)
-    {
-        if (!notAvailableReported)
-        {
-            std::cerr << std::endl 
-                      << "Command 'meshlabserver' not available, cannot convert meshes."
-                      << " (This error is reported only once.)"
-                      << std::endl;
-            notAvailableReported = true;
-        }
-        
-        return;
-    }
-    
-    // meshlabserver available
-    std::stringstream convertCommand;
-    convertCommand << "meshlabserver"
-                   << " -i " << sourceFile
-                   << " -o " << targetFile;
-    
-    // run command
-    std::cout << "----------------------------------------------------------" << std::endl;
-    std::cout << "Running command: " << convertCommand.str() << std::endl;
-    const int r = system(convertCommand.str().c_str());
-    std::cout << "----------------------------------------------------------" << std::endl;
-    if (r != 0)
-    {
-        std::cout << "Command returned with error: " << r << "\n"
-                  << "Command was: " << convertCommand.str() << std::endl;
-    }
-}
 
 void RobotMjcf::addNodeBodyMeshes()
 {
@@ -338,6 +367,275 @@ void RobotMjcf::addNodeBodyMeshes(const std::vector<std::string>& nodeNames)
     {
         addNodeBody(robot->getRobotNode(nodeName));
     }    
+}
+
+mjcf::Body RobotMjcf::addMocapBody(
+        const std::string& bodyName, const std::string& className, float geomSize)
+{
+    if (!className.empty())
+    {
+        // add defaults class
+        mjcf::DefaultClass defaultClass = document->default_().getClass(className);
+        
+        mjcf::Geom geom = defaultClass.getElement<mjcf::Geom>();
+        geom.rgba = Eigen::Vector4f(.9f, .5f, .5f, .5f);
+    }
+    
+    // Add body.
+    mjcf::Body mocap = document->worldbody().addMocapBody(bodyName, geomSize);
+    if (!className.empty())
+    {
+        mocap.childclass = className;
+    }
+    
+    return mocap;
+}
+
+mjcf::Body RobotMjcf::addMocapBodyWeld(
+        const std::string& weldBodyName, 
+        const std::string& bodyName, 
+        const std::string& className,
+        float geomSize)
+{
+    mjcf::Body mocap = addMocapBody(bodyName, className, geomSize);
+    
+    if (!className.empty())
+    {
+        // Get defaults class.
+        mjcf::DefaultClass defaultClass = document->default_().getClass(className);
+        
+        // Add equality defaults.
+        mjcf::EqualityDefaults equality = defaultClass.getElement<mjcf::EqualityDefaults>();
+        Eigen::Vector5f solimp = equality.solimp;
+        solimp(1) = 0.99f;
+        equality.solimp = solimp;
+        //equality.solref = Eigen::Vector2f(.02f, 1.f);
+    }
+    
+    // Add equality weld constraint.
+    mjcf::EqualityWeld weld = document->equality().addWeld(bodyName, weldBodyName, bodyName);
+    if (!className.empty())
+    {
+        weld.class_ = className;
+    }
+    
+    // Add contact exclude.
+    document->contact().addExclude(mocap.name, weldBodyName);
+    
+    return mocap;
+}
+
+mjcf::Body RobotMjcf::addMocapBodyWeldRobot(
+        const std::string& bodyName, const std::string& className)
+{
+    return addMocapBodyWeld(bodyName.empty() ? robot->getName() + "_mocap" : bodyName,
+                            className);    
+}
+
+
+struct ParentChildContactExcludeVisitor : public mjcf::Visitor
+{
+    ParentChildContactExcludeVisitor(mjcf::Document& document) : mjcf::Visitor (document)
+    {}
+    virtual ~ParentChildContactExcludeVisitor() override = default;
+
+    // bool VisitEnter(const tinyxml2::XMLElement&, const tinyxml2::XMLAttribute*) override;
+    bool visitEnter(const mjcf::AnyElement& element) override;
+    
+    std::vector<std::pair<std::string, std::string>> excludePairs;
+    bool firstSkipped = false;  ///< Used to skip the root element.
+};
+
+bool ParentChildContactExcludeVisitor::visitEnter(const mjcf::AnyElement& element)
+{
+    if (!element.is<mjcf::Body>())
+    {
+        return true;
+    }
+    
+    const mjcf::Body body = element.as<mjcf::Body>();
+    
+    if (!firstSkipped)
+    {
+        firstSkipped = true;
+        return true;
+    }
+    
+    const mjcf::Body parent = body.parent<mjcf::Body>();
+    VR_CHECK(parent);
+    excludePairs.emplace_back(parent.name.get(), body.name.get());
+    
+    return true;
+}
+
+
+void RobotMjcf::addContactExcludes(bool addParentChildExcludes)
+{
+    addContactExcludes(robot->getRobotNodeNames(), addParentChildExcludes);
+}
+
+void RobotMjcf::addContactExcludes(RobotNodeSetPtr nodeSet, bool addParentChildExcludes)
+{
+    addContactExcludes(nodeSet->getNodeNames(), addParentChildExcludes);
+}
+
+void RobotMjcf::addContactExcludes(const std::vector<std::string>& nodeNames, 
+                                   bool addParentChildExcludes)
+{
+    std::vector<std::pair<std::string, std::string>> excludePairs;
+    
+    for (const std::string& nodeName : nodeNames)
+    {
+        RobotNodePtr node = robot->getRobotNode(nodeName);
+        
+        for (const std::string& ignoreNode : node->getPhysics().ignoreCollisions)
+        {
+            // I found an <IgnoreCollision> element referring to a non-existing node.
+            // => check node existence here
+            if (robot->hasRobotNode(ignoreNode))
+            {
+                excludePairs.push_back({node->getName(), ignoreNode});
+            }
+        }
+    }
+    
+    // Resolve body names and add exludes.
+    for (const auto& excludePair : excludePairs)
+    {
+        const std::string body1 = excludePair.first;
+        const std::string body2 = excludePair.second;
+        
+        VR_CHECK(!body1.empty());
+        VR_CHECK(!body2.empty());
+        document->contact().addExclude(body1, body2);
+    }
+    
+    if (addParentChildExcludes)
+    {
+        // Add excludes between parent and child elemenets. 
+        // This should actually not be necessary?
+        ParentChildContactExcludeVisitor visitor(*document);
+        robotBody.accept(visitor);
+        for (const auto& excludePair : visitor.excludePairs)
+        {
+            document->contact().addExclude(excludePair.first, excludePair.second);
+        }
+    }
+}
+
+void RobotMjcf::addMocapContactExcludes(mjcf::Body mocap)
+{
+    if (!mocap)
+    {
+        throw std::invalid_argument("Passed uninitialized mocap body to " + std::string(__FUNCTION__) + "()");
+    }
+    for (const auto& nodeBody : nodeBodies)
+    {
+        document->contact().addExclude(mocap, nodeBody.second);
+    }
+}
+
+mjcf::AnyElement RobotMjcf::addJointActuator(mjcf::Joint joint, ActuatorType type)
+{
+    mjcf::AnyElement actuator;
+    
+    const std::string jointName = joint.name;
+    switch (type)
+    {
+        case ActuatorType::MOTOR:
+        {
+            mjcf::ActuatorMotor act = document->actuator().addMotor(jointName);
+            actuator = act;
+            break;
+        }
+            
+        case ActuatorType::POSITION:
+        {
+            mjcf::ActuatorPosition act = document->actuator().addPosition(jointName);
+            actuator = act;
+            
+            if (joint.limited)
+            {
+                act.ctrllimited = joint.limited;
+                act.ctrlrange = joint.range;
+            }
+        }
+            break;
+            
+        case ActuatorType::VELOCITY:
+        {
+            mjcf::ActuatorVelocity act = document->actuator().addVelocity(jointName);
+            actuator = act;
+        }
+            break;
+    }
+    
+    std::string actuatorName = joint.name;
+    actuator.setAttribute("name", actuatorName);
+    
+    return actuator;
+}
+
+
+mjcf::AnyElement RobotMjcf::addNodeActuator(RobotNodePtr node, ActuatorType type)
+{
+    if (!(node->isRotationalJoint() || node->isTranslationalJoint()))
+    {
+        throw error::NodeIsNoJoint(node->getName());
+    }
+    
+    mjcf::Body body = getRobotNodeBody(node->getName());
+    
+    mjcf::Joint joint;
+    if (body.hasChild<mjcf::Joint>())
+    {
+        joint = body.firstChild<mjcf::Joint>();
+    }
+    else
+    {
+        joint = addNodeJoint(node, body);
+    }
+    
+    return addJointActuator(joint, type);
+}
+
+
+void RobotMjcf::addActuators(ActuatorType type)
+{
+    addActuators(robot->getRobotNodeNames(), type);
+}
+
+void RobotMjcf::addActuators(RobotNodeSetPtr nodeSet, ActuatorType type)
+{
+    addActuators(nodeSet->getNodeNames(), type);
+}
+
+void RobotMjcf::addActuators(const std::vector<std::string>& nodeNames, ActuatorType type)
+{
+    for (const std::string& nodeName : nodeNames)
+    {
+        RobotNodePtr node = robot->getRobotNode(nodeName);
+        // Ignore non-joint nodes.
+        if (node->isRotationalJoint() || node->isTranslationalJoint())
+        {
+            addNodeActuator(robot->getRobotNode(nodeName), type);
+        }
+    }
+}
+
+void RobotMjcf::addActuators(const std::map<std::string, ActuatorType>& nodeTypeMap)
+{
+    for (const auto& item : nodeTypeMap)
+    {
+        const std::string& nodeName = item.first;
+        
+        RobotNodePtr node = robot->getRobotNode(nodeName);
+        // Ignore non-joint nodes.
+        if (node->isRotationalJoint() || node->isTranslationalJoint())
+        {
+            addNodeActuator(robot->getRobotNode(nodeName), item.second);
+        }
+    }
 }
 
 }

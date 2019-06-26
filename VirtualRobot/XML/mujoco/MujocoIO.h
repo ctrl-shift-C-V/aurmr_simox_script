@@ -11,14 +11,6 @@
 
 namespace VirtualRobot::mujoco
 {
-
-    /// Actuator type.
-    enum class ActuatorType
-    {
-        MOTOR, POSITION, VELOCITY,
-    };
-    ActuatorType toActuatorType(const std::string& string);
-    
     
     /// Body sanitization mode.
     enum class BodySanitizeMode

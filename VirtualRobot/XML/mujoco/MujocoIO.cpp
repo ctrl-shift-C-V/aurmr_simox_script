@@ -1,7 +1,7 @@
 #include "MujocoIO.h"
 
 #include <VirtualRobot/RobotNodeSet.h>
-#include <VirtualRobot/VirtualRobotException.h>
+#include <VirtualRobot/VirtualRobotChecks.h>
 
 #include <VirtualRobot/MJCF/visitors/Collector.h>
 #include <VirtualRobot/Nodes/RobotNodePrismatic.h>
@@ -32,7 +32,7 @@ namespace VirtualRobot::mujoco
 {
 
 template <typename EnumT>
-EnumT stringToEnum(const std::map<std::string, EnumT>& map, const std::string& string)
+static EnumT stringToEnum(const std::map<std::string, EnumT>& map, const std::string& string)
 {
     std::string lower = string;
     std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
@@ -52,15 +52,6 @@ EnumT stringToEnum(const std::map<std::string, EnumT>& map, const std::string& s
     }
 }
 
-ActuatorType toActuatorType(const std::string& string)
-{
-    return stringToEnum<ActuatorType>(
-    {
-        { "motor",    ActuatorType::MOTOR },
-        { "position", ActuatorType::POSITION },
-        { "velocity", ActuatorType::VELOCITY }
-    }, string);
-}
 
 BodySanitizeMode toBodySanitizeMode(const std::string& string)
 {
@@ -84,15 +75,15 @@ WorldMountMode toWorldMountMode(const std::string& string)
 
 
 
-MujocoIO::MujocoIO(RobotPtr robot) : robot(robot), mjcf(robot)
+MujocoIO::MujocoIO(RobotPtr robot) : mjcf(robot), robot(robot)
 {
-    THROW_VR_EXCEPTION_IF(!robot, "Given RobotPtr robot is null.");
+    VR_CHECK_HINT(robot, "RobotPtr must not be null.");
 }
 
 std::string MujocoIO::saveMJCF(
         const std::string& filename, const std::string& basePath, const std::string& meshRelDir)
 {
-    THROW_VR_EXCEPTION_IF(filename.empty(), "Given filename is empty.");
+    VR_CHECK_HINT(!filename.empty(), "Filename must not be empty.");
     
     setPaths(filename, basePath, meshRelDir);
     
@@ -177,7 +168,7 @@ std::string MujocoIO::saveMJCF(
         std::cout << "===========================" << std::endl;
     }
     
-    VR_ASSERT(!outputFileName.empty());
+    VR_CHECK(!outputFileName.empty());
     
     const fs::path outputFilePath = outputDirectory / outputFileName;
     
@@ -281,7 +272,7 @@ void MujocoIO::makeNodeBodies()
     nodeBodies.clear();
     
     RobotNodePtr rootNode = robot->getRootNode();
-    VR_ASSERT(rootNode);
+    VR_CHECK(rootNode);
     
     // add root
     robotRoot = document->worldbody().addBody(robot->getName(), robot->getName());
@@ -305,7 +296,7 @@ void MujocoIO::makeNodeBodies()
     
     mjcf::Body root = addNodeBody(robotRoot, rootNode);
     nodeBodies[rootNode->getName()] = root;
-    VR_ASSERT(root);
+    VR_CHECK(root);
     
     for (RobotNodePtr node : robot->getRobotNodes())
     {
@@ -315,7 +306,7 @@ void MujocoIO::makeNodeBodies()
 
 mjcf::Body MujocoIO::addNodeBody(mjcf::Body parent, RobotNodePtr node)
 {
-    mjcf.addNodeBody(node, parent);
+    return mjcf.addNodeBody(node, parent);
 }
 
 mjcf::Joint MujocoIO::addNodeJoint(mjcf::Body body, RobotNodePtr node)
@@ -421,103 +412,17 @@ void MujocoIO::addNodeBodyMeshes()
 
 mjcf::Body MujocoIO::addNodeBody(RobotNodePtr node)
 {
-    mjcf.addNodeBody(node);
+    return mjcf.addNodeBody(node);
 }
-
-struct ParentChildContactExcludeVisitor : public mjcf::Visitor
-{
-    ParentChildContactExcludeVisitor(mjcf::Document& document) : mjcf::Visitor (document)
-    {}
-    virtual ~ParentChildContactExcludeVisitor() override = default;
-
-    //bool VisitEnter(const tinyxml2::XMLElement&, const tinyxml2::XMLAttribute*) override;
-    bool visitEnter(const mjcf::AnyElement& element) override;
-    
-    std::vector<std::pair<std::string, std::string>> excludePairs;
-    bool firstSkipped = false;  ///< Used to skip the root element.
-};
-
-bool ParentChildContactExcludeVisitor::visitEnter(const mjcf::AnyElement& element)
-{
-    if (!element.is<mjcf::Body>())
-    {
-        return true;
-    }
-    
-    const mjcf::Body body = element.as<mjcf::Body>();
-    
-    if (!firstSkipped)
-    {
-        firstSkipped = true;
-        return true;
-    }
-    
-    const mjcf::Body parent = body.parent<mjcf::Body>();
-    VR_ASSERT(parent);
-    excludePairs.emplace_back(parent.name.get(), body.name.get());
-    
-    return true;
-}
-
 
 void MujocoIO::addContactExcludes()
 {
-    RobotNodePtr rootNode = robot->getRootNode();
-    
-    std::vector<std::pair<std::string, std::string>> excludePairs;
-    
-    for (RobotNodePtr node : robot->getRobotNodes())
-    {
-        for (std::string& ignore : node->getPhysics().ignoreCollisions)
-        {
-            // I found an <IgnoreCollision> element referring to a non-existing node.
-            // => check node existence here
-            if (robot->hasRobotNode(ignore))
-            {
-                excludePairs.push_back({node->getName(), ignore});
-            }
-        }
-    }
-    
-    // resolve body names and add exludes
-    for (const auto& excludePair : excludePairs)
-    {
-        std::string body1 = excludePair.first;
-        std::string body2 = excludePair.second;
-        
-        MergingBodySanitizer* mergingSanitizer = 
-                dynamic_cast<MergingBodySanitizer*>(bodySanitizer.get());
-        if (mergingSanitizer)
-        {
-            body1 = mergingSanitizer->getMergedBodyName(body1);
-            body2 = mergingSanitizer->getMergedBodyName(body2);
-        }
-        
-        // assert !body1.empty()
-        // assert !body2.empty()
-        document->contact().addExclude(body1, body2);
-    }
-    
-    // Add excludes between parent and child elemenets. 
-    // This should actually not be necessary?
-    ParentChildContactExcludeVisitor visitor(*document);
-    robotRoot.accept(visitor);
-    for (const auto& excludePair : visitor.excludePairs)
-    {
-        document->contact().addExclude(excludePair.first, excludePair.second);
-    }
+    mjcf.addContactExcludes();
 }
 
 void MujocoIO::addMocapContactExcludes(mjcf::Body mocap)
 {
-    if (!mocap)
-    {
-        throw std::invalid_argument("Passed uninitialized mocap body to " + std::string(__FUNCTION__) + "()");
-    }
-    for (const auto& nodeBody : nodeBodies)
-    {
-        document->contact().addExclude(mocap, nodeBody.second);
-    }
+    mjcf.addMocapContactExcludes(mocap);
 }
 
 void MujocoIO::addActuators()
@@ -569,7 +474,7 @@ void MujocoIO::addActuators()
 
 void MujocoIO::scaleLengths(mjcf::AnyElement element)
 {
-    VR_ASSERT(element);
+    VR_CHECK(element);
     if (verbose)
     {
         std::cout << "Traversing element " << element.actualTag() << std::endl;
