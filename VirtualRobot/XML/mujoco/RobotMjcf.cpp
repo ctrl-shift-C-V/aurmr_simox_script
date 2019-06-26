@@ -45,9 +45,10 @@ ActuatorType toActuatorType(const std::string& string)
 {
     return stringToEnum<ActuatorType>(
     {
+        { "none",     ActuatorType::NONE },
         { "motor",    ActuatorType::MOTOR },
         { "position", ActuatorType::POSITION },
-        { "velocity", ActuatorType::VELOCITY }
+        { "velocity", ActuatorType::VELOCITY },
     }, string);
 }
 
@@ -657,32 +658,36 @@ mjcf::AnyElement RobotMjcf::addJointActuator(mjcf::Joint joint, ActuatorType typ
     const std::string jointName = joint.name;
     switch (type)
     {
-        case ActuatorType::MOTOR:
-        {
-            mjcf::ActuatorMotor act = document->actuator().addMotor(jointName);
-            actuator = act;
-            break;
-        }
+    case ActuatorType::NONE:
+        // Nothing to do.
+        break;
+        
+    case ActuatorType::MOTOR:
+    {
+        mjcf::ActuatorMotor act = document->actuator().addMotor(jointName);
+        actuator = act;
+        break;
+    }
             
-        case ActuatorType::POSITION:
+    case ActuatorType::POSITION:
+    {
+        mjcf::ActuatorPosition act = document->actuator().addPosition(jointName);
+        actuator = act;
+        
+        if (joint.limited)
         {
-            mjcf::ActuatorPosition act = document->actuator().addPosition(jointName);
-            actuator = act;
-            
-            if (joint.limited)
-            {
-                act.ctrllimited = joint.limited;
-                act.ctrlrange = joint.range;
-            }
+            act.ctrllimited = joint.limited;
+            act.ctrlrange = joint.range;
         }
-            break;
+    }
+        break;
             
-        case ActuatorType::VELOCITY:
-        {
-            mjcf::ActuatorVelocity act = document->actuator().addVelocity(jointName);
-            actuator = act;
-        }
-            break;
+    case ActuatorType::VELOCITY:
+    {
+        mjcf::ActuatorVelocity act = document->actuator().addVelocity(jointName);
+        actuator = act;
+    }
+        break;
     }
     
     std::string actuatorName = joint.name;

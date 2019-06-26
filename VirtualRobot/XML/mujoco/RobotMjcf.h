@@ -16,7 +16,7 @@ namespace VirtualRobot::mujoco
     /// Actuator type.
     enum class ActuatorType
     {
-        MOTOR, POSITION, VELOCITY,
+        NONE, MOTOR, POSITION, VELOCITY,
     };
     ActuatorType toActuatorType(const std::string& string);
     
