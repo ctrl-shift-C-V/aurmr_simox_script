@@ -20,16 +20,6 @@ namespace VirtualRobot::mujoco
     BodySanitizeMode toBodySanitizeMode(const std::string& string);
     
     
-    /// How the robot is mounted at the world body.
-    enum class WorldMountMode
-    {
-        FIXED,  ///< No joint, i.e. fixed to world body.
-        FREE,   ///< Add a free body at the robot (but no mocap body).
-        MOCAP,  ///< Add a mocap body the robot is attached to.
-    };
-    WorldMountMode toWorldMountMode(const std::string& string);
-    
-    
     /**
      * @brief Converts a VirtualRobot robot model to MuJoCo MJCF format.
      */

@@ -51,6 +51,17 @@ ActuatorType toActuatorType(const std::string& string)
     }, string);
 }
 
+WorldMountMode toWorldMountMode(const std::string& string)
+{
+    return stringToEnum<WorldMountMode>(
+    {
+        { "fixed", WorldMountMode::FIXED },
+        { "free",  WorldMountMode::FREE },
+        { "mocap", WorldMountMode::MOCAP },
+    }, string);
+}
+
+
 
 RobotMjcf::RobotMjcf(RobotPtr robot) : robot(robot)
 {

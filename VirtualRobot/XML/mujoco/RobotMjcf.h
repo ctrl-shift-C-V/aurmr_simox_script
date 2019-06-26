@@ -2,6 +2,8 @@
 
 #include <filesystem>
 
+#include <Eigen/Core>
+
 #include <VirtualRobot/Robot.h>
 #include <VirtualRobot/MJCF/Document.h>
 
@@ -18,7 +20,17 @@ namespace VirtualRobot::mujoco
     };
     ActuatorType toActuatorType(const std::string& string);
     
-
+    
+    /// How the robot is mounted at the world body.
+    enum class WorldMountMode
+    {
+        FIXED,  ///< No joint, i.e. fixed to world body.
+        FREE,   ///< Add a free body at the robot (but no mocap body).
+        MOCAP,  ///< Add a mocap body the robot is attached to.
+    };
+    WorldMountMode toWorldMountMode(const std::string& string);
+    
+    
     /**
      * @brief The RobotMjcf class allows building a MuJoCo MJCF model from a 
      * VirtualRobot robot model.
