@@ -17,20 +17,22 @@ namespace VirtualRobot
             const std::string& hint,
             const std::string& lhs, const std::string& rhs)
     {
+        static const std::string newLine = "\n  ";
+        
         std::stringstream ss;
         ss << "Condition '" << condition << "' failed.";
         
         if (!(lhs.empty() && rhs.empty()))
         {
-            ss << "\n(lhs = " << lhs << ", rhs = " << rhs << ")";
+            ss << newLine << "(lhs = " << lhs << ", rhs = " << rhs << ")";
         }
         
         if (!hint.empty())
         {
-            ss << "\n Hint: " << hint;
+            ss << newLine << "Hint: " << hint;
         }
         
-        ss << "\n(line " << line << " in " << function << "() in " << file << ")" ;
+        ss << newLine << "(line " << line << " in " << function << "() in " << file << ")" ;
         
         return ss.str();
     }
