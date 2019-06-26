@@ -39,7 +39,9 @@ namespace VirtualRobot::mujoco
         const mjcf::Document& getDocument() const;
         
         
-        // PREPARATION
+        // CONFIGURATION
+        
+        // Scaling
         
         /// Get the length scaling (to m).
         float getLengthScale() const;
@@ -57,11 +59,37 @@ namespace VirtualRobot::mujoco
         void setMassScale(float value);
         
         
+        // Paths
+        
+        /**
+         * @brief Set whether paths (e.g. meshes) shall be relative (true) or absolute (false).
+         * Using relative paths can cause problems when including the model
+         * from another directory.
+         */
+        void setUseRelativePaths(bool useRelative);
+        
         /// Set the path to the output XML file.
         void setOutputFile(const std::filesystem::path& filePath);
         
-        /// Set the path to the directory where meshes shall be stored.
-        void setOutputMeshDirectory(const std::filesystem::path& path);
+        /// Set the path to the directory where meshes shall be stored 
+        /// (relative to output directory).
+        void setOutputMeshRelativeDirectory(const std::filesystem::path& meshRelativeDirectory);
+        
+        /// @see setOutputFile(), setOutputMeshRelativeDirectory()
+        void setOutputPaths(const std::filesystem::path& outputFile,
+                            const std::filesystem::path& outputMeshRelativeDirectory);
+        
+        /// Get the path to the output XML file.
+        std::filesystem::path getOutputFile() const;
+        
+        /// Get the directory of the output XML file.
+        std::filesystem::path getOutputDirectory() const;
+        
+        /// Get the output mesh directory (path relative to output directory).
+        std::filesystem::path getOutputMeshRelativeDirectory() const;
+        
+        /// Get the output mesh directory (path including the output directory).
+        std::filesystem::path getOutputMeshDirectory() const;
         
         
         // ELEMENT ACCESS
@@ -88,7 +116,7 @@ namespace VirtualRobot::mujoco
         
         
         
-        // MODIFIERS
+        // MODIFICATION
         
         // META
         
@@ -158,7 +186,8 @@ namespace VirtualRobot::mujoco
         /**
          * @brief Convert the mesh model of the given node to STL, which can 
          * be loaded by MuJoCo.
-         * @return The path to the resulting STL. On error, returns an empty path.
+         * @return The resulting STL mesh file (in the mesh directory).
+         *      On error, returns an empty path.
          */
         std::filesystem::path convertNodeMeshToSTL(RobotNodePtr node);
         
@@ -278,11 +307,25 @@ namespace VirtualRobot::mujoco
         /// The document. Using a pointer allows to easily reset it.
         mjcf::DocumentPtr document { new mjcf::Document() };
         
+        
+        // PATHS
+        
+        /// Indicate whether paths in MJCF should be relative or absolute.
+        bool useRelativePaths = false;
+        
         /// The path to the output XML file.
         std::filesystem::path outputFile;
-        /// Absolute path to the directory where meshes shall be stored.
-        std::filesystem::path outputMeshDir;
+        /// The directory of the output XML file.
+        std::filesystem::path outputDirectory() const
+        { return outputFile.parent_path(); }
         
+        /// The directory where meshes shall be stored, relative to `outputDirectory()`.
+        std::filesystem::path outputMeshRelDirectory;
+        /// The director where meshes are stored (including `outputDirectory()`.
+        
+        
+        
+        // SCALING
         
         /// Scaling for lengths, such as positions and translations (to m).
         float lengthScale = 1.f;
@@ -291,6 +334,8 @@ namespace VirtualRobot::mujoco
         /// Scaling for mass (to kg).
         float massScale = 1.f;
         
+        
+        // MJCF ELEMENTS
         
         /// The robot body. (Not part of the original robot structure.)
         mjcf::Body robotBody;

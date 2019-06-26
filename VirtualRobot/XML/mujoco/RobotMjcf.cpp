@@ -86,6 +86,79 @@ const mjcf::Document& RobotMjcf::getDocument() const
     return *document;
 }
 
+float RobotMjcf::getLengthScale() const
+{
+    return lengthScale;
+}
+
+void RobotMjcf::setLengthScale(float value)
+{
+    lengthScale = value;
+}
+
+float RobotMjcf::getMeshScale() const
+{
+    return meshScale;
+}
+
+void RobotMjcf::setMeshScale(float value)
+{
+    meshScale = value;
+}
+
+float RobotMjcf::getMassScale() const
+{
+    return massScale;
+}
+
+void RobotMjcf::setMassScale(float value)
+{
+    massScale = value;
+}
+
+void RobotMjcf::setUseRelativePaths(bool useRelative)
+{
+    this->useRelativePaths = useRelative;
+}
+
+
+void RobotMjcf::setOutputFile(const std::filesystem::path& filePath)
+{
+    this->outputFile = filePath;
+}
+
+void RobotMjcf::setOutputMeshRelativeDirectory(const std::filesystem::path& meshRelativeDirectory)
+{
+    this->outputMeshRelDirectory = meshRelativeDirectory;
+}
+
+void RobotMjcf::setOutputPaths(const std::filesystem::path& outputFile, 
+                               const std::filesystem::path& outputMeshRelativeDirectory)
+{
+    setOutputFile(outputFile);
+    setOutputMeshRelativeDirectory(outputMeshRelativeDirectory);
+}
+
+std::filesystem::path RobotMjcf::getOutputFile() const
+{
+    return outputFile;
+}
+
+std::filesystem::path RobotMjcf::getOutputDirectory() const
+{
+    return outputFile.parent_path();
+}
+
+std::filesystem::path RobotMjcf::getOutputMeshRelativeDirectory() const
+{
+    return outputMeshRelDirectory;
+}
+
+std::filesystem::path RobotMjcf::getOutputMeshDirectory() const
+{
+    return getOutputDirectory() / outputMeshRelDirectory;
+}
+
 
 RobotPtr RobotMjcf::getRobot() const
 {
@@ -119,15 +192,7 @@ mjcf::DefaultClass RobotMjcf::getRobotDefaults() const
     return document->default_().getClass(robot->getName());
 }
 
-void RobotMjcf::setOutputFile(const std::filesystem::path& filePath)
-{
-    this->outputFile = filePath;
-}
 
-void RobotMjcf::setOutputMeshDirectory(const std::filesystem::path& path)
-{
-    this->outputMeshDir = path;
-}
 
 void RobotMjcf::addCompiler(bool angleRadian, bool boundMass, bool balanceIneratia)
 {
@@ -200,7 +265,7 @@ mjcf::Body RobotMjcf::addNodeBody(RobotNodePtr node, mjcf::Body parent,
 
 mjcf::Joint RobotMjcf::addNodeJoint(RobotNodePtr node, mjcf::Body body)
 {
-    if (!node->isRotationalJoint() || node->isTranslationalJoint())
+    if (!(node->isRotationalJoint() || node->isTranslationalJoint()))
     {
         throw error::NodeIsNoJoint(node->getName());
     }
@@ -330,13 +395,17 @@ void RobotMjcf::addNodeBodyMesh(RobotNodePtr node)
 {
     mjcf::Body body = getRobotNodeBody(node->getName());
     
-    const fs::path meshPath = convertNodeMeshToSTL(node);
+    const fs::path meshFile = convertNodeMeshToSTL(node);
     
-    if (meshPath.empty())
+    if (meshFile.empty())
     {
         VR_ERROR << "Failed to add mesh to body for node '" << node->getName();
         return;
     }
+    
+    const fs::path meshPath = useRelativePaths
+            ? getOutputMeshRelativeDirectory() / meshFile
+            : getOutputMeshDirectory() / meshFile;
     
     // Add asset.
     const std::string meshName = node->getName();
@@ -374,11 +443,11 @@ std::filesystem::path RobotMjcf::convertNodeMeshToSTL(RobotNodePtr node)
     
     fs::path targetFilename = sourceFile.filename();
     targetFilename.replace_extension("stl");
-    const fs::path targetFile = outputMeshDir / targetFilename;
+    const fs::path targetFile = getOutputMeshDirectory() / targetFilename;
     
     MeshConverter::toSTL(sourceFile, targetFile, true);
     
-    return targetFile;
+    return targetFilename;
 }
 
 
@@ -396,8 +465,8 @@ void RobotMjcf::addNodeBodyMeshes(const std::vector<std::string>& nodeNames)
 {
     for (const std::string& nodeName : nodeNames)
     {
-        addNodeBody(robot->getRobotNode(nodeName));
-    }    
+        addNodeBodyMesh(robot->getRobotNode(nodeName));
+    }
 }
 
 mjcf::Body RobotMjcf::addMocapBody(
@@ -671,36 +740,6 @@ void RobotMjcf::addActuators(const std::map<std::string, ActuatorType>& nodeType
             addNodeActuator(robot->getRobotNode(nodeName), item.second);
         }
     }
-}
-
-float RobotMjcf::getLengthScale() const
-{
-    return lengthScale;
-}
-
-void RobotMjcf::setLengthScale(float value)
-{
-    lengthScale = value;
-}
-
-float RobotMjcf::getMeshScale() const
-{
-    return meshScale;
-}
-
-void RobotMjcf::setMeshScale(float value)
-{
-    meshScale = value;
-}
-
-float RobotMjcf::getMassScale() const
-{
-    return massScale;
-}
-
-void RobotMjcf::setMassScale(float value)
-{
-    massScale = value;
 }
 
 }
