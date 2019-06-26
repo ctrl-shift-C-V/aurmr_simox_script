@@ -209,6 +209,41 @@ namespace math
             return res;
         }
 
+        template<typename T>
+        static size_t ArgMin(const std::vector<T>& vec)
+        {
+            if(vec.size() == 0) return 0;
+            T minVal = vec.at(0);
+            size_t minIndex = 0;
+            for(size_t i = 1; i < vec.size(); i++)
+            {
+                T val = vec.at(i);
+                if(val < minVal)
+                {
+                    minVal = val;
+                    minIndex = i;
+                }
+            }
+            return minIndex;
+        }
+        template<typename TVec, typename TSelect>
+        static size_t ArgMin(const std::vector<TVec>& vec, std::function<TSelect(const TVec&)> selector)
+        {
+            if(vec.size() == 0) return 0;
+            TSelect minVal = selector(vec.at(0));
+            size_t minIndex = 0;
+            for(size_t i = 1; i < vec.size(); i++)
+            {
+                TSelect val = selector(vec.at(i));
+                if(val < minVal)
+                {
+                    minVal = val;
+                    minIndex = i;
+                }
+            }
+            return minIndex;
+        }
+
         
     private:
         
