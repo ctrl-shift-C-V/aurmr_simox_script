@@ -118,6 +118,13 @@ Geom Body::addGeom(const std::string& type)
     return geom;
 }
 
+Geom Body::addGeom(const std::string& type, const Eigen::Vector3f& size)
+{
+    Geom geom = addGeom(type);
+    geom.size = size;
+    return geom;
+}
+
 Geom Body::addGeomMesh(const std::string& meshName, const std::string& materialName)
 {
     Geom geom = addGeom("mesh");
@@ -134,15 +141,15 @@ Geom Body::addGeomMesh(const std::string& meshName, const std::string& materialN
 
 Body Worldbody::addMocapBody(const std::string& name, float geomSize)
 {
-    Body mocap = addChild<Body>();
-    mocap.name = name;
+    Body mocap = addBody(name);
     mocap.mocap = true;
-    // add geom for visualization
-
-    Geom geom = mocap.addChild<Geom>();
-    geom.type = "box";
-    geom.size = geomSize * Eigen::Vector3f::Ones();
-
+    
+    if (geomSize > 0)
+    {
+        // Add geom for visualization.
+        Geom geom = mocap.addGeom("box", Eigen::Vector3f::Constant(geomSize));
+    }
+    
     return mocap;
 }
 

@@ -109,6 +109,7 @@ struct Geom : public Element<Geom>
     mjcf_FloatAttributeDef(Geom, fitscale, 1);
 };
 
+
 struct Site : public Element<Site>
 {
     static const std::string tag;
@@ -130,6 +131,7 @@ struct Site : public Element<Site>
     mjcf_PoseAttributes(Site);
 };
 
+
 struct Camera : public Element<Camera>
 {
     static const std::string tag;
@@ -150,6 +152,7 @@ struct Camera : public Element<Camera>
     
     mjcf_PoseAttributes(Camera);
 };
+
 
 struct Light : public Element<Light>
 {
@@ -179,6 +182,7 @@ struct Light : public Element<Light>
     mjcf_Vector3fAttributeDef(Light, specular, Eigen::Vector3f::Constant(0.3f));
 };
 
+
 struct Body : public Element<Body>
 {
     static const std::string tag;
@@ -202,8 +206,10 @@ struct Body : public Element<Body>
     /// Add a free joint element to a body.
     FreeJoint addFreeJoint();
 
-    /// Add a geom to a body, referencing a mesh.
+    /// Add a geom element with the given type.
     Geom addGeom(const std::string& type);
+    /// Add a geom element with type and size.
+    Geom addGeom(const std::string& type, const Eigen::Vector3f& size);
     /// Add a mesh geom with optional material (for texture).
     Geom addGeomMesh(const std::string& meshName, const std::string& materialName = "");
     
@@ -216,6 +222,7 @@ struct Body : public Element<Body>
     mjcf_PoseAttributes(Body);
 };
 
+
 struct Worldbody : public Element<Worldbody>
 {
     static const std::string tag;
@@ -224,7 +231,10 @@ struct Worldbody : public Element<Worldbody>
     /// Add a body element.
     Body addBody(const std::string& name = "", const std::string& childClass = "");
     
-    /// Add a mocap body with the given name to the worldbody.
+    /**
+     * @brief Add a mocap body with the given name to the worldbody.
+     * @param geomSize If positive, a box geom is added for visualization and interaction.
+     */
     Body addMocapBody(const std::string& name, float geomSize);
     
 };
