@@ -106,6 +106,10 @@ namespace mjcf
         template <class OtherDerived>
         OtherDerived firstChild(const std::string& attrName, const std::string& attrValue) const;
         
+        /// Get all children of a specific type.
+        template <class OtherDerived>
+        std::vector<OtherDerived> getChildren() const;
+        
         
         // SIBLINGS
         
@@ -351,6 +355,19 @@ namespace mjcf
         return firstChild<OtherD>(predicateWithAttrib<OtherD>(attrName, attrValue));
     }
 
+    
+    template <class D>
+    template <class OtherD>
+    std::vector<OtherD> Element<D>::getChildren() const
+    {
+        std::vector<OtherD> children;
+        for (OtherD child = firstChild<OtherD>(); child;
+             child = child.template nextSiblingElement<OtherD>())
+        {
+            children.push_back(child);
+        }
+        return children;
+    }
 
     
     template <class D>
