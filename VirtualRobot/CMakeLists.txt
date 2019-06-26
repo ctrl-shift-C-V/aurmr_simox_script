@@ -375,6 +375,7 @@ SET(SOURCES
     XML/RobotIO.cpp
     XML/SceneIO.cpp
     
+    XML/mujoco/exceptions.cpp
     XML/mujoco/BodySanitizer.cpp
     XML/mujoco/DummyMassBodySanitizer.cpp
     XML/mujoco/MergingBodySanitizer.cpp
@@ -603,6 +604,7 @@ SET(INCLUDES
     XML/RobotIO.h
     XML/SceneIO.h
     
+    XML/mujoco/exceptions.h
     XML/mujoco/BodySanitizer.h
     XML/mujoco/DummyMassBodySanitizer.h
     XML/mujoco/MergingBodySanitizer.h
