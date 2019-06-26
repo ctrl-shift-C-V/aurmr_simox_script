@@ -1,5 +1,6 @@
 
 ADD_VR_TEST( VirtualRobotExceptionTest )
+ADD_VR_TEST( VirtualRobotChecksTest )
 
 ADD_VR_TEST( VirtualRobotRobotTest )
 
