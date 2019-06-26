@@ -43,6 +43,9 @@ namespace VirtualRobot::mujoco
         /**
          * @brief Convert a mesh file to STL using meshlabserver.
          * 
+         * Checks whether the command "meshlabserver" is available. If it is,
+         * 
+         * 
          * @param sourceFile The source mesh file (anything usable by meshlabserver).
          * @param targetPath 
          *  The target directory or filename. If a directory, the source file 
@@ -85,11 +88,17 @@ namespace VirtualRobot::mujoco
         mujoco::Mesh toMujoco(const VirtualRobot::TriMeshModel& triMeshModel);
         
         
-        
     private:
         
         /// Check whether the command `MESHLABSERVER` is available using `system("which ...")`.
         static bool checkMeshlabserverAvailable();
+        
+        /**
+         * @brief Run the command converting `sourceFile` to `targetFile`.
+         * @return True if the command returned without error, false otherwise.
+         */
+        static bool runMeshlabserverCommand(const std::filesystem::path& sourceFile,
+                                            const std::filesystem::path& targetFile);
         
         
         /// Command used to convert mesh files to STL.

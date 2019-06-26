@@ -160,22 +160,22 @@ void MeshConverter::toSTL(
     // Check if file already exists.
     if (skipIfExists && fs::exists(targetFile))
     {
-        VR_INFO << "skipping (" << targetFile << " already exists)";
+        VR_INFO << "Skipping (" << targetFile << " already exists).";
         return;
     }
     
     // Check if file has to be converted.
     if (sourceFile.extension() != ".stl")
     {
-        VR_INFO << "Copying: " << sourceFile << "\n"
-                  << "     to: " << targetFile;
+        VR_INFO << "Copying: " << sourceFile << std::endl
+                << "     to: " << targetFile;
         fs::copy_file(sourceFile, targetFile);
-        
         return;
     }
     
     
-    VR_INFO << "Converting to .stl: " << sourceFile << std::endl;
+    VR_INFO << "Converting to .stl: " << sourceFile << std::endl
+            << "(to: " << targetFile << ")" << std::endl;
     
     const bool meshlabserverAvailable = checkMeshlabserverAvailable();
     bool notAvailableReported = false;
@@ -184,17 +184,31 @@ void MeshConverter::toSTL(
     {
         if (!notAvailableReported)
         {
-            VR_ERROR << std::endl 
-                      << "Command '" << MESHLABSERVER << "' not available, cannot convert meshes."
-                      << " (This error is reported only once.)"
-                      << std::endl;
+            VR_ERROR << "Command '" << MESHLABSERVER << "' not available, cannot convert meshes."
+                     // << " (This error is reported only once.)"
+                     << std::endl;
             notAvailableReported = true;
         }
         
         return;
     }
     
-    // meshlabserver available
+    // Meshlabserver available.
+    runMeshlabserverCommand(sourceFile, targetFile);
+}
+
+bool MeshConverter::checkMeshlabserverAvailable()
+{
+    std::stringstream ss;
+    ss << "which " << MESHLABSERVER << " > /dev/null 2>&1";
+    return system(ss.str().c_str()) == 0;
+}
+
+
+bool MeshConverter::runMeshlabserverCommand(
+        const std::filesystem::path& sourceFile, 
+        const std::filesystem::path& targetFile)
+{
     std::stringstream convertCommand;
     convertCommand << MESHLABSERVER
                    << " -i " << sourceFile
@@ -205,22 +219,22 @@ void MeshConverter::toSTL(
     VR_INFO << "Running command: " << convertCommand.str() << std::endl;
     const int r = system(convertCommand.str().c_str());
     VR_INFO << "----------------------------------------------------------" << std::endl;
-    if (r != 0)
+    
+    if (r == 0)
+    {
+        // Success.
+        return true;
+    }
+    else
     {
         VR_INFO << "Command returned with error: " << r << "\n"
                 << "Command was: " << convertCommand.str() << std::endl;
+        return false;
     }
 }
 
 MeshConverter::MeshConverter() = default;
 
-
-bool MeshConverter::checkMeshlabserverAvailable()
-{
-    std::stringstream ss;
-    ss << "which " << MESHLABSERVER << " > /dev/null 2>&1";
-    return system(ss.str().c_str()) == 0;
-}
 
 float MeshConverter::getScaling() const
 {
