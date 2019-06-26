@@ -131,4 +131,37 @@ Mesh MeshConverter::toMujoco(const VirtualRobot::TriMeshModel& triMeshModel, flo
     return fromVirtualRobot(triMeshModel, scaling);
 }
 
+MeshConverter::MeshConverter() = default;
+
+
+float MeshConverter::getScaling() const
+{
+    return scaling;
+}
+
+void MeshConverter::setScaling(float value)
+{
+    this->scaling = value;
+}
+
+TriMeshModel MeshConverter::toVirtualRobot(const Mesh& mesh)
+{
+    return toVirtualRobot(mesh, scaling);
+}
+
+TriMeshModelPtr MeshConverter::toVirtualRobotPtr(const Mesh& mesh)
+{
+    return toVirtualRobotPtr(mesh, scaling);
+}
+
+Mesh MeshConverter::fromVirtualRobot(const TriMeshModel& triMeshModel)
+{
+    return fromVirtualRobot(triMeshModel, scaling);
+}
+
+Mesh MeshConverter::toMujoco(const TriMeshModel& triMeshModel)
+{
+    return toMujoco(triMeshModel, scaling);
+}
+
 }
