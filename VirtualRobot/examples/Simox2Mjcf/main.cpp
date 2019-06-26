@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
     RuntimeEnvironment::considerKey(
                 "actuator", "The actuator type to add (motor, position, velocity). (default: motor)");
     RuntimeEnvironment::considerKey(
-                "sanitize_bodies", "How to sanitize massless bodies (dummymass, merge). (default: merge)");
+                "sanitize_bodies", "How to sanitize massless bodies (none, dummymass, merge). (default: none)");
     RuntimeEnvironment::considerFlag(
                 "mount", "How to mount the robot at the world body (fixed, free, mocap). (default: fixed)");
     
@@ -45,9 +45,6 @@ int main(int argc, char* argv[])
                 "scale_mesh", "Scaling of meshes (to m). (default: 1.0)");
     RuntimeEnvironment::considerKey(
                 "scale_mass", "Scaling of masses (to kg). (default: 1.0)");
-    
-    RuntimeEnvironment::considerFlag(
-                "actuator_suffix", "Add a type suffix to actuator names.");
     
     RuntimeEnvironment::considerFlag(
                 "verbose", "Enable verbose output.");
@@ -82,7 +79,7 @@ int main(int argc, char* argv[])
     
     const std::string actuatorTypeStr = RuntimeEnvironment::checkParameter("actuator", "motor");
     mujoco::ActuatorType actuatorType;
-    const std::string bodySanitizeModeStr = RuntimeEnvironment::checkParameter("sanitize_bodies", "merge");
+    const std::string bodySanitizeModeStr = RuntimeEnvironment::checkParameter("sanitize_bodies", "none");
     mujoco::BodySanitizeMode bodySanitizeMode;
     const std::string worldMountModeStr = RuntimeEnvironment::checkParameter("mount", "fixed");
     mujoco::WorldMountMode worldMountMode;
@@ -100,7 +97,6 @@ int main(int argc, char* argv[])
     }
     
     const bool verbose = RuntimeEnvironment::hasFlag("verbose");
-    const bool addActuatorSuffix = RuntimeEnvironment::hasFlag("actuator_suffix");
     
     const bool useRelativePaths = RuntimeEnvironment::hasFlag("rel_paths");
     
@@ -158,21 +154,20 @@ int main(int argc, char* argv[])
     }
     catch (const VirtualRobotException&)
     {
-        throw; // rethrow
+        throw; // Rethrow
     }
     
     if (/* DISABLES CODE */ (false))
     {
-        // using RobotIO
+        // Using RobotIO.
         RobotIO::saveMJCF(robot, inputFilename.filename(), outputDir, meshRelDir);
     }
     else
     {
-        // direct API
+        // Direct API.
         mujoco::MujocoIO mujocoIO(robot);
         
         mujocoIO.setActuatorType(actuatorType);
-        mujocoIO.setAddActuatorTypeSuffix(addActuatorSuffix);
         mujocoIO.setBodySanitizeMode(bodySanitizeMode);
         
         mujocoIO.setUseRelativePaths(useRelativePaths);
