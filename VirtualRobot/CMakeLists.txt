@@ -376,13 +376,13 @@ SET(SOURCES
     XML/SceneIO.cpp
     
     XML/mujoco/exceptions.cpp
-    XML/mujoco/BodySanitizer.cpp
-    XML/mujoco/DummyMassBodySanitizer.cpp
-    XML/mujoco/MergingBodySanitizer.cpp
     XML/mujoco/Mesh.cpp
     XML/mujoco/MeshConverter.cpp
     XML/mujoco/MujocoIO.cpp
     XML/mujoco/RobotMjcf.cpp
+    XML/mujoco/body_sanitizer/BodySanitizer.cpp
+    XML/mujoco/body_sanitizer/DummyMassBodySanitizer.cpp
+    XML/mujoco/body_sanitizer/MergingBodySanitizer.cpp
 )
 
 SET(INCLUDES
@@ -605,13 +605,13 @@ SET(INCLUDES
     XML/SceneIO.h
     
     XML/mujoco/exceptions.h
-    XML/mujoco/BodySanitizer.h
-    XML/mujoco/DummyMassBodySanitizer.h
-    XML/mujoco/MergingBodySanitizer.h
     XML/mujoco/Mesh.h
     XML/mujoco/MeshConverter.h
     XML/mujoco/MujocoIO.h
     XML/mujoco/RobotMjcf.h
+    XML/mujoco/body_sanitizer/BodySanitizer.h
+    XML/mujoco/body_sanitizer/DummyMassBodySanitizer.h
+    XML/mujoco/body_sanitizer/MergingBodySanitizer.h
     
 )
 

@@ -5,8 +5,8 @@
 #include <VirtualRobot/Robot.h>
 #include <VirtualRobot/MJCF/Document.h>
 
-#include "BodySanitizer.h"
 #include "RobotMjcf.h"
+#include "body_sanitizer/BodySanitizer.h"
 
 
 namespace VirtualRobot::mujoco

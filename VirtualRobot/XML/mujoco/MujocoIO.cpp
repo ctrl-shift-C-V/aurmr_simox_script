@@ -9,8 +9,8 @@
 #include <VirtualRobot/Visualization/TriMeshModel.h>
 #include <VirtualRobot/XML/RobotIO.h>
 
-#include "DummyMassBodySanitizer.h"
-#include "MergingBodySanitizer.h"
+#include "body_sanitizer/DummyMassBodySanitizer.h"
+#include "body_sanitizer/MergingBodySanitizer.h"
 
 
 namespace fs = std::filesystem;
