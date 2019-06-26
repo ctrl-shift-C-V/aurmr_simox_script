@@ -109,6 +109,16 @@ FreeJoint Body::addFreeJoint()
     
 }
 
+bool Body::hasJoint() const
+{
+    return hasChild<FreeJoint>() || hasChild<Joint>();
+}
+
+bool Body::hasFreeJoint() const
+{
+    return hasChild<FreeJoint>() || hasChild<Joint>("type", "free");
+}
+
 Geom Body::addGeom(const std::string& type)
 {
     Geom geom = addChild<Geom>();

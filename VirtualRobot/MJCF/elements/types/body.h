@@ -205,6 +205,12 @@ struct Body : public Element<Body>
     Joint addJoint();
     /// Add a free joint element to a body.
     FreeJoint addFreeJoint();
+    
+    /// Indicate whether this body has at least one joint or free joint.
+    bool hasJoint() const;
+    /// Indicate whether this body has a `FreeJoint` or a `Joint` of type "free".
+    bool hasFreeJoint() const;
+    
 
     /// Add a geom element with the given type.
     Geom addGeom(const std::string& type);
