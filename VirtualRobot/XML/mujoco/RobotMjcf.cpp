@@ -86,9 +86,15 @@ const mjcf::Document& RobotMjcf::getDocument() const
     return *document;
 }
 
+
 RobotPtr RobotMjcf::getRobot() const
 {
     return robot;
+}
+
+mjcf::Body RobotMjcf::getRobotBody() const
+{
+    return robotBody;
 }
 
 mjcf::Body RobotMjcf::getRobotNodeBody(const std::string& nodeName) const
@@ -106,6 +112,11 @@ mjcf::Body RobotMjcf::getRobotNodeBody(const std::string& nodeName) const
 bool RobotMjcf::hasRobotNodeBody(const std::string& nodeName) const
 {
     return nodeBodies.find(nodeName) != nodeBodies.end();
+}
+
+mjcf::DefaultClass RobotMjcf::getRobotDefaults() const
+{
+    return document->default_().getClass(robot->getName());
 }
 
 void RobotMjcf::setOutputFile(const std::filesystem::path& filePath)
@@ -129,9 +140,14 @@ void RobotMjcf::addCompiler(bool angleRadian, bool boundMass, bool balanceInerat
     compiler.balanceinertia = balanceIneratia;
 }
 
-void RobotMjcf::addDefaultsClass(float meshScale)
+void RobotMjcf::addRobotDefaults()
 {
-    mjcf::DefaultClass defaultsClass = document->default_().addClass(robot->getName());
+    addRobotDefaults(meshScale);
+}
+
+void RobotMjcf::addRobotDefaults(float meshScale)
+{
+    mjcf::DefaultClass defaultsClass = getRobotDefaults();
     
     defaultsClass.insertComment("Add default values for " + robot->getName() + " here.", true);
     
@@ -443,6 +459,10 @@ mjcf::Body RobotMjcf::addMocapBodyWeld(
 mjcf::Body RobotMjcf::addMocapBodyWeldRobot(
         const std::string& bodyName, const std::string& className)
 {
+    if (!robotBody.hasFreeJoint())
+    {
+        robotBody.addFreeJoint();
+    }
     return addMocapBodyWeld(bodyName.empty() ? robot->getName() + "_mocap" : bodyName,
                             className);    
 }
@@ -651,6 +671,36 @@ void RobotMjcf::addActuators(const std::map<std::string, ActuatorType>& nodeType
             addNodeActuator(robot->getRobotNode(nodeName), item.second);
         }
     }
+}
+
+float RobotMjcf::getLengthScale() const
+{
+    return lengthScale;
+}
+
+void RobotMjcf::setLengthScale(float value)
+{
+    lengthScale = value;
+}
+
+float RobotMjcf::getMeshScale() const
+{
+    return meshScale;
+}
+
+void RobotMjcf::setMeshScale(float value)
+{
+    meshScale = value;
+}
+
+float RobotMjcf::getMassScale() const
+{
+    return massScale;
+}
+
+void RobotMjcf::setMassScale(float value)
+{
+    massScale = value;
 }
 
 }

@@ -39,6 +39,31 @@ namespace VirtualRobot::mujoco
         const mjcf::Document& getDocument() const;
         
         
+        // PREPARATION
+        
+        /// Get the length scaling (to m).
+        float getLengthScale() const;
+        /// Set the length scaling (to m).
+        void setLengthScale(float value);
+        
+        /// Get the mesh scaling (to m).
+        float getMeshScale() const;
+        /// Set the mesh scaling (to m).
+        void setMeshScale(float value);
+        
+        /// Get the mass scaling (to kg).
+        float getMassScale() const;
+        /// Set the mass scaling (to kg).
+        void setMassScale(float value);
+        
+        
+        /// Set the path to the output XML file.
+        void setOutputFile(const std::filesystem::path& filePath);
+        
+        /// Set the path to the directory where meshes shall be stored.
+        void setOutputMeshDirectory(const std::filesystem::path& path);
+        
+        
         // ELEMENT ACCESS
         
         /// Get the robot.
@@ -58,13 +83,9 @@ namespace VirtualRobot::mujoco
         bool hasRobotNodeBody(const std::string& nodeName) const;
 
         
-        // PREPARATION
+        /// Get the robot default class.
+        mjcf::DefaultClass getRobotDefaults() const;
         
-        /// Set the path to the output XML file.
-        void setOutputFile(const std::filesystem::path& filePath);
-        
-        /// Set the path to the directory where meshes shall be stored.
-        void setOutputMeshDirectory(const std::filesystem::path& path);
         
         
         // MODIFIERS
@@ -81,8 +102,10 @@ namespace VirtualRobot::mujoco
                          bool boundMass = true,
                          bool balanceIneratia = true);
         
-        /// Make defaults class with robot's name.
-        void addDefaultsClass(float meshScale = 1.0f);
+        /// Add defaults to robot class, using the set mesh scale.
+        void addRobotDefaults();
+        /// Add defaults to robot class with robot's name.
+        void addRobotDefaults(float meshScale);
         
         
         // ASSETS
@@ -183,6 +206,7 @@ namespace VirtualRobot::mujoco
         
         /**
          * @brief Add a mocap body and a weld constraint to the robot body.
+         * If the robot body does not have a free joint, a free joint is added.
          * @param bodyName Name of the mocap body. If left empty, is derived from the robot name.
          * @see addMocapBodyWeld()
          */
@@ -242,8 +266,12 @@ namespace VirtualRobot::mujoco
         // SENSORS
         
         
+        
+        
+        
+        
     private:
-
+        
         /// The robot.
         RobotPtr robot;
         
