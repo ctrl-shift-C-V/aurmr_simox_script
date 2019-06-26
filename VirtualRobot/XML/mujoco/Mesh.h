@@ -42,7 +42,7 @@ namespace VirtualRobot::mujoco
         /// Constructor.
         Mesh();
 
-        /// Read from a file.
+        /// Read from a file. Sets the filename.
         void read(const std::string& filename);
         /// Read from an in stream.
         void read(std::istream& is);
@@ -52,81 +52,55 @@ namespace VirtualRobot::mujoco
         /// Write to an out stream.
         void write(std::ostream& os) const;
 
-        int32_t nvertex() const
-        {
-            return _nvertex;
-        }
-        int32_t nnormal() const
-        {
-            return _nnormal;
-        }
-        int32_t ntexcoord() const
-        {
-            return _ntexcoord;
-        }
-        int32_t nface() const
-        {
-            return _nface;
-        }
+        /// Get the number of vertices.
+        int32_t nvertex() const { return _nvertex; }
+        /// Get the number of normals.
+        int32_t nnormal() const { return _nnormal; }
+        /// Get the number of texture coordinates.
+        int32_t ntexcoord() const { return _ntexcoord; }
+        /// Get the number of faces.
+        int32_t nface() const { return _nface; }
 
-        std::vector<float>& vertexPositions()
-        {
-            return _vertex_positions;
-        }
-        const std::vector<float>& vertexPositions() const
-        {
-            return _vertex_positions;
-        }
+        /// Get the vertex positions.
+        std::vector<float>& vertexPositions() { return _vertex_positions; }
+        const std::vector<float>& vertexPositions() const { return _vertex_positions; }
 
-        std::vector<float>& vertexNormals()
-        {
-            return _vertex_normals;
-        }
-        const std::vector<float>& vertexNormals() const
-        {
-            return _vertex_normals;
-        }
+        /// Get the vertex normals.
+        std::vector<float>& vertexNormals() { return _vertex_normals; }
+        const std::vector<float>& vertexNormals() const { return _vertex_normals; }
 
-        std::vector<float>& vertexTexcoords()
-        {
-            return _vertex_texcoords;
-        }
-        const std::vector<float>& vertexTexcoords() const
-        {
-            return _vertex_texcoords;
-        }
+        /// Get the vertex texture coordinates.
+        std::vector<float>& vertexTexcoords() { return _vertex_texcoords; }
+        const std::vector<float>& vertexTexcoords() const { return _vertex_texcoords; }
 
-        std::vector<int32_t>& faceVertexIndices()
-        {
-            return _face_vertex_indices;
-        }
-        const std::vector<int32_t>& faceVertexIndices() const
-        {
-            return _face_vertex_indices;
-        }
+        /// Get the face vertex indices.
+        std::vector<int32_t>& faceVertexIndices() { return _face_vertex_indices; }
+        const std::vector<int32_t>& faceVertexIndices() const { return _face_vertex_indices; }
 
+        /// Get the position of vertex i.
         Eigen::Vector3f vertexPosition(int32_t i) const;
+        /// Get the normal of vertex i.
         Eigen::Vector3f vertexNormal(int32_t i) const;
+        /// Get the texture coordinates of vertex i.
         Eigen::Vector2f vertexTexcoord(int32_t i) const;
+        /// Get the vertex indices of face i.
         Eigen::Vector3i faceVertexIndex(int32_t i) const;
 
-        bool hasNormals() const
-        {
-            return _nnormal > 0;
-        }
-        bool hasTexcoords() const
-        {
-            return _ntexcoord > 0;
-        }
-        bool hasFaces() const
-        {
-            return _nface > 0;
-        }
+        /// Indicate whether this mesh has vertex normals.
+        bool hasNormals() const { return _nnormal > 0; }
+        /// Indicate whether this mesh has vertex texture coordinates.
+        bool hasTexcoords() const { return _ntexcoord > 0; }
+        /// Indicate whether this mesh has faces.
+        bool hasFaces() const { return _nface > 0; }
 
-
+        
+        /// Add a vertex position.
         void addVertexPosition(const Eigen::Vector3f& position);
+        /// Add a vertex normal.
         void addVertexNormal(const Eigen::Vector3f& normal);
+        /// Add vertex texture coordinates.
         void addVertexTexcoord(const Eigen::Vector2f& texcoord);
+        /// Add a face as vertex indices.
         void addFaceVertexIndex(const Eigen::Vector3i& face);
 
 
@@ -140,18 +114,24 @@ namespace VirtualRobot::mujoco
          */
         Eigen::Matrix<float, 3, 2> getVertexPositionsBoundingBox() const;
 
+        
+        /// Get a texture file.
+        std::string getTextureFile() const;
+        /// Set the texture file.
         void setTextureFile(const std::string& path);
-        const std::string& getTextureFile() const;
+        
+        /// Get the filename.
+        std::string getFilename() const;
+        /// Set a filename.
+        void setFilename(const std::string& path);
+        
         
         /**
-         * @brief Split this mesh into num meshes by randomly assigning its
+         * @brief Split this mesh into `num` meshes by randomly assigning its
          * faces to the new meshes.
          */
         std::vector<Mesh> splitRandomly(std::size_t num) const;
         
-        void setFilename(const std::string& path);
-        const std::string& getFilename() const;
-
         
     private:
 
@@ -159,17 +139,27 @@ namespace VirtualRobot::mujoco
         /// _n* values must be nonnegative.
         void resizeVectors();
 
+        /// Number of vertices.
         int32_t _nvertex = 0;
+        /// Number of normals.
         int32_t _nnormal = 0;
+        /// Number of texture coordinates.
         int32_t _ntexcoord = 0;
+        /// Number of faces.
         int32_t _nface = 0;
 
+        /// Vertex positions. Must have size `3 * _nvertex`.
         std::vector<float> _vertex_positions;  // 3*nvertex
+        /// Vertex normals. Must have size `3 * _nnormal`.
         std::vector<float> _vertex_normals;    // 3*nnormal
+        /// Vertex texture coordinates. Must have size `3 * _ntexcoord`.
         std::vector<float> _vertex_texcoords;  // 2*ntexcoord
+        /// Face vertex indices. Must have size `3 * _nface`.
         std::vector<int32_t> _face_vertex_indices;  // 3*nface
 
+        /// The stored texture file.
         std::string _texture_file;
+        /// The stored file name.
         std::string _filename;
     };
 }

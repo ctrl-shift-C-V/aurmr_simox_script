@@ -7,7 +7,9 @@
 
 namespace VirtualRobot::mujoco
 {
-
+    /**
+     * @brief Converts from and to MuJoCo mesh formats.
+     */
     class MeshConverter
     {
     public:
@@ -30,6 +32,7 @@ namespace VirtualRobot::mujoco
         /// Construct mujoco::Mesh from a VirtualRobot::TriMeshModel.
         static mujoco::Mesh toMujoco(const VirtualRobot::TriMeshModel& triMeshModel,
                                      float scaling = 1.0);
+        
     private:
         
         /// Private constructor.

@@ -214,7 +214,7 @@ void Mesh::setTextureFile(const std::string& path)
     _texture_file = path;
 }
 
-const std::string& Mesh::getTextureFile() const
+std::string Mesh::getTextureFile() const
 {
     return _texture_file;
 }
@@ -224,7 +224,7 @@ void Mesh::setFilename(const std::string& path)
     _filename = path;
 }
 
-const std::string& Mesh::getFilename() const
+std::string Mesh::getFilename() const
 {
     return _filename;
 }
