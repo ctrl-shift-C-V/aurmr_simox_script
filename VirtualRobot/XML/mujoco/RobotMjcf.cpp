@@ -54,10 +54,25 @@ ActuatorType toActuatorType(const std::string& string)
 
 RobotMjcf::RobotMjcf(RobotPtr robot) : robot(robot)
 {
+    reset();
+}
+
+void RobotMjcf::reset()
+{
+    document.reset(new mjcf::Document());
+    robotBody = mjcf::Body();
+    nodeBodies.clear();
+    
+    // Set model name.
     document->setModelName(robot->getName());
     
+    const std::string className = robot->getName();
+    
+    // Add robot defaults class.
+    document->default_().addClass(className);
+    
     // Add robot body.
-    robotBody = document->worldbody().addBody(robot->getName(), robot->getName());
+    robotBody = document->worldbody().addBody(robot->getName(), className);
     nodeBodies[robot->getName()] = robotBody;
 }
 

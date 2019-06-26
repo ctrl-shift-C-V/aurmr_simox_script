@@ -31,6 +31,9 @@ namespace VirtualRobot::mujoco
         RobotMjcf(RobotPtr robot);
         
         
+        /// Reset the document and related data.
+        void reset();
+        
         /// Get the document.
         mjcf::Document& getDocument();
         const mjcf::Document& getDocument() const;
