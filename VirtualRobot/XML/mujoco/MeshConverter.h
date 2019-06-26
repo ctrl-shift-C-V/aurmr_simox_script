@@ -1,5 +1,7 @@
 #pragma once
 
+#include <filesystem>
+
 #include <VirtualRobot/Visualization/TriMeshModel.h>
 
 #include "Mesh.h"
@@ -34,6 +36,23 @@ namespace VirtualRobot::mujoco
         /// Construct mujoco::Mesh from a VirtualRobot::TriMeshModel.
         static mujoco::Mesh toMujoco(const VirtualRobot::TriMeshModel& triMeshModel,
                                      float scaling = 1.0);
+        
+        
+        // To STL.
+        
+        /**
+         * @brief Convert a mesh file to STL using meshlabserver.
+         * 
+         * @param sourceFile The source mesh file (anything usable by meshlabserver).
+         * @param targetPath 
+         *  The target directory or filename. If a directory, the source file 
+         *  name with replaced extension (.stl) is used.
+         * @param skipIfExists If true and the target file exists, do nothing.
+         */
+        static void toSTL(const std::filesystem::path& sourceFile,
+                          const std::filesystem::path& targetPath,
+                          bool skipIfExists = true);
+        
         
     public:
         

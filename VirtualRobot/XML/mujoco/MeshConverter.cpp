@@ -3,8 +3,13 @@
 #include <VirtualRobot/VirtualRobotChecks.h>
 
 
+namespace fs = std::filesystem;
+
+
 namespace VirtualRobot::mujoco
 {
+
+const std::string MeshConverter::MESHLABSERVER = "meshlabserver";
 
 
 VirtualRobot::TriMeshModelPtr MeshConverter::toVirtualRobotPtr(const Mesh& mesh, float scaling)
@@ -131,8 +136,91 @@ Mesh MeshConverter::toMujoco(const VirtualRobot::TriMeshModel& triMeshModel, flo
     return fromVirtualRobot(triMeshModel, scaling);
 }
 
+void MeshConverter::toSTL(
+        const std::filesystem::path& sourceFile,
+        const std::filesystem::path& _targetPath,
+        bool skipIfExists)
+{
+    fs::path targetFile = _targetPath;
+    
+    // Add a file name if none was passed.
+    if (!targetFile.has_filename())
+    {
+        fs::path filename = sourceFile.filename();
+        filename.replace_extension("stl");
+        targetFile = targetFile / filename;
+    }
+    
+    // Make sure parent directory exists.
+    if (!fs::exists(targetFile.parent_path()))
+    {
+        fs::create_directories(targetFile.parent_path());
+    }
+    
+    // Check if file already exists.
+    if (skipIfExists && fs::exists(targetFile))
+    {
+        VR_INFO << "skipping (" << targetFile << " already exists)";
+        return;
+    }
+    
+    // Check if file has to be converted.
+    if (sourceFile.extension() != ".stl")
+    {
+        VR_INFO << "Copying: " << sourceFile << "\n"
+                  << "     to: " << targetFile;
+        fs::copy_file(sourceFile, targetFile);
+        
+        return;
+    }
+    
+    
+    VR_INFO << "Converting to .stl: " << sourceFile << std::endl;
+    
+    const bool meshlabserverAvailable = checkMeshlabserverAvailable();
+    bool notAvailableReported = false;
+    
+    if (!meshlabserverAvailable)
+    {
+        if (!notAvailableReported)
+        {
+            VR_ERROR << std::endl 
+                      << "Command '" << MESHLABSERVER << "' not available, cannot convert meshes."
+                      << " (This error is reported only once.)"
+                      << std::endl;
+            notAvailableReported = true;
+        }
+        
+        return;
+    }
+    
+    // meshlabserver available
+    std::stringstream convertCommand;
+    convertCommand << MESHLABSERVER
+                   << " -i " << sourceFile
+                   << " -o " << targetFile;
+    
+    // run command
+    VR_INFO << "----------------------------------------------------------" << std::endl;
+    VR_INFO << "Running command: " << convertCommand.str() << std::endl;
+    const int r = system(convertCommand.str().c_str());
+    VR_INFO << "----------------------------------------------------------" << std::endl;
+    if (r != 0)
+    {
+        VR_INFO << "Command returned with error: " << r << "\n"
+                << "Command was: " << convertCommand.str() << std::endl;
+    }
+}
+
 MeshConverter::MeshConverter() = default;
 
+
+bool MeshConverter::checkMeshlabserverAvailable()
+{
+    std::stringstream ss;
+    ss << "which " << MESHLABSERVER << " > /dev/null 2>&1";
+    return system(ss.str().c_str()) == 0;
+}
 
 float MeshConverter::getScaling() const
 {
