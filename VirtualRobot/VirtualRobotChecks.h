@@ -4,12 +4,33 @@
 
 #include "VirtualRobotException.h"
 
+/**
+ * The macros VR_CHECK_*() defined in this file can be used as "soft"
+ * assertions. That is, they can be used to check some condition and, if this
+ * condition fails, throw an exception (of type `VirtualRobotCheckException`).
+ * Thrown exceptions give information about where they were thrown and what
+ * condition failed.
+ * 
+ * All macros are defined in two versions, one taking a "hint", explaining
+ * what is checked, and one taking no hint.
+ * 
+ * Hints hould be formulated "positively", i.e. what condition is tested and 
+ * what must be true, not what went wrong otherwise. For example:
+ * 
+ * @code
+ * VR_CHECK_EQUAL_HINT(vector.size(), 3, "Vector must have exactly 3 elements.");
+ * VR_CHECK_HINT(pointer, "Pointer must not be null.");
+ * 
+ * *not:* VR_CHECK_HINT(pointer, "Pointer is null.");
+ * @endcode
+ * 
+ */
 
 namespace VirtualRobot
 {
 
     /**
-     * @brief Exception class thrown by VR_CHECK_* macros ("soft" assertions).
+     * @brief Exception class thrown by VR_CHECK_* macros.
      */
     class VIRTUAL_ROBOT_IMPORT_EXPORT VirtualRobotCheckException :
             public VirtualRobotException
@@ -116,10 +137,17 @@ namespace VirtualRobot
 #define VR_CHECK_POSITIVE_HINT(value, hint)         VR_CHECK_GREATER_HINT(value, 0, hint)
 
 
+/**
+ * Check whether `value` is in the range [0, size), i.e. whether it would be
+ * a valid index into an array of size `size`.
+ */
 #define VR_CHECK_FITS_SIZE(value, size) \
     VR_CHECK_NONNEGATIVE(value); \
     VR_CHECK_LESS(value, size)
 
+/**
+ * @see VR_CHECK_FITS_SIZE()
+ */
 #define VR_CHECK_FITS_SIZE_HINT(value, size, hint) \
     VR_CHECK_NONNEGATIVE_HINT(value, hint); \
     VR_CHECK_LESS_HINT(value, size, hint)

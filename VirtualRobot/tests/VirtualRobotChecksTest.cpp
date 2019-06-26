@@ -66,8 +66,6 @@ BOOST_AUTO_TEST_CASE(test_VR_CHECK_EQUAL)
     BOOST_CHECK_THROW(VR_CHECK_EQUAL(0, 1), VirtualRobotCheckException);
     BOOST_CHECK_THROW(VR_CHECK_EQUAL(z, 10), VirtualRobotCheckException);
     BOOST_CHECK_THROW(VR_CHECK_EQUAL(a, b), VirtualRobotCheckException);
-    
-    VR_CHECK_EQUAL(0, 1);
 }
 
 
