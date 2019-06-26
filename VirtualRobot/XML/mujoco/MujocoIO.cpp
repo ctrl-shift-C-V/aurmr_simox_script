@@ -1,5 +1,7 @@
 #include "MujocoIO.h"
 
+#include <filesystem>
+
 #include <VirtualRobot/RobotNodeSet.h>
 #include <VirtualRobot/VirtualRobotChecks.h>
 
@@ -14,18 +16,6 @@
 
 
 namespace fs = std::filesystem;
-
-
-namespace
-{
-    namespace fs = std::filesystem;
-    inline fs::path removeTrailingSeparator(fs::path p)
-    {
-        p /= "dummy";
-        return p.parent_path();
-    }
-}
-
 
 
 namespace VirtualRobot::mujoco
@@ -57,6 +47,7 @@ BodySanitizeMode toBodySanitizeMode(const std::string& string)
 {
     return stringToEnum<BodySanitizeMode>(
     {
+        { "none",       BodySanitizeMode::NONE, },
         { "dummy_mass", BodySanitizeMode::DUMMY_MASS },
         { "dummymass",  BodySanitizeMode::DUMMY_MASS },
         { "merge",      BodySanitizeMode::MERGE },
@@ -75,7 +66,7 @@ WorldMountMode toWorldMountMode(const std::string& string)
 
 
 
-MujocoIO::MujocoIO(RobotPtr robot) : mjcf(robot), robot(robot)
+MujocoIO::MujocoIO(RobotPtr robot) : robot(robot), mjcf(robot)
 {
     VR_CHECK_HINT(robot, "RobotPtr must not be null.");
 }
@@ -85,37 +76,49 @@ std::string MujocoIO::saveMJCF(
 {
     VR_CHECK_HINT(!filename.empty(), "Filename must not be empty.");
     
-    setPaths(filename, basePath, meshRelDir);
+    // Reset MJCF.
+    mjcf.reset();
     
-    document.reset(new mjcf::Document());
-    document->setModelName(robot->getName());
+    // Set paths.
+    mjcf.setOutputPaths(fs::path(basePath) / filename, meshRelDir);
     
-    makeCompiler();
+    // Add meta elements.
+    mjcf.addCompiler();
     
-    makeDefaultsClass();
-    document->setNewElementClass(robot->getName(), true);
+    mjcf.addRobotDefaults();
+    mjcf.getDocument().setNewElementClass(robot->getName(), true);
     
-    addSkybox();
+    mjcf.addSkybox();
     
     mjcf::Body mocapBody;
-    if (worldMountMode == WorldMountMode::MOCAP)
+    switch (worldMountMode)
     {
+    case WorldMountMode::FIXED:
+        break;
+    
+    case WorldMountMode::FREE:
+        mjcf.getRobotBody().addFreeJoint();
+        break;
+        
+    case WorldMountMode::MOCAP:
         std::cout << "Adding mocap body ..." << std::endl;
-        mocapBody = addMocapBody();
+        mjcf.getRobotBody().addFreeJoint();
+        mocapBody = mjcf.addMocapBodyWeldRobot();
+        break;
     }
     
     std::cout << "Creating bodies structure ..." << std::endl;
-    makeNodeBodies();
+    mjcf.addNodeBodies();
     
     std::cout << "Adding meshes and geoms ..." << std::endl;
-    addNodeBodyMeshes();
+    mjcf.addNodeBodyMeshes();
     
     if (verbose)
     {
         std::cout << "===========================" << std::endl
                   << "Current model: "             << std::endl
                   << "--------------"              << std::endl;
-        std::cout << *document;
+        std::cout << mjcf.getDocument();
         std::cout << "===========================" << std::endl;
     }
     
@@ -123,6 +126,10 @@ std::string MujocoIO::saveMJCF(
     std::cout << "Sanitizing massless bodies ..." << std::endl;
     switch (bodySanitizeMode)
     {
+    case BodySanitizeMode::NONE:
+        std::cout << "Doing nothing." << std::endl;
+        break;
+        
     case BodySanitizeMode::DUMMY_MASS:
     {
         std::cout << t << "Adding dummy masses ..." << std::endl;
@@ -135,26 +142,27 @@ std::string MujocoIO::saveMJCF(
         std::cout << t << "Merging massless bodies ..." << std::endl;
         
         std::unique_ptr<MergingBodySanitizer> sanitizer(new MergingBodySanitizer(robot));
-        sanitizer->setLengthScale(lengthScale);
+        sanitizer->setLengthScale(mjcf.getLengthScale());
         
         bodySanitizer = std::move(sanitizer);
     }    
         break;
     }
-    bodySanitizer->sanitize(*document, robotRoot);
+    bodySanitizer->sanitize(mjcf.getDocument(), mjcf.getRobotBody());
     
     
     std::cout << "Adding contact excludes ..." << std::endl;
-    addContactExcludes();
+    mjcf.addContactExcludes();
 
     if (worldMountMode == WorldMountMode::MOCAP)
     {
         std::cout << "Adding mocap body contact excludes ..." << std::endl;
-        addMocapContactExcludes(mocapBody);
+        VR_CHECK(mocapBody);
+        mjcf.addMocapContactExcludes(mocapBody);
     }
     
     std::cout << "Adding actuators ..." << std::endl;
-    addActuators();
+    mjcf.addActuators(actuatorType);
     
     std::cout << "Done." << std::endl;
     
@@ -164,312 +172,34 @@ std::string MujocoIO::saveMJCF(
         std::cout << "===========================" << std::endl
                   << "Output file: "             << std::endl
                   << "------------"              << std::endl;
-        std::cout << *document;
+        std::cout << mjcf.getDocument();
         std::cout << "===========================" << std::endl;
     }
     
-    VR_CHECK(!outputFileName.empty());
     
-    const fs::path outputFilePath = outputDirectory / outputFileName;
+    const fs::path outputFilePath = mjcf.getOutputFile();
+    
+    VR_CHECK(!outputFilePath.empty());
     
     std::cout << "Writing to " << outputFilePath << std::endl;
-    document->saveFile(outputFilePath);
+    mjcf.getDocument().saveFile(outputFilePath);
     
     return outputFilePath;
 }
 
+RobotMjcf& MujocoIO::getMjcf()
+{
+    return mjcf;
+}
+
+const RobotMjcf& MujocoIO::getMjcf() const
+{
+    return mjcf;
+}
+
 void MujocoIO::setUseRelativePaths(bool useRelative)
 {
-    this->useRelativePaths = useRelative;
-}
-
-void MujocoIO::setPaths(
-        const std::string& filename,
-        const std::string& basePath,
-        const std::string& meshRelDir)
-{
-    outputDirectory = basePath;
-    outputFileName = filename;
-    outputMeshRelDirectory = meshRelDir;
-    
-    ensureDirectoriesExist();
-}
-
-void MujocoIO::ensureDirectoriesExist()
-{
-    auto ensureDirExists = [](const fs::path& dir, const std::string& errMsgName)
-    {
-        if (!fs::is_directory(dir))
-        {
-            std::cout << "Creating directory: " << dir << std::endl;
-            bool success = fs::create_directories(removeTrailingSeparator(dir));
-            THROW_VR_EXCEPTION_IF(!success, "Could not create " << errMsgName << ": " << dir);
-        }
-    };
-
-    ensureDirExists(outputDirectory, "output directory");
-    ensureDirExists(outputMeshDirectory(), "output mesh directory");
-}
-
-void MujocoIO::makeCompiler()
-{
-    mjcf.addCompiler();
-}
-
-void MujocoIO::makeDefaultsClass()
-{
-    mjcf.addDefaultsClass(meshScale);
-}
-
-void MujocoIO::addSkybox()
-{
-    mjcf.addSkybox();
-}
-
-
-mjcf::Body MujocoIO::addMocapBody()
-{
-    const std::string className = "mocap";
-    const float geomSize = 0.01f;
-    
-    std::string bodyName;
-    {
-        std::stringstream ss;
-        ss << robot->getName() << "_Mocap";
-        bodyName = ss.str();
-    }
-    
-    // add defaults class
-    mjcf::DefaultClass defaultClass = document->default_().getClass(className);
-    
-    mjcf::Geom geom = defaultClass.getElement<mjcf::Geom>();
-    geom.rgba = Eigen::Vector4f(.9f, .5f, .5f, .5f);
-    
-    {
-        mjcf::EqualityDefaults equality = defaultClass.getElement<mjcf::EqualityDefaults>();
-        Eigen::Vector5f solimp = equality.solimp;
-        solimp(1) = 0.99f;
-        equality.solimp = solimp;
-        //equality.solref = Eigen::Vector2f(.02f, 1.f);
-    }
-    
-    // add body
-    mjcf::Body mocap = document->worldbody().addMocapBody(bodyName, geomSize);
-    mocap.childclass = className;
-    
-    // add equality weld constraint
-    mjcf::EqualityWeld weld = document->equality().addWeld(bodyName, robot->getName(), bodyName);
-    weld.class_ = className;
-    
-    document->contact().addExclude(mocap.name, robot->getName());
-    
-    return mocap;
-}
-
-
-void MujocoIO::makeNodeBodies()
-{
-    nodeBodies.clear();
-    
-    RobotNodePtr rootNode = robot->getRootNode();
-    VR_CHECK(rootNode);
-    
-    // add root
-    robotRoot = document->worldbody().addBody(robot->getName(), robot->getName());
-    
-    switch (worldMountMode)
-    {
-    case WorldMountMode::FREE:
-    case WorldMountMode::MOCAP:
-    {
-        if (!robotRoot.hasMass())
-        {
-            robotRoot.addDummyInertial();
-        }
-        mjcf::FreeJoint joint = robotRoot.addFreeJoint();
-        joint.name = robot->getName();
-    }        
-        break;
-    default:
-        break;
-    }
-    
-    mjcf::Body root = addNodeBody(robotRoot, rootNode);
-    nodeBodies[rootNode->getName()] = root;
-    VR_CHECK(root);
-    
-    for (RobotNodePtr node : robot->getRobotNodes())
-    {
-        addNodeBody(node);
-    }
-}
-
-mjcf::Body MujocoIO::addNodeBody(mjcf::Body parent, RobotNodePtr node)
-{
-    return mjcf.addNodeBody(node, parent);
-}
-
-mjcf::Joint MujocoIO::addNodeJoint(mjcf::Body body, RobotNodePtr node)
-{
-    return mjcf.addNodeJoint(node, body);
-}
-
-mjcf::Inertial MujocoIO::addNodeInertial(mjcf::Body body, RobotNodePtr node)
-{
-    return mjcf.addNodeInertial(node, body);
-}
-
-void MujocoIO::addNodeBodyMeshes()
-{
-    const bool meshlabserverAviable = true; // system("which meshlabserver > /dev/null 2>&1") == 0;
-    bool notAvailableReported = false;
-    
-    for (RobotNodePtr node : robot->getRobotNodes())
-    {
-        VisualizationNodePtr visualization = node->getVisualization(SceneObject::VisualizationType::Full);
-        
-        if (!visualization)
-        {
-            continue;
-        }
-        
-        std::cout << t << "Node '" << node->getName() << "':\t";
-        
-        const fs::path srcMeshPath = visualization->getFilename();
-        
-        fs::path dstMeshFileName = srcMeshPath.filename();
-        dstMeshFileName.replace_extension("stl");
-        const fs::path dstMeshPath = outputMeshDirectory() / dstMeshFileName;
-        
-        if (!fs::exists(dstMeshPath))
-        {
-            if (srcMeshPath.extension() != ".stl")
-            {
-                std::cout << "Converting to .stl: " << srcMeshPath << std::endl;
-                
-                if (!meshlabserverAviable)
-                {
-                    if (!notAvailableReported)
-                    {
-                        std::cerr << std::endl 
-                                  << "Command 'meshlabserver' not available, cannot convert meshes."
-                                  << " (This error is only reported once.)"
-                                  << std::endl;
-                        notAvailableReported = true;
-                    }
-                    continue;
-                }
-                
-                // meshlabserver available
-                std::stringstream convertCommand;
-                convertCommand << "meshlabserver"
-                               << " -i " << srcMeshPath 
-                               << " -o " << dstMeshPath;
-                
-                // run command
-                std::cout << "----------------------------------------------------------" << std::endl;
-                std::cout << "Running command: " << convertCommand.str() << std::endl;
-                int r = system(convertCommand.str().c_str());
-                std::cout << "----------------------------------------------------------" << std::endl;
-                if (r != 0)
-                {
-                    std::cout << "Command returned with error: " << r << "\n"
-                              << "Command was: " << convertCommand.str() << std::endl;
-                }
-            }
-            else
-            {
-                std::cout << "Copying: " << srcMeshPath << "\n"
-                          << "     to: " << dstMeshPath;
-                fs::copy_file(srcMeshPath, dstMeshPath);
-            }
-        }
-        else
-        {
-            std::cout << "skipping (" << outputMeshRelDirectory / dstMeshFileName 
-                      << " already exists)";
-        }
-        std::cout << std::endl;
-        
-        
-        
-        // add asset
-        const std::string meshName = node->getName();
-        const fs::path meshPath = useRelativePaths 
-                ? outputMeshRelDirectory / dstMeshFileName
-                : fs::absolute(dstMeshPath);
-        
-        document->asset().addMesh(meshName, meshPath.string());
-        
-        // add geom to body
-        mjcf::Body& body = nodeBodies.at(node->getName());
-        mjcf::Geom geom = body.addGeomMesh(meshName);
-        geom.name = node->getName();
-    }
-}
-
-
-
-mjcf::Body MujocoIO::addNodeBody(RobotNodePtr node)
-{
-    return mjcf.addNodeBody(node);
-}
-
-void MujocoIO::addContactExcludes()
-{
-    mjcf.addContactExcludes();
-}
-
-void MujocoIO::addMocapContactExcludes(mjcf::Body mocap)
-{
-    mjcf.addMocapContactExcludes(mocap);
-}
-
-void MujocoIO::addActuators()
-{
-    const std::vector<mjcf::Joint> jointElements = mjcf::Collector<mjcf::Joint>::collect(
-                *document, document->worldbody());
-    
-    for (const auto& joint : jointElements)
-    {
-        mjcf::AnyElement actuator;
-        
-        const std::string jointName = joint.name;
-        switch (actuatorType)
-        {
-            case ActuatorType::MOTOR:
-            {
-                mjcf::ActuatorMotor act = document->actuator().addMotor(jointName);
-                actuator = act;
-                break;
-            }
-                
-            case ActuatorType::POSITION:
-            {
-                mjcf::ActuatorPosition act = document->actuator().addPosition(jointName);
-                actuator = act;
-                
-                if (joint.limited)
-                {
-                    act.ctrllimited = joint.limited;
-                    act.ctrlrange = joint.range;
-                }
-            }
-                break;
-                
-            case ActuatorType::VELOCITY:
-                actuator = document->actuator().addVelocity(jointName);
-                break;
-        }
-        
-        std::stringstream actuatorName;
-        actuatorName << joint.name;
-        if (addActuatorTypeSuffix)
-        {
-            actuatorName << actuatorTypeSuffixes.at(actuatorType);
-        }
-        actuator.setAttribute("name", actuatorName.str());
-    }
+    mjcf.setUseRelativePaths(useRelative);
 }
 
 void MujocoIO::scaleLengths(mjcf::AnyElement element)
@@ -487,7 +217,7 @@ void MujocoIO::scaleLengths(mjcf::AnyElement element)
         if (joint.type == "slide" && joint.range.isSet())
         {
             std::cout << t << "Scaling range of slide joint '" << joint.name << "'" << std::endl;
-            joint.range = joint.range.get() * lengthScale;
+            joint.range = joint.range.get() * mjcf.getLengthScale();
         }
     }
     else if (element.is<mjcf::ActuatorPosition>())
@@ -496,7 +226,7 @@ void MujocoIO::scaleLengths(mjcf::AnyElement element)
         if (act.ctrlrange.isSet())
         {
             std::cout << t << "Scaling ctrlrange of position actuator '" << act.name << "'" << std::endl;
-            act.ctrlrange = act.ctrlrange.get() * lengthScale;
+            act.ctrlrange = act.ctrlrange.get() * mjcf.getLengthScale();
         }
     }
     else if (element.isAttributeSet("pos"))
@@ -513,7 +243,7 @@ void MujocoIO::scaleLengths(mjcf::AnyElement element)
         std::cout << std::endl;
         
         Eigen::Vector3f pos = element.getAttribute<Eigen::Vector3f>("pos");
-        pos *= lengthScale;
+        pos *= mjcf.getLengthScale();
         element.setAttribute("pos", pos);
     }
     
@@ -526,32 +256,22 @@ void MujocoIO::scaleLengths(mjcf::AnyElement element)
 
 void MujocoIO::setLengthScale(float value)
 {
-    this->lengthScale = value;
+    mjcf.setLengthScale(value);
 }
 
 void MujocoIO::setMeshScale(float value)
 {
-    this->meshScale = value;
+    mjcf.setMeshScale(value);
 }
 
 void MujocoIO::setMassScale(float value)
 {
-    this->massScale = value;
+    mjcf.setMassScale(value);
 }
 
 void MujocoIO::setActuatorType(ActuatorType value)
 {
     this->actuatorType = value;
-}
-
-void MujocoIO::setAddActuatorTypeSuffix(bool enable)
-{
-    this->addActuatorTypeSuffix = enable;
-}
-
-void MujocoIO::setActuatorTypeSuffixes(const std::map<ActuatorType, std::string>& suffixes)
-{
-    this->actuatorTypeSuffixes = suffixes;
 }
 
 void MujocoIO::setBodySanitizeMode(BodySanitizeMode mode)
