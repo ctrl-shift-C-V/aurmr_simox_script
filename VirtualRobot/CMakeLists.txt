@@ -378,7 +378,6 @@ SET(SOURCES
     XML/mujoco/exceptions.cpp
     XML/mujoco/Mesh.cpp
     XML/mujoco/MeshConverter.cpp
-    XML/mujoco/MujocoIO.cpp
     XML/mujoco/RobotMjcf.cpp
     XML/mujoco/body_sanitizer/BodySanitizer.cpp
     XML/mujoco/body_sanitizer/DummyMassBodySanitizer.cpp
@@ -607,7 +606,6 @@ SET(INCLUDES
     XML/mujoco/exceptions.h
     XML/mujoco/Mesh.h
     XML/mujoco/MeshConverter.h
-    XML/mujoco/MujocoIO.h
     XML/mujoco/RobotMjcf.h
     XML/mujoco/body_sanitizer/BodySanitizer.h
     XML/mujoco/body_sanitizer/DummyMassBodySanitizer.h
