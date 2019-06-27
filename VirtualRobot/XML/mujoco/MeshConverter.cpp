@@ -233,9 +233,10 @@ bool MeshConverter::runMeshlabserverCommand(
     }
 }
 
+
 MeshConverter::MeshConverter() = default;
 
-
+/*
 float MeshConverter::getScaling() const
 {
     return scaling;
@@ -265,5 +266,6 @@ Mesh MeshConverter::toMujoco(const TriMeshModel& triMeshModel)
 {
     return toMujoco(triMeshModel, scaling);
 }
+*/
 
 }

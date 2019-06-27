@@ -57,6 +57,33 @@ namespace VirtualRobot::mujoco
                           bool skipIfExists = true);
         
         
+    private:
+        
+        /// Check whether the command `MESHLABSERVER` is available using `system("which ...")`.
+        static bool checkMeshlabserverAvailable();
+        
+        /**
+         * @brief Run the command converting `sourceFile` to `targetFile`.
+         * @return True if the command returned without error, false otherwise.
+         */
+        static bool runMeshlabserverCommand(const std::filesystem::path& sourceFile,
+                                            const std::filesystem::path& targetFile);
+        
+        
+        /// Command used to convert mesh files to STL.
+        static const std::string MESHLABSERVER;
+
+
+        
+    private:
+        
+        /// Private constructor.
+        MeshConverter();
+        
+        
+        /* Disabled stateful API because its methods are ambiguous to the 
+         * static API. 
+         
     public:
         
         // STATEFUL API.
@@ -85,31 +112,15 @@ namespace VirtualRobot::mujoco
         mujoco::Mesh fromVirtualRobot(const VirtualRobot::TriMeshModel& triMeshModel);
         
         /// Construct mujoco::Mesh from a VirtualRobot::TriMeshModel.
-        mujoco::Mesh toMujoco(const VirtualRobot::TriMeshModel& triMeshModel);
+        mujoco::Mesh toMujoco(const VirtualRobot::TriMeshModel& triMeshModel);        
         
-        
-    private:
-        
-        /// Check whether the command `MESHLABSERVER` is available using `system("which ...")`.
-        static bool checkMeshlabserverAvailable();
-        
-        /**
-         * @brief Run the command converting `sourceFile` to `targetFile`.
-         * @return True if the command returned without error, false otherwise.
-         */
-        static bool runMeshlabserverCommand(const std::filesystem::path& sourceFile,
-                                            const std::filesystem::path& targetFile);
-        
-        
-        /// Command used to convert mesh files to STL.
-        static const std::string MESHLABSERVER;
-        
+
         
     private:
         
         /// The scaling.
         float scaling = 1.0f;
-        
+        */
     };
 
 }
