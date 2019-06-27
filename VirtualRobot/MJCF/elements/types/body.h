@@ -207,6 +207,7 @@ struct Body : public Element<Body>
     /// Add a mesh geom with optional material (for texture).
     Geom addGeomMesh(const std::string& meshName, const std::string& materialName = "");
     
+    Site addSite(const std::string& type);
     
     mjcf_NameAttribute(Body);
     mjcf_StringAttributeOpt(Body, childclass);
