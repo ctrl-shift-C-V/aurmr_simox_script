@@ -204,6 +204,77 @@ mjcf::DefaultClass RobotMjcf::getRobotDefaults() const
     return document->default_().getClass(robot->getName());
 }
 
+void RobotMjcf::build(WorldMountMode worldMountMode, ActuatorType actuatorType)
+{
+    // Reset MJCF.
+    reset();
+    
+    // Add meta elements.
+    addCompiler();
+    
+    addRobotDefaults();
+    // document->setNewElementClass(robot->getName(), true);
+    
+    addSkybox();
+    
+    mjcf::Body mocapBody;
+    switch (worldMountMode)
+    {
+    case WorldMountMode::FIXED:
+        break;
+    
+    case WorldMountMode::FREE:
+        robotBody.addFreeJoint();
+        break;
+        
+    case WorldMountMode::MOCAP:
+        std::cout << "Adding mocap body ..." << std::endl;
+        robotBody.addFreeJoint();
+        mocapBody = addMocapBodyWeldRobot();
+        break;
+    }
+    
+    std::cout << "Creating bodies structure ..." << std::endl;
+    addNodeBodies();
+    
+    std::cout << "Adding meshes and geoms ..." << std::endl;
+    addNodeBodyMeshes();
+    
+    bool verbose = false;
+    if (verbose)
+    {
+        std::cout << "===========================" << std::endl
+                  << "Current model: "             << std::endl
+                  << "--------------"              << std::endl;
+        std::cout << getDocument();
+        std::cout << "===========================" << std::endl;
+    }
+    
+    
+    std::cout << "Adding contact excludes ..." << std::endl;
+    addContactExcludes();
+
+    if (worldMountMode == WorldMountMode::MOCAP)
+    {
+        std::cout << "Adding mocap body contact excludes ..." << std::endl;
+        VR_CHECK(mocapBody);
+        addMocapContactExcludes(mocapBody);
+    }
+    
+    if (actuatorType != ActuatorType::NONE)
+    {
+        std::cout << "Adding actuators ..." << std::endl;
+        addActuators(actuatorType);
+    }
+    
+    std::cout << "Done." << std::endl;
+}
+
+void RobotMjcf::save() const
+{
+    document->saveFile(outputFile);
+}
+
 
 
 void RobotMjcf::addCompiler(bool angleRadian, bool boundMass, bool balanceIneratia)

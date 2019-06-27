@@ -127,6 +127,28 @@ namespace VirtualRobot::mujoco
         mjcf::DefaultClass getRobotDefaults() const;
         
         
+        // DEFAULT BUILD
+        
+        /**
+         * @brief Build a default model of robot. 
+         * 
+         * Resets the document beforehand.
+         * 
+         * @param worldMountMode 
+         *      How the robot shall be mounted to the world body.
+         *      - WorldMountMode::FIXED: Rigid connection without joints.
+         *      - WorldMountMode::FREE:  Add a free joint.
+         *      - WorldMountMode::MOCAP: Add a free joint and a mocap body
+         *                               welded to the robot body.
+         * @param actuatorType Which actuators shall be added.
+         */
+        void build(WorldMountMode worldMountMode, ActuatorType actuatorType);
+        
+        /**
+         * @brief Save the MJCF model in `getOutputFile()`.
+         */
+        void save() const;
+        
         
         // MODIFICATION
         
@@ -326,14 +348,10 @@ namespace VirtualRobot::mujoco
         bool useRelativePaths = false;
         
         /// The path to the output XML file.
-        std::filesystem::path outputFile;
-        /// The directory of the output XML file.
-        std::filesystem::path outputDirectory() const
-        { return outputFile.parent_path(); }
+        std::filesystem::path outputFile { robot->getName() + ".xml" };
         
         /// The directory where meshes shall be stored, relative to `outputDirectory()`.
-        std::filesystem::path outputMeshRelDirectory;
-        /// The director where meshes are stored (including `outputDirectory()`.
+        std::filesystem::path outputMeshRelDirectory { "meshes" };
         
         
         
