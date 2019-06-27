@@ -117,7 +117,7 @@ namespace mjcf
         // ATTRIBUTES
         
         /// The document.
-        tinyxml2::XMLDocument doc;
+        std::unique_ptr<tinyxml2::XMLDocument> document;
         
         /// The "mujoco" root element.
         std::unique_ptr<MujocoRoot> root;
@@ -148,7 +148,7 @@ namespace mjcf
     template <class ElementD, class ParentD>
     ElementD Document::createElement(Element<ParentD> parent, const std::string& className, bool front)
     {
-        ElementD element(this, doc.NewElement(ElementD::Derived::tag.c_str()));
+        ElementD element(this, document->NewElement(ElementD::Derived::tag.c_str()));
 
         auto applyNewElementClass = [this]()
         {
@@ -223,7 +223,7 @@ namespace mjcf
     template <class D>
     void Element<D>::insertComment(const std::string& text, bool front)
     {
-        tinyxml2::XMLComment* comment = _document->doc.NewComment(text.c_str());
+        tinyxml2::XMLComment* comment = _document->document->NewComment(text.c_str());
         if (front)
         {
             _element->InsertFirstChild(comment);

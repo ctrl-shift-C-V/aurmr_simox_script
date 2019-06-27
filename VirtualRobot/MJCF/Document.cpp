@@ -7,41 +7,45 @@ namespace mjcf
 {
 
 
-Document::Document()
+Document::Document() : document(new tinyxml2::XMLDocument())
 {
     // create root element
-    tinyxml2::XMLElement* xml = doc.NewElement(MujocoRoot::tag.c_str());
-    doc.InsertEndChild(xml);
+    tinyxml2::XMLElement* xml = document->NewElement(MujocoRoot::tag.c_str());
+    document->InsertEndChild(xml);
     root.reset(new MujocoRoot(this, xml));
 }
 
 void Document::loadFile(const std::string& fileName)
 {
-    tinyxml2::XMLError error = doc.LoadFile(fileName.c_str());
+    tinyxml2::XMLError error = document->LoadFile(fileName.c_str());
     if (error != tinyxml2::XML_SUCCESS)
     {
-        throw MjcfIOError(doc.ErrorStr());
+        throw MjcfIOError(document->ErrorStr());
     }
 }
 
 void Document::saveFile(const std::string& fileName)
 {
-    tinyxml2::XMLError error = doc.SaveFile(fileName.c_str());
+    tinyxml2::XMLError error = document->SaveFile(fileName.c_str());
     if (error != tinyxml2::XML_SUCCESS)
     {
-        throw MjcfIOError(doc.ErrorStr());
+        throw MjcfIOError(document->ErrorStr());
     }
 }
 
 void Document::deepCopyFrom(const Document& source)
 {
-    source.doc.DeepCopy(&this->doc);
+    // Copy document.
+    source.document->DeepCopy(this->document.get());
+    
+    // Update root element.
+    root.reset(new MujocoRoot(this, document->FirstChildElement(MujocoRoot::tag.c_str())));
 }
 
 void Document::print(std::ostream& os) const
 {
     tinyxml2::XMLPrinter printer;
-    doc.Print(&printer);
+    document->Print(&printer);
     os << printer.CStr();
 }
 
