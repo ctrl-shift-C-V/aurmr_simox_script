@@ -36,6 +36,8 @@ ADD_VR_TEST( VirtualRobotRuntimeEnvironmentTest )
 ADD_VR_TEST( VirtualRobotJsonEigenConversionTest )
 ADD_VR_TEST( VirtualRobotMjcfTest )
 
+ADD_VR_TEST( VirtualRobotMujocoMeshTest )
+
 ADD_VR_TEST( MathFitPlaneTest )
 ADD_VR_TEST( MathGaussianImplicitSurface3DNormalsTest )
 ADD_VR_TEST( MathGaussianImplicitSurface3DTest )
