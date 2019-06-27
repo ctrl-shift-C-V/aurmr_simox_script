@@ -15,7 +15,7 @@
 #include "../RobotConfig.h"
 #include "../RuntimeEnvironment.h"
 #include "rapidxml.hpp"
-#include "mujoco/MujocoIO.h"
+#include "mujoco/RobotMjcf.h"
 
 
 #include <vector>
@@ -1526,9 +1526,10 @@ namespace VirtualRobot
     void RobotIO::saveMJCF(RobotPtr robot, const std::string& filename,
                            const std::string& basePath, const std::string& meshDir)
     {
-        mujoco::MujocoIO mujocoIO(robot);
-        mujocoIO.setActuatorType(mujoco::ActuatorType::MOTOR);
-        mujocoIO.saveMJCF(filename, basePath, meshDir);
+        mujoco::RobotMjcf mjcf(robot);
+        mjcf.setOutputPaths(fs::path(basePath) / filename, meshDir);
+        mjcf.build(mujoco::WorldMountMode::FREE, mujoco::ActuatorType::MOTOR);
+        mjcf.save();
     }
 
 
