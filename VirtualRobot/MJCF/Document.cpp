@@ -15,6 +15,27 @@ Document::Document() : document(new tinyxml2::XMLDocument())
     root.reset(new MujocoRoot(this, xml));
 }
 
+Document::Document(const Document& other)
+{
+    deepCopyFrom(other);
+}
+
+Document::Document(Document&& other) = default;
+
+Document& Document::operator=(const Document& other)
+{
+    if (&other == this)
+    {
+        return *this;
+    }
+    
+    deepCopyFrom(other);
+    return *this;
+}
+
+Document& Document::operator=(Document&& other) = default;
+
+
 void Document::loadFile(const std::string& fileName)
 {
     tinyxml2::XMLError error = document->LoadFile(fileName.c_str());

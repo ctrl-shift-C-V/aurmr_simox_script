@@ -25,6 +25,18 @@ namespace mjcf
         /// Constructor.
         Document();
         
+        
+        /// Copy constructor. Performs a deep copy from `other` to `*this`.
+        Document(const Document& other);
+        /// Move constructor.
+        Document(Document&& other);
+        
+        /// Copy assignment operator. Performs a deep copy from `other` to `*this`.
+        Document& operator= (const Document& other);
+        /// Move assignment operator.
+        Document& operator= (Document&& other);
+        
+        
         /// Set the precision for float comparison.
         float getFloatCompPrecision() const;
         /// Set the precision for float comparison (used e.g. when comparing
@@ -40,7 +52,7 @@ namespace mjcf
         /// Save to an MJCF file.
         void saveFile(const std::string& fileName);
         
-        /// Make a deep copy of source to this.
+        /// Make a deep copy of source to `*this`.
         void deepCopyFrom(const Document& source);
         
         void print(std::ostream& os = std::cout) const;
