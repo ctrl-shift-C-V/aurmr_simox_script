@@ -6,7 +6,7 @@ find_package(Boost COMPONENTS system filesystem REQUIRED)
 if (Boost_FOUND)
 
     set(SOURCES
-        main.cpp
+        MujocoMeshReader.cpp
     )
     
     set(HEADERS
