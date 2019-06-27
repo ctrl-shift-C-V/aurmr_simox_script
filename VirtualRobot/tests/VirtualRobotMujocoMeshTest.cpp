@@ -33,7 +33,8 @@
 
 namespace fs = std::filesystem;
 
-static const fs::path meshFileName = "VirtualRobotMujocoMeshTestMesh.msh";
+// Defined by CMake.
+static const fs::path meshFileName = TEST_MESH_FILE;  // "VirtualRobotMujocoMeshTestMesh.msh";
 
 
 struct Fixture
@@ -43,7 +44,7 @@ struct Fixture
         BOOST_CHECK(fs::exists(meshFileName) && fs::is_regular_file(meshFileName));
         mesh.read(meshFileName);
     }
-
+    
     VirtualRobot::mujoco::Mesh mesh;
 };
 

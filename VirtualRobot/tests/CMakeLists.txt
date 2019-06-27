@@ -36,7 +36,14 @@ ADD_VR_TEST( VirtualRobotRuntimeEnvironmentTest )
 ADD_VR_TEST( VirtualRobotJsonEigenConversionTest )
 ADD_VR_TEST( VirtualRobotMjcfTest )
 
+
 ADD_VR_TEST( VirtualRobotMujocoMeshTest )
+
+configure_file(VirtualRobotMujocoMeshTestMesh.msh 
+    ${Simox_TEST_DIR}/VirtualRobotMujocoMeshTestMesh.msh COPYONLY)
+target_compile_definitions(VirtualRobotMujocoMeshTest PRIVATE 
+    TEST_MESH_FILE="${Simox_TEST_DIR}/VirtualRobotMujocoMeshTestMesh.msh")
+
 
 ADD_VR_TEST( MathFitPlaneTest )
 ADD_VR_TEST( MathGaussianImplicitSurface3DNormalsTest )
