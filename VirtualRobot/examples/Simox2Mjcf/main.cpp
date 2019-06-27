@@ -3,7 +3,7 @@
 #include <VirtualRobot/RuntimeEnvironment.h>
 
 #include <VirtualRobot/XML/RobotIO.h>
-#include <VirtualRobot/XML/mujoco/MujocoIO.h>
+#include <VirtualRobot/XML/mujoco/RobotMjcf.h>
 
 
 using namespace VirtualRobot;
@@ -30,8 +30,6 @@ int main(int argc, char* argv[])
     
     RuntimeEnvironment::considerKey(
                 "actuator", "The actuator type to add (motor, position, velocity). (default: motor)");
-    RuntimeEnvironment::considerKey(
-                "sanitize_bodies", "How to sanitize massless bodies (none, dummymass, merge). (default: none)");
     RuntimeEnvironment::considerFlag(
                 "mount", "How to mount the robot at the world body (fixed, free, mocap). (default: fixed)");
     
@@ -46,8 +44,8 @@ int main(int argc, char* argv[])
     RuntimeEnvironment::considerKey(
                 "scale_mass", "Scaling of masses (to kg). (default: 1.0)");
     
-    RuntimeEnvironment::considerFlag(
-                "verbose", "Enable verbose output.");
+    // RuntimeEnvironment::considerFlag(
+    //            "verbose", "Enable verbose output.");
     
     RuntimeEnvironment::processCommandLine(argc, argv);
 
@@ -79,15 +77,12 @@ int main(int argc, char* argv[])
     
     const std::string actuatorTypeStr = RuntimeEnvironment::checkParameter("actuator", "motor");
     mujoco::ActuatorType actuatorType;
-    const std::string bodySanitizeModeStr = RuntimeEnvironment::checkParameter("sanitize_bodies", "none");
-    mujoco::BodySanitizeMode bodySanitizeMode;
     const std::string worldMountModeStr = RuntimeEnvironment::checkParameter("mount", "fixed");
     mujoco::WorldMountMode worldMountMode;
     
     try
     {
         actuatorType = mujoco::toActuatorType(actuatorTypeStr);
-        bodySanitizeMode = mujoco::toBodySanitizeMode(bodySanitizeModeStr);
         worldMountMode = mujoco::toWorldMountMode(worldMountModeStr);
     }
     catch (const std::out_of_range& e)
@@ -96,7 +91,7 @@ int main(int argc, char* argv[])
         return -1;
     }
     
-    const bool verbose = RuntimeEnvironment::hasFlag("verbose");
+    // const bool verbose = RuntimeEnvironment::hasFlag("verbose");
     
     const bool useRelativePaths = RuntimeEnvironment::hasFlag("rel_paths");
     
@@ -135,7 +130,6 @@ int main(int argc, char* argv[])
     std::cout << "Output dir:         " << outputDir << std::endl;
     std::cout << "Output mesh dir:    " << outputDir / meshRelDir << std::endl;
     std::cout << "Actuator type:      " << actuatorTypeStr << std::endl;
-    std::cout << "Body Sanitize Mode: " << bodySanitizeModeStr << std::endl;
     std::cout << "World Mount Mode:   " << worldMountModeStr << std::endl;
     
     std::cout << "Scaling: " <<  std::endl
@@ -165,20 +159,20 @@ int main(int argc, char* argv[])
     else
     {
         // Direct API.
-        mujoco::MujocoIO mujocoIO(robot);
+        mujoco::RobotMjcf mjcf(robot);
         
-        mujocoIO.setActuatorType(actuatorType);
-        mujocoIO.setBodySanitizeMode(bodySanitizeMode);
+        mjcf.setUseRelativePaths(useRelativePaths);
         
-        mujocoIO.setUseRelativePaths(useRelativePaths);
-        mujocoIO.setWorldMountMode(worldMountMode);
+        mjcf.setOutputFile(outputDir / inputFilename.filename());
+        mjcf.setOutputMeshRelativeDirectory(meshRelDir);
         
-        mujocoIO.setLengthScale(scaleLength);
-        mujocoIO.setMeshScale(scaleMesh);
-        mujocoIO.setMassScale(scaleMass);
+        mjcf.setLengthScale(scaleLength);
+        mjcf.setMeshScale(scaleMesh);
+        mjcf.setMassScale(scaleMass);
         
-        mujocoIO.setVerbose(verbose);
+        // mjcf.setVerbose(verbose);
         
-        mujocoIO.saveMJCF(inputFilename.filename(), outputDir, meshRelDir);
+        mjcf.build(worldMountMode, actuatorType);
+        mjcf.save();
     }
 }
