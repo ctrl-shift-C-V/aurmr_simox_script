@@ -181,6 +181,11 @@ namespace VirtualRobot
         return ManipulationObjectPtr(_clone(name, colChecker, deepVisuCopy));
     }
 
+    ManipulationObjectPtr ManipulationObject::clone(CollisionCheckerPtr colChecker, bool deepVisuCopy) const
+    {
+        return clone(getName(), colChecker, deepVisuCopy);
+    }
+
     ManipulationObject* ManipulationObject::_clone(const std::string& name, CollisionCheckerPtr colChecker, bool deepVisuCopy) const
     {
         VisualizationNodePtr clonedVisualizationNode;
