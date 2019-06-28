@@ -52,6 +52,8 @@ namespace math
         static Eigen::Vector3f CwiseMin(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
         static Eigen::Vector3f CwiseMax(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
         static Eigen::Vector3f CwiseDivide(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
+        static Eigen::Vector3f CwiseClamp(const Eigen::Vector3f& min, const Eigen::Vector3f& max, const Eigen::Vector3f& val);
+        static Eigen::Vector3f CwiseClamp(float min, float max, const Eigen::Vector3f& val);
         static Eigen::Vector3f Average(const std::vector<Eigen::Vector3f>& vectors);
         static void Swap(float& a,float& b);
 
@@ -200,13 +202,15 @@ namespace math
         /// Convert a value from degree to radian.
         static float deg2rad(float deg);
         
-        /// Convert a value from radian to degree.
-        template <typename ValueT>
-        static ValueT rad2deg(const ValueT& rad);
+        /// Convert an Eigen Matrix or Vector from radian to degree.
+        template <typename Derived>
+        static Eigen::Matrix<typename Derived::Scalar, Derived::RowsAtCompileTime, Derived::ColsAtCompileTime>
+        rad2deg(const Eigen::MatrixBase<Derived>& rad);
         
-        /// Convert a value from degree to radian.
-        template <typename ValueT>
-        static ValueT deg2rad(const ValueT& deg);
+        /// Convert an Eigen Matrix or Vector from radian to degree.
+        template <typename Derived>
+        static Eigen::Matrix<typename Derived::Scalar, Derived::RowsAtCompileTime, Derived::ColsAtCompileTime>
+        deg2rad(const Eigen::MatrixBase<Derived>& deg);
 
         
     private:
@@ -284,14 +288,16 @@ namespace math
     }
     
     
-    template<typename ValueT>
-    ValueT Helpers::rad2deg(const ValueT& rad)
+    template <typename Derived>
+    Eigen::Matrix<typename Derived::Scalar, Derived::RowsAtCompileTime, Derived::ColsAtCompileTime>
+    Helpers::rad2deg(const Eigen::MatrixBase<Derived>& rad)
     {
         return rad * (180.0 / M_PI);
     }
     
-    template<typename ValueT>
-    ValueT Helpers::deg2rad(const ValueT& deg)
+    template <typename Derived>
+    Eigen::Matrix<typename Derived::Scalar, Derived::RowsAtCompileTime, Derived::ColsAtCompileTime>
+    Helpers::deg2rad(const Eigen::MatrixBase<Derived>& deg)
     {
         return deg * (M_PI / 180.0);
     }
