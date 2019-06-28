@@ -14,7 +14,7 @@ namespace VirtualRobot
     }
 
     ManipulationObject::~ManipulationObject()
-    = default;
+        = default;
 
     void ManipulationObject::print(bool printDecoration)
     {
@@ -48,21 +48,21 @@ namespace VirtualRobot
 
     void ManipulationObject::includeGraspSet(GraspSetPtr toBeIncludedGraspSet)  //maybe delete
     {
-        THROW_VR_EXCEPTION_IF(!toBeIncludedGraspSet,"NULL data");
-        std::string robotType=toBeIncludedGraspSet->getRobotType();
-        std::string eef=toBeIncludedGraspSet->getEndEffector();
+        THROW_VR_EXCEPTION_IF(!toBeIncludedGraspSet, "NULL data");
+        std::string robotType = toBeIncludedGraspSet->getRobotType();
+        std::string eef = toBeIncludedGraspSet->getEndEffector();
 
         //include new Grasps
         //check if grasp is existing
-        int index=-1;
-        for(size_t i = 0 ; i < graspSets.size(); i++ )
+        int index = -1;
+        for (size_t i = 0 ; i < graspSets.size(); i++)
         {
             if (graspSets.at(i)->getRobotType() == robotType && graspSets.at(i)->getEndEffector() == eef)
             {
                 index = i;
             }
         }
-        THROW_VR_EXCEPTION_IF(index==-1,"Index wrong defined");
+        THROW_VR_EXCEPTION_IF(index == -1, "Index wrong defined");
         graspSets.at(index)->includeGraspSet(toBeIncludedGraspSet);
     }
 
@@ -70,7 +70,7 @@ namespace VirtualRobot
     {
         VR_ASSERT_MESSAGE(graspSet, "NULL data");
 
-        for (const auto & i : graspSets)
+        for (const auto& i : graspSets)
             if (i == graspSet)
             {
                 return true;
@@ -81,7 +81,7 @@ namespace VirtualRobot
 
     bool ManipulationObject::hasGraspSet(const std::string& robotType, const std::string& eef)
     {
-        for (auto & graspSet : graspSets)
+        for (auto& graspSet : graspSets)
             if (graspSet->getRobotType() == robotType && graspSet->getEndEffector() == eef)
             {
                 return true;
@@ -101,7 +101,7 @@ namespace VirtualRobot
 
     VirtualRobot::GraspSetPtr ManipulationObject::getGraspSet(const std::string& robotType, const std::string& eefName)
     {
-        for (auto & graspSet : graspSets)
+        for (auto& graspSet : graspSets)
             if (graspSet->getRobotType() == robotType && graspSet->getEndEffector() == eefName)
             {
                 return graspSet;
@@ -112,7 +112,7 @@ namespace VirtualRobot
 
     VirtualRobot::GraspSetPtr ManipulationObject::getGraspSet(const std::string& name)
     {
-        for (auto & graspSet : graspSets)
+        for (auto& graspSet : graspSets)
             if (graspSet->getName() == name)
             {
                 return graspSet;
@@ -165,7 +165,7 @@ namespace VirtualRobot
 
             ss << getSceneObjectXMLString(basePath, tabs + 1);
 
-            for (auto & graspSet : graspSets)
+            for (auto& graspSet : graspSets)
             {
                 ss << graspSet->getXMLString(tabs + 1) << "\n";
             }
@@ -176,7 +176,7 @@ namespace VirtualRobot
         return ss.str();
     }
 
-    ManipulationObjectPtr ManipulationObject::clone(const std::string &name, CollisionCheckerPtr colChecker, bool deepVisuCopy) const
+    ManipulationObjectPtr ManipulationObject::clone(const std::string& name, CollisionCheckerPtr colChecker, bool deepVisuCopy) const
     {
         return ManipulationObjectPtr(_clone(name, colChecker, deepVisuCopy));
     }
@@ -212,7 +212,7 @@ namespace VirtualRobot
 
         result->setGlobalPose(getGlobalPose());
 
-        for (const auto & graspSet : graspSets)
+        for (const auto& graspSet : graspSets)
         {
             result->addGraspSet(graspSet->clone());
         }
