@@ -108,6 +108,8 @@ namespace math
         /// Legacy shortcut for Pose().
         static Eigen::Matrix4f CreatePose(const Eigen::Vector3f& pos, const Eigen::Matrix3f& ori);
 
+        static Eigen::Matrix3f CreateOrientation(const Eigen::Vector3f& e1, const Eigen::Vector3f& e2, const Eigen::Vector3f& e3);
+
         /// Legacy shortcut for Position() as getter.
         static Eigen::Vector3f GetPosition(const Eigen::Matrix4f& pose);
         /// Legacy shortcut for Orientation() as getter.

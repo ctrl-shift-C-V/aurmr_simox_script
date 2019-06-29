@@ -252,6 +252,15 @@ Eigen::Matrix4f Helpers::CreatePose(const Eigen::Vector3f& pos, const Eigen::Mat
     return Pose(pos, ori);
 }
 
+Eigen::Matrix3f Helpers::CreateOrientation(const Eigen::Vector3f &e1, const Eigen::Vector3f &e2, const Eigen::Vector3f &e3)
+{
+    Eigen::Matrix3f ori;
+    ori.block<3,1>(0,0) = e1;
+    ori.block<3,1>(0,1) = e2;
+    ori.block<3,1>(0,2) = e3;
+    return ori;
+}
+
 Eigen::Vector3f Helpers::GetPosition(const Eigen::Matrix4f& pose)
 {
     return Position(pose);
