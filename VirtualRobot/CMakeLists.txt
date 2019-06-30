@@ -178,6 +178,7 @@ math/Kernels.cpp
 math/Line.cpp
 math/LinearContinuedBezier.cpp
 math/LinearInterpolatedOrientation.cpp
+math/LinearInterpolatedPose.cpp
 math/LineR2.cpp
 math/LineStrip.cpp
 math/MarchingCubes.cpp
@@ -345,6 +346,7 @@ math/LineStrip.h
 math/LineStripR1RM.h
 math/LinearContinuedBezier.h
 math/LinearInterpolatedOrientation.h
+math/LinearInterpolatedPose.h
 math/MarchingCubes.h
 math/MathForwardDefinitions.h
 math/Plane.h

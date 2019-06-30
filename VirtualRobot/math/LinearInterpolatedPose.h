@@ -15,38 +15,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * @author     Simon Ottenhaus (simon dot ottenhaus at kit dot edu)
- * @copyright  2018 Simon Ottenhaus
+ * @copyright  2019 Simon Ottenhaus
  *             GNU Lesser General Public License
  */
 
 #pragma once
 
-#include "AbstractFunctionR1Ori.h"
-#include "AbstractFunctionR1Ori.h"
 #include "MathForwardDefinitions.h"
+#include "LinearInterpolatedOrientation.h"
 
 
 namespace math
 {
 
-    class LinearInterpolatedOrientation
-            : public AbstractFunctionR1Ori
+    class LinearInterpolatedPose
     {
     public:
-        LinearInterpolatedOrientation(const Eigen::Quaternionf& startOri, const Eigen::Quaternionf& endOri, float startT, float endT, bool clamp);
-        LinearInterpolatedOrientation(const Eigen::Matrix3f& startOri, const Eigen::Matrix3f& endOri, float startT, float endT, bool clamp);
-        Eigen::Quaternionf Get(float t) override;
-        Eigen::Vector3f GetDerivative(float t) override;
+        LinearInterpolatedPose(const Eigen::Matrix4f& startPose, const Eigen::Matrix4f& endPose, float startT, float endT, bool clamp);
+
+        Eigen::Matrix4f Get(float t);
 
     private:
-        Eigen::Quaternionf startOri;
-        Eigen::Quaternionf endOri;
+        math::LinearInterpolatedOrientation ori;
+        Eigen::Vector3f startPos;
+        Eigen::Vector3f endPos;
         float startT;
         float endT;
         bool clamp;
-        Eigen::Vector3f derivative;
-        Eigen::Vector3f axis;
-        float angle;
-
     };
 }
