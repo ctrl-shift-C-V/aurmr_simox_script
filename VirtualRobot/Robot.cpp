@@ -13,7 +13,7 @@ namespace VirtualRobot
 
     Robot::Robot(const std::string& name, const std::string& type)
         : SceneObject(name)
-        ,scaling(1.0f)
+        , scaling(1.0f)
     {
         this->type = type;
         updateVisualization = true;
@@ -21,10 +21,10 @@ namespace VirtualRobot
     }
 
     Robot::Robot()
-    = default;
+        = default;
 
     Robot::~Robot()
-    = default;
+        = default;
 
     LocalRobot::~LocalRobot()
     {
@@ -35,7 +35,7 @@ namespace VirtualRobot
         {
             std::vector<SceneObjectPtr> c = it->second->getChildren();
 
-            for (const auto & j : c)
+            for (const auto& j : c)
             {
                 it->second->detachChild(j);
             }
@@ -74,7 +74,7 @@ namespace VirtualRobot
             std::vector< RobotNodePtr > allNodes;
             node->collectAllRobotNodes(allNodes);
 
-            for (auto & allNode : allNodes)
+            for (auto& allNode : allNodes)
             {
                 std::string name = allNode->getName();
 
@@ -430,17 +430,17 @@ namespace VirtualRobot
         this->getRootNode()->updatePose(this->getGlobalPose());
         //rootNode->updatePose(globalPose);
     }
-    
+
     /*float Robot::getRadianToMMfactor() const
     {
         return radianToMMfactor;
     }
-    
+
     void Robot::setRadianToMMfactor(float value)
     {
         radianToMMfactor = value;
     }*/
-    
+
     /**
      * This method stores all nodes belonging to the robot in \p storeNodes.
      * If there are no registered nodes \p storeNodes will be empty.
@@ -474,7 +474,7 @@ namespace VirtualRobot
         std::vector<std::string> res;
         const auto nodes = getRobotNodes();
         res.reserve(nodes.size());
-        for(const auto& node:nodes)
+        for (const auto& node : nodes)
         {
             res.emplace_back(node->getName());
         }
@@ -558,7 +558,7 @@ namespace VirtualRobot
         std::vector<std::string> res;
         const auto sets = getRobotNodeSets();
         res.reserve(sets.size());
-        for(const auto& set:sets)
+        for (const auto& set : sets)
         {
             res.emplace_back(set->getName());
         }
@@ -643,11 +643,11 @@ namespace VirtualRobot
         return res;
     }
 
-    void Robot::setGlobalPose(const Eigen::Matrix4f &globalPose)
+    void Robot::setGlobalPose(const Eigen::Matrix4f& globalPose)
     {
         setGlobalPose(globalPose, true);
     }
-    
+
     VirtualRobot::CollisionCheckerPtr Robot::getCollisionChecker()
     {
         std::vector<RobotNodePtr> robotNodes = this->getRobotNodes();
@@ -812,7 +812,7 @@ namespace VirtualRobot
         std::vector<RobotNodePtr> allNodes;
         startJoint->collectAllRobotNodes(allNodes);
 
-        for (auto & allNode : allNodes)
+        for (auto& allNode : allNodes)
         {
             RobotNodePtr roN = result->getRobotNode(allNode->getName());
 
@@ -827,16 +827,16 @@ namespace VirtualRobot
     }
 
     Eigen::Matrix4f Robot::getGlobalPoseForRobotNode(
-            const RobotNodePtr& node, const Eigen::Matrix4f& globalPoseNode) const
+        const RobotNodePtr& node, const Eigen::Matrix4f& globalPoseNode) const
     {
         THROW_VR_EXCEPTION_IF(!node, "NULL node");
-        
+
         if (math::Helpers::Orientation(globalPoseNode).isIdentity())
         {
             // set position to avoid accumulating rounding errors when using rotation
             return getGlobalPositionForRobotNode(node, math::Helpers::Position(globalPoseNode));
         }
-        
+
         // get transformation from current to wanted tcp pose
         Eigen::Matrix4f tf = globalPoseNode * math::Helpers::InvertedPose(node->getGlobalPose());
 
@@ -845,37 +845,37 @@ namespace VirtualRobot
 
         // re-orthogonolize to keep it a valid transformation matrix
         tf = math::Helpers::Orthogonalize(tf);
-        
+
         // return tf
         return tf;
     }
-    
+
     void Robot::setGlobalPoseForRobotNode(
-            const RobotNodePtr& node, const Eigen::Matrix4f& globalPoseNode)
+        const RobotNodePtr& node, const Eigen::Matrix4f& globalPoseNode)
     {
         THROW_VR_EXCEPTION_IF(!node, "NULL node");
-        
+
         setGlobalPose(getGlobalPoseForRobotNode(node, globalPoseNode));
     }
-    
+
     Eigen::Matrix4f Robot::getGlobalPositionForRobotNode(
-            const RobotNodePtr& node, const Eigen::Vector3f& globalPositionNode) const
+        const RobotNodePtr& node, const Eigen::Vector3f& globalPositionNode) const
     {
         // get translation from current to wanted tcp pose
         const Eigen::Vector3f translation = globalPositionNode - node->getGlobalPosition();
 
         // apply translation to current global position of robot
         const Eigen::Vector3f robotPosition = getGlobalPosition() + translation;
-        
+
         return math::Helpers::Pose(robotPosition);
     }
-    
+
     void Robot::setGlobalPositionForRobotNode(
-            const RobotNodePtr& node, const Eigen::Vector3f& globalPositionNode)
+        const RobotNodePtr& node, const Eigen::Vector3f& globalPositionNode)
     {
         setGlobalPose(getGlobalPositionForRobotNode(node, globalPositionNode));
     }
-    
+
 
     VirtualRobot::RobotPtr Robot::clone(const std::string& name, CollisionCheckerPtr collisionChecker, float scaling)
     {
@@ -1001,11 +1001,12 @@ namespace VirtualRobot
             RobotNodePtr rn = getRobotNode(it->first);
             if (!rn)
             {
-				VR_WARNING << "No joint with name " << it->first << endl;
-			} else
-			{
-				rn->setJointValueNoUpdate(it->second);
-			}
+                VR_WARNING << "No joint with name " << it->first << endl;
+            }
+            else
+            {
+                rn->setJointValueNoUpdate(it->second);
+            }
             it++;
         }
 
@@ -1079,7 +1080,7 @@ namespace VirtualRobot
         VirtualRobot::BoundingBox bbox;
         std::vector<RobotNodePtr> rn = getRobotNodes();
 
-        for (auto & i : rn)
+        for (auto& i : rn)
         {
             if (collisionModel && i->getCollisionModel())
             {
@@ -1098,11 +1099,11 @@ namespace VirtualRobot
     {
         std::vector<RobotNodePtr> rn = getRobotNodes();
 
-        for (auto & i : rn)
+        for (auto& i : rn)
         {
             std::vector<SensorPtr> sensors = i->getSensors();
 
-            for (auto & sensor : sensors)
+            for (auto& sensor : sensors)
             {
                 if (sensor->getName() == name)
                 {
@@ -1119,7 +1120,7 @@ namespace VirtualRobot
         std::vector<SensorPtr> result;
         std::vector<RobotNodePtr> rn = getRobotNodes();
 
-        for (auto & i : rn)
+        for (auto& i : rn)
         {
             std::vector<SensorPtr> s = i->getSensors();
 
@@ -1140,7 +1141,7 @@ namespace VirtualRobot
         ss << "<Robot Type='" << this->type << "' RootNode='" << this->getRootNode()->getName() << "'>" << endl << endl;
         std::vector<RobotNodePtr> nodes = getRobotNodes();
 
-        for (auto & node : nodes)
+        for (auto& node : nodes)
         {
             ss << node->toXML(basePath, modelPath, storeSensors) << endl;
         }
@@ -1152,7 +1153,7 @@ namespace VirtualRobot
             std::vector<RobotNodeSetPtr> rns;
             this->getRobotNodeSets(rns);
 
-            for (auto & rn : rns)
+            for (auto& rn : rns)
             {
                 ss << rn->toXML(1) << endl;
             }
@@ -1167,7 +1168,7 @@ namespace VirtualRobot
         {
             std::vector<EndEffectorPtr> eefs = this->getEndEffectors();
 
-            for (auto & eef : eefs)
+            for (auto& eef : eefs)
             {
                 ss << eef->toXML(1) << endl;
             }
@@ -1195,9 +1196,9 @@ namespace VirtualRobot
 
     void Robot::inflateCollisionModel(float inflationInMM)
     {
-        for(auto& node : getRobotNodes())
+        for (auto& node : getRobotNodes())
         {
-            if(node->getCollisionModel())
+            if (node->getCollisionModel())
             {
                 node->getCollisionModel()->inflateModel(inflationInMM);
             }

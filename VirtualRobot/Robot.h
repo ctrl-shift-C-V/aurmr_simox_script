@@ -379,11 +379,11 @@ namespace VirtualRobot
             std::vector<boost::shared_ptr<SensorType> > result;
             std::vector<SensorPtr> sensors = getSensors();
             result.reserve(sensors.size());
-            for(std::size_t i = 0; i < sensors.size(); ++i)
+            for (std::size_t i = 0; i < sensors.size(); ++i)
             {
-                if(dynamic_cast<SensorType*>(sensors.at(i).get()))
+                if (dynamic_cast<SensorType*>(sensors.at(i).get()))
                 {
-                   result.push_back(boost::static_pointer_cast<SensorType>(sensors.at(i)));
+                    result.push_back(boost::static_pointer_cast<SensorType>(sensors.at(i)));
                 }
             }
             return result;
