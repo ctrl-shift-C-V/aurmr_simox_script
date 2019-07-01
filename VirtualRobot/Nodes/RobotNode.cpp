@@ -331,22 +331,19 @@ namespace VirtualRobot
         if (propagatedJointValues.size() > 0 && getRobot()->getPropagatingJointValuesEnabled())
         {
             RobotPtr r = robot.lock();
-            std::map< std::string, float>::iterator it = propagatedJointValues.begin();
 
-            while (it != propagatedJointValues.end())
+            for (auto& [jname, factor] : propagatedJointValues)
             {
-                RobotNodePtr rn = r->getRobotNode(it->first);
+                RobotNodePtr rn = r->getRobotNode(jname);
 
                 if (!rn)
                 {
-                    VR_WARNING << "Could not propagate joint value from " << name << " to " << it->first << " because dependent joint does not exist...";
+                    VR_WARNING << "Could not propagate joint value from " << name << " to " << jname << " because dependent joint does not exist...";
                 }
                 else
                 {
-                    rn->setJointValue(jointValue * it->second);
+                    rn->setJointValue(jointValue * factor);
                 }
-
-                it++;
             }
         }
     }
@@ -676,9 +673,9 @@ namespace VirtualRobot
         delta = target - jointValue;
 
         // eventually take the other way around if it is shorter and if this joint is limitless.
-        if (limitless && (std::abs(delta) > M_PI))
+        if (limitless && (std::abs(delta) > static_cast<float>(M_PI)))
         {
-            delta = (-1) * ((delta > 0) - (delta < 0)) * ((2 * M_PI) - std::abs(delta));
+            delta = (-1) * ((delta > 0) - (delta < 0)) * ((2 * static_cast<float>(M_PI)) - std::abs(delta));
         }
 
         return delta;
@@ -715,7 +712,7 @@ namespace VirtualRobot
 
             if (visualizationType.empty())
             {
-                visualizationFactory = VisualizationFactory::first(NULL);
+                visualizationFactory = VisualizationFactory::first(nullptr);
             }
             else
             {
