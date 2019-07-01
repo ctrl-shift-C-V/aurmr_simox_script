@@ -406,6 +406,9 @@ namespace VirtualRobot
          */
         void inflateCollisionModel(float inflationInMM);
 
+
+        bool getPropagatingJointValuesEnabled() const;
+        void setPropagatingJointValuesEnabled(bool enabled);
     protected:
         Robot();
         /*!
@@ -426,6 +429,7 @@ namespace VirtualRobot
 
         mutable boost::recursive_mutex mutex;
         bool use_mutex;
+        bool propagatingJointValuesEnabled = true;
 
         //float radianToMMfactor = 10;
 

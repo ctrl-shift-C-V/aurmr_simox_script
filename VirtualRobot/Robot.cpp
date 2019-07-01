@@ -822,6 +822,7 @@ namespace VirtualRobot
             }
         }
 
+        result->propagatingJointValuesEnabled = propagatingJointValuesEnabled;
         result->applyJointValues();
         return result;
     }
@@ -1203,6 +1204,16 @@ namespace VirtualRobot
                 node->getCollisionModel()->inflateModel(inflationInMM);
             }
         }
+    }
+
+    bool Robot::getPropagatingJointValuesEnabled() const
+    {
+        return propagatingJointValuesEnabled;
+    }
+
+    void Robot::setPropagatingJointValuesEnabled(bool enabled)
+    {
+        propagatingJointValuesEnabled = enabled;
     }
 
 } // namespace VirtualRobot

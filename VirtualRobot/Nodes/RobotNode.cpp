@@ -328,7 +328,7 @@ namespace VirtualRobot
         SceneObject::updatePose(updateChildren);
 
         // apply propagated joint values
-        if (propagatedJointValues.size() > 0)
+        if (propagatedJointValues.size() > 0 && getRobot()->getPropagatingJointValuesEnabled())
         {
             RobotPtr r = robot.lock();
             std::map< std::string, float>::iterator it = propagatedJointValues.begin();
