@@ -183,7 +183,7 @@ namespace GraspStudio
 
             double pCenter[3];
 
-            for (double & u : pCenter)
+            for (double& u : pCenter)
             {
                 u = 0;
             }
@@ -200,7 +200,7 @@ namespace GraspStudio
             }
 
             if (nVcertexCount > 0)
-                for (double & u : pCenter)
+                for (double& u : pCenter)
                 {
                     u /= (float)nVcertexCount;
                 }
@@ -360,14 +360,14 @@ namespace GraspStudio
             /*int convexNumVert2 =*/ qh_setsize(qh_facetvertices(facet_list, nullptr, false));
             double pCenter[6];
 
-            for (double & u : pCenter)
+            for (double& u : pCenter)
             {
                 u = 0;
             }
 
             double pZero[6];
 
-            for (double & u : pZero)
+            for (double& u : pZero)
             {
                 u = 0;
             }
@@ -384,7 +384,7 @@ namespace GraspStudio
             }
 
             if (nVcertexCount > 0)
-                for (double & u : pCenter)
+                for (double& u : pCenter)
                 {
                     u /= (float)nVcertexCount;
                 }

@@ -35,7 +35,7 @@
 namespace GraspStudio
 {
     /*!
-     * This class generates grasping configs by sampling a random surface 
+     * This class generates grasping configs by sampling a random surface
      * position of the object and setting the EEF to a surface normal aligned
      * position.
      * The remaining free DoF (the rotation around the normal) is set randomly.
@@ -84,24 +84,24 @@ namespace GraspStudio
 
 
     protected:
-        
+
         /// The random engine.
         std::default_random_engine randomEngine { std::random_device{}() };
-        
+
         /// Uniform distribiton over face indices.
         std::uniform_int_distribution<std::size_t> distribUniform;
-        
+
         /// Indicates whether distribFaceAreas shall be used.
         bool useFaceAreasDistrib = false;
-        
+
         /// Distribution with probability of a face proportional to its area.
         /// Only initialized if useFaceAreasDistrib is true.
         std::discrete_distribution<std::size_t> distribFaceAreas;
 
-        
+
         /// Distribution to draw random retreat distances from.
         std::uniform_real_distribution<float> distribRetreatDistance;
-        
+
     };
 }
 

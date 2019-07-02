@@ -244,12 +244,16 @@ void GraspQualityWindow::evalRobustness()
     openEEF();
     closeEEF();
     if (contacts.size() == 0)
+    {
         return;
-    evalPoses = eval->generatePoses(object->getGlobalPose(), contacts, numSamples );
+    }
+    evalPoses = eval->generatePoses(object->getGlobalPose(), contacts, numSamples);
 
 
-    if (evalPoses.size()==0)
+    if (evalPoses.size() == 0)
+    {
         return;
+    }
 
     /*
     int r = rand() % evalPoses.size();
@@ -261,7 +265,9 @@ void GraspQualityWindow::evalRobustness()
     */
     GraspStudio::GraspEvaluationPoseUncertainty::PoseEvalResults re = eval->evaluatePoses(eef, object, evalPoses, qualityMeasure);
     if (eef && grasp)
+    {
         VR_INFO << "#### Robustness for eef " << eef->getName() << ", grasp " << grasp->getName() << endl;
+    }
     re.print();
 }
 
@@ -293,16 +299,22 @@ void GraspQualityWindow::evalRobustnessAll()
 
             VR_INFO << contacts.size() << endl;
             if (contacts.size() == 0)
+            {
                 continue;
-            std::vector<Eigen::Matrix4f> evalPoses = eval->generatePoses(object->getGlobalPose(), contacts, numSamples );
+            }
+            std::vector<Eigen::Matrix4f> evalPoses = eval->generatePoses(object->getGlobalPose(), contacts, numSamples);
 
             VR_INFO << evalPoses.size() << endl;
-            if (evalPoses.size()==0)
+            if (evalPoses.size() == 0)
+            {
                 continue;
+            }
 
             GraspStudio::GraspEvaluationPoseUncertainty::PoseEvalResults re = eval->evaluatePoses(eef, object, evalPoses, qualityMeasure);
             if (eef && grasp)
+            {
                 VR_INFO << "#### Robustness for eef " << eef->getName() << ", grasp " << grasp->getName() << endl;
+            }
             re.print();
 
             grasp->setQuality(re.avgQuality);
@@ -325,9 +337,11 @@ void GraspQualityWindow::loadObject()
 
     if (!objectFile.empty())
     {
-        try {
+        try
+        {
             object = ObjectIO::loadManipulationObject(objectFile);
-        } catch (...)
+        }
+        catch (...)
         {
             VR_ERROR << "Could not load file " << objectFile << endl;
         }
@@ -459,7 +473,7 @@ void GraspQualityWindow::setGraspComboBox()
 
     grasps = object->getGraspSet(eef);
 
-    if (!grasps || grasps->getSize()==0)
+    if (!grasps || grasps->getSize() == 0)
     {
         VR_INFO << "No grasps found for eef " << eef->getName() << endl;
         return;
@@ -488,7 +502,7 @@ void GraspQualityWindow::setEEFComboBox()
 
     robot->getEndEffectors(eefs);
 
-    for (auto & eef : eefs)
+    for (auto& eef : eefs)
     {
         QString nameEEF(eef->getName().c_str());
         UI.comboBoxEEF->addItem(nameEEF);
@@ -750,55 +764,55 @@ void GraspQualityWindow::showGWS()
     {
         return;
     }
-/*
-    if (UI.checkBoxGWS1->isChecked())
-    {
-        GraspStudio::CoinConvexHullVisualizationPtr v(new GraspStudio::CoinConvexHullVisualization(ch, true));
-        SoSeparator* s = v->getCoinVisualization();
-
-        if (s)
+    /*
+        if (UI.checkBoxGWS1->isChecked())
         {
-            gws1Sep->addChild(mt);
-            gws1Sep->addChild(s);
-        }
-    }
+            GraspStudio::CoinConvexHullVisualizationPtr v(new GraspStudio::CoinConvexHullVisualization(ch, true));
+            SoSeparator* s = v->getCoinVisualization();
 
-    if (UI.checkBoxGWS2->isChecked())
-    {
-        GraspStudio::CoinConvexHullVisualizationPtr v(new GraspStudio::CoinConvexHullVisualization(chOWS, false));
-        SoSeparator* s = v->getCoinVisualization();
-
-        if (s)
-        {
-            gws2Sep->addChild(mt);
-            gws2Sep->addChild(s);
+            if (s)
+            {
+                gws1Sep->addChild(mt);
+                gws1Sep->addChild(s);
+            }
         }
 
-    }
-
-    if (UI.checkBoxOWS1->isChecked())
-    {
-        GraspStudio::CoinConvexHullVisualizationPtr v(new GraspStudio::CoinConvexHullVisualization(chOWS, true));
-        SoSeparator* s = v->getCoinVisualization();
-
-        if (s)
+        if (UI.checkBoxGWS2->isChecked())
         {
-            ows1Sep->addChild(mt);
-            ows1Sep->addChild(s);
+            GraspStudio::CoinConvexHullVisualizationPtr v(new GraspStudio::CoinConvexHullVisualization(chOWS, false));
+            SoSeparator* s = v->getCoinVisualization();
+
+            if (s)
+            {
+                gws2Sep->addChild(mt);
+                gws2Sep->addChild(s);
+            }
+
         }
-    }
 
-    if (UI.checkBoxOWS2->isChecked())
-    {
-        GraspStudio::CoinConvexHullVisualizationPtr v(new GraspStudio::CoinConvexHullVisualization(chOWS, false));
-        SoSeparator* s = v->getCoinVisualization();
-
-        if (s)
+        if (UI.checkBoxOWS1->isChecked())
         {
-            ows2Sep->addChild(mt);
-            ows2Sep->addChild(s);
+            GraspStudio::CoinConvexHullVisualizationPtr v(new GraspStudio::CoinConvexHullVisualization(chOWS, true));
+            SoSeparator* s = v->getCoinVisualization();
+
+            if (s)
+            {
+                ows1Sep->addChild(mt);
+                ows1Sep->addChild(s);
+            }
         }
-    }*/
+
+        if (UI.checkBoxOWS2->isChecked())
+        {
+            GraspStudio::CoinConvexHullVisualizationPtr v(new GraspStudio::CoinConvexHullVisualization(chOWS, false));
+            SoSeparator* s = v->getCoinVisualization();
+
+            if (s)
+            {
+                ows2Sep->addChild(mt);
+                ows2Sep->addChild(s);
+            }
+        }*/
 }
 
 void GraspQualityWindow::showOWS()
