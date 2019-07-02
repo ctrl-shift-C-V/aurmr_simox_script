@@ -69,7 +69,6 @@ namespace PQP
         obb_disjoint(PQP_REAL B[3][3], PQP_REAL T[3], PQP_REAL a[3], PQP_REAL b[3])
         {
             PQP_REAL s;
-            int r;
             PQP_REAL Bf[3][3];
 
             {
@@ -90,175 +89,105 @@ namespace PQP
             }
 
             // if any of these tests are one-sided, then the polyhedra are disjoint
-            r = 1;
 
             // A1 x A2 = A0
-
-            r &= (std::abs(T[0]) <=
-                  (a[0] + b[0] * Bf[0][0] + b[1] * Bf[0][1] + b[2] * Bf[0][2]));
-
-            if (!r)
+            if (std::abs(T[0]) > (a[0] + b[0] * Bf[0][0] + b[1] * Bf[0][1] + b[2] * Bf[0][2]))
             {
                 return 1;
             }
 
-            // B1 x B2 = B0
-            s = T[0] * B[0][0] + T[1] * B[1][0] + T[2] * B[2][0];
-
-            r &= (std::abs(s) <=
-                  (b[0] + a[0] * Bf[0][0] + a[1] * Bf[1][0] + a[2] * Bf[2][0]));
-
-            if (!r)
-            {
-                return 2;
-            }
-
             // A2 x A0 = A1
-
-            r &= (std::abs(T[1]) <=
-                  (a[1] + b[0] * Bf[1][0] + b[1] * Bf[1][1] + b[2] * Bf[1][2]));
-
-            if (!r)
+            if (std::abs(T[1]) > (a[1] + b[0] * Bf[1][0] + b[1] * Bf[1][1] + b[2] * Bf[1][2]))
             {
                 return 3;
             }
 
             // A0 x A1 = A2
-
-            r &= (std::abs(T[2]) <=
-                  (a[2] + b[0] * Bf[2][0] + b[1] * Bf[2][1] + b[2] * Bf[2][2]));
-
-            if (!r)
+            if (std::abs(T[2]) > (a[2] + b[0] * Bf[2][0] + b[1] * Bf[2][1] + b[2] * Bf[2][2]))
             {
                 return 4;
             }
 
+            // B1 x B2 = B0
+            s = T[0] * B[0][0] + T[1] * B[1][0] + T[2] * B[2][0];
+            if (std::abs(s) > (b[0] + a[0] * Bf[0][0] + a[1] * Bf[1][0] + a[2] * Bf[2][0]))
+            {
+                return 2;
+            }
+
             // B2 x B0 = B1
             s = T[0] * B[0][1] + T[1] * B[1][1] + T[2] * B[2][1];
-
-            r &= (std::abs(s) <=
-                  (b[1] + a[0] * Bf[0][1] + a[1] * Bf[1][1] + a[2] * Bf[2][1]));
-
-            if (!r)
+            if (std::abs(s) > (b[1] + a[0] * Bf[0][1] + a[1] * Bf[1][1] + a[2] * Bf[2][1]))
             {
                 return 5;
             }
 
             // B0 x B1 = B2
             s = T[0] * B[0][2] + T[1] * B[1][2] + T[2] * B[2][2];
-
-            r &= (std::abs(s) <=
-                  (b[2] + a[0] * Bf[0][2] + a[1] * Bf[1][2] + a[2] * Bf[2][2]));
-
-            if (!r)
+            if (std::abs(s) > (b[2] + a[0] * Bf[0][2] + a[1] * Bf[1][2] + a[2] * Bf[2][2]))
             {
                 return 6;
             }
 
             // A0 x B0
             s = T[2] * B[1][0] - T[1] * B[2][0];
-
-            r &= (std::abs(s) <=
-                  (a[1] * Bf[2][0] + a[2] * Bf[1][0] +
-                   b[1] * Bf[0][2] + b[2] * Bf[0][1]));
-
-            if (!r)
+            if (std::abs(s) > (a[1] * Bf[2][0] + a[2] * Bf[1][0] + b[1] * Bf[0][2] + b[2] * Bf[0][1]))
             {
                 return 7;
             }
 
             // A0 x B1
             s = T[2] * B[1][1] - T[1] * B[2][1];
-
-            r &= (std::abs(s) <=
-                  (a[1] * Bf[2][1] + a[2] * Bf[1][1] +
-                   b[0] * Bf[0][2] + b[2] * Bf[0][0]));
-
-            if (!r)
+            if (std::abs(s) > (a[1] * Bf[2][1] + a[2] * Bf[1][1] + b[0] * Bf[0][2] + b[2] * Bf[0][0]))
             {
                 return 8;
             }
 
             // A0 x B2
             s = T[2] * B[1][2] - T[1] * B[2][2];
-
-            r &= (std::abs(s) <=
-                  (a[1] * Bf[2][2] + a[2] * Bf[1][2] +
-                   b[0] * Bf[0][1] + b[1] * Bf[0][0]));
-
-            if (!r)
+            if (std::abs(s) > (a[1] * Bf[2][2] + a[2] * Bf[1][2] + b[0] * Bf[0][1] + b[1] * Bf[0][0]))
             {
                 return 9;
             }
 
             // A1 x B0
             s = T[0] * B[2][0] - T[2] * B[0][0];
-
-            r &= (std::abs(s) <=
-                  (a[0] * Bf[2][0] + a[2] * Bf[0][0] +
-                   b[1] * Bf[1][2] + b[2] * Bf[1][1]));
-
-            if (!r)
+            if (std::abs(s) > (a[0] * Bf[2][0] + a[2] * Bf[0][0] + b[1] * Bf[1][2] + b[2] * Bf[1][1]))
             {
                 return 10;
             }
 
             // A1 x B1
             s = T[0] * B[2][1] - T[2] * B[0][1];
-
-            r &= (std::abs(s) <=
-                  (a[0] * Bf[2][1] + a[2] * Bf[0][1] +
-                   b[0] * Bf[1][2] + b[2] * Bf[1][0]));
-
-            if (!r)
+            if (std::abs(s) > (a[0] * Bf[2][1] + a[2] * Bf[0][1] + b[0] * Bf[1][2] + b[2] * Bf[1][0]))
             {
                 return 11;
             }
 
             // A1 x B2
             s = T[0] * B[2][2] - T[2] * B[0][2];
-
-            r &= (std::abs(s) <=
-                  (a[0] * Bf[2][2] + a[2] * Bf[0][2] +
-                   b[0] * Bf[1][1] + b[1] * Bf[1][0]));
-
-            if (!r)
+            if (std::abs(s) > (a[0] * Bf[2][2] + a[2] * Bf[0][2] + b[0] * Bf[1][1] + b[1] * Bf[1][0]))
             {
                 return 12;
             }
 
             // A2 x B0
             s = T[1] * B[0][0] - T[0] * B[1][0];
-
-            r &= (std::abs(s) <=
-                  (a[0] * Bf[1][0] + a[1] * Bf[0][0] +
-                   b[1] * Bf[2][2] + b[2] * Bf[2][1]));
-
-            if (!r)
+            if (std::abs(s) > (a[0] * Bf[1][0] + a[1] * Bf[0][0] + b[1] * Bf[2][2] + b[2] * Bf[2][1]))
             {
                 return 13;
             }
 
             // A2 x B1
             s = T[1] * B[0][1] - T[0] * B[1][1];
-
-            r &= (std::abs(s) <=
-                  (a[0] * Bf[1][1] + a[1] * Bf[0][1] +
-                   b[0] * Bf[2][2] + b[2] * Bf[2][0]));
-
-            if (!r)
+            if (std::abs(s) > (a[0] * Bf[1][1] + a[1] * Bf[0][1] + b[0] * Bf[2][2] + b[2] * Bf[2][0]))
             {
                 return 14;
             }
 
             // A2 x B2
             s = T[1] * B[0][2] - T[0] * B[1][2];
-
-            r &= (std::abs(s) <=
-                  (a[0] * Bf[1][2] + a[1] * Bf[0][2] +
-                   b[0] * Bf[2][1] + b[1] * Bf[2][0]));
-
-            if (!r)
+            if (std::abs(s) > (a[0] * Bf[1][2] + a[1] * Bf[0][2] + b[0] * Bf[2][1] + b[1] * Bf[2][0]))
             {
                 return 15;
             }

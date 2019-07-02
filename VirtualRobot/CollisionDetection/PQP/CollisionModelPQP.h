@@ -56,7 +56,7 @@ namespace VirtualRobot
         */
         ~CollisionModelPQP() override;
 
-        boost::shared_ptr<PQP::PQP_Model> getPQPModel()
+        const boost::shared_ptr<PQP::PQP_Model>& getPQPModel()
         {
             return pqpModel;
         }

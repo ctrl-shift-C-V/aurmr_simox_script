@@ -625,15 +625,18 @@ namespace PQP
         res->num_bv_tests++;
         BV_Processor p;
 
-        if (!p.BV_Overlap(R, T, o1->child(b1), o2->child(b2)))
+        auto o1cb1 = o1->child(b1);
+        auto o2cb2 = o2->child(b2);
+
+        if (!p.BV_Overlap(R, T, o1cb1, o2cb2))
         {
             return;
         }
 
         // if we are, see if we test triangles next
 
-        int l1 = o1->child(b1)->Leaf();
-        int l2 = o2->child(b2)->Leaf();
+        int l1 = o1cb1->Leaf();
+        int l2 = o2cb2->Leaf();
 
         if (l1 && l2)
         {
@@ -642,8 +645,8 @@ namespace PQP
 #if 1
             // transform the points in b2 into space of b1, then compare
 
-            Tri* t1 = &o1->tris[-o1->child(b1)->first_child - 1];
-            Tri* t2 = &o2->tris[-o2->child(b2)->first_child - 1];
+            Tri* t1 = &o1->tris[-o1cb1->first_child - 1];
+            Tri* t2 = &o2->tris[-o2cb2->first_child - 1];
             PQP_REAL q1[3], q2[3], q3[3];
             PQP_REAL* p1 = t1->p1;
             PQP_REAL* p2 = t1->p2;
@@ -662,8 +665,8 @@ namespace PQP
 #else
             PQP_REAL p[3], q[3];
 
-            Tri* t1 = &o1->tris[-o1->child(b1)->first_child - 1];
-            Tri* t2 = &o2->tris[-o2->child(b2)->first_child - 1];
+            Tri* t1 = &o1->tris[-o1cb1->first_child - 1];
+            Tri* t2 = &o2->tris[-o2cb2->first_child - 1];
 
             if (TriDistance(res->R, res->T, t1, t2, p, q) == 0.0)
             {
@@ -679,23 +682,25 @@ namespace PQP
 
         // we dont, so decide whose children to visit next
 
-        PQP_REAL sz1 = o1->child(b1)->GetSize();
-        PQP_REAL sz2 = o2->child(b2)->GetSize();
+        PQP_REAL sz1 = o1cb1->GetSize();
+        PQP_REAL sz2 = o2cb2->GetSize();
 
         PQP_REAL Rc[3][3], Tc[3], Ttemp[3];
 
         if (l2 || (!l1 && (sz1 > sz2)))
         {
-            int c1 = o1->child(b1)->first_child;
+            int c1 = o1cb1->first_child;
             int c2 = c1 + 1;
 
-            pqp_math.MTxM(Rc, o1->child(c1)->R, R);
+            auto o1cc1 = o1->child(c1);
+
+            pqp_math.MTxM(Rc, o1cc1->R, R);
 #if PQP_BV_TYPE & OBB_TYPE
-            pqp_math.VmV(Ttemp, T, o1->child(c1)->To);
+            pqp_math.VmV(Ttemp, T, o1cc1->To);
 #else
-            pqp_math.VmV(Ttemp, T, o1->child(c1)->Tr);
+            pqp_math.VmV(Ttemp, T, o1cc1->Tr);
 #endif
-            pqp_math.MTxV(Tc, o1->child(c1)->R, Ttemp);
+            pqp_math.MTxV(Tc, o1cc1->R, Ttemp);
             CollideRecurse(res, Rc, Tc, o1, c1, o2, b2, flag);
 
             if ((flag == PQP_FIRST_CONTACT) && (res->num_pairs > 0))
@@ -703,25 +708,28 @@ namespace PQP
                 return;
             }
 
-            pqp_math.MTxM(Rc, o1->child(c2)->R, R);
+            auto o1cc2 = o1->child(c2);
+            pqp_math.MTxM(Rc, o1cc2->R, R);
 #if PQP_BV_TYPE & OBB_TYPE
-            pqp_math.VmV(Ttemp, T, o1->child(c2)->To);
+            pqp_math.VmV(Ttemp, T, o1cc2->To);
 #else
-            pqp_math.VmV(Ttemp, T, o1->child(c2)->Tr);
+            pqp_math.VmV(Ttemp, T, o1cc2->Tr);
 #endif
-            pqp_math.MTxV(Tc, o1->child(c2)->R, Ttemp);
+            pqp_math.MTxV(Tc, o1cc2->R, Ttemp);
             CollideRecurse(res, Rc, Tc, o1, c2, o2, b2, flag);
         }
         else
         {
-            int c1 = o2->child(b2)->first_child;
+            int c1 = o2cb2->first_child;
             int c2 = c1 + 1;
 
-            pqp_math.MxM(Rc, R, o2->child(c1)->R);
+            auto o2cc1 = o2->child(c1);
+
+            pqp_math.MxM(Rc, R, o2cc1->R);
 #if PQP_BV_TYPE & OBB_TYPE
-            pqp_math.MxVpV(Tc, R, o2->child(c1)->To, T);
+            pqp_math.MxVpV(Tc, R, o2cc1->To, T);
 #else
-            pqp_math.MxVpV(Tc, R, o2->child(c1)->Tr, T);
+            pqp_math.MxVpV(Tc, R, o2cc1->Tr, T);
 #endif
             CollideRecurse(res, Rc, Tc, o1, b1, o2, c1, flag);
 
@@ -730,11 +738,12 @@ namespace PQP
                 return;
             }
 
-            pqp_math.MxM(Rc, R, o2->child(c2)->R);
+            auto o2cc2 = o2->child(c2);
+            pqp_math.MxM(Rc, R, o2cc2->R);
 #if PQP_BV_TYPE & OBB_TYPE
-            pqp_math.MxVpV(Tc, R, o2->child(c2)->To, T);
+            pqp_math.MxVpV(Tc, R, o2cc2->To, T);
 #else
-            pqp_math.MxVpV(Tc, R, o2->child(c2)->Tr, T);
+            pqp_math.MxVpV(Tc, R, o2cc2->Tr, T);
 #endif
             CollideRecurse(res, Rc, Tc, o1, b1, o2, c2, flag);
         }
@@ -746,17 +755,9 @@ namespace PQP
                              PQP_REAL R2[3][3], PQP_REAL T2[3], PQP_Model* o2,
                              int flag)
     {
-        Timer ti;
-        double t1 = ti.GetTime();
-
         // make sure that the models are built
 
-        if (o1->build_state != PQP_BUILD_STATE_PROCESSED)
-        {
-            return PQP_ERR_UNPROCESSED_MODEL;
-        }
-
-        if (o2->build_state != PQP_BUILD_STATE_PROCESSED)
+        if (o1->build_state != PQP_BUILD_STATE_PROCESSED || o2->build_state != PQP_BUILD_STATE_PROCESSED)
         {
             return PQP_ERR_UNPROCESSED_MODEL;
         }
@@ -783,25 +784,25 @@ namespace PQP
 
         PQP_REAL Rtemp[3][3], R[3][3], T[3];
 
-        pqp_math.MxM(Rtemp, res->R, o2->child(0)->R);
-        pqp_math.MTxM(R, o1->child(0)->R, Rtemp);
+        auto o1c0 = o1->child(0);
+        auto o2c0 = o2->child(0);
+
+        pqp_math.MxM(Rtemp, res->R, o2c0->R);
+        pqp_math.MTxM(R, o1c0->R, Rtemp);
 
 #if PQP_BV_TYPE & OBB_TYPE
-        pqp_math.MxVpV(Ttemp, res->R, o2->child(0)->To, res->T);
-        pqp_math.VmV(Ttemp, Ttemp, o1->child(0)->To);
+        pqp_math.MxVpV(Ttemp, res->R, o2c0->To, res->T);
+        pqp_math.VmV(Ttemp, Ttemp, o1c0->To);
 #else
-        pqp_math.MxVpV(Ttemp, res->R, o2->child(0)->Tr, res->T);
-        pqp_math.VmV(Ttemp, Ttemp, o1->child(0)->Tr);
+        pqp_math.MxVpV(Ttemp, res->R, o2c0->Tr, res->T);
+        pqp_math.VmV(Ttemp, Ttemp, o1c0->Tr);
 #endif
 
-        pqp_math.MTxV(T, o1->child(0)->R, Ttemp);
+        pqp_math.MTxV(T, o1c0->R, Ttemp);
 
         // now start with both top level BVs
 
         CollideRecurse(res, R, T, o1, 0, o2, 0, flag);
-
-        double t2 = ti.GetTime();
-        res->query_time_secs = t2 - t1;
 
         return PQP_OK;
     }
@@ -1112,8 +1113,8 @@ namespace PQP
                               PQP_REAL rel_err, PQP_REAL abs_err,
                               int qsize)
     {
-        Timer ti;
-        double time1 = ti.GetTime();
+        //        Timer ti;
+        //        double time1 = ti.GetTime();
 
         // make sure that the models are built
 
@@ -1227,8 +1228,8 @@ namespace PQP
         Vprint(res->p1);
         Vprint(res->p2);*/
 
-        double time2 = ti.GetTime();
-        res->query_time_secs = time2 - time1;
+        //        double time2 = ti.GetTime();
+        //        res->query_time_secs = time2 - time1;
 
         return PQP_OK;
     }
@@ -1535,8 +1536,8 @@ namespace PQP
                                PQP_REAL tolerance,
                                int qsize)
     {
-        Timer ti;
-        double time1 = ti.GetTime();
+        //                Timer ti;
+        //        double time1 = ti.GetTime();
 
         // make sure that the models are built
 
@@ -1616,8 +1617,8 @@ namespace PQP
         pqp_math.VmV(u, res->p2, res->T);
         pqp_math.MTxV(res->p2, res->R, u);
 
-        double time2 = ti.GetTime();
-        res->query_time_secs = time2 - time1;
+        //        double time2 = ti.GetTime();
+        //        res->query_time_secs = time2 - time1;
 
         return PQP_OK;
     }

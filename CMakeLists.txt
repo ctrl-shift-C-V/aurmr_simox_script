@@ -160,7 +160,6 @@ add_subdirectory(VirtualRobot)
 #######################################################################################
 list (APPEND SIMOX_EXPORT_TARGET_LIST VirtualRobot)
 list (APPEND Simox_LIBRARIES VirtualRobot)
-list(APPEND SIMOX_EXPORT_TARGET_LIST ColCheckerPQP)
 
 
 #######################################################################################
