@@ -11,6 +11,15 @@ IF(NOT CMAKE_BUILD_TYPE)
     SET_PROPERTY(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
+#we want Release and RelWithDebInfo to use the same optimization level
+string(REGEX MATCH "([ \t]|^)-O[^ \t]+([ \t]|^)" RELEASE_O_LEVEL ${CMAKE_CXX_FLAGS_RELEASE})
+string(REGEX MATCH "([ \t]|^)-O[^ \t]+([ \t]|^)" RELWITHDEBINFO_O_LEVEL ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
+if(NOT RELEASE_O_LEVEL STREQUAL RELWITHDEBINFO_O_LEVEL)
+    string(REPLACE "${RELWITHDEBINFO_O_LEVEL}" "${RELEASE_O_LEVEL}" CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
+    message(STATUS "Changing o level of RelWithDebInfo to match o level of Release (from '${RELWITHDEBINFO_O_LEVEL}' to '${RELEASE_O_LEVEL}')")
+    message(STATUS "CMAKE_CXX_FLAGS_RELWITHDEBINFO = ${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+endif()
+
 # cmake 3.10 does not understand c++2a, so we tell it we will handle the standard flag
 set(CMAKE_CXX_STANDARD_DEFAULT)
 add_definitions(-std=c++2a)
