@@ -196,7 +196,8 @@ namespace GraspStudio
 
     GraspEvaluationPoseUncertainty::PoseEvalResult GraspEvaluationPoseUncertainty::evaluatePose(
         EndEffectorPtr eef, ObstaclePtr object, const Matrix4f& objectPose,
-        GraspQualityMeasurePtr qm, VirtualRobot::RobotConfigPtr preshape)
+        GraspQualityMeasurePtr qm, VirtualRobot::RobotConfigPtr preshape,
+        float closingStepSize, float stepSizeSpeedFactor)
     {
         PoseEvalResult result;
         result.forceClosure = false;
@@ -217,7 +218,7 @@ namespace GraspStudio
         }
         else
         {
-            eef->openActors();
+            eef->openActors(nullptr, closingStepSize, stepSizeSpeedFactor);
         }
         object->setGlobalPose(objectPose);
 
@@ -229,7 +230,7 @@ namespace GraspStudio
         }
 
         // collision free
-        EndEffector::ContactInfoVector cont = eef->closeActors(object);
+        EndEffector::ContactInfoVector cont = eef->closeActors(object, closingStepSize, stepSizeSpeedFactor);
         qm->setContactPoints(cont);
 
         result.quality = qm->getGraspQuality();
@@ -240,28 +241,24 @@ namespace GraspStudio
 
     GraspEvaluationPoseUncertainty::PoseEvalResults GraspEvaluationPoseUncertainty::evaluatePoses(
         EndEffectorPtr eef, ObstaclePtr object, const std::vector<Eigen::Matrix4f>& objectPoses,
-        GraspQualityMeasurePtr qm, VirtualRobot::RobotConfigPtr preshape)
+        GraspQualityMeasurePtr qm, VirtualRobot::RobotConfigPtr preshape,
+        float closingStepSize, float stepSizeSpeedFactor)
     {
-        PoseEvalResults res;
-        res.avgQuality = 0.0f;
-        res.forceClosureRate = 0.0f;
-        res.avgQualityCol = 0.0f;
-        res.forceClosureRateCol = 0.0f;
-        res.numPosesTested = 0;
-        res.numValidPoses = 0;
-        res.numColPoses = 0;
-
+        if (objectPoses.empty())
+        {
+            return {};
+        }
 
         if (!eef || !qm)
         {
             VR_ERROR << "Missing parameters" << endl;
-            return res;
+            return {};
         }
 
         if (!eef->getRobot())
         {
             VR_WARNING << "missing eef->robot" << endl;
-            return res;
+            return {};
         }
 
         Eigen::Matrix4f eefRobotPoseInit = eef->getRobot()->getGlobalPose();
@@ -269,16 +266,13 @@ namespace GraspStudio
         VirtualRobot::RobotConfigPtr initialConf = eef->getConfiguration();
 
         std::vector<PoseEvalResult> results;
+        results.reserve(objectPoses.size());
         for (const auto& objectPose : objectPoses)
         {
-            results.push_back(evaluatePose(eef, object, objectPose, qm, preshape));
+            results.emplace_back(evaluatePose(eef, object, objectPose, qm, preshape, closingStepSize, stepSizeSpeedFactor));
         }
 
-        if (results.empty())
-        {
-            return res;
-        }
-
+        PoseEvalResults res;
         res.numPosesTested = static_cast<int>(results.size());
         for (const auto& result : results)
         {
@@ -321,7 +315,8 @@ namespace GraspStudio
 
     GraspEvaluationPoseUncertainty::PoseEvalResults GraspEvaluationPoseUncertainty::evaluateGrasp(
         VirtualRobot::GraspPtr grasp, VirtualRobot::EndEffectorPtr eef, VirtualRobot::ObstaclePtr object,
-        GraspQualityMeasurePtr qm, int numPoses)
+        GraspQualityMeasurePtr qm, int numPoses,
+        float closingStepSize, float stepSizeSpeedFactor)
     {
         PoseEvalResults res;
         res.avgQuality = 0.0f;
@@ -363,12 +358,12 @@ namespace GraspStudio
         }
         else
         {
-            eef->openActors();
+            eef->openActors(nullptr, closingStepSize, stepSizeSpeedFactor);
         }
 
 
 
-        auto contacts = eef->closeActors(object);
+        auto contacts = eef->closeActors(object, closingStepSize, stepSizeSpeedFactor);
         if (contacts.empty())
         {
             VR_INFO << "No contacts for grasp " << grasp->getName() << " found" << std::endl;
@@ -381,7 +376,7 @@ namespace GraspStudio
             VR_INFO << "No poses for grasp found" << std::endl;
             return res;
         }
-        res = evaluatePoses(eef, object, poses, qm, graspPS);
+        res = evaluatePoses(eef, object, poses, qm, graspPS, closingStepSize, stepSizeSpeedFactor);
 
         // restore setup
         eef->getRobot()->setGlobalPose(eefRobotPoseInit);

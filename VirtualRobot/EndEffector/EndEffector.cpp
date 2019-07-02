@@ -105,9 +105,20 @@ namespace VirtualRobot
     {
         actors = this->actors;
     }
+
+
+    const std::vector<EndEffectorActorPtr>& EndEffector::getActors()
+    {
+        return actors;
+    }
+
     void EndEffector::getStatics(std::vector<RobotNodePtr>& statics)
     {
         statics = this->statics;
+    }
+    const std::vector<RobotNodePtr>& EndEffector::getStatics()
+    {
+        return statics;
     }
 
     EndEffector::ContactInfoVector EndEffector::closeActors(SceneObjectSetPtr obstacles, float stepSize, float stepSizeSpeedFactor, std::uint64_t steps)

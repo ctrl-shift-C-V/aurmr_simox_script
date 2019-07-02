@@ -11,6 +11,7 @@
 namespace VirtualRobot
 {
 
+    const RobotPtr Robot::NullPtr{nullptr};
     Robot::Robot(const std::string& name, const std::string& type)
         : SceneObject(name)
         , scaling(1.0f)

@@ -51,6 +51,8 @@ namespace VirtualRobot
     {
         friend class RobotIO;
     public:
+        static const RobotPtr NullPtr;
+
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
         /*!
@@ -205,7 +207,7 @@ namespace VirtualRobot
         virtual Eigen::Matrix4f getGlobalPoseForRobotNode(const RobotNodePtr& node, const Eigen::Matrix4f& globalPoseNode) const;
         //! Set the global pose of this robot so that the RobotNode node is at pose globalPoseNode.
         virtual void setGlobalPoseForRobotNode(const RobotNodePtr& node, const Eigen::Matrix4f& globalPoseNode);
-        
+
         //! Get the global position of this robot so that the RobotNode node is at position globalPoseNode
         virtual Eigen::Matrix4f getGlobalPositionForRobotNode(const RobotNodePtr& node, const Eigen::Vector3f& globalPositionNode) const;
         //! Set the global position of this robot so that the RobotNode node is at position globalPoseNode
@@ -213,7 +215,7 @@ namespace VirtualRobot
 
         //virtual Eigen::Matrix4f getGlobalPose() = 0;
 
-        
+
         //! Return center of mass of this robot in local coordinate frame. All RobotNodes of this robot are considered according to their mass.
         Eigen::Vector3f getCoMLocal() override;
 
@@ -223,7 +225,7 @@ namespace VirtualRobot
         //! Return accumulated mass of this robot.
         virtual float getMass();
 
-        
+
         /*!
             Extract a sub kinematic from this robot and create a new robot instance.
             \param startJoint The kinematic starts with this RobotNode
