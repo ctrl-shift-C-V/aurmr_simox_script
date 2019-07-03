@@ -263,8 +263,8 @@ namespace PQP
                         const PQP_REAL dy = P[i][1] - maxy;
                         PQP_REAL u = dx * a + dy * a;
                         const PQP_REAL t = (a * u - dx) * (a * u - dx) +
-                                (a * u - dy) * (a * u - dy) +
-                                (cz - P[i][2]) * (cz - P[i][2]);
+                                           (a * u - dy) * (a * u - dy) +
+                                           (cz - P[i][2]) * (cz - P[i][2]);
                         u = u - sqrt(std::max(radsqr - t, 0.f));
 
                         if (u > 0)
@@ -279,8 +279,8 @@ namespace PQP
                         const PQP_REAL dy = P[i][1] - miny;
                         PQP_REAL u = dx * a - dy * a;
                         const PQP_REAL t = (a * u - dx) * (a * u - dx) +
-                                (-a * u - dy) * (-a * u - dy) +
-                                (cz - P[i][2]) * (cz - P[i][2]);
+                                           (-a * u - dy) * (-a * u - dy) +
+                                           (cz - P[i][2]) * (cz - P[i][2]);
                         u = u - sqrt(std::max(radsqr - t, 0.f));
 
                         if (u > 0)
@@ -298,8 +298,8 @@ namespace PQP
                         const PQP_REAL dy = P[i][1] - maxy;
                         PQP_REAL u = dy * a - dx * a;
                         const PQP_REAL t = (-a * u - dx) * (-a * u - dx) +
-                                (a * u - dy) * (a * u - dy) +
-                                (cz - P[i][2]) * (cz - P[i][2]);
+                                           (a * u - dy) * (a * u - dy) +
+                                           (cz - P[i][2]) * (cz - P[i][2]);
                         u = u - sqrt(std::max(radsqr - t, 0.f));
 
                         if (u > 0)
@@ -314,8 +314,8 @@ namespace PQP
                         const PQP_REAL dy = P[i][1] - miny;
                         PQP_REAL u = -dx * a - dy * a;
                         const PQP_REAL t = (-a * u - dx) * (-a * u - dx) +
-                                (-a * u - dy) * (-a * u - dy) +
-                                (cz - P[i][2]) * (cz - P[i][2]);
+                                           (-a * u - dy) * (-a * u - dy) +
+                                           (cz - P[i][2]) * (cz - P[i][2]);
                         u = u - sqrt(std::max(radsqr - t, 0.f));
 
                         if (u > 0)
@@ -2886,10 +2886,10 @@ namespace PQP
         // Even if these tests fail, it may be helpful to know the closest
         // points found, and whether the triangles were shown disjoint
 
-        PQP_REAL V[3] = {0,0,0};
-        PQP_REAL Z[3] = {0,0,0};
-        PQP_REAL minP[3] = {0,0,0};
-        PQP_REAL minQ[3] = {0,0,0};
+        PQP_REAL V[3] = {0, 0, 0};
+        PQP_REAL Z[3] = {0, 0, 0};
+        PQP_REAL minP[3] = {0, 0, 0};
+        PQP_REAL minQ[3] = {0, 0, 0};
         PQP_REAL mindd = 0;
         int shown_disjoint = 0;
 
