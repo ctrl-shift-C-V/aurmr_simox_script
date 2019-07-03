@@ -64,6 +64,7 @@ namespace PQP
     class OBB_Processor
     {
     public:
+        static
         inline
         int
         obb_disjoint(PQP_REAL B[3][3], PQP_REAL T[3], PQP_REAL a[3], PQP_REAL b[3])

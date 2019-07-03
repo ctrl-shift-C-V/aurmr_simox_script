@@ -356,7 +356,7 @@ namespace PQP
     BV_Processor::BV_Overlap(PQP_REAL R[3][3], PQP_REAL T[3], BV* b1, BV* b2)
     {
 #if PQP_BV_TYPE & OBB_TYPE
-        return (o.obb_disjoint(R, T, b1->d, b2->d) == 0);
+        return (OBB_Processor::obb_disjoint(R, T, b1->d, b2->d) == 0);
 #else
         PQP_REAL dist = p.RectDist(R, T, b1->l, b2->l);
 
