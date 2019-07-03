@@ -195,6 +195,108 @@ namespace PQP
 
             return 0;  // should equal 0
         }
+
+        //used for unittesting (failed attempt to leverage loop optimization)
+        static inline int
+        obb_disjoint_with_loops(PQP_REAL B[3][3], PQP_REAL T[3], PQP_REAL a[3], PQP_REAL b[3])
+        {
+            PQP_REAL s;
+            PQP_REAL Bf[3][3];
+
+            {
+                // Bf = fabs(B)
+                for (std::size_t idxa = 0; idxa < 3; ++idxa)
+                {
+                    for (std::size_t idxb = 0; idxb < 3; ++idxb)
+                    {
+                        Bf[idxa][idxb] = std::abs(B[idxa][idxb]) + static_cast<PQP_REAL>(1e-6);
+                    }
+                }
+            }
+
+            // if any of these tests are one-sided, then the polyhedra are disjoint
+            // 1  T[0]                                                 std::abs(s) > (a[0] + b[0] * Bf[0][0] + b[1] * Bf[0][1] + b[2] * Bf[0][2])
+            // 2  T[0] * B[0][0] + T[1] * B[1][0] + T[2] * B[2][0];    std::abs(s) > (b[0] + a[0] * Bf[0][0] + a[1] * Bf[1][0] + a[2] * Bf[2][0])
+            // 3  T[1]                                                 std::abs(s) > (a[1] + b[0] * Bf[1][0] + b[1] * Bf[1][1] + b[2] * Bf[1][2])
+            // 4  T[2]                                                 std::abs(s) > (a[2] + b[0] * Bf[2][0] + b[1] * Bf[2][1] + b[2] * Bf[2][2])
+            // 5  T[0] * B[0][1] + T[1] * B[1][1] + T[2] * B[2][1];    std::abs(s) > (b[1] + a[0] * Bf[0][1] + a[1] * Bf[1][1] + a[2] * Bf[2][1])
+            // 6  T[0] * B[0][2] + T[1] * B[1][2] + T[2] * B[2][2];    std::abs(s) > (b[2] + a[0] * Bf[0][2] + a[1] * Bf[1][2] + a[2] * Bf[2][2])
+            // A1 x A2 = A0
+            if (std::abs(T[0]) > (a[0] + b[0] * Bf[0][0] + b[1] * Bf[0][1] + b[2] * Bf[0][2]))
+            {
+                return 1;
+            }
+
+            // A2 x A0 = A1
+            if (std::abs(T[1]) > (a[1] + b[0] * Bf[1][0] + b[1] * Bf[1][1] + b[2] * Bf[1][2]))
+            {
+                return 3;
+            }
+
+            // A0 x A1 = A2
+            if (std::abs(T[2]) > (a[2] + b[0] * Bf[2][0] + b[1] * Bf[2][1] + b[2] * Bf[2][2]))
+            {
+                return 4;
+            }
+
+            // B1 x B2 = B0
+            s = T[0] * B[0][0] + T[1] * B[1][0] + T[2] * B[2][0];
+            if (std::abs(s) > (b[0] + a[0] * Bf[0][0] + a[1] * Bf[1][0] + a[2] * Bf[2][0]))
+            {
+                return 2;
+            }
+
+            // B2 x B0 = B1
+            s = T[0] * B[0][1] + T[1] * B[1][1] + T[2] * B[2][1];
+            if (std::abs(s) > (b[1] + a[0] * Bf[0][1] + a[1] * Bf[1][1] + a[2] * Bf[2][1]))
+            {
+                return 5;
+            }
+
+            // B0 x B1 = B2
+            s = T[0] * B[0][2] + T[1] * B[1][2] + T[2] * B[2][2];
+            if (std::abs(s) > (b[2] + a[0] * Bf[0][2] + a[1] * Bf[1][2] + a[2] * Bf[2][2]))
+            {
+                return 6;
+            }
+
+            {
+                //     201    120       120    201                                         100     221       221     100       100         221   221        100
+                //     (a[o100[idxa]] * Bf[o221[idxa]][idxb] + a[o221[idxa]] * Bf[o100[idxa]][idxb] + b[o100[idxb]] * Bf[idxa][o221[idxb]] + b[o221[idxb]] * Bf[idxa][o100[idxb]])
+                //      c?     c? v=     c?     c? v=                                       c?      c? v=     c?      c? v=     ?=      cv ?=     ?=      cv ?=
+                // 7  T[2] * B[1][0] - T[1] * B[2][0];                     std::abs(s) > (a[1] * Bf[2][0] + a[2] * Bf[1][0] + b[1] * Bf[0][2] + b[2] * Bf[0][1])      7+3*0+0 = 7
+                // 8  T[2] * B[1][1] - T[1] * B[2][1];                     std::abs(s) > (a[1] * Bf[2][1] + a[2] * Bf[1][1] + b[0] * Bf[0][2] + b[2] * Bf[0][0])      7+3*0+1 = 8
+                // 9  T[2] * B[1][2] - T[1] * B[2][2];                     std::abs(s) > (a[1] * Bf[2][2] + a[2] * Bf[1][2] + b[0] * Bf[0][1] + b[1] * Bf[0][0])      7+3*0+2 = 9
+
+                //10  T[0] * B[2][0] - T[2] * B[0][0];                     std::abs(s) > (a[0] * Bf[2][0] + a[2] * Bf[0][0] + b[1] * Bf[1][2] + b[2] * Bf[1][1])      7+3*1+0 = 10
+                //11  T[0] * B[2][1] - T[2] * B[0][1];                     std::abs(s) > (a[0] * Bf[2][1] + a[2] * Bf[0][1] + b[0] * Bf[1][2] + b[2] * Bf[1][0])
+                //12  T[0] * B[2][2] - T[2] * B[0][2];                     std::abs(s) > (a[0] * Bf[2][2] + a[2] * Bf[0][2] + b[0] * Bf[1][1] + b[1] * Bf[1][0])
+
+                //13  T[1] * B[0][0] - T[0] * B[1][0];                     std::abs(s) > (a[0] * Bf[1][0] + a[1] * Bf[0][0] + b[1] * Bf[2][2] + b[2] * Bf[2][1])
+                //14  T[1] * B[0][1] - T[0] * B[1][1];                     std::abs(s) > (a[0] * Bf[1][1] + a[1] * Bf[0][1] + b[0] * Bf[2][2] + b[2] * Bf[2][0])
+                //15  T[1] * B[0][2] - T[0] * B[1][2];                     std::abs(s) > (a[0] * Bf[1][2] + a[1] * Bf[0][2] + b[0] * Bf[2][1] + b[1] * Bf[2][0])
+
+                static constexpr int o201[3] = {2, 0, 1};
+                static constexpr int o120[3] = {1, 2, 0};
+                static constexpr int o100[3] = {1, 0, 0};
+                static constexpr int o221[3] = {2, 2, 1};
+                for (int idxa = 0; idxa < 3; ++idxa)
+                {
+                    for (int idxb = 0; idxb < 3; ++idxb)
+                    {
+                        // Aa x Bb
+                        if (
+                            std::abs(T[o201[idxa]] * B[o120[idxa]][idxb] - T[o120[idxa]] * B[o201[idxa]][idxb]) >
+                            (a[o100[idxa]] * Bf[o221[idxa]][idxb] + a[o221[idxa]] * Bf[o100[idxa]][idxb] + b[o100[idxb]] * Bf[idxa][o221[idxb]] + b[o221[idxb]] * Bf[idxa][o100[idxb]])
+                        )
+                        {
+                            return 7 + 3 * idxa + idxb;
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
     };
 
 } // namespace
