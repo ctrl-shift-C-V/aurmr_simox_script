@@ -1645,15 +1645,29 @@ namespace PQP
         // first thing, see if we're overlapping
 
         res->num_bv_tests++;
-        BV_Processor p;
 
         auto o1cb1 = o1->child(b1);
         auto o2cb2 = o2->child(b2);
 
+#if 0 & PQP_BV_TYPE & OBB_TYPE
+        //manually inlined version
+        //inlined fn
+        //BV_Processor::BV_Overlap(PQP_REAL R[3][3], PQP_REAL T[3], BV* b1, BV* b2)
+        //{
+        //    return (OBB_Processor::obb_disjoint(R, T, b1->d, b2->d) == 0);
+        //}
+        if (OBB_Processor::obb_disjoint(R, T, o1cb1->d, o2cb2->d) != 0)
+        {
+            return;
+        }
+#else
+        //original version
+        BV_Processor p;
         if (!p.BV_Overlap(R, T, o1cb1, o2cb2))
         {
             return;
         }
+#endif
 
         // if we are, see if we test triangles next
 
