@@ -552,6 +552,8 @@ namespace VirtualRobot
                 robotEEF_EEF->setPreshape(preshape);
             }
 
+            UI->labelQuality->setText(QString::number(currentGrasp->getQuality()));
+
             setCurrentGrasp(gp);
         }
 
