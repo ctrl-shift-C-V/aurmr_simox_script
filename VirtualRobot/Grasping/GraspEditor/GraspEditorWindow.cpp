@@ -462,6 +462,7 @@ namespace VirtualRobot
         }
 
         robot->getEndEffectors(eefs);
+        robot->setPropagatingJointValuesEnabled(false);
         updateEEFBox();
 
         if (eefs.size() == 0)
