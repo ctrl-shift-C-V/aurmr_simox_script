@@ -23,8 +23,6 @@ endif()
 # cmake 3.10 does not understand c++2a, so we tell it we will handle the standard flag
 set(CMAKE_CXX_STANDARD_DEFAULT)
 add_definitions(-std=c++2a)
-add_definitions(-ffast-math)
-add_definitions(-fassociative-math)
 
 list(APPEND CMAKE_MODULE_PATH ${Simox_SOURCE_DIR}/CMakeModules)
 MESSAGE (STATUS "** Module path: "  ${CMAKE_MODULE_PATH})
