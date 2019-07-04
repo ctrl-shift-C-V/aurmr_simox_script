@@ -102,7 +102,7 @@ namespace GraspStudio
             float forceClosureRateCol = 0.0; // with collision poses
             float avgQualityCol = 0.0;       // with collision poses
 
-            void print()
+            void print() const
             {
                 VR_INFO << *this << std::endl;
             }
