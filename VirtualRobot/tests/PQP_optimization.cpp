@@ -25,7 +25,9 @@ BOOST_AUTO_TEST_CASE(test_obb_disjoint)
     std::chrono::nanoseconds told{0};
     std::chrono::nanoseconds twloops{0};
 
-    static constexpr auto N = 1000;
+    static constexpr auto N = 1000000;
+
+    unsigned long dummy = 0;
 
     for (std::size_t i = 0; i < N; ++i)
     {
@@ -52,17 +54,44 @@ BOOST_AUTO_TEST_CASE(test_obb_disjoint)
         int old = -2;
 
         {
-            const auto start = std::chrono::high_resolution_clock::now();
-            wloops = PQP::OBB_Processor::obb_disjoint_with_loops(B, T, a, b);
-            const auto end = std::chrono::high_resolution_clock::now();
-            twloops += end - start;
+            // force things into cache
+            for (std::size_t i = 0; i < 10; ++i)
+            {
+                dummy += static_cast<unsigned long>(PQP::OBB_Processor::obb_disjoint_with_loops(B, T, a, b));
+            }
         }
+
+        if (i % 2)
         {
-            const auto start = std::chrono::high_resolution_clock::now();
-            old = PQP::OBB_Processor::obb_disjoint(B, T, a, b);
-            const auto end = std::chrono::high_resolution_clock::now();
-            told += end - start;
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                wloops = PQP::OBB_Processor::obb_disjoint_with_loops(B, T, a, b);
+                const auto end = std::chrono::high_resolution_clock::now();
+                twloops += end - start;
+            }
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                old = PQP::OBB_Processor::obb_disjoint(B, T, a, b);
+                const auto end = std::chrono::high_resolution_clock::now();
+                told += end - start;
+            }
         }
+        else
+        {
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                old = PQP::OBB_Processor::obb_disjoint(B, T, a, b);
+                const auto end = std::chrono::high_resolution_clock::now();
+                told += end - start;
+            }
+            {
+                const auto start = std::chrono::high_resolution_clock::now();
+                wloops = PQP::OBB_Processor::obb_disjoint_with_loops(B, T, a, b);
+                const auto end = std::chrono::high_resolution_clock::now();
+                twloops += end - start;
+            }
+        }
+
 
         BOOST_CHECK_EQUAL(old, wloops);
         ++statsc.at(wloops);
