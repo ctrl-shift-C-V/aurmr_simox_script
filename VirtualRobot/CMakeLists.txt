@@ -443,7 +443,7 @@ math/GaussianObjectModelNormals.cpp
 math/Grid3D.cpp
 math/GridCacheFloat3.cpp
 math/Helpers.cpp
-math/Histogram.cpp
+#math/Histogram.cpp
 math/ImplicitObjectModel.cpp
 math/ImplicitPlane.cpp
 math/Index3.cpp
@@ -543,10 +543,10 @@ Workspace/WorkspaceGrid.cpp
 Workspace/WorkspaceRepresentation.cpp
 XML/BaseIO.cpp
 XML/FileIO.cpp
-XML/mjcf/MasslessBodySanitizer.cpp
-XML/mjcf/MjcfDocument.cpp
-XML/mjcf/MujocoIO.cpp
-XML/mjcf/utils.cpp
+XML/mujoco/MasslessBodySanitizer.cpp
+#XML/mujoco/MjcfDocument.cpp
+XML/mujoco/MujocoIO.cpp
+#XML/mujoco/utils.cpp
 XML/ObjectIO.cpp
 XML/RobotIO.cpp
 XML/SceneIO.cpp
