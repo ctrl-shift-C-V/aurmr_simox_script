@@ -35,6 +35,7 @@ namespace math
         static float AngleModPI(float value);
         static void GetIndex(float t, float minT, float maxT, int count, int& i, float& f);
         static float Clamp(float min, float max, float value);
+        static int Clampi(int min, int max, int value);
         static float Lerp(float a, float b, float f);
         static Eigen::Vector3f Lerp(const Eigen::Vector3f& a, const Eigen::Vector3f& b, float f);
         static Eigen::Quaternionf Lerp(const Eigen::Quaternionf& a, const Eigen::Quaternionf& b, float f);
@@ -42,6 +43,7 @@ namespace math
         static float ILerp(float a, float b, float f);
         static float Lerp(float a, float b, int min, int max, int val);
         static float Angle(Eigen::Vector2f v);
+        static float Angle(const Eigen::Vector3f& a, const Eigen::Vector3f& b, const Eigen::Vector3f& up);
         static int Sign(float x);
         static void AssertNormalized(Eigen::Vector3f vec, float epsilon = 0.05f);
         static std::vector<float> FloatRange(float start, float end, int steps);
@@ -120,11 +122,16 @@ namespace math
         static Eigen::Matrix4f 
         Pose(const Eigen::RotationBase<OriDerived, 3>& ori);
         
+        static Eigen::Matrix4f CreateTranslationPose(const Eigen::Vector3f& pos);
+        static Eigen::Matrix4f CreateRotationPose(const Eigen::Matrix3f& ori);
+        static Eigen::Matrix4f CreateTranslationRotationTranslationPose(const Eigen::Vector3f& translation1, const Eigen::Matrix3f& rotation, const Eigen::Vector3f& translation2);
         
         /// Legacy shortcut for Pose().
         static Eigen::Matrix4f CreatePose(const Eigen::Vector3f& pos, const Eigen::Quaternionf& ori);
         /// Legacy shortcut for Pose().
         static Eigen::Matrix4f CreatePose(const Eigen::Vector3f& pos, const Eigen::Matrix3f& ori);
+
+        static Eigen::Matrix3f CreateOrientation(const Eigen::Vector3f& e1, const Eigen::Vector3f& e2, const Eigen::Vector3f& e3);
 
         /// Legacy shortcut for Position() as getter.
         static Eigen::Vector3f GetPosition(const Eigen::Matrix4f& pose);
@@ -133,6 +140,8 @@ namespace math
         
         /// Translate the given pose by the given offset.
         static Eigen::Matrix4f TranslatePose(const Eigen::Matrix4f& pose, const Eigen::Vector3f& offset);
+
+        static Eigen::Matrix4f TranslateAndRotatePose(const Eigen::Matrix4f& pose, const Eigen::Vector3f& offset, const Eigen::Matrix3f& rotation);
         
         /// Invert the given pose in-place.
         static void InvertPose(Eigen::Matrix4f& pose);
@@ -195,7 +204,11 @@ namespace math
         static Eigen::Vector3f GetRotationVector(const Eigen::Matrix3f& start, const Eigen::Matrix3f& target);
         static Eigen::Matrix3f RotationVectorToOrientation(const Eigen::Vector3f& rotation);
 
-        
+        // Vector projections:
+        static float ScalarProjection(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
+        static Eigen::Vector3f VectorProjection(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
+        static Eigen::Vector3f VectorRejection(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
+
         
         /// Convert a value from radian to degree.
         static float rad2deg(float rad);
@@ -211,6 +224,55 @@ namespace math
         template <typename Derived>
         static Eigen::Matrix<typename Derived::Scalar, Derived::RowsAtCompileTime, Derived::ColsAtCompileTime>
         deg2rad(const Eigen::MatrixBase<Derived>& deg);
+
+        static std::vector<Eigen::Matrix4f> CreatePoses(const std::vector<Eigen::Vector3f>& positions, const Eigen::Matrix3f& orientation);
+
+        static std::vector<Eigen::Matrix4f> CreatePoses(const Eigen::Vector3f& position, const std::vector<Eigen::Matrix3f>& orientations);
+
+        static std::vector<Eigen::Matrix4f> CreatePoses(const std::vector<Eigen::Vector3f>& positions, const std::vector<Eigen::Matrix3f>& orientations);
+
+        // Conversions
+        static std::vector<float> VectorToStd(const Eigen::VectorXf& vec){
+            std::vector<float> res;
+            res.resize(vec.size());
+            Eigen::VectorXf::Map(res.data(), vec.size()) = vec;
+            return res;
+        }
+
+        template<typename T>
+        static size_t ArgMin(const std::vector<T>& vec)
+        {
+            if(vec.size() == 0) return 0;
+            T minVal = vec.at(0);
+            size_t minIndex = 0;
+            for(size_t i = 1; i < vec.size(); i++)
+            {
+                T val = vec.at(i);
+                if(val < minVal)
+                {
+                    minVal = val;
+                    minIndex = i;
+                }
+            }
+            return minIndex;
+        }
+        template<typename TVec, typename TSelect>
+        static size_t ArgMin(const std::vector<TVec>& vec, std::function<TSelect(const TVec&)> selector)
+        {
+            if(vec.size() == 0) return 0;
+            TSelect minVal = selector(vec.at(0));
+            size_t minIndex = 0;
+            for(size_t i = 1; i < vec.size(); i++)
+            {
+                TSelect val = selector(vec.at(i));
+                if(val < minVal)
+                {
+                    minVal = val;
+                    minIndex = i;
+                }
+            }
+            return minIndex;
+        }
 
         
     private:

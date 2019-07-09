@@ -78,6 +78,13 @@ float Helpers::Clamp(float min, float max, float value)
     return value;
 }
 
+int Helpers::Clampi(int min, int max, int value)
+{
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+}
+
 float Helpers::Lerp(float a, float b, float f)
 {
     return a * (1 - f) + b * f;
@@ -113,7 +120,14 @@ float Helpers::Lerp(float a, float b, int min, int max, int val)
 
 float Helpers::Angle(Eigen::Vector2f v) 
 { 
-    return static_cast<float>(std::atan2(v.y(), v.x())); 
+    return static_cast<float>(std::atan2(v.y(), v.x()));
+}
+
+float Helpers::Angle(const Eigen::Vector3f &a, const Eigen::Vector3f &b, const Eigen::Vector3f &up)
+{
+    Eigen::Vector3f side = a.cross(up);
+    float sign = Sign(b.dot(side));
+    return (float)std::atan2(a.cross(b).norm() * sign, a.dot(b));
 }
 
 int Helpers::Sign(float x)
@@ -213,6 +227,21 @@ void Helpers::Swap(float& a,float& b)
     std::swap(a, b);
 }
 
+Eigen::Matrix4f Helpers::CreateTranslationPose(const Eigen::Vector3f &pos)
+{
+    return Pose(pos, Eigen::Matrix3f::Identity());
+}
+
+Eigen::Matrix4f Helpers::CreateRotationPose(const Eigen::Matrix3f &ori)
+{
+    return Pose(Eigen::Vector3f::Zero(), ori);
+}
+
+Eigen::Matrix4f Helpers::CreateTranslationRotationTranslationPose(const Eigen::Vector3f &translation1, const Eigen::Matrix3f &rotation, const Eigen::Vector3f &translation2)
+{
+    return CreateTranslationPose(translation2) *  CreateRotationPose(rotation) * CreateTranslationPose(translation1);
+}
+
 Eigen::Matrix4f Helpers::CreatePose(const Eigen::Vector3f& pos, const Eigen::Quaternionf& ori)
 {
     return Pose(pos, ori);
@@ -221,6 +250,15 @@ Eigen::Matrix4f Helpers::CreatePose(const Eigen::Vector3f& pos, const Eigen::Qua
 Eigen::Matrix4f Helpers::CreatePose(const Eigen::Vector3f& pos, const Eigen::Matrix3f& ori)
 {
     return Pose(pos, ori);
+}
+
+Eigen::Matrix3f Helpers::CreateOrientation(const Eigen::Vector3f &e1, const Eigen::Vector3f &e2, const Eigen::Vector3f &e3)
+{
+    Eigen::Matrix3f ori;
+    ori.block<3,1>(0,0) = e1;
+    ori.block<3,1>(0,1) = e2;
+    ori.block<3,1>(0,2) = e3;
+    return ori;
 }
 
 Eigen::Vector3f Helpers::GetPosition(const Eigen::Matrix4f& pose)
@@ -238,6 +276,14 @@ Eigen::Matrix4f math::Helpers::TranslatePose(const Eigen::Matrix4f& pose, const 
 {
     Eigen::Matrix4f p = pose;
     Position(p) += offset;
+    return p;
+}
+
+Eigen::Matrix4f Helpers::TranslateAndRotatePose(const Eigen::Matrix4f &pose, const Eigen::Vector3f &offset, const Eigen::Matrix3f &rotation)
+{
+    Eigen::Matrix4f p = pose;
+    Position(p) += offset;
+    p = CreatePose(Eigen::Vector3f::Zero(), rotation) * p;
     return p;
 }
 
@@ -397,6 +443,22 @@ Eigen::Matrix3f Helpers::RotationVectorToOrientation(const Eigen::Vector3f& rota
     return aa.toRotationMatrix();
 }
 
+float Helpers::ScalarProjection(const Eigen::Vector3f &a, const Eigen::Vector3f &b)
+{
+    return a.dot(b) / b.norm();
+}
+
+Eigen::Vector3f Helpers::VectorProjection(const Eigen::Vector3f &a, const Eigen::Vector3f &b)
+{
+    return a.dot(b) / b.dot(b) * b;
+}
+
+Eigen::Vector3f Helpers::VectorRejection(const Eigen::Vector3f &a, const Eigen::Vector3f &b)
+{
+    return a - VectorProjection(a, b);
+}
+
+
 float Helpers::rad2deg(float rad)
 {
     return rad * (180.0f / M_PI_F);
@@ -405,4 +467,31 @@ float Helpers::rad2deg(float rad)
 float Helpers::deg2rad(float deg)
 {
     return deg * (M_PI_F / 180.0f);
+}
+
+std::vector<Eigen::Matrix4f> Helpers::CreatePoses(const std::vector<Eigen::Vector3f> &positions, const Eigen::Matrix3f &orientation)
+{
+    std::vector<Eigen::Matrix3f> orientations;
+    orientations.push_back(orientation);
+    return CreatePoses(positions, orientations);
+}
+
+std::vector<Eigen::Matrix4f> Helpers::CreatePoses(const Eigen::Vector3f &position, const std::vector<Eigen::Matrix3f> &orientations)
+{
+    std::vector<Eigen::Vector3f> positions;
+    positions.push_back(position);
+    return CreatePoses(positions, orientations);
+}
+
+std::vector<Eigen::Matrix4f> Helpers::CreatePoses(const std::vector<Eigen::Vector3f> &positions, const std::vector<Eigen::Matrix3f> &orientations)
+{
+    std::vector<Eigen::Matrix4f> poses;
+    for(const Eigen::Vector3f& pos : positions)
+    {
+        for(const Eigen::Matrix3f& ori : orientations)
+        {
+            poses.emplace_back(CreatePose(pos, ori));
+        }
+    }
+    return poses;
 }
