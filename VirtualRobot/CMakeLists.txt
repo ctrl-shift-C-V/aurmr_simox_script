@@ -288,6 +288,7 @@ SET(SOURCES
     math/Line.cpp
     math/LinearContinuedBezier.cpp
     math/LinearInterpolatedOrientation.cpp
+    math/LinearInterpolatedPose.cpp
     math/LineR2.cpp
     math/LineStrip.cpp
     math/MarchingCubes.cpp
@@ -385,7 +386,7 @@ SET(SOURCES
 )
 
 SET(INCLUDES
-    
+
     AbstractFactoryMethod.h
     BoundingBox.h
     KinematicChain.h
@@ -496,6 +497,7 @@ SET(INCLUDES
     math/LineStripR1RM.h
     math/LinearContinuedBezier.h
     math/LinearInterpolatedOrientation.h
+    math/LinearInterpolatedPose.h
     math/MarchingCubes.h
     math/MathForwardDefinitions.h
     math/Plane.h
@@ -610,7 +612,6 @@ SET(INCLUDES
     XML/mujoco/body_sanitizer/BodySanitizer.h
     XML/mujoco/body_sanitizer/DummyMassBodySanitizer.h
     XML/mujoco/body_sanitizer/MergingBodySanitizer.h
-    
 )
 
 if (Simox_USE_RBDL_LIB)

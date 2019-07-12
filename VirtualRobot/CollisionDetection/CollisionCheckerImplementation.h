@@ -59,9 +59,9 @@ namespace VirtualRobot
         }
         virtual ~CollisionCheckerImplementation() {}
 
-        virtual float calculateDistance(CollisionModelPtr model1, CollisionModelPtr model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1 = NULL, int* trID2 = NULL) = 0;
-        virtual bool checkCollision(CollisionModelPtr model1, CollisionModelPtr model2) = 0; //, Eigen::Vector3f *storeContact = NULL) = 0;
-        virtual bool checkCollision(CollisionModelPtr model1, const Eigen::Vector3f& point, float tolerance = 0.0f) = 0; //, Eigen::Vector3f *storeContact = NULL) = 0;
+        virtual float calculateDistance(const CollisionModelPtr& model1, const CollisionModelPtr& model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1 = NULL, int* trID2 = NULL) = 0;
+        virtual bool checkCollision(const CollisionModelPtr& model1, const CollisionModelPtr& model2) = 0; //, Eigen::Vector3f *storeContact = NULL) = 0;
+        virtual bool checkCollision(const CollisionModelPtr& model1, const Eigen::Vector3f& point, float tolerance = 0.0f) = 0; //, Eigen::Vector3f *storeContact = NULL) = 0;
 
         virtual void setAutomaticSizeCheck(bool checkSizeOnColModelCreation)
         {

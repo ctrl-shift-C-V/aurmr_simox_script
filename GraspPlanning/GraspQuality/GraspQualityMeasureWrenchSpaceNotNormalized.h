@@ -49,7 +49,10 @@ namespace GraspStudio
 
 
         //! This method is used to compute a reference value that describes a perfect grasp
-        bool calculateObjectProperties() override { return true; }
+        bool calculateObjectProperties() override
+        {
+            return true;
+        }
 
         /*!
             Returns f_max_gws

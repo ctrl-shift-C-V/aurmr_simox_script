@@ -51,6 +51,7 @@ public:
     Eigen::Vector3f GetDdv(float u, float v) override;
     void GetUV(Eigen::Vector3f pos, float &u, float &v) override;
     Eigen::Vector3f GetNormal();
+    Eigen::Vector3f GetNormal(const Eigen::Vector3f& preferredDirection);
     Plane SwappedDirections();
     Plane Normalized();
     ImplicitPlane ToImplicit();

@@ -148,6 +148,13 @@ Geom Body::addGeomMesh(const std::string& meshName, const std::string& materialN
     return geom;
 }
 
+Site Body::addSite(const std::string& type)
+{
+    Site site = addChild<Site>();
+    site.type = type;
+    return site;
+}
+
 
 Body Worldbody::addMocapBody(const std::string& name, float geomSize)
 {

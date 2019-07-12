@@ -92,31 +92,19 @@ namespace VirtualRobot
     bool EndEffectorActor::moveActorCheckCollision(EndEffectorPtr eef, EndEffector::ContactInfoVector& storeContacts, SceneObjectSetPtr obstacles /*= SceneObjectSetPtr()*/, float angle /*= 0.02*/)
     {
         VR_ASSERT(eef);
-        RobotPtr robot = eef->getRobot();
+        const RobotPtr& robot = eef->getRobot();
         VR_ASSERT(robot);
         //bool res = true;
-        std::vector<EndEffectorActorPtr> eefActors;
-        eef->getActors(eefActors);
-        std::vector<RobotNodePtr> eefStatic;
-        eef->getStatics(eefStatic);
         EndEffector::ContactInfoVector newContacts;
 
-        enum ActorStatus
-        {
-            eFinished,
-            eCollision,
-            eMoving
-        };
-        std::map<RobotNodePtr, ActorStatus> actorStatus;
-
-
+        bool allActorsHaveStopped = true;
 
         for (auto& actor : actors)
         {
             float oldV =  actor.robotNode->getJointValue();
             float v = oldV + angle * actor.directionAndSpeed;
 
-            actorStatus[actor.robotNode] = eMoving;
+            bool isMoving = true;
 
             if (v <= actor.robotNode->getJointLimitHi() && v >= actor.robotNode->getJointLimitLo())
             {
@@ -135,7 +123,7 @@ namespace VirtualRobot
                 // actors (don't store contacts)
                 if (!collision)
                 {
-                    for (auto& eefActor : eefActors)
+                    for (auto& eefActor : eef->getActors())
                     {
                         // Don't check for collisions with the actor itself (don't store contacts)
                         if ((eefActor->getName() != name) && isColliding(eefActor))   //isColliding(eef,*a,newContacts) )
@@ -148,7 +136,7 @@ namespace VirtualRobot
                 // static (don't store contacts)
                 if (!collision)
                 {
-                    for (auto& node : eefStatic)
+                    for (auto& node : eef->getStatics())
                     {
                         SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(node);
 
@@ -161,22 +149,22 @@ namespace VirtualRobot
                     }
                 }
 
-                if (!collision)
-                {
-                    //res = false;
-                }
-                else
+                if (collision)
                 {
                     // reset last position
                     //n->robotNode->setJointValue(oldV);
                     robot->setJointValue(actor.robotNode, oldV);
 
-                    actorStatus[actor.robotNode] = eCollision;
+                    isMoving = false;
                 }
             }
             else
             {
-                actorStatus[actor.robotNode] = eFinished;
+                isMoving = false;
+            }
+            if (isMoving)
+            {
+                allActorsHaveStopped = false;
             }
         }
 
@@ -217,18 +205,7 @@ namespace VirtualRobot
             }
         }
 
-        // check what we should return
-        bool res = true;
-        for (auto& actor : actors)
-        {
-            // if at least one actor is not in collision and not at its joint limits, we are still in the process of closing the fingers
-            if (actorStatus[actor.robotNode] == eMoving)
-            {
-                res = false;
-            }
-        }
-
-        return res;
+        return allActorsHaveStopped;
     }
 
 

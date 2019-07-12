@@ -96,12 +96,12 @@ namespace VirtualRobot
         }
 
 #if defined(VR_COLLISION_DETECTION_PQP)
-        boost::shared_ptr< CollisionModelPQP > getCollisionModelImplementation()
+        const boost::shared_ptr< CollisionModelPQP >& getCollisionModelImplementation()
         {
             return collisionModelImplementation;
         }
 #else
-        boost::shared_ptr< CollisionModelDummy > getCollisionModelImplementation()
+        const boost::shared_ptr< CollisionModelDummy >& getCollisionModelImplementation()
         {
             return collisionModelImplementation;
         }

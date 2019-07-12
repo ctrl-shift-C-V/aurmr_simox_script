@@ -33,34 +33,34 @@ namespace GraspStudio
     struct GraspPlannerEvaluation
     {
         GraspPlannerEvaluation();
-    
+
         void print();
-    
+
         static std::string GetCSVHeader();
-    
+
         std::string toCSVString() const;
-    
-    
+
+
         int nrGraspsGenerated;
         int nrGraspsValid;
         int nrGraspsInvalidCollision;
         int nrGraspsInvalidFC; // or quality
         int nrGraspsInvalidContacts;
-    
+
         int nrGraspsValidPrecision;
         int nrGraspsValidPower;
-    
+
         std::vector<float> timeGraspMS;     // time per grasp generation
         std::vector<float> graspScore;      //grasp quality
         std::vector<bool> graspValid;       //grasp valid
         std::vector<bool> graspTypePower;   //grasp type
-    
+
         bool fcCheck;
         float minQuality;
-        
+
     };
 
-    
+
     std::ostream& operator<< (std::ostream& os, const GraspPlannerEvaluation& rhs);
 
 }

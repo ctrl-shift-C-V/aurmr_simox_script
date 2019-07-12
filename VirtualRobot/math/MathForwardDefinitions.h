@@ -93,6 +93,7 @@ namespace math
     typedef boost::shared_ptr<class SimpleAbstractFunctionR2R3> SimpleAbstractFunctionR2R3Ptr;
     typedef boost::shared_ptr<class SimpleAbstractFunctionR3R1> SimpleAbstractFunctionR3R1Ptr;
     typedef boost::shared_ptr<class LinearInterpolatedOrientation> LinearInterpolatedOrientationPtr;
+    typedef boost::shared_ptr<class LinearInterpolatedPose> LinearInterpolatedPosePtr;
     typedef boost::shared_ptr<class AbstractFunctionR1Ori> AbstractFunctionR1OriPtr;
     typedef boost::shared_ptr<class SimpleAbstractFunctionR1Ori> SimpleAbstractFunctionR1OriPtr;
     typedef boost::shared_ptr<class CompositeFunctionR1R6> CompositeFunctionR1R6Ptr;

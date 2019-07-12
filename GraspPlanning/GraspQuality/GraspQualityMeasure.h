@@ -66,13 +66,13 @@ namespace GraspStudio
         bool isValid() override;
 
         virtual ContactConeGeneratorPtr getConeGenerator();
-        
+
     protected:
 
         // Methods
         bool sampleObjectPoints(int nMaxFaces = 400);
 
-        
+
         // Friction cone relevant parameters
         float unitForce;
         float frictionCoeff;
