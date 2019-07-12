@@ -385,7 +385,7 @@ SET(SOURCES
 )
 
 SET(INCLUDES
-    
+
     AbstractFactoryMethod.h
     BoundingBox.h
     KinematicChain.h
@@ -610,7 +610,6 @@ SET(INCLUDES
     XML/mujoco/body_sanitizer/BodySanitizer.h
     XML/mujoco/body_sanitizer/DummyMassBodySanitizer.h
     XML/mujoco/body_sanitizer/MergingBodySanitizer.h
-    
 )
 
 if (Simox_USE_RBDL_LIB)

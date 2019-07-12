@@ -104,7 +104,7 @@ namespace PQP
 
     private:
 #if PQP_BV_TYPE & OBB_TYPE
-        OBB_Processor o;
+        //        OBB_Processor o;
 #endif
         Rect_Processor p;
     };

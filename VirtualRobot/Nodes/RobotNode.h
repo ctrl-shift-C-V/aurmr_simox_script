@@ -337,9 +337,9 @@ namespace VirtualRobot
         */
         virtual std::string toXML(const std::string& basePath, const std::string& modelPathRelative = "models", bool storeSensors = true);
 
-		/*!
-		    Set the local transformation matrix that is used in this node.
-		*/
+        /*!
+            Set the local transformation matrix that is used in this node.
+        */
         void setLocalTransformation(Eigen::Matrix4f& newLocalTransformation);
 
         /*!

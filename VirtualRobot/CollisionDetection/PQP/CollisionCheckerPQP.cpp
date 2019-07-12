@@ -24,9 +24,9 @@
 /// \return
 ///
 int tri_tri_intersect_with_isectline(
-        const float V0[3],const float V1[3],const float V2[3],
-        const float U0[3],const float U1[3],const float U2[3],
-        int *coplanar, float isectpt1[3],float isectpt2[3]);
+    const float V0[3], const float V1[3], const float V2[3],
+    const float U0[3], const float U1[3], const float U2[3],
+    int* coplanar, float isectpt1[3], float isectpt2[3]);
 
 namespace VirtualRobot
 {
@@ -39,16 +39,16 @@ namespace VirtualRobot
     };
 
     static TriTriIntersection intersectTriangles(
-            Eigen::Vector3f const& U0, Eigen::Vector3f const& U1, Eigen::Vector3f const& U2,
-            Eigen::Vector3f const& V0, Eigen::Vector3f const& V1, Eigen::Vector3f const& V2)
+        Eigen::Vector3f const& U0, Eigen::Vector3f const& U1, Eigen::Vector3f const& U2,
+        Eigen::Vector3f const& V0, Eigen::Vector3f const& V1, Eigen::Vector3f const& V2)
     {
         TriTriIntersection result;
 
         int coplanar = 0;
         int intersects = tri_tri_intersect_with_isectline(V0.data(), V1.data(), V2.data(),
-                                                          U0.data(), U1.data(), U2.data(),
-                                                          &coplanar,
-                                                          result.startPoint.data(), result.endPoint.data());
+                         U0.data(), U1.data(), U2.data(),
+                         &coplanar,
+                         result.startPoint.data(), result.endPoint.data());
 
         result.intersect = (intersects != 0);
         result.coplanar = (coplanar != 0);
@@ -63,14 +63,14 @@ namespace VirtualRobot
     {
         automaticSizeCheck = true;
 
-        PQP::PQP_REAL a[3] = {0.0f,0.0f,0.00001f};
-        PQP::PQP_REAL b[3] = {0.0f,0.00001f,0.00001f};
-        PQP::PQP_REAL c[3] = {0.0f,0.00001f,0.0f};
+        PQP::PQP_REAL a[3] = {0.0f, 0.0f, 0.00001f};
+        PQP::PQP_REAL b[3] = {0.0f, 0.00001f, 0.00001f};
+        PQP::PQP_REAL c[3] = {0.0f, 0.00001f, 0.0f};
 
 
         pointModel.reset(new PQP::PQP_Model());
         pointModel->BeginModel();
-        pointModel->AddTri(a,b,c,99999998);
+        pointModel->AddTri(a, b, c, 99999998);
         pointModel->EndModel();
         pqpChecker = new PQP::PQP_Checker();
     }
@@ -85,7 +85,7 @@ namespace VirtualRobot
     }
 
 
-    float CollisionCheckerPQP::calculateDistance(CollisionModelPtr model1, CollisionModelPtr model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
+    float CollisionCheckerPQP::calculateDistance(const CollisionModelPtr& model1, const CollisionModelPtr& model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
     {
         boost::shared_ptr<PQP::PQP_Model> m1 = model1->getCollisionModelImplementation()->getPQPModel();
         boost::shared_ptr<PQP::PQP_Model> m2 = model2->getCollisionModelImplementation()->getPQPModel();
@@ -101,14 +101,16 @@ namespace VirtualRobot
     rot[2][0] = sb(2,0); rot[2][1] = sb(2,1); rot[2][2] = sb(2,2); tr[2] = sb(2,3);
 
 
-    bool CollisionCheckerPQP::checkCollision(CollisionModelPtr model1, CollisionModelPtr model2) //, Eigen::Vector3f *storeContact)
+    bool CollisionCheckerPQP::checkCollision(const CollisionModelPtr& model1, const CollisionModelPtr& model2) //, Eigen::Vector3f *storeContact)
     {
         BOOST_ASSERT(model1);
         BOOST_ASSERT(model2);
-        BOOST_ASSERT(model1->getCollisionModelImplementation());
-        BOOST_ASSERT(model2->getCollisionModelImplementation());
-        boost::shared_ptr<PQP::PQP_Model> m1 = model1->getCollisionModelImplementation()->getPQPModel();
-        boost::shared_ptr<PQP::PQP_Model> m2 = model2->getCollisionModelImplementation()->getPQPModel();
+        const auto& Impl1 = model1->getCollisionModelImplementation();
+        const auto& Impl2 = model2->getCollisionModelImplementation();
+        BOOST_ASSERT(Impl1);
+        BOOST_ASSERT(Impl2);
+        const boost::shared_ptr<PQP::PQP_Model>& m1 = Impl1->getPQPModel();
+        const boost::shared_ptr<PQP::PQP_Model>& m2 = Impl2->getPQPModel();
         BOOST_ASSERT_MSG(m1, "NULL data in ColChecker in m1!");
         BOOST_ASSERT_MSG(m2, "NULL data in ColChecker in m2!");
 
@@ -117,8 +119,10 @@ namespace VirtualRobot
         PQP::PQP_REAL T1[3];
         PQP::PQP_REAL R2[3][3];
         PQP::PQP_REAL T2[3];
-        __convEigen2Ar(model1->getCollisionModelImplementation()->getGlobalPose(), R1, T1);
-        __convEigen2Ar(model2->getCollisionModelImplementation()->getGlobalPose(), R2, T2);
+        const auto& P1 = Impl1->getGlobalPose();
+        const auto& P2 = Impl2->getGlobalPose();
+        __convEigen2Ar(P1, R1, T1);
+        __convEigen2Ar(P2, R2, T2);
         pqpChecker->PQP_Collide(&result,
                                 R1, T1, m1.get(),
                                 R2, T2, m2.get(),
@@ -144,10 +148,10 @@ namespace VirtualRobot
             (*storeContact) = t.block(0,3,3,1);
         }*/
 
-        return ((bool)(result.Colliding() != 0));
+        return result.Colliding() != 0;
     }
 
-    bool CollisionCheckerPQP::checkCollision(CollisionModelPtr model1, const Eigen::Vector3f &point, float tolerance)
+    bool CollisionCheckerPQP::checkCollision(const CollisionModelPtr& model1, const Eigen::Vector3f& point, float tolerance)
     {
         BOOST_ASSERT(model1);
         BOOST_ASSERT(model1->getCollisionModelImplementation());
@@ -159,10 +163,10 @@ namespace VirtualRobot
         PQP::PQP_REAL R2[3][3];
         PQP::PQP_REAL T2[3];
         Eigen::Matrix4f pointPose = Eigen::Matrix4f::Identity();
-        pointPose.block<3,1>(0,3) = point;
+        pointPose.block<3, 1>(0, 3) = point;
         __convEigen2Ar(model1->getCollisionModelImplementation()->getGlobalPose(), R1, T1);
         __convEigen2Ar(pointPose, R2, T2);
-        if(tolerance == 0.0f)
+        if (tolerance == 0.0f)
         {
             PQP::PQP_CollideResult result;
 

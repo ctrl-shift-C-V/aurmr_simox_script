@@ -30,7 +30,7 @@ namespace GraspStudio
     }
 
     GraspQualityMeasure::~GraspQualityMeasure()
-    = default;
+        = default;
 
     bool GraspQualityMeasure::sampleObjectPoints(int nMaxFaces)
     {
@@ -99,7 +99,7 @@ namespace GraspStudio
             return p;
         }
 
-        for (auto & sampledObjectPoint : sampledObjectPoints)
+        for (auto& sampledObjectPoint : sampledObjectPoints)
         {
             p.p += sampledObjectPoint.p;
             p.n += sampledObjectPoint.n;

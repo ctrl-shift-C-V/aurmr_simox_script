@@ -110,7 +110,7 @@ namespace VirtualRobot
 
             case Body:
                 //THROW_VR_EXCEPTION_IF(postJointTransformation != Eigen::Matrix4f::Identity() , "No transformations allowed in BodyNodes");
-                THROW_VR_EXCEPTION_IF(localTransformation != Eigen::Matrix4f::Identity() , "No transformations allowed in BodyNodes");
+                THROW_VR_EXCEPTION_IF(localTransformation != Eigen::Matrix4f::Identity(), "No transformations allowed in BodyNodes");
 
                 break;
 
@@ -153,12 +153,18 @@ namespace VirtualRobot
 
     void RobotNode::setJointValueNotInitialized(float q)
     {
-        VR_ASSERT_MESSAGE((!boost::math::isnan(q) && !boost::math::isinf(q)) , "Not a valid number...");
+        VR_ASSERT_MESSAGE((!boost::math::isnan(q) && !boost::math::isinf(q)), "Not a valid number...");
 
         if (limitless)
         {
-            while (q > jointLimitHi) q -= 2.0f * M_PI;
-            while (q < jointLimitLo) q += 2.0f * M_PI;
+            while (q > jointLimitHi)
+            {
+                q -= 2.0f * M_PI;
+            }
+            while (q < jointLimitLo)
+            {
+                q += 2.0f * M_PI;
+            }
         }
         else
         {
@@ -178,21 +184,31 @@ namespace VirtualRobot
     void RobotNode::setJointValueNoUpdate(float q)
     {
         VR_ASSERT_MESSAGE(initialized, "Not initialized");
-        VR_ASSERT_MESSAGE((!boost::math::isnan(q) && !boost::math::isinf(q)) , "Not a valid number...");
+        VR_ASSERT_MESSAGE((!boost::math::isnan(q) && !boost::math::isinf(q)), "Not a valid number...");
 
         if (limitless)
         {
             // limitless joint: map q to allowed interval
-            if(q > jointLimitHi)
+            if (q > jointLimitHi)
+            {
                 q = fmod(q, 2.0f * M_PI);
-            while (q > jointLimitHi) q -= 2.0f * M_PI;
-            if(q < jointLimitLo)
+            }
+            while (q > jointLimitHi)
+            {
+                q -= 2.0f * M_PI;
+            }
+            if (q < jointLimitLo)
+            {
                 q = -fmod(fabs(q), 2.0f * M_PI);
-            while (q < jointLimitLo) q += 2.0f * M_PI;
+            }
+            while (q < jointLimitLo)
+            {
+                q += 2.0f * M_PI;
+            }
         }
         else
         {
-            if(enforceJointLimits)// non-limitless joint: clamp to borders
+            if (enforceJointLimits) // non-limitless joint: clamp to borders
             {
                 if (q < jointLimitLo)
                 {
@@ -276,7 +292,7 @@ namespace VirtualRobot
         }
     }
 
-    void RobotNode::copyPoseFrom(const RobotNodePtr &other)
+    void RobotNode::copyPoseFrom(const RobotNodePtr& other)
     {
         jointValue = other->jointValue;
         //the following code was manually inlined from
@@ -295,7 +311,7 @@ namespace VirtualRobot
         }
     }
 
-    void RobotNode::copyPoseFrom(const SceneObjectPtr &sceneobj)
+    void RobotNode::copyPoseFrom(const SceneObjectPtr& sceneobj)
     {
         RobotNodePtr other = boost::dynamic_pointer_cast<RobotNode>(sceneobj);
         THROW_VR_EXCEPTION_IF(!other, "The given SceneObject is no RobotNode");
@@ -312,25 +328,22 @@ namespace VirtualRobot
         SceneObject::updatePose(updateChildren);
 
         // apply propagated joint values
-        if (propagatedJointValues.size() > 0)
+        if (propagatedJointValues.size() > 0 && getRobot()->getPropagatingJointValuesEnabled())
         {
             RobotPtr r = robot.lock();
-            std::map< std::string, float>::iterator it = propagatedJointValues.begin();
 
-            while (it != propagatedJointValues.end())
+            for (auto& [jname, factor] : propagatedJointValues)
             {
-                RobotNodePtr rn = r->getRobotNode(it->first);
+                RobotNodePtr rn = r->getRobotNode(jname);
 
                 if (!rn)
                 {
-                    VR_WARNING << "Could not propagate joint value from " << name << " to " << it->first << " because dependent joint does not exist...";
+                    VR_WARNING << "Could not propagate joint value from " << name << " to " << jname << " because dependent joint does not exist...";
                 }
                 else
                 {
-                    rn->setJointValue(jointValue * it->second);
+                    rn->setJointValue(jointValue * factor);
                 }
-
-                it++;
             }
         }
     }
@@ -660,9 +673,9 @@ namespace VirtualRobot
         delta = target - jointValue;
 
         // eventually take the other way around if it is shorter and if this joint is limitless.
-        if (limitless && (std::abs(delta) > M_PI))
+        if (limitless && (std::abs(delta) > static_cast<float>(M_PI)))
         {
-            delta = (-1) * ((delta > 0) - (delta < 0)) * ((2 * M_PI) - std::abs(delta));
+            delta = (-1) * ((delta > 0) - (delta < 0)) * ((2 * static_cast<float>(M_PI)) - std::abs(delta));
         }
 
         return delta;
@@ -699,7 +712,7 @@ namespace VirtualRobot
 
             if (visualizationType.empty())
             {
-                visualizationFactory = VisualizationFactory::first(NULL);
+                visualizationFactory = VisualizationFactory::first(nullptr);
             }
             else
             {
@@ -934,20 +947,20 @@ namespace VirtualRobot
 
     Eigen::Matrix3f RobotNode::getOrientationInRootFrame() const
     {
-        return getPoseInRootFrame().block<3,3>(0,0);
+        return getPoseInRootFrame().block<3, 3>(0, 0);
     }
 
-    Eigen::Matrix4f RobotNode::getPoseInRootFrame(const Eigen::Matrix4f &localPose) const
+    Eigen::Matrix4f RobotNode::getPoseInRootFrame(const Eigen::Matrix4f& localPose) const
     {
         return getPoseInRootFrame() * localPose;
     }
 
-    Eigen::Vector3f RobotNode::getPositionInRootFrame(const Eigen::Vector3f &localPosition) const
+    Eigen::Vector3f RobotNode::getPositionInRootFrame(const Eigen::Vector3f& localPosition) const
     {
         return ::math::Helpers::TransformPosition(getPoseInRootFrame(), localPosition);
     }
 
-    Eigen::Vector3f RobotNode::getDirectionInRootFrame(const Eigen::Vector3f &localPosition) const
+    Eigen::Vector3f RobotNode::getDirectionInRootFrame(const Eigen::Vector3f& localPosition) const
     {
         return ::math::Helpers::TransformDirection(getPoseInRootFrame(), localPosition);
     }

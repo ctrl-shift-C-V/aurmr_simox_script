@@ -9,7 +9,7 @@ namespace GraspStudio
     }
 
     GraspPlanner::~GraspPlanner()
-    = default;
+        = default;
 
     void GraspPlanner::setVerbose(bool enable)
     {
@@ -25,7 +25,7 @@ namespace GraspStudio
     {
         return eval;
     }
-    
+
     void GraspPlanner::clearEvaluation()
     {
         this->eval = {};

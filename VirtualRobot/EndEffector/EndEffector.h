@@ -100,7 +100,10 @@ namespace VirtualRobot
         std::string getRobotType();
 
         void getActors(std::vector<EndEffectorActorPtr>& actors);
+        const std::vector<EndEffectorActorPtr>& getActors();
+
         void getStatics(std::vector<RobotNodePtr>& statics);
+        const std::vector<RobotNodePtr>& getStatics();
 
         /*!
             Closes each actor until a joint limit is hit or a collision occurred.

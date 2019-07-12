@@ -55,6 +55,13 @@ Eigen::Vector3f Plane::GetNormal()
     return dir1.cross(dir2);
 }
 
+Eigen::Vector3f Plane::GetNormal(const Eigen::Vector3f &preferredDirection)
+{
+    Eigen::Vector3f normal = GetNormal();
+    if(normal.dot(preferredDirection) < 0) normal = -normal;
+    return normal;
+}
+
 Plane Plane::SwappedDirections()
 {
     return Plane(pos, dir2, dir1);

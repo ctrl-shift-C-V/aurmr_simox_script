@@ -20,6 +20,6 @@ namespace GraspStudio
 
 
     ConvexHullVisualization::~ConvexHullVisualization()
-    = default;
+        = default;
 
 } // namespace GraspStudio

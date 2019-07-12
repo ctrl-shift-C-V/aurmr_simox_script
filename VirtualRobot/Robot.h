@@ -51,6 +51,8 @@ namespace VirtualRobot
     {
         friend class RobotIO;
     public:
+        static const RobotPtr NullPtr;
+
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
         /*!
@@ -205,7 +207,7 @@ namespace VirtualRobot
         virtual Eigen::Matrix4f getGlobalPoseForRobotNode(const RobotNodePtr& node, const Eigen::Matrix4f& globalPoseNode) const;
         //! Set the global pose of this robot so that the RobotNode node is at pose globalPoseNode.
         virtual void setGlobalPoseForRobotNode(const RobotNodePtr& node, const Eigen::Matrix4f& globalPoseNode);
-        
+
         //! Get the global position of this robot so that the RobotNode node is at position globalPoseNode
         virtual Eigen::Matrix4f getGlobalPositionForRobotNode(const RobotNodePtr& node, const Eigen::Vector3f& globalPositionNode) const;
         //! Set the global position of this robot so that the RobotNode node is at position globalPoseNode
@@ -213,7 +215,7 @@ namespace VirtualRobot
 
         //virtual Eigen::Matrix4f getGlobalPose() = 0;
 
-        
+
         //! Return center of mass of this robot in local coordinate frame. All RobotNodes of this robot are considered according to their mass.
         Eigen::Vector3f getCoMLocal() override;
 
@@ -223,7 +225,7 @@ namespace VirtualRobot
         //! Return accumulated mass of this robot.
         virtual float getMass();
 
-        
+
         /*!
             Extract a sub kinematic from this robot and create a new robot instance.
             \param startJoint The kinematic starts with this RobotNode
@@ -379,11 +381,11 @@ namespace VirtualRobot
             std::vector<boost::shared_ptr<SensorType> > result;
             std::vector<SensorPtr> sensors = getSensors();
             result.reserve(sensors.size());
-            for(std::size_t i = 0; i < sensors.size(); ++i)
+            for (std::size_t i = 0; i < sensors.size(); ++i)
             {
-                if(dynamic_cast<SensorType*>(sensors.at(i).get()))
+                if (dynamic_cast<SensorType*>(sensors.at(i).get()))
                 {
-                   result.push_back(boost::static_pointer_cast<SensorType>(sensors.at(i)));
+                    result.push_back(boost::static_pointer_cast<SensorType>(sensors.at(i)));
                 }
             }
             return result;
@@ -406,6 +408,9 @@ namespace VirtualRobot
          */
         void inflateCollisionModel(float inflationInMM);
 
+
+        bool getPropagatingJointValuesEnabled() const;
+        void setPropagatingJointValuesEnabled(bool enabled);
     protected:
         Robot();
         /*!
@@ -426,6 +431,7 @@ namespace VirtualRobot
 
         mutable boost::recursive_mutex mutex;
         bool use_mutex;
+        bool propagatingJointValuesEnabled = true;
 
         //float radianToMMfactor = 10;
 
