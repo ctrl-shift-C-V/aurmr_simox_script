@@ -7,7 +7,7 @@
 
 SET (QHULL_FOUND FALSE)
 
-FIND_PATH (QHULL_INCLUDE_DIR qhull/qhull.h
+FIND_PATH (QHULL_INCLUDE_DIR libqhull_r/qhull_ra.h
 	/usr/include
 	/usr/local/include
 	$ENV{HOME}/local/include
@@ -15,7 +15,7 @@ FIND_PATH (QHULL_INCLUDE_DIR qhull/qhull.h
 	$ENV{QHULL_PATH}/include
 	$ENV{QHULL_INCLUDE_PATH}
 	)
-FIND_LIBRARY (QHULL_LIBRARY NAMES qhull	PATHS
+FIND_LIBRARY (QHULL_LIBRARY NAMES qhull_r	PATHS
 	/usr/lib
 	/usr/local/lib
 	$ENV{HOME}/local/lib

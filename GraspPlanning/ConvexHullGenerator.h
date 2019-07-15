@@ -42,25 +42,21 @@ namespace GraspStudio
         /*!
             Creates a convex hull of the points stored in pointsInput.
         */
-        static VirtualRobot::MathTools::ConvexHull3DPtr CreateConvexHull(std::vector<Eigen::Vector3f>& pointsInput, bool lockMutex = true);
-        static VirtualRobot::MathTools::ConvexHull3DPtr CreateConvexHull(VirtualRobot::TriMeshModelPtr pointsInput, bool lockMutex = true);
-        static VirtualRobot::MathTools::ConvexHull6DPtr CreateConvexHull(std::vector<VirtualRobot::MathTools::ContactPoint>& pointsInput, bool lockMutex = true);
+        static VirtualRobot::MathTools::ConvexHull3DPtr CreateConvexHull(std::vector<Eigen::Vector3f>& pointsInput);
+        static VirtualRobot::MathTools::ConvexHull3DPtr CreateConvexHull(VirtualRobot::TriMeshModelPtr pointsInput);
+        static VirtualRobot::MathTools::ConvexHull6DPtr CreateConvexHull(std::vector<VirtualRobot::MathTools::ContactPoint>& pointsInput);
 
         static void PrintStatistics(VirtualRobot::MathTools::ConvexHull6DPtr convHull);
 
         /*!
             Convert points to qhull format
         */
-        static bool ConvertPoints(std::vector<Eigen::Vector3f>& points, double* storePointsQHull, bool lockMutex = true);
-        static bool ConvertPoints(std::vector<VirtualRobot::MathTools::ContactPoint>& points, double* storePointsQHull, bool lockMutex = true);
+        static bool ConvertPoints(std::vector<Eigen::Vector3f>& points, double* storePointsQHull);
+        static bool ConvertPoints(std::vector<VirtualRobot::MathTools::ContactPoint>& points, double* storePointsQHull);
 
         static void PrintVertices(std::vector<VirtualRobot::MathTools::ContactPoint>& pointsInput);
 
         static bool checkVerticeOrientation(const Eigen::Vector3f& v1, const Eigen::Vector3f& v2, const Eigen::Vector3f& v3, const Eigen::Vector3f& n);
-
-    protected:
-        //! QHull is not thread safe, so protect qHull calls with a mutex
-        static boost::mutex qhull_mutex;
     };
 }
 

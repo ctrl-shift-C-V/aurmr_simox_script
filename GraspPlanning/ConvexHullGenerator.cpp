@@ -13,7 +13,7 @@ using namespace VirtualRobot::MathTools;
 
 extern "C"
 {
-#include "qhull/qhull_a.h"
+#include "libqhull_r/qhull_ra.h"
 }
 
 //extern "C"
@@ -23,37 +23,19 @@ extern "C"
 
 namespace GraspStudio
 {
-    boost::mutex ConvexHullGenerator::qhull_mutex;
-
-    bool ConvexHullGenerator::ConvertPoints(std::vector<Eigen::Vector3f>& points, double* storePointsQHull, bool lockMutex)
+    bool ConvexHullGenerator::ConvertPoints(std::vector<Eigen::Vector3f>& points, double* storePointsQHull)
     {
-        if (lockMutex)
-        {
-            qhull_mutex.lock();
-        }
-
         for (int i = 0; i < (int)points.size(); i++)
         {
             storePointsQHull[i * 3 + 0] = points[i][0];
             storePointsQHull[i * 3 + 1] = points[i][1];
             storePointsQHull[i * 3 + 2] = points[i][2];
         }
-
-        if (lockMutex)
-        {
-            qhull_mutex.unlock();
-        }
-
         return true;
     }
 
-    bool ConvexHullGenerator::ConvertPoints(std::vector<ContactPoint>& points, double* storePointsQHull, bool lockMutex)
+    bool ConvexHullGenerator::ConvertPoints(std::vector<ContactPoint>& points, double* storePointsQHull)
     {
-        if (lockMutex)
-        {
-            qhull_mutex.lock();
-        }
-
         for (int i = 0; i < (int)points.size(); i++)
         {
             storePointsQHull[i * 6 + 0] = points[i].p[0];
@@ -63,42 +45,19 @@ namespace GraspStudio
             storePointsQHull[i * 6 + 4] = points[i].n[1];
             storePointsQHull[i * 6 + 5] = points[i].n[2];
         }
-
-        if (lockMutex)
-        {
-            qhull_mutex.unlock();
-        }
-
         return true;
     }
 
 
-    VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(VirtualRobot::TriMeshModelPtr pointsInput, bool lockMutex /*= true*/)
+    VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(VirtualRobot::TriMeshModelPtr pointsInput)
     {
-        if (lockMutex)
-        {
-            qhull_mutex.lock();
-        }
-
-        VirtualRobot::MathTools::ConvexHull3DPtr r = CreateConvexHull(pointsInput->vertices, false);
-
-        if (lockMutex)
-        {
-            qhull_mutex.unlock();
-        }
-
-        return r;
+        return CreateConvexHull(pointsInput->vertices);
     }
 
 
 
-    VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(std::vector<Eigen::Vector3f>& pointsInput, bool lockMutex /*= true*/)
-    {
-        if (lockMutex)
-        {
-            qhull_mutex.lock();
-        }
-
+    VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(std::vector<Eigen::Vector3f>& pointsInput)
+    {        
         //clock_t startT = clock();
 
         ConvexHull3DPtr result(new ConvexHull3D());
@@ -109,12 +68,6 @@ namespace GraspStudio
         if (nPoints < 4)
         {
             cout << __FUNCTION__ << "Error: Need at least 4 points (nr of points registered: " << nPoints << ")" << endl;
-
-            if (lockMutex)
-            {
-                qhull_mutex.unlock();
-            }
-
             return result;
         }
 
@@ -149,36 +102,40 @@ namespace GraspStudio
 #endif
 
         //cout << "QHULL input: nVertices: " << pointsInput.size() << endl;
-        ConvertPoints(pointsInput, points, false);
+        ConvertPoints(pointsInput, points);
         /*for (i=numpoints; i--; )
         rows[i]= points+dim*i;
         qh_printmatrix (outfile, "input", rows, numpoints, dim);*/
-        exitcode = qh_new_qhull(dim, numpoints, points, ismalloc, flags, outfile, errfile);
+        qhT qh_qh;                /* Qhull's data structure.  First argument of most calls */
+        qhT *qh= &qh_qh;
+        qh_zero(qh, errfile);
+        QHULL_LIB_CHECK
+        exitcode = qh_new_qhull(qh, dim, numpoints, points, ismalloc, flags, outfile, errfile);
 
         if (!exitcode)                    /* if no error */
         {
-            facetT* facet_list = qh facet_list;
+            facetT* facet_list = qh->facet_list;
             //int convexNumFaces = qh num_facets;
-            /*int convexNumVert =*/ qh_setsize(qh_facetvertices(facet_list, nullptr, false));
+            /*int convexNumVert =*/ qh_setsize(qh, qh_facetvertices(qh, facet_list, nullptr, false));
 
-            qh_triangulate(); // need this for triangulated output!
+            qh_triangulate(qh); // need this for triangulated output!
             //int convexNumFaces2 = qh num_facets;
-            /*int convexNumVert2 =*/ qh_setsize(qh_facetvertices(facet_list, nullptr, false));
+            /*int convexNumVert2 =*/ qh_setsize(qh, qh_facetvertices(qh, facet_list, nullptr, false));
             /*
             cout << "Numfacets1:" << convexNumFaces << endl;
             cout << "Numvertices1:" << convexNumVert << endl;
             cout << "Numfacets2:" << convexNumFaces2 << endl;
             cout << "Numvertices2:" << convexNumVert2 << endl;*/
-            /* 'qh facet_list' contains the convex hull */
+            /* 'qht->facet_list' contains the convex hull */
             Eigen::Vector3f v[3];
             int nIds[3];
             TriangleFace f;
 
             int nFacets = 0;
-            //cout << "Volume: " << qh totvol << endl;
-            qh_getarea(qh facet_list);
-            //cout << "Volume: " << qh totvol << endl;
-            result->volume = qh totvol;
+            //cout << "Volume: " << qht-> totvol << endl;
+            qh_getarea(qh, qh->facet_list);
+            //cout << "Volume: " << qht-> totvol << endl;
+            result->volume = qh-> totvol;
 
 
             double pCenter[3];
@@ -189,6 +146,7 @@ namespace GraspStudio
             }
 
             int nVcertexCount = 0;
+
             FORALLvertices
             {
                 for (int u = 0; u < 3; u++)
@@ -266,8 +224,8 @@ namespace GraspStudio
         }
 
 
-        qh_freeqhull(!qh_ALL);
-        qh_memfreeshort(&curlong, &totlong);
+        qh_freeqhull(qh, !qh_ALL);
+        qh_memfreeshort(qh, &curlong, &totlong);
 
         if (curlong || totlong)
             fprintf(errfile, "qhull internal warning (main): did not free %d bytes of long memory (%d pieces)\n",
@@ -277,35 +235,21 @@ namespace GraspStudio
         //long timeMS = (long)(((float)(endT - startT) / (float)CLOCKS_PER_SEC) * 1000.0);
 
         //cout << __FUNCTION__ << ": Created convex hull in " << timeMS << " ms" << endl;
-        if (lockMutex)
-        {
-            qhull_mutex.unlock();
-        }
-
         return result;
     }
 
-    VirtualRobot::MathTools::ConvexHull6DPtr ConvexHullGenerator::CreateConvexHull(std::vector<ContactPoint>& pointsInput, bool lockMutex)
+    VirtualRobot::MathTools::ConvexHull6DPtr ConvexHullGenerator::CreateConvexHull(std::vector<ContactPoint>& pointsInput)
     {
-        if (lockMutex)
-        {
-            qhull_mutex.lock();
-        }
-
         //clock_t startT = clock();
 
         ConvexHull6DPtr result(new ConvexHull6D());
-
-        int nPoints = (int)pointsInput.size();
+        
+        int nPoints = static_cast<int>(pointsInput.size());
 
         if (nPoints < 4)
         {
             cout << __FUNCTION__ << "Error: Need at least 4 points (nr of points registered: " << nPoints << ")" << endl;
 
-            if (lockMutex)
-            {
-                qhull_mutex.unlock();
-            }
 
             return result;
         }
@@ -345,19 +289,23 @@ namespace GraspStudio
 
         //cout << "QHULL input: nVertices: " << pointsInput.size() << endl;
         //printVertices(pointsInput);
-        ConvertPoints(pointsInput, points, false);
-        exitcode = qh_new_qhull(dim, numpoints, points, ismalloc,
+        ConvertPoints(pointsInput, points);
+        qhT qh_qh;                /* Qhull's data structure.  First argument of most calls */
+        qhT *qh= &qh_qh;
+        qh_zero(qh, errfile);
+        QHULL_LIB_CHECK
+        exitcode = qh_new_qhull(qh, dim, numpoints, points, ismalloc,
                                 flags, outfile, errfile);
 
         if (!exitcode)                    /* if no error */
         {
-            facetT* facet_list = qh facet_list;
+            facetT* facet_list = qh->facet_list;
             //int convexNumFaces = qh num_facets;
-            /*int convexNumVert =*/ qh_setsize(qh_facetvertices(facet_list, nullptr, false));
+            /*int convexNumVert =*/ qh_setsize(qh, qh_facetvertices(qh, facet_list, nullptr, false));
 
-            qh_triangulate(); // need this for triangulated output!
+            qh_triangulate(qh); // need this for triangulated output!
             //int convexNumFaces2 = qh num_facets;
-            /*int convexNumVert2 =*/ qh_setsize(qh_facetvertices(facet_list, nullptr, false));
+            /*int convexNumVert2 =*/ qh_setsize(qh, qh_facetvertices(qh, facet_list, nullptr, false));
             double pCenter[6];
 
             for (double& u : pCenter)
@@ -396,14 +344,14 @@ namespace GraspStudio
             result->center.n[1] = pCenter[4];
             result->center.n[2] = pCenter[5];
 
-            /* 'qh facet_list' contains the convex hull */
+            /* 'qht->facet_list' contains the convex hull */
             ContactPoint v[6];
             int nIds[6];
             MathTools::TriangleFace6D f;
 
             int nFacets = 0;
-            qh_getarea(qh facet_list);
-            result->volume = qh totvol;
+            qh_getarea(qh, qh->facet_list);
+            result->volume = qh-> totvol;
             double p[6];
             p[0] = p[1] = p[2] = p[3] = p[4] = p[5] = 0;
             FORALLfacets
@@ -468,11 +416,11 @@ namespace GraspStudio
                 f.offset = facet->offset;
                 double dist = qh_distnorm(6, pCenter, facet->normal, &(facet->offset));
                 f.distNormCenter = dist;
-                qh_distplane(pCenter, facet, &dist);
+                qh_distplane(qh, pCenter, facet, &dist);
                 f.distPlaneCenter = dist;
                 dist = qh_distnorm(6, pZero, facet->normal, &(facet->offset));
                 f.distNormZero = dist;
-                qh_distplane(pZero, facet, &dist);
+                qh_distplane(qh, pZero, facet, &dist);
                 f.distPlaneZero = dist;
 #ifdef CONVEXHULL_DEBUG_OUTPUT
 
@@ -498,8 +446,8 @@ namespace GraspStudio
             cout << "QHULL result: nFactes: " << convexNumFaces2 << endl;*/
         }
 
-        qh_freeqhull(!qh_ALL);
-        qh_memfreeshort(&curlong, &totlong);
+        qh_freeqhull(qh, !qh_ALL);
+        qh_memfreeshort(qh, &curlong, &totlong);
 
         if (curlong || totlong)
             fprintf(errfile, "qhull internal warning (main): did not free %d bytes of long memory (%d pieces)\n",
@@ -509,51 +457,38 @@ namespace GraspStudio
         //long timeMS = (long)(((float)(endT - startT) / (float)CLOCKS_PER_SEC) * 1000.0);
 
         //cout << __FUNCTION__ << ": Created 6D convex hull in " << timeMS << " ms" << endl;
-        if (lockMutex)
-        {
-            qhull_mutex.unlock();
-        }
 
         return result;
     }
 
     /*
-    bool createPoints( SoSeparator *pInputIVModel, std::vector<Vec3D> &vStorePoints, bool lockMutex )
+    bool createPoints( SoSeparator *pInputIVModel, std::vector<Vec3D> &vStorePoints)
     {
         if (!pInputIVModel)
             return false;
 
-        if (lockMutex)
-            qhull_mutex.lock();
         vStorePoints.clear();
         SoCallbackAction ca;
         ca.addTriangleCallback(SoShape::getClassTypeId(), &CConvexHullGenerator_triangleCB, &vStorePoints);
         ca.apply(pInputIVModel);
-        if (lockMutex)
-            qhull_mutex.unlock();
         return true;
     }*/
 
     /*
     bool createConvexHull(SoSeparator *pInputIVModel, ConvexHull3D &storeResult)
     {
-        qhull_mutex.lock();
         vector<Vec3D> points;
         if (!CreatePoints(pInputIVModel,points,false))
             return false;
         bool bRes = CreateConvexHull(points,storeResult,false);
-        qhull_mutex.unlock();
         return bRes;
     }*/
 
     /*
-    bool createIVModel( ConvexHull3D &convexHull, SoSeparator *pStoreResult, bool lockMutex )
+    bool createIVModel( ConvexHull3D &convexHull, SoSeparator *pStoreResult)
     {
         if (!pStoreResult || convexHull.vertices.size()<=0 || convexHull.faces.size()<=0)
             return false;
-
-        if (lockMutex)
-            qhull_mutex.lock();
 
         SoCoordinate3* pCoords = new SoCoordinate3();
         SoFaceSet* pFaceSet = new SoFaceSet();
@@ -602,9 +537,6 @@ namespace GraspStudio
         delete []pVertexArray;
         delete []nNumVertices;
 
-        if (lockMutex)
-            qhull_mutex.unlock();
-
         return true;
     }*/
 
@@ -636,7 +568,6 @@ namespace GraspStudio
         if (!pStoreResult || convHull.vertices.size()<=0 || convHull.faces.size()<=0)
             return false;
 
-        qhull_mutex.lock();
         Face6D f;
         Vec3D v1,v2,v3,v4,v5,v6;
 
@@ -701,11 +632,9 @@ namespace GraspStudio
         if (!CreateConvexHull(vProjectedPoints, projectedHull, false))
         {
             cout << __FUNCTION__ << " Could not create hull of projected points, aborting..." << endl;
-            qhull_mutex.unlock();
             return false;
         }
         bool bRes = CreateIVModel(projectedHull, pStoreResult, false);
-        qhull_mutex.unlock();
         return bRes;
         / *
         // creates 3d-projection of all 6d facets
@@ -813,7 +742,6 @@ namespace GraspStudio
         delete []pVertexArray;
         delete []nNumVertices;
 
-        qhull_mutex.unlock();
 
         return true;
         * /
@@ -821,7 +749,7 @@ namespace GraspStudio
 
     void ConvexHullGenerator::PrintVertices(std::vector<ContactPoint>& pointsInput)
     {
-        for (int i = 0; i < (int)pointsInput.size(); i++)
+        for (std::size_t i = 0; i < pointsInput.size(); i++)
         {
             cout << "v" << i << ": " << pointsInput[i].p[0] << "," << pointsInput[i].p[1] << "," << pointsInput[i].p[2] << ","
                  << pointsInput[i].n[0] << "," << pointsInput[i].n[1] << "," << pointsInput[i].n[2] << endl;
@@ -837,15 +765,14 @@ namespace GraspStudio
 
         float minValue[6];
         float maxValue[6];
-        int i;
-
-        for (i = 0; i <= 5; i++)
+        
+        for (std::size_t i = 0; i <= 5; i++)
         {
             minValue[i] = FLT_MAX;
             maxValue[i] = -FLT_MAX;
         }
 
-        for (i = 0; i < (int)convHull->vertices.size(); i++)
+        for (std::size_t i = 0; i < convHull->vertices.size(); i++)
         {
             if (convHull->vertices[i].p[0] < minValue[0])
             {
