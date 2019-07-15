@@ -110,11 +110,16 @@ Eigen::VectorXd Dynamics::getCoriolisMatrix(const Eigen::VectorXd &q, const Eige
 
 
 
-Eigen::MatrixXd Dynamics::getInertiaMatrix(const Eigen::VectorXd &q)
+Eigen::MatrixXd Dynamics::getInertiaMatrix(const Eigen::VectorXd &q, bool updateKinematics)
 {
     Eigen::MatrixXd inertia = Eigen::MatrixXd::Zero(model->dof_count, model->dof_count);
-    CompositeRigidBodyAlgorithm(*model.get(), q, inertia);
+    getInertiaMatrix(q, inertia, updateKinematics);
     return inertia;
+}
+
+void Dynamics::getInertiaMatrix(const Eigen::VectorXd &q, Eigen::MatrixXd &inertiaMatrix, bool updateKinematics)
+{
+    CompositeRigidBodyAlgorithm(*model.get(), q, inertiaMatrix, updateKinematics);
 }
 
 void Dynamics::setGravity(const Eigen::Vector3d &gravity)
