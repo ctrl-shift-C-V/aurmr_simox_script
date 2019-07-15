@@ -112,9 +112,9 @@ namespace VirtualRobot
         //! Optionally the configuration of the fingers / actors can be stored.
         void setConfiguration(const std::map<std::string, float>& config);
 
-        
+
     protected:
-        
+
         std::map< std::string, float > eefConfiguration; //!< Optional: the configuration of the actors.
 
         Eigen::Matrix4f poseTcp;    //!< The pose in TCP's coordinate system

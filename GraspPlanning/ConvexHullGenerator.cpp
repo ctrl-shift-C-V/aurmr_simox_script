@@ -195,7 +195,7 @@ namespace GraspStudio
                 {
                     pCenter[u] += vertex->point[u];
                 }
-
+                
                 nVcertexCount++;
             }
 

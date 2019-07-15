@@ -62,6 +62,5 @@ namespace GraspStudio
         //! QHull is not thread safe, so protect qHull calls with a mutex
         static boost::mutex qhull_mutex;
     };
-
 }
 
