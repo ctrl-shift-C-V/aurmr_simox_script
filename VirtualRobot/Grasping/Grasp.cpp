@@ -89,7 +89,7 @@ namespace VirtualRobot
         return preshape;
     }
 
-    Eigen::Matrix4f Grasp::getTransformation() const
+    const Eigen::Matrix4f& Grasp::getTransformation() const
     {
         return poseTcp;
     }

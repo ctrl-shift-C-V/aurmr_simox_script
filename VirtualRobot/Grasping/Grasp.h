@@ -100,7 +100,7 @@ namespace VirtualRobot
             The transformation is given in the coordinate system of the tcp (whereas the tcp belongs to the eef).
             This transformation specifies the tcp to object relation.
         */
-        Eigen::Matrix4f getTransformation() const;
+        const Eigen::Matrix4f& getTransformation() const;
 
         std::string toXML(int tabs = 2) const;
 
