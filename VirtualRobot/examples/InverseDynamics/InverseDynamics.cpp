@@ -59,7 +59,9 @@ int main(int argc, char* argv[])
             Eigen::VectorXd qdot = Eigen::VectorXd::Random(nDof);
             Eigen::VectorXd qddot = Eigen::VectorXd::Random(nDof);
             Eigen::VectorXd tau = Eigen::VectorXd::Random(nDof);
-            Eigen::VectorXd invDyn = dynamics.getInverseDynamics(q, qdot, qddot);            
+            Eigen::VectorXd invDyn = dynamics.getInverseDynamics(q, qdot, qddot);
+            Eigen::MatrixXd inertiaMatrix = dynamics.getInertiaMatrix(q);
+            VR_INFO << inertiaMatrix;
         }
         auto end = std::chrono::system_clock::now();
         auto elapsed =
