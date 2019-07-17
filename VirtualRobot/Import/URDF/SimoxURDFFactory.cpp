@@ -31,7 +31,7 @@ namespace VirtualRobot
     {
     }
 
-    RobotPtr SimoxURDFFactory::loadFromFile(const std::string& filename, RobotIO::RobotDescription loadMode)
+    RobotPtr SimoxURDFFactory::loadFromFile(const std::string& filename, RobotIO::RobotDescription)
     {
 
         RobotPtr result;
@@ -313,7 +313,6 @@ namespace VirtualRobot
 
     RobotNodePtr SimoxURDFFactory::createBodyNode(RobotPtr robo, std::shared_ptr<Link> urdfBody, const std::string& basePath, bool useColModelsIfNoVisuModel)
     {
-        const float scale = 1000.0f; // mm
         RobotNodePtr result;
 
         if (!urdfBody)
@@ -389,7 +388,6 @@ namespace VirtualRobot
             physics.localCoM = convertPose(urdfBody->inertial->origin).block(0, 3, 3, 1);
         }
 
-        Eigen::Matrix4f idMatrix = Eigen::Matrix4f::Identity();
         Eigen::Vector3f idVec3 = Eigen::Vector3f::Zero();
         result = fixedNodeFactory->createRobotNode(robo, name, rnVisu, rnCol, 0, 0, 0, preJointTransform, idVec3, idVec3, physics);
 
@@ -400,7 +398,6 @@ namespace VirtualRobot
 
     RobotNodePtr SimoxURDFFactory::createJointNode(RobotPtr robo, std::shared_ptr<Joint> urdfJoint)
     {
-        const float scale = 1000.0f; // mm
         RobotNodePtr result;
 
         if (!urdfJoint)
@@ -412,7 +409,6 @@ namespace VirtualRobot
         VirtualRobot::RobotNodeFactoryPtr revoluteNodeFactory = VirtualRobot::RobotNodeFactory::fromName(VirtualRobot::RobotNodeRevoluteFactory::getName(), NULL);
         VirtualRobot::RobotNodeFactoryPtr fixedNodeFactory = VirtualRobot::RobotNodeFactory::fromName(VirtualRobot::RobotNodeFixedFactory::getName(), NULL);
 
-        Eigen::Matrix4f idMatrix = Eigen::Matrix4f::Identity();
         Eigen::Vector3f idVec3 = Eigen::Vector3f::Zero();
         std::string name = urdfJoint->name;
 

@@ -15,7 +15,7 @@ using std::endl;
 using namespace VirtualRobot;
 
 
-int main(int argc, char* argv[])
+int main(int /*argc*/, char* /*argv*/[])
 {
     SimoxURDFFactory f;
 
