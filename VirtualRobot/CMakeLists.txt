@@ -67,6 +67,8 @@ endif ()
 ##########################################
 #### VISUALIZATION Coin3D+Qt+SoQt / OSG+Qt
 
+find_package(assimp REQUIRED)
+target_link_libraries(VirtualRobot PUBLIC assimp)
 
 if (Simox_USE_COIN_VISUALIZATION)
     MESSAGE(STATUS "Searching Coin3D, Qt and SoQt...")
@@ -260,7 +262,7 @@ SET(SOURCES
     
     Import/RobotImporterFactory.cpp
     Import/SimoxXMLFactory.cpp
-    Import/MeshImport/STLReader.cpp
+    Import/MeshImport/AssimpReader.cpp
     
     math/AbstractFunctionR1R2.cpp
     math/AbstractFunctionR1R3.cpp
@@ -462,7 +464,7 @@ SET(INCLUDES
 
     Import/RobotImporterFactory.h
     Import/SimoxXMLFactory.h
-    Import/MeshImport/STLReader.h
+    Import/MeshImport/AssimpReader.h
     
     math/AbstractFunctionR1Ori.h
     math/AbstractFunctionR1R2.h

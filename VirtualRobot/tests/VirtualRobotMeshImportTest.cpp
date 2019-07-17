@@ -7,7 +7,7 @@
 #define BOOST_TEST_MODULE VirtualRobot_VirtualRobotMeshImportTest
 
 #include <VirtualRobot/VirtualRobotTest.h>
-#include <VirtualRobot/Import/MeshImport/STLReader.h>
+#include <VirtualRobot/Import/MeshImport/AssimpReader.h>
 #include <VirtualRobot/Visualization/TriMeshModel.h>
 #include <VirtualRobot/RuntimeEnvironment.h>
 
@@ -108,18 +108,15 @@ BOOST_AUTO_TEST_CASE(testParseSTL)
         "endloop\n"
         "endfacet\n"
         "endsolid\n";
-    std::string s(stlcontent);
-    istringstream ss(s);
-    STLReaderPtr r(new STLReader());
-    TriMeshModelPtr t(new TriMeshModel());
-    bool readSTLok = r->read(ss, STLReader::STLA, t);
-    BOOST_REQUIRE(readSTLok);
-    BOOST_REQUIRE(t);
-    BOOST_CHECK_EQUAL(t->vertices.size(), 8); // identical vertices are mapped to one vertex instance
-    BOOST_CHECK_EQUAL(t->faces.size(), 12);
-    BOOST_CHECK_EQUAL(t->vertices.at(0)[0], 0.0f);
-    BOOST_CHECK_EQUAL(t->vertices.at(0)[1], 100.0f);
-    BOOST_CHECK_EQUAL(t->vertices.at(0)[2], 100.0f);
+
+    TriMeshModelPtr t2(new TriMeshModel());
+    {
+        bool readSTLok = AssimpReader{}.readFromBuffer(stlcontent, t2);
+        BOOST_REQUIRE(readSTLok);
+        BOOST_REQUIRE(t2);
+        BOOST_CHECK_EQUAL(t2->vertices.size(), 8); // identical vertices are mapped to one vertex instance
+        BOOST_CHECK_EQUAL(t2->faces.size(), 12);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(testLoadSTL)
@@ -129,13 +126,14 @@ BOOST_AUTO_TEST_CASE(testLoadSTL)
     bool fileOK = RuntimeEnvironment::getDataFileAbsolute(filename);
     BOOST_REQUIRE(fileOK);
 
-    STLReaderPtr r(new STLReader());
-    TriMeshModelPtr t(new TriMeshModel());
-    bool readSTLok = r->read(filename, t);
-    BOOST_REQUIRE(readSTLok);
-    BOOST_REQUIRE(t);
-    BOOST_CHECK_GT(int(t->vertices.size()), 20);
-    BOOST_CHECK_GT(int(t->faces.size()), 20);
+    TriMeshModelPtr t2(new TriMeshModel());
+    {
+        bool readSTLok = AssimpReader{}.read(filename, t2);
+        BOOST_REQUIRE(readSTLok);
+        BOOST_REQUIRE(t2);
+        BOOST_CHECK_GT(int(t2->vertices.size()), 20);
+        BOOST_CHECK_GT(int(t2->faces.size()), 20);
+    }
 }
 
 
