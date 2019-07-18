@@ -62,7 +62,7 @@ namespace GraspStudio
         storeApproachDir = (objectModel->faces[faceIndex]).normal;
         if (std::abs(storeApproachDir.squaredNorm() - 1) > 1e-6f)
         {
-            std::cout << "Normal in trimesh not normalized!";
+            std::cout << "Normal in trimesh not normalized! (normalizing it now)\n";
             storeApproachDir.normalize();
         }
 
