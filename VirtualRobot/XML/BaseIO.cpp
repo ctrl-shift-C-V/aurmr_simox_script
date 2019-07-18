@@ -1053,11 +1053,14 @@ namespace VirtualRobot
                 }
                 else
                 {
-                    VisualizationFactoryPtr visualizationFactory = VisualizationFactory::fromName(collisionFileType, NULL);
-
-                    if (visualizationFactory)
+                    if (auto factory = VisualizationFactory::fromName(collisionFileType, NULL))
                     {
-                        visualizationNode = visualizationFactory->createUnitedVisualization(visuNodes);
+                        visualizationNode = factory->createUnitedVisualization(visuNodes);
+                    }
+                    else if (auto factory = VisualizationFactory::fromName("inventor", NULL))
+                    {
+                        VR_WARNING << "VisualizationFactory of type '" << collisionFileType << "' not present. Trying factory for 'inventor' " << endl;
+                        visualizationNode = factory->createUnitedVisualization(visuNodes);
                     }
                     else
                     {
@@ -1138,13 +1141,25 @@ namespace VirtualRobot
 
             if (visuFile != "")
             {
-                VisualizationFactoryPtr visualizationFactory = VisualizationFactory::fromName(fileType, NULL);
+                VisualizationFactoryPtr factory = VisualizationFactory::fromName(fileType, NULL);
 
-                if (visualizationFactory)
+                if (factory = VisualizationFactory::fromName(fileType, NULL))
                 {
                     if (tmpFileType == fileType)
                     {
-                        result.push_back(visualizationFactory->getVisualizationFromFile(visuFile, bbox));
+                        result.push_back(factory->getVisualizationFromFile(visuFile, bbox));
+                    }
+                    else
+                    {
+                        VR_WARNING << "Ignoring data from " << visuFileXMLNode->value() << ": visualization type does not match to data from before." << endl;
+                    }
+                }
+                else if (auto factory = VisualizationFactory::fromName("inventor", NULL))
+                {
+                    VR_WARNING << "VisualizationFactory of type '" << fileType << "' not present. Trying factory for 'inventor' " << endl;
+                    if (tmpFileType == fileType)
+                    {
+                        result.push_back(factory->getVisualizationFromFile(visuFile, bbox));
                     }
                     else
                     {

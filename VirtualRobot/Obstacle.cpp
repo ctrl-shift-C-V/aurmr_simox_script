@@ -13,7 +13,6 @@ namespace VirtualRobot
     // obstacle models start with 20000
     int Obstacle::idCounter = 20000;
 
-
     Obstacle::Obstacle(const std::string& name, VisualizationNodePtr visualization, CollisionModelPtr collisionModel, const SceneObject::Physics& p, CollisionCheckerPtr colChecker)
         : SceneObject(name, visualization, collisionModel, p, colChecker)
     {
@@ -39,6 +38,17 @@ namespace VirtualRobot
             }
         }
     }
+
+    Obstacle::Obstacle(const std::string& name, const TriMeshModelPtr& trimesh, const std::string& filename)
+        : Obstacle(TagTrimeshCtor{}, name, boost::make_shared<VisualizationNode>(trimesh))
+    {
+        getVisualization()->setFilename(filename, false);
+        getCollisionModel()->getVisualization()->setFilename(filename, false);
+    }
+
+    Obstacle::Obstacle(TagTrimeshCtor, const std::string& name, const VisualizationNodePtr& vis)
+        : Obstacle(name, vis, boost::make_shared<CollisionModel>(vis))
+    {}
 
     Obstacle::~Obstacle() = default;
 

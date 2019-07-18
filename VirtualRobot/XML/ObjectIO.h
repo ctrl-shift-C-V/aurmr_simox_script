@@ -64,6 +64,10 @@ namespace VirtualRobot
             @return Returns an empty pointer, when file access failed.
         */
         static ManipulationObjectPtr loadManipulationObject(const std::string& xmlFile);
+        static ManipulationObjectPtr loadManipulationObject(const std::filesystem::path& xmlFile)
+        {
+            return loadManipulationObject(xmlFile.string());
+        }
 
         /*!
             Load ManipulationObject from a file stream.

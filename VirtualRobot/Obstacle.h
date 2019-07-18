@@ -46,6 +46,11 @@ namespace VirtualRobot
                  CollisionModelPtr collisionModel = {}, const SceneObject::Physics& p = {},
                  CollisionCheckerPtr colChecker = {});
 
+    private:
+        struct TagTrimeshCtor {};
+        Obstacle(TagTrimeshCtor, const std::string& name, const VisualizationNodePtr& vis);
+    public:
+        Obstacle(const std::string& name, const TriMeshModelPtr& trimesh, const std::string& filename = "");
         /*!
         */
         ~Obstacle() override;
