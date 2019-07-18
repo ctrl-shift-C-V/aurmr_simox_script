@@ -988,7 +988,7 @@ namespace VirtualRobot
         return physics.inertiaMatrix;
     }
 
-    Eigen::Matrix3f SceneObject::shiftInertia(const Eigen::Matrix3f inertiaMatrix, const Eigen::Vector3f &shift, float mass)
+    Eigen::Matrix3f SceneObject::shiftInertia(const Eigen::Matrix3f inertiaMatrix, const Eigen::Vector3f& shift, float mass)
     {
         Eigen::Matrix3f skew;
         skew << 0, -shift(2), +shift(1),

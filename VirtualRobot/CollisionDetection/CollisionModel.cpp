@@ -34,7 +34,7 @@ namespace VirtualRobot
         setVisualization(visu);
     }
 
-    CollisionModel::CollisionModel(VisualizationNodePtr visu, const std::string &name, CollisionCheckerPtr colChecker, int id, InternalCollisionModelPtr collisionModel)
+    CollisionModel::CollisionModel(VisualizationNodePtr visu, const std::string& name, CollisionCheckerPtr colChecker, int id, InternalCollisionModelPtr collisionModel)
     {
         margin = 0.0;
         globalPose = Eigen::Matrix4f::Identity();
@@ -55,8 +55,10 @@ namespace VirtualRobot
         }
 
         updateVisualization = true;
-        if(!collisionModel)
+        if (!collisionModel)
+        {
             VR_WARNING << "internal collision model is NULL for " << name << endl;
+        }
         collisionModelImplementation = boost::dynamic_pointer_cast<InternalCollisionModel>(collisionModel->clone(false));
         VR_ASSERT(collisionModelImplementation->getPQPModel());
         setVisualization(visu);
@@ -65,7 +67,7 @@ namespace VirtualRobot
 
     CollisionModel::~CollisionModel()
     {
-//        destroyData();
+        //        destroyData();
     }
 
 
@@ -81,7 +83,7 @@ namespace VirtualRobot
     void CollisionModel::inflateModel(float value)
     {
         float diff = std::abs(margin - value);
-        if(diff > 0.01f || (origVisualization && !model))
+        if (diff > 0.01f || (origVisualization && !model))
         {
             visualization = origVisualization->clone(true);
             visualization->shrinkFatten(value);
@@ -98,10 +100,14 @@ namespace VirtualRobot
             collisionModelImplementation.reset(new CollisionModelDummy(colChecker));
 #endif
         }
-        if(!origVisualization)
+        if (!origVisualization)
+        {
             margin = 0.0;
+        }
         else
+        {
             margin = value;
+        }
     }
 
 
@@ -127,25 +133,29 @@ namespace VirtualRobot
     {
         VisualizationNodePtr visuOrigNew;
 
-        if(origVisualization)
+        if (origVisualization)
+        {
             visuOrigNew = origVisualization->clone(deepVisuMesh, scaling);
+        }
 
         std::string nameNew = name;
         int idNew = id;
 
         CollisionModelPtr p;
-        if(deepVisuMesh || !this->collisionModelImplementation)
+        if (deepVisuMesh || !this->collisionModelImplementation)
+        {
             p.reset(new CollisionModel(visuOrigNew, nameNew, colChecker, idNew, margin));
+        }
         else
         {
             p.reset(new CollisionModel(visuOrigNew, nameNew, colChecker, idNew, this->collisionModelImplementation));
-            if(visualization)
+            if (visualization)
             {
                 p->visualization = visualization->clone(false, scaling);
                 p->margin = margin;
             }
             else
-            {                
+            {
                 p->inflateModel(margin);
             }
 
@@ -219,7 +229,7 @@ namespace VirtualRobot
         Eigen::Matrix4f t;
         t.setIdentity();
 
-        for (auto & vertice : model->vertices)
+        for (auto& vertice : model->vertices)
         {
             t.block(0, 3, 3, 1) = vertice;
             t = globalPose * t;
@@ -351,7 +361,7 @@ namespace VirtualRobot
         CollisionCheckerPtr colChecker = colModels[0]->getCollisionChecker();
         std::vector<VisualizationNodePtr> visus;
 
-        for (const auto & colModel : colModels)
+        for (const auto& colModel : colModels)
         {
             VisualizationNodePtr v = colModel->getVisualization();
 

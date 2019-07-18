@@ -40,15 +40,14 @@ namespace VirtualRobot
         }
     }
 
-    Obstacle::~Obstacle()
-    = default;
+    Obstacle::~Obstacle() = default;
 
     int Obstacle::getID()
     {
         return id;
     }
 
-    VirtualRobot::ObstaclePtr Obstacle::createBox(float width, float height, float depth, VisualizationFactory::Color color, std::string visualizationType , CollisionCheckerPtr colChecker)
+    VirtualRobot::ObstaclePtr Obstacle::createBox(float width, float height, float depth, VisualizationFactory::Color color, std::string visualizationType, CollisionCheckerPtr colChecker)
     {
         ObstaclePtr result;
         VisualizationFactoryPtr visualizationFactory;
@@ -101,7 +100,7 @@ namespace VirtualRobot
     }
 
 
-    VirtualRobot::ObstaclePtr Obstacle::createSphere(float radius, VisualizationFactory::Color color, std::string visualizationType , CollisionCheckerPtr colChecker)
+    VirtualRobot::ObstaclePtr Obstacle::createSphere(float radius, VisualizationFactory::Color color, std::string visualizationType, CollisionCheckerPtr colChecker)
     {
         ObstaclePtr result;
         VisualizationFactoryPtr visualizationFactory;
@@ -205,7 +204,7 @@ namespace VirtualRobot
     }
 
 
-    VirtualRobot::ObstaclePtr Obstacle::createFromMesh(TriMeshModelPtr mesh, std::string visualizationType , CollisionCheckerPtr colChecker)
+    VirtualRobot::ObstaclePtr Obstacle::createFromMesh(TriMeshModelPtr mesh, std::string visualizationType, CollisionCheckerPtr colChecker)
     {
         THROW_VR_EXCEPTION_IF(!mesh, "Null data");
 

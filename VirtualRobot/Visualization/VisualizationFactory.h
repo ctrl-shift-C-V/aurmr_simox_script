@@ -90,7 +90,7 @@ namespace VirtualRobot
             float transparency{0};
             float refractionIndex{0};
         };
-        
+
         VisualizationFactory() = default;
         virtual ~VisualizationFactory() = default;
 

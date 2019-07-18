@@ -42,7 +42,7 @@ namespace VirtualRobot
 
         /*!
         */
-        Obstacle(const std::string& name, VisualizationNodePtr visualization = {}, 
+        Obstacle(const std::string& name, VisualizationNodePtr visualization = {},
                  CollisionModelPtr collisionModel = {}, const SceneObject::Physics& p = {},
                  CollisionCheckerPtr colChecker = {});
 
@@ -71,7 +71,7 @@ namespace VirtualRobot
             \param visualizationType Here the type of visualization can be specified (e.g. "Inventor"). If empty, the first registered visualization type (which is usually the only one) is used.
             \param colChecker Only needed if you plan to use the collision checker in parallel. If not given, the object is registered with the global singleton collision checker.
         */
-        static ObstaclePtr createBox(float width, float height, float depth, 
+        static ObstaclePtr createBox(float width, float height, float depth,
                                      VisualizationFactory::Color color = VisualizationFactory::Color::Red(),
                                      std::string visualizationType = "", CollisionCheckerPtr colChecker = {});
         /*!

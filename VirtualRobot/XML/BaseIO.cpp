@@ -20,11 +20,9 @@ namespace VirtualRobot
 
     boost::mutex BaseIO::mutex;
 
-    BaseIO::BaseIO()
-    = default;
+    BaseIO::BaseIO() = default;
 
-    BaseIO::~BaseIO()
-    = default;
+    BaseIO::~BaseIO() = default;
 
     bool BaseIO::isTrue(const char* s)
     {
@@ -354,7 +352,7 @@ namespace VirtualRobot
         Units uAngle("rad");
         Units uLength("mm");
 
-        for (auto & i : unitsAttr)
+        for (auto& i : unitsAttr)
         {
             if (i.isAngle())
             {
@@ -455,7 +453,7 @@ namespace VirtualRobot
         getAllAttributes(node, "unitsAngle", attrStr);
         getAllAttributes(node, "unitsTime", attrStr);
 
-        for (auto & i : attrStr)
+        for (auto& i : attrStr)
         {
             Units unitsAttribute(getLowerCase(i.c_str()));
             result.push_back(unitsAttribute);
@@ -1341,7 +1339,7 @@ namespace VirtualRobot
             Units uWeight("kg");
             Units uLength("m");
 
-            for (auto & i : unitsAttr)
+            for (auto& i : unitsAttr)
             {
                 if (i.isWeight())
                 {
@@ -1735,7 +1733,7 @@ namespace VirtualRobot
 
         RobotPtr r;
 
-        for (auto & robot : robots)
+        for (auto& robot : robots)
         {
             if (robot->getType() == robotName)
             {
@@ -1748,7 +1746,7 @@ namespace VirtualRobot
         RobotNodeSetPtr rns = r->getRobotNodeSet(nodeSetName);
         THROW_VR_EXCEPTION_IF(!rns, "Could not find RNS with name " << nodeSetName << " in robot " << robotName);
 
-        assert(dim>=0);
+        assert(dim >= 0);
         if (static_cast<unsigned int>(dim) != rns->getSize())
         {
             VR_WARNING << " Invalid dim attribute (" << dim << "). Setting dimension to " << rns->getSize() << endl;

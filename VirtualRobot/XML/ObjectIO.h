@@ -108,7 +108,7 @@ namespace VirtualRobot
          * \param scaling Usually we scale from the internal mm format to m.
          * \return true on success
          */
-        static bool writeSTL(TriMeshModelPtr t, const std::string &filename, const std::string &objectName, float scaling = 0.001f);
+        static bool writeSTL(TriMeshModelPtr t, const std::string& filename, const std::string& objectName, float scaling = 0.001f);
     protected:
 
         // instantiation not allowed
