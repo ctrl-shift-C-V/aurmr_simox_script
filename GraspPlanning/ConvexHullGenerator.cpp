@@ -98,7 +98,7 @@ namespace GraspStudio
 #ifdef CONVEXHULL_DEBUG_OUTPUT
         sprintf(flags, "qhull s Tcv Qt FA");
 #else
-        sprintf(flags, "qhull s Qt FA");  // QJ is faster than Qt (but the results seem to be less accurate, see www.qhull.org documentation)
+        sprintf(flags, "qhull s Qt FA Pp");  // QJ is faster than Qt (but the results seem to be less accurate, see www.qhull.org documentation)
 #endif
 
         //cout << "QHULL input: nVertices: " << pointsInput.size() << endl;
@@ -284,7 +284,7 @@ namespace GraspStudio
         std::cout.precision(2);
 #else
         //sprintf (flags, "qhull s Qt FA"); // some of the resulting facets are not triangulated ?!
-        sprintf(flags, "qhull QJ FA");  // QJ is faster than Qt (but the results seem to be less accurate, see www.qhull.org documentation)
+        sprintf(flags, "qhull QJ FA Pp");  // QJ is faster than Qt (but the results seem to be less accurate, see www.qhull.org documentation)
 #endif
 
         //cout << "QHULL input: nVertices: " << pointsInput.size() << endl;
