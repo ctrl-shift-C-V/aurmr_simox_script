@@ -111,7 +111,7 @@ BOOST_AUTO_TEST_CASE(testParseSTL)
 
     TriMeshModelPtr t2(new TriMeshModel());
     {
-        bool readSTLok = AssimpReader{}.readFromBuffer(stlcontent, t2);
+        bool readSTLok = AssimpReader{}.readBufferAsTriMesh(stlcontent, t2);
         BOOST_REQUIRE(readSTLok);
         BOOST_REQUIRE(t2);
         BOOST_CHECK_EQUAL(t2->vertices.size(), 8); // identical vertices are mapped to one vertex instance
@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE(testLoadSTL)
 
     TriMeshModelPtr t2(new TriMeshModel());
     {
-        bool readSTLok = AssimpReader{}.read(filename, t2);
+        bool readSTLok = AssimpReader{}.readFileAsTriMesh(filename, t2);
         BOOST_REQUIRE(readSTLok);
         BOOST_REQUIRE(t2);
         BOOST_CHECK_GT(int(t2->vertices.size()), 20);

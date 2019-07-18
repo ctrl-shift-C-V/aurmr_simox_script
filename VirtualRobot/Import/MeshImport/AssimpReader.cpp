@@ -1,88 +1,15 @@
 #include "AssimpReader.h"
 #include <VirtualRobot/Visualization/TriMeshModel.h>
+#include <VirtualRobot/ManipulationObject.h>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/material.h>
 
-namespace VirtualRobot
+namespace
 {
-    AssimpReader::AssimpReader(float eps, float scaling) :
-        scaling{scaling}, eps{eps}
-    {}
-
-    std::string AssimpReader::get_extensions() const
-    {
-        static const auto extensions = []
-        {
-            const std::string upper =
-            "3D 3DS 3MF AC AC3D ACC AMJ ASE ASK B3D BLEND BVH CMS COB "  \
-            "DAE DXF ENFF FBX LWO LWS LXO MD2 MD3 MD5 MDC MDL MESH MOT " \
-            "MS3D NDO NFF OBJ OFF OGEX PLY PMX PRJ Q3O Q3S RAW SCN SIB " \
-            "SMD STP STL STLA STLB TER UC VTA X X3D XGL ZGL";
-            std::string both = upper + upper;
-            std::transform(
-                both.begin(), both.begin() + upper.size(), both.begin(),
-                [](unsigned char c)
-            {
-                return std::tolower(c);
-            }
-            );
-            return both;
-        }();
-        return extensions;
-    }
-
-    bool AssimpReader::read(const std::string& filename, const TriMeshModelPtr& t)
-    {
-        //code adapted from http://assimp.sourceforge.net/lib_html/usage.html
-        Assimp::Importer importer;
-        // And have it read the given file with some example postprocessing
-        // Usually - if speed is not the most important aspect for you - you'll
-        // propably to request more postprocessing than we do in this example.
-        const aiScene* scene = importer.ReadFile(
-                                   filename,
-                                   aiProcess_JoinIdenticalVertices    |
-                                   aiProcess_Triangulate              |
-                                   aiProcess_GenSmoothNormals         |
-                                   aiProcess_SortByPType
-                               );
-        return read(scene, t, filename);
-    }
-    bool AssimpReader::readFromBuffer(const std::string_view& v, const TriMeshModelPtr& t)
-    {
-        //code adapted from http://assimp.sourceforge.net/lib_html/usage.html
-        Assimp::Importer importer;
-        // And have it read the given file with some example postprocessing
-        // Usually - if speed is not the most important aspect for you - you'll
-        // propably to request more postprocessing than we do in this example.
-        const aiScene* scene = importer.ReadFileFromMemory(
-                                   v.data(), v.size(),
-                                   aiProcess_JoinIdenticalVertices    |
-                                   aiProcess_Triangulate              |
-                                   aiProcess_GenSmoothNormals         |
-                                   aiProcess_SortByPType
-                               );
-        return read(scene, t, "");
-    }
-
-    void AssimpReader::set_epsilon(float _eps)
-    {
-        eps = _eps;
-    }
-
-    float AssimpReader::epsilon() const
-    {
-        return eps;
-    }
-
-    void AssimpReader::setScaling(float s)
-    {
-        scaling = s;
-    }
-
-    bool AssimpReader::read(const aiScene* scene, const TriMeshModelPtr& t, const std::string& filename)
+    bool readScene(const aiScene* scene, const VirtualRobot::TriMeshModelPtr& t, const std::string& filename, float scaling, float eps)
     {
         if (!t)
         {
@@ -133,7 +60,7 @@ namespace VirtualRobot
             const auto& v = m.mVertices[i];
             const auto& n = m.mNormals[i];
             t->addVertex({v.x, v.y, v.z});
-            t->addNormal({n.x, n.y, n.z});
+            t->addNormal(Eigen::Vector3f{n.x, n.y, n.z}.normalized());
         }
         for (unsigned i = 0; i < m.mNumFaces; ++i)
         {
@@ -143,7 +70,7 @@ namespace VirtualRobot
                 VR_ERROR << "mesh from '" << filename << "' has face (# " << i << ") with the wrong number of vertices\n";
                 return false;
             }
-            MathTools::TriangleFace fc;
+            VirtualRobot::MathTools::TriangleFace fc;
             fc.id1 = f.mIndices[0];
             fc.id2 = f.mIndices[1];
             fc.id3 = f.mIndices[2];
@@ -156,6 +83,119 @@ namespace VirtualRobot
         t->scale(scaling);
         t->mergeVertices(eps);
         return true;
+    }
+}
+
+namespace VirtualRobot
+{
+    AssimpReader::AssimpReader(float eps, float scaling) :
+        scaling{scaling}, eps{eps}
+    {}
+
+    std::string AssimpReader::get_extensions()
+    {
+        static const auto extensions = []
+        {
+            const std::string upper =
+            "3D 3DS 3MF AC AC3D ACC AMJ ASE ASK B3D BLEND BVH CMS COB "  \
+            "DAE DXF ENFF FBX LWO LWS LXO MD2 MD3 MD5 MDC MDL MESH MOT " \
+            "MS3D NDO NFF OBJ OFF OGEX PLY PMX PRJ Q3O Q3S RAW SCN SIB " \
+            "SMD STP STL STLA STLB TER UC VTA X X3D XGL ZGL";
+            std::string both = upper + upper;
+            std::transform(
+                both.begin(), both.begin() + upper.size(), both.begin(),
+                [](unsigned char c)
+            {
+                return std::tolower(c);
+            }
+            );
+            return both;
+        }();
+        return extensions;
+    }
+
+    bool AssimpReader::readFileAsTriMesh(const std::string& filename, const TriMeshModelPtr& t)
+    {
+        //code adapted from http://assimp.sourceforge.net/lib_html/usage.html
+        Assimp::Importer importer;
+        // And have it read the given file with some example postprocessing
+        // Usually - if speed is not the most important aspect for you - you'll
+        // propably to request more postprocessing than we do in this example.
+        const aiScene* scene = importer.ReadFile(
+                                   filename,
+                                   aiProcess_JoinIdenticalVertices    |
+                                   aiProcess_Triangulate              |
+                                   aiProcess_GenSmoothNormals         |
+                                   aiProcess_SortByPType
+                               );
+        return readScene(scene, t, filename, scaling, eps);
+    }
+    bool AssimpReader::readBufferAsTriMesh(const std::string_view& v, const TriMeshModelPtr& t)
+    {
+        //code adapted from http://assimp.sourceforge.net/lib_html/usage.html
+        Assimp::Importer importer;
+        // And have it read the given file with some example postprocessing
+        // Usually - if speed is not the most important aspect for you - you'll
+        // propably to request more postprocessing than we do in this example.
+        const aiScene* scene = importer.ReadFileFromMemory(
+                                   v.data(), v.size(),
+                                   aiProcess_JoinIdenticalVertices    |
+                                   aiProcess_Triangulate              |
+                                   aiProcess_GenSmoothNormals         |
+                                   aiProcess_SortByPType
+                               );
+        return readScene(scene, t, "<MEMORY_BUFFER>", scaling, eps);
+    }
+
+    TriMeshModelPtr AssimpReader::readFileAsTriMesh(const std::string& filename)
+    {
+        auto tri = boost::make_shared<TriMeshModel>();
+        if (!readFileAsTriMesh(filename, tri))
+        {
+            return nullptr;
+        }
+        return tri;
+    }
+    TriMeshModelPtr AssimpReader::readBufferAsTriMesh(const std::string_view& v)
+    {
+        auto tri = boost::make_shared<TriMeshModel>();
+        if (!readBufferAsTriMesh(v, tri))
+        {
+            return nullptr;
+        }
+        return tri;
+    }
+
+    ManipulationObjectPtr AssimpReader::readFileAsManipulationObject(const std::string& filename, const std::string& name)
+    {
+        if (auto tri = readFileAsTriMesh(filename))
+        {
+            return boost::make_shared<ManipulationObject>(name, tri, filename);
+        }
+        return nullptr;
+    }
+    ManipulationObjectPtr AssimpReader::readBufferAsManipulationObject(const std::string_view& v, const std::string& name)
+    {
+        if (auto tri = readBufferAsTriMesh(v))
+        {
+            return boost::make_shared<ManipulationObject>(name, tri);
+        }
+        return nullptr;
+    }
+
+    void AssimpReader::set_epsilon(float _eps)
+    {
+        eps = _eps;
+    }
+
+    float AssimpReader::epsilon() const
+    {
+        return eps;
+    }
+
+    void AssimpReader::setScaling(float s)
+    {
+        scaling = s;
     }
 }
 

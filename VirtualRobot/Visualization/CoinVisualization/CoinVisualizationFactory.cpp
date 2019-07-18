@@ -237,7 +237,7 @@ namespace VirtualRobot
             std::string extension = filepath.extension().string();
             BaseIO::getLowerCase(extension);
 
-            if (extension == ".iv")
+            if (extension == ".iv" || extension == ".wrl")
             {
                 if (scaleX != 1.0f || scaleY != 1.0f || scaleZ != 1.0f)
                 {
@@ -279,7 +279,7 @@ namespace VirtualRobot
         TriMeshModelPtr t(new TriMeshModel());
         AssimpReader r;
         r.setScaling(1000.0f); // mm
-        bool readOK = r.read(filename, t);
+        bool readOK = r.readFileAsTriMesh(filename, t);
 
         if (!readOK)
         {

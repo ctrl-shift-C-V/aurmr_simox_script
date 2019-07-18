@@ -15,15 +15,21 @@ namespace VirtualRobot
         AssimpReader(float eps = FLT_MIN, float scaling = 1);
         virtual ~AssimpReader() = default;
 
-        std::string get_description() const
+        static std::string get_description()
         {
             return "Open Asset Import Library";
         }
-        std::string get_extensions() const;
+        static std::string get_extensions();
 
         // read data and store it to trimesh
-        bool read(const std::string& _filename, const TriMeshModelPtr& t);
-        bool readFromBuffer(const std::string_view& v, const TriMeshModelPtr& t);
+        bool readFileAsTriMesh(const std::string& _filename, const TriMeshModelPtr& t);
+        bool readBufferAsTriMesh(const std::string_view& v, const TriMeshModelPtr& t);
+
+        TriMeshModelPtr readFileAsTriMesh(const std::string& filename);
+        TriMeshModelPtr readBufferAsTriMesh(const std::string_view& v);
+
+        ManipulationObjectPtr readFileAsManipulationObject(const std::string& filename, const std::string& name = "");
+        ManipulationObjectPtr readBufferAsManipulationObject(const std::string_view& v, const std::string& name = "");
 
         /** Set the threshold to be used for considering two point to be equal.
             Can be used to merge small gaps */
@@ -34,7 +40,6 @@ namespace VirtualRobot
 
         void setScaling(float s);
     private:
-        bool read(const aiScene* scene, const TriMeshModelPtr& t, const std::string& filename);
         float scaling;
         float eps;
     };
