@@ -29,6 +29,10 @@ with interfaces, making it easy to exchange e.g. the collision engine or the vis
 functionality. As a reference implementation Simox offers Coin3D/SoQt-based visualization
 support.
 
+Documentation  
+-------
+https://gitlab.com/Simox/simox/wikis/home
+
 License
 -------
 GNU Lesser General Public License, version 2.1 or any later version.
@@ -62,5 +66,4 @@ https://gitlab.com/Simox/simox
 Mailing list:  
 https://groups.google.com/d/forum/simox
 
-Documentation:  
-https://gitlab.com/Simox/simox/wikis/home
+
