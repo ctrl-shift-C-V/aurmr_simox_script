@@ -31,7 +31,7 @@ namespace VirtualRobot
 
     float PoseQualityMeasurement::getPoseQuality(const Eigen::VectorXf& /*direction*/)
     {
-        VR_ASSERT(direction.rows() == 3 || direction.rows() == 6);
+        // VR_ASSERT(direction.rows() == 3 || direction.rows() == 6);
         VR_WARNING << "Please use derived classes..." << endl;
         return 0.0f;
     }
