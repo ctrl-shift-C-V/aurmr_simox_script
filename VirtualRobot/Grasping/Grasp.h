@@ -100,7 +100,7 @@ namespace VirtualRobot
             The transformation is given in the coordinate system of the tcp (whereas the tcp belongs to the eef).
             This transformation specifies the tcp to object relation.
         */
-        Eigen::Matrix4f getTransformation() const;
+        const Eigen::Matrix4f& getTransformation() const;
 
         std::string toXML(int tabs = 2) const;
 
@@ -112,9 +112,9 @@ namespace VirtualRobot
         //! Optionally the configuration of the fingers / actors can be stored.
         void setConfiguration(const std::map<std::string, float>& config);
 
-        
+
     protected:
-        
+
         std::map< std::string, float > eefConfiguration; //!< Optional: the configuration of the actors.
 
         Eigen::Matrix4f poseTcp;    //!< The pose in TCP's coordinate system

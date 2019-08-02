@@ -39,6 +39,7 @@ namespace VirtualRobot
 
         ManipulationObject(const std::string& name, VisualizationNodePtr visualization = VisualizationNodePtr(), CollisionModelPtr collisionModel = CollisionModelPtr(), const SceneObject::Physics& p = SceneObject::Physics(), CollisionCheckerPtr colChecker = CollisionCheckerPtr());
 
+        ManipulationObject(const std::string& name, const TriMeshModelPtr& trimesh, const std::string& filename = "");
         /*!
         */
         ~ManipulationObject() override;

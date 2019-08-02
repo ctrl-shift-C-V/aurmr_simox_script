@@ -10,11 +10,13 @@ namespace VirtualRobot
 
     ManipulationObject::ManipulationObject(const std::string& name, VisualizationNodePtr visualization, CollisionModelPtr collisionModel, const SceneObject::Physics& p, CollisionCheckerPtr colChecker)
         : Obstacle(name, visualization, collisionModel, p, colChecker)
-    {
-    }
+    {}
 
-    ManipulationObject::~ManipulationObject()
-        = default;
+    ManipulationObject::ManipulationObject(const std::string& name, const TriMeshModelPtr& trimesh, const std::string& filename)
+        : Obstacle(name, trimesh, filename)
+    {}
+
+    ManipulationObject::~ManipulationObject() = default;
 
     void ManipulationObject::print(bool printDecoration)
     {

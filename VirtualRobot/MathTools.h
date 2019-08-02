@@ -399,11 +399,7 @@ namespace VirtualRobot
 
         struct TriangleFace
         {
-            TriangleFace()
-                : id1(UINT_MAX), id2(UINT_MAX), id3(UINT_MAX),
-                  idColor1(UINT_MAX), idColor2(UINT_MAX), idColor3(UINT_MAX),
-                  idNormal1(UINT_MAX), idNormal2(UINT_MAX), idNormal3(UINT_MAX),
-                  idMaterial(UINT_MAX) {}
+            TriangleFace() = default;
 
             /**
              * Flips the orientation of the contained vertex and the normal.
@@ -437,25 +433,25 @@ namespace VirtualRobot
             }
 
             // id == position in vertex array
-            unsigned int id1;
-            unsigned int id2;
-            unsigned int id3;
+            unsigned int id1{UINT_MAX};
+            unsigned int id2{UINT_MAX};
+            unsigned int id3{UINT_MAX};
 
             // idColor == position in color array
-            unsigned int idColor1;
-            unsigned int idColor2;
-            unsigned int idColor3;
+            unsigned int idColor1{UINT_MAX};
+            unsigned int idColor2{UINT_MAX};
+            unsigned int idColor3{UINT_MAX};
 
             //idNormal == position in normal array
-            unsigned int idNormal1;
-            unsigned int idNormal2;
-            unsigned int idNormal3;
+            unsigned int idNormal1{UINT_MAX};
+            unsigned int idNormal2{UINT_MAX};
+            unsigned int idNormal3{UINT_MAX};
 
             // idMaterial == position in material array
-            unsigned int idMaterial;
+            unsigned int idMaterial{UINT_MAX};
 
             // per face normal (used when no idNormals are given)
-            Eigen::Vector3f normal;
+            Eigen::Vector3f normal{0, 0, 0};
         };
         struct TriangleFace6D
         {

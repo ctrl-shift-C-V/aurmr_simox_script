@@ -20,11 +20,9 @@ namespace VirtualRobot
 
     boost::mutex BaseIO::mutex;
 
-    BaseIO::BaseIO()
-    = default;
+    BaseIO::BaseIO() = default;
 
-    BaseIO::~BaseIO()
-    = default;
+    BaseIO::~BaseIO() = default;
 
     bool BaseIO::isTrue(const char* s)
     {
@@ -354,7 +352,7 @@ namespace VirtualRobot
         Units uAngle("rad");
         Units uLength("mm");
 
-        for (auto & i : unitsAttr)
+        for (auto& i : unitsAttr)
         {
             if (i.isAngle())
             {
@@ -455,7 +453,7 @@ namespace VirtualRobot
         getAllAttributes(node, "unitsAngle", attrStr);
         getAllAttributes(node, "unitsTime", attrStr);
 
-        for (auto & i : attrStr)
+        for (auto& i : attrStr)
         {
             Units unitsAttribute(getLowerCase(i.c_str()));
             result.push_back(unitsAttribute);
@@ -1055,11 +1053,14 @@ namespace VirtualRobot
                 }
                 else
                 {
-                    VisualizationFactoryPtr visualizationFactory = VisualizationFactory::fromName(collisionFileType, NULL);
-
-                    if (visualizationFactory)
+                    if (auto factory = VisualizationFactory::fromName(collisionFileType, NULL))
                     {
-                        visualizationNode = visualizationFactory->createUnitedVisualization(visuNodes);
+                        visualizationNode = factory->createUnitedVisualization(visuNodes);
+                    }
+                    else if (auto factory = VisualizationFactory::fromName("inventor", NULL))
+                    {
+                        VR_WARNING << "VisualizationFactory of type '" << collisionFileType << "' not present. Trying factory for 'inventor' " << endl;
+                        visualizationNode = factory->createUnitedVisualization(visuNodes);
                     }
                     else
                     {
@@ -1140,13 +1141,25 @@ namespace VirtualRobot
 
             if (visuFile != "")
             {
-                VisualizationFactoryPtr visualizationFactory = VisualizationFactory::fromName(fileType, NULL);
+                VisualizationFactoryPtr factory = VisualizationFactory::fromName(fileType, NULL);
 
-                if (visualizationFactory)
+                if (factory = VisualizationFactory::fromName(fileType, NULL))
                 {
                     if (tmpFileType == fileType)
                     {
-                        result.push_back(visualizationFactory->getVisualizationFromFile(visuFile, bbox));
+                        result.push_back(factory->getVisualizationFromFile(visuFile, bbox));
+                    }
+                    else
+                    {
+                        VR_WARNING << "Ignoring data from " << visuFileXMLNode->value() << ": visualization type does not match to data from before." << endl;
+                    }
+                }
+                else if (auto factory = VisualizationFactory::fromName("inventor", NULL))
+                {
+                    VR_WARNING << "VisualizationFactory of type '" << fileType << "' not present. Trying factory for 'inventor' " << endl;
+                    if (tmpFileType == fileType)
+                    {
+                        result.push_back(factory->getVisualizationFromFile(visuFile, bbox));
                     }
                     else
                     {
@@ -1341,7 +1354,7 @@ namespace VirtualRobot
             Units uWeight("kg");
             Units uLength("m");
 
-            for (auto & i : unitsAttr)
+            for (auto& i : unitsAttr)
             {
                 if (i.isWeight())
                 {
@@ -1735,7 +1748,7 @@ namespace VirtualRobot
 
         RobotPtr r;
 
-        for (auto & robot : robots)
+        for (auto& robot : robots)
         {
             if (robot->getType() == robotName)
             {
@@ -1748,7 +1761,7 @@ namespace VirtualRobot
         RobotNodeSetPtr rns = r->getRobotNodeSet(nodeSetName);
         THROW_VR_EXCEPTION_IF(!rns, "Could not find RNS with name " << nodeSetName << " in robot " << robotName);
 
-        assert(dim>=0);
+        assert(dim >= 0);
         if (static_cast<unsigned int>(dim) != rns->getSize())
         {
             VR_WARNING << " Invalid dim attribute (" << dim << "). Setting dimension to " << rns->getSize() << endl;
