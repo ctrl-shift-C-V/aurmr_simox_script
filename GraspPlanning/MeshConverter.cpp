@@ -114,7 +114,7 @@ namespace GraspStudio
         return -1;
     }
 
-    VirtualRobot::ObstaclePtr MeshConverter::RefineObjectSurface(VirtualRobot::ObstaclePtr object, float maxDist)
+    VirtualRobot::ObstaclePtr MeshConverter::RefineObjectSurface(VirtualRobot::ObstaclePtr object, float maxDist, bool verbose)
     {
         VirtualRobot::ObstaclePtr res;
 
@@ -130,7 +130,10 @@ namespace GraspStudio
             return res;
         }
 
-        VR_INFO << "Processing object with " << tm->faces.size() << " triangles" << endl;
+        if (verbose)
+        {
+            VR_INFO << "Processing object with " << tm->faces.size() << " triangles" << endl;
+        }
 
         // first create new object
         TriMeshModelPtr triMesh2(new TriMeshModel());
