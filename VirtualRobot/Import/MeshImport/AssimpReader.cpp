@@ -9,7 +9,7 @@
 
 namespace
 {
-    bool readScene(const aiScene* scene, const VirtualRobot::TriMeshModelPtr& t, const std::string& filename, float scaling, float eps)
+    bool readScene(const aiScene* scene, const VirtualRobot::TriMeshModelPtr& t, const std::string& filename, float scaling, float eps, bool mergeMultipleMeshes)
     {
         if (!t)
         {
@@ -26,9 +26,15 @@ namespace
             VR_ERROR << "mesh from '" << filename << "' has no root node\n";
             return false;
         }
-        if (scene->mNumMeshes != 1)
+        if (scene->mNumMeshes == 0)
         {
-            VR_ERROR << "mesh from '" << filename << "' has not exactly one mesh\n";
+            VR_ERROR << "mesh from '" << filename << "' has no mesh\n";
+            return false;
+        }
+        if (scene->mNumMeshes > 1 && !mergeMultipleMeshes)
+        {
+            VR_ERROR << "mesh from '" << filename << "' has not exactly one mesh"
+                     << " It has " << scene->mNumMeshes << " meshes\n";
             return false;
         }
         if (!scene->mMeshes[0])
@@ -37,47 +43,55 @@ namespace
             return false;
         }
 
-        const aiMesh& m = *(scene->mMeshes[0]);
-        if (!(m.mVertices && m.mNumVertices))
-        {
-            VR_ERROR << "mesh from '" << filename << "' has no vertices\n";
-            return false;
-        }
-        if (!(m.mFaces && m.mNumFaces))
-        {
-            VR_ERROR << "mesh from '" << filename << "' has no vertices\n";
-            return false;
-        }
-        if (!m.mNormals)
-        {
-            VR_ERROR << "mesh from '" << filename << "' has no normals (and none were generated when loading it)\n";
-            return false;
-        }
-
         t->clear();
-        for (unsigned i = 0; i < m.mNumVertices; ++i)
+        for (std::size_t idxMesh = 0; idxMesh < scene->mNumMeshes; ++idxMesh)
         {
-            const auto& v = m.mVertices[i];
-            const auto& n = m.mNormals[i];
-            t->addVertex({v.x, v.y, v.z});
-            t->addNormal(Eigen::Vector3f{n.x, n.y, n.z}.normalized());
-        }
-        for (unsigned i = 0; i < m.mNumFaces; ++i)
-        {
-            const auto& f = m.mFaces[i];
-            if (f.mNumIndices != 3)
+            const aiMesh& m = *(scene->mMeshes[idxMesh]);
+            if (!(m.mVertices && m.mNumVertices))
             {
-                VR_ERROR << "mesh from '" << filename << "' has face (# " << i << ") with the wrong number of vertices\n";
+                VR_ERROR << "mesh[" << idxMesh << "] from '" << filename
+                         << "' has no vertices\n";
                 return false;
             }
-            VirtualRobot::MathTools::TriangleFace fc;
-            fc.id1 = f.mIndices[0];
-            fc.id2 = f.mIndices[1];
-            fc.id3 = f.mIndices[2];
-            fc.idNormal1 = f.mIndices[0];
-            fc.idNormal2 = f.mIndices[1];
-            fc.idNormal3 = f.mIndices[2];
-            t->addFace(fc);
+            if (!(m.mFaces && m.mNumFaces))
+            {
+                VR_ERROR << "mesh[" << idxMesh << "] from '" << filename
+                         << "' has no vertices\n";
+                return false;
+            }
+            if (!m.mNormals)
+            {
+                VR_ERROR << "mesh[" << idxMesh << "] from '" << filename
+                         << "' has no normals (and none were generated when loading it)\n";
+                return false;
+            }
+
+            for (unsigned i = 0; i < m.mNumVertices; ++i)
+            {
+                const auto& v = m.mVertices[i];
+                const auto& n = m.mNormals[i];
+                t->addVertex({v.x, v.y, v.z});
+                t->addNormal(Eigen::Vector3f{n.x, n.y, n.z}.normalized());
+            }
+            for (unsigned i = 0; i < m.mNumFaces; ++i)
+            {
+                const auto& f = m.mFaces[i];
+                if (f.mNumIndices != 3)
+                {
+                    VR_ERROR << "mesh[" << idxMesh << "] from '" << filename
+                             << "' has face (# " << i
+                             << ") with the wrong number of vertices\n";
+                    return false;
+                }
+                VirtualRobot::MathTools::TriangleFace fc;
+                fc.id1 = f.mIndices[0];
+                fc.id2 = f.mIndices[1];
+                fc.id3 = f.mIndices[2];
+                fc.idNormal1 = f.mIndices[0];
+                fc.idNormal2 = f.mIndices[1];
+                fc.idNormal3 = f.mIndices[2];
+                t->addFace(fc);
+            }
         }
 
         t->scale(scaling);
@@ -114,7 +128,7 @@ namespace VirtualRobot
         return extensions;
     }
 
-    bool AssimpReader::readFileAsTriMesh(const std::string& filename, const TriMeshModelPtr& t)
+    bool AssimpReader::readFileAsTriMesh(const std::string& filename, const TriMeshModelPtr& t, bool mergeMultipleMeshes)
     {
         //code adapted from http://assimp.sourceforge.net/lib_html/usage.html
         Assimp::Importer importer;
@@ -128,9 +142,9 @@ namespace VirtualRobot
                                    aiProcess_GenSmoothNormals         |
                                    aiProcess_SortByPType
                                );
-        return readScene(scene, t, filename, scaling, eps);
+        return readScene(scene, t, filename, scaling, eps, mergeMultipleMeshes);
     }
-    bool AssimpReader::readBufferAsTriMesh(const std::string_view& v, const TriMeshModelPtr& t)
+    bool AssimpReader::readBufferAsTriMesh(const std::string_view& v, const TriMeshModelPtr& t, bool mergeMultipleMeshes)
     {
         //code adapted from http://assimp.sourceforge.net/lib_html/usage.html
         Assimp::Importer importer;
@@ -144,39 +158,40 @@ namespace VirtualRobot
                                    aiProcess_GenSmoothNormals         |
                                    aiProcess_SortByPType
                                );
-        return readScene(scene, t, "<MEMORY_BUFFER>", scaling, eps);
+        return readScene(scene, t, "<MEMORY_BUFFER>", scaling, eps, mergeMultipleMeshes);
     }
 
-    TriMeshModelPtr AssimpReader::readFileAsTriMesh(const std::string& filename)
+    TriMeshModelPtr AssimpReader::readFileAsTriMesh(const std::string& filename, bool mergeMultipleMeshes)
     {
         auto tri = boost::make_shared<TriMeshModel>();
-        if (!readFileAsTriMesh(filename, tri))
-        {
-            return nullptr;
-        }
-        return tri;
-    }
-    TriMeshModelPtr AssimpReader::readBufferAsTriMesh(const std::string_view& v)
-    {
-        auto tri = boost::make_shared<TriMeshModel>();
-        if (!readBufferAsTriMesh(v, tri))
+        if (!readFileAsTriMesh(filename, tri, mergeMultipleMeshes))
         {
             return nullptr;
         }
         return tri;
     }
 
-    ManipulationObjectPtr AssimpReader::readFileAsManipulationObject(const std::string& filename, const std::string& name)
+    TriMeshModelPtr AssimpReader::readBufferAsTriMesh(const std::string_view& v, bool mergeMultipleMeshes)
     {
-        if (auto tri = readFileAsTriMesh(filename))
+        auto tri = boost::make_shared<TriMeshModel>();
+        if (!readBufferAsTriMesh(v, tri, mergeMultipleMeshes))
+        {
+            return nullptr;
+        }
+        return tri;
+    }
+
+    ManipulationObjectPtr AssimpReader::readFileAsManipulationObject(const std::string& filename, const std::string& name, bool mergeMultipleMeshes)
+    {
+        if (auto tri = readFileAsTriMesh(filename, mergeMultipleMeshes))
         {
             return boost::make_shared<ManipulationObject>(name, tri, filename);
         }
         return nullptr;
     }
-    ManipulationObjectPtr AssimpReader::readBufferAsManipulationObject(const std::string_view& v, const std::string& name)
+    ManipulationObjectPtr AssimpReader::readBufferAsManipulationObject(const std::string_view& v, const std::string& name, bool mergeMultipleMeshes)
     {
-        if (auto tri = readBufferAsTriMesh(v))
+        if (auto tri = readBufferAsTriMesh(v, mergeMultipleMeshes))
         {
             return boost::make_shared<ManipulationObject>(name, tri);
         }

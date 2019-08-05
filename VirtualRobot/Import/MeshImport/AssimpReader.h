@@ -22,14 +22,14 @@ namespace VirtualRobot
         static std::string get_extensions();
 
         // read data and store it to trimesh
-        bool readFileAsTriMesh(const std::string& _filename, const TriMeshModelPtr& t);
-        bool readBufferAsTriMesh(const std::string_view& v, const TriMeshModelPtr& t);
+        bool readFileAsTriMesh(const std::string& _filename, const TriMeshModelPtr& t, bool mergeMultipleMeshes = false);
+        bool readBufferAsTriMesh(const std::string_view& v, const TriMeshModelPtr& t, bool mergeMultipleMeshes = false);
 
-        TriMeshModelPtr readFileAsTriMesh(const std::string& filename);
-        TriMeshModelPtr readBufferAsTriMesh(const std::string_view& v);
+        TriMeshModelPtr readFileAsTriMesh(const std::string& filename, bool mergeMultipleMeshes = false);
+        TriMeshModelPtr readBufferAsTriMesh(const std::string_view& v, bool mergeMultipleMeshes = false);
 
-        ManipulationObjectPtr readFileAsManipulationObject(const std::string& filename, const std::string& name = "");
-        ManipulationObjectPtr readBufferAsManipulationObject(const std::string_view& v, const std::string& name = "");
+        ManipulationObjectPtr readFileAsManipulationObject(const std::string& filename, const std::string& name = "", bool mergeMultipleMeshes = false);
+        ManipulationObjectPtr readBufferAsManipulationObject(const std::string_view& v, const std::string& name = "", bool mergeMultipleMeshes = false);
 
         /** Set the threshold to be used for considering two point to be equal.
             Can be used to merge small gaps */
