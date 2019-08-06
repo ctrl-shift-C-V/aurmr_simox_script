@@ -164,7 +164,10 @@ namespace GraspStudio
             // low number of contacts: check if it helps to move away (small object)
             if (retreatOnLowContacts && contacts.size() < 2)
             {
-                VR_INFO << "Low number of contacts, retreating hand (might be useful for a small object)" << endl;
+                if (verbose)
+                {
+                    VR_INFO << "Low number of contacts, retreating hand (might be useful for a small object)" << endl;
+                }
                 if (moveEEFAway(approach->getApproachDirGlobal(), 5.0f, 10))
                 {
                     contacts = eef->closeActors(object);

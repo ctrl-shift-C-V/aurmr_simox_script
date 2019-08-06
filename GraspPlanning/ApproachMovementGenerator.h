@@ -89,6 +89,8 @@ namespace GraspStudio
         // opens hand by setting the preshape (if defined) or just opening the actors in case no preshape has been defined
         virtual void openHand();
 
+        void setVerbose(bool v);
+
     protected:
 
 
@@ -104,6 +106,8 @@ namespace GraspStudio
 
         std::string name;
         std::string graspPreshape;
+
+        bool verbose = false;
     };
 
 }

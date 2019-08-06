@@ -88,12 +88,12 @@ namespace jsonbase
     {
         for (int row = 0; row < matrix.rows(); ++row)
         {
-            nlohmann::json column = nlohmann::json::array();
+            nlohmann::json jrow = nlohmann::json::array();
             for (int col = 0; col < matrix.cols(); ++col)
             {
-                column.push_back(matrix(row, col));
+                jrow.push_back(matrix(row, col));
             }
-            j.push_back(column);
+            j.push_back(jrow);
         }
     }
     

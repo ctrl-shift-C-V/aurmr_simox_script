@@ -13,6 +13,10 @@ using namespace std;
 
 namespace GraspStudio
 {
+    void ApproachMovementGenerator::setVerbose(bool v)
+    {
+        verbose = v;
+    }
 
     ApproachMovementGenerator::ApproachMovementGenerator(VirtualRobot::SceneObjectPtr object, VirtualRobot::EndEffectorPtr eef, const std::string& graspPreshape)
         : object(object), eef(eef), graspPreshape(graspPreshape)
