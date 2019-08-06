@@ -31,7 +31,7 @@ if (Boost_FOUND)
     # source: https://stackoverflow.com/a/3500721
     target_compile_definitions(${PROJECT_NAME} PRIVATE -DBOOST_NO_CXX11_SCOPED_ENUMS)
     
-    target_link_libraries(${PROJECT_NAME} ${LIBS})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS})
     
     
     #######################################################################################
@@ -41,10 +41,10 @@ if (Boost_FOUND)
     install(TARGETS ${PROJECT_NAME}
         # IMPORTANT: Add the library to the "export-set"
         EXPORT SimoxTargets
-        RUNTIME DESTINATION "${INSTALL_BIN_DIR}" COMPONENT bin
+        RUNTIME DESTINATION bin COMPONENT bin
         COMPONENT dev)
     
     message( STATUS " ** Simox application ${PROJECT_NAME} will be placed into " ${Simox_BIN_DIR})
-    message( STATUS " ** Simox application ${PROJECT_NAME} will be installed into " ${INSTALL_BIN_DIR})
+    message( STATUS " ** Simox application ${PROJECT_NAME} will be installed into " bin)
 
 endif()

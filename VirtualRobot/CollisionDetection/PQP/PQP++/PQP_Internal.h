@@ -92,7 +92,7 @@ namespace PQP
 
         int num_bv_tests;
         int num_tri_tests;
-        double query_time_secs;
+        //        double query_time_secs;
 
         // xform from model 1 to model 2
 
@@ -119,10 +119,10 @@ namespace PQP
         {
             return num_tri_tests;
         }
-        double QueryTimeSecs()
-        {
-            return query_time_secs;
-        }
+        //        double QueryTimeSecs()
+        //        {
+        //            return query_time_secs;
+        //        }
 
         // free the list of contact pairs; ordinarily this list is reused
         // for each query, and only deleted in the destructor.
@@ -157,7 +157,7 @@ namespace PQP
 
         int num_bv_tests;
         int num_tri_tests;
-        double query_time_secs;
+        //        double query_time_secs;
 
         // xform from model 1 to model 2
 
@@ -187,10 +187,10 @@ namespace PQP
         {
             return num_tri_tests;
         }
-        double QueryTimeSecs()
-        {
-            return query_time_secs;
-        }
+        //        double QueryTimeSecs()
+        //        {
+        //            return query_time_secs;
+        //        }
 
         // The following distance and points established the minimum distance
         // for the models, within the relative and absolute error bounds
@@ -228,7 +228,7 @@ namespace PQP
 
         int num_bv_tests;
         int num_tri_tests;
-        double query_time_secs;
+        //        double query_time_secs;
 
         // xform from model 1 to model 2
 
@@ -253,10 +253,10 @@ namespace PQP
         {
             return num_tri_tests;
         }
-        double QueryTimeSecs()
-        {
-            return query_time_secs;
-        }
+        //        double QueryTimeSecs()
+        //        {
+        //            return query_time_secs;
+        //        }
 
         // If the models are closer than ( <= ) tolerance, these points
         // and distance were what established this.  Otherwise,

@@ -13,6 +13,10 @@ using namespace std;
 
 namespace GraspStudio
 {
+    void ApproachMovementGenerator::setVerbose(bool v)
+    {
+        verbose = v;
+    }
 
     ApproachMovementGenerator::ApproachMovementGenerator(VirtualRobot::SceneObjectPtr object, VirtualRobot::EndEffectorPtr eef, const std::string& graspPreshape)
         : object(object), eef(eef), graspPreshape(graspPreshape)
@@ -44,7 +48,7 @@ namespace GraspStudio
     }
 
     ApproachMovementGenerator::~ApproachMovementGenerator()
-    = default;
+        = default;
 
 
     VirtualRobot::RobotPtr ApproachMovementGenerator::getEEFRobotClone()
@@ -58,9 +62,13 @@ namespace GraspStudio
         if (!graspPreshape.empty()
             && eef_cloned->hasPreshape(graspPreshape)
             && eef_cloned->getPreshape(graspPreshape)->getTCP())
+        {
             tcp = eef_cloned->getPreshape(graspPreshape)->getTCP();
+        }
         else
+        {
             tcp = eef_cloned->getGCP();
+        }
         eefRobot->setGlobalPoseForRobotNode(tcp, pose);
         return true;
     }
@@ -83,9 +91,13 @@ namespace GraspStudio
     {
         VirtualRobot::RobotNodePtr tcp;
         if (!graspPreshape.empty() && eef_cloned->hasPreshape(graspPreshape) && eef_cloned->getPreshape(graspPreshape)->getTCP())
+        {
             tcp = eef_cloned->getPreshape(graspPreshape)->getTCP();
+        }
         else
+        {
             tcp = eef_cloned->getGCP();
+        }
         return tcp->getGlobalPose();
     }
 

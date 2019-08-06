@@ -31,14 +31,14 @@ namespace VirtualRobot
     {
     }
 
-    RobotPtr SimoxURDFFactory::loadFromFile(const std::string& filename, RobotIO::RobotDescription loadMode)
+    RobotPtr SimoxURDFFactory::loadFromFile(const std::string& filename, RobotIO::RobotDescription)
     {
 
         RobotPtr result;
-        boost::shared_ptr<urdf::ModelInterface> urdf_model = urdf::parseURDFFile(filename.c_str());
+        urdf::ModelInterfaceSharedPtr urdf_model = urdf::parseURDFFile(filename.c_str());
 
-        boost::filesystem::path filenameBaseComplete(filename);
-        boost::filesystem::path filenameBasePath = filenameBaseComplete.branch_path();
+        std::filesystem::path filenameBaseComplete(filename);
+        std::filesystem::path filenameBasePath = filenameBaseComplete.parent_path();
         std::string basePath = filenameBasePath.string();
 
         if (!urdf_model)
@@ -89,7 +89,7 @@ namespace VirtualRobot
         return URDFFactory;
     }
 
-    VirtualRobot::RobotPtr SimoxURDFFactory::createRobot(boost::shared_ptr<urdf::ModelInterface> urdfModel, const std::string& basePath, bool useColModelsIfNoVisuModel)
+    VirtualRobot::RobotPtr SimoxURDFFactory::createRobot(std::shared_ptr<urdf::ModelInterface> urdfModel, const std::string& basePath, bool useColModelsIfNoVisuModel)
     {
         THROW_VR_EXCEPTION_IF(!urdfModel, "NULL data");
         std::string robotType = urdfModel->getName();
@@ -153,7 +153,7 @@ namespace VirtualRobot
         return res;
     }
 
-    std::string SimoxURDFFactory::getFilename(const std::string& f, const string &basePath)
+    std::string SimoxURDFFactory::getFilename(const std::string& f, const string& basePath)
     {
         if (f.find(basePath) == 0)
         {
@@ -169,8 +169,8 @@ namespace VirtualRobot
         {
             // No ROS package structure, just try to find the file in the data directory
 
-            boost::filesystem::path p_base(basePath);
-            boost::filesystem::path p_f(f);
+            std::filesystem::path p_base(basePath);
+            std::filesystem::path p_f(f);
             result = (p_base / p_f).string();
 
             if (!VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(result))
@@ -189,20 +189,20 @@ namespace VirtualRobot
 
             std::string package_base = basePath;
 
-            if(result.find("_description/") != std::string::npos)
+            if (result.find("_description/") != std::string::npos)
             {
                 std::string package_name = result.substr(0, result.find("_description/") + 12);
                 package_base = basePath.substr(0, basePath.rfind(package_name));
             }
 
-            boost::filesystem::path p_f(result);
-            boost::filesystem::path p_base(package_base);
+            std::filesystem::path p_f(result);
+            std::filesystem::path p_base(package_base);
             result = (p_base / p_f).string();
         }
         return result;
     }
 
-    VirtualRobot::VisualizationNodePtr SimoxURDFFactory::convertVisu(boost::shared_ptr<Geometry> g, urdf::Pose& pose, const std::string& basePath)
+    VirtualRobot::VisualizationNodePtr SimoxURDFFactory::convertVisu(std::shared_ptr<Geometry> g, urdf::Pose& pose, const std::string& basePath)
     {
 
         const float scale = 1000.0f; // mm
@@ -218,14 +218,14 @@ namespace VirtualRobot
         {
             case urdf::Geometry::BOX:
             {
-                boost::shared_ptr<Box> b = boost::dynamic_pointer_cast<Box>(g);
+                std::shared_ptr<Box> b = boost::dynamic_pointer_cast<Box>(g);
                 res = factory->createBox(b->dim.x * scale, b->dim.y * scale, b->dim.z * scale);
             }
             break;
 
             case urdf::Geometry::SPHERE:
             {
-                boost::shared_ptr<Sphere> s = boost::dynamic_pointer_cast<Sphere>(g);
+                std::shared_ptr<Sphere> s = boost::dynamic_pointer_cast<Sphere>(g);
                 res = factory->createSphere(s->radius * scale);
             }
             break;
@@ -233,15 +233,15 @@ namespace VirtualRobot
 
             case urdf::Geometry::CYLINDER:
             {
-                boost::shared_ptr<Cylinder> c = boost::dynamic_pointer_cast<Cylinder>(g);
+                std::shared_ptr<Cylinder> c = boost::dynamic_pointer_cast<Cylinder>(g);
                 res = factory->createCylinder(c->radius * scale, c->length * scale);
-                
+
             }
             break;
 
             case urdf::Geometry::MESH:
             {
-                boost::shared_ptr<Mesh> m = boost::dynamic_pointer_cast<Mesh>(g);
+                std::shared_ptr<Mesh> m = boost::dynamic_pointer_cast<Mesh>(g);
                 std::string filename = getFilename(m->filename, basePath);
                 res = factory->getVisualizationFromFile(filename, false, m->scale.x, m->scale.y, m->scale.z);
             }
@@ -256,7 +256,7 @@ namespace VirtualRobot
             Eigen::Matrix4f p = convertPose(pose);
             if (g->type == urdf::Geometry::CYLINDER)
             {
-				// inventor and urdf differ in the conventions for cylinders
+                // inventor and urdf differ in the conventions for cylinders
                 p = p * MathTools::axisangle2eigen4f(Eigen::Vector3f::UnitX(), M_PI_2);
             }
             factory->applyDisplacement(res, p);
@@ -265,18 +265,18 @@ namespace VirtualRobot
         return res;
     }
 
-    VisualizationNodePtr SimoxURDFFactory::convertVisuArray(std::vector<boost::shared_ptr<urdf::Collision> > visu_array, const string &basePath)
+    VisualizationNodePtr SimoxURDFFactory::convertVisuArray(std::vector<std::shared_ptr<urdf::Collision> > visu_array, const string& basePath)
     {
         VirtualRobot::VisualizationNodePtr res;
         boost::shared_ptr<VisualizationFactory> factory = CoinVisualizationFactory::createInstance(NULL);
 
-        if (visu_array.size()==0)
+        if (visu_array.size() == 0)
         {
             return res;
         }
 
         std::vector< VisualizationNodePtr > visus;
-        for (size_t i=0; i<visu_array.size(); i++)
+        for (size_t i = 0; i < visu_array.size(); i++)
         {
             VirtualRobot::VisualizationNodePtr v = convertVisu(visu_array[i]->geometry, visu_array[i]->origin, basePath);
             if (v)
@@ -288,18 +288,18 @@ namespace VirtualRobot
         return res;
     }
 
-    VisualizationNodePtr SimoxURDFFactory::convertVisuArray(std::vector<boost::shared_ptr<urdf::Visual> > visu_array, const string &basePath)
+    VisualizationNodePtr SimoxURDFFactory::convertVisuArray(std::vector<std::shared_ptr<urdf::Visual> > visu_array, const string& basePath)
     {
         VirtualRobot::VisualizationNodePtr res;
         boost::shared_ptr<VisualizationFactory> factory = CoinVisualizationFactory::createInstance(NULL);
 
-        if (visu_array.size()==0)
+        if (visu_array.size() == 0)
         {
             return res;
         }
 
         std::vector< VisualizationNodePtr > visus;
-        for (size_t i=0; i<visu_array.size(); i++)
+        for (size_t i = 0; i < visu_array.size(); i++)
         {
             VirtualRobot::VisualizationNodePtr v = convertVisu(visu_array[i]->geometry, visu_array[i]->origin, basePath);
             if (v)
@@ -311,9 +311,8 @@ namespace VirtualRobot
         return res;
     }
 
-    RobotNodePtr SimoxURDFFactory::createBodyNode(RobotPtr robo, boost::shared_ptr<Link> urdfBody, const std::string& basePath, bool useColModelsIfNoVisuModel)
+    RobotNodePtr SimoxURDFFactory::createBodyNode(RobotPtr robo, std::shared_ptr<Link> urdfBody, const std::string& basePath, bool useColModelsIfNoVisuModel)
     {
-        const float scale = 1000.0f; // mm
         RobotNodePtr result;
 
         if (!urdfBody)
@@ -335,8 +334,11 @@ namespace VirtualRobot
             {
                 // visual points to first entry in array
                 rnVisu = convertVisuArray(urdfBody->visual_array, basePath);
-            } else
+            }
+            else
+            {
                 rnVisu = convertVisu(urdfBody->visual->geometry, urdfBody->visual->origin, basePath);
+            }
         }
 
         if (urdfBody->collision && urdfBody->collision)
@@ -345,8 +347,11 @@ namespace VirtualRobot
             if (urdfBody->collision_array.size() > 1)
             {
                 v = convertVisuArray(urdfBody->collision_array, basePath);
-            } else
+            }
+            else
+            {
                 v = convertVisu(urdfBody->collision->geometry, urdfBody->collision->origin, basePath);
+            }
 
             if (v)
             {
@@ -383,7 +388,6 @@ namespace VirtualRobot
             physics.localCoM = convertPose(urdfBody->inertial->origin).block(0, 3, 3, 1);
         }
 
-        Eigen::Matrix4f idMatrix = Eigen::Matrix4f::Identity();
         Eigen::Vector3f idVec3 = Eigen::Vector3f::Zero();
         result = fixedNodeFactory->createRobotNode(robo, name, rnVisu, rnCol, 0, 0, 0, preJointTransform, idVec3, idVec3, physics);
 
@@ -392,9 +396,8 @@ namespace VirtualRobot
         return result;
     }
 
-    RobotNodePtr SimoxURDFFactory::createJointNode(RobotPtr robo, boost::shared_ptr<Joint> urdfJoint)
+    RobotNodePtr SimoxURDFFactory::createJointNode(RobotPtr robo, std::shared_ptr<Joint> urdfJoint)
     {
-        const float scale = 1000.0f; // mm
         RobotNodePtr result;
 
         if (!urdfJoint)
@@ -406,7 +409,6 @@ namespace VirtualRobot
         VirtualRobot::RobotNodeFactoryPtr revoluteNodeFactory = VirtualRobot::RobotNodeFactory::fromName(VirtualRobot::RobotNodeRevoluteFactory::getName(), NULL);
         VirtualRobot::RobotNodeFactoryPtr fixedNodeFactory = VirtualRobot::RobotNodeFactory::fromName(VirtualRobot::RobotNodeFixedFactory::getName(), NULL);
 
-        Eigen::Matrix4f idMatrix = Eigen::Matrix4f::Identity();
         Eigen::Vector3f idVec3 = Eigen::Vector3f::Zero();
         std::string name = urdfJoint->name;
 
@@ -431,8 +433,8 @@ namespace VirtualRobot
 
         switch (urdfJoint->type)
         {
-        case urdf::Joint::REVOLUTE:
-        case urdf::Joint::CONTINUOUS:
+            case urdf::Joint::REVOLUTE:
+            case urdf::Joint::CONTINUOUS:
                 result = revoluteNodeFactory->createRobotNode(robo, name, rnVisu, rnCol, limitLo, limitHi, 0, preJointTransform, axis, idVec3, physics);
                 break;
 
@@ -440,7 +442,7 @@ namespace VirtualRobot
                 result = prismaticNodeFactory->createRobotNode(robo, name, rnVisu, rnCol, limitLo, limitHi, 0, preJointTransform, idVec3, axis, physics);
                 break;
 
-           case urdf::Joint::FIXED:
+            case urdf::Joint::FIXED:
                 result = prismaticNodeFactory->createRobotNode(robo, name, rnVisu, rnCol, limitLo, limitHi, 0, preJointTransform, axis, idVec3, physics);
                 break;
 

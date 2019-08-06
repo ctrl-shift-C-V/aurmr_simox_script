@@ -36,7 +36,7 @@ namespace GraspStudio
     }
 
     GenericGraspPlanner::~GenericGraspPlanner()
-    = default;
+        = default;
 
     int GenericGraspPlanner::plan(int nrGrasps, int timeOutMS, VirtualRobot::SceneObjectSetPtr obstacles)
     {
@@ -48,7 +48,7 @@ namespace GraspStudio
 
         if (verbose)
         {
-            GRASPSTUDIO_INFO << ": Searching " << nrGrasps << " grasps for EEF '" << approach->getEEF()->getName() 
+            GRASPSTUDIO_INFO << ": Searching " << nrGrasps << " grasps for EEF '" << approach->getEEF()->getName()
                              << "' and object '" << graspQuality->getObject()->getName() << "'.\n";
             GRASPSTUDIO_INFO << ": Approach movements are generated with " << approach->getName() << endl;
             GRASPSTUDIO_INFO << ": Grasps are evaluated with " << graspQuality->getName() << endl;
@@ -108,7 +108,7 @@ namespace GraspStudio
                 break;
             }
             auto contacts = eef->closeActors(object);
-            if (contacts.size()>=2)
+            if (contacts.size() >= 2)
             {
                 approach->openHand();
                 finishedContactsOK = true;
@@ -130,13 +130,13 @@ namespace GraspStudio
 
         VR_ASSERT(robot);
         VR_ASSERT(tcp);
-        
+
         // GENERATE APPROACH POSE
         // Eigen::Matrix4f pose = approach->createNewApproachPose();
         // bRes = approach->setEEFPose(pose);
-        
+
         bool bRes = approach->setEEFToRandomApproachPose();
-        
+
         if (bRes && obstacles)
         {
             // CHECK VALID APPROACH POSE
@@ -145,7 +145,7 @@ namespace GraspStudio
             VR_ASSERT(obstacles);
 
             if (colChecker->checkCollision(eef->createSceneObjectSet(), obstacles))
-            {                
+            {
                 //                GRASPSTUDIO_INFO << ": Collision detected before closing fingers" << endl;
                 //return VirtualRobot::GraspPtr();
                 bRes = false;
@@ -153,7 +153,7 @@ namespace GraspStudio
         }
 
         contacts.clear();
-        
+
         // CHECK CONTACTS
         if (bRes)
         {
@@ -164,7 +164,10 @@ namespace GraspStudio
             // low number of contacts: check if it helps to move away (small object)
             if (retreatOnLowContacts && contacts.size() < 2)
             {
-                VR_INFO << "Low number of contacts, retreating hand (might be useful for a small object)" << endl;
+                if (verbose)
+                {
+                    VR_INFO << "Low number of contacts, retreating hand (might be useful for a small object)" << endl;
+                }
                 if (moveEEFAway(approach->getApproachDirGlobal(), 5.0f, 10))
                 {
                     contacts = eef->closeActors(object);
@@ -190,19 +193,19 @@ namespace GraspStudio
         // construct grasp
         std::stringstream graspName;
         graspName << graspNameBase << (graspSet->getSize() + 1);
-        
+
         Eigen::Matrix4f poseObject = object->getGlobalPose();
         Eigen::Matrix4f poseTcp = tcp->toLocalCoordinateSystem(poseObject);
-        
+
         VirtualRobot::GraspPtr grasp(new VirtualRobot::Grasp(
-                        graspName.str(), robot->getType(), eef->getName(), poseTcp,
-                        graspPlannerName, 0 /*score*/ ));
-        
+                                         graspName.str(), robot->getType(), eef->getName(), poseTcp,
+                                         graspPlannerName, 0 /*score*/));
+
         // set joint config
         grasp->setConfiguration(eef->getConfiguration()->getRobotNodeJointValueMap());
-        
+
         bool returnNullWhenInvalid = true;
-        
+
         // eval data
         eval.graspTypePower.push_back(true);
         eval.nrGraspsGenerated++;
@@ -213,7 +216,7 @@ namespace GraspStudio
             float ms = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
             return ms;
         };
-        
+
         if (!bRes)
         {
             // result not valid due to collision
@@ -238,14 +241,14 @@ namespace GraspStudio
             eval.graspValid.push_back(false);
             eval.nrGraspsInvalidContacts++;
             eval.timeGraspMS.push_back(ms);
-            
+
             return returnNullWhenInvalid ? nullptr : grasp;
         }
 
         graspQuality->setContactPoints(contacts);
         float score = graspQuality->getGraspQuality();
         grasp->setQuality(score);
-        
+
         if (forceClosure && !graspQuality->isGraspForceClosure())
         {
             // not force closure
@@ -254,7 +257,7 @@ namespace GraspStudio
             eval.graspValid.push_back(false);
             eval.nrGraspsInvalidFC++;
             eval.timeGraspMS.push_back(ms);
-            
+
             return returnNullWhenInvalid ? nullptr : grasp;
         }
 
@@ -266,7 +269,7 @@ namespace GraspStudio
             eval.graspValid.push_back(false);
             eval.nrGraspsInvalidFC++;
             eval.timeGraspMS.push_back(ms);
-            
+
             return returnNullWhenInvalid ? nullptr : grasp;
         }
 
@@ -277,7 +280,7 @@ namespace GraspStudio
         }
 
         float ms = getTimeMS();
-        
+
         eval.graspScore.push_back(score);
         eval.graspValid.push_back(true);
         eval.nrGraspsValid++;

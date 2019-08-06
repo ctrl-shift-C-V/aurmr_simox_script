@@ -1,11 +1,12 @@
 
 ADD_VR_TEST( VirtualRobotExceptionTest )
+ADD_VR_TEST( VirtualRobotChecksTest )
 
 ADD_VR_TEST( VirtualRobotRobotTest )
 
 ADD_VR_TEST( VirtualRobotTransformationTest )
 
-if (VirtualRobot_VISUALIZATION)
+if (Simox_VISUALIZATION)
 	ADD_VR_TEST( VirtualRobotCollisionTest )
 endif()
 
@@ -30,9 +31,22 @@ ADD_VR_TEST( VirtualRobotMeshImportTest )
 
 ADD_VR_TEST( VirtualRobotTimeOptimalTrajectoryTest )
 
+ADD_VR_TEST( VirtualRobotRuntimeEnvironmentTest )
+
 ADD_VR_TEST( VirtualRobotJsonEigenConversionTest )
+ADD_VR_TEST( VirtualRobotMjcfTest )
+
+
+ADD_VR_TEST( VirtualRobotMujocoMeshTest )
+
+configure_file(VirtualRobotMujocoMeshTestMesh.msh 
+    ${Simox_TEST_DIR}/VirtualRobotMujocoMeshTestMesh.msh COPYONLY)
+target_compile_definitions(VirtualRobotMujocoMeshTest PRIVATE 
+    TEST_MESH_FILE="${Simox_TEST_DIR}/VirtualRobotMujocoMeshTestMesh.msh")
+
 
 ADD_VR_TEST( MathFitPlaneTest )
 ADD_VR_TEST( MathGaussianImplicitSurface3DNormalsTest )
 ADD_VR_TEST( MathGaussianImplicitSurface3DTest )
 ADD_VR_TEST( MathHelpersTest )
+ADD_VR_TEST( PQP_optimization )

@@ -39,6 +39,7 @@ namespace VirtualRobot
 
         ManipulationObject(const std::string& name, VisualizationNodePtr visualization = VisualizationNodePtr(), CollisionModelPtr collisionModel = CollisionModelPtr(), const SceneObject::Physics& p = SceneObject::Physics(), CollisionCheckerPtr colChecker = CollisionCheckerPtr());
 
+        ManipulationObject(const std::string& name, const TriMeshModelPtr& trimesh, const std::string& filename = "");
         /*!
         */
         ~ManipulationObject() override;
@@ -96,6 +97,7 @@ namespace VirtualRobot
             Clones this object. If no col checker is given, the one of the original object is used.
         */
         ManipulationObjectPtr clone(const std::string& name, CollisionCheckerPtr colChecker = CollisionCheckerPtr(), bool deepVisuCopy = true) const;
+        ManipulationObjectPtr clone(CollisionCheckerPtr colChecker = CollisionCheckerPtr(), bool deepVisuCopy = true) const;
 
         /*!
         Create a standard obstacle from a mesh.

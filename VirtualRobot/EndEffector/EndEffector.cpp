@@ -38,14 +38,13 @@ namespace VirtualRobot
             gcpNode = tcpNode;
         }
 
-        for (const auto & preshape : preshapes)
+        for (const auto& preshape : preshapes)
         {
             registerPreshape(preshape);
         }
     }
 
-    EndEffector::~EndEffector()
-    = default;
+    EndEffector::~EndEffector() = default;
 
     EndEffectorPtr EndEffector::clone(RobotPtr newRobot)
     {
@@ -106,24 +105,39 @@ namespace VirtualRobot
     {
         actors = this->actors;
     }
+
+
+    const std::vector<EndEffectorActorPtr>& EndEffector::getActors()
+    {
+        return actors;
+    }
+
     void EndEffector::getStatics(std::vector<RobotNodePtr>& statics)
     {
         statics = this->statics;
     }
-
-    EndEffector::ContactInfoVector EndEffector::closeActors(SceneObjectSetPtr obstacles, float stepSize)
+    const std::vector<RobotNodePtr>& EndEffector::getStatics()
     {
+        return statics;
+    }
+
+    EndEffector::ContactInfoVector EndEffector::closeActors(SceneObjectSetPtr obstacles, float stepSize, float stepSizeSpeedFactor, std::uint64_t steps)
+    {
+        const bool hasStepLimit = steps;
+        std::vector<char> actorFastMode(actors.size(), stepSizeSpeedFactor > 1);
+        EndEffector::ContactInfoVector fastModeContacts;
         std::vector<char> actorCollisionStatus(actors.size(), false);
         EndEffector::ContactInfoVector result;
 
         bool finished = false;
-        int loop = 0;
+        std::uint64_t loop = 0;
 
         const auto shared_this = shared_from_this();
 
         while (!finished)
         {
             loop++;
+            --steps;
             finished = true;
 
             for (unsigned int i = 0; i < actors.size(); i++)
@@ -133,7 +147,22 @@ namespace VirtualRobot
                 {
                     finished = false;
 
-                    actorCollisionStatus[i] = actors[i]->moveActorCheckCollision(shared_this, result, obstacles, stepSize);
+                    auto& fastMode = actorFastMode.at(i);
+                    if (fastMode)
+                    {
+                        const auto fastStepSize = stepSize * stepSizeSpeedFactor;
+                        fastMode = !actors[i]->moveActorCheckCollision(shared_this, fastModeContacts, obstacles, fastStepSize);
+                        if (!fastMode)
+                        {
+                            //now in collision if fast mode is used
+                            actors[i]->moveActor(-fastStepSize);
+                            actorCollisionStatus[i] = actors[i]->moveActorCheckCollision(shared_this, result, obstacles, stepSize);
+                        }
+                    }
+                    else
+                    {
+                        actorCollisionStatus[i] = actors[i]->moveActorCheckCollision(shared_this, result, obstacles, stepSize);
+                    }
                 }
             }
 
@@ -149,28 +178,68 @@ namespace VirtualRobot
                     actorCollisionStatus[i] = false;
                 }
             }
+            if ((hasStepLimit && 0 == steps) || finished)
+            {
+                if (finished)
+                {
+                    return result;
+                }
+                return {};
+            }
         }
 
         return result;
     }
 
-
-    EndEffector::ContactInfoVector EndEffector::closeActors(SceneObjectPtr obstacle, float stepSize /*= 0.02*/)
+    EndEffector::ContactInfoVector EndEffector::closeActors(SceneObjectPtr obstacle, float stepSize /*= 0.02*/, float stepSizeSpeedFactor, uint64_t steps)
     {
         if (!obstacle)
         {
-            return closeActors(SceneObjectSetPtr(), stepSize);
+            return closeActors(SceneObjectSetPtr(), stepSize, stepSizeSpeedFactor, steps);
         }
 
         SceneObjectSetPtr colModels(new SceneObjectSet("", obstacle->getCollisionChecker()));
         colModels->addSceneObject(obstacle);
-        return closeActors(colModels, stepSize);
+        return closeActors(colModels, stepSize, stepSizeSpeedFactor, steps);
     }
 
-
-    void EndEffector::openActors(SceneObjectSetPtr obstacles, float stepSize)
+    EndEffector::ContactInfoVector EndEffector::closeActors(std::nullptr_t, float stepSize, float stepSizeSpeedFactor, std::uint64_t steps)
     {
-        closeActors(obstacles, -stepSize);
+        return closeActors(SceneObjectSetPtr(), stepSize, stepSizeSpeedFactor, steps);
+    }
+
+    EndEffector::ContactInfoVector EndEffector::closeActors(float stepSize, float stepSizeSpeedFactor, std::uint64_t steps)
+    {
+        return closeActors(SceneObjectSetPtr(), stepSize, stepSizeSpeedFactor, steps);
+    }
+
+    bool EndEffector::allActorsClosed() const
+    {
+        for (const auto& actor : actors)
+        {
+            if (!actor->isAtHiLimit())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool EndEffector::allActorsOpen() const
+    {
+        for (const auto& actor : actors)
+        {
+            if (!actor->isAtLoLimit())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void EndEffector::openActors(SceneObjectSetPtr obstacles, float stepSize, float stepSizeSpeedFactor)
+    {
+        closeActors(obstacles, -stepSize, stepSizeSpeedFactor);
     }
 
     VirtualRobot::SceneObjectSetPtr EndEffector::createSceneObjectSet(CollisionCheckerPtr colChecker)
@@ -178,7 +247,7 @@ namespace VirtualRobot
         SceneObjectSetPtr cms(new SceneObjectSet(name, colChecker));
         cms->addSceneObjects(statics);
 
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             cms->addSceneObjects(actor->getRobotNodes());
         }
@@ -258,14 +327,14 @@ namespace VirtualRobot
 
         cout << " * Static RobotNodes:" << endl;
 
-        for (auto & i : statics)
+        for (auto& i : statics)
         {
             cout << " ** " << i->getName() << endl;
         }
 
         cout << " * Actors:" << endl;
 
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             actor->print();
         }
@@ -384,7 +453,7 @@ namespace VirtualRobot
         VirtualRobot::RobotConfigPtr result(new VirtualRobot::RobotConfig(getRobot(), getName()));
         std::vector< RobotNodePtr > rn = getAllNodes();
 
-        for (auto & i : rn)
+        for (auto& i : rn)
         {
             if (i->isRotationalJoint() || i->isTranslationalJoint())
             {
@@ -413,7 +482,7 @@ namespace VirtualRobot
         {
             std::vector< RobotNodePtr > rn = (*iA)->getRobotNodes();
 
-            for (const auto & i : rn)
+            for (const auto& i : rn)
             {
                 mapR[i] = i;
             }
@@ -489,7 +558,7 @@ namespace VirtualRobot
             return false;
         }
 
-        for (const auto & actor : actors)
+        for (const auto& actor : actors)
         {
             if (!actor->nodesSufficient(nodes))
             {
@@ -504,7 +573,7 @@ namespace VirtualRobot
     {
         float maxActor = 0;
 
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             float al = actor->getApproximatedLength();
 
@@ -517,7 +586,7 @@ namespace VirtualRobot
 
         BoundingBox bb_all;
 
-        for (auto & j : statics)
+        for (auto& j : statics)
         {
             if (j->getCollisionModel())
             {
@@ -606,7 +675,7 @@ namespace VirtualRobot
         {
             ss << tt << "<Static>" << endl;
 
-            for (auto & i : statics)
+            for (auto& i : statics)
             {
                 ss << ttt << "<Node name='" << i->getName() << "'/>" << endl;
             }
@@ -615,7 +684,7 @@ namespace VirtualRobot
         }
 
         // Actors
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             ss << actor->toXML(ident + 1);
         }
@@ -625,22 +694,26 @@ namespace VirtualRobot
         return ss.str();
     }
 
-    int EndEffector::addStaticPartContacts(SceneObjectPtr obstacle, EndEffector::ContactInfoVector &contacts, const Eigen::Vector3f &approachDirGlobal, float maxDistance)
+    int EndEffector::addStaticPartContacts(SceneObjectPtr obstacle, EndEffector::ContactInfoVector& contacts, const Eigen::Vector3f& approachDirGlobal, float maxDistance)
     {
         if (!obstacle)
+        {
             return 0;
+        }
 
         int contactCount = 0;
 
         for (auto n : statics)
         {
             if (!n->getCollisionModel())
+            {
                 continue;
+            }
             int id1, id2;
-            Eigen::Vector3f p1,p2;
-            float dist = this->getCollisionChecker()->calculateDistance(n->getCollisionModel(),obstacle->getCollisionModel(),p1,p2,&id1,&id2);
+            Eigen::Vector3f p1, p2;
+            float dist = this->getCollisionChecker()->calculateDistance(n->getCollisionModel(), obstacle->getCollisionModel(), p1, p2, &id1, &id2);
             //VR_INFO << n->getName() << " - DIST: " << dist << endl;
-            if (dist<=maxDistance)
+            if (dist <= maxDistance)
             {
                 EndEffector::ContactInfo ci;
                 ci.eef = shared_from_this();

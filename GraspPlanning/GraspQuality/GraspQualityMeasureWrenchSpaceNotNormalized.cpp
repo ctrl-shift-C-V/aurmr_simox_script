@@ -63,7 +63,9 @@ namespace GraspStudio
         if (contactPointsM.empty())
         {
             if (verbose && printAll)
+            {
                 printf("Contact points not set.\n");
+            }
             return;
         }
 
@@ -152,8 +154,8 @@ namespace GraspStudio
         {
 #ifdef INVERT_NORMALS
             /*p.p(0) = -(*iter).n(0);
-            p.p(1) = -(*iter).n(1);
-            p.p(2) = -(*iter).n(2);*/
+                p.p(1) = -(*iter).n(1);
+                p.p(2) = -(*iter).n(2);*/
             p.p = -1.0f * (iter->n);
 #else
             p.p = iter->n;
@@ -285,7 +287,7 @@ namespace GraspStudio
         float fRes = FLT_MAX;
         int nWrongFacets = 0;
 
-        for (auto & face : ch->faces)
+        for (auto& face : ch->faces)
         {
             const auto dist = face.distNormCenter;
             if (dist > 0)
@@ -294,7 +296,7 @@ namespace GraspStudio
                 nWrongFacets++;
                 continue;
             }
-            fRes = std::max(fRes, -dist);
+            fRes = std::min(fRes, -dist);
         }
 
         if (nWrongFacets > 0)

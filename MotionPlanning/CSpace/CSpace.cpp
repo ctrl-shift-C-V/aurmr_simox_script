@@ -406,9 +406,9 @@ namespace Saba
         return d;
     }
 
-    float CSpace::getDirectedMaxMovement(const Eigen::VectorXf& config, const Eigen::VectorXf& nextConfig)
+    float CSpace::getDirectedMaxMovement(const Eigen::VectorXf& /*config*/, const Eigen::VectorXf& nextConfig)
     {
-        SABA_ASSERT(config.rows() == dimension)
+        // SABA_ASSERT(config.rows() == dimension)
         SABA_ASSERT(nextConfig.rows() == dimension)
 
         SABA_WARNING << "NYI..." << endl;

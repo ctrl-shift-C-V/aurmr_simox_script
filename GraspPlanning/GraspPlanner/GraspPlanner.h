@@ -72,10 +72,10 @@ namespace GraspStudio
         GraspPlannerEvaluation getEvaluation() const;
         /// Clear the evaluation.
         void clearEvaluation();
-        
-        
+
+
     protected:
-        
+
         bool verbose;
         VirtualRobot::GraspSetPtr graspSet;
         std::vector<VirtualRobot::GraspPtr> plannedGrasps;

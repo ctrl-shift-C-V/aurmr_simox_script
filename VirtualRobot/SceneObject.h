@@ -52,7 +52,7 @@ namespace VirtualRobot
             CollisionData   //!< a visualization of the collision model data that is internally used (this mode is only for debug purposes, the model is static, i.e. updates/movements/rotations are not visualized!)
         };
 
-		struct VIRTUAL_ROBOT_IMPORT_EXPORT Physics
+        struct VIRTUAL_ROBOT_IMPORT_EXPORT Physics
         {
             enum CoMLocation
             {
@@ -225,13 +225,13 @@ namespace VirtualRobot
         /*!
             Returns the transformation matrix from this object to otherObject
         */
-        Eigen::Matrix4f getTransformationTo(const SceneObjectPtr otherObject);
+        Eigen::Matrix4f getTransformationTo(const SceneObjectPtr otherObject) const;
 
 
         /*!
             Returns the transformation matrix from otherObject to this object
         */
-        Eigen::Matrix4f getTransformationFrom(const SceneObjectPtr otherObject);
+        Eigen::Matrix4f getTransformationFrom(const SceneObjectPtr otherObject) const;
 
         /*!
             Transform pose to local coordinate system of this object
@@ -296,6 +296,15 @@ namespace VirtualRobot
 
         void setInertiaMatrix(const Eigen::Matrix3f& im);
 
+        /**
+         * @brief The shift is done using the parallel axis theorem (https://en.wikipedia.org/wiki/Parallel_axis_theorem)
+         * @param inertiaMatrix
+         * @param shift
+         * @param mass
+         * @return
+         */
+        static Eigen::Matrix3f shiftInertia(const Eigen::Matrix3f inertiaMatrix, const Eigen::Vector3f& shift, float mass);
+
         float getFriction();
         void setFriction(float friction);
 
@@ -337,6 +346,7 @@ namespace VirtualRobot
             Clones this object. If no col checker is given, the one of the original object is used.
         */
         SceneObjectPtr clone(const std::string& name, CollisionCheckerPtr colChecker = CollisionCheckerPtr(), float scaling = 1.0f) const;
+        SceneObjectPtr clone(CollisionCheckerPtr colChecker = CollisionCheckerPtr(), float scaling = 1.0f) const;
 
         /*!
             Attach a connected object. The connected object is linked to this SceneObject and moves accordingly.
@@ -364,7 +374,7 @@ namespace VirtualRobot
         /*!
             \return true, if this object is attached to another object.
         */
-        virtual bool hasParent();
+        virtual bool hasParent() const;
 
         /*!
             \return If this object is attached, the parent is returned. Otherwise an empty object is returned.

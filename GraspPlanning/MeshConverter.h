@@ -40,7 +40,7 @@ namespace GraspStudio
         */
         static VirtualRobot::ManipulationObjectPtr CreateManipulationObject(const std::string& name, VirtualRobot::MathTools::ConvexHull3DPtr hull);
         static VirtualRobot::TriMeshModelPtr CreateTriMeshModel(VirtualRobot::MathTools::ConvexHull3DPtr hull);
-        static VirtualRobot::ObstaclePtr RefineObjectSurface(VirtualRobot::ObstaclePtr object, float maxDist);
+        static VirtualRobot::ObstaclePtr RefineObjectSurface(VirtualRobot::ObstaclePtr object, float maxDist, bool verbose = true);
 
         //! Returns -1 if obj is not part of vectList, otherwise the index of vectList is returned.
         static int hasVertex(std::vector< Eigen::Vector3f>& vectList, Eigen::Vector3f& obj);

@@ -114,7 +114,7 @@ namespace GraspStudio
         return -1;
     }
 
-    VirtualRobot::ObstaclePtr MeshConverter::RefineObjectSurface(VirtualRobot::ObstaclePtr object, float maxDist)
+    VirtualRobot::ObstaclePtr MeshConverter::RefineObjectSurface(VirtualRobot::ObstaclePtr object, float maxDist, bool verbose)
     {
         VirtualRobot::ObstaclePtr res;
 
@@ -130,7 +130,10 @@ namespace GraspStudio
             return res;
         }
 
-        VR_INFO << "Processing object with " << tm->faces.size() << " triangles" << endl;
+        if (verbose)
+        {
+            VR_INFO << "Processing object with " << tm->faces.size() << " triangles" << endl;
+        }
 
         // first create new object
         TriMeshModelPtr triMesh2(new TriMeshModel());
@@ -138,9 +141,9 @@ namespace GraspStudio
 
         for (size_t i = 0; i < tm->faces.size(); i++)
         {
-            Eigen::Vector3f &v1 = tm->vertices[tm->faces[i].id1];
-            Eigen::Vector3f &v2 = tm->vertices[tm->faces[i].id2];
-            Eigen::Vector3f &v3 = tm->vertices[tm->faces[i].id3];
+            Eigen::Vector3f& v1 = tm->vertices[tm->faces[i].id1];
+            Eigen::Vector3f& v2 = tm->vertices[tm->faces[i].id2];
+            Eigen::Vector3f& v3 = tm->vertices[tm->faces[i].id3];
             unsigned int id1, id2, id3;
             check = hasVertex(triMesh2->vertices, v1);
 
@@ -218,9 +221,9 @@ namespace GraspStudio
         VR_ASSERT(faceIdx >= 0 && faceIdx < (int)tm->faces.size());
 
         float d12, d13, d23;
-        Eigen::Vector3f &v1 = tm->vertices[tm->faces[faceIdx].id1];
-        Eigen::Vector3f &v2 = tm->vertices[tm->faces[faceIdx].id2];
-        Eigen::Vector3f &v3 = tm->vertices[tm->faces[faceIdx].id3];
+        Eigen::Vector3f& v1 = tm->vertices[tm->faces[faceIdx].id1];
+        Eigen::Vector3f& v2 = tm->vertices[tm->faces[faceIdx].id2];
+        Eigen::Vector3f& v3 = tm->vertices[tm->faces[faceIdx].id3];
         Eigen::Vector3f v4;
         unsigned int id4;
         size_t checkFaceIdx;

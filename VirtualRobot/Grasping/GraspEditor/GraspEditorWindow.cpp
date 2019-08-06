@@ -27,7 +27,7 @@
 
 #include <sstream>
 
-#include <VirtualRobot/ui_GraspEditor.h>
+#include "ui_GraspEditor.h"
 
 
 using namespace std;
@@ -281,9 +281,11 @@ namespace VirtualRobot
         {
 
             SoNode* visualisationNode = nullptr;
-            boost::shared_ptr<VirtualRobot::CoinVisualization> visualizationObject = object->getVisualization<CoinVisualization>(colModel); 
+            boost::shared_ptr<VirtualRobot::CoinVisualization> visualizationObject = object->getVisualization<CoinVisualization>(colModel);
             if (visualizationObject)
+            {
                 visualisationNode = visualizationObject->getCoinVisualization();
+            }
 
             if (visualisationNode)
             {
@@ -313,8 +315,10 @@ namespace VirtualRobot
     void GraspEditorWindow::selectRobot()
     {
         QString fi = QFileDialog::getOpenFileName(this, tr("Open Robot File"), QString(), tr("XML Files (*.xml)"));
-        if(fi.isEmpty())
+        if (fi.isEmpty())
+        {
             return;
+        }
         robotFile = std::string(fi.toLatin1());
         loadRobot();
     }
@@ -336,14 +340,16 @@ namespace VirtualRobot
             dialog.setAcceptMode(QFileDialog::AcceptOpen);
             QStringList nameFilters;
             nameFilters << "Manipulation Object XML Files (*.xml *.moxml)"
-//                        << "XML Files (*.xml)"
+                        //                        << "XML Files (*.xml)"
                         << "All Files (*.*)";
             dialog.setNameFilters(nameFilters);
 
             if (dialog.exec())
             {
                 if (dialog.selectedFiles().size() == 0)
+                {
                     return;
+                }
 
                 fi = dialog.selectedFiles()[0];
             }
@@ -386,7 +392,9 @@ namespace VirtualRobot
             if (dialog.exec())
             {
                 if (dialog.selectedFiles().size() == 0)
+                {
                     return;
+                }
 
                 fi = dialog.selectedFiles()[0];
             }
@@ -454,6 +462,7 @@ namespace VirtualRobot
         }
 
         robot->getEndEffectors(eefs);
+        robot->setPropagatingJointValuesEnabled(false);
         updateEEFBox();
 
         if (eefs.size() == 0)
@@ -543,6 +552,8 @@ namespace VirtualRobot
                 robotEEF_EEF->setPreshape(preshape);
             }
 
+            UI->labelQuality->setText(QString::number(currentGrasp->getQuality()));
+
             setCurrentGrasp(gp);
         }
 
@@ -595,7 +606,7 @@ namespace VirtualRobot
     {
         UI->comboBoxEEF->clear();
 
-        for (auto & eef : eefs)
+        for (auto& eef : eefs)
         {
             UI->comboBoxEEF->addItem(QString(eef->getName().c_str()));
         }

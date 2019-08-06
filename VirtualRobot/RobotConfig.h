@@ -86,7 +86,7 @@ namespace VirtualRobot
         bool setConfig(RobotNodePtr node, float value);
         bool setConfig(const std::string& node, float value);
 
-        bool setTCP(const std::string &tcpName);
+        bool setTCP(const std::string& tcpName);
         bool setTCP(RobotNodePtr tcp);
         bool hasTCP() const;
         RobotNodePtr getTCP();

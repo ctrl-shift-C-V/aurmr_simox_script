@@ -27,6 +27,15 @@
 #include <Inventor/VRMLnodes/SoVRMLGroup.h>
 
 
+namespace
+{
+    namespace fs = std::filesystem;
+    inline fs::path remove_trailing_separator(fs::path p)
+    {
+        p /= "dummy";
+        return p.parent_path();
+    }
+}
 
 
 namespace VirtualRobot
@@ -37,7 +46,7 @@ namespace VirtualRobot
      * CoinVisualizationNode::visualization.
      * If \p visualizationNode is a valid object call SoNode::ref() on it.
      */
-    CoinVisualizationNode::CoinVisualizationNode(SoNode* visualizationNode, float margin) :
+    CoinVisualizationNode::CoinVisualizationNode(SoNode* visualizationNode, float /*margin*/) :
         visualization(visualizationNode)
     {
         visualizationAtGlobalPose = new SoSeparator();
@@ -142,7 +151,7 @@ namespace VirtualRobot
         return triMeshModel;
     }
 
-    typedef std::map<const SoPrimitiveVertex*,int> CoinVertexIndexMap;
+    typedef std::map<const SoPrimitiveVertex*, int> CoinVertexIndexMap;
     /**
      * This method constructs an instance of TriMeshModel and stores it in
      * CoinVisualizationNode::triMeshModel.
@@ -213,7 +222,7 @@ namespace VirtualRobot
         c << triangle[2][0], triangle[2][1], triangle[2][2];
         n << normal[0][0], normal[0][1], normal[0][2];
 
-        // add new triangle to the model        
+        // add new triangle to the model
         triangleMeshModel->addTriangleWithFace(a, b, c, n);
 
     }
@@ -332,7 +341,7 @@ namespace VirtualRobot
             }
             else
             {
-                newModel->addChild(visualization);                
+                newModel->addChild(visualization);
             }
         }
 
@@ -342,8 +351,10 @@ namespace VirtualRobot
         {
             newModel->unrefNoDelete();
         }
-        if(!deepCopy)
+        if (!deepCopy)
+        {
             p->triMeshModel = this->triMeshModel;
+        }
         //else -> lazy generation
 
         p->setUpdateVisualization(updateVisualization);
@@ -433,19 +444,19 @@ namespace VirtualRobot
         std::string outFile = filename;
         bool vrml = true; // may be changed later according to file extension
 
-        boost::filesystem::path completePath(modelPath);
-        boost::filesystem::path fn(outFile);
+        auto completePath = remove_trailing_separator(modelPath);
+        auto fn = remove_trailing_separator(outFile);
 
-        if (!boost::filesystem::is_directory(completePath))
+        if (!std::filesystem::is_directory(completePath))
         {
-            if (!boost::filesystem::create_directories(completePath))
+            if (!std::filesystem::create_directories(completePath))
             {
                 VR_ERROR << "Could not create model dir  " << completePath.string() << endl;
                 return false;
             }
         }
 
-        boost::filesystem::path completeFile = boost::filesystem::operator/(completePath, fn);
+        std::filesystem::path completeFile = std::filesystem::operator/(completePath, fn);
 
         SoOutput* so = new SoOutput();
 
@@ -454,7 +465,7 @@ namespace VirtualRobot
             VR_ERROR << "Could not open file " << completeFile.string() << " for writing." << endl;
         }
 
-        boost::filesystem::path extension = completeFile.extension();
+        std::filesystem::path extension = completeFile.extension();
         std::string extStr = extension.string();
         BaseIO::getLowerCase(extStr);
 
@@ -501,7 +512,7 @@ namespace VirtualRobot
 
     void CoinVisualizationNode::shrinkFatten(float offset)
     {
-        if(offset != 0.0f)
+        if (offset != 0.0f)
         {
             triMeshModel.reset();
             getTriMeshModel()->mergeVertices();
@@ -513,10 +524,9 @@ namespace VirtualRobot
             visualization->ref();
             scaledVisualization->addChild(visualization);
         }
-
     }
 
-    void CoinVisualizationNode::scale(Eigen::Vector3f& scaleFactor)
+    void CoinVisualizationNode::scale(const Eigen::Vector3f& scaleFactor)
     {
         scaling->scaleFactor.setValue(scaleFactor(0), scaleFactor(1), scaleFactor(2));
         triMeshModel.reset();

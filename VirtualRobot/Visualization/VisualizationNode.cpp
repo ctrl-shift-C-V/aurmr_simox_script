@@ -13,11 +13,21 @@
 #include "VirtualRobot/VirtualRobotException.h"
 #include "VirtualRobot/XML/BaseIO.h"
 
+namespace
+{
+    namespace fs = std::filesystem;
+    inline fs::path remove_trailing_separator(fs::path p)
+    {
+        p /= "dummy";
+        return p.parent_path();
+    }
+}
 
 namespace VirtualRobot
 {
 
-    VisualizationNode::VisualizationNode()
+    VisualizationNode::VisualizationNode(const TriMeshModelPtr& triMeshModel) :
+        triMeshModel{triMeshModel}
     {
         updateVisualization = true;
         showVisualization = true;
@@ -31,11 +41,33 @@ namespace VirtualRobot
         attachedVisualizations.clear();
     }
 
-    VirtualRobot::VisualizationNodePtr VisualizationNode::clone(bool /*deepCopy*/, float /*scaling*/)
+    VirtualRobot::VisualizationNodePtr VisualizationNode::clone(bool deepCopy, float scaling)
     {
+        THROW_VR_EXCEPTION_IF(scaling <= 0, "Scaling must be >0");
+
         VisualizationNodePtr p(new VisualizationNode());
+
+        if (deepCopy && triMeshModel)
+        {
+            p->triMeshModel = triMeshModel->clone();
+            p->triMeshModel->scale(scaling);
+        }
+        else
+        {
+            p->triMeshModel = triMeshModel;
+        }
+
+
         p->setUpdateVisualization(updateVisualization);
+        p->setGlobalPose(getGlobalPose());
         p->setFilename(filename, boundingBox);
+
+        for (const auto& [key, value] : attachedVisualizations)
+        {
+            VisualizationNodePtr attachedClone = value->clone(deepCopy, scaling);
+            p->attachVisualization(key, attachedClone);
+        }
+
         p->primitives = primitives;
 
         return p;
@@ -43,7 +75,7 @@ namespace VirtualRobot
 
     VirtualRobot::TriMeshModelPtr VisualizationNode::getTriMeshModel()
     {
-        return TriMeshModelPtr();
+        return triMeshModel;
     }
 
     void VisualizationNode::attachVisualization(const std::string& name, VisualizationNodePtr v)
@@ -182,7 +214,7 @@ namespace VirtualRobot
     std::string VisualizationNode::toXML(const std::string& basePath, int tabs)
     {
         std::string visualizationFilename = getFilename();
-        boost::filesystem::path fn(visualizationFilename);
+        std::filesystem::path fn(visualizationFilename);
         return toXML(basePath, fn.string(), tabs);
     }
 
@@ -233,21 +265,60 @@ namespace VirtualRobot
         return bbox;
     }
 
-    bool VisualizationNode::saveModel(const std::string& /*modelPath*/, const std::string& /*filename*/)
+    bool VisualizationNode::saveModel(const std::string& modelPath, const std::string& filename)
     {
-        // derived classes have to overwrite this method, otherwise a NYI will show up
-        VR_ERROR << "NYI..." << endl;
-        return false;
+        const auto completePath = remove_trailing_separator(modelPath);
+
+        if (!std::filesystem::is_directory(completePath))
+        {
+            if (!std::filesystem::create_directories(completePath))
+            {
+                VR_ERROR << "Could not create model dir  " << completePath.string() << endl;
+                return false;
+            }
+        }
+        const auto completeFile = std::filesystem::absolute(completePath / filename).replace_extension("off");
+
+        const auto& t = *getTriMeshModel();
+        VR_INFO << "writing " << completeFile.string() << std::endl;
+        std::ofstream out{completeFile.string()};
+        out << "OFF\n# num vert / num face / num edge\n"
+            << t.vertices.size() << ' ' << t.faces.size()
+            << " 0\n\n#vert (x y z)\n";
+        for (const auto& v : t.vertices)
+        {
+            out << v.x() <<  ' ' << v.y() <<  ' ' << v.z() <<  '\n';
+        }
+        out << "\n# face (num vert N v0idx v1idx ... vNidx)\n";
+        for (const auto& f : t.faces)
+        {
+            out << "3 " << f.id1 <<  ' ' << f.id2 <<  ' ' << f.id3 <<  '\n';
+        }
+
+        return true;
     }
 
-    void VisualizationNode::scale(Eigen::Vector3f& /*scaleFactor*/)
+    void VisualizationNode::scale(const Eigen::Vector3f& scaleFactor)
     {
-        VR_WARNING << "not implemented..." << endl;
+        if (triMeshModel)
+        {
+            triMeshModel->scale(scaleFactor);
+        }
+    }
+    void VisualizationNode::scale(float scaleFactor)
+    {
+        if (triMeshModel)
+        {
+            triMeshModel->scale(Eigen::Vector3f{scaleFactor, scaleFactor, scaleFactor});
+        }
     }
 
     void VisualizationNode::shrinkFatten(float offset)
     {
-        VR_WARNING << "not implemented..." << endl;
+        if (offset != 0.0f && triMeshModel)
+        {
+            triMeshModel->fattenShrink(offset, true);
+        }
     }
 
     void VisualizationNode::createTriMeshModel()

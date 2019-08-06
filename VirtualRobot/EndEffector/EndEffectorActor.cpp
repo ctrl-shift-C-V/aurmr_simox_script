@@ -46,7 +46,7 @@ namespace VirtualRobot
 
         std::vector<ActorDefinition> newDef;
 
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             ActorDefinition a;
             a.colMode = actor.colMode;
@@ -74,7 +74,7 @@ namespace VirtualRobot
         VR_ASSERT(robot);
         bool res = true;
 
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             float v = actor.robotNode->getJointValue() + angle * actor.directionAndSpeed;
 
@@ -92,31 +92,19 @@ namespace VirtualRobot
     bool EndEffectorActor::moveActorCheckCollision(EndEffectorPtr eef, EndEffector::ContactInfoVector& storeContacts, SceneObjectSetPtr obstacles /*= SceneObjectSetPtr()*/, float angle /*= 0.02*/)
     {
         VR_ASSERT(eef);
-        RobotPtr robot = eef->getRobot();
+        const RobotPtr& robot = eef->getRobot();
         VR_ASSERT(robot);
         //bool res = true;
-        std::vector<EndEffectorActorPtr> eefActors;
-        eef->getActors(eefActors);
-        std::vector<RobotNodePtr> eefStatic;
-        eef->getStatics(eefStatic);
         EndEffector::ContactInfoVector newContacts;
 
-        enum ActorStatus
-        {
-            eFinished,
-            eCollision,
-            eMoving
-        };
-        std::map<RobotNodePtr, ActorStatus> actorStatus;
+        bool allActorsHaveStopped = true;
 
-
-
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             float oldV =  actor.robotNode->getJointValue();
             float v = oldV + angle * actor.directionAndSpeed;
 
-            actorStatus[actor.robotNode] = eMoving;
+            bool isMoving = true;
 
             if (v <= actor.robotNode->getJointLimitHi() && v >= actor.robotNode->getJointLimitLo())
             {
@@ -135,7 +123,7 @@ namespace VirtualRobot
                 // actors (don't store contacts)
                 if (!collision)
                 {
-                    for (auto & eefActor : eefActors)
+                    for (auto& eefActor : eef->getActors())
                     {
                         // Don't check for collisions with the actor itself (don't store contacts)
                         if ((eefActor->getName() != name) && isColliding(eefActor))   //isColliding(eef,*a,newContacts) )
@@ -148,7 +136,7 @@ namespace VirtualRobot
                 // static (don't store contacts)
                 if (!collision)
                 {
-                    for (auto & node : eefStatic)
+                    for (auto& node : eef->getStatics())
                     {
                         SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(node);
 
@@ -161,31 +149,32 @@ namespace VirtualRobot
                     }
                 }
 
-                if (!collision)
-                {
-                    //res = false;
-                }
-                else
+                if (collision)
                 {
                     // reset last position
                     //n->robotNode->setJointValue(oldV);
                     robot->setJointValue(actor.robotNode, oldV);
 
-                    actorStatus[actor.robotNode] = eCollision;
+                    isMoving = false;
                 }
-            } else
+            }
+            else
             {
-                actorStatus[actor.robotNode] = eFinished;
+                isMoving = false;
+            }
+            if (isMoving)
+            {
+                allActorsHaveStopped = false;
             }
         }
 
         // update contacts
-        for (auto & newContact : newContacts)
+        for (auto& newContact : newContacts)
         {
             // check for double entries (this may happen since we move all actors to the end and may detecting contacts multiple times)
             bool doubleEntry = false;
 
-            for (auto & storeContact : storeContacts)
+            for (auto& storeContact : storeContacts)
             {
                 if (storeContact.robotNode == newContact.robotNode && storeContact.obstacle == newContact.obstacle)
                 {
@@ -216,16 +205,7 @@ namespace VirtualRobot
             }
         }
 
-        // check what we should return
-        bool res = true;
-        for (auto & actor : actors)
-        {
-            // if at least one actor is not in collision and not at its joint limits, we are still in the process of closing the fingers
-            if (actorStatus[actor.robotNode] == eMoving)
-                res = false;
-        }
-
-        return res;
+        return allActorsHaveStopped;
     }
 
 
@@ -235,9 +215,9 @@ namespace VirtualRobot
         //Eigen::Vector3f contact;
         bool col = false;
 
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
-            for (auto & colModel : colModels)
+            for (auto& colModel : colModels)
             {
 
                 if ((actor.colMode & checkColMode) &&
@@ -271,7 +251,7 @@ namespace VirtualRobot
 
     bool EndEffectorActor::isColliding(SceneObjectSetPtr obstacles,  CollisionMode checkColMode)
     {
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             if ((actor.colMode & checkColMode) && actor.robotNode->getCollisionModel() && colChecker->checkCollision(actor.robotNode->getCollisionModel(), obstacles))
             {
@@ -289,7 +269,7 @@ namespace VirtualRobot
             return false;
         }
 
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             if ((actor.colMode & checkColMode) && actor.robotNode->getCollisionModel() && colChecker->checkCollision(actor.robotNode->getCollisionModel(), obstacle->getCollisionModel()))
             {
@@ -302,7 +282,7 @@ namespace VirtualRobot
 
     bool EndEffectorActor::isColliding(EndEffectorActorPtr obstacle)
     {
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(actor.robotNode);
 
@@ -323,7 +303,7 @@ namespace VirtualRobot
         std::vector<RobotNodePtr> obstacleStatics;
         obstacle->getStatics(obstacleStatics);
 
-        for (auto & obstacleActor : obstacleActors)
+        for (auto& obstacleActor : obstacleActors)
         {
             // Don't check for collisions with the actor itself
             if ((obstacleActor->getName() != name) && isColliding(obstacleActor))
@@ -332,7 +312,7 @@ namespace VirtualRobot
             }
         }
 
-        for (auto & obstacleStatic : obstacleStatics)
+        for (auto& obstacleStatic : obstacleStatics)
         {
             SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(obstacleStatic);
 
@@ -353,7 +333,7 @@ namespace VirtualRobot
         std::vector<RobotNodePtr> obstacleStatics;
         obstacle->getStatics(obstacleStatics);
 
-        for (auto & obstacleActor : obstacleActors)
+        for (auto& obstacleActor : obstacleActors)
         {
             // Don't check for collisions with the actor itself
             if ((obstacleActor->getName() != name) && isColliding(eef, obstacleActor, storeContacts))
@@ -362,7 +342,7 @@ namespace VirtualRobot
             }
         }
 
-        for (auto & obstacleStatic : obstacleStatics)
+        for (auto& obstacleStatic : obstacleStatics)
         {
             SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(obstacleStatic);
 
@@ -377,7 +357,7 @@ namespace VirtualRobot
 
     bool EndEffectorActor::isColliding(EndEffectorPtr eef, EndEffectorActorPtr obstacle, EndEffector::ContactInfoVector& storeContacts)
     {
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(actor.robotNode);
 
@@ -401,7 +381,7 @@ namespace VirtualRobot
         //Eigen::Vector3f contact;
         bool col = false;
 
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
 
             if ((actor.colMode & checkColMode) &&
@@ -438,7 +418,7 @@ namespace VirtualRobot
     {
         std::vector< RobotNodePtr > res;
 
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             res.push_back(actor.robotNode);
         }
@@ -451,7 +431,7 @@ namespace VirtualRobot
         cout << " ****" << endl;
         cout << " ** Name:" << name << endl;
 
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             cout << " *** RobotNode: " << actor.robotNode->getName() << ", Direction/Speed:" << actor.directionAndSpeed << endl;
             //actors[i].robotNode->print();
@@ -512,7 +492,7 @@ namespace VirtualRobot
     {
         BoundingBox bb_all;
 
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             if (actor.robotNode->getCollisionModel())
             {
@@ -535,7 +515,7 @@ namespace VirtualRobot
 
         std::vector< RobotConfig::Configuration > c;
 
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             RobotConfig::Configuration e;
             e.name = actor.robotNode->getName();
@@ -562,7 +542,7 @@ namespace VirtualRobot
         std::string ttt = tt + t;
         ss << pre << "<Actor name='" << name << "'>" << endl;
 
-        for (auto & actor : actors)
+        for (auto& actor : actors)
         {
             ss << tt << "<Node name='" << actor.robotNode->getName() << "' ";
 
@@ -595,6 +575,60 @@ namespace VirtualRobot
         return ss.str();
     }
 
+    bool EndEffectorActor::isAtHiLimit() const
+    {
+        for (const auto& actor : actors)
+        {
+            const float v = actor.robotNode->getJointValue();
+            const auto [min, max] =
+                std::minmax(
+                    actor.robotNode->getJointLimitHi(),
+                    actor.robotNode->getJointLimitLo()
+                );
+            if (actor.directionAndSpeed > 0)
+            {
+                if (v < max)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (v > min)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
+    bool EndEffectorActor::isAtLoLimit() const
+    {
+        for (const auto& actor : actors)
+        {
+            const float v = actor.robotNode->getJointValue();
+            const auto [min, max] =
+                std::minmax(
+                    actor.robotNode->getJointLimitHi(),
+                    actor.robotNode->getJointLimitLo()
+                );
+            if (actor.directionAndSpeed > 0)
+            {
+                if (v > min)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (v < max)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
 } // namespace VirtualRobot

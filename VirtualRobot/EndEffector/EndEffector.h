@@ -100,21 +100,33 @@ namespace VirtualRobot
         std::string getRobotType();
 
         void getActors(std::vector<EndEffectorActorPtr>& actors);
+        const std::vector<EndEffectorActorPtr>& getActors();
+
         void getStatics(std::vector<RobotNodePtr>& statics);
+        const std::vector<RobotNodePtr>& getStatics();
 
         /*!
             Closes each actor until a joint limit is hit or a collision occurred.
             This method is intended for gripper or hand-like end-effectors.
         */
-        ContactInfoVector closeActors(SceneObjectSetPtr obstacles = SceneObjectSetPtr(), float stepSize = 0.02);
-        ContactInfoVector closeActors(SceneObjectPtr obstacle, float stepSize = 0.02);
+        ContactInfoVector closeActors(SceneObjectSetPtr obstacles = SceneObjectSetPtr(), float stepSize = 0.02, float stepSizeSpeedFactor = 1, std::uint64_t steps = 0);
+        ContactInfoVector closeActors(SceneObjectPtr obstacle, float stepSize = 0.02, float stepSizeSpeedFactor = 1, std::uint64_t steps = 0);
+        ContactInfoVector closeActors(std::nullptr_t, float stepSize = 0.02, float stepSizeSpeedFactor = 1, std::uint64_t steps = 0);
+        ContactInfoVector closeActors(float stepSize, float stepSizeSpeedFactor = 1, std::uint64_t steps = 0);
+
+        bool allActorsClosed() const;
+        bool allActorsOpen() const;
 
         /*!
             Opens each actor until a joint limit is hit or a collision occurred.
             This method is intended for hand-like end-effectors.
             Note that the same effect can be realized by calling closeActors with a negative step size
         */
-        void openActors(SceneObjectSetPtr obstacles = SceneObjectSetPtr(), float stepSize = 0.02);
+        void openActors(SceneObjectSetPtr obstacles = SceneObjectSetPtr(), float stepSize = 0.02, float stepSizeSpeedFactor = 1);
+        void openActors(float stepSize, float stepSizeSpeedFactor)
+        {
+            openActors(nullptr, stepSize, stepSizeSpeedFactor);
+        }
 
         /*!
             Build a SceneObjectSet that covers all RobotNodes of this EndEffector.
@@ -179,7 +191,7 @@ namespace VirtualRobot
         */
         virtual std::string toXML(int ident = 1);
 
-        int addStaticPartContacts(SceneObjectPtr obstacle, ContactInfoVector& contacts, const Eigen::Vector3f &approachDirGlobal, float maxDistance = 3.0f);
+        int addStaticPartContacts(SceneObjectPtr obstacle, ContactInfoVector& contacts, const Eigen::Vector3f& approachDirGlobal, float maxDistance = 3.0f);
 
     private:
         std::string name;

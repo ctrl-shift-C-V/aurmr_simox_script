@@ -20,7 +20,7 @@ namespace VirtualRobot
     {
         THROW_VR_EXCEPTION_IF(!robot.lock(), "NULL robot in RobotConfig");
 
-        for (const auto & config : configs)
+        for (const auto& config : configs)
         {
             setConfig(config);
         }
@@ -32,7 +32,7 @@ namespace VirtualRobot
     {
         THROW_VR_EXCEPTION_IF(!robot.lock(), "NULL robot in RobotConfig");
 
-        for (const auto & config : configs)
+        for (const auto& config : configs)
         {
             setConfig(config.first, config.second);
         }
@@ -69,7 +69,7 @@ namespace VirtualRobot
     {
         cout << "  Robot Config <" << name << ">" << endl;
 
-        for (const auto & config : configs)
+        for (const auto& config : configs)
         {
             cout << "  * " << config.first->getName() << ":\t" << config.second << endl;
         }
@@ -160,7 +160,9 @@ namespace VirtualRobot
 
         RobotConfigPtr result(new RobotConfig(newRobot, name, newConfigs));
         if (tcpNode)
+        {
             result->setTCP(tcpNode->getName());
+        }
         return result;
     }
 
@@ -188,7 +190,7 @@ namespace VirtualRobot
 
     bool RobotConfig::hasConfig(const std::string& name) const
     {
-        for (const auto & config : configs)
+        for (const auto& config : configs)
         {
             if (config.first->getName() == name)
             {
@@ -298,7 +300,7 @@ namespace VirtualRobot
         return true;
     }
 
-    bool RobotConfig::setTCP(const std::string &tcpName)
+    bool RobotConfig::setTCP(const std::string& tcpName)
     {
         RobotPtr r = robot.lock();
 
@@ -329,7 +331,9 @@ namespace VirtualRobot
     bool RobotConfig::hasTCP() const
     {
         if (tcpNode)
+        {
             return true;
+        }
         return false;
     }
 
@@ -344,7 +348,9 @@ namespace VirtualRobot
         std::map < std::string, float > jv = getRobotNodeJointValueMap();
         std::string tcpName;
         if (tcpNode)
+        {
             tcpName = tcpNode->getName();
+        }
         return createXMLString(jv, name, tcpName, tabs);
     }
 
@@ -366,7 +372,9 @@ namespace VirtualRobot
         ss << t << "<Configuration name='" << name << "'";
 
         if (!tcpName.empty())
+        {
             ss << " tcp='" << tcpName << "'";
+        }
 
         ss << ">\n";
 

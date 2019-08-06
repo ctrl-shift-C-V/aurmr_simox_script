@@ -73,7 +73,7 @@ namespace GraspStudio
 
         void setParameters(float minQuality, bool forceClosure);
 
-        /** 
+        /**
          * if enabled (default), the planner retreates the hand if the number of contacts is <2.
          * During retreat, the contacts are checked if a better situation can be achieved.
          * This procedure helps in case the object is small.
@@ -92,7 +92,7 @@ namespace GraspStudio
 
         std::chrono::system_clock::time_point startTime;
         std::chrono::milliseconds timeOutDuration;
-        
+
         VirtualRobot::EndEffector::ContactInfoVector contacts;
         GraspStudio::GraspQualityMeasurePtr graspQuality;
         GraspStudio::ApproachMovementGeneratorPtr approach;

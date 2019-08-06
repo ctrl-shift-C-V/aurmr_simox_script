@@ -26,8 +26,7 @@ namespace VirtualRobot
         }
     }
 
-    CDManager::~CDManager()
-    = default;
+    CDManager::~CDManager() = default;
 
     void CDManager::addCollisionModel(SceneObjectSetPtr m)
     {
@@ -38,7 +37,7 @@ namespace VirtualRobot
                 VR_WARNING << "CollisionModel of SceneObjectSet '" << m->getName() << "' is linked to a different instance of collision checker than this CollisionManager..." << endl;
             }
 
-            for (const auto & colModel : colModels)
+            for (const auto& colModel : colModels)
             {
                 if (m != colModel)
                 {
@@ -63,6 +62,21 @@ namespace VirtualRobot
         }
     }
 
+    void CDManager::addCollisionModel(const std::vector<RobotNodePtr>& nodes, const std::string& setName)
+    {
+        VirtualRobot::SceneObjectSetPtr cms(
+            new VirtualRobot::SceneObjectSet(
+                setName.empty() ? "set_" + std::to_string(colModels.size()) : setName,
+                getCollisionChecker()
+            )
+        );
+        for (const auto& robotNode : nodes)
+        {
+            cms->addSceneObject(robotNode);
+        }
+        addCollisionModel(cms);
+    }
+
     bool CDManager::isInCollision(SceneObjectSetPtr m)
     {
         if (!m || !colChecker)
@@ -72,7 +86,7 @@ namespace VirtualRobot
         }
 
         // check all colmodels
-        for (const auto & colModel : colModels)
+        for (const auto& colModel : colModels)
         {
             if (m != colModel)
             {
@@ -100,7 +114,7 @@ namespace VirtualRobot
         }
 
         // check all colmodels
-        for (const auto & colModel : colModels)
+        for (const auto& colModel : colModels)
         {
             if (m != colModel)
             {
@@ -122,7 +136,7 @@ namespace VirtualRobot
     {
         float minDist = FLT_MAX;
 
-        for (const auto & set : sets)
+        for (const auto& set : sets)
         {
             float tmp = (float)colChecker->calculateDistance(m, set);
 
@@ -171,7 +185,7 @@ namespace VirtualRobot
         int _trID1;
         int _trID2;
 
-        for (const auto & set : sets)
+        for (const auto& set : sets)
         {
             float tmp = (float)colChecker->calculateDistance(m, set, _P1, _P2, &_trID1, &_trID2);
 
@@ -246,7 +260,7 @@ namespace VirtualRobot
             return -1.0f;
         }
 
-        for (const auto & colModel : colModels)
+        for (const auto& colModel : colModels)
         {
             tmp = (float)colChecker->calculateDistance(m, colModel, _P1, _P2, &_trID1, &_trID2);
 
@@ -271,7 +285,7 @@ namespace VirtualRobot
 
     bool CDManager::isInCollision(SceneObjectSetPtr m, std::vector<SceneObjectSetPtr>& sets)
     {
-        for (const auto & set : sets)
+        for (const auto& set : sets)
         {
             if (colChecker->checkCollision(m, set))
             {
@@ -317,7 +331,7 @@ namespace VirtualRobot
 
     bool CDManager::hasSceneObjectSet(SceneObjectSetPtr m)
     {
-        for (const auto & colModel : colModels)
+        for (const auto& colModel : colModels)
         {
             if (colModel == m)
             {
@@ -330,7 +344,7 @@ namespace VirtualRobot
 
     bool CDManager::_hasSceneObjectSet(SceneObjectSetPtr m)
     {
-        for (auto & colModel : colModels)
+        for (auto& colModel : colModels)
         {
             if (colModel == m)
             {
@@ -348,7 +362,7 @@ namespace VirtualRobot
 
     bool CDManager::hasSceneObject(SceneObjectPtr m)
     {
-        for (auto & colModel : colModels)
+        for (auto& colModel : colModels)
         {
             if (colModel->getSize() == 1 &&  colModel->getSceneObject(0) == m)
             {

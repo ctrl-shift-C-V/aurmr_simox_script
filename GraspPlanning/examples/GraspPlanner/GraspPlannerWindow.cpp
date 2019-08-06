@@ -40,7 +40,7 @@ using namespace std;
 using namespace VirtualRobot;
 using namespace GraspStudio;
 
-float TIMER_MS = 30.0f;
+//float TIMER_MS = 30.0f;
 
 GraspPlannerWindow::GraspPlannerWindow(std::string& robFile, std::string& eefName, std::string& preshape, std::string& objFile)
     : QMainWindow(nullptr)
@@ -49,7 +49,6 @@ GraspPlannerWindow::GraspPlannerWindow(std::string& robFile, std::string& eefNam
 
     // init the random number generator
     this->robotFile = robFile;
-    this->objectFile = objFile;
     this->eefName = eefName;
     this->preshape = preshape;
     eefVisu = nullptr;
@@ -75,7 +74,7 @@ GraspPlannerWindow::GraspPlannerWindow(std::string& robFile, std::string& eefNam
 
 
     loadRobot();
-    loadObject();
+    loadObject(objFile);
 
     buildVisu();
 
@@ -262,7 +261,7 @@ void GraspPlannerWindow::buildVisu()
         }
 
         // add approach dir visu
-        for (auto & contact : contacts)
+        for (auto& contact : contacts)
         {
             SoSeparator* s = new SoSeparator;
             Eigen::Matrix4f ma;
@@ -303,11 +302,11 @@ void GraspPlannerWindow::quit()
     SoQt::exitMainLoop();
 }
 
-void GraspPlannerWindow::loadObject()
+void GraspPlannerWindow::loadObject(const string& objFile)
 {
-    if (!objectFile.empty())
+    if (!objFile.empty())
     {
-        object = ObjectIO::loadManipulationObject(objectFile);
+        object = ObjectIO::loadManipulationObject(objFile);
     }
 
     if (!object)
@@ -368,16 +367,20 @@ void GraspPlannerWindow::plan()
 
     float timeout = UI.spinBoxTimeOut->value() * 1000.0f;
     bool forceClosure = UI.checkBoxFoceClosure->isChecked();
-    float quality = (float)UI.doubleSpinBoxQuality->value();
+    float quality = static_cast<float>(UI.doubleSpinBoxQuality->value());
     int nrGrasps = UI.spinBoxGraspNumber->value();
     if (planner)
+    {
         planner->setParameters(quality, forceClosure);
+    }
     else
+    {
         planner.reset(new GraspStudio::GenericGraspPlanner(grasps, qualityMeasure, approach, quality, forceClosure));
+    }
 
     int nr = planner->plan(nrGrasps, timeout);
     VR_INFO << " Grasp planned:" << nr << endl;
-    int start = (int)grasps->getSize() - nrGrasps - 1;
+    int start = static_cast<int>(grasps->getSize()) - nrGrasps - 1;
 
     if (start < 0)
     {
@@ -386,7 +389,7 @@ void GraspPlannerWindow::plan()
 
     grasps->setPreshape(preshape);
 
-    for (int i = start; i < (int)grasps->getSize() - 1; i++)
+    for (int i = start; i < static_cast<int>(grasps->getSize()) - 1; i++)
     {
         Eigen::Matrix4f m = grasps->getGrasp(i)->getTcpPoseGlobal(object->getGlobalPose());
         SoSeparator* sep1 = new SoSeparator();
@@ -475,7 +478,8 @@ void GraspPlannerWindow::openEEF()
         if (!preshape.empty())
         {
             eefCloned->getEndEffector(eefName)->setPreshape(preshape);
-        } else
+        }
+        else
         {
             eefCloned->getEndEffector(eefName)->openActors();
         }
@@ -509,12 +513,12 @@ void GraspPlannerWindow::save()
     ManipulationObjectPtr objectM(new ManipulationObject(object->getName(), object->getVisualization()->clone(), object->getCollisionModel()->clone()));
     objectM->addGraspSet(grasps);
     QString fi = QFileDialog::getSaveFileName(this, tr("Save ManipulationObject"), QString(), tr("XML Files (*.xml)"));
-    objectFile = std::string(fi.toLatin1());
+    const std::string objFile(fi.toLatin1());
     bool ok = false;
 
     try
     {
-        ok = ObjectIO::saveManipulationObject(objectM, objectFile);
+        ok = ObjectIO::saveManipulationObject(objectM, objFile);
     }
     catch (VirtualRobotException& e)
     {
@@ -539,7 +543,7 @@ void GraspPlannerWindow::planObjectBatch()
         return;
     }
     QStringList paths;
-    for (boost::filesystem::recursive_directory_iterator end, dir(fi.toUtf8().data(), boost::filesystem::symlink_option::recurse);
+    for (std::filesystem::recursive_directory_iterator end, dir(fi.toUtf8().data(), std::filesystem::directory_options::follow_directory_symlink);
          dir != end ; ++dir)
     {
         //std::string path(dir->path().c_str());
@@ -555,8 +559,8 @@ void GraspPlannerWindow::planObjectBatch()
     }
     paths.removeDuplicates();
     VR_INFO << "Found:  " << paths.join(", ").toStdString() << std::endl;
-    boost::filesystem::path resultsCSVPath("genericgraspplanningresults-" + robot->getName() + ".csv");
-    resultsCSVPath = boost::filesystem::absolute(resultsCSVPath);
+    std::filesystem::path resultsCSVPath("genericgraspplanningresults-" + robot->getName() + ".csv");
+    resultsCSVPath = std::filesystem::absolute(resultsCSVPath);
     std::ofstream fs(resultsCSVPath.string().c_str(), std::ofstream::out);
     fs << "object," << planner->getEvaluation().GetCSVHeader() << ",RobustnessAvgQualityNoCol,RobustnessAvgForceClosureRateNoCol,RobustnessAvgQualityCol,RobustnessAvgForceClosureRateCol";
     QProgressDialog progress("Calculating grasps...", "Abort", 0, paths.size(), this);
@@ -576,45 +580,46 @@ void GraspPlannerWindow::planObjectBatch()
     }
     fs << std::endl;
 
-    for(auto& path :  paths)
+    for (auto& path :  paths)
     {
         try
         {
             //resetSceneryAll();
-            objectFile = path.toStdString();
-            loadObject();
+            loadObject(path.toStdString());
             {
                 //planner->setRetreatOnLowContacts(false);
                 plan();
-//                save(boost::filesystem::path(path.toStdString()).replace_extension(".moxml").string());
+                //                save(std::filesystem::path(path.toStdString()).replace_extension(".moxml").string());
                 float avgRate = 0;
                 float avgForceClosureRate = 0;
                 float avgRateCol = 0;
                 float avgForceClosureRateCol = 0;
                 size_t graspSum = 0;
-                std::vector<double> histogramFC(bins,0.0);
-                std::vector<double> histogramFCWithCollisions(bins,0.0);
-//                if(planner->getPlannedGrasps().empty())
-//                {
-//                    ARMARX_INFO << "No grasps found for"
-//                }
-                for(VirtualRobot::GraspPtr& g : planner->getPlannedGrasps())
+                std::vector<double> histogramFC(bins, 0.0);
+                std::vector<double> histogramFCWithCollisions(bins, 0.0);
+                //                if(planner->getPlannedGrasps().empty())
+                //                {
+                //                    ARMARX_INFO << "No grasps found for"
+                //                }
+                for (VirtualRobot::GraspPtr& g : planner->getPlannedGrasps())
                 {
                     GraspEvaluationPoseUncertainty::PoseEvalResults result;
                     if (!evaluateGrasp(g, eefCloned, eefCloned->getEndEffector(eefName), 100, result))
+                    {
                         continue;
+                    }
                     VR_INFO << "Grasp " << graspSum << "/" << planner->getPlannedGrasps().size() << std::endl;
-                    histogramFC.at(std::min<int>((int)(result.forceClosureRate * bins), bins-1))++;
-                    histogramFCWithCollisions.at(std::min<int>((int)((double)(result.numForceClosurePoses)/result.numPosesTested * bins), bins-1))++;
+                    histogramFC.at(std::min<int>(static_cast<int>(result.forceClosureRate * bins), bins - 1))++;
+                    histogramFCWithCollisions.at(std::min<int>(static_cast<int>(static_cast<double>(result.numForceClosurePoses) / result.numPosesTested * bins), bins - 1))++;
                     avgRate += result.avgQuality;
                     avgForceClosureRate += result.forceClosureRate;
                     avgRateCol += result.avgQualityCol;
                     avgForceClosureRateCol += result.forceClosureRateCol;
                     graspSum++;
-//                    if(graspSum > 10)
-//                        break;
+                    //                    if(graspSum > 10)
+                    //                        break;
                 }
-                if (graspSum>0)
+                if (graspSum > 0)
                 {
                     avgRate /= planner->getPlannedGrasps().size();
                     avgForceClosureRate /= planner->getPlannedGrasps().size();
@@ -623,35 +628,39 @@ void GraspPlannerWindow::planObjectBatch()
                 }
                 fs << object->getName() << "," << planner->getEvaluation().toCSVString() << "," << avgRate << "," << avgForceClosureRate << "," << avgRateCol << "," << avgForceClosureRateCol;
                 int i = 0;
-                for(auto bin : histogramFC)
+                for (auto bin : histogramFC)
                 {
-                    fs  <<  ", " << (double)(bin)/graspSum;
-                    cout << i << ": " << bin << ", " << graspSum << ", " <<  (double)(bin)/graspSum << std::endl;
+                    fs  <<  ", " << static_cast<double>(bin) / graspSum;
+                    cout << i << ": " << bin << ", " << graspSum << ", " << static_cast<double>(bin) / graspSum << std::endl;
                     i++;
                 }
-                for(auto bin : histogramFCWithCollisions)
+                for (auto bin : histogramFCWithCollisions)
                 {
-                    fs  <<  ", " << (double)(bin)/graspSum;
+                    fs  <<  ", " << static_cast<double>(bin) / graspSum;
                 }
                 fs << std::endl;
             }
         }
-        catch(std::exception & e)
+        catch (std::exception& e)
         {
             VR_ERROR << "Failed to plan for " << path.toStdString() << "\nReason: \n" << e.what() << std::endl;
         }
         progress.setValue(++i);
         qApp->processEvents();
         if (progress.wasCanceled())
+        {
             break;
+        }
     }
     VR_INFO << "Saving CSV results to " << resultsCSVPath.string() << std::endl;
 }
 
-bool GraspPlannerWindow::evaluateGrasp(VirtualRobot::GraspPtr g, VirtualRobot::RobotPtr eefRobot, VirtualRobot::EndEffectorPtr eef, int nrEvalLoops, GraspEvaluationPoseUncertainty::PoseEvalResults &results)
+bool GraspPlannerWindow::evaluateGrasp(VirtualRobot::GraspPtr g, VirtualRobot::RobotPtr eefRobot, VirtualRobot::EndEffectorPtr eef, int nrEvalLoops, GraspEvaluationPoseUncertainty::PoseEvalResults& results)
 {
     if (!g || !eefRobot || !eef)
+    {
         return false;
+    }
 
     GraspEvaluationPoseUncertaintyPtr eval(new GraspEvaluationPoseUncertainty(GraspEvaluationPoseUncertainty::PoseUncertaintyConfig()));
 
@@ -660,3 +669,9 @@ bool GraspPlannerWindow::evaluateGrasp(VirtualRobot::GraspPtr g, VirtualRobot::R
     return true;
 }
 
+
+void GraspPlannerWindow::on_pushButtonLoadObject_clicked()
+{
+    loadObject(QFileDialog::getOpenFileName(this, tr("Open Object File"), "", tr("XML Files (*.xml)")).toStdString());
+    buildVisu();
+}

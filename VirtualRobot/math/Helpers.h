@@ -95,9 +95,32 @@ namespace math
         Pose(const Eigen::MatrixBase<PosDerived>& pos, const Eigen::RotationBase<OriDerived, 3>& ori);
         
         /// Build a pose matrix from the given position and identity orientation.
-        template <typename PosDerived>
+        template <typename Derived,
+                  typename std::enable_if<Eigen::MatrixBase<Derived>::RowsAtCompileTime == 3
+                                       && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 1,
+                                          int>::type = 0>
+        static Eigen::Matrix4f
+        Pose(const Eigen::MatrixBase<Derived>& position)
+        {
+            return Pose(position, Eigen::Matrix3f::Identity());
+        }
+        
+        /// Build a pose matrix from the given orientation and zero position.
+        template <typename Derived,
+                  typename std::enable_if<Eigen::MatrixBase<Derived>::RowsAtCompileTime == 3
+                                       && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 3,
+                                          int>::type = 0>
+        static Eigen::Matrix4f
+        Pose(const Eigen::MatrixBase<Derived>& orientation)
+        {
+            return Pose(Eigen::Vector3f::Zero(), orientation);
+        }
+        
+        
+        /// Build a pose matrix from the given orientation and zero position.
+        template <typename OriDerived>
         static Eigen::Matrix4f 
-        Pose(const Eigen::MatrixBase<PosDerived>& pos);
+        Pose(const Eigen::RotationBase<OriDerived, 3>& ori);
         
         static Eigen::Matrix4f CreateTranslationPose(const Eigen::Vector3f& pos);
         static Eigen::Matrix4f CreateRotationPose(const Eigen::Matrix3f& ori);
@@ -107,6 +130,8 @@ namespace math
         static Eigen::Matrix4f CreatePose(const Eigen::Vector3f& pos, const Eigen::Quaternionf& ori);
         /// Legacy shortcut for Pose().
         static Eigen::Matrix4f CreatePose(const Eigen::Vector3f& pos, const Eigen::Matrix3f& ori);
+
+        static Eigen::Matrix3f CreateOrientation(const Eigen::Vector3f& e1, const Eigen::Vector3f& e2, const Eigen::Vector3f& e3);
 
         /// Legacy shortcut for Position() as getter.
         static Eigen::Vector3f GetPosition(const Eigen::Matrix4f& pose);
@@ -123,6 +148,11 @@ namespace math
         /// Return the inverted of the given pose.
         template <typename Derived>
         static Eigen::Matrix4f InvertedPose(const Eigen::MatrixBase<Derived>& pose);
+        
+        /// Scale the translation/position of the given pose.
+        static void ScaleTranslation(Eigen::Matrix4f& pose, float scale);
+        /// Get the pose with its translation/position scaled.
+        static Eigen::Matrix4f ScaledTranslation(const Eigen::Matrix4f& pose, float scale);
         
         /// Get a cartesian vector from cylinder coordinates.
         static Eigen::Vector3f CreateVectorFromCylinderCoords(float r, float angle, float z);
@@ -174,7 +204,11 @@ namespace math
         static Eigen::Vector3f GetRotationVector(const Eigen::Matrix3f& start, const Eigen::Matrix3f& target);
         static Eigen::Matrix3f RotationVectorToOrientation(const Eigen::Vector3f& rotation);
 
-        
+        // Vector projections:
+        static float ScalarProjection(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
+        static Eigen::Vector3f VectorProjection(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
+        static Eigen::Vector3f VectorRejection(const Eigen::Vector3f& a, const Eigen::Vector3f& b);
+
         
         /// Convert a value from radian to degree.
         static float rad2deg(float rad);
@@ -190,6 +224,55 @@ namespace math
         template <typename Derived>
         static Eigen::Matrix<typename Derived::Scalar, Derived::RowsAtCompileTime, Derived::ColsAtCompileTime>
         deg2rad(const Eigen::MatrixBase<Derived>& deg);
+
+        static std::vector<Eigen::Matrix4f> CreatePoses(const std::vector<Eigen::Vector3f>& positions, const Eigen::Matrix3f& orientation);
+
+        static std::vector<Eigen::Matrix4f> CreatePoses(const Eigen::Vector3f& position, const std::vector<Eigen::Matrix3f>& orientations);
+
+        static std::vector<Eigen::Matrix4f> CreatePoses(const std::vector<Eigen::Vector3f>& positions, const std::vector<Eigen::Matrix3f>& orientations);
+
+        // Conversions
+        static std::vector<float> VectorToStd(const Eigen::VectorXf& vec){
+            std::vector<float> res;
+            res.resize(vec.size());
+            Eigen::VectorXf::Map(res.data(), vec.size()) = vec;
+            return res;
+        }
+
+        template<typename T>
+        static size_t ArgMin(const std::vector<T>& vec)
+        {
+            if(vec.size() == 0) return 0;
+            T minVal = vec.at(0);
+            size_t minIndex = 0;
+            for(size_t i = 1; i < vec.size(); i++)
+            {
+                T val = vec.at(i);
+                if(val < minVal)
+                {
+                    minVal = val;
+                    minIndex = i;
+                }
+            }
+            return minIndex;
+        }
+        template<typename TVec, typename TSelect>
+        static size_t ArgMin(const std::vector<TVec>& vec, std::function<TSelect(const TVec&)> selector)
+        {
+            if(vec.size() == 0) return 0;
+            TSelect minVal = selector(vec.at(0));
+            size_t minIndex = 0;
+            for(size_t i = 1; i < vec.size(); i++)
+            {
+                TSelect val = selector(vec.at(i));
+                if(val < minVal)
+                {
+                    minVal = val;
+                    minIndex = i;
+                }
+            }
+            return minIndex;
+        }
 
         
     private:
@@ -246,12 +329,11 @@ namespace math
         return Pose(pos, ori.toRotationMatrix());
     }
     
-    template <typename PosDerived>
-    Eigen::Matrix4f Helpers::Pose(const Eigen::MatrixBase<PosDerived>& pos)
+    template <typename OriDerived>
+    Eigen::Matrix4f Helpers::Pose(const Eigen::RotationBase<OriDerived, 3>& ori)
     {
-        return Pose(pos, Eigen::Matrix3f::Identity());
+        return Pose(Eigen::Vector3f::Zero(), ori);
     }
-    
     
     template <typename Derived>
     Eigen::Matrix4f Helpers::InvertedPose(const Eigen::MatrixBase<Derived>& pose)

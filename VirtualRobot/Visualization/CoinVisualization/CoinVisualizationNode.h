@@ -53,7 +53,7 @@ namespace VirtualRobot
 
         void print() override;
 
-        void scale(Eigen::Vector3f& scaleFactor) override;
+        void scale(const Eigen::Vector3f& scaleFactor) override;
 
         /*!
             Attach an optional visualization to this VisualizationNode. The attached visualizations will not show up in the TriMeshModel.
@@ -112,7 +112,6 @@ namespace VirtualRobot
         std::map< std::string, SoNode* > attachedCoinVisualizations;    //< These optional visualizations will not show up in the TriMeshModel
 
         SoMatrixTransform* globalPoseTransform;
-        TriMeshModelPtr triMeshModel;
         SoScale* scaling;
         float margin = 0.0f;
         static void InventorTriangleCB(void* data, SoCallbackAction* action,
