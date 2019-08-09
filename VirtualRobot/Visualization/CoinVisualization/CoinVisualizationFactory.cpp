@@ -279,7 +279,7 @@ namespace VirtualRobot
         TriMeshModelPtr t(new TriMeshModel());
         AssimpReader r;
         r.setScaling(1000.0f); // mm
-        bool readOK = r.readFileAsTriMesh(filename, t);
+        bool readOK = r.readFileAsTriMesh(filename, t, true);
 
         if (!readOK)
         {
