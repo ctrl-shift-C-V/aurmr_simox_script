@@ -46,6 +46,7 @@ namespace
         t->clear();
         for (std::size_t idxMesh = 0; idxMesh < scene->mNumMeshes; ++idxMesh)
         {
+            const long vertexIdxOffset = t->vertices.size();
             const aiMesh& m = *(scene->mMeshes[idxMesh]);
             if (!(m.mVertices && m.mNumVertices))
             {
@@ -83,13 +84,24 @@ namespace
                              << ") with the wrong number of vertices\n";
                     return false;
                 }
+                if (
+                    f.mIndices[0] >= m.mNumVertices ||
+                    f.mIndices[1] >= m.mNumVertices ||
+                    f.mIndices[2] >= m.mNumVertices
+                )
+                {
+                    VR_ERROR << "mesh[" << idxMesh << "] from '" << filename
+                             << "' has vertex index out of bounds for face # " << i
+                             << " \n";
+                    return false;
+                }
                 VirtualRobot::MathTools::TriangleFace fc;
-                fc.id1 = f.mIndices[0];
-                fc.id2 = f.mIndices[1];
-                fc.id3 = f.mIndices[2];
-                fc.idNormal1 = f.mIndices[0];
-                fc.idNormal2 = f.mIndices[1];
-                fc.idNormal3 = f.mIndices[2];
+                fc.id1 = vertexIdxOffset + f.mIndices[0];
+                fc.id2 = vertexIdxOffset + f.mIndices[1];
+                fc.id3 = vertexIdxOffset + f.mIndices[2];
+                fc.idNormal1 = vertexIdxOffset + f.mIndices[0];
+                fc.idNormal2 = vertexIdxOffset + f.mIndices[1];
+                fc.idNormal3 = vertexIdxOffset + f.mIndices[2];
                 t->addFace(fc);
             }
         }
