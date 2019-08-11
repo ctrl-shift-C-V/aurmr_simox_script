@@ -278,8 +278,9 @@ namespace VirtualRobot
         // try to read from file
         TriMeshModelPtr t(new TriMeshModel());
         AssimpReader r;
-        r.setScaling(1000.0f); // mm
-        bool readOK = r.readFileAsTriMesh(filename, t, true);
+        r.parameters.scaling = 1000.0f; // mm
+        r.parameters.mergeMultipleMeshes = true;
+        bool readOK = r.readFileAsTriMesh(filename, t);
 
         if (!readOK)
         {
@@ -393,19 +394,17 @@ namespace VirtualRobot
 
     VisualizationPtr CoinVisualizationFactory::getVisualization(const std::vector<VisualizationNodePtr>& visus)
     {
-        boost::shared_ptr<CoinVisualization> v(new CoinVisualization(visus));
-        return v;
+        return boost::make_shared<CoinVisualization>(visus);
     }
 
     VisualizationPtr CoinVisualizationFactory::getVisualization(VisualizationNodePtr visu)
     {
-        boost::shared_ptr<CoinVisualization> v(new CoinVisualization(visu));
-        return v;
+        return boost::make_shared<CoinVisualization>(visu);
     }
 
     SoSeparator* CoinVisualizationFactory::CreateBoundingBox(SoNode* ivModel, bool wireFrame)
     {
-        THROW_VR_EXCEPTION_IF(!ivModel, "NULL ivModel!");
+        THROW_VR_EXCEPTION_IF(!ivModel, "NULL ivModel!")
 
         float minX;
         float minY;
@@ -869,8 +868,8 @@ namespace VirtualRobot
 
             float theta = 0.0f;
             float phi = 0.0f;
-            float verticalAngularStride = (float)(M_PI * 2.0f) / (float)rings;
-            float horizontalAngularStride = ((float)M_PI * 2.0f) / (float)sides;
+            float verticalAngularStride = static_cast<float>((M_PI * 2.0f) / rings);
+            float horizontalAngularStride = static_cast<float>((M_PI * 2.0f) / sides);
 
             for (int verticalIt = 0; verticalIt < numVerticesPerColumn; verticalIt++)
             {

@@ -9,8 +9,17 @@
 
 namespace
 {
-    bool readScene(const aiScene* scene, const VirtualRobot::TriMeshModelPtr& t, const std::string& filename, float scaling, float eps, bool mergeMultipleMeshes, bool ignoreMissingNormals)
+    bool readScene(
+        const aiScene* scene,
+        const VirtualRobot::TriMeshModelPtr& t,
+        const std::string& filename,
+        const VirtualRobot::AssimpReader::Parameters& param,
+        VirtualRobot::AssimpReader::ResultMetaData& meta
+    )
     {
+        meta.loadingSuccessful = false;
+        meta.regeneratedNormals = false;
+        meta.skippedFaces = 0;
         if (!t)
         {
             VR_ERROR << "Tri mesh is null\n";
@@ -31,7 +40,7 @@ namespace
             VR_ERROR << "mesh from '" << filename << "' has no mesh\n";
             return false;
         }
-        if (scene->mNumMeshes > 1 && !mergeMultipleMeshes)
+        if (scene->mNumMeshes > 1 && !param.mergeMultipleMeshes)
         {
             VR_ERROR << "mesh from '" << filename << "' has not exactly one mesh"
                      << " It has " << scene->mNumMeshes << " meshes\n";
@@ -63,12 +72,13 @@ namespace
             }
             if (!m.mNormals)
             {
-                if (!ignoreMissingNormals)
+                if (!param.ignoreMissingNormals)
                 {
                     error_log << " has no normals (and none were generated when loading it)\n";
                     return false;
                 }
                 error_log << " has no normals (and none were generated when loading it) (ignoring this)\n";
+                meta.regeneratedNormals = true;
             }
 
             for (unsigned i = 0; i < m.mNumVertices; ++i)
@@ -89,6 +99,12 @@ namespace
                     error_log << " has face (# " << i
                               << ") with the wrong number of vertices ("
                               << f.mNumIndices << ")\n";
+                    if (param.skipInvalidFaces)
+                    {
+                        ++meta.skippedFaces;
+                        continue;
+                    }
+
                     return false;
                 }
                 if (
@@ -113,18 +129,21 @@ namespace
 #undef error_log
         }
 
-        t->scale(scaling);
-        t->mergeVertices(eps);
+        t->scale(param.scaling);
+        t->mergeVertices(param.eps);
         t->addMissingNormals();
+        meta.loadingSuccessful = true;
         return true;
     }
 }
 
 namespace VirtualRobot
 {
-    AssimpReader::AssimpReader(float eps, float scaling) :
-        scaling{scaling}, eps{eps}
-    {}
+    AssimpReader::AssimpReader(float eps, float scaling)
+    {
+        parameters.scaling = scaling;
+        parameters.eps = eps;
+    }
 
     std::string AssimpReader::get_extensions()
     {
@@ -148,7 +167,7 @@ namespace VirtualRobot
         return extensions;
     }
 
-    bool AssimpReader::readFileAsTriMesh(const std::string& filename, const TriMeshModelPtr& t, bool mergeMultipleMeshes, bool ignoreMissingNormals)
+    bool AssimpReader::readFileAsTriMesh(const std::string& filename, const TriMeshModelPtr& t)
     {
         //code adapted from http://assimp.sourceforge.net/lib_html/usage.html
         Assimp::Importer importer;
@@ -162,9 +181,9 @@ namespace VirtualRobot
                                    aiProcess_GenSmoothNormals         |
                                    aiProcess_SortByPType
                                );
-        return readScene(scene, t, filename, scaling, eps, mergeMultipleMeshes, ignoreMissingNormals);
+        return readScene(scene, t, filename, parameters, resultMetaData);
     }
-    bool AssimpReader::readBufferAsTriMesh(const std::string_view& v, const TriMeshModelPtr& t, bool mergeMultipleMeshes, bool ignoreMissingNormals)
+    bool AssimpReader::readBufferAsTriMesh(const std::string_view& v, const TriMeshModelPtr& t)
     {
         //code adapted from http://assimp.sourceforge.net/lib_html/usage.html
         Assimp::Importer importer;
@@ -178,59 +197,44 @@ namespace VirtualRobot
                                    aiProcess_GenSmoothNormals         |
                                    aiProcess_SortByPType
                                );
-        return readScene(scene, t, "<MEMORY_BUFFER>", scaling, eps, mergeMultipleMeshes, ignoreMissingNormals);
+        return readScene(scene, t, "<MEMORY_BUFFER>", parameters, resultMetaData);
     }
 
-    TriMeshModelPtr AssimpReader::readFileAsTriMesh(const std::string& filename, bool mergeMultipleMeshes, bool ignoreMissingNormals)
+    TriMeshModelPtr AssimpReader::readFileAsTriMesh(const std::string& filename)
     {
         auto tri = boost::make_shared<TriMeshModel>();
-        if (!readFileAsTriMesh(filename, tri, mergeMultipleMeshes, ignoreMissingNormals))
+        if (!readFileAsTriMesh(filename, tri))
         {
             return nullptr;
         }
         return tri;
     }
 
-    TriMeshModelPtr AssimpReader::readBufferAsTriMesh(const std::string_view& v, bool mergeMultipleMeshes, bool ignoreMissingNormals)
+    TriMeshModelPtr AssimpReader::readBufferAsTriMesh(const std::string_view& v)
     {
         auto tri = boost::make_shared<TriMeshModel>();
-        if (!readBufferAsTriMesh(v, tri, mergeMultipleMeshes, ignoreMissingNormals))
+        if (!readBufferAsTriMesh(v, tri))
         {
             return nullptr;
         }
         return tri;
     }
 
-    ManipulationObjectPtr AssimpReader::readFileAsManipulationObject(const std::string& filename, const std::string& name, bool mergeMultipleMeshes, bool ignoreMissingNormals)
+    ManipulationObjectPtr AssimpReader::readFileAsManipulationObject(const std::string& filename, const std::string& name)
     {
-        if (auto tri = readFileAsTriMesh(filename, mergeMultipleMeshes, ignoreMissingNormals))
+        if (auto tri = readFileAsTriMesh(filename))
         {
             return boost::make_shared<ManipulationObject>(name, tri, filename);
         }
         return nullptr;
     }
-    ManipulationObjectPtr AssimpReader::readBufferAsManipulationObject(const std::string_view& v, const std::string& name, bool mergeMultipleMeshes, bool ignoreMissingNormals)
+    ManipulationObjectPtr AssimpReader::readBufferAsManipulationObject(const std::string_view& v, const std::string& name)
     {
-        if (auto tri = readBufferAsTriMesh(v, mergeMultipleMeshes, ignoreMissingNormals))
+        if (auto tri = readBufferAsTriMesh(v))
         {
             return boost::make_shared<ManipulationObject>(name, tri);
         }
         return nullptr;
-    }
-
-    void AssimpReader::set_epsilon(float _eps)
-    {
-        eps = _eps;
-    }
-
-    float AssimpReader::epsilon() const
-    {
-        return eps;
-    }
-
-    void AssimpReader::setScaling(float s)
-    {
-        scaling = s;
     }
 }
 
