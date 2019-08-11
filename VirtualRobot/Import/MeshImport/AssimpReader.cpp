@@ -77,7 +77,10 @@ namespace
                     error_log << " has no normals (and none were generated when loading it)\n";
                     return false;
                 }
-                error_log << " has no normals (and none were generated when loading it) (ignoring this)\n";
+                if (param.verbose)
+                {
+                    error_log << " has no normals (and none were generated when loading it) (ignoring this)\n";
+                }
                 meta.regeneratedNormals = true;
             }
 
@@ -96,9 +99,10 @@ namespace
                 const auto& f = m.mFaces[i];
                 if (f.mNumIndices != 3)
                 {
-                    error_log << " has face (# " << i
-                              << ") with the wrong number of vertices ("
-                              << f.mNumIndices << ")\n";
+                    if (param.verbose || !param.skipInvalidFaces)
+                        error_log << " has face (# " << i
+                                  << ") with the wrong number of vertices ("
+                                  << f.mNumIndices << ")\n";
                     if (param.skipInvalidFaces)
                     {
                         ++meta.skippedFaces;

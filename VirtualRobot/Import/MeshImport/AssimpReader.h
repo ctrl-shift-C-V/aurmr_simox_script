@@ -30,7 +30,7 @@ namespace VirtualRobot
 
         ManipulationObjectPtr readFileAsManipulationObject(const std::string& filename, const std::string& name = "");
         ManipulationObjectPtr readBufferAsManipulationObject(const std::string_view& v, const std::string& name = "");
-        
+
         struct Parameters
         {
             float scaling = 1;
@@ -39,6 +39,7 @@ namespace VirtualRobot
             bool mergeMultipleMeshes = false;
             bool ignoreMissingNormals = false;
             bool skipInvalidFaces = false;
+            bool verbose = true;
         };
         Parameters parameters;
 
