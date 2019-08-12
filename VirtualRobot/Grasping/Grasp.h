@@ -98,7 +98,7 @@ namespace VirtualRobot
         /*!
             Return the transformation of this grasp.
             The transformation is given in the coordinate system of the tcp (whereas the tcp belongs to the eef).
-            This transformation specifies the tcp to object relation.
+            This transformation specifies the tcp to object relation (object in tcp frame).
         */
         const Eigen::Matrix4f& getTransformation() const;
 
