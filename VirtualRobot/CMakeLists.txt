@@ -353,6 +353,7 @@ SET(SOURCES
     Tools/Gravity.cpp
     
     Util/json/eigen_conversion.cpp
+    Util/json/io.cpp
     Util/xml/tinyxml2.cpp
     
     Visualization/ColorMap.cpp
@@ -575,6 +576,7 @@ SET(INCLUDES
     
     Util/json/eigen_conversion.h
     Util/json/eigen_conversion.hpp
+    Util/json/io.h
     Util/json/json.hpp
     Util/xml/tinyxml2.h
     
