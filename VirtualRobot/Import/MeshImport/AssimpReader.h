@@ -22,26 +22,35 @@ namespace VirtualRobot
         static std::string get_extensions();
 
         // read data and store it to trimesh
-        bool readFileAsTriMesh(const std::string& _filename, const TriMeshModelPtr& t, bool mergeMultipleMeshes = false);
-        bool readBufferAsTriMesh(const std::string_view& v, const TriMeshModelPtr& t, bool mergeMultipleMeshes = false);
+        bool readFileAsTriMesh(const std::string& _filename, const TriMeshModelPtr& t);
+        bool readBufferAsTriMesh(const std::string_view& v, const TriMeshModelPtr& t);
 
-        TriMeshModelPtr readFileAsTriMesh(const std::string& filename, bool mergeMultipleMeshes = false);
-        TriMeshModelPtr readBufferAsTriMesh(const std::string_view& v, bool mergeMultipleMeshes = false);
+        TriMeshModelPtr readFileAsTriMesh(const std::string& filename);
+        TriMeshModelPtr readBufferAsTriMesh(const std::string_view& v);
 
-        ManipulationObjectPtr readFileAsManipulationObject(const std::string& filename, const std::string& name = "", bool mergeMultipleMeshes = false);
-        ManipulationObjectPtr readBufferAsManipulationObject(const std::string_view& v, const std::string& name = "", bool mergeMultipleMeshes = false);
+        ManipulationObjectPtr readFileAsManipulationObject(const std::string& filename, const std::string& name = "");
+        ManipulationObjectPtr readBufferAsManipulationObject(const std::string_view& v, const std::string& name = "");
 
-        /** Set the threshold to be used for considering two point to be equal.
-            Can be used to merge small gaps */
-        void set_epsilon(float _eps);
+        struct Parameters
+        {
+            float scaling = 1;
+            /// Returns the threshold to be used for considering two point to be equal.
+            float eps = FLT_MIN;
+            bool mergeMultipleMeshes = false;
+            bool ignoreMissingNormals = false;
+            bool skipInvalidFaces = false;
+            bool verbose = true;
+        };
+        Parameters parameters;
 
-        /// Returns the threshold to be used for considering two point to be equal.
-        float epsilon() const;
+        struct ResultMetaData
+        {
+            std::size_t skippedFaces = 0;
+            bool loadingSuccessful  = false;
+            bool regeneratedNormals  = false;
+        };
 
-        void setScaling(float s);
-    private:
-        float scaling;
-        float eps;
+        ResultMetaData resultMetaData;
     };
 
     typedef boost::shared_ptr<AssimpReader> AssimpReaderPtr;
