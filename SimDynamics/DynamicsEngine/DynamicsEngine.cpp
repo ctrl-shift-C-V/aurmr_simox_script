@@ -80,6 +80,19 @@ namespace SimDynamics
         MutexLockPtr lock = getScopedLock();
         floorPos = pos;
         floorUp = up;
+        floorDepthMM = 500.0f;
+        floorExtendMM = 50000.0f;
+    }
+
+    void DynamicsEngine::removeFloorPlane()
+    {
+        MutexLockPtr lock = getScopedLock();
+        floorPos.setZero();
+        floorUp.setZero();
+        floorDepthMM = 0.0f;
+        floorExtendMM = 0.0f;
+        removeObject(floor);
+        floor.reset();
     }
 
     bool DynamicsEngine::addRobot(DynamicsRobotPtr r)

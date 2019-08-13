@@ -111,6 +111,7 @@ namespace SimDynamics
         */
         virtual void createFloorPlane(const Eigen::Vector3f& pos, const Eigen::Vector3f& up, float friction = 0.0f);
 
+        virtual void removeFloorPlane();
         /*!
             By default all collisions are enabled.
             Here, collisions between two objects can be disabled.

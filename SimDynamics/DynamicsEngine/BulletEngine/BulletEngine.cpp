@@ -324,6 +324,12 @@ namespace SimDynamics
         addObject(groundObjectBt);
     }
 
+    void BulletEngine::removeFloorPlane()
+    {
+        MutexLockPtr lock = getScopedLock();
+        groundObject.reset();
+        DynamicsEngine::removeFloorPlane();
+    }
 
     btMatrix3x3 BulletEngine::getRotMatrix(const Eigen::Matrix4f& pose)
     {

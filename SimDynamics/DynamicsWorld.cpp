@@ -81,7 +81,7 @@ namespace SimDynamics
     }
 
     DynamicsWorld::~DynamicsWorld()
-    = default;
+        = default;
 
     bool DynamicsWorld::addObject(DynamicsObjectPtr o)
     {
@@ -135,4 +135,26 @@ namespace SimDynamics
         return engine->getRobots();
     }
 
+    std::vector<DynamicsObjectPtr> DynamicsWorld::getObjects()
+    {
+        return engine->getObjects();
+    }
+
+    void DynamicsWorld::removeFloorPlane()
+    {
+        engine->removeFloorPlane();
+    }
+
+    void DynamicsWorld::clear()
+    {
+        for (const auto& robot : getRobots())
+        {
+            removeRobot(robot);
+        }
+        for (const auto& obj : getObjects())
+        {
+            removeObject(obj);
+        }
+        removeFloorPlane();
+    }
 } // namespace

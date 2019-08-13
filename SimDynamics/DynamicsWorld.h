@@ -76,6 +76,8 @@ namespace SimDynamics
         */
         bool removeObject(DynamicsObjectPtr o);
 
+        std::vector<DynamicsObjectPtr> getObjects();
+
         /*!
             Add a robot to the world.
         */
@@ -94,12 +96,14 @@ namespace SimDynamics
             \param up The up vector. Currently supported: (+/-1,0,0), (0,+/-1,0) or (0,0,+/-1).
         */
         void createFloorPlane(const Eigen::Vector3f& pos = Eigen::Vector3f(0, 0, 0), const Eigen::Vector3f& up = Eigen::Vector3f(0, 0, 1.0f), float friction = -1);
-
+        void removeFloorPlane();
         /*!
             Since VirtualRobot usually uses MM and most physics engines like M, the models are automatically converted if this bool is set.
             You can disable this automatic feature by calling <DynamicsWorld::convertMM2M = false;> before starting with your application.
         */
         static bool convertMM2M; // standard: true;
+
+        void clear();
 
     protected:
         // create world with static Init method.

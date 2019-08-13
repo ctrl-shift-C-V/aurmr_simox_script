@@ -110,6 +110,7 @@ namespace SimDynamics
         */
         void createFloorPlane(const Eigen::Vector3f& pos, const Eigen::Vector3f& up, float friction = 0.0f) override;
 
+        void removeFloorPlane() override;
         /*!
             dt and fixedTimeStep are given in seconds.
         */
