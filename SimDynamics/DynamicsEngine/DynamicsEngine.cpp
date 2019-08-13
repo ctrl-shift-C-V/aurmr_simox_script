@@ -101,7 +101,7 @@ namespace SimDynamics
 
         if (find(robots.begin(), robots.end(), r) == robots.end())
         {
-            for (auto & robot : robots)
+            for (auto& robot : robots)
             {
                 if (robot->getRobot() == r->getRobot())
                 {
@@ -274,8 +274,10 @@ namespace SimDynamics
     bool DynamicsEngine::checkCollisionEnabled(DynamicsObject* o1, DynamicsObject* o2)
     {
         MutexLockPtr lock = getScopedLock();
-        if(o1 == nullptr || o2 == nullptr)
+        if (o1 == nullptr || o2 == nullptr)
+        {
             return true;
+        }
         if (!checkCollisionEnabled(o1))
         {
             return false;
@@ -341,11 +343,11 @@ namespace SimDynamics
         return objects;
     }
 
-    DynamicsObjectPtr DynamicsEngine::getObject(const std::string &objectName)
+    DynamicsObjectPtr DynamicsEngine::getObject(const std::string& objectName)
     {
         MutexLockPtr lock = getScopedLock();
 
-        for (auto & object : objects)
+        for (auto& object : objects)
         {
             if (object->getName() == objectName)
             {
@@ -360,7 +362,7 @@ namespace SimDynamics
     {
         MutexLockPtr lock = getScopedLock();
 
-        for (auto & object : objects)
+        for (auto& object : objects)
         {
             object->activate();
         }
@@ -377,7 +379,7 @@ namespace SimDynamics
     {
         MutexLockPtr lock = getScopedLock();
 
-        for (auto & robot : robots)
+        for (auto& robot : robots)
         {
             if (robot->getRobot() == r)
             {
@@ -392,7 +394,7 @@ namespace SimDynamics
     {
         MutexLockPtr lock = getScopedLock();
 
-        for (auto & robot : robots)
+        for (auto& robot : robots)
         {
             if (robot->getName() == robName)
             {

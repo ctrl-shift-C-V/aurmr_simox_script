@@ -198,8 +198,8 @@ namespace SimDynamics
 
         // btActionInterface interface
     public:
-        void updateAction(btCollisionWorld *collisionWorld, btScalar deltaTimeStep) override;
-        void debugDraw(btIDebugDraw *debugDrawer) override;
+        void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep) override;
+        void debugDraw(btIDebugDraw* debugDrawer) override;
     };
 
     typedef boost::shared_ptr<BulletEngine> BulletEnginePtr;

@@ -12,8 +12,7 @@ namespace SimDynamics
         //engineMutexPtr.reset(new boost::recursive_mutex()); // may be overwritten by another mutex!
     }
 
-    DynamicsObject::~DynamicsObject()
-    = default;
+    DynamicsObject::~DynamicsObject() = default;
 
     std::string DynamicsObject::getName() const
     {
