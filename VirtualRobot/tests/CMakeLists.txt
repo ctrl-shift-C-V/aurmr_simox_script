@@ -34,6 +34,8 @@ ADD_VR_TEST( VirtualRobotTimeOptimalTrajectoryTest )
 ADD_VR_TEST( VirtualRobotRuntimeEnvironmentTest )
 
 ADD_VR_TEST( VirtualRobotJsonEigenConversionTest )
+ADD_VR_TEST( VirtualRobotJsonIOTest )
+
 ADD_VR_TEST( VirtualRobotMjcfTest )
 
 
