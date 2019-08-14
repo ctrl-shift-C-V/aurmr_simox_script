@@ -906,6 +906,10 @@ namespace VirtualRobot
         r->scale(scaleFactor);
         return r;
     }
+    TriMeshModelPtr TriMeshModel::clone(float x, float y, float z) const
+    {
+        return clone(Eigen::Vector3f{x, y, z});
+    }
 
 
 } // namespace VirtualRobot

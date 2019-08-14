@@ -139,6 +139,7 @@ namespace VirtualRobot
         virtual void scale(float scaleFactor);
         TriMeshModelPtr clone() const;
         TriMeshModelPtr clone(const Eigen::Vector3f& scaleFactor) const;
+        TriMeshModelPtr clone(float x, float y, float z) const;
 
         std::vector<Eigen::Vector3f> normals;
         std::vector<Eigen::Vector3f> vertices;
