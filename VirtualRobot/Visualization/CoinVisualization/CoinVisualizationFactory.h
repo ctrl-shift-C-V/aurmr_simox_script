@@ -369,6 +369,15 @@ namespace VirtualRobot
          bool renderPointcloud, std::vector<Eigen::Vector3f>& pointCloud,
          float zNear = 10.f, float zFar = 100000.f, float vertFov = M_PI / 4, float nanValue = NAN);
 
+        static bool renderOffscreenRgbDepthPointcloud
+        (SoOffscreenRenderer* renderer,
+         const Eigen::Matrix4f camPose, SoNode* scene,
+         short width, short height,
+         bool renderRgbImage, std::vector<unsigned char>& rgbImage,
+         bool renderDepthImage, std::vector<float>& depthImage,
+         bool renderPointcloud, std::vector<Eigen::Vector3f>& pointCloud,
+         float zNear = 10.f, float zFar = 100000.f, float vertFov = M_PI / 4, float nanValue = NAN);
+
         /*!
          * \brief Renders the given scene from the given cam position and outputs the rgb image, depth image and point cloud.
          * \param camNode The node of the robot that defines the position of the camera. Any node of the robot can host a camera.

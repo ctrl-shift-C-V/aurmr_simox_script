@@ -3798,15 +3798,31 @@ namespace VirtualRobot
             bool renderDepthImage, std::vector<float>& depthImage, bool renderPointcloud,
             std::vector<Eigen::Vector3f>& pointCloud, float zNear, float zFar, float vertFov, float nanValue)
     {
-        if (!offscreenRenderer)
-        {
-            VR_ERROR << "No renderer..." << endl;
-            return false;
-        }
         //check input
         if (!camNode)
         {
             VR_ERROR << "No cam node to render..." << endl;
+            return false;
+        }
+        return renderOffscreenRgbDepthPointcloud(
+                   offscreenRenderer, camNode->getGlobalPose(),
+                   scene, width, height, renderRgbImage, rgbImage,
+                   renderDepthImage, depthImage, renderPointcloud,
+                   pointCloud, zNear, zFar, vertFov, nanValue);
+    }
+
+    bool CoinVisualizationFactory::renderOffscreenRgbDepthPointcloud(
+        SoOffscreenRenderer* offscreenRenderer,
+        const Eigen::Matrix4f camPose, SoNode* scene,
+        short width, short height,
+        bool renderRgbImage, std::vector<unsigned char>& rgbImage,
+        bool renderDepthImage, std::vector<float>& depthImage,
+        bool renderPointcloud, std::vector<Eigen::Vector3f>& pointCloud,
+        float zNear, float zFar, float vertFov, float nanValue)
+    {
+        if (!offscreenRenderer)
+        {
+            VR_ERROR << "No renderer..." << endl;
             return false;
         }
         if (!scene)
@@ -3852,7 +3868,6 @@ namespace VirtualRobot
         //setup cam
         float sc = 0.001f;//cam has to be in m but values are in mm. (if the cam is set to mm with a unit node the robot visu disapperars)
         SoPerspectiveCamera* camInMeters = new SoPerspectiveCamera;
-        Eigen::Matrix4f camPose = camNode->getGlobalPose();
         Eigen::Vector3f camPos = MathTools::getTranslation(camPose);
         camInMeters->position.setValue(camPos[0]*sc, camPos[1]*sc, camPos[2]*sc);
         SbRotation align(SbVec3f(1, 0, 0), (float)(M_PI)); // first align from  default direction -z to +z by rotating with 180 degree around x axis
