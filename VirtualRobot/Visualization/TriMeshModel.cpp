@@ -283,14 +283,20 @@ namespace VirtualRobot
 
         auto getAndAddColorId = [&](unsigned int vertexId)
         {
-            for(auto& face : faces)
+            for (auto& face : faces)
             {
-                if(face.id1 == vertexId && face.idColor1 != UINT_MAX)
+                if (face.id1 == vertexId && face.idColor1 != UINT_MAX)
+                {
                     return face.idColor1;
-                if(face.id2 == vertexId && face.idColor2 != UINT_MAX)
+                }
+                if (face.id2 == vertexId && face.idColor2 != UINT_MAX)
+                {
                     return face.idColor2;
-                if(face.id3 == vertexId && face.idColor3 != UINT_MAX)
+                }
+                if (face.id3 == vertexId && face.idColor3 != UINT_MAX)
+                {
                     return face.idColor3;
+                }
             }
             return addColor(color);
         };
@@ -304,17 +310,17 @@ namespace VirtualRobot
             }
 
 
-            if(face.idColor1 == UINT_MAX)
+            if (face.idColor1 == UINT_MAX)
             {
                 face.idColor1 = getAndAddColorId(face.id1);
                 counter++;
             }
-            if(face.idColor2 == UINT_MAX)
+            if (face.idColor2 == UINT_MAX)
             {
                 face.idColor2 = getAndAddColorId(face.id2);
                 counter++;
             }
-            if(face.idColor3 == UINT_MAX)
+            if (face.idColor3 == UINT_MAX)
             {
                 face.idColor3 = getAndAddColorId(face.id3);
                 counter++;
@@ -881,14 +887,14 @@ namespace VirtualRobot
         scale(Eigen::Vector3f{scaleFactor, scaleFactor, scaleFactor});
     }
 
-    VirtualRobot::TriMeshModelPtr TriMeshModel::clone() const
+    TriMeshModelPtr TriMeshModel::clone() const
     {
         Eigen::Vector3f scaleFactor;
         scaleFactor << 1.0f, 1.0f, 1.0f;
         return clone(scaleFactor);
     }
 
-    VirtualRobot::TriMeshModelPtr TriMeshModel::clone(const Eigen::Vector3f& scaleFactor) const
+    TriMeshModelPtr TriMeshModel::clone(const Eigen::Vector3f& scaleFactor) const
     {
         TriMeshModelPtr r(new TriMeshModel());
         r->vertices = vertices;
@@ -899,6 +905,10 @@ namespace VirtualRobot
         r->normals = normals;
         r->scale(scaleFactor);
         return r;
+    }
+    TriMeshModelPtr TriMeshModel::clone(float x, float y, float z) const
+    {
+        return clone(Eigen::Vector3f{x, y, z});
     }
 
 
