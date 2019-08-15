@@ -303,20 +303,20 @@ namespace VirtualRobot
                 continue;
             }
 
-            auto colorId = UINT_MAX;
+
             if(face.idColor1 == UINT_MAX)
             {
-                colorId = face.idColor1 = getAndAddColorId(face.id1);
+                face.idColor1 = getAndAddColorId(face.id1);
                 counter++;
             }
             if(face.idColor2 == UINT_MAX)
             {
-                colorId = face.idColor2 = getAndAddColorId(face.id2);
+                face.idColor2 = getAndAddColorId(face.id2);
                 counter++;
             }
             if(face.idColor3 == UINT_MAX)
             {
-                colorId = face.idColor3 = getAndAddColorId(face.id3);
+                face.idColor3 = getAndAddColorId(face.id3);
                 counter++;
             }
 
