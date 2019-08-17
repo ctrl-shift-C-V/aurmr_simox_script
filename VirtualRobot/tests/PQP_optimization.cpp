@@ -93,7 +93,10 @@ BOOST_AUTO_TEST_CASE(test_obb_disjoint)
         }
 
 
-        BOOST_CHECK_EQUAL(old, wloops);
+        if(i % N/100 == 0)
+        {
+            BOOST_CHECK_EQUAL(old, wloops);
+        }
         ++statsc.at(wloops);
         ++statso.at(old);
     }
