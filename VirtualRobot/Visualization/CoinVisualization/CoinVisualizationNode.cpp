@@ -40,7 +40,9 @@ namespace
 
 namespace VirtualRobot
 {
-
+    CoinVisualizationNode::CoinVisualizationNode(TriMeshModelPtr tri):
+        CoinVisualizationNode(CoinVisualizationFactory::getCoinVisualization(tri))
+    {}
     /**
      * Store a reference to \p visualizationNode in the member
      * CoinVisualizationNode::visualization.
