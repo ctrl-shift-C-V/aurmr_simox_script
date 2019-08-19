@@ -95,7 +95,19 @@ namespace VirtualRobot
         template<class T>
         static T getValue(const std::string& key, const T& defaultValue)
         {
-            return hasValue(key) ? boost::lexical_cast<T>(getValue(key)) : defaultValue;
+            static_assert(std::is_arithmetic_v<T>);
+            try
+            {
+                return hasValue(key) ? boost::lexical_cast<T>(getValue(key)) : defaultValue;
+            }
+            catch(...)
+            {
+                VR_WARNING << "Failed to lexical cast value '" << getValue(key)
+                           << "' for key '" << key << "' to "
+                           << boost::core::demangle(typeid(T).name())
+                           << "'" << std::endl;
+                throw;
+            }
         }
         static bool hasValue(const std::string& key);
 
