@@ -79,6 +79,9 @@ namespace VirtualRobot
         virtual bool addSceneObjects(RobotNodeSetPtr robotNodeSet);
         virtual bool addSceneObjects(std::vector<RobotNodePtr> robotNodes);
 
+        virtual void addSceneObjects(std::vector<SceneObjectPtr> sceneObjects);
+        virtual void addSceneObjects(std::vector<ManipulationObjectPtr> sceneObjects);
+
         //! remove a single col model from this Set
         virtual bool removeSceneObject(SceneObjectPtr sceneObject);
 

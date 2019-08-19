@@ -5,6 +5,7 @@
 #include "Visualization//VisualizationNode.h"
 #include "RobotNodeSet.h"
 #include "Obstacle.h"
+#include "ManipulationObject.h"
 
 
 namespace VirtualRobot
@@ -137,6 +138,23 @@ namespace VirtualRobot
         }
 
         return true;
+    }
+
+    void SceneObjectSet::addSceneObjects(std::vector<SceneObjectPtr> sceneObjects)
+    {
+        for (auto& so : sceneObjects)
+        {
+            addSceneObject(so);
+        }
+    }
+
+    void SceneObjectSet::addSceneObjects(std::vector<ManipulationObjectPtr> mos)
+    {
+        for (auto& mobj : mos)
+        {
+            SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(mobj);
+            addSceneObject(so);
+        }
     }
 
     bool SceneObjectSet::removeSceneObject(SceneObjectPtr sceneObject)
