@@ -811,7 +811,7 @@ namespace VirtualRobot
         fs::path::iterator itFile = filepath.begin();
         fs::path newPath;
 
-        while (*itBasePath == *itFile)
+        while (itBasePath != basePathDir.end() && itFile != filepath.end() && *itBasePath == *itFile)
         {
             itFile++;
             itBasePath++;

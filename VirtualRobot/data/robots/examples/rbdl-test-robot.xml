@@ -1,0 +1,69 @@
+<Robot Type='ArmarIII RightArm' RootNode='Base'>
+        <RobotNode name='Base'>
+            <Transform>
+                <Translation x="0" y="0" z="0" unitsLength="mm"/>
+            </Transform>
+            <Visualization enable='true'>
+                <CoordinateAxis type='Inventor' enable='false' scaling='8'/>
+            </Visualization>
+            <Child name='Joint1'/>
+        </RobotNode>
+        <RobotNode name='Joint1'>
+            <Transform>
+            <Translation x="0" y="0" z="0" unitsLength="mm"/>
+            <rollpitchyaw roll="0" pitch="0" yaw="90" unitsAngle="deg"/>
+            </Transform>
+            <Joint type='revolute'>
+            </Joint>
+            <Physics>
+                <CoM location='VisualizationBBoxCenter'/>
+                <Mass value='3.65' units='kg' />
+            </Physics>
+            <Child name='Joint2'/>
+        </RobotNode>
+        <RobotNode name='Joint2'>
+            <Transform>
+            <rollpitchyaw roll="0" pitch="0" yaw="0" unitsAngle="degree"/>
+            <Translation x="100" y="200" z="300" unitsLength="mm"/>
+            </Transform>
+            <Joint type='revolute'>
+            </Joint>
+            <Physics>
+                <CoM location='VisualizationBBoxCenter'/>
+                <Mass value='3.65' units='kg' />
+            </Physics>
+            <Child name='Joint3'/>
+        </RobotNode>
+        <RobotNode name='Joint3'>
+            <Transform>
+            <rollpitchyaw roll="0" pitch="0" yaw="-90" unitsAngle="degree"/>
+            <Translation x="100" y="200" z="300" unitsLength="mm"/>
+            </Transform>
+            <Joint type='revolute'>
+            </Joint>
+            <Physics>
+                <CoM location='VisualizationBBoxCenter'/>
+                <Mass value='3.65' units='kg' />
+            </Physics>
+            <Child name='Joint4'/>
+        </RobotNode>
+        <RobotNode name='Joint4'>
+            <Transform>
+            <rollpitchyaw roll="0" pitch="0" yaw="-90" unitsAngle="degree"/>
+            <Translation x="100" y="200" z="300" unitsLength="mm"/>
+            </Transform>
+            <Joint type='revolute'>
+            </Joint>
+            <Physics>
+                <CoM location='VisualizationBBoxCenter'/>
+                <Mass value='3.65' units='kg' />
+            </Physics>
+        </RobotNode>
+
+        <RobotNodeSet name='Arm' kinematicRoot='Base'>
+            <Node name='Joint1'/>
+            <Node name='Joint2'/>
+            <Node name='Joint3'/>
+            <Node name='Joint4'/>
+        </RobotNodeSet>
+</Robot>

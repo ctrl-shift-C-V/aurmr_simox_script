@@ -44,7 +44,10 @@ struct OutputConfiguration
     }
     ~OutputConfiguration()
     {
+
+#if  BOOST_VERSION  < 106200
         logFile << "</TestLog>" << std::flush;
+#endif
         logFile.close();
         boost::unit_test::unit_test_log.set_stream(std::cout);
     }

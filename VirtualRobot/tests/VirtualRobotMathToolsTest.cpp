@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_SUITE(MathTools)
     BOOST_AUTO_TEST_CASE(testMathToolsHopf)
     {
         Eigen::Matrix4f m = Eigen::Matrix4f::Identity();
-        const int NR_TESTS = 10000;
+        const int NR_TESTS = 100;
         for (int i = 0; i < NR_TESTS; i++)
         {
             Eigen::Vector3f ax = Eigen::Vector3f::Random();
@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_SUITE(MathTools)
     BOOST_AUTO_TEST_CASE(testMathToolsHopfNeighborhood)
     {
         Eigen::Matrix4f m = Eigen::Matrix4f::Identity();
-        const int NR_TESTS = 50000;
+        const int NR_TESTS = 500;
         const float maxAngHopf = 0.01f;
         const float maxAngQuat = 2.5f * maxAngHopf;
         for (int i = 0; i < NR_TESTS; i++)
