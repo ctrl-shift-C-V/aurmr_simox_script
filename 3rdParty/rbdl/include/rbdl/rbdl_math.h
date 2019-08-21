@@ -8,16 +8,16 @@
 #ifndef RBDL_MATH_H
 #define RBDL_MATH_H
 
-#include "rbdl/rbdl_config.h"
+#include <rbdl/rbdl_config.h>
 
 #ifdef RBDL_USE_SIMPLE_MATH
-#include "rbdl/SimpleMath/SimpleMathFixed.h"
-#include "rbdl/SimpleMath/SimpleMathDynamic.h"
-#include "rbdl/SimpleMath/SimpleMathMixed.h"
-#include "rbdl/SimpleMath/SimpleMathQR.h"
-#include "rbdl/SimpleMath/SimpleMathCholesky.h"
-#include "rbdl/SimpleMath/SimpleMathCommaInitializer.h"
-#include "rbdl/SimpleMath/SimpleMathMap.h"
+#include <rbdl/SimpleMath/SimpleMathFixed.h>
+#include <rbdl/SimpleMath/SimpleMathDynamic.h>
+#include <rbdl/SimpleMath/SimpleMathMixed.h>
+#include <rbdl/SimpleMath/SimpleMathQR.h>
+#include <rbdl/SimpleMath/SimpleMathCholesky.h>
+#include <rbdl/SimpleMath/SimpleMathCommaInitializer.h>
+#include <rbdl/SimpleMath/SimpleMathMap.h>
 #include <vector>
 
 typedef SimpleMath::Fixed::Matrix<double, 2,1> Vector2_t;
@@ -39,7 +39,7 @@ typedef SimpleMath::Dynamic::Matrix<double> VectorN_t;
 #include <Eigen/StdVector>
 #include <Eigen/QR>
 
-#include "rbdl/rbdl_eigenmath.h"
+#include <rbdl/rbdl_eigenmath.h>
 
 typedef Eigen::Matrix<double, 6, 3> Matrix63_t;
 typedef Eigen::Matrix<double, 4, 3> Matrix43_t;
@@ -66,8 +66,8 @@ typedef MatrixN_t MatrixNd;
 
 } /* RigidBodyDynamics */
 
-#include "rbdl/Quaternion.h"
-#include "rbdl/SpatialAlgebraOperators.h"
+#include <rbdl/Quaternion.h>
+#include <rbdl/SpatialAlgebraOperators.h>
 
 // If we use Eigen3 we have to create specializations of the STL
 // std::vector such that the alignment is done properly.

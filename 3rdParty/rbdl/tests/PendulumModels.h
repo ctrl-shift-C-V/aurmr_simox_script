@@ -1,4 +1,4 @@
-#include "rbdl/rbdl.h"
+#include <rbdl/rbdl.h>
 
 struct DoublePerpendicularPendulumJointCoordinates {
   DoublePerpendicularPendulumJointCoordinates()
