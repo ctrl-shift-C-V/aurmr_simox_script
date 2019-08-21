@@ -197,7 +197,7 @@ FILE ( GLOB headers
 	${CMAKE_CURRENT_SOURCE_DIR}/include/rbdl/*.h
 	${CMAKE_CURRENT_BINARY_DIR}/include/rbdl/rbdl_config.h
 	)
-
+    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/rbdl/rbdl_config.h DESTINATION ${Simox_INSTALL_HEADER_DIR}/rbdl)
     INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION ${Simox_INSTALL_HEADER_DIR}
           COMPONENT Headers
             FILES_MATCHING
