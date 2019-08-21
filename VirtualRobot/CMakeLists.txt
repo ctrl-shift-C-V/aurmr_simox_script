@@ -519,6 +519,7 @@ SET(INCLUDES
     math/statistics/BoxPlot.h
     math/statistics/Histogram.h
     
+    mjcf.h
     MJCF/Document.h
     MJCF/elements.h
     MJCF/elements/has_member.hpp

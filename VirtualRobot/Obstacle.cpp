@@ -4,8 +4,8 @@
 #include "CollisionDetection/CollisionChecker.h"
 #include "Nodes/RobotNode.h"
 #include "Visualization/VisualizationFactory.h"
+#include "Visualization/CoinVisualization/CoinVisualizationNode.h"
 #include <vector>
-
 
 namespace VirtualRobot
 {
@@ -40,7 +40,7 @@ namespace VirtualRobot
     }
 
     Obstacle::Obstacle(const std::string& name, const TriMeshModelPtr& trimesh, const std::string& filename)
-        : Obstacle(TagTrimeshCtor{}, name, boost::make_shared<VisualizationNode>(trimesh))
+        : Obstacle(TagTrimeshCtor{}, name, boost::make_shared<CoinVisualizationNode>(trimesh))
     {
         getVisualization()->setFilename(filename, false);
         getCollisionModel()->getVisualization()->setFilename(filename, false);

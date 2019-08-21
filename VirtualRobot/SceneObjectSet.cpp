@@ -5,6 +5,7 @@
 #include "Visualization//VisualizationNode.h"
 #include "RobotNodeSet.h"
 #include "Obstacle.h"
+#include "ManipulationObject.h"
 
 
 namespace VirtualRobot
@@ -62,7 +63,7 @@ namespace VirtualRobot
             return false;
         }
 
-        for (const auto & i : sceneObjects)
+        for (const auto& i : sceneObjects)
             if (i == sceneObject)
             {
                 VR_WARNING << "col model already added, in: " << name << endl;
@@ -91,7 +92,7 @@ namespace VirtualRobot
 
         std::vector< SceneObjectPtr > so = sceneObjectSet->getSceneObjects();
 
-        for (const auto & i : so)
+        for (const auto& i : so)
         {
             if (!addSceneObject(i))
             {
@@ -116,7 +117,7 @@ namespace VirtualRobot
 
     bool SceneObjectSet::addSceneObjects(std::vector<RobotNodePtr> robotNodes)
     {
-        for (auto & robotNode : robotNodes)
+        for (auto& robotNode : robotNodes)
         {
             SceneObjectPtr cm = boost::dynamic_pointer_cast<SceneObject>(robotNode);
 
@@ -137,6 +138,23 @@ namespace VirtualRobot
         }
 
         return true;
+    }
+
+    void SceneObjectSet::addSceneObjects(std::vector<SceneObjectPtr> sceneObjects)
+    {
+        for (auto& so : sceneObjects)
+        {
+            addSceneObject(so);
+        }
+    }
+
+    void SceneObjectSet::addSceneObjects(std::vector<ManipulationObjectPtr> mos)
+    {
+        for (auto& mobj : mos)
+        {
+            SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(mobj);
+            addSceneObject(so);
+        }
     }
 
     bool SceneObjectSet::removeSceneObject(SceneObjectPtr sceneObject)
@@ -221,7 +239,7 @@ namespace VirtualRobot
 
     bool SceneObjectSet::getCurrentSceneObjectConfig(std::map< SceneObjectPtr, Eigen::Matrix4f >& storeConfig)
     {
-        for (auto & sceneObject : sceneObjects)
+        for (auto& sceneObject : sceneObjects)
         {
             storeConfig[sceneObject] = sceneObject->getGlobalPose();
         }
@@ -231,7 +249,7 @@ namespace VirtualRobot
 
     bool SceneObjectSet::hasSceneObject(SceneObjectPtr sceneObject)
     {
-        for (auto & iter : sceneObjects)
+        for (auto& iter : sceneObjects)
         {
             if (iter == sceneObject)
             {
@@ -246,7 +264,7 @@ namespace VirtualRobot
     {
         std::vector< CollisionModelPtr > result;
 
-        for (auto & sceneObject : sceneObjects)
+        for (auto& sceneObject : sceneObjects)
         {
             if (sceneObject->getCollisionModel())
             {
@@ -286,7 +304,7 @@ namespace VirtualRobot
 
         ss << pre << "<SceneObjectSet name='" << name << "'>\n";
 
-        for (auto & sceneObject : sceneObjects)
+        for (auto& sceneObject : sceneObjects)
         {
             ss << pre << t << "<SceneObject name='" << sceneObject->getName() << "'/>\n";
         }
@@ -299,7 +317,7 @@ namespace VirtualRobot
     {
         SceneObjectSetPtr result(new SceneObjectSet(newName, colChecker));
 
-        for (const auto & sceneObject : sceneObjects)
+        for (const auto& sceneObject : sceneObjects)
         {
             result->addSceneObject(sceneObject);
         }
@@ -312,7 +330,7 @@ namespace VirtualRobot
     {
         SceneObjectSetPtr result(new SceneObjectSet(newName, newColChecker));
 
-        for (auto & sceneObject : sceneObjects)
+        for (auto& sceneObject : sceneObjects)
         {
             SceneObjectPtr o = sceneObject->clone(sceneObject->getName(), newColChecker);
             result->addSceneObject(o);
@@ -327,7 +345,7 @@ namespace VirtualRobot
         std::vector<VisualizationNodePtr> visus;
         std::vector<CollisionModelPtr> cols;
 
-        for (auto & sceneObject : sceneObjects)
+        for (auto& sceneObject : sceneObjects)
         {
             if (sceneObject->getVisualization())
             {
