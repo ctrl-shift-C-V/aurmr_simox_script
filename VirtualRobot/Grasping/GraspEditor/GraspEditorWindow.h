@@ -12,9 +12,7 @@
 #include <VirtualRobot/ManipulationObject.h>
 #include <string.h>
 #include <QtGui>
-#if QT_VERSION >= 0x050000
 #include <QtWidgets/QtWidgets>
-#endif
 #include <QtCore/QtCore>
 
 #include <Inventor/sensors/SoTimerSensor.h>
