@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <fstream>
 
+
 namespace fs = std::filesystem;
 
 
@@ -28,9 +29,7 @@ namespace nlohmann
         try
         {
             ifs.open(filename);
-            json j;
-            ifs >> j;
-            return j;
+            return read_json(ifs);
         }
         catch (const std::ios_base::failure& e)
         {
@@ -40,6 +39,15 @@ namespace nlohmann
             throw std::ios_base::failure(msg + std::string(e.what()));
         }
     }
+
+
+    json read_json(std::istream& is)
+    {
+        json j;
+        is >> j;
+        return j;
+    }
+
 
 
     void write_json(const std::string& filename, const json& j,
@@ -52,7 +60,7 @@ namespace nlohmann
         try
         {
             ofs.open(filename);
-            ofs << j.dump(indent, indent_char);
+            write_json(ofs, j, indent, indent_char);
         }
         catch (const std::ios_base::failure& e)
         {
@@ -60,6 +68,12 @@ namespace nlohmann
             const std::string msg = "Failed to write file \"" + filename + "\": ";
             throw std::ios_base::failure(msg + std::string(e.what()));
         }
+    }
+
+
+    void write_json(std::ostream& os, const json& j, const int indent, const char indent_char)
+    {
+        os << j.dump(indent, indent_char);
     }
 
 }
