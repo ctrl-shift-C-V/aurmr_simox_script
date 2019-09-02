@@ -917,19 +917,12 @@ namespace VirtualRobot
     {
         RobotConfigPtr r(new RobotConfig(shared_from_this(), getName()));
 
-        std::vector<RobotNodePtr> robotNodes = this->getRobotNodes();
-        std::vector<RobotNodePtr>::const_iterator iterator = robotNodes.begin();
-
-        while (robotNodes.end() != iterator)
+        for (const auto& rn : this->getRobotNodes())
         {
-            RobotNodePtr rn = *iterator;
-
             if (rn->isTranslationalJoint() || rn->isRotationalJoint())
             {
                 r->setConfig(rn, rn->getJointValue());
             }
-
-            iterator++;
         }
 
         return r;

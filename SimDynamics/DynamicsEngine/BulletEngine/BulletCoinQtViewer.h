@@ -38,9 +38,7 @@
 #include <QtCore/QtGlobal>
 #include <QtGui/QtGui>
 #include <QtCore/QtCore>
-#if QT_VERSION >= 0x050000
 #include <QtWidgets/QFrame>
-#endif
 
 namespace SimDynamics
 {
