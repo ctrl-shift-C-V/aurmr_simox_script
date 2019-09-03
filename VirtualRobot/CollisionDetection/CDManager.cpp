@@ -36,8 +36,8 @@ namespace VirtualRobot
             {
                 VR_WARNING << "CollisionModel of SceneObjectSet '" << m->getName() << "' is linked to a different instance of collision checker than this CollisionManager..." << endl;
             }
-
-            for (const auto& colModel : colModels)
+            auto tmpColModels = colModels; // colModels is changed in the next loop, so we need a copy
+            for (const auto& colModel : tmpColModels)
             {
                 if (m != colModel)
                 {
@@ -138,8 +138,8 @@ namespace VirtualRobot
 
         for (const auto& set : sets)
         {
-            float tmp = (float)colChecker->calculateDistance(m, set);
 
+            float tmp = (float)colChecker->calculateDistance(m, set);
             if (tmp < minDist)
             {
                 minDist = tmp;
@@ -165,6 +165,7 @@ namespace VirtualRobot
         while (i != colModelPairs.end())
         {
             tmp = getDistance(i->first, i->second);
+
 
             if (tmp < minDist)
             {
@@ -331,6 +332,8 @@ namespace VirtualRobot
 
     bool CDManager::hasSceneObjectSet(SceneObjectSetPtr m)
     {
+        if(!m)
+            return false;
         for (const auto& colModel : colModels)
         {
             if (colModel == m)
@@ -344,6 +347,8 @@ namespace VirtualRobot
 
     bool CDManager::_hasSceneObjectSet(SceneObjectSetPtr m)
     {
+        if(!m)
+            return false;
         for (auto& colModel : colModels)
         {
             if (colModel == m)
@@ -389,7 +394,6 @@ namespace VirtualRobot
         {
             colModels.push_back(m2);
         }
-
         colModelPairs[m1].push_back(m2);
     }
 
@@ -412,9 +416,9 @@ namespace VirtualRobot
             return;
         }
 
-        VirtualRobot::SceneObjectSetPtr cms(new VirtualRobot::SceneObjectSet("", colChecker));
+        VirtualRobot::SceneObjectSetPtr cms(new VirtualRobot::SceneObjectSet(m1->getName() + "Set", colChecker));
         cms->addSceneObject(m1);
-        VirtualRobot::SceneObjectSetPtr cms2(new VirtualRobot::SceneObjectSet("", colChecker));
+        VirtualRobot::SceneObjectSetPtr cms2(new VirtualRobot::SceneObjectSet(m2->getName() + "Set", colChecker));
         cms2->addSceneObject(m2);
         addCollisionModelPair(cms, cms2);
 

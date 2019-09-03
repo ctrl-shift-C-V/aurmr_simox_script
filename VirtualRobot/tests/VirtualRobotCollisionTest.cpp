@@ -13,6 +13,7 @@
 #include <VirtualRobot/CollisionDetection/CollisionModel.h>
 #include <VirtualRobot/Obstacle.h>
 #include <string>
+#include <CollisionDetection/CDManager.h>
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
@@ -51,6 +52,36 @@ BOOST_AUTO_TEST_CASE(testCollisionModel)
     bool col2 = colChecker->checkCollision(obstacle1->getCollisionModel(), obstacle2->getCollisionModel());
     BOOST_CHECK_EQUAL(col2, true);
 
+}
+
+BOOST_AUTO_TEST_CASE(testCollisionManager)
+{
+    VirtualRobot::CDManager cdm;
+    VirtualRobot::CollisionCheckerPtr colChecker = VirtualRobot::CollisionChecker::getGlobalCollisionChecker();
+    BOOST_REQUIRE(colChecker);
+
+    VirtualRobot::ObstaclePtr obstacle1(VirtualRobot::Obstacle::createBox(100, 200, 300));
+    VirtualRobot::ObstaclePtr obstacle2(VirtualRobot::Obstacle::createBox(10, 20, 30));
+    VirtualRobot::ObstaclePtr obstacle3(VirtualRobot::Obstacle::createBox(10, 20, 30));
+    Eigen::Matrix4f m1 = Eigen::Matrix4f::Identity();
+    Eigen::Matrix4f m2 = Eigen::Matrix4f::Identity();
+    m2(0, 3) = 5000.0f;
+    m2(1, 3) = 1000.0f;
+    m2(2, 3) = 1500.0f;
+    obstacle1->setGlobalPose(m1);
+    obstacle2->setGlobalPose(m2);
+    obstacle3->setGlobalPose(m2);
+
+    cdm.addCollisionModel(obstacle1);
+    cdm.addCollisionModel(obstacle2);
+    cdm.addCollisionModel(obstacle3);
+
+    BOOST_REQUIRE(obstacle1);
+    BOOST_REQUIRE(obstacle2);
+    BOOST_REQUIRE(obstacle3);
+
+    BOOST_CHECK_EQUAL(cdm.getDistance(), 0.0f);
+    BOOST_CHECK(cdm.isInCollision());
 }
 
 BOOST_AUTO_TEST_SUITE_END()
