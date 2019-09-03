@@ -2,6 +2,7 @@
 
 #include "converters.h"
 
+
 namespace VirtualRobot::json
 {
     Eigen::Matrix4f posquat2eigen4f(const std::string& str)
@@ -24,7 +25,28 @@ namespace VirtualRobot::json
                    j.at("qw").get<float>()
                );
     }
+
+    std::vector<Eigen::Matrix4f> posquatArray2eigen4fVector(const std::string& str)
+    {
+        return posquatArray2eigen4fVector(::nlohmann::json::parse(str));
+    }
+    std::vector<Eigen::Matrix4f> posquatArray2eigen4fVector(const char* str)
+    {
+        return posquatArray2eigen4fVector(::nlohmann::json::parse(str));
+    }
+
+    std::vector<Eigen::Matrix4f> posquatArray2eigen4fVector(const nlohmann::json& j)
+    {
+        if (!j.is_array())
+        {
+            throw std::invalid_argument{"posquatArray2eigen4fVector: json has to be an array"};
+        }
+        std::vector<Eigen::Matrix4f> result;
+        result.reserve(j.size());
+        for (const auto& element : j)
+        {
+            result.emplace_back(posquat2eigen4f(element));
+        }
+        return result;
+    }
 }
-
-
-
