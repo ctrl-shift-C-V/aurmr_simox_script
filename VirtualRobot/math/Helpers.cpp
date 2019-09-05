@@ -118,8 +118,8 @@ float Helpers::Lerp(float a, float b, int min, int max, int val)
     return Lerp(a, b, (val - min) / static_cast<float>(max - min));
 }
 
-float Helpers::Angle(Eigen::Vector2f v) 
-{ 
+float Helpers::Angle(Eigen::Vector2f v)
+{
     return static_cast<float>(std::atan2(v.y(), v.x()));
 }
 
@@ -331,11 +331,16 @@ Eigen::Vector3f Helpers::CartesianFromSphere(float radius, float elevation, floa
 }
 
 Eigen::Matrix3f Helpers::RotateOrientationToFitVector(
-        const Eigen::Matrix3f& ori, const Eigen::Vector3f& localSource, 
+        const Eigen::Matrix3f& ori, const Eigen::Vector3f& localSource,
         const Eigen::Vector3f& globalTarget)
 {
     Eigen::Vector3f vec = ori * localSource;
     return GetRotationMatrix(vec, globalTarget) * ori;
+}
+
+Eigen::Matrix4f Helpers::GetPoseFromTo(const Eigen::Matrix4f& sourceFramePose, const Eigen::Matrix4f& targetFramePose)
+{
+    return targetFramePose * InvertedPose(sourceFramePose);
 }
 
 
@@ -362,7 +367,7 @@ Eigen::Matrix3f Helpers::Orthogonalize(const Eigen::Matrix3f& matrix)
 Eigen::Matrix3f Helpers::OrthogonalizeSVD(const Eigen::Matrix3f& matrix)
 {
     auto svd = matrix.jacobiSvd(Eigen::ComputeFullU | Eigen::ComputeFullV);
-    
+
     Eigen::Matrix3f orth = svd.matrixU() * svd.matrixV().transpose();
     if (orth.determinant() >= 0)
         return orth;
@@ -374,9 +379,9 @@ Eigen::Matrix3f Helpers::OrthogonalizeQR(const Eigen::Matrix3f& matrix)
 {
     auto householder = matrix.householderQr();
     Eigen::Matrix3f orth = householder.householderQ();
-    
+
     // Upper right triangular matrix of matrixQR() is R matrix.
-    // If a diagonal entry of R is negative, the corresponding column 
+    // If a diagonal entry of R is negative, the corresponding column
     // in Q must be inverted.
     for (int i = 0; i < matrix.cols(); ++i)
     {
