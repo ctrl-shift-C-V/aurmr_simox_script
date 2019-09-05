@@ -338,6 +338,11 @@ Eigen::Matrix3f Helpers::RotateOrientationToFitVector(
     return GetRotationMatrix(vec, globalTarget) * ori;
 }
 
+Eigen::Matrix4f Helpers::GetPoseFromTo(const Eigen::Matrix4f& sourceFramePose, const Eigen::Matrix4f& targetFramePose)
+{
+    return targetFramePose * InvertedPose(sourceFramePose);
+}
+
 
 Eigen::Vector3f Helpers::TransformPosition(const Eigen::Matrix4f& transform, const Eigen::Vector3f& pos)
 {
