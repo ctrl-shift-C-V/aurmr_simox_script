@@ -247,9 +247,10 @@ namespace math
         static std::vector<Eigen::Matrix4f> CreatePoses(const std::vector<Eigen::Vector3f>& positions, const std::vector<Eigen::Matrix3f>& orientations);
 
         // Conversions
-        static std::vector<float> VectorToStd(const Eigen::VectorXf& vec){
+        static std::vector<float> VectorToStd(const Eigen::VectorXf& vec)
+        {
             std::vector<float> res;
-            res.resize(vec.size());
+            res.resize(static_cast<std::size_t>(vec.size()));
             Eigen::VectorXf::Map(res.data(), vec.size()) = vec;
             return res;
         }
