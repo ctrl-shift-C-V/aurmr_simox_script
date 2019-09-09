@@ -423,3 +423,119 @@ BOOST_AUTO_TEST_CASE(test_deg2rad_vector)
 
 BOOST_AUTO_TEST_SUITE_END()
 
+
+#define BOOST_CHECK_EQUAL_EIGEN(L, R) { BOOST_CHECK_MESSAGE(L .isApprox( R ), \
+    "check " << #L << " == " << #R << " has failed\n[\n" << L << "\n] != [\n" << R << "\n]"); }
+
+
+struct GetTransformFromToTestFixture
+{
+    // A -> Global
+    Eigen::Matrix4f poseAG;
+
+    // B -> Global
+    Eigen::Matrix4f poseBG;
+
+    // A -> B
+    Eigen::Matrix4f poseAB;
+    // B -> A
+    Eigen::Matrix4f poseBA;
+
+    Eigen::Vector3f origin = origin.Zero();
+
+
+    GetTransformFromToTestFixture()
+    {
+    }
+
+
+    void setFramePoses(const Eigen::Matrix4f& poseAG, const Eigen::Matrix4f& poseBG)
+    {
+        this->poseAG = poseAG;
+        this->poseBG = poseBG;
+
+        // A -> B
+        poseAB = Helpers::GetTransformFromTo(poseAG, poseBG);
+        // B -> A
+        poseBA = Helpers::GetTransformFromTo(poseBG, poseAG);
+    }
+
+    void test_commuting()
+    {
+        // A -> B -> Global == A -> Global
+        BOOST_CHECK_EQUAL_EIGEN((poseBG * poseAB).eval(), poseAG);
+        // B -> A -> Global == B -> Global
+        BOOST_CHECK_EQUAL_EIGEN((poseAG * poseBA).eval(), poseBG);
+    }
+
+    void test_inversion_consistency()
+    {
+        // (A -> B)-1 == (B -> A) (and the other way round).
+        BOOST_CHECK_EQUAL_EIGEN(Helpers::InvertedPose(poseAB), poseBA);
+        BOOST_CHECK_EQUAL_EIGEN(Helpers::InvertedPose(poseBA), poseAB);
+    }
+};
+
+
+BOOST_FIXTURE_TEST_SUITE(GetTransformFromToTest, GetTransformFromToTestFixture)
+
+
+BOOST_AUTO_TEST_CASE(test_translation_only)
+{
+    /*   ^
+     *   |B
+     * 1 +-->
+     *   |     ^
+     *   |G    |A
+     * 0 +-----+--->
+     *   0     1
+     *
+     * 0_A:
+     *  in A: ( 0,  0)
+     *  in B: ( 1, -1)
+     *  in G: ( 1,  0)
+     * 0_B:
+     *  in B: ( 0,  0)
+     *  in A: (-1,  1)
+     *  in G: ( 0,  1)
+     */
+
+    setFramePoses(Helpers::Pose(Eigen::Vector3f(1, 0, 0)),
+                  Helpers::Pose(Eigen::Vector3f(0, 1, 0)));
+
+    BOOST_CHECK_EQUAL_EIGEN(poseAB, Helpers::Pose(Eigen::Vector3f( 1, -1, 0)));
+    BOOST_CHECK_EQUAL_EIGEN(poseBA, Helpers::Pose(Eigen::Vector3f(-1,  1, 0)));
+
+    // 0_A -> Global
+    BOOST_CHECK_EQUAL_EIGEN(Helpers::TransformPosition(poseAG, origin), Eigen::Vector3f(1, 0, 0));
+    BOOST_CHECK_EQUAL_EIGEN(Helpers::TransformPosition(poseBG, origin), Eigen::Vector3f(0, 1, 0));
+
+    test_commuting();
+    test_inversion_consistency();
+}
+
+
+BOOST_AUTO_TEST_CASE(test_rotation_only)
+{
+    setFramePoses(Helpers::Pose(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d::UnitX()).cast<float>()),
+                  Helpers::Pose(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d::UnitY()).cast<float>()));
+
+    test_commuting();
+    test_inversion_consistency();
+}
+
+
+BOOST_AUTO_TEST_CASE(test_arbitrary)
+{
+    setFramePoses(Helpers::Pose(Eigen::Vector3f(-1, 0, 2),
+                                Eigen::AngleAxisf(1.25, Eigen::Vector3f(1, 0, 1).normalized())),
+                  Helpers::Pose(Eigen::Vector3f(3, -5, 0),
+                                Eigen::AngleAxisf(-0.5, Eigen::Vector3f(-1, 1, 0).normalized()))
+                  );
+
+    test_commuting();
+    test_inversion_consistency();
+}
+
+
+BOOST_AUTO_TEST_SUITE_END()
