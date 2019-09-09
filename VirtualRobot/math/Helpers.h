@@ -168,17 +168,20 @@ namespace math
                 const Eigen::Matrix3f& ori, const Eigen::Vector3f& localSource, const Eigen::Vector3f& globalTarget);
 
         /**
-         * @brief Get the transformation matrix transforming one frame to another.
+         * @brief Get the tranformation matrix from a source to a target frame.
+         *
+         * The returned transformation matrix transforms local poses in the
+         * source frame to local poses in the target frame.
          *
          * Given poses T_A and T_B of frames A, B relative to some global frame G
-         * (i.e. G --T_A--> A, G --T_B--> B), the transformation T_AB (with A --T_AB--> B)
-         * is T_AB = T_B * T_A)^-1. (Since A --T_A^-1--> G --T_B--> B).
+         * (i.e. A --T_A--> G, B --T_B--> G), the transformation T_AB (with A --T_AB--> B)
+         * is T_AB = (T_B)^-1 * T_A. (Since A --T_A--> G --T_B^-1--> B).
          *
-         * @param sourceFramePose The source frame's pose T_A (relative to some common frame).
-         * @param targetFramePose The target frame's pose T_B (relative to the same common frame).
+         * @param sourceFramePose The source frame's pose T_A (relative to some global frame).
+         * @param targetFramePose The target frame's pose T_B (relative to the same global frame).
          * @return The transformation matrix T_AB from the source frame to the target frame.
          */
-        static Eigen::Matrix4f GetPoseFromTo(const Eigen::Matrix4f& sourceFramePose, const Eigen::Matrix4f& targetFramePose);
+        static Eigen::Matrix4f GetTransformFromTo(const Eigen::Matrix4f& sourceFramePose, const Eigen::Matrix4f& targetFramePose);
 
         /// Transform the position by the transform.
         static Eigen::Vector3f TransformPosition(const Eigen::Matrix4f& transform, const Eigen::Vector3f& pos);
