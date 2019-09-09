@@ -470,7 +470,7 @@ struct GetTransformFromToTestFixture
 
     void test_inversion_consistency()
     {
-        // (A -> B)-1 == (B -> A) (and the other way round).
+        // (A -> B)^-1 == (B -> A) (and the other way round).
         BOOST_CHECK_EQUAL_EIGEN(Helpers::InvertedPose(poseAB), poseBA);
         BOOST_CHECK_EQUAL_EIGEN(Helpers::InvertedPose(poseBA), poseAB);
     }
