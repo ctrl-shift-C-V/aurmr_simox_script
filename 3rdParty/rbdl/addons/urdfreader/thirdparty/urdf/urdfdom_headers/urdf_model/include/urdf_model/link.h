@@ -62,7 +62,7 @@ public:
 
   virtual ~Geometry(void)
   {
-  }  
+  }
 };
 
 class Sphere : public Geometry
@@ -232,7 +232,7 @@ public:
   {
 	  parent_link_ = parent.get();
   }
-  
+
   void clear()
   {
     this->name.clear();

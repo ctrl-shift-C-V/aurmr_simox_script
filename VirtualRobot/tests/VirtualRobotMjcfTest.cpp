@@ -26,7 +26,7 @@ namespace Eigen
     {
         return lhs.isApprox(rhs);
     }
-    
+
     std::ostream& operator<<(std::ostream& os, const Quaternionf& rhs)
     {
         os << "[ " << rhs.w() << " | " << rhs.x() << " " << rhs.y() << " " << rhs.z() << " ]";
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(test_boost_lexical_cast)
         MSG_CONVERSION(in, string, out);
         BOOST_CHECK_EQUAL(in, out);
     }
-    
+
     // this cannot be handled by boost
     BOOST_CHECK_THROW(boost::lexical_cast<bool>("true"), boost::bad_lexical_cast);
     BOOST_CHECK_THROW(boost::lexical_cast<bool>("false"), boost::bad_lexical_cast);
@@ -63,9 +63,9 @@ BOOST_AUTO_TEST_CASE(test_parseCoeffs)
 {
     const std::string string = "1 -3 2.4";
     Eigen::Vector3f vector(1, -3, 2.4f);
-    
+
     std::vector<float> coeffs = mjcf::parseCoeffs<float>(string, ' ');
-    
+
     BOOST_CHECK_EQUAL(coeffs[0], vector.x());
     BOOST_CHECK_EQUAL(coeffs[1], vector.y());
     BOOST_CHECK_EQUAL(coeffs[2], vector.z());
@@ -75,22 +75,22 @@ BOOST_AUTO_TEST_CASE(test_parseCoeffs)
 BOOST_AUTO_TEST_CASE(test_attrib_conversion_vector3f)
 {
     Vector3f in(1, -3, 2.4f), out;
-    
+
     const std::string string = mjcf::toAttr(in);
     mjcf::fromAttr(string, out);
     MSG_CONVERSION(in, string, out);
-    
+
     BOOST_CHECK_EQUAL(in, out);
 }
 
 BOOST_AUTO_TEST_CASE(test_attrib_conversion_quaternionf)
 {
     Quaternionf in(AngleAxisf(1.4f, Vector3f(.5, -1, .3f).normalized())), out;
-    
+
     const std::string string = mjcf::toAttr(in);
     mjcf::fromAttr(string, out);
     MSG_CONVERSION(in, string, out);
-    
+
     BOOST_CHECK_EQUAL(in, out);
 }
 
@@ -100,10 +100,10 @@ BOOST_AUTO_TEST_CASE(test_attrib_conversion_quaternionf)
 struct Fixture
 {
     mjcf::Document document;
-    
+
     mjcf::Body body;
     mjcf::Joint joint;
-    
+
     Fixture()
     {
         body = document.worldbody().addBody("thebody");

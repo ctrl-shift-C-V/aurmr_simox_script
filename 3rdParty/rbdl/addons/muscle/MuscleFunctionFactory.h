@@ -26,10 +26,10 @@
   Update:
   This is a port of the original code so that it will work with
   the multibody code RBDL written by Martin Felis.
-  
+
   Author:
   Matthew Millard
-  
+
   Date:
   Nov 2015
 
@@ -171,14 +171,14 @@ class MuscleFunctionFactory
     active force-length curve. The value of the active force
     length curve for lce < lce0 will be equal to the value
     set in shoulderVal. Normally lce0 is approximately 0.5
-  
+
   @param lce1   Normalized fiber length at the transition point between 
     the ascending limb and the plateau region of the active 
     force length curve.
-  
+
   @param lce2   Normalized fiber length at the maximum active force length
     curve value of 1. Normally lce2 is by definition 1.
-  
+
   @param lce3   Normalized fiber length of the at the right most shoulder
     of the active-force length curve. The value of the active
     force length curve for lce > lce2 will be equal to the 
@@ -191,7 +191,7 @@ class MuscleFunctionFactory
     muscle model would have a non-zero lower bound on 
     this value of 0.1 typically. shoulderVal must be 
     greater than, or equal to 0.
-    
+
   @param plateauSlope   The slope of the plateau of the active force
     length curve between lce1 and lce2. This parameter
     can vary depending on the muscle model, but a 
@@ -226,7 +226,7 @@ class MuscleFunctionFactory
 
   \image html fig_MuscleAddon_MuscleFunctionFactory_falCurve.png
 
-   
+
   <B>Conditions:</B>
 
   <B>Computational Costs</B>
@@ -247,10 +247,10 @@ class MuscleFunctionFactory
   SmoothSegmentedFunction fiberfalCurve = SmoothSegmentedFunction();
   MuscleFunctionFactory::
     createFiberActiveForceLengthCurve(lce0, lce1, lce2, lce3, 
-        shoulderVal, plateauSlope, curviness,"test", fiberfalCurve);  
+        shoulderVal, plateauSlope, curviness,"test", fiberfalCurve);
   fiberfalCurve.printCurveToFile();
   @endcode
-  
+
 
   */
   static void createFiberActiveForceLengthCurve(
@@ -271,7 +271,7 @@ class MuscleFunctionFactory
   derivative) force velocity curve of a single muscle fiber. The main 
   function of this element is to model the amount the force enhancement or 
   attenuation that is associated with contracting at a particular velocity.
-  
+
   @param fmaxE  The normalized maximum force the fiber can generate when 
     is being stretched. This value is reported to range 
     between 1.1 and 1.8 in the literature, though all values
@@ -301,7 +301,7 @@ class MuscleFunctionFactory
     <br /><br />
     Minimim Value: dydxIso > 1.0
     Maximum Value: dydxIso < Inf
-    
+
   @param dydxE  The analogous term of dydxC parameter but for the 
     eccentric portion of the force-velocity curve. As with
     the dydxC term, the physiologically accurate value for
@@ -318,7 +318,7 @@ class MuscleFunctionFactory
     integration problem for equilibrium-type muscle models: 
     the closer to zero this term is, the stiffer the model 
     will be (but only when (dlce(t)/dt)/vmax approaches 1.
-  
+
   @param dydxNearE The slope of the force velocity curve as it approaches
      the maximum eccentric (lengthening) contraction velocity.
      <br /><br />
@@ -350,7 +350,7 @@ class MuscleFunctionFactory
       the coefficients that are defined by this curve.
 
   \b aborts \b 
-  unless these conditions are met  
+  unless these conditions are met
   -0 <= dydxC < 1
   -dydxC < dydxNearC < 1
   -1 < dydxIso
@@ -358,8 +358,8 @@ class MuscleFunctionFactory
   -dydxE < dydxNearC < (fmaxE-1)
   -0<= concCurviness <=0
   -0 <= eccCurviness <= 0
-  
-  
+
+
   \image html fig_MuscleAddon_MuscleFunctionFactory_fvCurve.png
 
 
@@ -379,14 +379,14 @@ class MuscleFunctionFactory
   double dydxIso= 5;
   double concCurviness = 0.1;
   double eccCurviness = 0.75;
-  
+
   SmoothSegmentedFunction fiberFVCurve = SmoothSegmentedFunction();
   MuscleFunctionFactory::
     createFiberForceVelocityCurve(fmaxE, 
       dydxC, dydxNearC, dydxIso, dydxE, dydxNearE,
       concCurviness,  eccCurviness,"test", fiberFVCurve);
   fiberFVCurve.printCurveToFile();
-  @endcode   
+  @endcode
   */
   static void createFiberForceVelocityCurve(
                   double fmaxE, 
@@ -414,7 +414,7 @@ class MuscleFunctionFactory
   the inverse function are identical. The curve name should be different,
   however, because this is an inverse curve 
   (e.g. "bicep_fiberForceVelocityInverseCurve")
-  
+
 
   \image html fig_MuscleAddon_MuscleFunctionFactory_fvInvCurve.png
 
@@ -499,7 +499,7 @@ class MuscleFunctionFactory
   static void createFiberCompressiveForcePennationCurve(
                 double phi0, 
                 double kiso, 
-                double curviness,   
+                double curviness,
                 const std::string& curveName,
                 RigidBodyDynamics::Addons::Geometry::
                   SmoothSegmentedFunction&
@@ -518,7 +518,7 @@ class MuscleFunctionFactory
   angle of pi/2 radians is reached, which causes a singularity in the 
   model.
 
-  
+
   @param  cosPhi0 The cosine of the pennation angle at which the 
     compressive force element starts to engage. When the 
     cos of the pennation angle is greater than cosPhi0, the 
@@ -552,7 +552,7 @@ class MuscleFunctionFactory
   -0 < cosPhi0
   -kiso > 1/(cosPhi0)
   -0 <= curviness <= 1
-  
+
   \image html fig_MuscleAddon_MuscleFunctionFactory_fcCosPhiCurve.png
 
   <B>Computational Costs</B>
@@ -571,7 +571,7 @@ class MuscleFunctionFactory
   fiberCEPhiCurve.printCurveToFile();
   @endcode
 
-  
+
 
   */
   static void createFiberCompressiveForceCosPennationCurve(
@@ -652,7 +652,7 @@ class MuscleFunctionFactory
   static void createFiberCompressiveForceLengthCurve(
                 double l0, 
                 double kiso, 
-                double curviness,  
+                double curviness,
                 const std::string& curveName,
                 RigidBodyDynamics::Addons::Geometry::
                   SmoothSegmentedFunction&
@@ -702,7 +702,7 @@ class MuscleFunctionFactory
 
   \b aborts \b 
   unless the following conditions are met
-  -eIso > eZero  
+  -eIso > eZero
   -kIso > 1/(eIso-eZero)
   -0 < kLow < kIso
   -0 <= curviness <= 1
@@ -759,7 +759,7 @@ class MuscleFunctionFactory
   @param kIso  The normalized stiffness (or slope) of the tendon
     curve when the tendon is strained by e0 
     (or has a length of 1+e0) under a load of 1 maximum
-    isometric unit of force.  
+    isometric unit of force.
 
   @param fToe  The normalized force at which the tendon smoothly
      transitions from the curved low stiffness region to 
@@ -802,14 +802,14 @@ class MuscleFunctionFactory
   double kiso = 42.79679348815859;
   double fToe = 1.0/3.0
   double c  = 0.75;
-  
+
   SmoothSegmentedFunction* tendonCurve = MuscleFunctionFactory::
       createTendonForceLengthCurve(
         e0,kiso,fToe,c,"test");
-  tendonCurve.printCurveToFile();  
+  tendonCurve.printCurveToFile();
   @endcode
 
-  
+
   */
   static void createTendonForceLengthCurve(double eIso, 
                 double kIso,
@@ -821,7 +821,7 @@ class MuscleFunctionFactory
                   smoothSegmentedFunctionToUpdate);
 
 
-  
+
 
 };
 

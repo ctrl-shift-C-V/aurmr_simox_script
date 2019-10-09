@@ -15,7 +15,7 @@ struct Model;
 struct ConstraintSet;
 
 namespace Addons {
-  
+
 /** \page addon_luamodel_page Addon: rbdl_luamodel
 * @{
 *
@@ -92,7 +92,7 @@ namespace Addons {
 *     constraint_set_2_name = {
 *       ...
 *     },
-*   },  
+*   },
 * }
 * \endcode
 *
@@ -124,7 +124,7 @@ namespace Addons {
 *     If the value is "ROOT" the parent frame of this body is assumed to be
 *     the base coordinate system, otherwise it must be the exact same string
 *     as was used for the "name"-field of the parent frame.
-*   
+*
 * \par body (optional, type: table)
 *     Specification of the dynamical parameters of the body. It uses the
 *     values (if existing):
@@ -155,7 +155,7 @@ namespace Addons {
 *
 * \par
 *    Examples:
-* \code    
+* \code
 *       joint_fixed = {}
 *       joint_translate_x = { {0., 0., 0., 1., 0., 0.} }
 *       joint_translate_xy = { 
@@ -169,7 +169,7 @@ namespace Addons {
 *       }
 *       joint_rotate_euler_zyx = { "JointTypeEulerZYX" }
 *   \endcode
-*       
+*
 * \par  joint_frame (optional, type: table)
 *     Specifies the origin of the joint in the frame of the parent. It uses
 *     the values (if existing):
@@ -179,7 +179,7 @@ namespace Addons {
 *   \endcode
 * \par
 *    for which r is the translation and E the rotation of the joint frame
-*    
+*
 * \section luamodel_constraint_table Constraint Information Table
 * The Constraint Information Table is searched for values needed to call
 * ConstraintSet::AddContactConstraint() or ConstraintSet::AddLoopConstraint().

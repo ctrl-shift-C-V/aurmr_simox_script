@@ -26,10 +26,10 @@
   Update:
   This is a port of the original code so that it will work with
   the multibody code RBDL written by Martin Felis.
-  
+
   Author:
   Matthew Millard
-  
+
   Date:
   Nov 2015
 
@@ -71,13 +71,13 @@ Inc., New York. Chapter 4 was quite helpful.
   roots to a quintic polynomial, however, this fact may not preclude forming the 
   inverse curve. The impossibility of finding the roots to a quintic polynomial
   was proven by Abel (Abel's Impossibility Theorem) and Galois
-  
+
   http://mathworld.wolfram.com/QuinticEquation.html
-  
+
   At the moment I am approximating the curve u(x) using cubic splines to return
   an approximate value for u(x), which I polish using Newton's method to the
   desired precision.
-  
+
   **Note as of Nov 2015**
   -> The cubic spline approximation of the inverse curve has been
    removed. Since there is no spline class in RBDL (and I'm not
@@ -85,7 +85,7 @@ Inc., New York. Chapter 4 was quite helpful.
    not work. In addition, I've since found that this nice inverse
    only saves a few Newton iterations over a calculated guess. 
    It's not worth the effort to include.
-  
+
 2. Analytical Integral of y(x):
   This is possible using the Divergence Theorem applied to 2D curves. A nice 
   example application is shown in link 2 for computing the area of a closed 
@@ -94,15 +94,15 @@ Inc., New York. Chapter 4 was quite helpful.
   correctly. I ran out of time trying to fix this problem, and so at the present 
   time I am numerically computing the integral at a number of knot points and 
   then evaluating the spline to compute the integral value.
-  
+
   a. http://en.wikipedia.org/wiki/Divergence_theorem
   b. http://objectmix.com/graphics/133553-area-closed-bezier-curve.html
-  
+
   **Note as of Nov 2015**
   ->  The splined numeric integral of the curve has been removed. There
     is not an error-controlled numerical integrator in RBDL and so
     it is not straight forward to include this feature.
-  ->  For later: discuss options with Martin.  
+  ->  For later: discuss options with Martin.
 
 3. calcU:
   Currently the Bezier curve value and its derivative are computed separately to
@@ -197,7 +197,7 @@ class SegmentedQuinticBezierToolkit
 
   @param ax   The x value
   @param bezierPtsX The 6 Bezier point values
-  @param tol  The desired tolerance on u.   
+  @param tol  The desired tolerance on u.
   @param maxIter  The maximum number of Newton iterations allowed
 
   \b aborts \b
@@ -209,7 +209,7 @@ class SegmentedQuinticBezierToolkit
   for a quintic Bezier curve. This is accomplished by using an approximate 
   spline inverse of u(x) to get a very good initial guess, and then one or 
   two Newton iterations to polish the answer to the desired tolerance.
-  
+
   <B>Computational Costs</B>
   \verbatim
     ~219 flops
@@ -230,7 +230,7 @@ class SegmentedQuinticBezierToolkit
 
     RigidBodyDynamics::Math::VectorNd x(100);
     RigidBodyDynamics::Math::VectorNd u(100);
-  
+
     //Now evalutate u at the given xVal
     double u = SegmentedQuinticBezierToolkit::
        calcU(xVal,vX, 1e-12,20);
@@ -262,7 +262,7 @@ class SegmentedQuinticBezierToolkit
   it simply scans through the Bezier curve sets until it finds the correct
   one. 
 
-  
+
   <B>Computational Costs</B>
   Quoted for a Bezier curve set containing 1 to 5 curves.
   \verbatim
@@ -298,14 +298,14 @@ class SegmentedQuinticBezierToolkit
   static int calcIndex(
     double x, 
     const RigidBodyDynamics::Math::MatrixNd& bezierPtsX);
-  
+
   static int calcIndex(
     double x, 
     const std::vector<RigidBodyDynamics::Math::VectorNd>& bezierPtsX);
 
 
-  
-  
+
+
 
   /**
   Calculates the value of a quintic Bezier curve at value u.
@@ -313,7 +313,7 @@ class SegmentedQuinticBezierToolkit
   @param u  The independent variable of a Bezier curve, which ranges 
       between 0.0 and 1.0.
   @param pts  The locations of the control points in 1 dimension.
-  
+
   \b aborts \b
     -If u is outside of [0,1]
     -if pts has a length other than 6
@@ -338,7 +338,7 @@ class SegmentedQuinticBezierToolkit
 
   \verbatim
     uV = [u^5 u^4 u^3 u^2 u 1];
-  
+
     cM = [ -1   5   -10   10  -5   1; 
             5  -20   30  -20   5   0; 
           -10   30  -30   10   0   0; 
@@ -381,7 +381,7 @@ class SegmentedQuinticBezierToolkit
       between 0.0 and 1.0.
   @param pts  The locations of the control points in 1 dimension.
   @param order  The desired order of the derivative. Order must be >= 1
-  
+
   \b aborts \b
     -u is outside [0,1]
     -pts is not 6 elements long
@@ -397,7 +397,7 @@ class SegmentedQuinticBezierToolkit
   Pseudo code for the first derivative (order == 1) would be
   \verbatim
     uV = [5*u^4 4*u^3 3*u^2 2u 1 0];
-  
+
     cM = [ -1     5   -10    10  -5   1;
             5   -20    30   -20   5   0;
           -10    30   -30    10   0   0;
@@ -449,12 +449,12 @@ class SegmentedQuinticBezierToolkit
   /**
   Calculates the value of dydx of a quintic Bezier curve derivative at u.
 
-  @param u  The u value of interest. Note that u must be [0,1]    
+  @param u  The u value of interest. Note that u must be [0,1]
   @param xpts   The 6 control points associated with the x axis
   @param ypts   The 6 control points associated with the y axis
   @param order  The order of the derivative. Currently only orders from 1-6 
       can be evaluated
-  
+
   \b aborts \b
     -If u is outside [0,1]
     -If xpts is not 6 elements long
@@ -497,7 +497,7 @@ class SegmentedQuinticBezierToolkit
     RigidBodyDynamics::Math::VectorNd vX(6), vY(6);
 
     double u = 0.5;
-  
+
     vX(0) = 1;
     vX(1) = 1.01164;
     vX(2) = 1.01164;
@@ -517,14 +517,14 @@ class SegmentedQuinticBezierToolkit
        u,vX, vY, 2);
     @endcode
 
-  */  
+  */
   static double  calcQuinticBezierCurveDerivDYDX(
       double u,
       const RigidBodyDynamics::Math::VectorNd& xpts, 
       const RigidBodyDynamics::Math::VectorNd& ypts, 
       int order);
 
-  
+
   /**
   Calculates the location of quintic Bezier curve control points to 
   create a C shaped curve like that shown in the figure. Using a series 
@@ -675,7 +675,7 @@ class SegmentedQuinticBezierToolkit
   RigidBodyDynamics::Math::VectorNd x(NUM_SAMPLE_PTS); 
   //Used for the approximate inverse
 
-  //Used to generate the set of knot points of the integral of y(x)  
+  //Used to generate the set of knot points of the integral of y(x)
   RigidBodyDynamics::Math::VectorNd 
   xALL(NUM_SAMPLE_PTS*_numBezierSections-(_numBezierSections-1));
   _arraySplineUX.resize(_numBezierSections);
@@ -686,7 +686,7 @@ class SegmentedQuinticBezierToolkit
     for(int i=0;i<NUM_SAMPLE_PTS;i++){
     u(i) = ( (double)i )/( (double)(NUM_SAMPLE_PTS-1) );
     x(i) = SegmentedQuinticBezierToolkit::
-      calcQuinticBezierCurveVal(u(i),_mX(s),_name);    
+      calcQuinticBezierCurveVal(u(i),_mX(s),_name);
     if(_numBezierSections > 1){
        //Skip the last point of a set that has another set of points
        //after it. Why? The last point and the starting point of the
@@ -696,24 +696,24 @@ class SegmentedQuinticBezierToolkit
       xidx++;
       }
     }else{
-      xALL(xidx) = x(i);    
+      xALL(xidx) = x(i);
       xidx++;
     }
     }
-    //Create the array of approximate inverses for u(x)  
+    //Create the array of approximate inverses for u(x)
     _arraySplineUX[s] = SimTK::SplineFitter<double>::
     fitForSmoothingParameter(3,x,u,0).getSpline();
   }
 
-   
+
   //////////////////////////////////////////////////
-  //Compute the integral of y(x) and spline the result  
+  //Compute the integral of y(x) and spline the result
   //////////////////////////////////////////////////
 
   RigidBodyDynamics::Math::VectorNd yInt =  SegmentedQuinticBezierToolkit::
     calcNumIntBezierYfcnX(xALL,0,INTTOL, UTOL, MAXITER,_mX, _mY,
     _arraySplineUX,_name);
-  
+
   if(_intx0x1==false){
     yInt = yInt*-1;
     yInt = yInt - yInt(yInt.nelt()-1);
@@ -721,7 +721,7 @@ class SegmentedQuinticBezierToolkit
 
   _splineYintX = SimTK::SplineFitter<double>::
     fitForSmoothingParameter(3,xALL,yInt,0).getSpline();
-  
+
   @endcode
 
 
@@ -729,7 +729,7 @@ class SegmentedQuinticBezierToolkit
 
 //MM:   Can't port this over to RBDL as RBDL doesn't have an error
 //  controlled integrator. I could add this if a dependency
-//  like Boost was allowed.    
+//  like Boost was allowed.
 // 
 //  static RigidBodyDynamics::Math::MatrixNd 
 //  calcNumIntBezierYfcnX(
@@ -745,12 +745,12 @@ class SegmentedQuinticBezierToolkit
 
 
    private:
-  
+
 
   /**
   This function will print cvs file of the column vector col0 and the 
   matrix data.
-   
+
   @param col0   A vector that must have the same number of rows as the 
       data matrix. This column vector is printed as the first 
       column
@@ -775,7 +775,7 @@ class SegmentedQuinticBezierToolkit
       RigidBodyDynamics::Math::MatrixNd& ctrlPts, 
       RigidBodyDynamics::Math::VectorNd& xVal, 
       RigidBodyDynamics::Math::VectorNd& yVal, 
-      std::string& filename);  
+      std::string& filename);
 
   /**
   This function will return a value that is equal to u, except when u is
@@ -785,7 +785,7 @@ class SegmentedQuinticBezierToolkit
   */
   static double clampU(double u);
 
-  
+
 ///@cond
 /**
 Class that contains data that describes the Bezier curve set. This class is used

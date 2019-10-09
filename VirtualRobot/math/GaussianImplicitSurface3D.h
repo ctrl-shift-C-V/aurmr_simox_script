@@ -48,7 +48,7 @@ private:
     Eigen::VectorXd alpha;
     std::vector<DataR3R2> samples;
     float R;
-    
+
     std::unique_ptr<KernelWithDerivatives> kernel;
 
     float Predict(const Eigen::Vector3f& pos) const;

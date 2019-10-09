@@ -159,7 +159,7 @@ public:
 
   void setParent(boost::shared_ptr<Link> parent)
   {  this->parent_link_ = parent; }
-  
+
   void clear()
   {
     this->name.clear();

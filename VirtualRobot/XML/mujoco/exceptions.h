@@ -14,8 +14,8 @@ namespace VirtualRobot::mujoco::error
     private:
         static std::string makeMsg(const std::string& nodeName);
     };
-    
-    
+
+
     /// Indicates that a robot node has to be a joint node, but is not.
     class NodeIsNoJoint : public VirtualRobotException
     {

@@ -63,9 +63,9 @@ namespace Saba
     protected:
 
         bool getCSpaceForce(const Eigen::Vector3f &f, Eigen::VectorXf &fc, float factor, float maxForce);
-        
+
 		bool getWSpaceForce(const Eigen::VectorXf& fc, Eigen::Vector3f &f);
-    
+
         bool getObstacleForce(Eigen::Vector3f& f);
         bool initSolution();
 

@@ -86,9 +86,9 @@ public:
         }
       }
     }
-	  
-	  
-	  
+	
+	
+	
   if (xyz.size() != 3)
   {
 	  assert(0);
@@ -98,7 +98,7 @@ public:
     this->y = xyz[1];
     this->z = xyz[2];
   }
-  
+
   Vector3 operator+(Vector3 vec)
   {
     return Vector3(this->x+vec.x,this->y+vec.y,this->z+vec.z);
@@ -168,7 +168,7 @@ public:
     rpy.init(rotation_str);
     setFromRPY(rpy.x, rpy.y, rpy.z);
   }
-  
+
   void clear() { this->x=this->y=this->z=0.0;this->w=1.0; }
 
   void normalize()

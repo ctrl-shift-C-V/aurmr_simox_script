@@ -7,7 +7,7 @@ IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION AND NLOPT_FOUND)
     # the variable "demo_SRCS" contains all .cpp files of this project
     FILE(GLOB demo_SRCS ${PROJECT_SOURCE_DIR}/ConstrainedIKDemo.cpp ${PROJECT_SOURCE_DIR}/ConstrainedIKWindow.cpp)
     FILE(GLOB demo_INCS ${PROJECT_SOURCE_DIR}/ConstrainedIKWindow.h)
-  
+
     set(GUI_MOC_HDRS
         ${PROJECT_SOURCE_DIR}/ConstrainedIKWindow.h
     )

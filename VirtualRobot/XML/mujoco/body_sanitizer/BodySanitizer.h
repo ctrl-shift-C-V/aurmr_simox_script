@@ -18,27 +18,27 @@ namespace VirtualRobot::mujoco
     class BodySanitizer
     {
     public:
-        
+
         /// Constructor.
         BodySanitizer();
-        
+
         /// Virtual destructor.
         virtual ~BodySanitizer();
-        
-        
+
+
         /**
          * @brief Sanitize the given root body and its direct and indirect children.
          * @param document The MJCF document.
          * @param root The root body to sanitize.
          */
         virtual void sanitize(mjcf::Document& document, mjcf::Body root) = 0;
-        
-        
+
+
     protected:
-        
+
         /// "Tab" string for logging.
         static const std::string t;
-        
+
     };
 
 }

@@ -17,8 +17,8 @@ namespace Eigen
             jsonbase::from_json(j, vector);
         }
     }
-    
-    
+
+
     template <>
     void from_json<Matrix4f>(const nlohmann::json& j, MatrixBase<Matrix4f>& matrix)
     {
@@ -26,7 +26,7 @@ namespace Eigen
         {
             const auto& j_ori = j.at("ori");
             Eigen::Matrix3f ori;
-            
+
             if (j_ori.is_object())
             {
                 ori = j_ori.get<Eigen::Quaternionf>().toRotationMatrix();
@@ -35,7 +35,7 @@ namespace Eigen
             {
                 ori = j_ori.get<Eigen::Matrix3f>();
             }
-            
+
             matrix = math::Helpers::Pose(j.at("pos").get<Eigen::Vector3f>(), ori);
         }
         else

@@ -86,7 +86,7 @@ public:
 #ifdef DYN_SHARED_PTR_THREAD_SAFE
         pthread_mutex_lock(&m_mutex);
 #endif
-        long c = ++m_count;  
+        long c = ++m_count;
 #ifdef DYN_SHARED_PTR_THREAD_SAFE
         pthread_mutex_unlock(&m_mutex);
 #endif
@@ -97,7 +97,7 @@ public:
 #ifdef DYN_SHARED_PTR_THREAD_SAFE
         pthread_mutex_lock(&m_mutex);
 #endif
-        long c = --m_count;  
+        long c = --m_count;
 #ifdef DYN_SHARED_PTR_THREAD_SAFE
         pthread_mutex_unlock(&m_mutex);
 #endif

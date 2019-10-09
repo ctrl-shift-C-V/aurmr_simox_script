@@ -247,7 +247,7 @@ namespace VirtualRobot
             If false is returned the position is outside the covered workspace.
         */
         virtual bool getVoxelFromPosition(const Eigen::Matrix4f& globalPose, unsigned int v[3]) const;
-        
+
         /*!
             Computes center of corresponding voxel in global coord system.
         */

@@ -3,7 +3,7 @@ PROJECT ( RobotViewer )
 INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
 
 IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)
- 	    
+ 	
 	# the variable "demo_SRCS" contains all .cpp files of this project
 	FILE(GLOB demo_SRCS ${PROJECT_SOURCE_DIR}/RobotViewer.cpp ${PROJECT_SOURCE_DIR}/showRobotWindow.cpp)
 	FILE(GLOB demo_INCS ${PROJECT_SOURCE_DIR}/showRobotWindow.h)
@@ -22,7 +22,7 @@ IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)
   VirtualRobotQtApplication(${PROJECT_NAME} "${demo_SRCS}" "${demo_INCS}" "${GUI_MOC_HDRS}" "${GUI_UIS}")
   SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Simox_BIN_DIR})
   SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "Examples")
-   
+
   #######################################################################################
   ############################ Setup for installation ###################################
   #######################################################################################

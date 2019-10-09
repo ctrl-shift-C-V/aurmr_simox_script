@@ -45,7 +45,7 @@ void GaussianImplicitSurface3DCombined::Calculate(const ContactList& normalSampl
     std::vector<Eigen::Vector3f> pointsOriginal;
     std::vector<float> noise;
     for (const auto& d : normalSamples)
-    {        
+    {
         const Eigen::Vector3f pos = d.Position();
         shiftedNormalSamples.emplace_back(pos, d.Normal() * normalScale);
         points.push_back(pos);
@@ -53,7 +53,7 @@ void GaussianImplicitSurface3DCombined::Calculate(const ContactList& normalSampl
     }
 
     for (const auto& d : samples)
-    {        
+    {
         const Eigen::Vector3f pos = d.Position();
         shiftedSamples.emplace_back(pos, d.Value1(), d.Value2());
         points.push_back(pos);

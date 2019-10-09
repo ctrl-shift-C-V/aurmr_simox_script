@@ -28,7 +28,7 @@ Document& Document::operator=(const Document& other)
     {
         return *this;
     }
-    
+
     deepCopyFrom(other);
     return *this;
 }
@@ -58,7 +58,7 @@ void Document::deepCopyFrom(const Document& source)
 {
     // Copy document.
     source.document->DeepCopy(this->document.get());
-    
+
     // Update root element.
     root.reset(new MujocoRoot(this, document->FirstChildElement(MujocoRoot::tag.c_str())));
 }
@@ -99,7 +99,7 @@ void Document::setNewElementClass(const std::string& className, bool excludeBody
 {
     this->newElementClass = className;
     this->newElementClassExcludeBody = excludeBody;
-    
+
     if (!className.empty() && !default_().hasChild<DefaultClass>("class", className))
     {
         default_().addClass(className);

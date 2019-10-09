@@ -56,7 +56,7 @@ void MergingBodySanitizer::setLengthScale(float toMeter)
 void MergingBodySanitizer::sanitize(Document&, Body root)
 {
     // Merge body leaf nodes with parent if they do not have a mass (inertial or geom).
-    
+
     for (Body body = root.firstChild<Body>(); body; body = body.nextSiblingElement<Body>())
     {
         sanitizeRecursive(body);
@@ -68,18 +68,18 @@ void MergingBodySanitizer::sanitizeRecursive(mjcf::Body body)
 {
     RobotNodePtr bodyNode = robot->getRobotNode(body.name);
     Eigen::Matrix4f accChildPose = Eigen::Matrix4f::Identity();
-    
+
     while (!body.hasMass())
     {
         std::cout << t << body.name << ": \t";
-        
+
         if (!body.hasChild<Body>())
         {
             // Leaf => end of recursion.
             sanitizeLeafBody(body);
             return;
         }
-        
+
         // Non-leaf body.
         // Check whether there is only one child body.
         Body childBody = body.firstChild<Body>();
@@ -95,7 +95,7 @@ void MergingBodySanitizer::sanitizeRecursive(mjcf::Body body)
             break;
         }
     }
-    
+
     // recursive descend
     for (Body child = body.firstChild<Body>();
          child; child = child.nextSiblingElement<Body>())
@@ -139,18 +139,18 @@ void copyChildren(Body body, Body child, const Eigen::Matrix4f& childPose)
     {
         // Clone grandchild.
         AnyElement elem = grandChild.deepClone();
-        
+
         if (elem)
         {
             /* Adapt pose/axis elements in child. Their poses/axes will be
              * relative to body's frame, so the transformation from body
              * to child will be lost. Therefore, apply accChildPose to
              * their poses/axes. */
-            
+
             updatePos(elem, childPose);
             updateOri(elem, math::Helpers::Orientation(childPose));
         }
-        
+
         // Insert to body
         body.insertEndChild(elem);
     }
@@ -164,25 +164,25 @@ void MergingBodySanitizer::mergeBodies(Body body, Body childBody, Eigen::Matrix4
 
     RobotNodePtr childNode = robot->getRobotNode(childBody.name);
     Eigen::Matrix4f childPose = childNode->getTransformationFrom(childNode->getParent());
-    
+
     // Scale position.
     math::Helpers::Position(childPose) = lengthScale * math::Helpers::Position(childPose);
-    
+
     // Update accumulated child pose.
     // Merged child's frame w.r.t. body's frame.
     accChildPose = childPose * accChildPose;
-    
+
     // Merge childBody into body => move all its elements here.
     // While doing this, apply accChildPose to elements.
     copyChildren(body, childBody, accChildPose);
-    
+
     // Update body name.
     MergedBodyList& bodySet = getMergedBodySetWith(body.name);
     bodySet.addBody(childBody.name);
     body.name = bodySet.getMergedBodyName();
-    
+
     std::cout << t << "\t(new name: '" << bodySet.getMergedBodyName() << "')" << std::endl;
-    
+
     // Delete child.
     body.deleteChild(childBody);
 }
@@ -192,7 +192,7 @@ void MergingBodySanitizer::sanitizeLeafBody(Body body)
 {
     VR_ASSERT_MESSAGE(!body.hasChild<Body>(), "Leaf body must not have a child body.");
     VR_ASSERT_MESSAGE(!body.hasMass(), "Leaf body must not have mass.");
-    
+
     if (!body.hasChildren()) // is completely empty?
     {
         // Leaf without geom: make it a site.
@@ -226,10 +226,10 @@ MergedBodyList& MergingBodySanitizer::getMergedBodySetWith(const std::string& bo
            return set;
         }
     }
-    
+
     // Not found => add.
     mergedBodyLists.push_back(MergedBodyList(bodyName));
-    
+
     return mergedBodyLists.back();
 }
 

@@ -32,11 +32,11 @@
 #undef mjcf_BoolAttributeReq
 #undef mjcf_BoolAttributeOpt
 #undef mjcf_BoolAttributeDef
-    
+
 #undef mjcf_IntAttributeReq
 #undef mjcf_IntAttributeOpt
 #undef mjcf_IntAttributeDef
-    
+
 #undef mjcf_FloatAttributeReq
 #undef mjcf_FloatAttributeOpt
 #undef mjcf_FloatAttributeDef
@@ -50,14 +50,14 @@
 #undef mjcf_Vector3fAttributeReq
 #undef mjcf_Vector3fAttributeOpt
 #undef mjcf_Vector3fAttributeDef
-    
+
 #undef mjcf_NameAttribute
 #undef mjcf_ClassAttribute
 #undef mjcf_GroupAttribute
 
 #undef mjcf_RgbAttributeDef
 #undef mjcf_RgbaAttributeDef
-    
+
 #undef mjcf_PosAttribute
 #undef mjcf_QuatAttribute
 #undef mjcf_PoseAttributes

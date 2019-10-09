@@ -45,7 +45,7 @@ if (SimDynamics_USE_BULLET)
     BulletCheckPrecision()
     target_link_libraries(SimDynamics PUBLIC ${BULLET_LIBRARIES})
     SET (SimDynamics_DYNAMICSENGINE TRUE)
-      
+
     FIND_PACKAGE(OpenGL)
     IF (OPENGL_FOUND)
         MESSAGE (STATUS " ** OPENGL FOUND lib:${OPENGL_gl_LIBRARY}")
@@ -93,9 +93,9 @@ if (SimDynamics_USE_BULLET)
 else()
     MESSAGE (STATUS " ** Could not find Bullet")
 endif()
-    
+
 else()
-        MESSAGE ("No Physics engine selected...")   	    
+        MESSAGE ("No Physics engine selected...")   	
 endif()
 
 
@@ -127,7 +127,7 @@ if (SimDynamics_DYNAMICSENGINE)
     DynamicsEngine/DynamicsRobot.cpp
     DynamicsEngine/DynamicsUtils.cpp
   )
-    
+
   SET(INCLUDES
     DynamicsWorld.h
     SimDynamics.h
@@ -137,7 +137,7 @@ if (SimDynamics_DYNAMICSENGINE)
     DynamicsEngine/DynamicsRobot.h
     DynamicsEngine/DynamicsUtils.h
   )
-   
+
   if (SimDynamics_USE_BULLET)
   	SET(SOURCES
     	${SOURCES}
@@ -149,7 +149,7 @@ if (SimDynamics_DYNAMICSENGINE)
     	DynamicsEngine/BulletEngine/SimoxMotionState.cpp
      	DynamicsEngine/BulletEngine/SimoxCollisionDispatcher.cpp
   	)
-  
+
   	SET(INCLUDES
     	${INCLUDES}
     	DynamicsEngine/BulletEngine/BulletEngineFactory.h
@@ -175,13 +175,13 @@ if (SimDynamics_DYNAMICSENGINE)
       else()
           MESSAGE (STATUS " ** Bullet's OpenGLSupport library not found: Skipping BulletOpenGLViewer")
       endif()
-  
+
   if (Simox_USE_COIN_VISUALIZATION AND SOQT_FOUND)
       	SET(SOURCES
         	${SOURCES}
         	DynamicsEngine/BulletEngine/BulletCoinQtViewer.cpp
       	)
-      
+
       	SET(INCLUDES
         	${INCLUDES}
         	DynamicsEngine/BulletEngine/BulletCoinQtViewer.h
@@ -210,25 +210,25 @@ if (SimDynamics_DYNAMICSENGINE)
   SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${Simox_LIB_DIR})
   # .lib path (this is needed for setting the DLL-import library path on windows)
   SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${Simox_LIB_DIR})
-  
+
   if(Simox_BUILD_EXAMPLES)
       # include examples
       ADD_SUBDIRECTORY(examples/)
   endif()
-  
+
   # include unit tests
   #ADD_SUBDIRECTORY(tests/)
   if (SimDynamics_USE_BULLET)
       ADD_SUBDIRECTORY(DynamicsEngine/BulletEngine/tests/)
   endif()
-  
-    
-    
+
+
+
   #######################################################################################
   ############################ Setup for installation ###################################
   #######################################################################################
-  
-  
+
+
   INSTALL(TARGETS ${PROJECT_NAME}
     # IMPORTANT: Add the library to the "export-set"
     EXPORT SimoxTargets
@@ -236,7 +236,7 @@ if (SimDynamics_DYNAMICSENGINE)
     LIBRARY DESTINATION lib COMPONENT shlib
     ARCHIVE DESTINATION lib COMPONENT library
     COMPONENT dev)
-  
+
   INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR} DESTINATION ${Simox_INSTALL_HEADER_DIR}
   	COMPONENT Headers
           FILES_MATCHING 
@@ -250,7 +250,7 @@ if (SimDynamics_DYNAMICSENGINE)
           PATTERN "data" EXCLUDE
           PATTERN "examples" EXCLUDE
   	)
-  
+
 else()
     MESSAGE ("Not building SimDynamics, physics engine not found...")
 endif()

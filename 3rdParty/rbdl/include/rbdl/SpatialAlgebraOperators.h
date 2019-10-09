@@ -226,7 +226,7 @@ struct RBDL_DLLAPI SpatialTransform {
           rbi.Iyx, rbi.Iyy, rbi.Izy,
           rbi.Izx, rbi.Izy, rbi.Izz
           ) * E
-        - VectorCrossMatrix(r) * VectorCrossMatrix (E.transpose() * rbi.h)  
+        - VectorCrossMatrix(r) * VectorCrossMatrix (E.transpose() * rbi.h)
         - VectorCrossMatrix (E_T_mr) * VectorCrossMatrix (r));
   }
 

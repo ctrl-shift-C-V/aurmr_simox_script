@@ -516,7 +516,7 @@ struct RBDL_DLLAPI ConstraintSet {
 
   //CustomConstraint variables.
 
-  
+
 };
 
 /** \brief Computes the position errors for the given ConstraintSet.
@@ -1051,7 +1051,7 @@ struct RBDL_DLLAPI CustomConstraint {
 
     CustomConstraint(unsigned int constraintCount):mConstraintCount(constraintCount){}
 
-    virtual ~CustomConstraint(){};    
+    virtual ~CustomConstraint(){};
 
     virtual void CalcConstraintsJacobianAndConstraintAxis(
                                           Model &model,

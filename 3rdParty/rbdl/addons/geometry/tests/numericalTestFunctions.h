@@ -24,13 +24,13 @@
     Update:
      This is a port of the original code so that it will work with
      the multibody code RBDL written by Martin Felis.
-    
+
      This also includes additional curves (the Anderson2007 curves)
      which are not presently in OpenSim.
 
     Author:
      Matthew Millard
-    
+
     Date:
      Nov 2015
 
@@ -128,13 +128,13 @@ RigidBodyDynamics::Math::VectorNd
     For a step size of h/2 to the left and to the right of the point of 
     interest the error is
     error = 1/4*h^2*c3 + r*f(x)/h,         (1)
-      
+
     Where c3 is the coefficient of the 3rd order Taylor series expansion
     about point x. Thus c3 can be computed if the order + 2 derivative is
     known
-     
+
      c3 = (d^3f(x)/dx^3)/(6)            (2)
-     
+
     And r*f(x)/h is the rounding error that occurs due to the central 
     difference.
 
@@ -219,7 +219,7 @@ method
     When this flag is set to true, the integral of y(x) will be evaluated from
     left to right, starting with int(y(0)) = 0. When this flag is false, then
     y(x) will be evaluated from right to left with int(y(n)) = 0, where n is 
-    the maximum number of elements.                    
+    the maximum number of elements.
 @return the integral of y(x)
 */
 RigidBodyDynamics::Math::VectorNd calcTrapzIntegral(
@@ -248,10 +248,10 @@ isFunctionContinuous.
   A n-by-m matrix of values where the first column is the domain (x) of interest
   and the remaining columns are the curve value (y), and its derivatives (dy/dx,
   d2y/dx2, d3y/dx3, etc).  This matrix is returned by the function 
-  calcSampledCurve in SmoothSegmented Function.  
-@param continuityTol  
+  calcSampledCurve in SmoothSegmented Function.
+@param continuityTol
 @return bool: true if the curve is C2 continuous to the desired tolernace
-              
+
 */ 
 bool isCurveC2Continuous(SmoothSegmentedFunction& mcf,
               RigidBodyDynamics::Math::MatrixNd& mcfSample,

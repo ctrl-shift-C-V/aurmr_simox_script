@@ -30,7 +30,7 @@ void Inertial::inertiaFromMatrix(const Eigen::Matrix3f& matrix)
          * M(1,1), M(2,2), M(3,3), M(1,2), M(1,3), M(2,3).
          * -- http://www.mujoco.org/book/XMLreference.html#inertial 
          */
-        
+
         Eigen::Vector6f inertia;
         inertia << matrix(0, 0), matrix(1, 1), matrix(2, 2), 
                 matrix(0, 1), matrix(0, 2), matrix(1, 2);
@@ -64,7 +64,7 @@ Inertial Body::addInertial(const Eigen::Vector3f& pos, float mass, const Eigen::
                            bool front)
 {
     Inertial inertial = addInertial(front);
-    
+
     inertial.pos = pos;
     inertial.mass = mass;
 
@@ -83,7 +83,7 @@ Inertial Body::addInertial(const Eigen::Vector3f& pos, float mass, const Eigen::
                 matrix(0, 1), matrix(0, 2), matrix(1, 2);
         inertial.fullinertia = inertia;
     }
-    
+
     return inertial;
 }
 
@@ -106,7 +106,7 @@ Joint Body::addJoint()
 FreeJoint Body::addFreeJoint()
 {
     return addChild<FreeJoint>();
-    
+
 }
 
 bool Body::hasJoint() const
@@ -122,9 +122,9 @@ bool Body::hasFreeJoint() const
 Geom Body::addGeom(const std::string& type)
 {
     Geom geom = addChild<Geom>();
-    
+
     geom.type = type;
-    
+
     return geom;
 }
 
@@ -138,13 +138,13 @@ Geom Body::addGeom(const std::string& type, const Eigen::Vector3f& size)
 Geom Body::addGeomMesh(const std::string& meshName, const std::string& materialName)
 {
     Geom geom = addGeom("mesh");
-    
+
     geom.mesh = meshName;
     if (!materialName.empty())
     {
         geom.material = materialName;
     }
-    
+
     return geom;
 }
 
@@ -160,13 +160,13 @@ Body Worldbody::addMocapBody(const std::string& name, float geomSize)
 {
     Body mocap = addBody(name);
     mocap.mocap = true;
-    
+
     if (geomSize > 0)
     {
         // Add geom for visualization.
         Geom geom = mocap.addGeom("box", Eigen::Vector3f::Constant(geomSize));
     }
-    
+
     return mocap;
 }
 

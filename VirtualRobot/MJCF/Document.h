@@ -19,24 +19,24 @@ namespace mjcf
      */
     class Document
     {
-        
+
     public:
 
         /// Constructor.
         Document();
-        
-        
+
+
         /// Copy constructor. Performs a deep copy from `other` to `*this`.
         Document(const Document& other);
         /// Move constructor.
         Document(Document&& other);
-        
+
         /// Copy assignment operator. Performs a deep copy from `other` to `*this`.
         Document& operator= (const Document& other);
         /// Move assignment operator.
         Document& operator= (Document&& other);
-        
-        
+
+
         /// Set the precision for float comparison.
         float getFloatCompPrecision() const;
         /// Set the precision for float comparison (used e.g. when comparing
@@ -46,22 +46,22 @@ namespace mjcf
         float getDummyMass() const;
         /// Set the mass of dummy inertial elements.
         void setDummyMass(float value);
-        
+
         /// Load from an MJCF file.
         void loadFile(const std::string& fileName);
         /// Save to an MJCF file.
         void saveFile(const std::string& fileName);
-        
+
         /// Make a deep copy of source to `*this`.
         void deepCopyFrom(const Document& source);
-        
+
         void print(std::ostream& os = std::cout) const;
 
         std::string getModelName() const;
         /// Set the name of the Mujoco model.
         void setModelName(const std::string& name);
 
-        
+
         // Section elements (children of top-level 'mujoco' element).
         CompilerSection  compiler()  { return section<CompilerSection>();   }
         OptionSection    option()    { return section<OptionSection>();     }
@@ -84,7 +84,7 @@ namespace mjcf
          * @see http://www.mujoco.org/book/XMLreference.html#include
          */
         Include addInclude(const std::string& relativePath);
-        
+
         /**
          * @brief Set the class attribute of all new applicable elements
          * (after calling this method). Pass an empty string to disable class attributes.
@@ -93,12 +93,12 @@ namespace mjcf
          *  They should be the childclass attribute of the robot root body.
          */
         void setNewElementClass(const std::string& className, bool excludeBody = true);
-        
-        
+
+
         template <class Derived>
         friend class Element;
 
-        
+
     private:
 
         // METHODS
@@ -110,7 +110,7 @@ namespace mjcf
          */
         template <class ElementD, class ParentD>
         ElementD createElement(Element<ParentD> parent, const std::string& className = "", bool front = false);
-        
+
         /// Return the first child element of parent with the given element name.
         /// If it does not exist, create it.
         template <class ElementD, class ParentD>
@@ -122,41 +122,41 @@ namespace mjcf
 
         /// Prints the document to os.
         friend std::ostream& operator<<(std::ostream& os, const Document& rhs);
-        
-        
+
+
     private:
-        
+
         // ATTRIBUTES
-        
+
         /// The document.
         std::unique_ptr<tinyxml2::XMLDocument> document;
-        
+
         /// The "mujoco" root element.
         std::unique_ptr<MujocoRoot> root;
 
-        
+
         /// Precision when comparing floats (e.g. with zero).
         float floatCompPrecision = 1e-6f;
         /// Mass used for dummy inertial elements.
         float dummyMass = 0.0001f;
-        
+
         /// The class added to new elements, if applicable.
         std::string newElementClass = "";
         /// Indicate whether body elements and their children shall be
         /// exluded from setting the class attribute.
         bool newElementClassExcludeBody = true;
 
-        
-    };
-    
-    using DocumentPtr = std::unique_ptr<Document>;
-    
 
-    
+    };
+
+    using DocumentPtr = std::unique_ptr<Document>;
+
+
+
 #include "elements/has_member.hpp"
-    
+
     define_has_member(class_);
-    
+
     template <class ElementD, class ParentD>
     ElementD Document::createElement(Element<ParentD> parent, const std::string& className, bool front)
     {
@@ -168,16 +168,16 @@ namespace mjcf
             bool hasClass = has_member(ElementD, class_);
             bool excludeBecauseBody = std::is_same<ParentD, Body>() && newElementClassExcludeBody;
                     // body itself does not have a class attribute
-            
+
             bool inDefaultClass = std::is_same<ParentD, DefaultClass>();
-            
+
             return isSet                     // must not be empty
                     && hasClass              // must have class attribute
                     && !excludeBecauseBody   // not excluded because of body exclusion
                     && !inDefaultClass;      // not part of default class
         };
-                
-        
+
+
         if (!className.empty())
         {
             element.setAttribute("class", className);
@@ -201,27 +201,27 @@ namespace mjcf
 // cleanup macros by has_member.hpp
 #undef define_has_member
 #undef has_member
-    
-    
+
+
     template <class ElementD, class ParentD>
     ElementD Document::getOrCreateElement(Element<ParentD>& parent)
     {
         ElementD element = parent.template firstChild<ElementD>();
-        
+
         if (!element)
         {
             element = createElement<ElementD>(parent);
         }
-        
+
         return element;
     }
-    
+
     template<class SectionT>
     SectionT Document::section()
     {
         return getOrCreateElement<SectionT>(*root);
     }
-    
+
     // Implementation of Element::createNewElement, which depends on the 
     // definition of Document.
     template <class D>
@@ -231,7 +231,7 @@ namespace mjcf
     {
         return _document->createElement<ElementD, ParentD>(parent, className, front);
     }
-    
+
     template <class D>
     void Element<D>::insertComment(const std::string& text, bool front)
     {
@@ -245,5 +245,5 @@ namespace mjcf
             _element->InsertEndChild(comment);
         }
     }
-    
+
 }

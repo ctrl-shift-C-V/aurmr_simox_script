@@ -41,7 +41,7 @@ float max(const std::vector<float>& values, bool isSorted)
 float mean(const std::vector<float>& values)
 {
     checkNotEmpty(values);
-    
+
     float sum = 0;
     for (float v : values)
     {
@@ -72,12 +72,12 @@ float quantile(const std::vector<float>& _values, float p, bool isSorted)
 {
     checkNotEmpty(_values);
     const std::vector<float>& values = isSorted ? _values : sorted(_values);
-    
+
     float location = p < 1 ? p * values.size() : values.size() - 1;
-    
+
     std::size_t floor = static_cast<std::size_t>(std::floor(location));
     std::size_t ceil = static_cast<std::size_t>(std::ceil(location));
-    
+
     if (floor == ceil)
     {
         return values.at(floor);
@@ -107,7 +107,7 @@ float upperQuartile(const std::vector<float>& values, bool isSorted)
 float interquartileRange(const std::vector<float>& _values, bool isSorted)
 {
     checkNotEmpty(_values);
-    
+
     const std::vector<float>& values = isSorted ? _values : sorted(_values);
     return interquartileRange(lowerQuartile(values, true), upperQuartile(values, true));
 }

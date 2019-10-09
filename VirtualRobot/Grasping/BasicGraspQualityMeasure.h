@@ -46,7 +46,7 @@ namespace VirtualRobot
         /// Destructor
         virtual ~BasicGraspQualityMeasure();
 
-        
+
         /*!
             setup contact information
             the contact points are normalized by subtracting the COM

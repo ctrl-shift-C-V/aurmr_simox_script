@@ -1037,7 +1037,7 @@ namespace VirtualRobot
 
         Eigen::FullPivLU<Eigen::MatrixXf> lu_decomp(mBasis);
         Eigen::MatrixXf basisVectors = lu_decomp.image(mBasis);
-        
+
         assert(0 <= basisVectors.cols());
         std::size_t startWithDet = static_cast<std::size_t>(basisVectors.cols());
 
@@ -2110,24 +2110,24 @@ namespace VirtualRobot
     {
         return angleModPI(angle2 - angle1);
     }
-    
+
     float MathTools::getTriangleArea(const Eigen::Vector3f& a, const Eigen::Vector3f& b,
                                      const Eigen::Vector3f& c)
     {
         Eigen::Vector3f ab = b - a;
         Eigen::Vector3f ac = c - a;
-        
+
         float abNorm = ab.norm();
         float acNorm = ac.norm();
-        
+
         if (abNorm <= 0 || acNorm <= 0) return 0;  // collapsed triangle
-        
+
         // alpha := angle at a, i.e. between ab and ac
         // => cos(alpha) = ab * ac
         // => sin(alpha) = sqrt( 1 - cos(alpha)^2 )
         float cos_alpha = (ab / abNorm).dot(ac / acNorm);
         float sin_alpha = std::sqrt(1 - cos_alpha * cos_alpha);
-        
+
         // area = 1/2 * sin(alpha) * |ab| * |ac|
         // (where sin(alpha) * |ab| = distance of b to |ac|)
         float area = 0.5f * sin_alpha * abNorm * acNorm;

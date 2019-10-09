@@ -80,6 +80,6 @@ namespace VirtualRobot
     } while(0);
 
 #ifdef WIN32
-#pragma warning(default:4275)  
+#pragma warning(default:4275)
 #endif
 

@@ -57,7 +57,7 @@ namespace GraspStudio
 
 
     VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(std::vector<Eigen::Vector3f>& pointsInput)
-    {        
+    {
         //clock_t startT = clock();
 
         ConvexHull3DPtr result(new ConvexHull3D());
@@ -153,7 +153,7 @@ namespace GraspStudio
                 {
                     pCenter[u] += vertex->point[u];
                 }
-                
+
                 nVcertexCount++;
             }
 
@@ -243,7 +243,7 @@ namespace GraspStudio
         //clock_t startT = clock();
 
         ConvexHull6DPtr result(new ConvexHull6D());
-        
+
         int nPoints = static_cast<int>(pointsInput.size());
 
         if (nPoints < 4)
@@ -765,7 +765,7 @@ namespace GraspStudio
 
         float minValue[6];
         float maxValue[6];
-        
+
         for (std::size_t i = 0; i <= 5; i++)
         {
             minValue[i] = FLT_MAX;

@@ -40,11 +40,11 @@ RBDL_DLLAPI void ClearLogOutput ();
  * {
  *   // logging will be active
  *   do_some_stuff();
- *  
+ *
  *   // now create a new scope in which a LoggingGuard instance exists
  *   {
  *     LoggingGuard ignore_logging;
- *    
+ *
  *     // as a _Nologging instance exists, all logging will be discarded
  *     do_some_crazy_stuff();
  *   }

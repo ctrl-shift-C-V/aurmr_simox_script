@@ -165,7 +165,7 @@ static void createAnderson2007ActiveTorqueAngleCurve(
 
   Note the following differences between this implementation and
   the original equations presented in Anderson et al.:
-  
+
   1. This function will return a curve that is fitted to the
   positive side of the curve defined by the coefficients 
   b1, k1, b2, and k2. Because of the sign convention employed by
@@ -219,7 +219,7 @@ static void createAnderson2007ActiveTorqueAngleCurve(
       double b1,
       double k1,
       double b2,
-      double k2,      
+      double k2,
       const std::string& curveName,
       RigidBodyDynamics::Addons::Geometry::SmoothSegmentedFunction&
         smoothSegmentedFunctionToUpdate);
@@ -258,7 +258,7 @@ static void createAnderson2007ActiveTorqueAngleCurve(
     <b>aborts</b>
 
     -tvAtEccentricOmegaMax < 1.05
-    -tvAtHalfOmegaMax >= 0.45    
+    -tvAtHalfOmegaMax >= 0.45
     -tvAtHalfOmegaMax <= 0.05
 
     <b>References</b>
@@ -267,7 +267,7 @@ static void createAnderson2007ActiveTorqueAngleCurve(
     126(843), 136-195.
 
   */
-  
+
   static void createTorqueVelocityCurve(
       double tvAtEccentricOmegaMax,
       double tvAtHalfConcentricOmegaMax,
@@ -392,10 +392,10 @@ static void createAnderson2007ActiveTorqueAngleCurve(
 
     <b>aborts</b>
 
-    - abs(angleAtOneNormTorque-angleAtZeroTorque) < sqrt(eps)        
+    - abs(angleAtOneNormTorque-angleAtZeroTorque) < sqrt(eps)
   */
   static void createPassiveTorqueAngleCurve(
-      double angleAtZeroTorque,    
+      double angleAtZeroTorque,
       double angleAtOneNormTorque,
       const std::string& curveName,
       RigidBodyDynamics::Addons::Geometry::SmoothSegmentedFunction&
@@ -434,11 +434,11 @@ static void createAnderson2007ActiveTorqueAngleCurve(
       angleAtOneNormTorque > angleAtZeroPassiveTorque. The sign 
       of stiffnessAtLowTorque must be negative if 
       angleAtOneNormTorque < angleAtZeroPassiveTorque.
-      (Norm.Torque/radians)  
+      (Norm.Torque/radians)
 
     @param stiffnessAtOneNormTorque
       The normalized stiffness (or slope) of the fiber curve 
-      when the fiber is stretched by  
+      when the fiber is stretched by
       angleAtOneNormTorque - angleAtZeroPassiveTorque. The sign 
       of stiffnessAtOneNormTorque must agree with stiffnessAtLowTorque.
       (Norm.Torque/radians)
@@ -462,8 +462,8 @@ static void createAnderson2007ActiveTorqueAngleCurve(
 
     <b>aborts</b>
 
-    - abs(angleAtOneNormTorque-angleAtZeroTorque) < sqrt(eps)   
-    - sign(stiffnessAtLowTorque) != sign(angleAtOneNormTorque-angleAtLowTorque)     
+    - abs(angleAtOneNormTorque-angleAtZeroTorque) < sqrt(eps)
+    - sign(stiffnessAtLowTorque) != sign(angleAtOneNormTorque-angleAtLowTorque)
     - sign(stiffnessAtOneNormTorque) != sign(stiffnessAtLowTorque)
     - abs(stiffnessAtLowTorque) > 0.9/abs(angleAtOneNormTorque-angleAtZeroTorque)
     - abs(stiffnessAtOneTorque) <= 1.1/abs(angleAtOneNormTorque-angleAtZeroTorque)
@@ -473,7 +473,7 @@ static void createAnderson2007ActiveTorqueAngleCurve(
   static void createPassiveTorqueAngleCurve(
       double angleAtZeroTorque,
       double angleAtOneNormTorque,
-      double stiffnessAtLowTorque,      
+      double stiffnessAtLowTorque,
       double stiffnessAtOneNormTorque,
       double curviness,
       const std::string& curveName,
@@ -507,7 +507,7 @@ static void createAnderson2007ActiveTorqueAngleCurve(
 
     <b>aborts</b>
 
-    - angularWidthOfOneStandardDeviation < sqrt(eps)  
+    - angularWidthOfOneStandardDeviation < sqrt(eps)
   */
   static void createGaussianShapedActiveTorqueAngleCurve(
       double angleAtOneNormTorque,
@@ -559,7 +559,7 @@ static void createAnderson2007ActiveTorqueAngleCurve(
 
     <b>aborts</b>
 
-    - angularWidthOfOneStandardDeviation < sqrt(eps)  
+    - angularWidthOfOneStandardDeviation < sqrt(eps)
     - minSlopeAtShoulders < 0
     - minValueAtShoulders < 0
     - curviness > 1 or curviness < 0
@@ -609,7 +609,7 @@ static void createAnderson2007ActiveTorqueAngleCurve(
       const std::string& curveName,
       RigidBodyDynamics::Addons::Geometry::SmoothSegmentedFunction&
         smoothSegmentedFunctionToUpdate 
-    );  
+    );
 
   /**
     This function produces a normalized tendon-torque-angle curve with a 
@@ -647,7 +647,7 @@ static void createAnderson2007ActiveTorqueAngleCurve(
         the coefficients that are defined by this curve. 
 
     <b>aborts</b>
-    
+
     - angularStretchAtOneNormTorque < sqrt(eps) 
     - stiffnessAtOneNormTorque < 1.1/angularStretchAtOneNormTorque
     - normTorqueAtToeEnd < sqrt(eps) or normTorqueAtToeEnd > 0.99
@@ -662,7 +662,7 @@ static void createAnderson2007ActiveTorqueAngleCurve(
       const std::string& curveName,
       RigidBodyDynamics::Addons::Geometry::SmoothSegmentedFunction&
         smoothSegmentedFunctionToUpdate 
-    );  
+    );
 
   /**
     This function creates a C2 sigmoid function that varies
@@ -688,7 +688,7 @@ static void createAnderson2007ActiveTorqueAngleCurve(
 
     @param smoothSegmentedFunctionToUpdate
         A SmoothSegmentedFunction object that will be erased and filled with 
-        the coefficients that are defined by this curve.    
+        the coefficients that are defined by this curve.
   */
   static void createDampingBlendingCurve(
         double normAngularVelocityAtMaximumDamping,

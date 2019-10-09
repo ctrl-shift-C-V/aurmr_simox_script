@@ -7,9 +7,9 @@ namespace VirtualRobot::mujoco
 struct DummyMassVisitor : public mjcf::Visitor
 {
     DummyMassVisitor(mjcf::Document& document, const std::string& t = "| ");
-    
+
     virtual bool visitEnter(const mjcf::AnyElement& element) override;
-    
+
     const std::string& t;
 };
 
@@ -20,7 +20,7 @@ DummyMassVisitor::DummyMassVisitor(mjcf::Document& document, const std::string& 
 bool DummyMassVisitor::visitEnter(const mjcf::AnyElement& element)
 {
     static const bool front = true;
-    
+
     if (element.is<mjcf::Body>())
     {
         mjcf::Body body = element.as<mjcf::Body>();

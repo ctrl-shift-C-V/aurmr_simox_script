@@ -94,8 +94,8 @@ namespace VirtualRobot
         static void saveMJCF(RobotPtr robot, 
                              const std::string& filename, const std::string& basePath, 
                              const std::string& meshDir = "mesh");
-        
-        
+
+
     protected:
 
         struct ChildFromRobotDef

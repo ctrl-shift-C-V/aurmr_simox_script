@@ -44,7 +44,7 @@ struct Fixture
         BOOST_CHECK(fs::exists(meshFileName) && fs::is_regular_file(meshFileName));
         mesh.read(meshFileName);
     }
-    
+
     VirtualRobot::mujoco::Mesh mesh;
 };
 

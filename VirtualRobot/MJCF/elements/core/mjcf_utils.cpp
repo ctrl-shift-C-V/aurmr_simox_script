@@ -20,14 +20,14 @@ namespace mjcf
                                       bigger->begin()).first;
         return std::size_t(std::distance(smaller->begin(), mismatch));
     }
-    
+
     template <>
     std::string toAttr<bool>(const bool& b)
     {
         static const std::string strings[] = { "false", "true" };
         return strings[int(b)];
     }
-    
+
     void fromAttr(const std::string& valueStr, bool& value)
     {
         static const std::map<std::string, bool> map = {
@@ -61,12 +61,12 @@ namespace mjcf
     }
 
 
-    
+
     bool equals(const char* lhs, const char* rhs)
     {
         return strcmp(lhs, rhs) == 0;
     }
-    
+
 }
 
 bool std::operator==(const char* lhs, const std::string& rhs)

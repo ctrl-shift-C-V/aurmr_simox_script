@@ -3,13 +3,13 @@ PROJECT ( RRTdemo )
 INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
 
 IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)
-    
+
   # the variable "demo_SRCS" contains all .cpp files of this project
   FILE(GLOB demo_SRCS ${PROJECT_SOURCE_DIR}/RRTdemo.cpp)
-    
+
   VirtualRobotQtApplication(${PROJECT_NAME} "${demo_SRCS}" "${demo_INCS}" "${GUI_MOC_HDRS}" "${GUI_UIS}")
   TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE Saba)
-  
+
   SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "Examples")
   SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Simox_BIN_DIR})
 

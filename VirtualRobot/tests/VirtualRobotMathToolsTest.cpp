@@ -302,7 +302,7 @@ BOOST_FIXTURE_TEST_SUITE(getTriangleArea, Fixture_getTriangleArea)
         b << 2, 0, 0;
         c << 0, 4, 0;
         areaTrue = 4;
-        
+
         float area = VirtualRobot::MathTools::getTriangleArea(a, b, c);
         BOOST_CHECK_CLOSE_FRACTION(area, areaTrue, PRECISION);
     }
@@ -313,15 +313,15 @@ BOOST_FIXTURE_TEST_SUITE(getTriangleArea, Fixture_getTriangleArea)
         b << 2, 0, 1;
         c << 0, 4, 1;
         areaTrue = 4;
-        
+
         Eigen::AngleAxisf rot(1.14f * M_PIf, Eigen::Vector3f(1, -.5, 2).normalized());
         Eigen::Translation3f trans(-1, 2, .5);
         Eigen::Affine3f tf = trans * rot;
-        
+
         a = tf * a;
         b = tf * b;
         c = tf * c;
-        
+
         float area = VirtualRobot::MathTools::getTriangleArea(a, b, c);
         BOOST_CHECK_CLOSE_FRACTION(area, areaTrue, PRECISION);
     }
@@ -332,17 +332,17 @@ BOOST_FIXTURE_TEST_SUITE(getTriangleArea, Fixture_getTriangleArea)
         b << 1, 4, 3;
         c << 2, 4, 3;
         areaTrue = 0;
-        
+
         float area = VirtualRobot::MathTools::getTriangleArea(a, b, c);
         BOOST_CHECK_CLOSE_FRACTION(area, areaTrue, PRECISION);
     }
-    
+
     BOOST_AUTO_TEST_CASE(test_getTriangleArea_collapsed_triangle)
     {
         a << 1, 2, 3;
         b = c = a;
         areaTrue = 0;
-        
+
         float area = VirtualRobot::MathTools::getTriangleArea(a, b, c);
         BOOST_CHECK_CLOSE_FRACTION(area, areaTrue, PRECISION);
     }

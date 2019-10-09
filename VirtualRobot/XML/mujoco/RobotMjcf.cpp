@@ -74,15 +74,15 @@ void RobotMjcf::reset()
     document.reset(new mjcf::Document());
     robotBody = mjcf::Body();
     nodeBodies.clear();
-    
+
     // Set model name.
     document->setModelName(robot->getName());
-    
+
     const std::string className = robot->getName();
-    
+
     // Add robot defaults class.
     document->default_().addClass(className);
-    
+
     // Add robot body.
     robotBody = document->worldbody().addBody(robot->getName(), className);
     nodeBodies[robot->getName()] = robotBody;
@@ -208,38 +208,38 @@ void RobotMjcf::build(WorldMountMode worldMountMode, ActuatorType actuatorType)
 {
     // Reset MJCF.
     reset();
-    
+
     // Add meta elements.
     addCompiler();
-    
+
     addRobotDefaults();
     // document->setNewElementClass(robot->getName(), true);
-    
+
     addSkybox();
-    
+
     mjcf::Body mocapBody;
     switch (worldMountMode)
     {
     case WorldMountMode::FIXED:
         break;
-    
+
     case WorldMountMode::FREE:
         robotBody.addFreeJoint();
         break;
-        
+
     case WorldMountMode::MOCAP:
         std::cout << "Adding mocap body ..." << std::endl;
         robotBody.addFreeJoint();
         mocapBody = addMocapBodyWeldRobot();
         break;
     }
-    
+
     std::cout << "Creating bodies structure ..." << std::endl;
     addNodeBodies();
-    
+
     std::cout << "Adding meshes and geoms ..." << std::endl;
     addNodeBodyMeshes();
-    
+
     bool verbose = false;
     if (verbose)
     {
@@ -249,8 +249,8 @@ void RobotMjcf::build(WorldMountMode worldMountMode, ActuatorType actuatorType)
         std::cout << getDocument();
         std::cout << "===========================" << std::endl;
     }
-    
-    
+
+
     std::cout << "Adding contact excludes ..." << std::endl;
     addContactExcludes();
 
@@ -260,13 +260,13 @@ void RobotMjcf::build(WorldMountMode worldMountMode, ActuatorType actuatorType)
         VR_CHECK(mocapBody);
         addMocapContactExcludes(mocapBody);
     }
-    
+
     if (actuatorType != ActuatorType::NONE)
     {
         std::cout << "Adding actuators ..." << std::endl;
         addActuators(actuatorType);
     }
-    
+
     std::cout << "Done." << std::endl;
 }
 
@@ -296,22 +296,22 @@ void RobotMjcf::addRobotDefaults()
 void RobotMjcf::addRobotDefaults(float meshScale)
 {
     mjcf::DefaultClass defaultsClass = getRobotDefaults();
-    
+
     defaultsClass.insertComment("Add default values for " + robot->getName() + " here.", true);
-    
+
     mjcf::Joint joint = defaultsClass.getElement<mjcf::Joint>();
     joint.frictionloss = 1;
     joint.damping = 0;
-    
+
     mjcf::Mesh mesh = defaultsClass.getElement<mjcf::Mesh>();
     mesh.scale = Eigen::Vector3f::Constant(meshScale);
-    
+
     mjcf::Geom geom = defaultsClass.getElement<mjcf::Geom>();
     geom.condim = 4;
-    
+
     mjcf::ActuatorPosition actPos = defaultsClass.getElement<mjcf::ActuatorPosition>();
     actPos.kp = 1;
-    
+
     mjcf::ActuatorVelocity actVel = defaultsClass.getElement<mjcf::ActuatorVelocity >();
     actVel.kv = 1;
 }
@@ -332,17 +332,17 @@ mjcf::Body RobotMjcf::addNodeBody(RobotNodePtr node, mjcf::Body parent,
         math::Helpers::ScaleTranslation(pose, lengthScale);
         body.setPose(pose);
     }
-    
+
     if (addJoint && (node->isRotationalJoint() || node->isTranslationalJoint()))
     {
         addNodeJoint(node, body);
     }
-    
+
     if (addInertial)
     {
         addNodeInertial(node, body);
     }
-    
+
     return body;
 }
 
@@ -355,10 +355,10 @@ mjcf::Joint RobotMjcf::addNodeJoint(RobotNodePtr node, mjcf::Body body)
     VR_CHECK_HINT(!(node->isRotationalJoint() && node->isTranslationalJoint()),
                   "Node must not be both rotational and translational joint.");
 
-    
+
     mjcf::Joint joint = body.addJoint();
     joint.name = node->getName();
-    
+
     // get the axis
     Eigen::Vector3f axis;
     if (node->isRotationalJoint())
@@ -373,11 +373,11 @@ mjcf::Joint RobotMjcf::addNodeJoint(RobotNodePtr node, mjcf::Body body)
         VR_CHECK(prismatic);
         axis = prismatic->getJointTranslationDirectionJointCoordSystem();
     }
-    
+
     joint.type = node->isRotationalJoint() ? "hinge" : "slide";
     joint.axis = axis;
     joint.limited = !node->isLimitless();
-    
+
     if (!node->isLimitless())
     {
         Eigen::Vector2f range = { node->getJointLimitLow(), node->getJointLimitHigh() };
@@ -385,7 +385,7 @@ mjcf::Joint RobotMjcf::addNodeJoint(RobotNodePtr node, mjcf::Body body)
         {
             range *= lengthScale;
         }
-        
+
         // Mujoco does not like ranges where min >= max.
         if (std::abs(range(0) - range(1)) < 1e-6f)
         {
@@ -393,7 +393,7 @@ mjcf::Joint RobotMjcf::addNodeJoint(RobotNodePtr node, mjcf::Body body)
         }
         joint.range = range;
     }
-    
+
     return joint;
 }
 
@@ -406,12 +406,12 @@ mjcf::Inertial RobotMjcf::addNodeInertial(RobotNodePtr node, mjcf::Body body)
         // Dont set an inertial element and let it be derived automatically.
         return { };
     }
-    
+
     mjcf::Inertial inertial = body.addInertial();
     inertial.pos = node->getCoMLocal() * lengthScale;
     inertial.mass = node->getMass() * massScale;
     inertial.inertiaFromMatrix(matrix);
-    
+
     return inertial;
 }
 
@@ -424,10 +424,10 @@ mjcf::Body RobotMjcf::addNodeBody(RobotNodePtr node, bool addJoint, bool addIner
         // Exists => break recursion.
         return find->second;
     }
-    
+
     // Check whether body exists for parent node.
     mjcf::Body parent;
-    
+
     if (node->getName() == robot->getRootNode()->getName())
     {
         parent = robotBody;
@@ -447,7 +447,7 @@ mjcf::Body RobotMjcf::addNodeBody(RobotNodePtr node, bool addJoint, bool addIner
                                  addJoint, addInertial);
         }
     }
-    
+
     // Add body as child of parent.
     mjcf::Body body = addNodeBody(node, parent, addJoint, addInertial);
     nodeBodies[node->getName()] = body;
@@ -477,23 +477,23 @@ void RobotMjcf::addNodeBodies(const std::vector<std::string>& nodeNames)
 void RobotMjcf::addNodeBodyMesh(RobotNodePtr node)
 {
     mjcf::Body body = getRobotNodeBody(node->getName());
-    
+
     const fs::path meshFile = convertNodeMeshToSTL(node);
-    
+
     if (meshFile.empty())
     {
         VR_ERROR << "Failed to add mesh to body for node '" << node->getName();
         return;
     }
-    
+
     const fs::path meshPath = useRelativePaths
             ? getOutputMeshRelativeDirectory() / meshFile
             : getOutputMeshDirectory() / meshFile;
-    
+
     // Add asset.
     const std::string meshName = node->getName();
     document->asset().addMesh(meshName, meshPath);
-    
+
     // Add mesh geom to body.
     mjcf::Geom geom = body.addGeomMesh(meshName);
     geom.name = node->getName();
@@ -502,17 +502,17 @@ void RobotMjcf::addNodeBodyMesh(RobotNodePtr node)
 std::filesystem::path RobotMjcf::convertNodeMeshToSTL(RobotNodePtr node)
 {
     VisualizationNodePtr visualization = node->getVisualization(SceneObject::VisualizationType::Full);
-    
+
     if (!visualization)
     {
         VR_INFO << "Node '" << node->getName() << "': No visualization." << std::endl;
         return "";
     }
-    
+
     std::cout << "Node '" << node->getName() << "':\t";
-    
+
     const fs::path sourceFile = visualization->getFilename();
-    
+
     if (sourceFile.empty())
     {
         VR_INFO << "Node '" << node->getName() << "': No visualization file." << std::endl;
@@ -523,13 +523,13 @@ std::filesystem::path RobotMjcf::convertNodeMeshToSTL(RobotNodePtr node)
                 << " does not exist." << std::endl;
         return "";
     }
-    
+
     fs::path targetFilename = sourceFile.filename();
     targetFilename.replace_extension("stl");
     const fs::path targetFile = getOutputMeshDirectory() / targetFilename;
-    
+
     MeshConverter::toSTL(sourceFile, targetFile, true);
-    
+
     return targetFilename;
 }
 
@@ -559,18 +559,18 @@ mjcf::Body RobotMjcf::addMocapBody(
     {
         // add defaults class
         mjcf::DefaultClass defaultClass = document->default_().getClass(className);
-        
+
         mjcf::Geom geom = defaultClass.getElement<mjcf::Geom>();
         geom.rgba = Eigen::Vector4f(.9f, .5f, .5f, .5f);
     }
-    
+
     // Add body.
     mjcf::Body mocap = document->worldbody().addMocapBody(bodyName, geomSize);
     if (!className.empty())
     {
         mocap.childclass = className;
     }
-    
+
     return mocap;
 }
 
@@ -581,12 +581,12 @@ mjcf::Body RobotMjcf::addMocapBodyWeld(
         float geomSize)
 {
     mjcf::Body mocap = addMocapBody(bodyName, className, geomSize);
-    
+
     if (!className.empty())
     {
         // Get defaults class.
         mjcf::DefaultClass defaultClass = document->default_().getClass(className);
-        
+
         // Add equality defaults.
         mjcf::EqualityDefaults equality = defaultClass.getElement<mjcf::EqualityDefaults>();
         Eigen::Vector5f solimp = equality.solimp;
@@ -594,17 +594,17 @@ mjcf::Body RobotMjcf::addMocapBodyWeld(
         equality.solimp = solimp;
         //equality.solref = Eigen::Vector2f(.02f, 1.f);
     }
-    
+
     // Add equality weld constraint.
     mjcf::EqualityWeld weld = document->equality().addWeld(bodyName, weldBodyName, bodyName);
     if (!className.empty())
     {
         weld.class_ = className;
     }
-    
+
     // Add contact exclude.
     document->contact().addExclude(mocap.name, weldBodyName);
-    
+
     return mocap;
 }
 
@@ -616,7 +616,7 @@ mjcf::Body RobotMjcf::addMocapBodyWeldRobot(
         robotBody.addFreeJoint();
     }
     return addMocapBodyWeld(bodyName.empty() ? robot->getName() + "_mocap" : bodyName,
-                            className);    
+                            className);
 }
 
 
@@ -628,7 +628,7 @@ struct ParentChildContactExcludeVisitor : public mjcf::Visitor
 
     // bool VisitEnter(const tinyxml2::XMLElement&, const tinyxml2::XMLAttribute*) override;
     bool visitEnter(const mjcf::AnyElement& element) override;
-    
+
     std::vector<std::pair<std::string, std::string>> excludePairs;
     bool firstSkipped = false;  ///< Used to skip the root element.
 };
@@ -639,19 +639,19 @@ bool ParentChildContactExcludeVisitor::visitEnter(const mjcf::AnyElement& elemen
     {
         return true;
     }
-    
+
     const mjcf::Body body = element.as<mjcf::Body>();
-    
+
     if (!firstSkipped)
     {
         firstSkipped = true;
         return true;
     }
-    
+
     const mjcf::Body parent = body.parent<mjcf::Body>();
     VR_CHECK(parent);
     excludePairs.emplace_back(parent.name.get(), body.name.get());
-    
+
     return true;
 }
 
@@ -670,11 +670,11 @@ void RobotMjcf::addContactExcludes(const std::vector<std::string>& nodeNames,
                                    bool addParentChildExcludes)
 {
     std::vector<std::pair<std::string, std::string>> excludePairs;
-    
+
     for (const std::string& nodeName : nodeNames)
     {
         RobotNodePtr node = robot->getRobotNode(nodeName);
-        
+
         for (const std::string& ignoreNode : node->getPhysics().ignoreCollisions)
         {
             // I found an <IgnoreCollision> element referring to a non-existing node.
@@ -685,18 +685,18 @@ void RobotMjcf::addContactExcludes(const std::vector<std::string>& nodeNames,
             }
         }
     }
-    
+
     // Resolve body names and add exludes.
     for (const auto& excludePair : excludePairs)
     {
         const std::string body1 = excludePair.first;
         const std::string body2 = excludePair.second;
-        
+
         VR_CHECK(!body1.empty());
         VR_CHECK(!body2.empty());
         document->contact().addExclude(body1, body2);
     }
-    
+
     if (addParentChildExcludes)
     {
         // Add excludes between parent and child elemenets. 
@@ -725,26 +725,26 @@ void RobotMjcf::addMocapContactExcludes(mjcf::Body mocap)
 mjcf::AnyElement RobotMjcf::addJointActuator(mjcf::Joint joint, ActuatorType type)
 {
     mjcf::AnyElement actuator;
-    
+
     const std::string jointName = joint.name;
     switch (type)
     {
     case ActuatorType::NONE:
         // Nothing to do.
         break;
-        
+
     case ActuatorType::MOTOR:
     {
         mjcf::ActuatorMotor act = document->actuator().addMotor(jointName);
         actuator = act;
         break;
     }
-            
+
     case ActuatorType::POSITION:
     {
         mjcf::ActuatorPosition act = document->actuator().addPosition(jointName);
         actuator = act;
-        
+
         if (joint.limited)
         {
             act.ctrllimited = joint.limited;
@@ -752,7 +752,7 @@ mjcf::AnyElement RobotMjcf::addJointActuator(mjcf::Joint joint, ActuatorType typ
         }
     }
         break;
-            
+
     case ActuatorType::VELOCITY:
     {
         mjcf::ActuatorVelocity act = document->actuator().addVelocity(jointName);
@@ -760,10 +760,10 @@ mjcf::AnyElement RobotMjcf::addJointActuator(mjcf::Joint joint, ActuatorType typ
     }
         break;
     }
-    
+
     std::string actuatorName = joint.name;
     actuator.setAttribute("name", actuatorName);
-    
+
     return actuator;
 }
 
@@ -774,9 +774,9 @@ mjcf::AnyElement RobotMjcf::addNodeActuator(RobotNodePtr node, ActuatorType type
     {
         throw error::NodeIsNoJoint(node->getName());
     }
-    
+
     mjcf::Body body = getRobotNodeBody(node->getName());
-    
+
     mjcf::Joint joint;
     if (body.hasChild<mjcf::Joint>())
     {
@@ -786,7 +786,7 @@ mjcf::AnyElement RobotMjcf::addNodeActuator(RobotNodePtr node, ActuatorType type
     {
         joint = addNodeJoint(node, body);
     }
-    
+
     return addJointActuator(joint, type);
 }
 
@@ -819,7 +819,7 @@ void RobotMjcf::addActuators(const std::map<std::string, ActuatorType>& nodeType
     for (const auto& item : nodeTypeMap)
     {
         const std::string& nodeName = item.first;
-        
+
         RobotNodePtr node = robot->getRobotNode(nodeName);
         // Ignore non-joint nodes.
         if (node->isRotationalJoint() || node->isTranslationalJoint())

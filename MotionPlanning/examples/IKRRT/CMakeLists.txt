@@ -8,7 +8,7 @@ IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)
 	FILE(GLOB demo_SRCS ${PROJECT_SOURCE_DIR}/IKRRTDemo.cpp ${PROJECT_SOURCE_DIR}/IKRRTWindow.cpp)
 	FILE(GLOB demo_INCS ${PROJECT_SOURCE_DIR}/IKRRTWindow.h)
 
-  
+
     ################################## moc'ing ##############################
     set(GUI_MOC_HDRS
         ${PROJECT_SOURCE_DIR}/IKRRTWindow.h

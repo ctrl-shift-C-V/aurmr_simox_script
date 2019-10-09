@@ -283,7 +283,7 @@ struct RBDL_DLLAPI Joint {
                   << " type). Only allowed when type != JointTypeCustom" 
                   << std::endl;
         assert(0);
-        abort();                  
+        abort();
       } else if (type != JointTypeFixed && type != JointTypeFloatingBase) {
         std::cerr << "Error: Invalid use of Joint constructor Joint(JointType type). Only allowed when type == JointTypeFixed or JointTypeSpherical." << std::endl;
         assert (0);
@@ -296,12 +296,12 @@ struct RBDL_DLLAPI Joint {
       mDoFCount (0),
       q_index (0),
       custom_joint_index(-1) {
-     if (type == JointTypeCustom) {        
+     if (type == JointTypeCustom) {
         mDoFCount   = degreesOfFreedom;
         mJointAxes  = new Math::SpatialVector[mDoFCount];
         for(unsigned int i=0; i<mDoFCount;++i){
           mJointAxes[i] = Math::SpatialVector (0., 0., 0., 0., 0., 0.);
-        }        
+        }
       } else {
         std::cerr << "Error: Invalid use of Joint constructor Joint(JointType"
                   << " type, int degreesOfFreedom). Only allowed when "
@@ -310,7 +310,7 @@ struct RBDL_DLLAPI Joint {
         assert (0);
         abort();
       }
-    }  
+    }
   Joint (const Joint &joint) :
     mJointType (joint.mJointType),
     mDoFCount (joint.mDoFCount),
@@ -617,7 +617,7 @@ struct RBDL_DLLAPI Joint {
     if(axis_translational && translation.norm() - 1.0 > 1.0e-8) {
       std::cerr << "Warning: joint translation axis is not unit!" << std::endl;
     }
-    
+
     return axis_rotational != axis_translational;
   }
 

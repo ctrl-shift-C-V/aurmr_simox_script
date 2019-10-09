@@ -9,14 +9,14 @@ struct CompilerSection : public Element<CompilerSection>
 {
     static const std::string tag;
     mjcf_ElementDerivedConstructors(CompilerSection)
-    
+
     mjcf_FloatAttributeDef(CompilerSection, boundmass, 0);
     mjcf_FloatAttributeDef(CompilerSection, boundinertia, 0);
     mjcf_FloatAttributeDef(CompilerSection, settotalmass, -1);
-    
+
     mjcf_BoolAttributeDef(CompilerSection, balanceinertia, false);
     mjcf_BoolAttributeDef(CompilerSection, strippath, false);
-    
+
     // local, global
     mjcf_StringAttributeDef(CompilerSection, coordinate, "local");
     // degree, radian (default "degree" for MJCF, always "radian" for URDF)
@@ -31,7 +31,7 @@ struct CompilerSection : public Element<CompilerSection>
 
     mjcf_BoolAttributeDef(CompilerSection, convexhull, true);
     mjcf_BoolAttributeDef(CompilerSection, userthread, true);
-    
+
     // Default: false for MJCF, true for URDF
     mjcf_BoolAttributeDef(CompilerSection, fusestatic, false);
 

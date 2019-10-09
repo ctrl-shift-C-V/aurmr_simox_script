@@ -21,40 +21,40 @@ VirtualRobot::TriMeshModelPtr MeshConverter::toVirtualRobotPtr(const Mesh& mesh,
 VirtualRobot::TriMeshModel MeshConverter::toVirtualRobot(const Mesh& mj, float scaling)
 {
     VirtualRobot::TriMeshModel vr;
-    
+
     // copy vertices
     for (int i = 0; i < mj.nvertex(); ++i)
     {
         vr.addVertex(mj.vertexPosition(i) * scaling);
     }
-    
+
     // copy normals
     for (int i = 0; i < mj.nnormal(); ++i)
     {
         vr.addNormal(mj.vertexNormal(i));
     }
-    
+
     // copy faces
     for (int i = 0; i < mj.nface(); ++i)
     {
         Eigen::Vector3i faceVertexIndex = mj.faceVertexIndex(i);
-        
+
         // check before casting
         VR_CHECK_NONNEGATIVE(faceVertexIndex.minCoeff());
         VR_CHECK_LESS(faceVertexIndex.maxCoeff(), static_cast<int>(vr.vertices.size()));
-        
+
         Eigen::Matrix<unsigned int, 3, 1> vertexIDs = faceVertexIndex.cast<unsigned int>();
-        
+
         VirtualRobot::MathTools::TriangleFace triFace;
-        
+
         // set position indices
         triFace.set(vertexIDs(0), vertexIDs(1), vertexIDs(2));
-        
+
         // set normals (if present)
         if (vertexIDs.maxCoeff() < vr.normals.size())
         {
             triFace.setNormal(vertexIDs(0), vertexIDs(1), vertexIDs(2));
-            
+
             Eigen::Vector3f normal = Eigen::Vector3f::Zero();
             for (int i = 0; i < vertexIDs.size(); ++i)
             {
@@ -68,10 +68,10 @@ VirtualRobot::TriMeshModel MeshConverter::toVirtualRobot(const Mesh& mj, float s
             triFace.normal = vr.CreateNormal(vr.vertices[triFace.id1], vr.vertices[triFace.id2],
                     vr.vertices[triFace.id3]);
         }
-        
+
         vr.addFace(triFace);
     }
-    
+
     return vr;
 }
 
@@ -85,7 +85,7 @@ static ValueT max3(ValueT a, ValueT b, ValueT c)
 Mesh MeshConverter::fromVirtualRobot(const VirtualRobot::TriMeshModel& vr, float scaling)
 {
     Mesh mj;
-    
+
     const auto& vertices = vr.vertices;
     const auto& normals = vr.normals;
 
@@ -127,7 +127,7 @@ Mesh MeshConverter::fromVirtualRobot(const VirtualRobot::TriMeshModel& vr, float
 
         mj.addFaceVertexIndex({ index, index + 1, index + 2 });
     }
-    
+
     return mj;
 }
 
@@ -142,7 +142,7 @@ void MeshConverter::toSTL(
         bool skipIfExists)
 {
     fs::path targetFile = _targetPath;
-    
+
     // Add a file name if none was passed.
     if (!targetFile.has_filename())
     {
@@ -150,20 +150,20 @@ void MeshConverter::toSTL(
         filename.replace_extension("stl");
         targetFile = targetFile / filename;
     }
-    
+
     // Make sure parent directory exists.
     if (!fs::exists(targetFile.parent_path()))
     {
         fs::create_directories(targetFile.parent_path());
     }
-    
+
     // Check if file already exists.
     if (skipIfExists && fs::exists(targetFile))
     {
         VR_INFO << "Skipping (" << targetFile << " already exists).";
         return;
     }
-    
+
     // Check if file has to be converted.
     if (sourceFile.extension() != ".stl")
     {
@@ -172,14 +172,14 @@ void MeshConverter::toSTL(
         fs::copy_file(sourceFile, targetFile);
         return;
     }
-    
-    
+
+
     VR_INFO << "Converting to .stl: " << sourceFile << std::endl
             << "(to: " << targetFile << ")" << std::endl;
-    
+
     const bool meshlabserverAvailable = checkMeshlabserverAvailable();
     bool notAvailableReported = false;
-    
+
     if (!meshlabserverAvailable)
     {
         if (!notAvailableReported)
@@ -189,10 +189,10 @@ void MeshConverter::toSTL(
                      << std::endl;
             notAvailableReported = true;
         }
-        
+
         return;
     }
-    
+
     // Meshlabserver available.
     runMeshlabserverCommand(sourceFile, targetFile);
 }
@@ -213,13 +213,13 @@ bool MeshConverter::runMeshlabserverCommand(
     convertCommand << MESHLABSERVER
                    << " -i " << sourceFile
                    << " -o " << targetFile;
-    
+
     // run command
     VR_INFO << "----------------------------------------------------------" << std::endl;
     VR_INFO << "Running command: " << convertCommand.str() << std::endl;
     const int r = system(convertCommand.str().c_str());
     VR_INFO << "----------------------------------------------------------" << std::endl;
-    
+
     if (r == 0)
     {
         // Success.

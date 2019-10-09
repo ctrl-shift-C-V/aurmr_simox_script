@@ -31,9 +31,9 @@ void GaussianImplicitSurface3DNormals::Calculate(const ContactList& samples, flo
 {
     ContactList shiftedSamples;
     std::vector<Eigen::Vector3f> points;
-    
+
     for (const auto& d : samples)
-    {        
+    {
         const Eigen::Vector3f pos = d.Position();
         shiftedSamples.push_back(Contact(pos, d.Normal() * normalScale));
         points.push_back(pos);
@@ -115,7 +115,7 @@ void GaussianImplicitSurface3DNormals::CalculateCovariance(const std::vector<Eig
     {
          covariance(i, i) += i % 4 == 0 ? noise*noise : normalNoise*normalNoise;
     }
-}    
+}
 
 void GaussianImplicitSurface3DNormals::MatrixInvert(const Eigen::VectorXd& b)
 {

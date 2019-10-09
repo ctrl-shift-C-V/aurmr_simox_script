@@ -93,7 +93,7 @@ namespace VirtualRobot::mujoco
         /// Indicate whether this mesh has faces.
         bool hasFaces() const { return _nface > 0; }
 
-        
+
         /// Add a vertex position.
         void addVertexPosition(const Eigen::Vector3f& position);
         /// Add a vertex normal.
@@ -114,25 +114,25 @@ namespace VirtualRobot::mujoco
          */
         Eigen::Matrix<float, 3, 2> getVertexPositionsBoundingBox() const;
 
-        
+
         /// Get a texture file.
         std::string getTextureFile() const;
         /// Set the texture file.
         void setTextureFile(const std::string& path);
-        
+
         /// Get the filename.
         std::string getFilename() const;
         /// Set a filename.
         void setFilename(const std::string& path);
-        
-        
+
+
         /**
          * @brief Split this mesh into `num` meshes by randomly assigning its
          * faces to the new meshes.
          */
         std::vector<Mesh> splitRandomly(std::size_t num) const;
-        
-        
+
+
     private:
 
         /// Resize the vectors to the according number of elements.

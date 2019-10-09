@@ -41,7 +41,7 @@ endfunction()
 
 
 function(SimoxQtApplication name srcs incs mocFiles uiFiles)
-    VirtualRobotQtApplication("${name}" "${srcs}" "${incs}" "${mocFiles}" "${uiFiles}")  
+    VirtualRobotQtApplication("${name}" "${srcs}" "${incs}" "${mocFiles}" "${uiFiles}")
     # add Saba and GraspStudio
     TARGET_LINK_LIBRARIES(${name} PUBLIC GraspStudio Saba)
 endfunction()

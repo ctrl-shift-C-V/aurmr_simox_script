@@ -61,7 +61,7 @@ float KernelWithDerivatives::Kernel_didj(const Eigen::Vector3f& p1, const Eigen:
    float z = p1.z() - p2.z();
    if (i == j)
    {
-       swap(x, y, z, i);       
+       swap(x, y, z, i);
        return -Kernel_ddx(x, y, z, r, R);
    }
     std::vector<float> a(3);

@@ -32,7 +32,7 @@
 #define BZ_RAND_DECLS                          \
     Int32 rNToGo;                               \
     Int32 rTPos                                 \
-     
+
 
 #define BZ_MAX_ALPHA_SIZE 258
 #define BZ_MAX_CODE_LEN    23

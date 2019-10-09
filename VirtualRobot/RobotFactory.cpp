@@ -854,7 +854,7 @@ namespace VirtualRobot
         RobotNodePtr rootNode = createUnitedRobotNode(result, initialNodes, RobotNodePtr(), RobotNodePtr(), Eigen::Matrix4f::Identity(), childSensorNodes);
         result->setRootNode(rootNode);
         RobotNodePtr currentParent = rootNode;
-    
+
         for (size_t i = 0; i < nodes.size(); i++)
         {
             RobotNodePtr newNode = nodes[i]->clone(result, false, currentParent);

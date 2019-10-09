@@ -12,14 +12,14 @@ namespace VirtualRobot::mujoco
     class DummyMassBodySanitizer : public BodySanitizer
     {
     public:
-        
+
         /// Constructor.
         DummyMassBodySanitizer();
 
-        
+
         /// @see BodySanitizer::sanitize()
         virtual void sanitize(mjcf::Document& document, mjcf::Body root) override;
-        
+
     };
 
 }

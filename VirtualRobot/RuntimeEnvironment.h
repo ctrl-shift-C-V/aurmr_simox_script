@@ -50,7 +50,7 @@ namespace VirtualRobot
 
         /// Set the runtime environment caption.
         static void setCaption(const std::string& caption);
-        
+
         /*!
          * Add a path to global data path vector. 
          * These paths are searched within the getDataFileAbsolute() method.
@@ -115,7 +115,7 @@ namespace VirtualRobot
         static bool hasFlag(const std::string& flag);
         /// Indicate whether the 'help' flag was specified.
         static bool hasHelpFlag();
-        
+
         //! Return all key value pairs
         static std::map<std::string, std::string> getKeyValuePairs();
 
@@ -153,37 +153,37 @@ namespace VirtualRobot
 
         //! Print status.
         static void print();
-        
+
         //! Print the command line options (as printed by boost::program_options) to os.
         static void printOptions(std::ostream& os = std::cout);
-        
+
 
         /*!
          * \brief Free all resources. 
          * Usually not not needed, since on application exit all resources are freed automatically.
          */
         static void cleanup();
-        
-        
+
+
     protected:
 
         RuntimeEnvironment() {}
         virtual ~RuntimeEnvironment() {}
-        
+
         static bool pathInitialized;
-        
+
         static void init();
         /// Make the options description based on the added keys and flags.
         static boost::program_options::options_description makeOptionsDescription();
         static void processParsedOptions(const boost::program_options::parsed_options& parsed);
 
         static std::string caption;
-        
+
         /// Pairs of (key, description). If not given, description is empty.
         static std::vector< std::pair<std::string, std::string> > processKeys;
         /// Pairs of (flag, description). If not given, description is empty.
         static std::vector< std::pair<std::string, std::string> > processFlags;
-        
+
         static std::vector< std::string > dataPaths;
         static std::vector< std::string > unrecognizedOptions;
 

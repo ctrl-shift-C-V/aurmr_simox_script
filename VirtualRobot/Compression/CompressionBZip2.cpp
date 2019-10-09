@@ -138,11 +138,11 @@
 #define BZ_RAND_DECLS                          \
     Int32 rNToGo;                               \
     Int32 rTPos                                 \
-     
+
 #define BZ_RAND_INIT_MASK                      \
     s->rNToGo = 0;                              \
     s->rTPos  = 0                               \
-                 
+
 #define BZ_RAND_MASK ((s->rNToGo == 1) ? 1 : 0)
 
 #define BZ_RAND_UPD_MASK                       \
@@ -852,7 +852,7 @@ namespace VirtualRobot
     cost01 += s->len_pack[icv][0]; \
     cost23 += s->len_pack[icv][1]; \
     cost45 += s->len_pack[icv][2]; \
-     
+
                     BZ_ITER(0);
                     BZ_ITER(1);
                     BZ_ITER(2);

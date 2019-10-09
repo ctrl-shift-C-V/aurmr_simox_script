@@ -37,7 +37,7 @@ Gravity::Gravity(VirtualRobot::RobotPtr robot, VirtualRobot::RobotNodeSetPtr rns
         }
     }
 
-    gravityDataHelperRoot = GravityData::create(robot->getRootNode(), nodes, nodesBodies, gravityDataHelperVec);   
+    gravityDataHelperRoot = GravityData::create(robot->getRootNode(), nodes, nodesBodies, gravityDataHelperVec);
 }
 
 Gravity::~Gravity()

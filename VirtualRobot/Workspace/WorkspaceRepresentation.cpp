@@ -862,7 +862,7 @@ namespace VirtualRobot
 
         return true;
     }
-    
+
     bool WorkspaceRepresentation::getVoxelFromPosition(const Eigen::Matrix4f &globalPose, unsigned int v[3]) const
     {
         float x[6];

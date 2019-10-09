@@ -133,8 +133,8 @@ using namespace VirtualRobot;
 
         return true;
     }
-    
-    
+
+
     bool ElasticBandProcessor::getWSpaceForce(const Eigen::VectorXf& fc, Eigen::Vector3f &f)
     {
         if (ik)
@@ -248,7 +248,7 @@ using namespace VirtualRobot;
 
         return true;
     }
-    
+
     Eigen::Vector3f ElasticBandProcessor::getWSpacePoint(const Eigen::VectorXf& fc)
     {
 		rns->setJointValues(fc);

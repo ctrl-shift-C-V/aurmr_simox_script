@@ -3,7 +3,7 @@ PROJECT ( MultiThreadedPlanning )
 INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
 
 IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)
-	    
+	
 	# the variable "demo_SRCS" contains all .cpp files of this project
 	FILE(GLOB demo_SRCS ${PROJECT_SOURCE_DIR}/MTPlanning.cpp ${PROJECT_SOURCE_DIR}/MTPlanningWindow.cpp ${PROJECT_SOURCE_DIR}/MTPlanningScenery.cpp)
 	FILE(GLOB demo_INCS ${PROJECT_SOURCE_DIR}/MTPlanningWindow.h ${PROJECT_SOURCE_DIR}/MTPlanningScenery.h)
@@ -17,10 +17,10 @@ IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)
 	set(GUI_UIS
 	  ${PROJECT_SOURCE_DIR}/MTPlanning.ui
 	)
-    
+
   VirtualRobotQtApplication(${PROJECT_NAME} "${demo_SRCS}" "${demo_INCS}" "${GUI_MOC_HDRS}" "${GUI_UIS}")
   TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE Saba)
-  
+
   SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "Examples")
   SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Simox_BIN_DIR})
 	
@@ -37,5 +37,5 @@ IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)
   MESSAGE( STATUS " ** Simox application ${PROJECT_NAME} will be placed into " ${Simox_BIN_DIR})
   MESSAGE( STATUS " ** Simox application ${PROJECT_NAME} will be installed into " bin)
 
-  
+
 ENDIF()

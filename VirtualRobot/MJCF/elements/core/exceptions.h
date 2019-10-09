@@ -19,7 +19,7 @@ namespace mjcf
         MjcfIOError(const std::string& message);
     };
 
-    
+
     /// Indicates that an attribute without default was not set when it was 
     /// attempted to read.
     class AttribNotSetError : public MjcfError
@@ -27,7 +27,7 @@ namespace mjcf
     public:
         AttribNotSetError(const std::string& name);
     };
-    
+
     /// Indicates that an attribute without default was not set when it was 
     /// attempted to read.
     class ParseAttributeError : public MjcfError
@@ -36,7 +36,7 @@ namespace mjcf
         ParseAttributeError(const std::string& source, const std::type_info& targetType,
                             const std::string& reason);
     };
-    
+
 namespace error
 {
 
@@ -45,7 +45,7 @@ namespace error
     public:
         InvalidElementTag(const std::string& expected, const std::string& actual);
     };
-    
+
 }
 
 

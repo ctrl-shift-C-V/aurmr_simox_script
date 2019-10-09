@@ -6,7 +6,7 @@
 namespace mjcf
 {
     const std::string SensorSection::tag                       = "sensor";
-    
+
     const std::string TouchSensor::tag                    = "touch";
     const std::string AccelerometerSensor::tag            = "accelerometer";
     const std::string VelocimeterSensor::tag              = "velocimeter";

@@ -33,10 +33,10 @@
   Update:
     This is a port of the original code so that it will work with
     the multibody code RBDL written by Martin Felis.
-  
+
   Author:
     Matthew Millard
-  
+
   Date:
     Nov 2015
 
@@ -46,14 +46,14 @@
 #include <rbdl/rbdl_math.h>
 #include <vector>
 #include <cmath>
-#include <cstdio>    
+#include <cstdio>
 /**
   This abstract class represents a mathematical function that calculates a 
   value of arbitrary type based on M real arguments.  The output type is set 
   as a template argument, while the number of input components may be 
   determined at runtime.  The name "Function" (with no trailing _) may be
   used as a synonym for Function_<double>.
-  
+
   Subclasses define particular mathematical functions.  Predefined subclasses 
   are provided for several common function types: Function_<T>::Constant, 
   Function_<T>::Linear, Function_<T>::Polynomial, and Function_<T>::Step.
@@ -79,25 +79,25 @@ public:
   }
   /**
     Calculate the value of this function at a particular point.
-    
+
     @param x   the RigidBodyDynamics::Math::VectorNd of input arguments. Its 
                size must equal the value returned by getArgumentSize().
    */
   virtual T calcValue(const RigidBodyDynamics::Math::VectorNd& x) const = 0;
   /**
-    Calculate a partial derivative of this function at a particular point.  
+    Calculate a partial derivative of this function at a particular point.
     Which derivative to take is specified by listing the input components 
     with which to take it. For example, if derivComponents=={0}, that 
     indicates a first derivative with respective to component 0. If 
     derivComponents=={0, 0, 0}, that indicates a third derivative with 
     respective to component 0.  If derivComponents=={4, 7}, that indicates a 
     partial second derivative with respect to components 4 and 7.
-    
-    @param     derivComponents  
+
+    @param     derivComponents
        The input components with respect to which the derivative should be
        taken.  Its size must be less than or equal to the value returned 
        by getMaxDerivativeOrder().
-    @param     x        
+    @param     x
        The RigidBodyDynamics::Math::VectorNd of input arguments. Its size must 
        equal the value 
        returned by getArgumentSize().
@@ -185,9 +185,9 @@ public:
   /**
    * Create a Function_::Linear object.
    * 
-   * @param coefficients  
+   * @param coefficients
    *    The coefficients of the linear function. The number of arguments 
-   *    expected by the function is equal to coefficients.size()-1.  
+   *    expected by the function is equal to coefficients.size()-1.
    *    coefficients[0] is the coefficient for the first argument, 
    *    coefficients[1] is the coefficient for the second argument, etc.
    *    The final element of coefficients contains the constant term.
@@ -322,7 +322,7 @@ public:
 
   virtual double calcValue(
     const RigidBodyDynamics::Math::VectorNd& x) const {
-    
+
     const double t = x[0]; // we expect just one argument
     return a*std::sin(w*t + p);
   }
@@ -396,7 +396,7 @@ public:
   Step(const T& y0, const T& y1, double x0, double x1) 
   :   m_y0(y0), m_y1(y1), m_yr(y1-y0), m_zero(double(0)*y0),
     m_x0(x0), m_x1(x1), m_ooxr(1/(x1-x0)), m_sign(copysign(1,m_ooxr)) 
-  {   
+  {
     /*
     SimTK_ERRCHK1_ALWAYS(x0 != x1, "Function_<T>::Step::ctor()",
     "A zero-length switching interval is illegal; both ends were %g.", x0);
@@ -413,7 +413,7 @@ public:
     SimTK_ERRCHK1_ALWAYS(xin.size() == 1,
       "Function_<T>::Step::calcValue()", 
       "Expected just one input argument but got %d.", xin.size());
-    */      
+    */
     assert(xin.size() == 1);
     std::printf( "Function_<T>::Step::calcValue() "
         "Expected just one input argument but got %d.",

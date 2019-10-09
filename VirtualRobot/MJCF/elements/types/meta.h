@@ -11,7 +11,7 @@ struct MujocoRoot : public Element<MujocoRoot>
 {
     static const std::string tag;
     mjcf_ElementDerivedConstructors(MujocoRoot)
-    
+
     mjcf_StringAttributeDef(MujocoRoot, model, "MuJoCo Model");
 };
 
@@ -21,7 +21,7 @@ struct Include : public Element<Include>
 {
     static const std::string tag;
     mjcf_ElementDerivedConstructors(Include)
-    
+
     mjcf_StringAttributeReq(Include, file);
 };
 

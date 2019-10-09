@@ -12,12 +12,12 @@
 namespace VirtualRobot
 {
     bool RuntimeEnvironment::pathInitialized = false;
-    
+
     std::string RuntimeEnvironment::caption = "Simox runtime options";
-    
+
     std::vector< std::pair<std::string, std::string> > RuntimeEnvironment::processKeys;
     std::vector< std::pair<std::string, std::string> > RuntimeEnvironment::processFlags;
-    
+
     std::vector< std::string > RuntimeEnvironment::dataPaths;
     std::vector< std::string > RuntimeEnvironment::unrecognizedOptions;
     std::map< std::string, std::string > RuntimeEnvironment::keyValues;
@@ -107,7 +107,7 @@ namespace VirtualRobot
             }
         }
     }
-    
+
     bool RuntimeEnvironment::getDataFileAbsolute(std::string& fileName)
     {
         if (!pathInitialized)
@@ -166,19 +166,19 @@ namespace VirtualRobot
         {
             init();
         }
-        
+
         const boost::program_options::options_description description = makeOptionsDescription();
-        
+
         const boost::program_options::parsed_options parsed =
             boost::program_options::command_line_parser(argc, argv).options(description).allow_unregistered().run();
 
         processParsedOptions(parsed);
     }
-    
+
     boost::program_options::options_description RuntimeEnvironment::makeOptionsDescription()
     {
         // Declare the supported options.
-        
+
         boost::program_options::options_description desc(caption);
         desc.add_options()
             ("help", "Simox command line parser: Set options with '--key value'\n")
@@ -201,14 +201,14 @@ namespace VirtualRobot
         }
         return desc;
     }
-    
+
     void RuntimeEnvironment::processParsedOptions(const boost::program_options::parsed_options& parsed)
     {
         boost::program_options::variables_map vm;
         //boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
         boost::program_options::store(parsed, vm);
         boost::program_options::notify(vm);
-        
+
         // process data-path entries
         if (vm.count("data-path"))
         {
@@ -242,7 +242,7 @@ namespace VirtualRobot
             }
 
         }
-        
+
         for (const auto& flag : processFlags)
         {
             if (vm.count(flag.first.c_str()) > 0)
@@ -261,7 +261,7 @@ namespace VirtualRobot
             unrecognizedOptions.push_back(option);
         }
     }
-    
+
     void RuntimeEnvironment::addKeyValuePair(const std::string& key, const std::string& value)
     {
         keyValues[key] = value;
@@ -297,7 +297,7 @@ namespace VirtualRobot
 
         return dataPaths;
     }
-    
+
     void RuntimeEnvironment::setCaption(const std::string& caption)
     {
         RuntimeEnvironment::caption = caption;
@@ -336,7 +336,7 @@ namespace VirtualRobot
         }
         return max;
     }
-    
+
     static std::string padding(std::size_t current, std::size_t target, char c = ' ')
     {
         std::stringstream ss;
@@ -346,7 +346,7 @@ namespace VirtualRobot
         }
         return ss.str();
     }
-    
+
     void RuntimeEnvironment::print()
     {
         if (!pathInitialized)
@@ -364,7 +364,7 @@ namespace VirtualRobot
 
         const std::size_t descriptionOffset = std::max(
                     getMaxLength(processKeys), getMaxLength(processFlags)) + 4;
-        
+
         auto printDescriptions = [&descriptionOffset](
                 const std::vector<std::pair<std::string, std::string>>& items,
                 const std::string& name)
@@ -372,7 +372,7 @@ namespace VirtualRobot
             if (items.size() > 0)
             {
                 cout << "Known " << name << ":" << endl;
-    
+
                 for (const auto& item : items)
                 {
                     cout << " * " << item.first
@@ -381,10 +381,10 @@ namespace VirtualRobot
                 }
             }
         };
-        
+
         printDescriptions(processKeys, "keys");
         printDescriptions(processFlags, "flags");
-        
+
 
         if (keyValues.size() > 0)
         {
@@ -394,7 +394,7 @@ namespace VirtualRobot
                 cout << " * " << item.first << ": " << item.second << endl;
             }
         }
-        
+
         if (flags.size() > 0)
         {
             cout << "Parsed flags:"  << endl;
@@ -414,7 +414,7 @@ namespace VirtualRobot
             }
         }
     }
-    
+
     void RuntimeEnvironment::printOptions(std::ostream& os)
     {
         os << makeOptionsDescription() << std::endl;
@@ -424,7 +424,7 @@ namespace VirtualRobot
     {
         processKeys.emplace_back(key, description);
     }
-    
+
     void RuntimeEnvironment::considerFlag(const std::string& flag, const std::string& description)
     {
         processFlags.emplace_back(flag, description);
@@ -434,12 +434,12 @@ namespace VirtualRobot
     {
         return keyValues.find(key) != keyValues.end();
     }
-    
+
     bool RuntimeEnvironment::hasFlag(const std::string& flag)
     {
         return flags.find(flag) != flags.end();
     }
-    
+
     bool RuntimeEnvironment::hasHelpFlag()
     {
         return helpFlag;
@@ -482,7 +482,7 @@ namespace VirtualRobot
         }
 
         Eigen::Vector3f result;
-        
+
         for (int i = 0; i < result.SizeAtCompileTime; ++i)
         {
             const std::string& string = stringSplit[static_cast<std::size_t>(i)];
@@ -503,7 +503,7 @@ namespace VirtualRobot
             }
             result(i) = a;
         }
-        
+
         storeResult = result;
         return true;
     }

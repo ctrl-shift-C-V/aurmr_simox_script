@@ -26,7 +26,7 @@ ENDIF(SimDynamics_USE_BULLET_USE_GLUT)
 
 SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "Examples")
 SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Simox_BIN_DIR})
-  
+
 #######################################################################################
 ############################ Setup for installation ###################################
 #######################################################################################

@@ -29,28 +29,28 @@
  */
 namespace Eigen
 {
-    
+
 
     // MatrixBase (non-specialized).
 
     /// Writes the matrix as list of rows.
     template <typename Derived>
     void to_json(nlohmann::json& j, const MatrixBase<Derived>& matrix);
-    
+
     /// Reads the matrix from list of rows.
     template <typename Derived>
     void from_json(const nlohmann::json& j, MatrixBase<Derived>& matrix);
-    
+
 
     // Specialization for Vector3f (implemented in .cpp)
-    
+
     /// If `j` is an object, reads vector from `x, y, z` keys. Otherwise, reads it as matrix.
     template <>
     void from_json<Vector3f>(const nlohmann::json& j, MatrixBase<Vector3f>& vector);
-    
-    
+
+
     // Specialization for Matrix4f as transformation matrix (implemented in .cpp).
-    
+
     /**
      * @brief Reads a 4x4 matrix from list of rows or `pos` and `ori` keys.
      * 
@@ -59,20 +59,20 @@ namespace Eigen
      */
     template <>
     void from_json<Matrix4f>(const nlohmann::json& j, MatrixBase<Matrix4f>& matrix);
-    
-    
+
+
     // Quaternion
-    
+
     /// Writes the quaternion with `qw, qx, qy, qz` keys.
     template <typename Derived>
     void to_json(nlohmann::json& j, const QuaternionBase<Derived>& quat);
-    
+
     /// Reads the quaternion from `qw, qx, qy, qz` keys.
     template <typename Derived>
     void from_json(const nlohmann::json& j, QuaternionBase<Derived>& quat);
 
-    
-    
+
+
     // IMPLEMENTATION
 
 namespace jsonbase
@@ -96,14 +96,14 @@ namespace jsonbase
             j.push_back(jrow);
         }
     }
-    
+
     /// Reads the matrix from list of rows.
     template <typename Derived>
     void from_json(const nlohmann::json& j, MatrixBase<Derived>& matrix)
     {
         using Scalar = typename MatrixBase<Derived>::Scalar;
         using Index = typename MatrixBase<Derived>::Index;
-        
+
         for (std::size_t row = 0; row < j.size(); ++row)
         {
             const auto& jrow = j.at(row);
@@ -115,21 +115,21 @@ namespace jsonbase
         }
     }
 }
-  
+
 
     template <typename Derived>
     void to_json(nlohmann::json& j, const MatrixBase<Derived>& matrix)
     {
         jsonbase::to_json(j, matrix);
     }
-    
+
     template <typename Derived>
     void from_json(const nlohmann::json& j, MatrixBase<Derived>& matrix)
     {
         jsonbase::from_json(j, matrix);
     }
 
-    
+
     template <typename Derived>
     void to_json(nlohmann::json& j, const QuaternionBase<Derived>& quat)
     {
@@ -148,5 +148,5 @@ namespace jsonbase
         quat.y() = j.at("qy").get<Scalar>();
         quat.z() = j.at("qz").get<Scalar>();
     }
-    
+
 }

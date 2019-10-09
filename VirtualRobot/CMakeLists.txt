@@ -86,7 +86,7 @@ if (Simox_USE_COIN_VISUALIZATION)
 
 
     if ( Qt5_FOUND )
-        MESSAGE (STATUS "Found Qt5: " ${Qt5Gui_INCLUDE_DIRS}  ${Qt5OpenGL_INCLUDE_DIRS} )        
+        MESSAGE (STATUS "Found Qt5: " ${Qt5Gui_INCLUDE_DIRS}  ${Qt5OpenGL_INCLUDE_DIRS} )
         target_link_libraries(VirtualRobot PUBLIC Qt5::Core Qt5::Gui Qt5::OpenGL Qt5::Widgets)
     else ( )
         MESSAGE (STATUS "Did not find Qt. Disabling Qt/SoQt support.")
@@ -193,7 +193,7 @@ ENDMACRO()
 
 #################################### FILES ##################################
 SET(SOURCES
-    
+
     BoundingBox.cpp
     KinematicChain.cpp
     LinkedCoordinate.cpp
@@ -215,21 +215,21 @@ SET(SOURCES
     VirtualRobot.cpp
     VirtualRobotChecks.cpp
     VirtualRobotException.cpp
-    
+
     CollisionDetection/CDManager.cpp
     CollisionDetection/CollisionChecker.cpp
     CollisionDetection/CollisionModel.cpp
-    
+
     Compression/CompressionBZip2.cpp
     Compression/CompressionRLE.cpp
-    
+
     EndEffector/EndEffector.cpp
     EndEffector/EndEffectorActor.cpp
-    
+
     Grasping/BasicGraspQualityMeasure.cpp
     Grasping/Grasp.cpp
     Grasping/GraspSet.cpp
-    
+
     IK/AdvancedIKSolver.cpp
     IK/CoMIK.cpp
     IK/ConstrainedHierarchicalIK.cpp
@@ -259,11 +259,11 @@ SET(SOURCES
     IK/constraints/PositionConstraint.cpp
     IK/constraints/ReferenceConfigurationConstraint.cpp
     IK/constraints/TSRConstraint.cpp
-    
+
     Import/RobotImporterFactory.cpp
     Import/SimoxXMLFactory.cpp
     Import/MeshImport/AssimpReader.cpp
-    
+
     math/AbstractFunctionR1R2.cpp
     math/AbstractFunctionR1R3.cpp
     math/AbstractFunctionR1R6.cpp
@@ -303,7 +303,7 @@ SET(SOURCES
     math/statistics/measures.cpp
     math/statistics/BoxPlot.cpp
     math/statistics/Histogram.cpp
-    
+
     MJCF/Document.cpp
     MJCF/elements/core/AnyElement.cpp
     MJCF/elements/core/Attribute.cpp
@@ -328,7 +328,7 @@ SET(SOURCES
     MJCF/elements/types/tendon.cpp
     MJCF/elements/types/visual.cpp
     MJCF/visitors/Collector.cpp
-    
+
     Nodes/CameraSensor.cpp
     Nodes/CameraSensorFactory.cpp
     Nodes/ContactSensor.cpp
@@ -346,23 +346,23 @@ SET(SOURCES
     Nodes/RobotNodeRevolute.cpp
     Nodes/RobotNodeRevoluteFactory.cpp
     Nodes/Sensor.cpp
-    
+
     TimeOptimalTrajectory/Path.cpp
     TimeOptimalTrajectory/TimeOptimalTrajectory.cpp
-    
+
     Tools/Gravity.cpp
-    
+
     Util/json/eigen_conversion.cpp
     Util/json/io.cpp
     Util/json/converters.cpp
     Util/xml/tinyxml2.cpp
-    
+
     Visualization/ColorMap.cpp
     Visualization/TriMeshModel.cpp
     Visualization/TriMeshUtils.cpp
     Visualization/Visualization.cpp
     Visualization/VisualizationNode.cpp
-    
+
     Workspace/Manipulability.cpp
     Workspace/Reachability.cpp
     Workspace/WorkspaceDataArray.cpp
@@ -373,13 +373,13 @@ SET(SOURCES
     #Workspace/ReachabilityInversion/ReachabilityProcessor.cpp
     #Workspace/ReachabilityInversion/RobotPlacementIK.cpp
     #Workspace/ReachabilityInversion/RobotPlacementTrajectoryIK.cpp
-    
+
     XML/BaseIO.cpp
     XML/FileIO.cpp
     XML/ObjectIO.cpp
     XML/RobotIO.cpp
     XML/SceneIO.cpp
-    
+
     XML/mujoco/exceptions.cpp
     XML/mujoco/Mesh.cpp
     XML/mujoco/MeshConverter.cpp
@@ -414,26 +414,26 @@ SET(INCLUDES
     VirtualRobotException.h
     VirtualRobotImportExport.h
     VirtualRobotTest.h
-    
+
     CollisionDetection/CollisionChecker.h
     CollisionDetection/CollisionModel.h
     CollisionDetection/CDManager.h
     CollisionDetection/CollisionModelImplementation.h
     CollisionDetection/CollisionCheckerImplementation.h
-    
+
     Compression/CompressionBZip2.h
     Compression/CompressionRLE.h
-    
+
     DataStructures/nanoflann.hpp
     DataStructures/KdTreePointCloud.h
-    
+
     EndEffector/EndEffector.h
     EndEffector/EndEffectorActor.h
-    
+
     Grasping/Grasp.h
     Grasping/GraspSet.h
     Grasping/BasicGraspQualityMeasure.h
-    
+
     IK/AdvancedIKSolver.h
     IK/CoMIK.h
     IK/ConstrainedHierarchicalIK.h
@@ -467,7 +467,7 @@ SET(INCLUDES
     Import/RobotImporterFactory.h
     Import/SimoxXMLFactory.h
     Import/MeshImport/AssimpReader.h
-    
+
     math/AbstractFunctionR1Ori.h
     math/AbstractFunctionR1R2.h
     math/AbstractFunctionR1R3.h
@@ -519,7 +519,7 @@ SET(INCLUDES
     math/statistics/measures.h
     math/statistics/BoxPlot.h
     math/statistics/Histogram.h
-    
+
     mjcf.h
     MJCF/Document.h
     MJCF/elements.h
@@ -549,7 +549,7 @@ SET(INCLUDES
     MJCF/elements/types/visual.h
     MJCF/visitors.h
     MJCF/visitors/Collector.h
-    
+
     Nodes/CameraSensor.h
     Nodes/CameraSensorFactory.h
     Nodes/ConditionedLock.h
@@ -568,14 +568,14 @@ SET(INCLUDES
     Nodes/RobotNodeRevoluteFactory.h
     Nodes/Sensor.h
     Nodes/SensorFactory.h
-    
+
     TimeOptimalTrajectory/Path.h
     TimeOptimalTrajectory/TimeOptimalTrajectory.h
-    
+
     Tools/Gravity.h
-    
+
     Transformation/DHParameter.h
-    
+
     Util/json.h
     Util/json/eigen_conversion.h
     Util/json/eigen_conversion.hpp
@@ -583,14 +583,14 @@ SET(INCLUDES
     Util/json/converters.h
     Util/json/json.hpp
     Util/xml/tinyxml2.h
-    
+
     Visualization/ColorMap.h
     Visualization/TriMeshModel.h
     Visualization/TriMeshUtils.h
     Visualization/Visualization.h
     Visualization/VisualizationFactory.h
     Visualization/VisualizationNode.h
-    
+
     Workspace/Manipulability.h
     Workspace/Reachability.h
     Workspace/VoxelTree6D.hpp
@@ -606,13 +606,13 @@ SET(INCLUDES
     #Workspace/ReachabilityInversion/ReachabilityProcessor.h
     #Workspace/ReachabilityInversion/RobotPlacementIK.h
     #Workspace/ReachabilityInversion/RobotPlacementTrajectoryIK.h
-    
+
     XML/BaseIO.h
     XML/FileIO.h
     XML/ObjectIO.h
     XML/RobotIO.h
     XML/SceneIO.h
-    
+
     XML/mujoco/exceptions.h
     XML/mujoco/Mesh.h
     XML/mujoco/MeshConverter.h
@@ -657,7 +657,7 @@ endif ()
 MESSAGE (STATUS "Simox_VISUALIZATION                   : ${Simox_VISUALIZATION}")
 MESSAGE (STATUS "Simox_USE_COIN_VISUALIZATION          : ${Simox_USE_COIN_VISUALIZATION}")
 MESSAGE (STATUS "Simox_USE_OPENSCENEGRAPH_VISUALIZATION: ${Simox_USE_OPENSCENEGRAPH_VISUALIZATION}")
-if (Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)    
+if (Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)
     MESSAGE (STATUS "adding Coin3d visualzation")
     SET(SOURCES
     ${SOURCES}
@@ -749,7 +749,7 @@ endif()
 # Adding the UI files to the library
 if (Simox_USE_COIN_VISUALIZATION AND SOQT_FOUND)
     MESSAGE (STATUS " ** Adding GraspEditor gui")
-    
+
 
     SET(SOURCES ${SOURCES} Grasping/GraspEditor/GraspEditorWindow.cpp)
     SET(INCLUDES ${INCLUDES}
@@ -841,5 +841,5 @@ INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/data DESTINATION "."
         PATTERN ".svn" EXCLUDE
         PATTERN ".git" EXCLUDE
         )
-   
+
 MESSAGE (STATUS "***** Finished CONFIGURING Simox project VirtualRobot *****\n")
