@@ -519,6 +519,7 @@ SET(INCLUDES
     math/statistics/measures.h
     math/statistics/BoxPlot.h
     math/statistics/Histogram.h
+    math/OrientedBox.h
 
     mjcf.h
     MJCF/Document.h
