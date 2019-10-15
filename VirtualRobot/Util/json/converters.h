@@ -14,4 +14,7 @@ namespace VirtualRobot::json
     std::vector<Eigen::Matrix4f> posquatArray2eigen4fVector(const std::string& str);
     std::vector<Eigen::Matrix4f> posquatArray2eigen4fVector(const char* str);
     std::vector<Eigen::Matrix4f> posquatArray2eigen4fVector(const nlohmann::json& j);
+
+    std::string eigen4f2posquatJson(const Eigen::Matrix4f& str);
+    std::string eigen4fVector2posquatArrayJson(const std::vector<Eigen::Matrix4f>& str);
 }

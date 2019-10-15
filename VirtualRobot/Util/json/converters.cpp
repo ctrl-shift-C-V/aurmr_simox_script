@@ -49,4 +49,39 @@ namespace VirtualRobot::json
         }
         return result;
     }
+
+    std::string eigen4f2posquatJson(const Eigen::Matrix4f& mx)
+    {
+        nlohmann::json j = nlohmann::json::object();
+        const auto quat = VirtualRobot::MathTools::eigen4f2quat(mx);
+        j["qx"] = quat.x;
+        j["qy"] = quat.y;
+        j["qz"] = quat.z;
+        j["qw"] = quat.w;
+
+        j["x"] = mx(0, 3);
+        j["y"] = mx(1, 3);
+        j["z"] = mx(2, 3);
+        return j.dump(4);
+    }
+    std::string eigen4fVector2posquatArrayJson(const std::vector<Eigen::Matrix4f>& vec)
+    {
+        nlohmann::json jar = nlohmann::json::array();
+        for (const auto& mx : vec)
+        {
+            nlohmann::json j = nlohmann::json::object();
+            const auto quat = VirtualRobot::MathTools::eigen4f2quat(mx);
+            j["qx"] = quat.x;
+            j["qy"] = quat.y;
+            j["qz"] = quat.z;
+            j["qw"] = quat.w;
+
+            j["x"] = mx(0, 3);
+            j["y"] = mx(1, 3);
+            j["z"] = mx(2, 3);
+            jar.push_back(j);
+        }
+        //= ::nlohmann::json::parse(str);
+        return jar.dump(4);
+    }
 }
