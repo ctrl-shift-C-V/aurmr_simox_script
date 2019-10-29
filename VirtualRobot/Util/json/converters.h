@@ -1,5 +1,8 @@
 #pragma once
 
+#include <map>
+#include <string>
+
 #include <Eigen/Core>
 
 #include "json.hpp"
@@ -17,4 +20,8 @@ namespace VirtualRobot::json
 
     std::string eigen4f2posquatJson(const Eigen::Matrix4f& str);
     std::string eigen4fVector2posquatArrayJson(const std::vector<Eigen::Matrix4f>& str);
+
+    std::map<std::string, float> json2NameValueMap(const std::string& str);
+    std::map<std::string, float> json2NameValueMap(const char* str);
+    std::map<std::string, float> json2NameValueMap(const nlohmann::json& j);
 }

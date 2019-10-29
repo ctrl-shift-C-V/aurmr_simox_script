@@ -1,7 +1,8 @@
+#include <boost/lexical_cast.hpp>
+
 #include <VirtualRobot/MathTools.h>
 
 #include "converters.h"
-
 
 namespace VirtualRobot::json
 {
@@ -82,5 +83,27 @@ namespace VirtualRobot::json
             jar.push_back(j);
         }
         return jar.dump(4);
+    }
+
+    std::map<std::string, float> json2NameValueMap(const std::string& str)
+    {
+        return json2NameValueMap(::nlohmann::json::parse(str));
+    }
+    std::map<std::string, float> json2NameValueMap(const char* str)
+    {
+        return json2NameValueMap(::nlohmann::json::parse(str));
+    }
+    std::map<std::string, float> json2NameValueMap(const nlohmann::json& j)
+    {
+        if (!j.is_object())
+        {
+            throw std::invalid_argument{"json2NameValueMap: json has to be an object"};
+        }
+        std::map<std::string, float> result;
+        for (const auto& el : j.items())
+        {
+            result[el.key()] = boost::lexical_cast<float>(el.value());
+        }
+        return result;
     }
 }
