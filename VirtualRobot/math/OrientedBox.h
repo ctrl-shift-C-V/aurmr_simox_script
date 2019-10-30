@@ -32,10 +32,15 @@ namespace VirtualRobot
     class OrientedBox
     {
     public:
+        template<class T> using vector_casted    = Eigen::Matrix<T, 3, 1>;
+        template<class T> using transform_casted = Eigen::Matrix<T, 4, 4>;
+        template<class T> using rotation_casted  = Eigen::Matrix<T, 3, 3>;
+
         using float_t = FloatT;
-        using vector_t = Eigen::Matrix<float_t, 3, 1>;
-        using transform_t = Eigen::Matrix<float_t, 4, 4>;
-        using rotation_t = Eigen::Matrix<float_t, 3, 3>;
+        using vector_t    = vector_casted<float_t>;
+        using transform_t = transform_casted<float_t>;
+        using rotation_t  = rotation_casted<float_t>;
+
 
     public:
         static constexpr float_t eps = static_cast<float_t>(1e8);
@@ -151,41 +156,105 @@ namespace VirtualRobot
             _t.template block<3, 1>(0, 3) = corner;
         }
 
-
+        template<class T>
+        OrientedBox<T> cast() const
+        {
+            return
+            {
+                translation<T>(),
+                axis_x<T>() * dimension<T>(0),
+                axis_y<T>() * dimension<T>(1),
+                axis_z<T>() * dimension<T>(2)
+            };
+        }
 
         const vector_t& dimensions() const
         {
             return _d;
         }
+        template<class T>
+        vector_casted<T> dimensions() const
+        {
+            return dimensions().template cast<T>();
+        }
+
+        float_t dimension(int i) const
+        {
+            return _d(i);
+        }
+        template<class T>
+        T dimension(int i) const
+        {
+            return static_cast<T>(dimension(i));
+        }
+
         const transform_t& transformation() const
         {
             return _t;
         }
+        template<class T>
+        transform_casted<T> transformation() const
+        {
+            return transformation().template cast<T>();
+        }
+
         transform_t transformation_centered() const
         {
             return transformation(rotation(), center());
+        }
+        template<class T>
+        transform_casted<T> transformation_centered() const
+        {
+            return transformation_centered().template cast<T>();
         }
 
         auto translation() const
         {
             return translation(_t);
         }
+        template<class T>
+        vector_casted<T> translation() const
+        {
+            return translation().template cast<T>();
+        }
         auto rotation() const
         {
             return rotation(_t);
+        }
+        template<class T>
+        rotation_casted<T> rotation() const
+        {
+            return rotation().template cast<T>();
         }
 
         auto axis_x() const
         {
             return _t.template block<3, 1>(0, 0);
         }
+        template<class T>
+        vector_casted<T> axis_x() const
+        {
+            return axis_x().template cast<T>();
+        }
+
         auto axis_y() const
         {
             return _t.template block<3, 1>(0, 1);
         }
+        template<class T>
+        vector_casted<T> axis_y() const
+        {
+            return axis_y().template cast<T>();
+        }
+
         auto axis_z() const
         {
             return _t.template block<3, 1>(0, 2);
+        }
+        template<class T>
+        vector_casted<T> axis_z() const
+        {
+            return axis_z().template cast<T>();
         }
 
         float_t volume() const
@@ -207,10 +276,20 @@ namespace VirtualRobot
         {
             return translation() + rotation() * p;
         }
+        template<class T>
+        vector_casted<T> from_box_frame(const vector_t& p) const
+        {
+            return from_box_frame(p).template cast<T>();
+        }
 
         vector_t to_box_frame(const vector_t& p) const
         {
             return -rotation().transpose() * translation() + rotation().transpose() * p;
+        }
+        template<class T>
+        vector_casted<T> to_box_frame(const vector_t& p) const
+        {
+            return from_box_frame(p).template cast<T>();
         }
 
         bool contains(const vector_t& p)
@@ -225,7 +304,43 @@ namespace VirtualRobot
         {
             return from_box_frame(_d / 2);
         }
+        template<class T>
+        vector_casted<T> center() const
+        {
+            return center().template cast<T>();
+        }
 
+        OrientedBox transformed(const rotation_t& t) const
+        {
+            return
+            {
+                t * translation(),
+                t * axis_x() * dimension(0),
+                t * axis_y() * dimension(1),
+                t * axis_z() * dimension(2)
+            };
+        }
+        template<class T>
+        OrientedBox<T> transformed(const rotation_t& t) const
+        {
+            return transformed(t).template cast<T>();
+        }
+
+        OrientedBox transformed(const transform_t& t) const
+        {
+            return
+            {
+                rotation(t) * translation() + translation(t),
+                rotation(t) * axis_x() * dimension(0),
+                rotation(t) * axis_y() * dimension(1),
+                rotation(t) * axis_z() * dimension(2)
+            };
+        }
+        template<class T>
+        OrientedBox<T>  transformed(const transform_t& t) const
+        {
+            return transformed(t).template cast<T>();
+        }
     private:
         transform_t _t;
         vector_t _d;
