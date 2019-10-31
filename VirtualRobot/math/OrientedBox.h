@@ -295,9 +295,27 @@ namespace VirtualRobot
         bool contains(const vector_t& p)
         {
             const vector_t b = to_box_frame(p);
-            return (_d(0) < 0 ? b(0) >= _d(0) : b(0) <= _d(0)) &&
-                   (_d(1) < 0 ? b(1) >= _d(1) : b(1) <= _d(1)) &&
-                   (_d(2) < 0 ? b(2) >= _d(2) : b(2) <= _d(2));
+            static const auto check_dim = [&](int i)
+            {
+                return _d(i) < 0 ?
+                            (b(i) <= 0 && b(i) >= _d(i)) :
+                            (b(i) >= 0 && b(i) <= _d(i));
+            };
+            return check_dim(0) && check_dim(1) && check_dim(2);
+        }
+
+        template<class T, class...Other>
+        std::vector<Eigen::Matrix<T, 3, 1>, Other...> contained_points(const std::vector<Eigen::Matrix<T, 3, 1>, Other...>& ps)
+        {
+            std::vector<Eigen::Matrix<T, 3, 1>, Other...> filtered;
+            for(const auto& p : ps)
+            {
+                if(contains(p))
+                {
+                    filtered.emplace_back(p);
+                }
+            }
+            return filtered;
         }
 
         vector_t center() const
