@@ -295,11 +295,23 @@ namespace VirtualRobot
         bool contains(const vector_t& p)
         {
             const vector_t b = to_box_frame(p);
-            static const auto check_dim = [&](int i)
+            const auto check_dim = [&](int i)
             {
                 return _d(i) < 0 ?
                             (b(i) <= 0 && b(i) >= _d(i)) :
                             (b(i) >= 0 && b(i) <= _d(i));
+            };
+            return check_dim(0) && check_dim(1) && check_dim(2);
+        }
+
+        bool contains_by(const vector_t& p, float_t thresh = 0)
+        {
+            const vector_t b = to_box_frame(p);
+            const auto check_dim = [&](int i)
+            {
+                return _d(i) < 0 ?
+                            (b(i) <= -thresh && b(i) >= _d(i) + thresh) :
+                            (b(i) >= +thresh && b(i) <= _d(i) - thresh);
             };
             return check_dim(0) && check_dim(1) && check_dim(2);
         }
