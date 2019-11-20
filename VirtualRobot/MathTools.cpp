@@ -295,6 +295,11 @@ namespace VirtualRobot
         return m;
     }
 
+    Eigen::Matrix4f MathTools::rpy2eigen4f(const Eigen::Vector3f& rpy)
+    {
+        return rpy2eigen4f(rpy(0), rpy(1), rpy(2));
+    }
+
     Eigen::Matrix3f MathTools::rpy2eigen3f(float r, float p, float y)
     {
         Eigen::Matrix3f m;
@@ -320,6 +325,11 @@ namespace VirtualRobot
         m(2, 2) = cbeta * cgamma;
 
         return m;
+    }
+
+    Eigen::Matrix3f MathTools::rpy2eigen3f(const Eigen::Vector3f& rpy)
+    {
+        return rpy2eigen3f(rpy(0), rpy(1), rpy(2));
     }
 
     void MathTools::posrpy2eigen4f(const float x[6], Eigen::Matrix4f& m)
