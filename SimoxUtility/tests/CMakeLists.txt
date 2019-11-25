@@ -1,0 +1,15 @@
+MACRO(ADD_SU_TEST TEST_NAME)
+    ADD_EXECUTABLE(${TEST_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_NAME}.cpp)
+    TARGET_LINK_LIBRARIES(${TEST_NAME} PRIVATE VirtualRobot Boost::unit_test_framework)
+    target_include_directories(${TEST_NAME} PRIVATE ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/..)
+    if (NOT Boost_USE_STATIC_LIBS)
+        target_compile_definitions(${TEST_NAME} PRIVATE -DBOOST_TEST_DYN_LINK)
+    endif ()
+    SET_TARGET_PROPERTIES(${TEST_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Simox_TEST_DIR})
+    SET_TARGET_PROPERTIES(${TEST_NAME} PROPERTIES FOLDER "VirtualRobot Tests")
+    ADD_TEST(NAME VirtualRobot_${TEST_NAME}
+        COMMAND ${Simox_TEST_DIR}/${TEST_NAME} --output_format=XML --log_level=all --report_level=no)
+ENDMACRO()
+
+ADD_SU_TEST( OrientedBoxTest )
+ADD_SU_TEST( XYConstrainedOrientedBoxTest )

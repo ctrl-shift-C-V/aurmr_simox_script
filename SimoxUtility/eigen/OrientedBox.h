@@ -26,7 +26,7 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
-namespace VirtualRobot
+namespace simox
 {
     template<class FloatT>
     class OrientedBox

@@ -34,8 +34,15 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-
-FIND_PACKAGE(Boost COMPONENTS unit_test_framework REQUIRED)
+FIND_PACKAGE (Eigen3 REQUIRED)
+FIND_PACKAGE(Boost COMPONENTS
+    filesystem
+    system
+    program_options
+    thread
+    unit_test_framework
+    REQUIRED)
+MESSAGE (STATUS "Boost found at: ${Boost_INCLUDE_DIR}")
 
 #flags
 add_compile_options(-Wall)
@@ -64,7 +71,8 @@ set (Simox_BUILD_Saba TRUE CACHE BOOL "Build Motion Planning library")
 set (Simox_BUILD_GraspStudio TRUE CACHE BOOL "Build Grasp Planning library")
 set (Simox_BUILD_SimDynamics TRUE CACHE BOOL "Build Dynamic Simulation")
 
-MESSAGE (STATUS "** SIMOX BUILD VirtualRobot: TRUE (can't e turned off)")
+MESSAGE (STATUS "** SIMOX BUILD SimoxUtility: TRUE (can't be turned off)")
+MESSAGE (STATUS "** SIMOX BUILD VirtualRobot: TRUE (can't be turned off)")
 MESSAGE (STATUS "** SIMOX BUILD Saba        : ${Simox_BUILD_Saba}")
 MESSAGE (STATUS "** SIMOX BUILD GraspStudio : ${Simox_BUILD_GraspStudio}")
 MESSAGE (STATUS "** SIMOX BUILD SimDynamics : ${Simox_BUILD_SimDynamics}")
@@ -163,12 +171,13 @@ if (Simox_USE_RBDL_LIB)
 endif()
 
 #######################################################################################
+add_subdirectory(SimoxUtility)
 add_subdirectory(VirtualRobot)
 
 
 #######################################################################################
-list (APPEND SIMOX_EXPORT_TARGET_LIST VirtualRobot)
-list (APPEND Simox_LIBRARIES VirtualRobot)
+list (APPEND SIMOX_EXPORT_TARGET_LIST SimoxUtility VirtualRobot)
+list (APPEND Simox_LIBRARIES          SimoxUtility VirtualRobot)
 
 
 #######################################################################################

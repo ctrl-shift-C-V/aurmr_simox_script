@@ -8,11 +8,9 @@ target_include_directories(VirtualRobot PUBLIC
     $<INSTALL_INTERFACE:include>
 )
 
-target_compile_options(VirtualRobot PUBLIC ${Simox_OS_compile_options})
 
-target_link_libraries(VirtualRobot PUBLIC
-        stdc++fs
-)
+
+target_link_libraries(VirtualRobot PUBLIC SimoxUtility)
 #######################################################################
 # Setup dependencies
 #######################################################################
@@ -36,32 +34,9 @@ if (Simox_USE_NLOPT)
 endif ()
 
 #### Eigen
-FIND_PACKAGE (Eigen3 REQUIRED)
-target_include_directories(VirtualRobot SYSTEM PUBLIC ${Eigen3_INCLUDE_DIR})
 
 #### BOOST
 FIND_PACKAGE(Boost COMPONENTS filesystem system program_options thread REQUIRED)
-MESSAGE (STATUS "Boost found at: ${Boost_INCLUDE_DIR}")
-
-target_include_directories(VirtualRobot PUBLIC ${Boost_INCLUDE_DIR})
-target_link_libraries(VirtualRobot PUBLIC 
-        Boost::boost
-        Boost::program_options
-        Boost::thread
-)
-
-# disable boost auto linking
-if (Boost_USE_STATIC_LIBS)
-    target_compile_definitions(VirtualRobot PUBLIC -DBOOST_ALL_NO_LIB -DBOOST_TEST_MAIN)
-else (Boost_USE_STATIC_LIBS)
-    # enable dynamic linking for specific boost libraries
-    target_compile_definitions(VirtualRobot PUBLIC
-        -DBOOST_ALL_NO_LIB
-        -DBOOST_PROGRAM_OPTIONS_DYN_LINK
-        -DBOOST_FILESYSTEM_DYN_LINK
-        -DBOOST_SYSTEM_DYN_LINK
-        -DBOOST_THREAD_DYN_LINK)
-endif ()
 
 
 ##########################################
@@ -519,7 +494,6 @@ SET(INCLUDES
     math/statistics/measures.h
     math/statistics/BoxPlot.h
     math/statistics/Histogram.h
-    math/OrientedBox.h
 
     mjcf.h
     MJCF/Document.h
@@ -786,15 +760,14 @@ endif()
 
 # against undefined reference to boost::filesystem::detail::copy_file
 # source: https://stackoverflow.com/a/3500721
-target_compile_definitions(${PROJECT_NAME} PRIVATE -DBOOST_NO_CXX11_SCOPED_ENUMS)
 
 
 # .DLL path
-SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Simox_BIN_DIR})
+SET_TARGET_PROPERTIES(VirtualRobot PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Simox_BIN_DIR})
 # .so path
-SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${Simox_LIB_DIR})
+SET_TARGET_PROPERTIES(VirtualRobot PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${Simox_LIB_DIR})
 # .lib path (this is needed for setting the DLL-import library path on windows)
-SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${Simox_LIB_DIR})
+SET_TARGET_PROPERTIES(VirtualRobot PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${Simox_LIB_DIR})
 
 
 
@@ -803,7 +776,7 @@ SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${Simo
 ############################ Setup for installation ###################################
 #######################################################################################
 
-install(TARGETS ${PROJECT_NAME}
+install(TARGETS VirtualRobot
     # IMPORTANT: Add the library to the "export-set"
     EXPORT SimoxTargets
     RUNTIME DESTINATION bin COMPONENT bin
