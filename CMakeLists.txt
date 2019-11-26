@@ -41,6 +41,7 @@ FIND_PACKAGE(Boost COMPONENTS
     program_options
     thread
     unit_test_framework
+    regex
     REQUIRED)
 MESSAGE (STATUS "Boost found at: ${Boost_INCLUDE_DIR}")
 

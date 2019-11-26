@@ -17,14 +17,11 @@ target_link_libraries(SimoxUtility PUBLIC stdc++fs)
 target_include_directories(SimoxUtility SYSTEM PUBLIC ${Eigen3_INCLUDE_DIR})
 
 #### BOOST
-#FIND_PACKAGE(Boost COMPONENTS REQUIRED)
-#MESSAGE (STATUS "Boost found at: ${Boost_INCLUDE_DIR}")
-
-#target_include_directories(SimoxUtility PUBLIC ${Boost_INCLUDE_DIR})
 target_link_libraries(SimoxUtility PUBLIC
         Boost::boost
         Boost::program_options
         Boost::thread
+        Boost::regex
 )
 
 # disable boost auto linking

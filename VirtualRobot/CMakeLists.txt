@@ -33,12 +33,6 @@ if (Simox_USE_NLOPT)
     endif ()
 endif ()
 
-#### Eigen
-
-#### BOOST
-FIND_PACKAGE(Boost COMPONENTS filesystem system program_options thread REQUIRED)
-
-
 ##########################################
 #### VISUALIZATION Coin3D+Qt+SoQt / OSG+Qt
 
