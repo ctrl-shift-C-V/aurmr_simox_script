@@ -50,8 +50,12 @@ SET(SOURCES
 
 SET(INCLUDES
     SimoxUtility.h
+
     eigen/OrientedBox.h
     eigen/XYConstrainedOrientedBox.h
+
+    math/convert/deg2rad.h
+    math/convert/rad2deg.h
 )
 
 macro(simox_subdirs result curdir)
