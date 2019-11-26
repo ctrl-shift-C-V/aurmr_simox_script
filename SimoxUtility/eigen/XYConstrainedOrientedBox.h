@@ -91,11 +91,11 @@ namespace simox
             const vector_t& dimensions = {0, 0, 0}
         ) :
             _t{transformation(
-               Eigen::AngleAxis<float_t>{yaw, vector_t::UnitZ()}.toRotationMatrix(),
-               corner
-            )},
-            _d{dimensions},
-            _yaw{yaw}
+                   Eigen::AngleAxis<float_t>{yaw, vector_t::UnitZ()}.toRotationMatrix(),
+        corner
+           )},
+           _d{dimensions},
+           _yaw{yaw}
         {}
 
     private:
@@ -127,11 +127,11 @@ namespace simox
             }
 
             //make sure the system is right handed + calculate yaw
-            const vector_t normalized0{normalized2d0(0),normalized2d0(1),0};
-            const vector_t normalized1{normalized2d1(0),normalized2d1(1),0};
+            const vector_t normalized0{normalized2d0(0), normalized2d0(1), 0};
+            const vector_t normalized1{normalized2d1(0), normalized2d1(1), 0};
 
             const vector_t cross01 = normalized0.cross(normalized1);
-            if(cross01(2) >= 0)
+            if (cross01(2) >= 0)
             {
                 // x=0, y=1
                 const float_t yaw = -std::atan2(normalized1(0), normalized1(1));
@@ -154,7 +154,7 @@ namespace simox
             const vector2_t& extend1,
             const float_t height
         ) :
-           XYConstrainedOrientedBox(calc_params(corner, extend0, extend1, height))
+            XYConstrainedOrientedBox(calc_params(corner, extend0, extend1, height))
         {}
 
         template<class T>
@@ -293,8 +293,8 @@ namespace simox
             const auto check_dim = [&](int i)
             {
                 return _d(i) < 0 ?
-                            (b(i) <= 0 && b(i) >= _d(i)) :
-                            (b(i) >= 0 && b(i) <= _d(i));
+                       (b(i) <= 0 && b(i) >= _d(i)) :
+                       (b(i) >= 0 && b(i) <= _d(i));
             };
             return check_dim(0) && check_dim(1) && check_dim(2);
         }
@@ -305,8 +305,8 @@ namespace simox
             const auto check_dim = [&](int i)
             {
                 return _d(i) < 0 ?
-                            (b(i) <= -thresh && b(i) >= _d(i) + thresh) :
-                            (b(i) >= +thresh && b(i) <= _d(i) - thresh);
+                       (b(i) <= -thresh && b(i) >= _d(i) + thresh) :
+                       (b(i) >= +thresh && b(i) <= _d(i) - thresh);
             };
             return check_dim(0) && check_dim(1) && check_dim(2);
         }
@@ -315,9 +315,9 @@ namespace simox
         std::vector<Eigen::Matrix<T, 3, 1>, Other...> contained_points(const std::vector<Eigen::Matrix<T, 3, 1>, Other...>& ps)
         {
             std::vector<Eigen::Matrix<T, 3, 1>, Other...> filtered;
-            for(const auto& p : ps)
+            for (const auto& p : ps)
             {
-                if(contains(p))
+                if (contains(p))
                 {
                     filtered.emplace_back(p);
                 }
