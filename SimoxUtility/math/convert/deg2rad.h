@@ -2,7 +2,7 @@
 
 #include <boost/math/constants/constants.hpp>
 
-namespace simox
+namespace simox::math
 {
     template<class FloatT>
     FloatT deg2rad(FloatT rad)
