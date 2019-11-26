@@ -84,10 +84,10 @@ namespace simox
         OrientedBox& operator=(const OrientedBox&) = default;
 
         OrientedBox(
-            const vector_t& corner,
-            const vector_t& extend0,
-            const vector_t& extend1,
-            const vector_t& extend2
+            const vector_t& corner = {0, 0, 0},
+            const vector_t& extend0 = {1, 0, 0},
+            const vector_t& extend1 = {0, 1, 0},
+            const vector_t& extend2 = {0, 0, 1}
         )
         {
             const float_t len0 = extend0.norm();

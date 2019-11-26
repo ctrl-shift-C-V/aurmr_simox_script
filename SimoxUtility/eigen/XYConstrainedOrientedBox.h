@@ -86,9 +86,9 @@ namespace simox
 
 
         XYConstrainedOrientedBox(
-            const vector_t& corner,
-            const float_t yaw,
-            const vector_t& dimensions
+            const vector_t& corner = {0, 0, 0},
+            const float_t yaw = 0,
+            const vector_t& dimensions = {0, 0, 0}
         ) :
             _t{transformation(
                Eigen::AngleAxis<float_t>{yaw, vector_t::UnitZ()}.toRotationMatrix(),
