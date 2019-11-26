@@ -122,6 +122,7 @@ namespace VirtualRobot
         /// Get the areas of all faces.
         std::vector<float> getFaceAreas() const;
 
+        void rotate(const Eigen::Matrix3f& mx);
 
         // Overwrite all colors
         void setColor(VisualizationFactory::Color color);

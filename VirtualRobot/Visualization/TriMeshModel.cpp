@@ -530,6 +530,20 @@ namespace VirtualRobot
         return areas;
     }
 
+    void TriMeshModel::rotate(const Eigen::Matrix3f& mx)
+    {
+        for (auto& vec3f : normals)
+        {
+            const Eigen::Vector3f old = vec3f;
+            vec3f = mx * old;
+        }
+        for (auto& vec3f : vertices)
+        {
+            const Eigen::Vector3f old = vec3f;
+            vec3f = mx * old;
+        }
+    }
+
     void TriMeshModel::fattenShrink(float offset, bool updateNormals)
     {
         size_t i;
