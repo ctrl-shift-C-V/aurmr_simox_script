@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 #######################################################################################
 PROJECT(Simox LANGUAGES CXX VERSION 2.3.74.0)
 MESSAGE (STATUS "** Simox version: ${Simox_VERSION}")
+INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
 #######################################################################################
 #global config
 # Set up build type

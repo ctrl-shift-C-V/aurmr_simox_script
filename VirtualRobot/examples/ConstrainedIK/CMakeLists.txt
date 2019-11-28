@@ -1,7 +1,5 @@
 PROJECT ( ConstrainedIKDemo )
 
-INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
-
 IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION AND NLOPT_FOUND)
 
     # the variable "demo_SRCS" contains all .cpp files of this project

@@ -1,7 +1,5 @@
 PROJECT ( RobotViewerOSG )
 
-INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
-
 IF(Simox_VISUALIZATION AND Simox_USE_OPENSCENEGRAPH_VISUALIZATION)
 
 

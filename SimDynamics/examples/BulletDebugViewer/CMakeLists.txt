@@ -1,7 +1,5 @@
 PROJECT ( BulletDebugViewer )
 
-INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
-
 IF (SimDynamics_USE_BULLET_USE_GLUT)
 	include_directories(${GLUT_INCLUDE_DIR})
 	message("GLUT_INCLUDE_DIR:${GLUT_INCLUDE_DIR}")
