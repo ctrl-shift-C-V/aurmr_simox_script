@@ -11,7 +11,7 @@
 
 #include <boost/test/included/unit_test.hpp>
 
-#include <SimoxUtility/eigen/XYConstrainedOrientedBox.h>
+#include <SimoxUtility/shapes/XYConstrainedOrientedBox.h>
 
 BOOST_AUTO_TEST_CASE(test_XYConstrainedOrientedBox)
 {

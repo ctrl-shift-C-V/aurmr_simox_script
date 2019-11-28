@@ -13,3 +13,5 @@ ENDMACRO()
 
 ADD_SU_TEST( OrientedBoxTest )
 ADD_SU_TEST( XYConstrainedOrientedBoxTest )
+ADD_SU_TEST( DeltaAngleTest )
+ADD_SU_TEST( ConverterTest )

@@ -2,5 +2,6 @@
 
 //dummy header
 
-#include "eigen.h"
-
+#include "math.h"
+#include "meta.h"
+#include "shapes.h"

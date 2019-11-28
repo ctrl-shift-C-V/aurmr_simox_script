@@ -11,7 +11,7 @@
 
 #include <boost/test/included/unit_test.hpp>
 
-#include <SimoxUtility/eigen/OrientedBox.h>
+#include <SimoxUtility/shapes/OrientedBox.h>
 
 BOOST_AUTO_TEST_CASE(test_OrientedBox)
 {
