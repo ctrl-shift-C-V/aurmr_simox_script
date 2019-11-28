@@ -17,7 +17,7 @@ namespace VirtualRobot
         /// No initialization constructor.
         Histogram();
 
-        /// Construct with the given data. 
+        /// Construct with the given data.
         /// Minimum and maximum are derived automatically.
         Histogram(const std::vector<float>& data, std::size_t numBins = 128);
 
@@ -71,7 +71,7 @@ namespace VirtualRobot
          *
          * The size specifies the number of neighours (in each direction)
          * considered.
-         * That is, if k = size, 2k+1 values are considered for each point 
+         * That is, if k = size, 2k+1 values are considered for each point
          * (k neighbours in each direction).
          *
          * @param size the size of the neighbourhood (in each direction)

@@ -1,4 +1,4 @@
-# Locate Bullet. Original version from osgbullet, http://code.google.com/p/osgbullet/ 
+# Locate Bullet. Original version from osgbullet, http://code.google.com/p/osgbullet/
 #
 # This script defines:
 #   BULLET_FOUND, set to 1 if found

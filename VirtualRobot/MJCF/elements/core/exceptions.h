@@ -20,7 +20,7 @@ namespace mjcf
     };
 
 
-    /// Indicates that an attribute without default was not set when it was 
+    /// Indicates that an attribute without default was not set when it was
     /// attempted to read.
     class AttribNotSetError : public MjcfError
     {
@@ -28,7 +28,7 @@ namespace mjcf
         AttribNotSetError(const std::string& name);
     };
 
-    /// Indicates that an attribute without default was not set when it was 
+    /// Indicates that an attribute without default was not set when it was
     /// attempted to read.
     class ParseAttributeError : public MjcfError
     {

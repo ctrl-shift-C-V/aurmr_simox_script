@@ -6,7 +6,7 @@ using namespace VirtualRobot;
 int main(int argc, char* argv[])
 {
 
-    VirtualRobot::init(argc, argv, "Stability Demo"); 
+    VirtualRobot::init(argc, argv, "Stability Demo");
     cout << " --- START --- " << endl;
 
     //std::string filenameRob("robots/ArmarIII/ArmarIII.xml");

@@ -1,13 +1,13 @@
 /*********************************************************************
 * Software License Agreement (BSD License)
-* 
+*
 *  Copyright (c) 2008, Willow Garage, Inc.
 *  All rights reserved.
-* 
+*
 *  Redistribution and use in source and binary forms, with or without
 *  modification, are permitted provided that the following conditions
 *  are met:
-* 
+*
 *   * Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
 *   * Redistributions in binary form must reproduce the above
@@ -17,7 +17,7 @@
 *   * Neither the name of the Willow Garage nor the names of its
 *     contributors may be used to endorse or promote products derived
 *     from this software without specific prior written permission.
-* 
+*
 *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -71,7 +71,7 @@ bool parseMaterial(Material &material, TiXmlElement *config, bool only_name_is_o
     logError("Material must contain a name attribute");
     return false;
   }
-  
+
   material.name = config->Attribute("name");
 
   // texture
@@ -95,7 +95,7 @@ bool parseMaterial(Material &material, TiXmlElement *config, bool only_name_is_o
         material.color.init(c->Attribute("rgba"));
         has_rgb = true;
       }
-      catch (ParseError &e) {  
+      catch (ParseError &e) {
         material.color.clear();
         logError(std::string("Material [" + material.name + "] has malformed color rgba values: " + e.what()).c_str());
       }
@@ -137,14 +137,14 @@ bool parseSphere(Sphere &s, TiXmlElement *c)
       logError("radius issue");
     return false;
   }
-  
+
   return true;
 }
 
 bool parseBox(Box &b, TiXmlElement *c)
 {
   b.clear();
-  
+
   b.type = Geometry::BOX;
   if (!c->Attribute("size"))
   {
@@ -273,14 +273,14 @@ my_shared_ptr<Geometry> parseGeometry(TiXmlElement *g)
     Mesh *m = new Mesh();
     geom.reset(m);
     if (parseMesh(*m, shape))
-      return geom;    
+      return geom;
   }
   else
   {
     logError("Unknown geometry type '%s'", type_name.c_str());
     return geom;
   }
-  
+
   return my_shared_ptr<Geometry>();
 }
 
@@ -357,7 +357,7 @@ bool parseInertial(Inertial &i, TiXmlElement *config)
     logError(stm.str().c_str());
     */
       logError("Inertia error");
-      
+
     return false;
   }
   return true;
@@ -393,7 +393,7 @@ bool parseVisual(Visual &vis, TiXmlElement *config)
       return false;
     }
     vis.material_name = mat->Attribute("name");
-    
+
     // try to parse material element in place
     vis.material.reset(new Material());
     if (!parseMaterial(*vis.material, mat, true))
@@ -401,12 +401,12 @@ bool parseVisual(Visual &vis, TiXmlElement *config)
       logDebug("urdfdom: material has only name, actual material definition may be in the model");
     }
   }
-  
+
   return true;
 }
 
 bool parseCollision(Collision &col, TiXmlElement* config)
-{  
+{
   col.clear();
 
   // Origin
@@ -415,7 +415,7 @@ bool parseCollision(Collision &col, TiXmlElement* config)
     if (!parsePose(col.origin, o))
       return false;
   }
-  
+
   // Geometry
   TiXmlElement *geom = config->FirstChildElement("geometry");
   col.geometry = parseGeometry(geom);
@@ -431,7 +431,7 @@ bool parseCollision(Collision &col, TiXmlElement* config)
 
 bool parseLink(Link &link, TiXmlElement* config)
 {
-  
+
   link.clear();
 
   const char *name_char = config->Attribute("name");
@@ -476,14 +476,14 @@ bool parseLink(Link &link, TiXmlElement* config)
   // Assign the first visual to the .visual ptr, if it exists
   if (!link.visual_array.empty())
     link.visual = link.visual_array[0];
-  
+
   // Multiple Collisions (optional)
   for (TiXmlElement* col_xml = config->FirstChildElement("collision"); col_xml; col_xml = col_xml->NextSiblingElement("collision"))
   {
     my_shared_ptr<Collision> col;
     col.reset(new Collision());
     if (parseCollision(*col, col_xml))
-    {      
+    {
       link.collision_array.push_back(col);
     }
     else
@@ -493,8 +493,8 @@ bool parseLink(Link &link, TiXmlElement* config)
       return false;
     }
   }
-  
-  // Collision (optional)  
+
+  // Collision (optional)
   // Assign the first collision to the .collision ptr, if it exists
   if (!link.collision_array.empty())
     link.collision = link.collision_array[0];

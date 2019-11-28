@@ -14,7 +14,7 @@ std::string NoBodyOfRobotNode::makeMsg(const std::string& nodeName)
 }
 
 
-NodeIsNoJoint::NodeIsNoJoint(const std::string& nodeName) : 
+NodeIsNoJoint::NodeIsNoJoint(const std::string& nodeName) :
     VirtualRobotException("Node '" + nodeName + "' is no joint node.")
 {}
 

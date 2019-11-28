@@ -8,11 +8,11 @@ namespace VirtualRobot::mujoco
 
     /**
      * @brief Sanitizer for MJCF bodies without mass.
-     * 
+     *
      * MuJoCo does not allow non-static bodies to have 0 mass. However, this
      * is the case when the robot model contains elements representing joints,
      * which are not associated with some geometry.
-     * 
+     *
      * A body sanitizer edits massless bodies to fix this issue.
      */
     class BodySanitizer

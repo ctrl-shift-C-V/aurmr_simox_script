@@ -44,9 +44,9 @@
 
   /**
   This class contains the quintic Bezier curves, x(u) and y(u), that have been
-  created by SmoothSegmentedFunctionFactory to follow a physiologically 
-  meaningful muscle characteristic. A SmoothSegmentedFunction cannot be 
-  created directly,you must use SmoothSegmentedFunctionFactory to create the 
+  created by SmoothSegmentedFunctionFactory to follow a physiologically
+  meaningful muscle characteristic. A SmoothSegmentedFunction cannot be
+  created directly,you must use SmoothSegmentedFunctionFactory to create the
   muscle curve of interest.
 
    <B>Computational Cost Details</B>
@@ -54,27 +54,27 @@
 
   \verbatim
   Operation Type   : #flops
-  +,-,=,Boolean Op : 1 
+  +,-,=,Boolean Op : 1
        / : 10
        sqrt: 20
        trig: 40
   \endverbatim
 
-  These relative weightings will vary processor to processor, and so any 
+  These relative weightings will vary processor to processor, and so any
   of the quoted computational costs are approximate.
 
 
 <B> RBDL Port Notes </B>
 The port of this code from OpenSim has been accompanied by a few changes:
 
-1.  The 'calcIntegral' method has been removed. Why? This function 
-  relied on having access to a variable-step error controlled 
-  integrator. There is no such integrator built into RBDL. Rather 
+1.  The 'calcIntegral' method has been removed. Why? This function
+  relied on having access to a variable-step error controlled
+  integrator. There is no such integrator built into RBDL. Rather
   than add a dependency (by using Boost perhaps) this functionality
-  has been removed. 
+  has been removed.
 
 2.  The function name .printMuscleCurveToFile(...) has been changed
-  to .printCurveToFile(). 
+  to .printCurveToFile().
 
 
   @author Matt Millard
@@ -103,7 +103,7 @@ namespace RigidBodyDynamics {
 
      @param mX   The matrix of quintic Bezier x point locations (6xn).
          Each column vector is the 6 control points required
-         for each quintic Bezier curve. For C0 continuity 
+         for each quintic Bezier curve. For C0 continuity
          adjacent columns must share the last and first control
          points. For C1 continuity the last 2 and first two
          control points of adjacent curves should be on the same
@@ -111,33 +111,33 @@ namespace RigidBodyDynamics {
 
      @param mY   The matrix of quintic Bezier y point locations (6xn).
 
-     @param x0   The minimum x value. This is used for the linear 
+     @param x0   The minimum x value. This is used for the linear
          extrapolation of the Bezier curve. This parameter is
          explicitly asked for, rather than computed, to prevent
-         rounding error from reducing the accuracy of the 
+         rounding error from reducing the accuracy of the
          linear extrapolation.
-     @param x1   The maximum x value. This is used for the linear 
-         extrapolation and is required for the same reasons 
-         as x0. 
-     @param y0   The value of y(x) at x=x0. This is used for the linear 
-         extrapolation and is required for the same reasons 
+     @param x1   The maximum x value. This is used for the linear
+         extrapolation and is required for the same reasons
          as x0.
-     @param y1   The value of y(x) at x=x1.  This is used for the linear 
-         extrapolation and is required for the same reasons 
+     @param y0   The value of y(x) at x=x0. This is used for the linear
+         extrapolation and is required for the same reasons
          as x0.
-     @param dydx0  The value of dy/dx at x=x0.  This is used for the linear 
-         extrapolation and is required for the same reasons 
+     @param y1   The value of y(x) at x=x1.  This is used for the linear
+         extrapolation and is required for the same reasons
          as x0.
-     @param dydx1  The value of dy/dx at x=x1. This is used for the linear 
-         extrapolation and is required for the same reasons 
+     @param dydx0  The value of dy/dx at x=x0.  This is used for the linear
+         extrapolation and is required for the same reasons
+         as x0.
+     @param dydx1  The value of dy/dx at x=x1. This is used for the linear
+         extrapolation and is required for the same reasons
          as x0.
      @param name    The name of the data this SmoothSegmentedFunction. This name
-                    is used to make human-readable error messages and to 
-                    generate sensible names when printing the curve to file. 
+                    is used to make human-readable error messages and to
+                    generate sensible names when printing the curve to file.
 
      <B>Computational Costs</B>
-     Generating the integral curve is not cheap, and so should only be used 
-     when if it will be evaluated during a simulation. 
+     Generating the integral curve is not cheap, and so should only be used
+     when if it will be evaluated during a simulation.
      \verbatim
     Computatonal Cost Per Bezier Section:
       Without Integral :   4,100 flops
@@ -145,12 +145,12 @@ namespace RigidBodyDynamics {
 
       */
      SmoothSegmentedFunction(
-      const RigidBodyDynamics::Math::MatrixNd& mX, 
-      const RigidBodyDynamics::Math::MatrixNd& mY, 
+      const RigidBodyDynamics::Math::MatrixNd& mX,
+      const RigidBodyDynamics::Math::MatrixNd& mY,
       double x0, double x1,
       double y0, double y1,
       double dydx0, double dydx1,
-      const std::string& name); 
+      const std::string& name);
 
 
      /**
@@ -159,7 +159,7 @@ namespace RigidBodyDynamics {
 
        @param mX   The matrix of quintic Bezier x point locations (6xn).
            Each column vector is the 6 control points required
-           for each quintic Bezier curve. For C0 continuity 
+           for each quintic Bezier curve. For C0 continuity
            adjacent columns must share the last and first control
            points. For C1 continuity the last 2 and first two
            control points of adjacent curves should be on the same
@@ -167,34 +167,34 @@ namespace RigidBodyDynamics {
 
        @param mY   The matrix of quintic Bezier y point locations (6xn).
 
-       @param x0   The minimum x value. This is used for the linear 
+       @param x0   The minimum x value. This is used for the linear
            extrapolation of the Bezier curve. This parameter is
            explicitly asked for, rather than computed, to prevent
-           rounding error from reducing the accuracy of the 
+           rounding error from reducing the accuracy of the
            linear extrapolation.
-       @param x1   The maximum x value. This is used for the linear 
-           extrapolation and is required for the same reasons 
-           as x0. 
-       @param y0   The value of y(x) at x=x0. This is used for the linear 
-           extrapolation and is required for the same reasons 
+       @param x1   The maximum x value. This is used for the linear
+           extrapolation and is required for the same reasons
            as x0.
-       @param y1   The value of y(x) at x=x1.  This is used for the linear 
-           extrapolation and is required for the same reasons 
+       @param y0   The value of y(x) at x=x0. This is used for the linear
+           extrapolation and is required for the same reasons
            as x0.
-       @param dydx0  The value of dy/dx at x=x0.  This is used for the linear 
-           extrapolation and is required for the same reasons 
+       @param y1   The value of y(x) at x=x1.  This is used for the linear
+           extrapolation and is required for the same reasons
            as x0.
-       @param dydx1  The value of dy/dx at x=x1. This is used for the linear 
-           extrapolation and is required for the same reasons 
+       @param dydx0  The value of dy/dx at x=x0.  This is used for the linear
+           extrapolation and is required for the same reasons
+           as x0.
+       @param dydx1  The value of dy/dx at x=x1. This is used for the linear
+           extrapolation and is required for the same reasons
            as x0.
         @param name The name of the data this SmoothSegmentedFunction. This name
-                    is used to make human-readable error messages and to 
+                    is used to make human-readable error messages and to
                     generate sensible names when printing the curve to file.
 
      */
      void updSmoothSegmentedFunction(
-      const RigidBodyDynamics::Math::MatrixNd& mX, 
-      const RigidBodyDynamics::Math::MatrixNd& mY, 
+      const RigidBodyDynamics::Math::MatrixNd& mX,
+      const RigidBodyDynamics::Math::MatrixNd& mY,
       double x0, double x1,
       double y0, double y1,
       double dydx0, double dydx1,
@@ -204,17 +204,17 @@ namespace RigidBodyDynamics {
       This function will shift the entire SmoothSegmentedFunction by xShift
       and yShift. Setting xShift = yShift = 0.0 will leave the curve unchanged.
 
-      @param xShift - the amount to shift the curve in the x-direction. 
+      @param xShift - the amount to shift the curve in the x-direction.
       @param yShift - the amount to shift the curve in the y-direction
      */
      void shift(double xShift, double yShift);
 
      /**
-      This function will scale the curve in the x and y directions. Setting 
+      This function will scale the curve in the x and y directions. Setting
       xScale=yScale=1.0 will leave the curve unchanged.
 
       \b aborts \b
-    -If abs(xScale) < sqrt(eps) 
+    -If abs(xScale) < sqrt(eps)
 
       @param xScale: the amount to scale the curve in the x direction
       @param yScale: the amount to scale the curve in the y direction
@@ -234,7 +234,7 @@ namespace RigidBodyDynamics {
 
      The curve is parameterized as a set of Bezier curves. If x is within the
      domain of these Bezier curves they will be evaluated. If x is outside
-     of the domain of these Bezier curves a linear extrapolation will be 
+     of the domain of these Bezier curves a linear extrapolation will be
      evalulated
 
 
@@ -248,13 +248,13 @@ namespace RigidBodyDynamics {
 
 
 
-     /**Calculates the value of the derivative of the curve this object 
-     represents. 
+     /**Calculates the value of the derivative of the curve this object
+     represents.
 
      @param x   The domain point of interest.
 
      @param order The order of the derivative to compute. Note that order must
-        be between 0 and 2. Calling 0 just calls calcValue. 
+        be between 0 and 2. Calling 0 just calls calcValue.
 
      \b aborts \b
     -If anything but 0's are stored in derivComponents
@@ -277,8 +277,8 @@ namespace RigidBodyDynamics {
 
 
 
-     /*This will return the value of the integral of this objects curve 
-     evaluated at x. 
+     /*This will return the value of the integral of this objects curve
+     evaluated at x.
 
      @param x the domain point of interest
 
@@ -288,7 +288,7 @@ namespace RigidBodyDynamics {
 
      The integral is approximate, though its errors are small.
      The integral is computed by numerically integrating the function when
-     the constructor for this class is called (if computeIntegral is true) and 
+     the constructor for this class is called (if computeIntegral is true) and
      then splining the result, thus the regions between the knot points may
      have some error in them. A very fine mesh of points is used to create the
      spline so the errors will be small
@@ -322,7 +322,7 @@ namespace RigidBodyDynamics {
      //bool isIntegralComputedLeftToRight() const;
 
      /**
-     Returns a string that is the name for this curve, which is set at the 
+     Returns a string that is the name for this curve, which is set at the
      time of construction and cannot be changed after construction.
 
      @return The string name this object was given during construction*/
@@ -332,7 +332,7 @@ namespace RigidBodyDynamics {
       Sets the name of the SmoothSegmentedFunction object.
 
       @param name The name of the data this SmoothSegmentedFunction. This name
-                  is used to make human-readable error messages and to 
+                  is used to make human-readable error messages and to
                   generate sensible names when printing the curve to file.
      */
      void setName(const std::string &name);
@@ -343,32 +343,32 @@ namespace RigidBodyDynamics {
      value in the curve domain of the curve. Outside of this domain the curve
      is approximated using linear extrapolation.
 
-     @return The minimum and maximum value of the domain, x, of the curve 
+     @return The minimum and maximum value of the domain, x, of the curve
         y(x). Within this range y(x) is a curve, outside of this range
-        the function y(x) is a C2 (continuous to the second 
+        the function y(x) is a C2 (continuous to the second
         derivative) linear extrapolation*/
      RigidBodyDynamics::Math::VectorNd getCurveDomain() const;
 
-     /**This function will generate a csv file (of 'name_curveName.csv', where 
-     name is the one used in the constructor) of the muscle curve, and 
+     /**This function will generate a csv file (of 'name_curveName.csv', where
+     name is the one used in the constructor) of the muscle curve, and
      'curveName' corresponds to the function that was called from
      SmoothSegmentedFunctionFactory to create the curve.
 
      @param path The full path to the location. Note '/' slashes must be used,
       and do not put a '/' after the last folder.
-     @param fileNameWithoutExtension The name of the file to write, not 
+     @param fileNameWithoutExtension The name of the file to write, not
             including the file extension
-     @param domainMin 
+     @param domainMin
        the left most domain point of the curve to print. The curve
        will extend to at least this point.
-     @param domainMax 
-       the right most domain point of the curve to print. The 
+     @param domainMax
+       the right most domain point of the curve to print. The
        printed curve will extend at least to this point, perhaps
        beyond.
     \b aborts \b
       -If the filename is empty
 
-     For example the tendon 
+     For example the tendon
      curve for a muscle named 'glutmax' will be:
 
      'glutmax_tendonForceLengthCurve.csv'
@@ -383,17 +383,17 @@ namespace RigidBodyDynamics {
      Where iy is the integral of y(x). If the curve has been set not to have
      an integral, this column will not exist.
 
-     The curve will be sampled from its linear extrapolation region, through 
-     the curve, out to the other linear extrapolation region. The width of 
-     each linear extrapolation region is 10% of the entire range of x, or 
+     The curve will be sampled from its linear extrapolation region, through
+     the curve, out to the other linear extrapolation region. The width of
+     each linear extrapolation region is 10% of the entire range of x, or
      0.1*(x1-x0).
 
-     The number of rows used will vary from curve to curve. Each quintic 
+     The number of rows used will vary from curve to curve. Each quintic
      Bezier curve section will have 100 samples. Each linearily extrapolated
-     region will have 10 samples each. Some muscle curves (the tendon, 
-     parallel elements, compressive elements) consist of only 1 elbow, and so 
-     these matrices will have only 100+20 rows. The force velocity curve is 
-     made up of 2 elbows and will have 200+20 rows. The active force length 
+     region will have 10 samples each. Some muscle curves (the tendon,
+     parallel elements, compressive elements) consist of only 1 elbow, and so
+     these matrices will have only 100+20 rows. The force velocity curve is
+     made up of 2 elbows and will have 200+20 rows. The active force length
      curve has 5 elbows, and so its sampled matrix will have 500+20 rows
 
      <B>Computational Costs</B>
@@ -403,9 +403,9 @@ namespace RigidBodyDynamics {
      \endverbatim
 
      <B>Example</B>
-     To read the csv file with a header in from Matlab, you need to use 
+     To read the csv file with a header in from Matlab, you need to use
      csvread set so that it will ignore the header row. This is accomplished
-     by using the extra two numerical arguments for csvread to tell the 
+     by using the extra two numerical arguments for csvread to tell the
      function to begin reading from the 1st row, and the 0th index (csvread
      is 0 indexed).
      \verbatim
@@ -424,13 +424,13 @@ namespace RigidBodyDynamics {
      @param domainMin
      @param domainMax
      \b aborts \b
-    -If the requested derivatve order is greater than 
+    -If the requested derivatve order is greater than
     getMaxDerivativeOrder()
      @returns a matrix populated with x,y,dy/dx ... d^ny/dx^n,iy
 
 
-     This function will generate a RigidBodyDynamics::Math::MatrixNd populated 
-     with samples of the muscle curves values, derivatives (up to 6) and its 
+     This function will generate a RigidBodyDynamics::Math::MatrixNd populated
+     with samples of the muscle curves values, derivatives (up to 6) and its
      first integral (if available). The matrix has the following columns:
 
      \verbatim
@@ -441,16 +441,16 @@ namespace RigidBodyDynamics {
      Where iy is the integral of y(x). If the curve has been set not to have
      an integral, this column will not exist.
 
-     The curve will be sampled from its 
+     The curve will be sampled from its
      linear extrapolation region, through the curve, out to the other linear
      extrapolation region. The width of each linear extrapolation region is
      10% of the entire range of x, or 0.1*(x1-x0).
 
      The rows used will vary from curve to curve. Each quintic Bezier curve
      section will have 100 samples + 20 samples for the linear extrapolation
-     region. Some muscle curves (the tendon, parallel elements, compressive 
-     elements) consist of only 1 elbow, and so these matrices will have only 
-     100+20 rows. The force velocity curve is made up of 2 elbows and will 
+     region. Some muscle curves (the tendon, parallel elements, compressive
+     elements) consist of only 1 elbow, and so these matrices will have only
+     100+20 rows. The force velocity curve is made up of 2 elbows and will
      have 200+20 rows. The active force length curve has 5 elbows, and so its
      sampled matrix will have 500+20 rows
 
@@ -475,12 +475,12 @@ namespace RigidBodyDynamics {
        Spline fit of the integral of the curve y(x)*/
     //SimTK::Spline _splineYintX;
 
-    /**Bezier X1,...,Xn control point locations. Control points are 
+    /**Bezier X1,...,Xn control point locations. Control points are
     stored in 6x1 vectors in the order above*/
-    std::vector<RigidBodyDynamics::Math::VectorNd> _mXVec; 
-    /**Bezier Y1,...,Yn control point locations. Control points are 
+    std::vector<RigidBodyDynamics::Math::VectorNd> _mXVec;
+    /**Bezier Y1,...,Yn control point locations. Control points are
     stored in 6x1 vectors in the order above*/
-    std::vector<RigidBodyDynamics::Math::VectorNd> _mYVec; 
+    std::vector<RigidBodyDynamics::Math::VectorNd> _mYVec;
 
     /**The number of quintic Bezier curves that describe the relation*/
     int _numBezierSections;
@@ -508,8 +508,8 @@ namespace RigidBodyDynamics {
     std::string _name;
 
     /**No human should be constructing a SmoothSegmentedFunction, so the
-    constructor is made private so that mere mortals cannot look at it. 
-    SmoothSegmentedFunctionFactory should be used to create 
+    constructor is made private so that mere mortals cannot look at it.
+    SmoothSegmentedFunctionFactory should be used to create
     MuscleCurveFunctions and that's why its a friend*/
     friend class SmoothSegmentedFunctionFactory;
 
@@ -518,7 +518,7 @@ namespace RigidBodyDynamics {
 
 
     /**
-    This function will print cvs file of the column vector col0 and the 
+    This function will print cvs file of the column vector col0 and the
     matrix data
 
     @param data A matrix of data
@@ -526,55 +526,55 @@ namespace RigidBodyDynamics {
     @param path The desired path to the folder to write the file
     @param filename The name of the file to print
     \b aborts \b
-      -If the desired file cannot be created and openened, perhaps 
+      -If the desired file cannot be created and openened, perhaps
        because the path doesn't exist.
     */
     void printMatrixToFile( RigidBodyDynamics::Math::MatrixNd& data,
           std::vector<std::string>& colnames,
-          const std::string& path, 
+          const std::string& path,
           const std::string& filename) const;
 
      /**
-     Refer to the documentation for calcValue(double x) 
-     because this function is identical in function to 
-     calcValue(double x), but requires different inputs. 
-     This is a required virtual function required because this class extends 
+     Refer to the documentation for calcValue(double x)
+     because this function is identical in function to
+     calcValue(double x), but requires different inputs.
+     This is a required virtual function required because this class extends
      the Function interface.
      */
-    double calcValue(const RigidBodyDynamics::Math::VectorNd& x) const; 
+    double calcValue(const RigidBodyDynamics::Math::VectorNd& x) const;
     /*virtual*/
 
-    /** Refer to the documentation for calcDerivative(double x, int order) 
-     because this function is identical in function to 
-     calcDerivative(double x, int order), but requires different inputs. 
-     This is a required virtual function required because this class extends 
+    /** Refer to the documentation for calcDerivative(double x, int order)
+     because this function is identical in function to
+     calcDerivative(double x, int order), but requires different inputs.
+     This is a required virtual function required because this class extends
      the Function interface.*/
-     double calcDerivative(const std::vector<int>& derivComponents, 
-           const RigidBodyDynamics::Math::VectorNd& x) const; 
-           /*virtual*/ 
+     double calcDerivative(const std::vector<int>& derivComponents,
+           const RigidBodyDynamics::Math::VectorNd& x) const;
+           /*virtual*/
 
-     /**This will return the size of the vector that the 
-     calcValue(const RigidBodyDynamics::Math::VectorNd& x) require. This is a 
-     required virtual function required because this class extends the 
-     Function interface, though is only needed if you call 
+     /**This will return the size of the vector that the
+     calcValue(const RigidBodyDynamics::Math::VectorNd& x) require. This is a
+     required virtual function required because this class extends the
+     Function interface, though is only needed if you call
 
      double calcValue(const RigidBodyDynamics::Math::VectorNd& x) const;
 
      or
 
-     double calcDerivative( const SimTK::Array_<int>& derivComponents, 
+     double calcDerivative( const SimTK::Array_<int>& derivComponents,
           const RigidBodyDynamics::Math::VectorNd& x) const;
 
     Since this class is implementing strictly scalar functions you can use
-    the simplified versions of calcValue(double x) and 
+    the simplified versions of calcValue(double x) and
     calcDerivative(double x, int order) instead.
 
      */
-     int getArgumentSize() const; /*virtual*/ 
+     int getArgumentSize() const; /*virtual*/
 
-     /**@return The maximum order derivative that this object is capable of 
+     /**@return The maximum order derivative that this object is capable of
      returning*/
-     /*virtual*/ 
+     /*virtual*/
      int getMaxDerivativeOrder() const;
 
 
@@ -586,4 +586,4 @@ namespace RigidBodyDynamics {
 
 
 
-#endif 
+#endif

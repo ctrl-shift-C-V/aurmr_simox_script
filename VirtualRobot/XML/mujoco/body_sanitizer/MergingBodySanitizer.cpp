@@ -124,7 +124,7 @@ static void updateOri(AnyElement element, const Eigen::Matrix3f& accChildOri)
     }
     else
     {
-        const Eigen::Quaternionf quat = 
+        const Eigen::Quaternionf quat =
                 element.getAttribute<Eigen::Quaternionf>("quat", Eigen::Quaternionf::Identity());
         element.setAttribute("quat", Eigen::Quaternionf(accChildOri * quat));
     }

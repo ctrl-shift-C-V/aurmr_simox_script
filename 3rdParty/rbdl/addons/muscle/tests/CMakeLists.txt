@@ -4,7 +4,7 @@ SET ( RBDL_ADDON_MUSCLE_TESTS_VERSION_MAJOR 1 )
 SET ( RBDL_ADDON_MUSCLE_TESTS_VERSION_MINOR 0 )
 SET ( RBDL_ADDON_MUSCLE_TESTS_VERSION_PATCH 0 )
 
-SET ( RBDL_ADDON_MUSCLE_VERSION 
+SET ( RBDL_ADDON_MUSCLE_VERSION
 	${RBDL_ADDON_MUSCLE_TESTS_VERSION_MAJOR}.${RBDL_ADDON_MUSCLE_TESTS_VERSION_MINOR}.${RBDL_ADDON_MUSCLE_TESTS_VERSION_PATCH}
 )
 
@@ -27,7 +27,7 @@ SET ( MUSCLE_TESTS_SRCS
     ../MuscleFunctionFactory.h
     ../MuscleFunctionFactory.cc
     ../TorqueMuscleFunctionFactory.h
-		../TorqueMuscleFunctionFactory.cc    
+		../TorqueMuscleFunctionFactory.cc
     ../Millard2016TorqueMuscle.h
     ../Millard2016TorqueMuscle.cc
     ../csvtools.h

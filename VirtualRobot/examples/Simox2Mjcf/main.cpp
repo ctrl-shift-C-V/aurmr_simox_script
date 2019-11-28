@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
         }
         catch (const std::invalid_argument& e)
         {
-            std::cerr << "Could not parse value of argument " << key << ": '" << string << "' \n" 
+            std::cerr << "Could not parse value of argument " << key << ": '" << string << "' \n"
                       << "Reason: " << e.what() << std::endl;
             throw e;
         }

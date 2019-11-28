@@ -26,7 +26,7 @@ Texture AssetSection::addSkyboxTexture(const Eigen::Vector3f& rgb1, const Eigen:
     return texSkybox;
 }
 
-Texture AssetSection::addTextureFile(const std::string& name, const std::string& file, 
+Texture AssetSection::addTextureFile(const std::string& name, const std::string& file,
                                      bool vflip, bool hflip)
 {
     Texture texture = addChild<Texture>();

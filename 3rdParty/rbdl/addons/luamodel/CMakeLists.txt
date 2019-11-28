@@ -8,12 +8,12 @@ SET_TARGET_PROPERTIES ( ${PROJECT_EXECUTABLES} PROPERTIES
 
 FIND_PACKAGE (Lua51 REQUIRED)
 
-INCLUDE_DIRECTORIES ( 
+INCLUDE_DIRECTORIES (
   ${CMAKE_CURRENT_BINARY_DIR}/include/rbdl
   ${LUA_INCLUDE_DIR}
   )
 
-SET ( LUAMODEL_SOURCES 
+SET ( LUAMODEL_SOURCES
   luamodel.cc
   luatables.cc
   )
@@ -37,7 +37,7 @@ IF (RBDL_BUILD_STATIC)
     rbdl-static
     )
 
-  INSTALL (TARGETS rbdl_luamodel-static rbdl_luamodel_util 
+  INSTALL (TARGETS rbdl_luamodel-static rbdl_luamodel_util
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     )
@@ -58,17 +58,17 @@ ELSE (RBDL_BUILD_STATIC)
     rbdl
     )
 
-  INSTALL (TARGETS rbdl_luamodel rbdl_luamodel_util 
+  INSTALL (TARGETS rbdl_luamodel rbdl_luamodel_util
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     )
 ENDIF (RBDL_BUILD_STATIC)
 
-FILE ( GLOB headers 
+FILE ( GLOB headers
   "${CMAKE_CURRENT_SOURCE_DIR}/*.h"
   )
 
-INSTALL ( FILES ${headers} 
-  DESTINATION 
-  ${CMAKE_INSTALL_INCLUDEDIR}/rbdl/addons/luamodel 
+INSTALL ( FILES ${headers}
+  DESTINATION
+  ${CMAKE_INSTALL_INCLUDEDIR}/rbdl/addons/luamodel
   )

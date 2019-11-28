@@ -22,20 +22,20 @@ namespace Eigen
     using Vector7f = Eigen::Matrix<float, 7, 1>;
 
     template<typename Derived>
-    struct is_matrix_expression : 
+    struct is_matrix_expression :
             std::is_base_of<Eigen::MatrixBase<typename std::decay<Derived>::type>, typename std::decay<Derived>::type>
     {};
 
     template<typename Derived>
-    struct is_quaternion_expression : 
+    struct is_quaternion_expression :
             std::is_base_of<Eigen::QuaternionBase<typename std::decay<Derived>::type>, typename std::decay<Derived>::type>
     {};
 
     template<typename Derived>
-    struct is_eigen_expression : 
+    struct is_eigen_expression :
             is_matrix_expression<Derived>, is_quaternion_expression<Derived>
     {};
-} 
+}
 
 
 namespace mjcf
@@ -80,10 +80,10 @@ namespace mjcf
     void fromAttr(const std::string& valueStr, bool& value);
 
     /// Eigen Matrix and vectors
-    template <typename Derived> 
+    template <typename Derived>
     void fromAttr(const std::string& valueStr, Eigen::MatrixBase<Derived>& value);
     /// Eigen Quaternions
-    template <typename Derived> 
+    template <typename Derived>
     void fromAttr(const std::string& valueStr, Eigen::QuaternionBase<Derived>& value);
 
 
@@ -106,7 +106,7 @@ namespace mjcf
     template<typename Derived>
     std::string toAttr(const Eigen::MatrixBase<Derived>& mat)
     {
-        static const Eigen::IOFormat iof 
+        static const Eigen::IOFormat iof
         {
             Eigen::FullPrecision, Eigen::DontAlignCols, " ", " ", "", "", "", ""
         };
@@ -133,18 +133,18 @@ namespace mjcf
         value = boost::lexical_cast<AttrT>(valueStr);
     }
 
-    template <typename Derived> 
+    template <typename Derived>
     void fromAttr(const std::string& valueStr, Eigen::MatrixBase<Derived>& value)
     {
         using Matrix = Eigen::MatrixBase<Derived>;
         using Scalar = typename Matrix::Scalar;
 
         std::vector<Scalar> coeffs;
-        try 
+        try
         {
             coeffs = parseCoeffs<Scalar>(valueStr);
         }
-        catch (const std::bad_cast& e) 
+        catch (const std::bad_cast& e)
         {
             throw mjcf::ParseAttributeError(valueStr, typeid(Matrix), e.what());
         }
@@ -161,18 +161,18 @@ namespace mjcf
         }
     }
 
-    template <typename Derived> 
+    template <typename Derived>
     void fromAttr(const std::string& valueStr, Eigen::QuaternionBase<Derived>& value)
     {
         using Quaternion = Eigen::QuaternionBase<Derived>;
         using Scalar = typename Quaternion::Scalar;
         std::vector<Scalar> coeffs;
 
-        try 
+        try
         {
             coeffs = parseCoeffs<Scalar>(valueStr);
         }
-        catch (const std::bad_cast& e) 
+        catch (const std::bad_cast& e)
         {
             throw mjcf::ParseAttributeError(valueStr, typeid(Quaternion), e.what());
         }

@@ -3,10 +3,10 @@
 SET ( RBDL_VERSION_MAJOR 2 )
 SET ( RBDL_VERSION_MINOR 6 )
 SET ( RBDL_VERSION_PATCH 0 )
-SET ( RBDL_VERSION 
+SET ( RBDL_VERSION
 	${RBDL_VERSION_MAJOR}.${RBDL_VERSION_MINOR}.${RBDL_VERSION_PATCH}
 )
-SET ( RBDL_SO_VERSION 
+SET ( RBDL_SO_VERSION
 	${RBDL_VERSION_MAJOR}.${RBDL_VERSION_MINOR}.${RBDL_VERSION_PATCH}
 )
 SET (PROJECT_VERSION ${RBDL_VERSION})
@@ -16,7 +16,7 @@ LIST( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake )
 
 
 
-INCLUDE_DIRECTORIES ( 
+INCLUDE_DIRECTORIES (
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 	${CMAKE_CURRENT_BINARY_DIR}/include
 )
@@ -87,7 +87,7 @@ IF(RBDL_BUILD_ADDON_MUSCLE)
   SET(RBDL_BUILD_ADDON_GEOMETRY ON CACHE BOOL "Build the geometry library" FORCE)
   ADD_SUBDIRECTORY ( addons/muscle )
   IF(RBDL_BUILD_TESTS)
-  	ADD_SUBDIRECTORY ( addons/muscle/tests ) 
+  	ADD_SUBDIRECTORY ( addons/muscle/tests )
   ENDIF(RBDL_BUILD_TESTS)
 ENDIF(RBDL_BUILD_ADDON_MUSCLE)
 
@@ -95,7 +95,7 @@ ENDIF(RBDL_BUILD_ADDON_MUSCLE)
 IF(RBDL_BUILD_ADDON_GEOMETRY)
   ADD_SUBDIRECTORY ( addons/geometry )
   IF(RBDL_BUILD_TESTS)
-  	ADD_SUBDIRECTORY ( addons/geometry/tests ) 
+  	ADD_SUBDIRECTORY ( addons/geometry/tests )
   ENDIF(RBDL_BUILD_TESTS)
 ENDIF(RBDL_BUILD_ADDON_GEOMETRY)
 
@@ -106,7 +106,7 @@ IF (RBDL_BUILD_TESTS)
 ENDIF (RBDL_BUILD_TESTS)
 
 # Source files for RBDL
-SET ( RBDL_SOURCES 
+SET ( RBDL_SOURCES
         src/rbdl/rbdl_version.cc
         src/rbdl/rbdl_mathutils.cc
         src/rbdl/rbdl_utils.cc
@@ -173,7 +173,7 @@ ELSE (RBDL_STORE_VERSION)
 ENDIF (RBDL_STORE_VERSION)
 
 CONFIGURE_FILE (
-	"${CMAKE_CURRENT_SOURCE_DIR}/include/rbdl/rbdl_config.h.cmake" 
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/rbdl/rbdl_config.h.cmake"
 	"${CMAKE_CURRENT_BINARY_DIR}/include/rbdl/rbdl_config.h"
 	)
     target_include_directories(rbdl PUBLIC
@@ -193,7 +193,7 @@ set_target_properties(rbdl PROPERTIES SOURCES "${RBDL_SOURCES}")
 
 
 # Installation
-FILE ( GLOB headers 
+FILE ( GLOB headers
 	${CMAKE_CURRENT_SOURCE_DIR}/include/rbdl/*.h
 	${CMAKE_CURRENT_BINARY_DIR}/include/rbdl/rbdl_config.h
 	)

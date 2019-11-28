@@ -1,7 +1,7 @@
 #ifndef _COMPILE_ASSERT_H
 #define _COMPILE_ASSERT_H
 
-/* 
+/*
  * This is a simple compile time assertion tool taken from:
  *   http://blogs.msdn.com/b/abhinaba/archive/2008/10/27/c-c-compile-time-asserts.aspx
  * written by Abhinaba Basu!
@@ -33,7 +33,7 @@ namespace static_assert_compat
 
 #endif // __cplusplus
 
-#define VERIFY_EXPLICIT_CAST(from, to) COMPILE_ASSERT(sizeof(from) == sizeof(to)) 
+#define VERIFY_EXPLICIT_CAST(from, to) COMPILE_ASSERT(sizeof(from) == sizeof(to))
 
 // _COMPILE_ASSERT_H_
 #endif

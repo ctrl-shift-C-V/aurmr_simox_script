@@ -1,13 +1,13 @@
 /*********************************************************************
 * Software License Agreement (BSD License)
-* 
+*
 *  Copyright (c) 2008, Willow Garage, Inc.
 *  All rights reserved.
-* 
+*
 *  Redistribution and use in source and binary forms, with or without
 *  modification, are permitted provided that the following conditions
 *  are met:
-* 
+*
 *   * Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
 *   * Redistributions in binary form must reproduce the above
@@ -17,7 +17,7 @@
 *   * Neither the name of the Willow Garage nor the names of its
 *     contributors may be used to endorse or promote products derived
 *     from this software without specific prior written permission.
-* 
+*
 *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -92,18 +92,18 @@ const char* urdf_char = MSTRINGIFY(
 
 int main(int argc, char** argv)
 {
-    
+
   std::string xml_string;
-    
+
   if (argc < 2){
     std::cerr << "No URDF file name provided, using a dummy test URDF" << std::endl;
 
       xml_string = std::string(urdf_char);
-      
+
   } else
   {
 
-      
+
       std::fstream xml_file(argv[1], std::fstream::in);
       while ( xml_file.good() )
       {
@@ -113,7 +113,7 @@ int main(int argc, char** argv)
       }
       xml_file.close();
   }
-    
+
   my_shared_ptr<ModelInterface> robot = parseURDF(xml_string);
   if (!robot){
     std::cerr << "ERROR: Model Parsing the xml failed" << std::endl;

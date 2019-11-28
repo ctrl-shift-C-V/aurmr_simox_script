@@ -137,7 +137,7 @@ RBDL_DLLAPI Math::Matrix3d CalcBodyWorldOrientation (
  * Before calling this function one has to ensure that all other values
  * have been set to zero, e.g. by calling G.setZero().
  *
- */ 
+ */
 RBDL_DLLAPI void CalcPointJacobian (Model &model,
     const Math::VectorNd &Q,
     unsigned int body_id,
@@ -165,7 +165,7 @@ RBDL_DLLAPI void CalcPointJacobian (Model &model,
  * Before calling this function one has to ensure that all other values
  * have been set to zero, e.g. by calling G.setZero().
  *
- */ 
+ */
 RBDL_DLLAPI void CalcPointJacobian6D (Model &model,
     const Math::VectorNd &Q,
     unsigned int body_id,
@@ -176,7 +176,7 @@ RBDL_DLLAPI void CalcPointJacobian6D (Model &model,
 
 /** \brief Computes the spatial jacobian for a body
  *
- * The spatial velocity of a body at the origin of coordinate system of 
+ * The spatial velocity of a body at the origin of coordinate system of
  * body \f$i\f$ can be expressed as \f${}^i \hat{v}_i = G(q) * \dot{q}\f$.
  * The matrix \f$G(q)\f$ is called the spatial body jacobian of the body
  * and can be computed using this function.
@@ -202,7 +202,7 @@ RBDL_DLLAPI void CalcBodySpatialJacobian (
     bool update_kinematics = true
     );
 
-/** \brief Computes the velocity of a point on a body 
+/** \brief Computes the velocity of a point on a body
  *
  * \param model   rigid body model
  * \param Q       state vector of the internal joints
@@ -245,7 +245,7 @@ RBDL_DLLAPI
       bool update_kinematics = true
       );
 
-/** \brief Computes the linear acceleration of a point on a body 
+/** \brief Computes the linear acceleration of a point on a body
  *
  * \param model   rigid body model
  * \param Q       state vector of the internal joints
@@ -277,7 +277,7 @@ RBDL_DLLAPI
       bool update_kinematics = true
       );
 
-/** \brief Computes linear and angular acceleration of a point on a body 
+/** \brief Computes linear and angular acceleration of a point on a body
  *
  * \param model   rigid body model
  * \param Q       state vector of the internal joints
@@ -360,4 +360,4 @@ RBDL_DLLAPI
 }
 
 /* RBDL_KINEMATICS_H */
-#endif 
+#endif

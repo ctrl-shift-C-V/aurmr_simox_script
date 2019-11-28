@@ -1,5 +1,5 @@
-/** \file Mainpage.h 
- * \mainpage Mainpage 
+/** \file Mainpage.h
+ * \mainpage Mainpage
  * \image html rbdl_logo.png
  *
  * This is the documentation of RBDL, the Rigid Body Dynamics Library. The
@@ -9,7 +9,7 @@
  * \li Recursive Newton Euler Algorithm (RNEA)
  * \li Composite Rigid Body Algorithm (CRBA)
  * \li Articulated Body Algorithm (ABA).
- 
+
  * Furthermore it contains code for forward and inverse \ref
  * kinematics_group "kinematics", computations of Jacobians, \ref
  * constraints_group "constraints" for contact and collision handling, and
@@ -18,7 +18,7 @@
  * inspired by the pseudo code of the book "Rigid Body Dynamics Algorithms"
  * of <a href="http://royfeatherstone.org" target="_parent">Roy
  * Featherstone</a>.
- 
+
  * The code has no external dependencies but for optimal performance it is
  * advised to use version 3 of the <a href="http://eigen.tuxfamily.org/"
  * target="_parent">Eigen</a> math library. More information about it can
@@ -27,7 +27,7 @@
  * must be obtained and installed separately.
  *
  * \note This library is free and published under a very liberal \ref
- * license "license". If you use it in scientific work we would greatly 
+ * license "license". If you use it in scientific work we would greatly
  * appreciate a citation as described \ref citation "here".
  *
  * \section download Download
@@ -64,7 +64,7 @@
  * <li>28 April 2016: New release 2.5.0:
  *   <ul>
  *     <li> Added an experimental Cython based Python wrapper of RBDL. The API is
- *       very close to the C++ API. For a brief glimpse of the API see 
+ *       very close to the C++ API. For a brief glimpse of the API see
  *       \ref PythonExample "Python Example"</li>
  *     <li> Matthew Millard added CustomJoints which allow to create different joint
  *       types completely by user code. They are implemented as proxy joints for
@@ -131,15 +131,15 @@
  *
  * An example of the Python wrapper can be found at \ref PythonExample
  * "Python Example".
- * 
+ *
  * \section ModuleOverview API Overview
- * 
+ *
  * \li \subpage modeling_page
  * \li \subpage joint_description
  * \li \ref kinematics_group
  * \li \ref dynamics_group
  * \li \ref constraints_group
- * \li \subpage addon_luamodel_page 
+ * \li \subpage addon_luamodel_page
  *
  * The page \subpage api_version_checking_page contains information about
  * incompatibilities of the existing versions and how to migrate.
@@ -194,12 +194,12 @@ freely, subject to the following restrictions:
 \endverbatim
 
  * \section Acknowledgements
- * 
+ *
  * Previous work on this library was funded by the <a
  * href="http://hgs.iwr.uni-heidelberg.de/hgs.mathcomp/">Heidelberg
  * Graduate School of Mathematical and Computational Methods for the
  * Sciences (HGS)</a> and the European FP7 projects <a
  * href="http://echord.eu">ECHORD</a> (grant number 231143) and <a
  * href="http://www.koroibot.eu">Koroibot</a> (grant number 611909).
- * 
+ *
  */

@@ -14,7 +14,7 @@ const std::string MeshConverter::MESHLABSERVER = "meshlabserver";
 
 VirtualRobot::TriMeshModelPtr MeshConverter::toVirtualRobotPtr(const Mesh& mesh, float scaling)
 {
-    return VirtualRobot::TriMeshModelPtr( 
+    return VirtualRobot::TriMeshModelPtr(
                 new VirtualRobot::TriMeshModel(toVirtualRobot(mesh, scaling)));
 }
 
@@ -206,7 +206,7 @@ bool MeshConverter::checkMeshlabserverAvailable()
 
 
 bool MeshConverter::runMeshlabserverCommand(
-        const std::filesystem::path& sourceFile, 
+        const std::filesystem::path& sourceFile,
         const std::filesystem::path& targetFile)
 {
     std::stringstream convertCommand;

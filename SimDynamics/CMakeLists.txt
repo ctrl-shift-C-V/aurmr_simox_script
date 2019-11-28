@@ -239,7 +239,7 @@ if (SimDynamics_DYNAMICSENGINE)
 
   INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR} DESTINATION ${Simox_INSTALL_HEADER_DIR}
   	COMPONENT Headers
-          FILES_MATCHING 
+          FILES_MATCHING
           PATTERN "*.h"
           PATTERN "*.hpp"
           PATTERN ".svn" EXCLUDE

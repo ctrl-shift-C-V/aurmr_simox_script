@@ -5,7 +5,7 @@
 namespace mjcf
 {
 
-Visitor::Adapter::Adapter(Visitor& owner) : 
+Visitor::Adapter::Adapter(Visitor& owner) :
     owner(owner)
 {}
 

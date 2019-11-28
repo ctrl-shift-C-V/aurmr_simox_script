@@ -32,7 +32,7 @@ namespace VirtualRobot::mujoco
 
 
     /**
-     * @brief The RobotMjcf class allows building a MuJoCo MJCF model from a 
+     * @brief The RobotMjcf class allows building a MuJoCo MJCF model from a
      * VirtualRobot robot model.
      */
     class RobotMjcf
@@ -83,7 +83,7 @@ namespace VirtualRobot::mujoco
         /// Set the path to the output XML file.
         void setOutputFile(const std::filesystem::path& filePath);
 
-        /// Set the path to the directory where meshes shall be stored 
+        /// Set the path to the directory where meshes shall be stored
         /// (relative to output directory).
         void setOutputMeshRelativeDirectory(const std::filesystem::path& meshRelativeDirectory);
 
@@ -130,11 +130,11 @@ namespace VirtualRobot::mujoco
         // DEFAULT BUILD
 
         /**
-         * @brief Build a default model of robot. 
-         * 
+         * @brief Build a default model of robot.
+         *
          * Resets the document beforehand.
-         * 
-         * @param worldMountMode 
+         *
+         * @param worldMountMode
          *      How the robot shall be mounted to the world body.
          *      - WorldMountMode::FIXED: Rigid connection without joints.
          *      - WorldMountMode::FREE:  Add a free joint.
@@ -173,7 +173,7 @@ namespace VirtualRobot::mujoco
         // ASSETS
 
         /// Add skybox texture.
-        void addSkybox(const Eigen::Vector3f& rgb1 = { .8f, .9f, .95f }, 
+        void addSkybox(const Eigen::Vector3f& rgb1 = { .8f, .9f, .95f },
                        const Eigen::Vector3f& rgb2 = { .4f, .6f, .80f });
 
 
@@ -218,7 +218,7 @@ namespace VirtualRobot::mujoco
         void addNodeBodyMesh(RobotNodePtr node);
 
         /**
-         * @brief Convert the mesh model of the given node to STL, which can 
+         * @brief Convert the mesh model of the given node to STL, which can
          * be loaded by MuJoCo.
          * @return The resulting STL mesh file (in the mesh directory).
          *      On error, returns an empty path.
@@ -235,9 +235,9 @@ namespace VirtualRobot::mujoco
 
         /**
          * @brief Add a mocap body without a weld constraint.
-         * 
+         *
          * If `className` is not empty, adds class defaults for geom/RGBA.
-         * 
+         *
          * @param bodyName  Name of the mocap body.
          * @param className The mocap defaults class name.
          * @param geomSize  Size of the mocap's geom.
@@ -249,13 +249,13 @@ namespace VirtualRobot::mujoco
 
         /**
          * @brief Add a mocap body and a weld constraint to `weldBodyName`.
-         * 
+         *
          * In addition to the mocap body, adds an equality weld constraint
          * as well as a contact exclude between the mocap body and the welded
-         * body. 
-         * 
+         * body.
+         *
          * If `className` is not empty, adds equality defaults.
-         * 
+         *
          * @param weldBodyName Name of the body to be welded to the mocap body.
          * @param bodyName     Name of the mocap body.
          * @param className    Name of mocap defaults class.
@@ -284,7 +284,7 @@ namespace VirtualRobot::mujoco
         /// Add contact exclude elements of specified nodes to their IgnoreCollision elements.
         void addContactExcludes(RobotNodeSetPtr nodeSet, bool addParentChildExcludes = false);
         /**
-         * @brief Add contact exclude elements of specified nodes to their 
+         * @brief Add contact exclude elements of specified nodes to their
          * `IgnoreCollision` elements.
          * @param addParentChildExcludes
          *      If true, also add contact excludes between bodies and their children.
@@ -307,9 +307,9 @@ namespace VirtualRobot::mujoco
 
         /**
          * @brief Adds an actuator for the joint of the given node with the given type.
-         * 
+         *
          * If the node's body has no joint, a joint is added before adding the actuator.
-         * 
+         *
          * @return Same as addJointActuator().
          * @throw error::NodeIsNoJoint If `node` is not a joint node.
          */

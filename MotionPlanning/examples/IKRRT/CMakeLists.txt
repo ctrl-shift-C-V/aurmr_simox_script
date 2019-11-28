@@ -1,7 +1,7 @@
 PROJECT ( IKRRT )
 
 IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)
- 
+
  	# the variable "demo_SRCS" contains all .cpp files of this project
 	FILE(GLOB demo_SRCS ${PROJECT_SOURCE_DIR}/IKRRTDemo.cpp ${PROJECT_SOURCE_DIR}/IKRRTWindow.cpp)
 	FILE(GLOB demo_INCS ${PROJECT_SOURCE_DIR}/IKRRTWindow.h)

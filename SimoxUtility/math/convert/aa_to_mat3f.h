@@ -66,7 +66,7 @@ namespace simox::math
     {
         return aa_to_mat3f(Eigen::AngleAxisf{ang, ax.normalized()});
     }
-    
+
     /// @brief assumes a premultiplied axis angle
     template<class D1> inline
     meta::enable_if_vec3<D1, Eigen::Matrix3f>

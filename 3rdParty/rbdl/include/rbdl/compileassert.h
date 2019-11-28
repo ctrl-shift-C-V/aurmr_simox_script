@@ -8,7 +8,7 @@
 #ifndef RBDL_COMPILE_ASSERT_H
 #define RBDL_COMPILE_ASSERT_H
 
-/* 
+/*
  * This is a simple compile time assertion tool taken from:
  *   http://blogs.msdn.com/b/abhinaba/archive/2008/10/27/c-c-compile-time-asserts.aspx
  * written by Abhinaba Basu!
@@ -40,7 +40,7 @@ JOIN(_custom_static_assert_typedef, __LINE__)
 
 #endif // __cplusplus
 
-#define VERIFY_EXPLICIT_CAST(from, to) COMPILE_ASSERT(sizeof(from) == sizeof(to)) 
+#define VERIFY_EXPLICIT_CAST(from, to) COMPILE_ASSERT(sizeof(from) == sizeof(to))
 
 // RBDL_COMPILE_ASSERT_H_
 #endif

@@ -16,7 +16,7 @@ if (Boost_FOUND)
     )
 
     set(LIBS
-        VirtualRobot 
+        VirtualRobot
     #    ${TINYXML2_LIBRARIES}
         ${BOOST_FILESYSTEM_LIBRARIES}
         ${BOOST_SYSTEM_LIBRARIES}

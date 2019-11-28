@@ -42,13 +42,13 @@ namespace VirtualRobot::mujoco
 
         /**
          * @brief Convert a mesh file to STL using meshlabserver.
-         * 
+         *
          * Checks whether the command "meshlabserver" is available. If it is,
-         * 
-         * 
+         *
+         *
          * @param sourceFile The source mesh file (anything usable by meshlabserver).
-         * @param targetPath 
-         *  The target directory or filename. If a directory, the source file 
+         * @param targetPath
+         *  The target directory or filename. If a directory, the source file
          *  name with replaced extension (.stl) is used.
          * @param skipIfExists If true and the target file exists, do nothing.
          */
@@ -81,8 +81,8 @@ namespace VirtualRobot::mujoco
         MeshConverter();
 
 
-        /* Disabled stateful API because its methods are ambiguous to the 
-         * static API. 
+        /* Disabled stateful API because its methods are ambiguous to the
+         * static API.
 
     public:
 

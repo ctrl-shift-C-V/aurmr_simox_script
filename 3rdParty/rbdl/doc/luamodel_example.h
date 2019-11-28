@@ -1,4 +1,4 @@
-/** \file example.h 
+/** \file example.h
  * \page LuaModelExample LuaModel example
  *
  * Here is an example on how to use the \ref luamodel_introduction Addon both
@@ -11,12 +11,12 @@
  * uses Lua code it is easy to create parameterized models.
  *
  * To be able to use the addon one has to enable the addon in CMake by
- * setting BUILD_ADDON_LUAMODEL to true. 
+ * setting BUILD_ADDON_LUAMODEL to true.
  *
  * Here is an example how \ref luamodel_introduction can be loaded by the RBDL:
  *
  * \include example_luamodel.cc
- * 
+ *
  * If the library itself is already created, one can compile this example
  * with CMake. In the example folder is a CMakeLists.txt file, that can be
  * used to automatically create the makefiles by using <a

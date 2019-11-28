@@ -177,9 +177,9 @@ namespace mjcf
 
         /**
          * @brief Transform this element to another type.
-         * 
-         * Change the underlying element's tag and return the element as the 
-         * new type. Using `*this` afterwards can result in unexpected 
+         *
+         * Change the underlying element's tag and return the element as the
+         * new type. Using `*this` afterwards can result in unexpected
          * behaviour (and should in general be avoided), so use this method
          * with caution!
          */
@@ -241,7 +241,7 @@ namespace mjcf
 
 
     template <class D>
-    Element<D>::Element(Document* document, tinyxml2::XMLElement* element) : 
+    Element<D>::Element(Document* document, tinyxml2::XMLElement* element) :
         _document(document), _element(element)
     {
         assertElemValueEqualsTag();
@@ -329,7 +329,7 @@ namespace mjcf
     template <class OtherD>
     OtherD Element<D>::firstChild() const
     {
-        return Element<OtherD>(_document, /*may be null*/ 
+        return Element<OtherD>(_document, /*may be null*/
                                _element->FirstChildElement(OtherD::tag_c_str()));
     }
 
@@ -498,7 +498,7 @@ namespace mjcf
             const std::string& attrName, const std::string& attrValue) const
     {
         return [&attrName, &attrValue](OtherDerived e)
-        { 
+        {
             return e.isAttributeSet(attrName) && e.getAttribute(attrName) == attrValue;
         };
     }

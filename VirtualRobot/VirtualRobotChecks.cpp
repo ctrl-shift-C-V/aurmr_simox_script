@@ -6,14 +6,14 @@ namespace VirtualRobot
 
     VirtualRobotCheckException::VirtualRobotCheckException(
             const std::string& condition,
-            const std::string& file, int line, const std::string& function, 
+            const std::string& file, int line, const std::string& function,
             const std::string& hint) :
         VirtualRobotException(makeMsg(condition, file, line, function, hint))
     {}
 
     std::string VirtualRobotCheckException::makeMsg(
-            const std::string& condition, 
-            const std::string& file, int line, const std::string& function, 
+            const std::string& condition,
+            const std::string& file, int line, const std::string& function,
             const std::string& hint,
             const std::string& lhs, const std::string& rhs)
     {

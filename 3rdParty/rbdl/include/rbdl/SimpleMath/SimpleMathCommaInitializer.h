@@ -32,7 +32,7 @@ namespace SimpleMath {
 				mColIndex = col_index;
 			}
 			~CommaInitializer() {
-				if (!mElementWasAdded 
+				if (!mElementWasAdded
 						&& (mColIndex + 1 < mParentMatrix->cols() || mRowIndex + 1 < mParentMatrix->rows())) {
 					std::cerr << "Error: too few elements passed to CommaInitializer! Expected " << mParentMatrix->size() << " but was given " << mRowIndex * mParentMatrix->cols() + mColIndex + 1 << std::endl;
 					abort();

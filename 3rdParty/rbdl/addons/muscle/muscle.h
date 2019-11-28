@@ -1,5 +1,5 @@
 //==============================================================================
-/* 
+/*
  * RBDL - Rigid Body Dynamics Library: Addon : muscle
  * Copyright (c) 2016 Matthew Millard <matthew.millard@iwr.uni-heidelberg.de>
  *

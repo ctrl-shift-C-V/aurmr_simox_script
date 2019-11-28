@@ -16,7 +16,7 @@
 
 namespace RigidBodyDynamics {
 
-/** \brief Describes all properties of a single body 
+/** \brief Describes all properties of a single body
  *
  * A Body contains information about mass, the location of its center of
  * mass, and the ineria tensor in the center of mass. This class is
@@ -47,13 +47,13 @@ struct RBDL_DLLAPI Body {
     return *this;
   }
 
-  /** \brief Constructs a body from mass, center of mass and radii of gyration 
-   * 
+  /** \brief Constructs a body from mass, center of mass and radii of gyration
+   *
    * This constructor eases the construction of a new body as all the
    * required parameters can be specified as parameters to the
    * constructor. These are then used to generate the spatial inertia
    * matrix which is expressed at the origin.
-   * 
+   *
    * \param mass the mass of the body
    * \param com  the position of the center of mass in the bodies coordinates
    * \param gyration_radii the radii of gyration at the center of mass of the body
@@ -71,8 +71,8 @@ struct RBDL_DLLAPI Body {
           );
     }
 
-  /** \brief Constructs a body from mass, center of mass, and a 3x3 inertia matrix 
-   * 
+  /** \brief Constructs a body from mass, center of mass, and a 3x3 inertia matrix
+   *
    * This constructor eases the construction of a new body as all the
    * required parameters can simply be specified as parameters to the
    * constructor. These are then used to generate the spatial inertia
@@ -197,7 +197,7 @@ struct RBDL_DLLAPI FixedBody {
   /// \brief Id of the movable body that this fixed body is attached to.
   unsigned int mMovableParent;
   /// \brief Transforms spatial quantities expressed for the parent to the
-  // fixed body. 
+  // fixed body.
   Math::SpatialTransform mParentTransform;
   Math::SpatialTransform mBaseTransform;
 

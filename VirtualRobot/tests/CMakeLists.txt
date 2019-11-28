@@ -41,9 +41,9 @@ ADD_VR_TEST( VirtualRobotMjcfTest )
 
 ADD_VR_TEST( VirtualRobotMujocoMeshTest )
 
-configure_file(VirtualRobotMujocoMeshTestMesh.msh 
+configure_file(VirtualRobotMujocoMeshTestMesh.msh
     ${Simox_TEST_DIR}/VirtualRobotMujocoMeshTestMesh.msh COPYONLY)
-target_compile_definitions(VirtualRobotMujocoMeshTest PRIVATE 
+target_compile_definitions(VirtualRobotMujocoMeshTest PRIVATE
     TEST_MESH_FILE="${Simox_TEST_DIR}/VirtualRobotMujocoMeshTestMesh.msh")
 
 

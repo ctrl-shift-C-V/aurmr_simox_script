@@ -21,9 +21,9 @@ Instead of calling the global functions ::PQP_Collide() and ::PQP_Distance() cre
 or
   PQP::PQP_DistanceResult pqpResult;
   pqpChecker->PQP_Distance(&pqpResult, Rotation1, Translation1, m1, Rotation2, Translation2, m2, 0, 0);
-  
-  
-  
+
+
+
 -- Contact Information --
 -------------------------
 Nikolaus Vahrenkamp

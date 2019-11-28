@@ -36,7 +36,7 @@ if (tinyxml_library AND URDF_FOUND)
 
     ADD_EXECUTABLE (loadURDFobot loadURDFobot.cpp)
     target_compile_definitions(loadURDFobot PUBLIC "-DDEMO_BASE_PATH=\"${PROJECT_SOURCE_DIR}\"")
-    
+
     TARGET_LINK_LIBRARIES (simox_urdfimport VirtualRobot ${URDFDOM_LIBRARIES})
     TARGET_LINK_LIBRARIES(loadURDFobot simox_urdfimport VirtualRobot ${URDFDOM_LIBRARIES})
 endif()

@@ -25,14 +25,14 @@ void Inertial::inertiaFromMatrix(const Eigen::Matrix3f& matrix)
     }
     else
     {
-        /* Full inertia matrix M. Since M is 3-by-3 and symmetric, 
-         * it is specified using only 6 numbers in the following order: 
+        /* Full inertia matrix M. Since M is 3-by-3 and symmetric,
+         * it is specified using only 6 numbers in the following order:
          * M(1,1), M(2,2), M(3,3), M(1,2), M(1,3), M(2,3).
-         * -- http://www.mujoco.org/book/XMLreference.html#inertial 
+         * -- http://www.mujoco.org/book/XMLreference.html#inertial
          */
 
         Eigen::Vector6f inertia;
-        inertia << matrix(0, 0), matrix(1, 1), matrix(2, 2), 
+        inertia << matrix(0, 0), matrix(1, 1), matrix(2, 2),
                 matrix(0, 1), matrix(0, 2), matrix(1, 2);
         this->fullinertia = inertia;
     }
@@ -60,7 +60,7 @@ Inertial Body::addInertial(bool front)
     return addChild<Inertial>("", front);
 }
 
-Inertial Body::addInertial(const Eigen::Vector3f& pos, float mass, const Eigen::Matrix3f& matrix, 
+Inertial Body::addInertial(const Eigen::Vector3f& pos, float mass, const Eigen::Matrix3f& matrix,
                            bool front)
 {
     Inertial inertial = addInertial(front);

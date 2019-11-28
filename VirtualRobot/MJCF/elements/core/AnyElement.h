@@ -18,7 +18,7 @@ namespace mjcf
 
         /// Construct from any other element type.
         template <class OtherDerived>
-        AnyElement(const Element<OtherDerived>& other) : 
+        AnyElement(const Element<OtherDerived>& other) :
             AnyElement(other.template reinterpret<AnyElement>())
         {}
 

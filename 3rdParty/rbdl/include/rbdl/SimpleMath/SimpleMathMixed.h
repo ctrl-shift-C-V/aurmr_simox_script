@@ -29,7 +29,7 @@ namespace SimpleMath {
 // conversion Dynamic->Fixed
 template <typename val_type, unsigned int nrows, unsigned int ncols>
 inline Fixed::Matrix<val_type, nrows, ncols>::Matrix(const Dynamic::Matrix<val_type> &dynamic_matrix) {
-	if (dynamic_matrix.cols() != ncols 
+	if (dynamic_matrix.cols() != ncols
 		|| dynamic_matrix.rows() != nrows) {
 		std::cerr << "Error: cannot assign a dynamic sized matrix of size " << dynamic_matrix.rows() << "x" << dynamic_matrix.cols() << " to a fixed size matrix of size " << nrows << "x" << ncols << "!" << std::endl;
 		abort();
@@ -42,7 +42,7 @@ inline Fixed::Matrix<val_type, nrows, ncols>::Matrix(const Dynamic::Matrix<val_t
 
 template <typename val_type, unsigned int nrows, unsigned int ncols>
 inline Fixed::Matrix<val_type, nrows, ncols>& Fixed::Matrix<val_type, nrows, ncols>::operator=(const Dynamic::Matrix<val_type> &dynamic_matrix) {
-	if (dynamic_matrix.cols() != ncols 
+	if (dynamic_matrix.cols() != ncols
 		|| dynamic_matrix.rows() != nrows) {
 		std::cerr << "Error: cannot assign a dynamic sized matrix of size " << dynamic_matrix.rows() << "x" << dynamic_matrix.cols() << " to a fixed size matrix of size " << nrows << "x" << ncols << "!" << std::endl;
 		abort();

@@ -75,7 +75,7 @@ namespace mjcf
         EqualitySection  equality()  { return section<EqualitySection>();   }
         TendonSection    tendon()    { return section<TendonSection>();     }
         ActuatorSection  actuator()  { return section<ActuatorSection>();   }
-        SensorSection    sensor()    { return section<SensorSection>();     } 
+        SensorSection    sensor()    { return section<SensorSection>();     }
         KeyframeSection  keyframe()  { return section<KeyframeSection>();   }
 
         /**
@@ -222,11 +222,11 @@ namespace mjcf
         return getOrCreateElement<SectionT>(*root);
     }
 
-    // Implementation of Element::createNewElement, which depends on the 
+    // Implementation of Element::createNewElement, which depends on the
     // definition of Document.
     template <class D>
     template <class ParentD, class ElementD>
-    ElementD Element<D>::createElement(Element<ParentD> parent, const std::string& className, 
+    ElementD Element<D>::createElement(Element<ParentD> parent, const std::string& className,
                                        bool front)
     {
         return _document->createElement<ElementD, ParentD>(parent, className, front);

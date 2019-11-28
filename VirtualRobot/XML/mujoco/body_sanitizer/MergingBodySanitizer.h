@@ -32,11 +32,11 @@ namespace VirtualRobot::mujoco
 
     /**
      * @brief A body sanitizer merging massless bodies to new bodies.
-     * 
-     * Massless bodies are merged along a kinematic chain until a body with 
+     *
+     * Massless bodies are merged along a kinematic chain until a body with
      * mass or a body with multiple children is encountered. The encountered
      * body is the last one included in the merged body.
-     * 
+     *
      * If the last body has multiple children but no mass, a small dummy mass
      * is added.
      */

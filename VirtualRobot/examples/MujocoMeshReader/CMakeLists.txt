@@ -13,7 +13,7 @@ if (Boost_FOUND)
     )
 
     set(LIBS
-        VirtualRobot 
+        VirtualRobot
     )
 
 

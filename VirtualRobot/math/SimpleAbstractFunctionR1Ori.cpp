@@ -1,6 +1,6 @@
 /*
  * This file is part of Simox.
- * 
+ *
  * Copyright (C) 2012-2016, High Performance Humanoid Technologies (H2T),
  * Karlsruhe Institute of Technology (KIT), all rights reserved.
  *

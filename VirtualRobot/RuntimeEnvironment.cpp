@@ -182,7 +182,7 @@ namespace VirtualRobot
         boost::program_options::options_description desc(caption);
         desc.add_options()
             ("help", "Simox command line parser: Set options with '--key value'\n")
-            ("data-path", boost::program_options::value<std::vector<std::string>>()->composing(), 
+            ("data-path", boost::program_options::value<std::vector<std::string>>()->composing(),
              "Set data path. Multiple data paths are allowed.")
         ;
 

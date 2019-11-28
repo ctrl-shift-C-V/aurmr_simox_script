@@ -31,7 +31,7 @@ namespace Eigen
             {
                 ori = j_ori.get<Eigen::Quaternionf>().toRotationMatrix();
             }
-            else 
+            else
             {
                 ori = j_ori.get<Eigen::Matrix3f>();
             }

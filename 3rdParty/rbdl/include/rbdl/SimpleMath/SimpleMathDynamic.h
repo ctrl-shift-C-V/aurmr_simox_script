@@ -384,7 +384,7 @@ class Matrix {
 		}
 
 		void random() {
-			for (unsigned int i = 0; i < nrows * ncols; i++) 
+			for (unsigned int i = 0; i < nrows * ncols; i++)
 				mData[i] = static_cast<val_type> (rand()) / static_cast<val_type> (RAND_MAX);
 		}
 

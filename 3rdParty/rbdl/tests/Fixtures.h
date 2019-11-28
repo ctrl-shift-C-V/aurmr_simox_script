@@ -12,7 +12,7 @@ struct FixedBase3DoF {
      * and the CoM of the last (3rd) body comes out of the Y=X=0 plane.
      *
      *      Z
-     *      *---* 
+     *      *---*
      *      |
      *      |
      *  Z   |
@@ -202,7 +202,7 @@ struct FloatingBase12DoF {
         Vector3d (0.5, 0., 0.),
         Vector3d (1., 1., 1.)
         );
-    base_rot_x_id = model->AddBody (0, SpatialTransform(), 
+    base_rot_x_id = model->AddBody (0, SpatialTransform(),
         Joint (
           SpatialVector (0., 0., 0., 1., 0., 0.),
           SpatialVector (0., 0., 0., 0., 1., 0.),
@@ -331,7 +331,7 @@ struct FixedJoint2DoF {
      * and the CoM of the last (3rd) body comes out of the Y=X=0 plane.
      *
      *      Z
-     *      *---* 
+     *      *---*
      *      |
      *      |
      *  Z   |
@@ -396,7 +396,7 @@ struct FixedAndMovableJoint {
      * and the CoM of the last (3rd) body comes out of the Y=X=0 plane.
      *
      *      Z
-     *      *---* 
+     *      *---*
      *      |
      *      |
      *  Z   |
@@ -631,7 +631,7 @@ struct FixedBase6DoF12DoFFloatingBase {
         Vector3d (0.5, 0., 0.),
         Vector3d (1., 1., 1.)
         );
-    base_id = model->AddBody (0, SpatialTransform(), 
+    base_id = model->AddBody (0, SpatialTransform(),
         Joint (
           SpatialVector (0., 0., 0., 1., 0., 0.),
           SpatialVector (0., 0., 0., 0., 1., 0.),

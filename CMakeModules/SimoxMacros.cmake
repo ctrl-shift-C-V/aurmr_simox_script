@@ -90,7 +90,7 @@ macro(_simox_generate_subdir_headers_impl dir prefix_to_remove out_headers)
         #recurse
         _simox_generate_subdir_headers_impl("${subdir}" "${prefix_to_remove}" ${out_headers})
 
-        file(GLOB headers ${subdir}/*.h) 
+        file(GLOB headers ${subdir}/*.h)
         list(LENGTH headers n)
         string(REGEX REPLACE ".*/" "" subdir_name "${subdir}")
         if(NOT ${n} EQUAL 0 AND NOT "${subdir_name}" STREQUAL "detail")

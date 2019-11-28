@@ -17,12 +17,12 @@ namespace mjcf
     {
     public:
 
-        AttributeBase() : _owner(nullptr) 
+        AttributeBase() : _owner(nullptr)
         {}
 
         /// Constructor.
         /// @param owner the owning element (Element instance of which this is a member).
-        AttributeBase(Element<Derived>& owner) : _owner(&owner) 
+        AttributeBase(Element<Derived>& owner) : _owner(&owner)
         {}
 
 
@@ -343,4 +343,4 @@ Eigen::Vector5f mjcf_solimpDefault();
     mjcf_AttributeDef(Derived, Eigen::Vector5f, solimp, ::mjcf::mjcf_solimpDefault())
 
 
-} 
+}

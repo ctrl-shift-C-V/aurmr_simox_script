@@ -20,23 +20,23 @@
  * See the License for the specific language governing permissions and        *
  * limitations under the License.                                             *
  * -------------------------------------------------------------------------- */
- 
+
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <fstream> 
+#include <fstream>
 #include <vector>
 #include <stdlib.h>
 
 /**
-This function will print cvs file of the matrix 
+This function will print cvs file of the matrix
  data
 
 @params data: A vector of state vectors
 @params filename: The name of the file to print
 */
-void printMatrixToFile( const std::vector<std::vector<double > >& dataMatrix, 
-                        const std::string& header, 
+void printMatrixToFile( const std::vector<std::vector<double > >& dataMatrix,
+                        const std::string& header,
                         const std::string& filename);
 
 void printMatrixToFile( const std::vector<std::vector<int > >& dataMatrix,

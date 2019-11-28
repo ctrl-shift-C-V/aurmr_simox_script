@@ -34,7 +34,7 @@ extra_params['library_dirs'] = [
   ]
 extra_params['extra_link_args'] = [
   "-Wl,-O1",
-  "-Wl,--as-needed", 
+  "-Wl,--as-needed",
   ]
 
 if os.name == 'posix':

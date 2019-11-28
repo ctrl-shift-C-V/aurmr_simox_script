@@ -54,7 +54,7 @@ RBDL_DLLAPI void CalcCenterOfMass (
   double &mass,
   Math::Vector3d &com,
   Math::Vector3d *com_velocity = NULL,
-  Math::Vector3d *com_acceleration = NULL, 
+  Math::Vector3d *com_acceleration = NULL,
   Math::Vector3d *angular_momentum = NULL,
   Math::Vector3d *change_of_angular_momentum = NULL,
   bool update_kinematics = true

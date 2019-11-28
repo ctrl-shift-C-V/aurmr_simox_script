@@ -1,13 +1,13 @@
 /*********************************************************************
 * Software License Agreement (BSD License)
-* 
+*
 *  Copyright (c) 2008, Willow Garage, Inc.
 *  All rights reserved.
-* 
+*
 *  Redistribution and use in source and binary forms, with or without
 *  modification, are permitted provided that the following conditions
 *  are met:
-* 
+*
 *   * Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
 *   * Redistributions in binary form must reproduce the above
@@ -17,7 +17,7 @@
 *   * Neither the name of the Willow Garage nor the names of its
 *     contributors may be used to endorse or promote products derived
 *     from this software without specific prior written permission.
-* 
+*
 *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -92,14 +92,14 @@ public:
   /// clear variables on construction
   JointSafety() { this->clear(); };
 
-  /// 
+  ///
   /// IMPORTANT:  The safety controller support is very much PR2 specific, not intended for generic usage.
-  /// 
+  ///
   /// Basic safety controller operation is as follows
-  /// 
+  ///
   /// current safety controllers will take effect on joints outside the position range below:
   ///
-  /// position range: [JointSafety::soft_lower_limit  + JointLimits::velocity / JointSafety::k_position, 
+  /// position range: [JointSafety::soft_lower_limit  + JointLimits::velocity / JointSafety::k_position,
   ///                  JointSafety::soft_uppper_limit - JointLimits::velocity / JointSafety::k_position]
   ///
   /// if (joint_position is outside of the position range above)
@@ -122,7 +122,7 @@ public:
   /// Final effort command sent to the joint is saturated by [effort_limit_min,effort_limit_max]
   ///
   /// Please see wiki for more details: http://www.ros.org/wiki/pr2_controller_manager/safety_limits
-  /// 
+  ///
   double soft_upper_limit;
   double soft_lower_limit;
   double k_position;

@@ -10,7 +10,7 @@ const std::string ContactExclude::tag = "exclude";
 const std::string ContactSection::tag = "contact";
 
 
-Eigen::Vector5f ContactPair::condimDefault() 
+Eigen::Vector5f ContactPair::condimDefault()
 {
     Eigen::Vector5f v;
     v << 1, 1, 0.005f, 0.0001f, 0.0001f;

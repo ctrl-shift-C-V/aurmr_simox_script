@@ -52,7 +52,7 @@ namespace VirtualRobot
         static void setCaption(const std::string& caption);
 
         /*!
-         * Add a path to global data path vector. 
+         * Add a path to global data path vector.
          * These paths are searched within the getDataFileAbsolute() method.
          * Only valid paths are processed.
          * \param path The path to add.
@@ -62,7 +62,7 @@ namespace VirtualRobot
         static bool addDataPath(const std::string& path, bool quiet = false);
 
         /*!
-         * \brief Enable the command line search for given key. 
+         * \brief Enable the command line search for given key.
          * Only keys that are enabled can later be accessed with the getValue() method.
          */
         static void considerKey(const std::string& key, const std::string& description = "");
@@ -159,7 +159,7 @@ namespace VirtualRobot
 
 
         /*!
-         * \brief Free all resources. 
+         * \brief Free all resources.
          * Usually not not needed, since on application exit all resources are freed automatically.
          */
         static void cleanup();

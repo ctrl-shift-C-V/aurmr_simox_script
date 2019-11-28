@@ -144,8 +144,8 @@ struct Camera : public Element<Camera>
     mjcf_StringAttributeDef(Camera, mode, "fixed");
     mjcf_StringAttributeOpt(Camera, target); // required if targetbody or targetbodycom
 
-    /// Vertical field of view of the camera, expressed in degrees regardless 
-    /// of the global angle setting. 
+    /// Vertical field of view of the camera, expressed in degrees regardless
+    /// of the global angle setting.
     mjcf_FloatAttributeDef(Camera, fovy, 45);
     /// Inter-pupilary distance.
     mjcf_FloatAttributeDef(Camera, ipd, 0.068f);

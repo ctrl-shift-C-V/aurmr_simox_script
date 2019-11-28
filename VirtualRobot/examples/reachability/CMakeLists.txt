@@ -12,8 +12,8 @@ IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)
   )
 
   set(GUI_UIS
-      ${PROJECT_SOURCE_DIR}/reachabilityScene.ui 
-      ${PROJECT_SOURCE_DIR}/reachabilityCreate.ui 
+      ${PROJECT_SOURCE_DIR}/reachabilityScene.ui
+      ${PROJECT_SOURCE_DIR}/reachabilityCreate.ui
   )
 
  	# create the executable

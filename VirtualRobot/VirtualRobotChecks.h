@@ -10,20 +10,20 @@
  * condition fails, throw an exception (of type `VirtualRobotCheckException`).
  * Thrown exceptions give information about where they were thrown and what
  * condition failed.
- * 
+ *
  * All macros are defined in two versions, one taking a "hint", explaining
  * what is checked, and one taking no hint.
- * 
- * Hints hould be formulated "positively", i.e. what condition is tested and 
+ *
+ * Hints hould be formulated "positively", i.e. what condition is tested and
  * what must be true, not what went wrong otherwise. For example:
- * 
+ *
  * @code
  * VR_CHECK_EQUAL_HINT(vector.size(), 3, "Vector must have exactly 3 elements.");
  * VR_CHECK_HINT(pointer, "Pointer must not be null.");
- * 
+ *
  * *not:* VR_CHECK_HINT(pointer, "Pointer is null.");
  * @endcode
- * 
+ *
  */
 
 namespace VirtualRobot
@@ -76,7 +76,7 @@ namespace VirtualRobot
 
 
 /**
- * Check the given condition. 
+ * Check the given condition.
  * @throw VirtualRobotCheckException If `condition``evaluates to false.
  */
 #define VR_CHECK_HINT(condition, hint) \
@@ -88,7 +88,7 @@ namespace VirtualRobot
     } while(0);
 
 /**
- * Check the given condition. 
+ * Check the given condition.
  * @throw VirtualRobotCheckException If `condition``evaluates to false.
  */
 #define VR_CHECK(condition) \

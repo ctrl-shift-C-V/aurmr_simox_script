@@ -12,7 +12,7 @@ namespace VirtualRobot
      * @class A normal distribution with lower and upper bounds (min and max).
      *
      * The normal distribution's mean is not limited to the clamping bounds.
-     * 
+     *
      * When a new number is generated, random numbers are generated according
      * to the normal distribution until a number between min and max is
      * generated. If the number of attempts exceeds a threshold, the last
@@ -129,7 +129,7 @@ namespace VirtualRobot
         /// The upper bound.
         RealType _max = std::numeric_limits<RealType>::max();
 
-        /// The maximal number of times it is attempted to generate a value 
+        /// The maximal number of times it is attempted to generate a value
         /// inside the bounds before uniformly drawing the result.
         int _maxAttempts = 100;
 
@@ -140,7 +140,7 @@ namespace VirtualRobot
     std::ostream& operator<< (std::ostream& os, const ClampedNormalDistribution<RealT>& rhs)
     {
         // for some reason, the first string must be wrapped in string constructor
-        os << std::string("<ClampedNormalDistribution mean=") << rhs.mean() << " stddev=" 
+        os << std::string("<ClampedNormalDistribution mean=") << rhs.mean() << " stddev="
            << rhs.stddev() << " [min, max]=[" << rhs.min() << ", " << rhs.max() << "] >";
         return os;
     }

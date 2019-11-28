@@ -45,7 +45,7 @@ struct ActuatorGeneral : public Element<ActuatorGeneral>
 
     mjcf_ActuatorAttributes(ActuatorGeneral);
 
-    // dyntype : [none, integrator, filter, muscle, user], 
+    // dyntype : [none, integrator, filter, muscle, user],
     mjcf_StringAttributeDef(ActuatorGeneral, dyntype, "none");
     // gaintype : [fixed, muscle, user], "fixed"
     mjcf_StringAttributeDef(ActuatorGeneral, gaintype, "fixed");

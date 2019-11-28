@@ -91,8 +91,8 @@ namespace VirtualRobot
             @param basePath The directory to store the robot to
             @param meshDir  The local directory where all mesh files should be stored to.
          */
-        static void saveMJCF(RobotPtr robot, 
-                             const std::string& filename, const std::string& basePath, 
+        static void saveMJCF(RobotPtr robot,
+                             const std::string& filename, const std::string& basePath,
                              const std::string& meshDir = "mesh");
 
 

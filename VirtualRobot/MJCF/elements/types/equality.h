@@ -99,7 +99,7 @@ struct EqualitySection : public Element<EqualitySection>
     static const std::string tag;
     mjcf_ElementDerivedConstructors(EqualitySection)
 
-    EqualityWeld addWeld(const std::string& name, const std::string& body1, 
+    EqualityWeld addWeld(const std::string& name, const std::string& body1,
                          const std::string& body2);
 
 };

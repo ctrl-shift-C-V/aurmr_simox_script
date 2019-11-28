@@ -158,7 +158,7 @@ RBDL_DLLAPI void ForwardDynamicsLagrangian (
  * \param update_kinematics whether the kinematics should be updated (safer, but at a higher computational cost)
  *
  * This function uses a reduced version of the Articulated %Body Algorithm
- * to compute: 
+ * to compute:
  *
  *   \f$ \ddot{q} = M(q)^{-1} \tau\f$
  *

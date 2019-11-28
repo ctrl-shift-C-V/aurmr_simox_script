@@ -90,7 +90,7 @@ namespace VirtualRobot
         /*!
             Creates a robot clone with reduced structure.
             \param robot The robot to clone.
-            \param uniteWithAllChildren List of RobotNodeNames. Each listed robot ndoe is united with all of its children to one fixed RobotNode. 
+            \param uniteWithAllChildren List of RobotNodeNames. Each listed robot ndoe is united with all of its children to one fixed RobotNode.
                                         This means that all related coordinate systems and joints will not be present in the clone. The visualizations are united.
         */
         static RobotPtr cloneUniteSubsets(RobotPtr robot, const std::string& name, std::vector<std::string> uniteWithAllChildren);

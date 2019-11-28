@@ -29,7 +29,7 @@ namespace mjcf
 
     // cutoff
     /**
-     * The standard deviation of zero-mean Gaussian noise added to the 
+     * The standard deviation of zero-mean Gaussian noise added to the
      * sensor output, when the sensornoise attribute of flag is enabled.
      * Sensor noise respects the sensor data type: quaternions and unit
      * vectors remain normalized, non-negative quantities remain non-negative.
@@ -39,7 +39,7 @@ namespace mjcf
 
     /**
      * @brief A TouchSensor element.
-     * 
+     *
      * "This element creates a touch sensor. The active sensor zone is defined
      * by a site. If a contact point falls within the site's volume, and
      * involves a geom attached to the same body as the site, the corresponding
@@ -52,7 +52,7 @@ namespace mjcf
      * (scalar) normal forces from all included contacts. An example of touch
      * sensor zones for a robotic hand can be found in the Sensors section in
      * the MuJoCo HATPIX chapter."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-touch
      */
     struct TouchSensor : public Element<TouchSensor>
@@ -72,12 +72,12 @@ namespace mjcf
 
     /**
      * @brief A AccelerometerSensor element.
-     * 
+     *
      * "This element creates a 3-axis accelerometer. The sensor is mounted at a
      * site, and has the same position and orientation as the site frame. This
      * sensor outputs three numbers, which are the linear acceleration of the
      * site (including gravity) in local coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-accelerometer
      */
     struct AccelerometerSensor : public Element<AccelerometerSensor>
@@ -89,7 +89,7 @@ namespace mjcf
 
         /**
          * @brief Site where the sensor is mounted.
-         * 
+         *
          * The accelerometer is centered and aligned with the site local frame.
          */
         mjcf_StringAttributeReq(AccelerometerSensor, site);
@@ -99,12 +99,12 @@ namespace mjcf
 
     /**
      * @brief A VelocimeterSensor element.
-     * 
+     *
      * "This element creates a 3-axis velocimeter. The sensor is mounted at a
      * site, and has the same position and orientation as the site frame. This
      * sensor outputs three numbers, which are the linear velocity of the site
      * in local coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-velocimeter
      */
     struct VelocimeterSensor : public Element<VelocimeterSensor>
@@ -116,7 +116,7 @@ namespace mjcf
 
         /**
          * @brief Site where the sensor is mounted.
-         * 
+         *
          * The velocimeter is centered and aligned with the site local frame.
          */
         mjcf_StringAttributeReq(VelocimeterSensor, site);
@@ -126,14 +126,14 @@ namespace mjcf
 
     /**
      * @brief A GyroSensor element.
-     * 
+     *
      * "This element creates a 3-axis gyroscope. The sensor is mounted at a
      * site, and has the same position and orientation as the site frame. This
      * sensor outputs three numbers, which are the angular velocity of the site
      * in local coordinates. This sensor is often used in conjunction with an
      * accelerometer mounted at the same site, to simulate an inertial
      * measurement unit (IMU)."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-gyro
      */
     struct GyroSensor : public Element<GyroSensor>
@@ -145,7 +145,7 @@ namespace mjcf
 
         /**
          * @brief Site where the sensor is mounted.
-         * 
+         *
          * The gyroscope is centered and aligned with the site local frame.
          */
         mjcf_StringAttributeReq(GyroSensor, site);
@@ -155,7 +155,7 @@ namespace mjcf
 
     /**
      * @brief A ForceSensor element.
-     * 
+     *
      * "This element creates a 3-axis force sensor. The sensor outputs three
      * numbers, which are the interaction force between a child and a parent
      * body, expressed in the site frame defining the sensor. The convention is
@@ -165,7 +165,7 @@ namespace mjcf
      * forces acting on the system, including contacts as well as external
      * perturbations. Using this sensor often requires creating a dummy body
      * welded to its parent (i.e. having no joint elements)."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-force
      */
     struct ForceSensor : public Element<ForceSensor>
@@ -177,7 +177,7 @@ namespace mjcf
 
         /**
          * @brief Site where the sensor is mounted.
-         * 
+         *
          * The measured interaction force is between the body where the site is
          * defined and its parent body, and points from the child towards the
          * parent. The physical sensor being modeled could of course be attached
@@ -193,10 +193,10 @@ namespace mjcf
 
     /**
      * @brief A TorqueSensor element.
-     * 
+     *
      * "This element creates a 3-axis torque sensor. This is similar to the
      * force sensor above, but measures torque rather than force."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-torque
      */
     struct TorqueSensor : public Element<TorqueSensor>
@@ -208,7 +208,7 @@ namespace mjcf
 
         /**
          * @brief Site where the sensor is mounted.
-         * 
+         *
          * The measured interaction torque is between the body where the site is
          * defined and its parent body.
          */
@@ -219,11 +219,11 @@ namespace mjcf
 
     /**
      * @brief A MagnetometerSensor element.
-     * 
+     *
      * "This element creates a magnetometer. It measures the magnetic flux at
      * the sensor site position, expressed in the sensor site frame. The output
      * is a 3D vector."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-magnetometer
      */
     struct MagnetometerSensor : public Element<MagnetometerSensor>
@@ -243,7 +243,7 @@ namespace mjcf
 
     /**
      * @brief A RangeFinderSensor element.
-     * 
+     *
      * "This element creates a rangefinder. It measures the distance to the
      * nearest geom surface, along the ray defined by the positive Z-axis of the
      * sensor site. If the ray does not intersect any geom surface, the sensor
@@ -254,7 +254,7 @@ namespace mjcf
      * however that geoms made invisible in the visualizer by disabling their
      * geom group are not excluded; this is because sensor calculations are
      * independent of the visualizer."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-rangefinder
      */
     struct RangeFinderSensor : public Element<RangeFinderSensor>
@@ -274,13 +274,13 @@ namespace mjcf
 
     /**
      * @brief A JointPositionSensor element.
-     * 
+     *
      * "This and the remaining sensor elements do not involve sensor-specific
      * computations. Instead they copy into the array mjData.sensordata
      * quantities that are already computed. This element creates a joint
      * position or angle sensor. It can be attached to scalar joints (slide or
      * hinge). Its output is scalar."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-jointpos
      */
     struct JointPositionSensor : public Element<JointPositionSensor>
@@ -292,7 +292,7 @@ namespace mjcf
 
         /**
          * @brief The joint whose position or angle will be sensed.
-         * 
+         *
          * Only scalar joints can be referenced here. The sensor output is copied
          * from mjData.qpos.
          */
@@ -303,10 +303,10 @@ namespace mjcf
 
     /**
      * @brief A JointVelocitySensor element.
-     * 
+     *
      * "This element creates a joint velocity sensor. It can be attached to
      * scalar joints (slide or hinge). Its output is scalar."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-jointvel
      */
     struct JointVelocitySensor : public Element<JointVelocitySensor>
@@ -318,7 +318,7 @@ namespace mjcf
 
         /**
          * @brief The joint whose velocity will be sensed.
-         * 
+         *
          * Only scalar joints can be referenced here. The sensor output is copied
          * from mjData.qvel.
          */
@@ -329,10 +329,10 @@ namespace mjcf
 
     /**
      * @brief A TendonPositionSensor element.
-     * 
+     *
      * "This element creates a tendon length sensor. It can be attached to both
      * spatial and fixed tendons. Its output is scalar."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-tendonpos
      */
     struct TendonPositionSensor : public Element<TendonPositionSensor>
@@ -344,7 +344,7 @@ namespace mjcf
 
         /**
          * @brief The tendon whose length will be sensed.
-         * 
+         *
          * The sensor output is copied from mjData.ten_length.
          */
         mjcf_StringAttributeReq(TendonPositionSensor, tendon);
@@ -354,10 +354,10 @@ namespace mjcf
 
     /**
      * @brief A TendonVelocitySensor element.
-     * 
+     *
      * "This element creates a tendon velocity sensor. It can be attached to
      * both spatial and fixed tendons. Its output is scalar."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-tendonvel
      */
     struct TendonVelocitySensor : public Element<TendonVelocitySensor>
@@ -369,7 +369,7 @@ namespace mjcf
 
         /**
          * @brief The tendon whose velocity will be sensed.
-         * 
+         *
          * The sensor output is copied from mjData.ten_velocity.
          */
         mjcf_StringAttributeReq(TendonVelocitySensor, tendon);
@@ -379,11 +379,11 @@ namespace mjcf
 
     /**
      * @brief A ActuatorPositionSensor element.
-     * 
+     *
      * "This element creates an actuator length sensor. Recall that each
      * actuator has a transmission which has length. This sensor can be attached
      * to any actuator. Its output is scalar."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-actuatorpos
      */
     struct ActuatorPositionSensor : public Element<ActuatorPositionSensor>
@@ -395,7 +395,7 @@ namespace mjcf
 
         /**
          * @brief The actuator whose transmission's length will be sensed.
-         * 
+         *
          * The sensor output is copied from mjData.actuator_length.
          */
         mjcf_StringAttributeReq(ActuatorPositionSensor, actuator);
@@ -405,10 +405,10 @@ namespace mjcf
 
     /**
      * @brief A ActuatorVelocitySensor element.
-     * 
+     *
      * "This element creates an actuator velocity sensor. This sensor can be
      * attached to any actuator. Its output is scalar."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-actuatorvel
      */
     struct ActuatorVelocitySensor : public Element<ActuatorVelocitySensor>
@@ -420,7 +420,7 @@ namespace mjcf
 
         /**
          * @brief The actuator whose transmission's velocity will be sensed.
-         * 
+         *
          * The sensor output is copied from mjData.actuator_velocity.
          */
         mjcf_StringAttributeReq(ActuatorVelocitySensor, actuator);
@@ -430,13 +430,13 @@ namespace mjcf
 
     /**
      * @brief A ActuatorForceSensor element.
-     * 
+     *
      * "This element creates an actuator force sensor. The quantity being sensed
      * is the scalar actuator force, not the generalized force contributed by
      * the actuator (the latter is the product of the scalar force and the
      * vector of moment arms determined by the transmission). This sensor can be
      * attached to any actuator. Its output is scalar."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-actuatorfrc
      */
     struct ActuatorForceSensor : public Element<ActuatorForceSensor>
@@ -448,7 +448,7 @@ namespace mjcf
 
         /**
          * @brief The actuator whose scalar force output will be sensed.
-         * 
+         *
          * The sensor output is copied from mjData.actuator_force.
          */
         mjcf_StringAttributeReq(ActuatorForceSensor, actuator);
@@ -458,10 +458,10 @@ namespace mjcf
 
     /**
      * @brief A BallJointValueSensor element.
-     * 
+     *
      * "This element creates a quaternion sensor for a ball joints. It outputs 4
      * numbers corresponding to a unit quaternion."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-ballquat
      */
     struct BallJointValueSensor : public Element<BallJointValueSensor>
@@ -473,7 +473,7 @@ namespace mjcf
 
         /**
          * @brief The ball joint whose quaternion is sensed.
-         * 
+         *
          * The sensor output is copied from mjData.qpos.
          */
         mjcf_StringAttributeReq(BallJointValueSensor, joint);
@@ -483,12 +483,12 @@ namespace mjcf
 
     /**
      * @brief A BallAngularVelocitySensor element.
-     * 
+     *
      * "This element creates a ball joint angular velocity sensor. It outputs 3
      * numbers corresponding to the angular velocity of the joint. The norm of
      * that vector is the rotation speed in rad/s and the direction is the axis
      * around which the rotation takes place."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-ballangvel
      */
     struct BallAngularVelocitySensor : public Element<BallAngularVelocitySensor>
@@ -500,7 +500,7 @@ namespace mjcf
 
         /**
          * @brief The ball joint whose angular velocity is sensed.
-         * 
+         *
          * The sensor output is copied from mjData.qvel.
          */
         mjcf_StringAttributeReq(BallAngularVelocitySensor, joint);
@@ -510,9 +510,9 @@ namespace mjcf
 
     /**
      * @brief A JointLimitPositionSensor element.
-     * 
+     *
      * "This element creates a joint limit sensor for position."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-jointlimitpos
      */
     struct JointLimitPositionSensor : public Element<JointLimitPositionSensor>
@@ -524,7 +524,7 @@ namespace mjcf
 
         /**
          * @brief The joint whose limit is sensed.
-         * 
+         *
          * The sensor output equals mjData.efc_pos - mjData.efc_margin for the
          * corresponding limit constraint. Note that the result is negative if
          * the limit is violated, regardless of which side of the limit is
@@ -539,9 +539,9 @@ namespace mjcf
 
     /**
      * @brief A JointLimitVelocitySensor element.
-     * 
+     *
      * "This element creates a joint limit sensor for velocity."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-jointlimitvel
      */
     struct JointLimitVelocitySensor : public Element<JointLimitVelocitySensor>
@@ -553,7 +553,7 @@ namespace mjcf
 
         /**
          * @brief The joint whose limit is sensed.
-         * 
+         *
          * The sensor output is copied from mjData.efc_vel. If the joint limit is
          * not violated, the result is 0.
          */
@@ -564,9 +564,9 @@ namespace mjcf
 
     /**
      * @brief A JointLimitForceSensor element.
-     * 
+     *
      * "This element creates a joint limit sensor for constraint force."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-jointlimitfrc
      */
     struct JointLimitForceSensor : public Element<JointLimitForceSensor>
@@ -578,7 +578,7 @@ namespace mjcf
 
         /**
          * @brief The joint whose limit is sensed.
-         * 
+         *
          * The sensor output is copied from mjData.efc_force. If the joint limit
          * is not violated, the result is 0.
          */
@@ -589,9 +589,9 @@ namespace mjcf
 
     /**
      * @brief A TendonLimitPositionSensor element.
-     * 
+     *
      * "This element creates a tendon limit sensor for position."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-tendonlimitpos
      */
     struct TendonLimitPositionSensor : public Element<TendonLimitPositionSensor>
@@ -603,7 +603,7 @@ namespace mjcf
 
         /**
          * @brief The tendon whose limit is sensed.
-         * 
+         *
          * The sensor output equals mjData.efc_pos - mjData.efc_margin for the
          * corresponding limit constraint. If the tendon limit is not violated,
          * the result is 0.
@@ -615,9 +615,9 @@ namespace mjcf
 
     /**
      * @brief A TendonLimitVelocitySensor element.
-     * 
+     *
      * "This element creates a tendon limit sensor for velocity."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-tendonlimitvel
      */
     struct TendonLimitVelocitySensor : public Element<TendonLimitVelocitySensor>
@@ -629,7 +629,7 @@ namespace mjcf
 
         /**
          * @brief The tendon whose limit is sensed.
-         * 
+         *
          * The sensor output is copied from mjData.efc_vel. If the tendon limit
          * is not violated, the result is 0.
          */
@@ -640,9 +640,9 @@ namespace mjcf
 
     /**
      * @brief A TendonLimitForceSensor element.
-     * 
+     *
      * "This element creates a tendon limit sensor for constraint force."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-tendonlimitfrc
      */
     struct TendonLimitForceSensor : public Element<TendonLimitForceSensor>
@@ -654,7 +654,7 @@ namespace mjcf
 
         /**
          * @brief The tendon whose limit is sensed.
-         * 
+         *
          * The sensor output is copied from mjData.efc_force. If the tendon limit
          * is not violated, the result is 0.
          */
@@ -665,10 +665,10 @@ namespace mjcf
 
     /**
      * @brief A FramePositionSensor element.
-     * 
+     *
      * "This element creates a sensor that returns the 3D position of the
      * spatial frame of the object, in global coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-framepos
      */
     struct FramePositionSensor : public Element<FramePositionSensor>
@@ -680,7 +680,7 @@ namespace mjcf
 
         /**
          * @brief The type of object to which the sensor is attached.
-         * 
+         *
          * This must be an object type that has a spatial frame. "body" refers to
          * the inertial frame of the body, while "xbody" refers to the regular
          * frame of the body (usually centered at the joint with the parent
@@ -698,11 +698,11 @@ namespace mjcf
 
     /**
      * @brief A FrameOrientationSensor element.
-     * 
+     *
      * "This element creates a sensor that returns the unit quaternion
      * specifying the orientation of the spatial frame of the object, in global
      * coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-framequat
      */
     struct FrameOrientationSensor : public Element<FrameOrientationSensor>
@@ -714,7 +714,7 @@ namespace mjcf
 
         /**
          * @brief The type of object to which the sensor is attached.
-         * 
+         *
          * This must be an object type that has a spatial frame. "body" refers to
          * the inertial frame of the body, while "xbody" refers to the regular
          * frame of the body (usually centered at the joint with the parent
@@ -732,11 +732,11 @@ namespace mjcf
 
     /**
      * @brief A FrameXAxisSensor element.
-     * 
+     *
      * "This element creates a sensor that returns the 3D unit vector
      * corresponding to the X-axis of the spatial frame of the object, in global
      * coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-framexaxis
      */
     struct FrameXAxisSensor : public Element<FrameXAxisSensor>
@@ -748,7 +748,7 @@ namespace mjcf
 
         /**
          * @brief The type of object to which the sensor is attached.
-         * 
+         *
          * This must be an object type that has a spatial frame. "body" refers to
          * the inertial frame of the body, while "xbody" refers to the regular
          * frame of the body (usually centered at the joint with the parent
@@ -766,11 +766,11 @@ namespace mjcf
 
     /**
      * @brief A FrameYAxisSensor element.
-     * 
+     *
      * "This element creates a sensor that returns the 3D unit vector
      * corresponding to the Y-axis of the spatial frame of the object, in global
      * coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-frameyaxis
      */
     struct FrameYAxisSensor : public Element<FrameYAxisSensor>
@@ -782,7 +782,7 @@ namespace mjcf
 
         /**
          * @brief The type of object to which the sensor is attached.
-         * 
+         *
          * This must be an object type that has a spatial frame. "body" refers to
          * the inertial frame of the body, while "xbody" refers to the regular
          * frame of the body (usually centered at the joint with the parent
@@ -800,11 +800,11 @@ namespace mjcf
 
     /**
      * @brief A FrameZAxisSensor element.
-     * 
+     *
      * "This element creates a sensor that returns the 3D unit vector
      * corresponding to the Z-axis of the spatial frame of the object, in global
      * coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-framezaxis
      */
     struct FrameZAxisSensor : public Element<FrameZAxisSensor>
@@ -816,7 +816,7 @@ namespace mjcf
 
         /**
          * @brief The type of object to which the sensor is attached.
-         * 
+         *
          * This must be an object type that has a spatial frame. "body" refers to
          * the inertial frame of the body, while "xbody" refers to the regular
          * frame of the body (usually centered at the joint with the parent
@@ -834,10 +834,10 @@ namespace mjcf
 
     /**
      * @brief A FrameLinearVelocitySensor element.
-     * 
+     *
      * "This element creates a sensor that returns the 3D linear velocity of the
      * spatial frame of the object, in global coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-framelinvel
      */
     struct FrameLinearVelocitySensor : public Element<FrameLinearVelocitySensor>
@@ -849,7 +849,7 @@ namespace mjcf
 
         /**
          * @brief The type of object to which the sensor is attached.
-         * 
+         *
          * This must be an object type that has a spatial frame. "body" refers to
          * the inertial frame of the body, while "xbody" refers to the regular
          * frame of the body (usually centered at the joint with the parent
@@ -867,10 +867,10 @@ namespace mjcf
 
     /**
      * @brief A FrameAngularVelocitySensor element.
-     * 
+     *
      * "This element creates a sensor that returns the 3D angular velocity of
      * the spatial frame of the object, in global coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-frameangvel
      */
     struct FrameAngularVelocitySensor : public Element<FrameAngularVelocitySensor>
@@ -882,7 +882,7 @@ namespace mjcf
 
         /**
          * @brief The type of object to which the sensor is attached.
-         * 
+         *
          * This must be an object type that has a spatial frame. "body" refers to
          * the inertial frame of the body, while "xbody" refers to the regular
          * frame of the body (usually centered at the joint with the parent
@@ -900,10 +900,10 @@ namespace mjcf
 
     /**
      * @brief A FrameLinearAccelerationSensor element.
-     * 
+     *
      * "This element creates a sensor that returns the 3D linear acceleration of
      * the spatial frame of the object, in global coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-framelinacc
      */
     struct FrameLinearAccelerationSensor : public Element<FrameLinearAccelerationSensor>
@@ -915,7 +915,7 @@ namespace mjcf
 
         /**
          * @brief The type of object to which the sensor is attached.
-         * 
+         *
          * This must be an object type that has a spatial frame. "body" refers to
          * the inertial frame of the body, while "xbody" refers to the regular
          * frame of the body (usually centered at the joint with the parent
@@ -933,10 +933,10 @@ namespace mjcf
 
     /**
      * @brief A FrameAngularAccelerationSensor element.
-     * 
+     *
      * "This element creates a sensor that returns the 3D angular acceleration
      * of the spatial frame of the object, in global coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-frameangacc
      */
     struct FrameAngularAccelerationSensor : public Element<FrameAngularAccelerationSensor>
@@ -948,7 +948,7 @@ namespace mjcf
 
         /**
          * @brief The type of object to which the sensor is attached.
-         * 
+         *
          * This must be an object type that has a spatial frame. "body" refers to
          * the inertial frame of the body, while "xbody" refers to the regular
          * frame of the body (usually centered at the joint with the parent
@@ -966,10 +966,10 @@ namespace mjcf
 
     /**
      * @brief A SubtreeCenterOfMassSensor element.
-     * 
+     *
      * "This element creates sensor that returns the center of mass of the
      * kinematic subtree rooted at a specified body, in global coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-subtreecom
      */
     struct SubtreeCenterOfMassSensor : public Element<SubtreeCenterOfMassSensor>
@@ -989,11 +989,11 @@ namespace mjcf
 
     /**
      * @brief A SubtreeLinearVelocitySensor element.
-     * 
+     *
      * "This element creates sensor that returns the linear velocity of the
      * center of mass of the kinematic subtree rooted at a specified body, in
      * global coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-subtreelinvel
      */
     struct SubtreeLinearVelocitySensor : public Element<SubtreeLinearVelocitySensor>
@@ -1013,11 +1013,11 @@ namespace mjcf
 
     /**
      * @brief A SubtreeAngularMomentumSensor element.
-     * 
+     *
      * "This element creates sensor that returns the angular momentum around the
      * center of mass of the kinematic subtree rooted at a specified body, in
      * global coordinates."
-     * 
+     *
      * @see http://www.mujoco.org/book/XMLreference.html#sensor-subtreeangmom
      */
     struct SubtreeAngularMomentumSensor : public Element<SubtreeAngularMomentumSensor>

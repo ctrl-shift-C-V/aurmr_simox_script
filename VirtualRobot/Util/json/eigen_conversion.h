@@ -14,17 +14,17 @@
 /**
  * Provide `to_json()` and `from_json()` overloads for `nlohmann::json`,
  * which allows simple syntax like:
- * 
+ *
  * @code
  * Eigen::Matrix3f in, out;
- * 
+ *
  * nlohmann::json j;
  * j = in;
  * out = j.get<Eigen::Matrix3f>();
  * @endcode
- * 
+ *
  * @test VirtualRobotJsonEigenConversionTest
- * 
+ *
  * @see https://github.com/nlohmann/json#arbitrary-types-conversions
  */
 namespace Eigen
@@ -53,7 +53,7 @@ namespace Eigen
 
     /**
      * @brief Reads a 4x4 matrix from list of rows or `pos` and `ori` keys.
-     * 
+     *
      * If `j` is an object, reads `matrix` as transformation matrix from `pos` and `ori` keys.
      * Otherweise, reads it from list of rows.
      */

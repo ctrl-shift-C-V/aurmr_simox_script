@@ -980,7 +980,7 @@ namespace VirtualRobot
                         VR_INFO << "Skipping node " << i->getName() << endl;
                 }
             }
- 
+
         }
 
     }

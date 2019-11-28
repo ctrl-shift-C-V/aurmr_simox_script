@@ -144,7 +144,7 @@ void RobotMjcf::setOutputMeshRelativeDirectory(const std::filesystem::path& mesh
     this->outputMeshRelDirectory = meshRelativeDirectory;
 }
 
-void RobotMjcf::setOutputPaths(const std::filesystem::path& outputFile, 
+void RobotMjcf::setOutputPaths(const std::filesystem::path& outputFile,
                                const std::filesystem::path& outputMeshRelativeDirectory)
 {
     setOutputFile(outputFile);
@@ -400,7 +400,7 @@ mjcf::Joint RobotMjcf::addNodeJoint(RobotNodePtr node, mjcf::Body body)
 mjcf::Inertial RobotMjcf::addNodeInertial(RobotNodePtr node, mjcf::Body body)
 {
     const Eigen::Matrix3f matrix = node->getInertiaMatrix();
-    if (matrix.isIdentity(document->getFloatCompPrecision()) 
+    if (matrix.isIdentity(document->getFloatCompPrecision())
         && node->getMass() < document->getFloatCompPrecision())
     {
         // Dont set an inertial element and let it be derived automatically.
@@ -519,7 +519,7 @@ std::filesystem::path RobotMjcf::convertNodeMeshToSTL(RobotNodePtr node)
     }
     if (!fs::is_regular_file(sourceFile))
     {
-        VR_INFO << "Node '" << node->getName() << "': Visualization file " << sourceFile 
+        VR_INFO << "Node '" << node->getName() << "': Visualization file " << sourceFile
                 << " does not exist." << std::endl;
         return "";
     }
@@ -575,8 +575,8 @@ mjcf::Body RobotMjcf::addMocapBody(
 }
 
 mjcf::Body RobotMjcf::addMocapBodyWeld(
-        const std::string& weldBodyName, 
-        const std::string& bodyName, 
+        const std::string& weldBodyName,
+        const std::string& bodyName,
         const std::string& className,
         float geomSize)
 {
@@ -666,7 +666,7 @@ void RobotMjcf::addContactExcludes(RobotNodeSetPtr nodeSet, bool addParentChildE
     addContactExcludes(nodeSet->getNodeNames(), addParentChildExcludes);
 }
 
-void RobotMjcf::addContactExcludes(const std::vector<std::string>& nodeNames, 
+void RobotMjcf::addContactExcludes(const std::vector<std::string>& nodeNames,
                                    bool addParentChildExcludes)
 {
     std::vector<std::pair<std::string, std::string>> excludePairs;
@@ -699,7 +699,7 @@ void RobotMjcf::addContactExcludes(const std::vector<std::string>& nodeNames,
 
     if (addParentChildExcludes)
     {
-        // Add excludes between parent and child elemenets. 
+        // Add excludes between parent and child elemenets.
         // This should actually not be necessary?
         ParentChildContactExcludeVisitor visitor(*document);
         robotBody.accept(visitor);

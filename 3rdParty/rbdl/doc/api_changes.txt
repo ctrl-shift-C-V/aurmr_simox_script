@@ -16,7 +16,7 @@
 - Removed Model::SetFloatingBaseBody(). Use JointTypeFloatingBase instead.
 - LuaModel: extended specification to support ConstraintSets.
 
-2.4.1 -> 2.5.0 
+2.4.1 -> 2.5.0
 - Added an experimental Cython based Python wrapper of RBDL. The API is
   very close to the C++ API. For a brief glimpse of the API see the file
   python/test_wrapper.py.
@@ -49,9 +49,9 @@ erroneous behaviour.
 
 2.3.3 -> 2.4.0 (23 February 2015)
 - Added sparse range-space method ForwardDynamicsContactsRangeSpaceSparse()
-  and ComputeContactImpulsesRangeSpaceSparse() 
+  and ComputeContactImpulsesRangeSpaceSparse()
 - Added null-space method ForwardDynamicsContactsNullSpace()
-  and ComputeContactImpulsesNullSpace() 
+  and ComputeContactImpulsesNullSpace()
 - Renamed ForwardDynamicsContactsLagrangian() to
   ForwardDynamicsContactsDirect() and
   ComputeContactImpulsesLagrangian() to ComputeContactImpulsesDirect()
@@ -82,7 +82,7 @@ erroneous behaviour.
 - rbdl_print_version() now properly prints whether URDFReader was enabled
   at build time
 - build system: fixed roblems especially building of the URDFreader
-- build system: all CMake variables for RBDL are now prefixed with RBDL_ 
+- build system: all CMake variables for RBDL are now prefixed with RBDL_
 - FindRBDL.cmake now can use components to search for the LuaModel or
   URDFReader addon
 
@@ -100,7 +100,7 @@ erroneous behaviour.
 - fixed library version number for the LuaModel addon. It now uses version
   2.3 instead of the wrong 2.2.
 
-2.2.2 -> 2.3.0 (14 March 2014) 
+2.2.2 -> 2.3.0 (14 March 2014)
 - disabled clearing of joint space inertia matrix in CRBA.
   It is expected that the matrix is cleared by the user when neccessary.
 - Added experimental joint type JointTypeEulerZYX. It does not emulate
@@ -126,7 +126,7 @@ erroneous behaviour.
 
 2.2.0 -> 2.2.1 04 (November 2013)
 - properly exporting LuaTables++ functions when using LuaModel addon
-  Fixes linking 
+  Fixes linking
 - fixed exported library version (now at 2.2 as expected)
 
 2.1.0 -> 2.2.0 (28 October 2013)
@@ -138,10 +138,10 @@ erroneous behaviour.
   Model::dof_count.
 - removed "constraint_" prefix from constraint impulses, forces and
   accelerations from the ConstraintSets:
-  renaming required if values are queried  
+  renaming required if values are queried
 - Contact impulses: specification of a contact velocity after a collision:
   added ConstraintSet::v_plus which can be set for the desired constraint
-  velocity after a collision. Previously it used the values stored in 
+  velocity after a collision. Previously it used the values stored in
   ConstraintSet::constraint_acceleration.
   User has to store desired exit velocities manually in CS::v_plus
 

@@ -108,7 +108,7 @@ FILE ( GLOB headers
 	"${CMAKE_CURRENT_SOURCE_DIR}/*.h"
 	)
 
-INSTALL ( FILES ${headers} 
+INSTALL ( FILES ${headers}
 	DESTINATION
-	${CMAKE_INSTALL_INCLUDEDIR}/rbdl/addons/urdfreader 
+	${CMAKE_INSTALL_INCLUDEDIR}/rbdl/addons/urdfreader
 	)

@@ -112,7 +112,7 @@ class Quaternion : public Vector4d {
     static Quaternion fromZYXAngles (const Vector3d &zyx_angles) {
       return Quaternion::fromAxisAngle (Vector3d (0., 0., 1.), zyx_angles[0])
         * Quaternion::fromAxisAngle (Vector3d (0., 1., 0.), zyx_angles[1])
-        * Quaternion::fromAxisAngle (Vector3d (1., 0., 0.), zyx_angles[2]); 
+        * Quaternion::fromAxisAngle (Vector3d (1., 0., 0.), zyx_angles[2]);
     }
 
     static Quaternion fromYXZAngles (const Vector3d &yxz_angles) {
@@ -122,7 +122,7 @@ class Quaternion : public Vector4d {
     }
 
     static Quaternion fromXYZAngles (const Vector3d &xyz_angles) {
-      return Quaternion::fromAxisAngle (Vector3d (0., 0., 01.), xyz_angles[2]) 
+      return Quaternion::fromAxisAngle (Vector3d (0., 0., 01.), xyz_angles[2])
         * Quaternion::fromAxisAngle (Vector3d (0., 1., 0.), xyz_angles[1])
         * Quaternion::fromAxisAngle (Vector3d (1., 0., 0.), xyz_angles[0]);
     }
@@ -186,7 +186,7 @@ class Quaternion : public Vector4d {
 
     /** \brief Converts a 3d angular velocity vector into a 4d derivative of the
     * components of the quaternion.
-    * 
+    *
     * \param omega the angular velocity.
     *
     * \return a 4d vector containing the derivatives of the 4 components of the

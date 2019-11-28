@@ -13,7 +13,7 @@ IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)
   )
 
   set(GUI_UIS
-      ${PROJECT_SOURCE_DIR}/stabilityScene.ui 
+      ${PROJECT_SOURCE_DIR}/stabilityScene.ui
   )
 
  	# create the executable

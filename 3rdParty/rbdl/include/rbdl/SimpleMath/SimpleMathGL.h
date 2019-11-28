@@ -41,7 +41,7 @@ inline Matrix44f RotateMat44 (float rot_deg, float x, float y, float z) {
 			x * x * (1.0f - c) + c,
 			y * x * (1.0f - c) + z * s,
 			x * z * (1.0f - c) - y * s,
-			0.f, 
+			0.f,
 
 			x * y * (1.0f - c) - z * s,
 			y * y * (1.0f - c) + c,
@@ -75,7 +75,7 @@ inline Matrix44f ScaleMat44 (float x, float y, float z) {
 			);
 }
 
-/** Quaternion 
+/** Quaternion
  *
  * order: x,y,z,w
  */
@@ -205,7 +205,7 @@ class Quaternion : public Vector4f {
 		static Quaternion fromEulerZYX (const Vector3f &zyx_angles) {
 			return Quaternion::fromAxisAngle (Vector3f (0., 0., 1.), zyx_angles[0])
 				* Quaternion::fromAxisAngle (Vector3f (0., 1., 0.), zyx_angles[1])
-				* Quaternion::fromAxisAngle (Vector3f (1., 0., 0.), zyx_angles[2]); 
+				* Quaternion::fromAxisAngle (Vector3f (1., 0., 0.), zyx_angles[2]);
 		}
 
 		static Quaternion fromEulerYXZ (const Vector3f &yxz_angles) {
@@ -215,11 +215,11 @@ class Quaternion : public Vector4f {
 		}
 
 		static Quaternion fromEulerXYZ (const Vector3f &xyz_angles) {
-			return Quaternion::fromAxisAngle (Vector3f (0., 0., 01.), xyz_angles[2]) 
+			return Quaternion::fromAxisAngle (Vector3f (0., 0., 01.), xyz_angles[2])
 				* Quaternion::fromAxisAngle (Vector3f (0., 1., 0.), xyz_angles[1])
 				* Quaternion::fromAxisAngle (Vector3f (1., 0., 0.), xyz_angles[0]);
 		}
- 
+
 		Vector3f toEulerZYX () const {
 			return Vector3f (
 					atan2 (-2.f * (*this)[0] * (*this)[1] + 2.f * (*this)[3] * (*this)[2],

@@ -1,11 +1,11 @@
-/** \file example.h 
+/** \file example.h
  * \page SimpleExample A simple example
  *
  * Here is a simple example how one can create a meaningless model and
  * compute the forward dynamics for it:
  *
  * \include example.cc
- * 
+ *
  * If the library itself is already created, one can compile this example
  * with CMake. In the example folder is a CMakeLists.txt file, that can be
  * used to automatically create the makefiles by using <a
