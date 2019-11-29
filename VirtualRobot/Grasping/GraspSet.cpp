@@ -30,7 +30,7 @@ namespace VirtualRobot
         grasps.push_back(grasp);
     }
 
-    bool GraspSet::hasGrasp(GraspPtr grasp)
+    bool GraspSet::hasGrasp(GraspPtr grasp) const
     {
         VR_ASSERT_MESSAGE(grasp, "NULL grasp");
 
@@ -43,7 +43,7 @@ namespace VirtualRobot
         return false;
     }
 
-    bool GraspSet::hasGrasp(const std::string& name)
+    bool GraspSet::hasGrasp(const std::string& name) const
     {
         for (auto & grasp : grasps)
         {
@@ -75,7 +75,7 @@ namespace VirtualRobot
         }
     }
 
-    void GraspSet::print()
+    void GraspSet::print() const
     {
         cout << "**** Grasp set ****" << endl;
         cout << "Name: " << name << endl;
@@ -92,7 +92,7 @@ namespace VirtualRobot
         cout << endl;
     }
 
-    bool GraspSet::isCompatibleGrasp(GraspPtr grasp)
+    bool GraspSet::isCompatibleGrasp(GraspPtr grasp) const
     {
         if (grasp->getRobotType() != robotType)
         {
@@ -107,14 +107,14 @@ namespace VirtualRobot
         return true;
     }
 
-    unsigned int GraspSet::getSize()
+    std::size_t GraspSet::getSize() const
     {
-        return (unsigned int)grasps.size();
+        return grasps.size();
     }
 
-    VirtualRobot::GraspPtr GraspSet::getGrasp(unsigned int n)
+    VirtualRobot::GraspPtr GraspSet::getGrasp(std::size_t n) const
     {
-        if (n >= (unsigned int)grasps.size())
+        if (n >= grasps.size())
         {
             return GraspPtr();
         }
@@ -122,7 +122,7 @@ namespace VirtualRobot
         return grasps[n];
     }
 
-    VirtualRobot::GraspPtr GraspSet::getGrasp(const std::string& name)
+    VirtualRobot::GraspPtr GraspSet::getGrasp(const std::string& name) const
     {
         for (auto & grasp : grasps)
         {
@@ -136,22 +136,22 @@ namespace VirtualRobot
     }
 
 
-    std::string GraspSet::getName()
+    std::string GraspSet::getName() const
     {
         return name;
     }
 
-    std::string GraspSet::getRobotType()
+    std::string GraspSet::getRobotType() const
     {
         return robotType;
     }
 
-    std::string GraspSet::getEndEffector()
+    std::string GraspSet::getEndEffector() const
     {
         return eef;
     }
 
-    std::string GraspSet::getXMLString(int tabs)
+    std::string GraspSet::getXMLString(int tabs) const
     {
         std::stringstream ss;
         std::string t;
@@ -174,7 +174,7 @@ namespace VirtualRobot
     }
 
 
-    VirtualRobot::GraspSetPtr GraspSet::clone()
+    VirtualRobot::GraspSetPtr GraspSet::clone() const
     {
         GraspSetPtr res(new GraspSet(name, robotType, eef));
 
@@ -214,7 +214,7 @@ namespace VirtualRobot
         grasps.clear();
     }
 
-    std::vector< GraspPtr > GraspSet::getGrasps()
+    std::vector< GraspPtr > GraspSet::getGrasps() const
     {
         std::vector< GraspPtr > res;
 

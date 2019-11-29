@@ -50,44 +50,53 @@ namespace VirtualRobot
         */
         virtual ~GraspSet();
 
-        std::string getName();
-        std::string getRobotType();
-        std::string getEndEffector();
+        std::string getName() const;
+        std::string getRobotType() const;
+        std::string getEndEffector() const;
 
 
         void addGrasp(GraspPtr grasp);
-        bool hasGrasp(GraspPtr grasp);
+        bool hasGrasp(GraspPtr grasp) const;
 
-        bool hasGrasp(const std::string& name);
+        bool hasGrasp(const std::string& name) const;
         bool removeGrasp(GraspPtr grasp);
         bool removeGrasp(unsigned int i);
         void removeAllGrasps();
-        bool isCompatibleGrasp(GraspPtr grasp);
+        bool isCompatibleGrasp(GraspPtr grasp) const;
         void clear();
         void includeGraspSet(GraspSetPtr grasps);
 
         /*!
             Return number of grasps stored in this set.
         */
-        unsigned int getSize();
+        std::size_t getSize() const;
 
         /*!
             Return grasp number n. If n is out of bounds an empty GraspPtr is returned.
         */
-        GraspPtr getGrasp(unsigned int n);
-        GraspPtr getGrasp(const std::string& name);
+        GraspPtr getGrasp(std::size_t n) const;
+        GraspPtr getGrasp(const std::string& name) const;
 
-        void print();
+        void print() const;
 
-        std::string getXMLString(int tabs = 1);
+        std::string getXMLString(int tabs = 1) const;
 
-        GraspSetPtr clone();
+        GraspSetPtr clone() const;
 
-        std::vector< GraspPtr > getGrasps();
+        std::vector< GraspPtr > getGrasps() const;
 
         //! Sets preshape string of all grasps
         void setPreshape(const std::string& preshape);
-
+        
+        auto begin() const
+        {
+            return grasps.begin();
+        }
+        auto end() const
+        {
+            return grasps.end();
+        }
+        
     protected:
         std::vector< GraspPtr > grasps;
         std::string name;
