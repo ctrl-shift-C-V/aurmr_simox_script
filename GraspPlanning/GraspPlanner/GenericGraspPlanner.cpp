@@ -5,6 +5,8 @@
 #include <VirtualRobot/RobotConfig.h>
 #include <VirtualRobot/Nodes/RobotNode.h>
 #include <VirtualRobot/math/Helpers.h>
+#include <VirtualRobot/CollisionDetection/CollisionChecker.h>
+
 
 #include "../GraspQuality/GraspQualityMeasureWrenchSpace.h"
 #include "../GraspQuality/GraspQualityMeasure.h"

@@ -22,16 +22,14 @@
 */
 #pragma once
 
-#include "VirtualRobot.h"
 #include "MathTools.h"
-#include "CollisionDetection/CollisionChecker.h"
 
 #include <Eigen/Core>
 #include <vector>
 
 namespace VirtualRobot
 {
-
+    class CollisionChecker;
     /*!
         An axis oriented bounding box.
         Todo: Some parts of this class are similar to MathTools::OOBB.

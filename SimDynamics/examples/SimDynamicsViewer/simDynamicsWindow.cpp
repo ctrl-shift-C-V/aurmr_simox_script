@@ -6,6 +6,7 @@
 #include <VirtualRobot/Nodes/RobotNodeRevolute.h>
 #include <SimDynamics/DynamicsEngine/BulletEngine/BulletEngine.h>
 #include <VirtualRobot/XML/ObjectIO.h>
+#include <VirtualRobot/CollisionDetection/CollisionChecker.h>
 #include <QFileDialog>
 #include <Eigen/Geometry>
 

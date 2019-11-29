@@ -1,3 +1,4 @@
+#include "CollisionDetection/CollisionChecker.h"
 #include "SupportPolygon.h"
 
 using namespace std;

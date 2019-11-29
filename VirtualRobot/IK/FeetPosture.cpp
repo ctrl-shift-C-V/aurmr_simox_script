@@ -1,3 +1,4 @@
+#include "CollisionDetection/CollisionChecker.h"
 #include "FeetPosture.h"
 #include <VirtualRobot/Robot.h>
 
