@@ -96,28 +96,28 @@ namespace simox
             }
 
             //build transform
-            _t = transform_t::Identity();
-            _t.template block<3, 1>(0, 0) = normalized0;
-            _d(0) = len0;
+            this->_t = transform_t::Identity();
+            this->_t.template block<3, 1>(0, 0) = normalized0;
+            this->_d(0) = len0;
 
             const vector_t cross01 = normalized0.cross(normalized1);
             const float_t direction_match = cross01.dot(normalized2);
 
             if (direction_match > 0)
             {
-                _t.template block<3, 1>(0, 1) = normalized1;
-                _t.template block<3, 1>(0, 2) = normalized2;
-                _d(1) = len1;
-                _d(2) = len2;
+                this->_t.template block<3, 1>(0, 1) = normalized1;
+                this->_t.template block<3, 1>(0, 2) = normalized2;
+                this->_d(1) = len1;
+                this->_d(2) = len2;
             }
             else
             {
-                _t.template block<3, 1>(0, 1) = normalized2;
-                _t.template block<3, 1>(0, 2) = normalized1;
-                _d(1) = len2;
-                _d(2) = len1;
+                this->_t.template block<3, 1>(0, 1) = normalized2;
+                this->_t.template block<3, 1>(0, 2) = normalized1;
+                this->_d(1) = len2;
+                this->_d(2) = len1;
             }
-            _t.template block<3, 1>(0, 3) = corner;
+            this->_t.template block<3, 1>(0, 3) = corner;
         }
         
         OrientedBox(const base& b) : base(b) {}
@@ -166,9 +166,6 @@ namespace simox
         {
             return transformed(t).template cast<T>();
         }
-    private:
-        transform_t _t;
-        vector_t _d;
     };
 }
 
