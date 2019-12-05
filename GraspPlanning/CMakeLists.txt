@@ -15,14 +15,11 @@ MACRO(ADD_GRASPSTUDIO_TEST TEST_NAME)
                  COMMAND ${Simox_TEST_DIR}/${TEST_NAME} --output_format=XML --log_level=all --report_level=no)
 ENDMACRO(ADD_GRASPSTUDIO_TEST)
 
-
-find_package(QHULL REQUIRED)
-
-
 SET(SOURCES
     ApproachMovementGenerator.cpp
     ApproachMovementSurfaceNormal.cpp
     ContactConeGenerator.cpp
+    ConvexHullGeneratorQhull.cpp
     ConvexHullGenerator.cpp
     MeshConverter.cpp
 
@@ -74,9 +71,8 @@ endif ()
 
 ADD_LIBRARY (GraspStudio SHARED ${SOURCES} ${INCLUDES})
 
-target_include_directories(GraspStudio PUBLIC ${QHULL_INCLUDE_DIRS})
 
-TARGET_LINK_LIBRARIES (GraspStudio PUBLIC Saba VirtualRobot ${QHULL_LIBRARIES})
+TARGET_LINK_LIBRARIES (GraspStudio PUBLIC Saba VirtualRobot)
 
 # .DLL path
 SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Simox_BIN_DIR})
