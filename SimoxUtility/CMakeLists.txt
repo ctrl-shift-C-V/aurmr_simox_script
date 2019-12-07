@@ -50,6 +50,7 @@ SET(SOURCES
 
 SET(INCLUDES
     SimoxUtility.h
+    EigenStdVector.h
 
     meta/eigen/enable_if_compile_time_size.h
 
