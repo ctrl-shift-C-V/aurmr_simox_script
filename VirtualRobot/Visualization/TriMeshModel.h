@@ -67,9 +67,21 @@ namespace VirtualRobot
         static Eigen::Vector3f CreateNormal(const Eigen::Vector3f& vertex1, const Eigen::Vector3f& vertex2, const Eigen::Vector3f& vertex3);
         void addFace(const MathTools::TriangleFace& face);
         int addVertex(const Eigen::Vector3f& vertex);
+        int addVertex(float x, float y, float z)
+        {
+            return addVertex({x, y, z});
+        }
         unsigned int addNormal(const Eigen::Vector3f& normal);
+        unsigned int addNormal(float x, float y, float z)
+        {
+            return addNormal({x, y, z});
+        }
         unsigned int addColor(const VisualizationFactory::Color& color);
         unsigned int addColor(const Eigen::Vector4f& color);
+        unsigned int addColor(float r, float g, float b, float a)
+        {
+            return addColor(Eigen::Vector4f{r, g, b, a});
+        }
         unsigned int addMaterial(const VisualizationFactory::PhongMaterial& material);
         void addFace(unsigned int id0, unsigned int id1, unsigned int id2);
         void clear();
