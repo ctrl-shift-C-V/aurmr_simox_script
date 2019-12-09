@@ -42,7 +42,7 @@ namespace GraspStudio
         /*!
             Creates a convex hull of the points stored in pointsInput.
         */
-        static VirtualRobot::MathTools::ConvexHull3DPtr CreateConvexHull(std::vector<Eigen::Vector3f>& pointsInput);
+        static VirtualRobot::MathTools::ConvexHull3DPtr CreateConvexHull(const std::vector<Eigen::Vector3f>& pointsInput);
         static VirtualRobot::MathTools::ConvexHull3DPtr CreateConvexHull(VirtualRobot::TriMeshModelPtr pointsInput);
         static VirtualRobot::MathTools::ConvexHull6DPtr CreateConvexHull(std::vector<VirtualRobot::MathTools::ContactPoint>& pointsInput);
 
@@ -51,8 +51,8 @@ namespace GraspStudio
         /*!
             Convert points to qhull format
         */
-        static bool ConvertPoints(std::vector<Eigen::Vector3f>& points, double* storePointsQHull);
-        static bool ConvertPoints(std::vector<VirtualRobot::MathTools::ContactPoint>& points, double* storePointsQHull);
+        static bool ConvertPoints(const std::vector<Eigen::Vector3f>& points, double* storePointsQHull);
+        static bool ConvertPoints(const std::vector<VirtualRobot::MathTools::ContactPoint>& points, double* storePointsQHull);
 
         static void PrintVertices(std::vector<VirtualRobot::MathTools::ContactPoint>& pointsInput);
 

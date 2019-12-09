@@ -38294,7 +38294,7 @@ using namespace VirtualRobot::MathTools;
 namespace GraspStudio
 {
 
-VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(std::vector<Eigen::Vector3f>& pointsInput)
+VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(const std::vector<Eigen::Vector3f> &pointsInput)
 {
     //clock_t startT = clock();
 

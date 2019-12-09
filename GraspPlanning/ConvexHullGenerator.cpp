@@ -19,7 +19,7 @@ using namespace VirtualRobot::MathTools;
 
 namespace GraspStudio
 {
-    bool ConvexHullGenerator::ConvertPoints(std::vector<Eigen::Vector3f>& points, double* storePointsQHull)
+    bool ConvexHullGenerator::ConvertPoints(const std::vector<Eigen::Vector3f>& points, double* storePointsQHull)
     {
         for (int i = 0; i < (int)points.size(); i++)
         {
@@ -30,7 +30,7 @@ namespace GraspStudio
         return true;
     }
 
-    bool ConvexHullGenerator::ConvertPoints(std::vector<ContactPoint>& points, double* storePointsQHull)
+    bool ConvexHullGenerator::ConvertPoints(const std::vector<ContactPoint>& points, double* storePointsQHull)
     {
         for (int i = 0; i < (int)points.size(); i++)
         {
