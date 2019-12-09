@@ -29,6 +29,19 @@ namespace VirtualRobot
         }
     }
 
+    TriMeshModel::TriMeshModel(const MathTools::ConvexHull3D& ch)
+    {
+        for (const auto& v : ch.vertices)
+        {
+            addVertex(v);
+        }
+
+        for (const auto& f : ch.faces)
+        {
+            addFace(f);
+        }
+    }
+
 
 
     /**

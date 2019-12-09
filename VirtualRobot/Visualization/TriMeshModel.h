@@ -53,6 +53,7 @@ namespace VirtualRobot
         /// Construct from vector of triangles.
         TriMeshModel(const std::vector<triangle>& triangles);
 
+        TriMeshModel(const MathTools::ConvexHull3D& ch);
         /// Virtual destructor.
         virtual ~TriMeshModel() = default;
 
