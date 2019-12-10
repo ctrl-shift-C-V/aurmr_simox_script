@@ -51,7 +51,8 @@ namespace GraspStudio
         if (verbose)
         {
             GRASPSTUDIO_INFO << ": Searching " << nrGrasps << " grasps for EEF '" << approach->getEEF()->getName()
-                             << "' and object '" << graspQuality->getObject()->getName() << "'.\n";
+                             << "' and object '" << graspQuality->getObject()->getName() << "'.\n"
+                             << "timeout set to " << timeOutMS << " ms.\n";
             GRASPSTUDIO_INFO << ": Approach movements are generated with " << approach->getName() << endl;
             GRASPSTUDIO_INFO << ": Grasps are evaluated with " << graspQuality->getName() << endl;
         }
@@ -76,7 +77,11 @@ namespace GraspStudio
 
         if (verbose)
         {
-            GRASPSTUDIO_INFO << ": created " << nGraspsCreated << " valid grasps in " << nLoop << " loops" << endl;
+            const auto endt = std::chrono::system_clock::now();
+            const auto dt = endt - startTime;
+            const auto dtms = std::chrono::duration_cast<std::chrono::milliseconds>(dt);
+            GRASPSTUDIO_INFO << ": created " << nGraspsCreated << " valid grasps in " << nLoop << " loops"
+                              << "\n took " << dtms.count() << " ms " << endl;
         }
 
         return nGraspsCreated;
