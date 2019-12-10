@@ -378,6 +378,9 @@ void GraspPlannerWindow::plan()
         planner.reset(new GraspStudio::GenericGraspPlanner(grasps, qualityMeasure, approach, quality, forceClosure));
     }
 
+    robot->setPropagatingJointValuesEnabled(UI.checkBoxPropagateJointValues->isChecked());
+    eefCloned->setPropagatingJointValuesEnabled(UI.checkBoxPropagateJointValues->isChecked());
+
     int nr = planner->plan(nrGrasps, timeout);
     VR_INFO << " Grasp planned:" << nr << endl;
     int start = static_cast<int>(grasps->getSize()) - nrGrasps - 1;

@@ -182,6 +182,16 @@
             </property>
            </widget>
           </item>
+          <item row="8" column="0">
+           <widget class="QCheckBox" name="checkBoxPropagateJointValues">
+            <property name="toolTip">
+             <string>This might lead to infinite loops</string>
+            </property>
+            <property name="text">
+             <string>Propagate joints</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -247,7 +257,7 @@
      <x>0</x>
      <y>0</y>
      <width>1079</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>
