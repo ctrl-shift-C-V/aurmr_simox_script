@@ -60,7 +60,7 @@ namespace simox::math
     pos_rpy_to_mat4f(const Eigen::MatrixBase<D1>& pos, float roll, float pitch, float yaw)
     {
         Eigen::Matrix4f m4;
-        pos_mat3f_to_mat4f(pos, roll, pitch, yaw, m4);
+        pos_rpy_to_mat4f(pos, roll, pitch, yaw, m4);
         return m4;
     }
 
@@ -69,7 +69,7 @@ namespace simox::math
     pos_rpy_to_mat4f(float x, float y, float z, const Eigen::MatrixBase<D1>& rpy)
     {
         Eigen::Matrix4f m4;
-        pos_mat3f_to_mat4f(x, y, z, rpy, m4);
+        pos_rpy_to_mat4f(x, y, z, rpy, m4);
         return m4;
     }
 
@@ -78,7 +78,7 @@ namespace simox::math
     pos_rpy_to_mat4f(const Eigen::MatrixBase<D1>& pos, const Eigen::MatrixBase<D2>& rpy)
     {
         Eigen::Matrix4f m4;
-        pos_mat3f_to_mat4f(pos, rpy, m4);
+        pos_rpy_to_mat4f(pos, rpy, m4);
         return m4;
     }
 }
