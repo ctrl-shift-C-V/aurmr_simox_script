@@ -54,6 +54,8 @@ SET(INCLUDES
 
     meta/eigen/enable_if_compile_time_size.h
 
+    algorithm/for_each_if.h
+
     shapes/OrientedBoxBase.h
     shapes/OrientedBox.h
     shapes/XYConstrainedOrientedBox.h
