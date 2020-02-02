@@ -99,6 +99,7 @@ SET(INCLUDES
     math/convert/xyyaw_to_mat4f.h
 
     math/distance/delta_angle.h
+    math/distance/angle_between.h
 
     math/periodic_clamp.h
 )
