@@ -281,6 +281,26 @@ namespace simox
         {
             return center().template cast<T>();
         }
+
+        vector_t corner_min() const
+        {
+            return from_box_frame(vector_t::Zero());
+        }
+        template<class T>
+        vector_casted<T> corner_min() const
+        {
+            return corner_min().template cast<T>();
+        }
+
+        vector_t corner_max() const
+        {
+            return from_box_frame(_d);
+        }
+        template<class T>
+        vector_casted<T> corner_max() const
+        {
+            return corner_max().template cast<T>();
+        }
     protected:
         transform_t _t{transform_t::Identity()};
         vector_t _d{vector_t::Zero()};
