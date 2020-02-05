@@ -53,6 +53,7 @@ SET(INCLUDES
     EigenStdVector.h
 
     meta/eigen/enable_if_compile_time_size.h
+    meta/has_member_macros/has_member.hpp
 
     algorithm/for_each_if.h
 
