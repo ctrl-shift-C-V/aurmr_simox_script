@@ -9,7 +9,6 @@
 #include <cfloat>
 #include <cstdlib>
 
-using namespace Eigen;
 using namespace VirtualRobot;
 
 namespace GraspStudio
@@ -95,7 +94,7 @@ namespace GraspStudio
         return result;
     }
 
-    std::vector<Matrix4f> GraspEvaluationPoseUncertainty::generatePoses(const Matrix4f& objectGP, const EndEffector::ContactInfoVector& contacts)
+    std::vector<Eigen::Matrix4f> GraspEvaluationPoseUncertainty::generatePoses(const Eigen::Matrix4f& objectGP, const EndEffector::ContactInfoVector& contacts)
     {
         Eigen::Vector3f centerPos = getMean(contacts);
         if (centerPos.hasNaN())
@@ -195,7 +194,7 @@ namespace GraspStudio
     }
 
     GraspEvaluationPoseUncertainty::PoseEvalResult GraspEvaluationPoseUncertainty::evaluatePose(
-        EndEffectorPtr eef, ObstaclePtr object, const Matrix4f& objectPose,
+        EndEffectorPtr eef, ObstaclePtr object, const Eigen::Matrix4f& objectPose,
         GraspQualityMeasurePtr qm, VirtualRobot::RobotConfigPtr preshape,
         float closingStepSize, float stepSizeSpeedFactor)
     {
@@ -386,7 +385,7 @@ namespace GraspStudio
         return res;
     }
 
-    Vector3f GraspEvaluationPoseUncertainty::getMean(const EndEffector::ContactInfoVector& contacts) const
+    Eigen::Vector3f GraspEvaluationPoseUncertainty::getMean(const EndEffector::ContactInfoVector& contacts) const
     {
         Eigen::Vector3f mean = mean.Zero();
         if (contacts.empty())

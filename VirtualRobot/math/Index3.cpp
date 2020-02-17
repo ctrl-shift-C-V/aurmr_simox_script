@@ -21,18 +21,17 @@
 
 #include "Index3.h"
 
-using namespace math;
-
-
-Index3::Index3(int x, int y, int z)
-    : x(x), y(y), z(z)
+namespace math
 {
-}
+    Index3::Index3(int x, int y, int z)
+        : x(x), y(y), z(z)
+    {
+    }
 
-std::string Index3::ToString()
-{
-    std::stringstream ss;
-    ss << x << " " << y << " " << " " << z;
-    return ss.str();
+    std::string Index3::ToString()
+    {
+        std::stringstream ss;
+        ss << x << " " << y << " " << " " << z;
+        return ss.str();
+    }
 }
-

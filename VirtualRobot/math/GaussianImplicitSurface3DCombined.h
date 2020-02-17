@@ -56,9 +56,7 @@ private:
 
     float Predict(const Eigen::Vector3f& pos);
     void CalculateCovariance(const std::vector<Eigen::Vector3f>& points, const std::vector<Eigen::Vector3f>& normalPoints, float R, const std::vector<float>& noise, float normalNoise);
-    //static VectorXf Cholesky(MatrixXf matrix);
-    //static VectorXf FitModel(MatrixXf L, List<DataR3R1> targets);
-    //VectorXf SpdMatrixSolve(MatrixXf a, bool IsUpper, VectorXf b);
+
     void MatrixInvert(const Eigen::VectorXd& b);
     Eigen::VectorXd getCux(const Eigen::Vector3f& pos);
 };

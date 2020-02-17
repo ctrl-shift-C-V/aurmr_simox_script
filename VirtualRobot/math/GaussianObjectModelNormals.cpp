@@ -25,35 +25,37 @@
 #include "MathForwardDefinitions.h"
 #include "Kernels.h"
 
-using namespace math;
-
-GaussianObjectModelNormals::GaussianObjectModelNormals(float noise, float normalNoise, float normalScale)
-   : noise(noise), normalNoise(normalNoise), normalScale(normalScale)
+namespace math
 {
-    model = gpModel = GaussianImplicitSurface3DNormalsPtr(new GaussianImplicitSurface3DNormals(std::unique_ptr<WilliamsPlusKernel>(new WilliamsPlusKernel)));
-}
-void GaussianObjectModelNormals::AddContact(Contact contact)
-{
-     //std::cout<<"addContact"<<std::endl;
-     ImplicitObjectModel::AddContact(contact);
-}
-void GaussianObjectModelNormals::Update()
-{
-    std::cout<<"contacts"<<contacts->size()<<std::endl;
-    if(contacts->size()==1){
-        Contact c = contacts->at(0);
-        Eigen::Vector3f dir1, dir2;
-        contacts->push_back(Contact(c.Position()+Helpers::GetOrthonormalVectors(c.Normal(),dir1,dir2),c.Normal()));
+    GaussianObjectModelNormals::GaussianObjectModelNormals(float noise, float normalNoise, float normalScale)
+        : noise(noise), normalNoise(normalNoise), normalScale(normalScale)
+    {
+        model = gpModel = GaussianImplicitSurface3DNormalsPtr(new GaussianImplicitSurface3DNormals(std::unique_ptr<WilliamsPlusKernel>(new WilliamsPlusKernel)));
     }
-    gpModel->Calculate(*contacts,noise,normalNoise,normalScale);
-}
-
-std::vector<float> GaussianObjectModelNormals::GetContactWeights()
-{
-    std::vector<float> result;
-    for (size_t i = 0; i < contacts->size(); ++i) {
-        result.push_back(1.f);
+    void GaussianObjectModelNormals::AddContact(Contact contact)
+    {
+        //std::cout<<"addContact"<<std::endl;
+        ImplicitObjectModel::AddContact(contact);
     }
-    return result;
-}
+    void GaussianObjectModelNormals::Update()
+    {
+        std::cout << "contacts" << contacts->size() << std::endl;
+        if (contacts->size() == 1)
+        {
+            Contact c = contacts->at(0);
+            Eigen::Vector3f dir1, dir2;
+            contacts->push_back(Contact(c.Position() + Helpers::GetOrthonormalVectors(c.Normal(), dir1, dir2), c.Normal()));
+        }
+        gpModel->Calculate(*contacts, noise, normalNoise, normalScale);
+    }
 
+    std::vector<float> GaussianObjectModelNormals::GetContactWeights()
+    {
+        std::vector<float> result;
+        for (size_t i = 0; i < contacts->size(); ++i)
+        {
+            result.push_back(1.f);
+        }
+        return result;
+    }
+}

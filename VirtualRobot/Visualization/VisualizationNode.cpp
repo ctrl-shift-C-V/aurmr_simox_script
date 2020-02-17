@@ -5,6 +5,7 @@
 * @copyright  2010 Manfred Kroehnert
 */
 
+#include <SimoxUtility/filesystem/remove_trailing_separator.h>
 
 #include "VisualizationNode.h"
 #include "TriMeshModel.h"
@@ -12,16 +13,6 @@
 #include "VirtualRobot/VirtualRobot.h"
 #include "VirtualRobot/VirtualRobotException.h"
 #include "VirtualRobot/XML/BaseIO.h"
-
-namespace
-{
-    namespace fs = std::filesystem;
-    inline fs::path remove_trailing_separator(fs::path p)
-    {
-        p /= "dummy";
-        return p.parent_path();
-    }
-}
 
 namespace VirtualRobot
 {
@@ -267,7 +258,7 @@ namespace VirtualRobot
 
     bool VisualizationNode::saveModel(const std::string& modelPath, const std::string& filename)
     {
-        const auto completePath = remove_trailing_separator(modelPath);
+        const auto completePath = simox::fs::remove_trailing_separator(modelPath);
 
         if (!std::filesystem::is_directory(completePath))
         {

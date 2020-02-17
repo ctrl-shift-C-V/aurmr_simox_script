@@ -42,11 +42,11 @@ BOOST_AUTO_TEST_CASE(testRBDLTransformationOrientation)
     model.AppendBody(
                 SpatialTransform(m.inverse(), // I have to use the rotation matrix for the frame transformation from A to B (Type 2) <------------
                                  Eigen::Vector3d(0,0,0)),
-                     jointA, Body(), "bodyA");
+                     jointA, RigidBodyDynamics::Body(), "bodyA");
 
     Joint jointB = Joint(JointTypeRevolute, Eigen::Vector3d::UnitZ());
     model.AppendBody(SpatialTransform(Eigen::Matrix3d::Identity(), Eigen::Vector3d(0,0,0)),
-                     jointB, Body(), "bodyB");
+                     jointB, RigidBodyDynamics::Body(), "bodyB");
 
     Eigen::Vector3d positionInBodyB = CalcBaseToBodyCoordinates(model, Eigen::Vector2d::Zero(), 1, Eigen::Vector3d(1,0,0));
     std::cout << "rotation: position in bodyB\n" << positionInBodyB << endl;
@@ -67,11 +67,11 @@ BOOST_AUTO_TEST_CASE(testRBDLTransformationTranslation)
     model.AppendBody(
                 SpatialTransform(Eigen::Matrix3d::Identity(),
                                  Eigen::Vector3d(1,0,0)), // I have to use the translation for the transformation between body A and B (type 1) <--------------------
-                     jointA, Body(), "bodyA");
+                     jointA, RigidBodyDynamics::Body(), "bodyA");
 
     Joint jointB = Joint(JointTypeRevolute, Eigen::Vector3d::UnitZ());
     model.AppendBody(SpatialTransform(Eigen::Matrix3d::Identity(), Eigen::Vector3d(0,0,0)),
-                     jointB, Body(), "bodyB");
+                     jointB, RigidBodyDynamics::Body(), "bodyB");
 
     Eigen::Vector3d positionInBodyB = CalcBaseToBodyCoordinates(model, Eigen::Vector2d::Zero(), 1, Eigen::Vector3d(0,0,0));
     std::cout << "translation: position in bodyB\n" << positionInBodyB << endl;

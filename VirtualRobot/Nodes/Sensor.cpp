@@ -8,8 +8,6 @@
 
 #include <Eigen/Core>
 
-using namespace boost;
-
 namespace VirtualRobot
 {
 

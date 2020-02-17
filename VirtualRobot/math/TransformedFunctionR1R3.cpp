@@ -23,23 +23,21 @@
 #include "TransformedFunctionR1R3.h"
 #include "Helpers.h"
 
-using namespace math;
-
-
-
-TransformedFunctionR1R3::TransformedFunctionR1R3(const Eigen::Matrix4f& transformation, AbstractFunctionR1R3Ptr func)
-    : transformation(transformation), func(func)
+namespace math
 {
+    TransformedFunctionR1R3::TransformedFunctionR1R3(const Eigen::Matrix4f& transformation, AbstractFunctionR1R3Ptr func)
+        : transformation(transformation), func(func)
+    {
 
-}
+    }
 
+    Eigen::Vector3f TransformedFunctionR1R3::Get(float t)
+    {
+        return Helpers::TransformPosition(transformation, func->Get(t));
+    }
 
-Eigen::Vector3f TransformedFunctionR1R3::Get(float t)
-{
-    return Helpers::TransformPosition(transformation, func->Get(t));
-}
-
-Eigen::Vector3f TransformedFunctionR1R3::GetDerivative(float t)
-{
-    return Helpers::TransformDirection(transformation, func->GetDerivative(t));
+    Eigen::Vector3f TransformedFunctionR1R3::GetDerivative(float t)
+    {
+        return Helpers::TransformDirection(transformation, func->GetDerivative(t));
+    }
 }

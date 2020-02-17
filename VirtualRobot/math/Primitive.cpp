@@ -22,17 +22,10 @@
 #include "Line.h"
 #include "Primitive.h"
 
-using namespace math;
-
-
-
-void Primitive::AddTriangle(Eigen::Vector3f v1, Eigen::Vector3f v2, Eigen::Vector3f v3)
+namespace math
 {
-    push_back(Triangle(v1, v2, v3));
+    void Primitive::AddTriangle(Eigen::Vector3f v1, Eigen::Vector3f v2, Eigen::Vector3f v3)
+    {
+        push_back(Triangle(v1, v2, v3));
+    }
 }
-
-
-
-
-
-

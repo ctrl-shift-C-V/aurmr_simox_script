@@ -15,19 +15,19 @@
 
 namespace Eigen
 {
-    std::ostream& operator<<(std::ostream& os, const Vector3f& rhs)
+    std::ostream& operator<<(std::ostream& os, const Eigen::Vector3f& rhs)
     {
         static const IOFormat iof(4, 0, " ", " ", "", "", "[", "]");
         os << rhs.format(iof);
         return os;
     }
 
-    bool operator==(const Quaternionf& lhs, const Quaternionf& rhs)
+    bool operator==(const Eigen::Quaternionf& lhs, const Eigen::Quaternionf& rhs)
     {
         return lhs.isApprox(rhs);
     }
 
-    std::ostream& operator<<(std::ostream& os, const Quaternionf& rhs)
+    std::ostream& operator<<(std::ostream& os, const Eigen::Quaternionf& rhs)
     {
         os << "[ " << rhs.w() << " | " << rhs.x() << " " << rhs.y() << " " << rhs.z() << " ]";
         return os;
@@ -56,9 +56,6 @@ BOOST_AUTO_TEST_CASE(test_boost_lexical_cast)
 
 BOOST_AUTO_TEST_SUITE_END()
 
-using namespace Eigen;
-
-
 BOOST_AUTO_TEST_CASE(test_parseCoeffs)
 {
     const std::string string = "1 -3 2.4";
@@ -74,7 +71,7 @@ BOOST_AUTO_TEST_CASE(test_parseCoeffs)
 
 BOOST_AUTO_TEST_CASE(test_attrib_conversion_vector3f)
 {
-    Vector3f in(1, -3, 2.4f), out;
+    Eigen::Vector3f in(1, -3, 2.4f), out;
 
     const std::string string = mjcf::toAttr(in);
     mjcf::fromAttr(string, out);
@@ -85,7 +82,7 @@ BOOST_AUTO_TEST_CASE(test_attrib_conversion_vector3f)
 
 BOOST_AUTO_TEST_CASE(test_attrib_conversion_quaternionf)
 {
-    Quaternionf in(AngleAxisf(1.4f, Vector3f(.5, -1, .3f).normalized())), out;
+    Eigen::Quaternionf in(Eigen::AngleAxisf(1.4f, Eigen::Vector3f(.5, -1, .3f).normalized())), out;
 
     const std::string string = mjcf::toAttr(in);
     mjcf::fromAttr(string, out);

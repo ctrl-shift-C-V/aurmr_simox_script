@@ -17,20 +17,11 @@
 #include "rapidxml.hpp"
 #include "mujoco/RobotMjcf.h"
 
+#include <SimoxUtility/filesystem/remove_trailing_separator.h>
 
 #include <vector>
 #include <fstream>
 #include <iostream>
-
-namespace
-{
-    namespace fs = std::filesystem;
-    inline fs::path remove_trailing_separator(fs::path p)
-    {
-        p /= "dummy";
-        return p.parent_path();
-    }
-}
 
 namespace VirtualRobot
 {
@@ -1477,9 +1468,9 @@ namespace VirtualRobot
         THROW_VR_EXCEPTION_IF(!robot, "NULL data");
 
 
-        std::filesystem::path p = remove_trailing_separator(basePath);
-        std::filesystem::path fn = remove_trailing_separator(filename);
-        std::filesystem::path pModelDir = remove_trailing_separator(modelDir);
+        std::filesystem::path p = simox::fs::remove_trailing_separator(basePath);
+        std::filesystem::path fn = simox::fs::remove_trailing_separator(filename);
+        std::filesystem::path pModelDir = simox::fs::remove_trailing_separator(modelDir);
         std::filesystem::path fnComplete = p / fn;
         std::filesystem::path modelDirComplete = p / pModelDir;
 

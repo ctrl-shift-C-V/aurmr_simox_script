@@ -45,7 +45,6 @@
 #include <Eigen/Geometry>
 
 using namespace std;
-using namespace Eigen;
 
 namespace VirtualRobot
 {
@@ -170,22 +169,22 @@ namespace VirtualRobot
 
 
 
-    Path::Path(const list<VectorXd> &path, double maxDeviation) :
+    Path::Path(const list<Eigen::VectorXd> &path, double maxDeviation) :
         length(0.0)
     {
         if(path.size() < 2)
             return;
-        list<VectorXd>::const_iterator config1 = path.begin();
-        list<VectorXd>::const_iterator config2 = config1;
+        list<Eigen::VectorXd>::const_iterator config1 = path.begin();
+        list<Eigen::VectorXd>::const_iterator config2 = config1;
         config2++;
-        list<VectorXd>::const_iterator config3;
-        VectorXd startConfig = *config1;
+        list<Eigen::VectorXd>::const_iterator config3;
+        Eigen::VectorXd startConfig = *config1;
         while(config2 != path.end()) {
             config3 = config2;
             config3++;
             if(maxDeviation > 0.0 && config3 != path.end()) {
                 CircularPathSegment* blendSegment = new CircularPathSegment(0.5 * (*config1 + *config2), *config2, 0.5 * (*config2 + *config3), maxDeviation);
-                VectorXd endConfig = blendSegment->getConfig(0.0);
+                Eigen::VectorXd endConfig = blendSegment->getConfig(0.0);
                 if((endConfig - startConfig).norm() > 0.000001) {
                     pathSegments.push_back(new LinearPathSegment(startConfig, endConfig));
                 }
@@ -247,17 +246,17 @@ namespace VirtualRobot
         return *it;
     }
 
-    VectorXd Path::getConfig(double s) const {
+    Eigen::VectorXd Path::getConfig(double s) const {
         const PathSegment* pathSegment = getPathSegment(s);
         return pathSegment->getConfig(s);
     }
 
-    VectorXd Path::getTangent(double s) const {
+    Eigen::VectorXd Path::getTangent(double s) const {
         const PathSegment* pathSegment = getPathSegment(s);
         return pathSegment->getTangent(s);
     }
 
-    VectorXd Path::getCurvature(double s) const {
+    Eigen::VectorXd Path::getCurvature(double s) const {
         const PathSegment* pathSegment = getPathSegment(s);
         return pathSegment->getCurvature(s);
     }

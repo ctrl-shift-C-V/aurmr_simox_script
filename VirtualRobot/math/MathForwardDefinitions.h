@@ -65,14 +65,6 @@ private:
 
 namespace math
 {
-
-
-    //typedef Eigen::Vector2f Eigen::Vector2f;
-    //typedef Eigen::Vector3f Eigen::Vector3f;
-    //typedef Eigen::Matrix3f Matrix3f;
-    //typedef Eigen::MatrixXf MatrixXf;
-    //typedef Eigen::VectorXf VectorXf;
-    //typedef Nullable<float> floatOpt;
     typedef Nullable<Eigen::Vector3f> Vec3Opt;
 
     typedef boost::shared_ptr<class AbstractFunctionR1R2> AbstractFunctionR1R2Ptr;

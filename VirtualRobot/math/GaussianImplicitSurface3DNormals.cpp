@@ -79,7 +79,7 @@ Eigen::VectorXd GaussianImplicitSurface3DNormals::getCux(const Eigen::Vector3f& 
         Cux(i * 4 + 2) = kernel->Kernel_dj(pos, samples.at(i).Position(), R, 1);
         Cux(i * 4 + 3) = kernel->Kernel_dj(pos, samples.at(i).Position(), R, 2);
     }
-    return Cux;//VectorXf;
+    return Cux;//Eigen::VectorXf;
 }
 float GaussianImplicitSurface3DNormals::Predict(const Eigen::Vector3f& pos)
 {

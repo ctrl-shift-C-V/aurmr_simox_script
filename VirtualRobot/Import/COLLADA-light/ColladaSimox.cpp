@@ -12,7 +12,6 @@
 #include <Eigen/Geometry>
 
 using namespace std;
-using namespace boost;
 //using namespace VirtualRobot;
 
 #define DBG_NODE(NAME) (this->name.compare(NAME)==0)
@@ -140,12 +139,12 @@ namespace Collada
     {
         VirtualRobot::RobotNodeFactoryPtr revoluteNodeFactory = VirtualRobot::RobotNodeFactory::fromName(VirtualRobot::RobotNodeRevoluteFactory::getName(), NULL);
         VirtualRobot::RobotNodeFactoryPtr prismaticNodeFactory = VirtualRobot::RobotNodeFactory::fromName(VirtualRobot::RobotNodePrismaticFactory::getName(), NULL);
-        float jointLimitLow = lexical_cast<float>(this->kinematics_info.select_single_node("limits/min/float").node().child_value());
-        float jointLimitHigh = lexical_cast<float>(this->kinematics_info.select_single_node("limits/max/float").node().child_value());
-        float acceleration = lexical_cast<float>(this->motion_info.select_single_node("acceleration/float").node().child_value());
-        float torque = lexical_cast<float>(this->motion_info.select_single_node("jerk/float").node().child_value());
-        float velocity = lexical_cast<float>(this->motion_info.select_single_node("speed/float").node().child_value());
-        float deceleration = lexical_cast<float>(this->motion_info.select_single_node("deceleration/float").node().child_value());
+        float jointLimitLow = boost::lexical_cast<float>(this->kinematics_info.select_single_node("limits/min/float").node().child_value());
+        float jointLimitHigh = boost::lexical_cast<float>(this->kinematics_info.select_single_node("limits/max/float").node().child_value());
+        float acceleration = boost::lexical_cast<float>(this->motion_info.select_single_node("acceleration/float").node().child_value());
+        float torque = boost::lexical_cast<float>(this->motion_info.select_single_node("jerk/float").node().child_value());
+        float velocity = boost::lexical_cast<float>(this->motion_info.select_single_node("speed/float").node().child_value());
+        float deceleration = boost::lexical_cast<float>(this->motion_info.select_single_node("deceleration/float").node().child_value());
         Eigen::Vector3f axis = getVector3f(this->joint_axis.child("axis"));
         float jointOffset = 0.0;
         Eigen::Matrix4f preJointTransformation = Eigen::Matrix4f::Identity();
@@ -184,7 +183,7 @@ namespace Collada
         {
             //assert(rigidBodies.size()==1);
             pugi::xml_node technique = rigidBodies[0].child("technique_common");
-            float mass = lexical_cast<float>(technique.child("mass").child_value());
+            float mass = boost::lexical_cast<float>(technique.child("mass").child_value());
             Eigen::Matrix4f massFrameTransformation = Eigen::Matrix4f::Identity();
             BOOST_FOREACH(pugi::xpath_node trafo, technique.select_nodes(".//mass_frame/*"))
             {

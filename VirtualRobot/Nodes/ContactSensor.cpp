@@ -3,8 +3,6 @@
 #include "ContactSensorFactory.h"
 #include "../XML/BaseIO.h"
 
-using namespace boost;
-
 namespace VirtualRobot
 {
 

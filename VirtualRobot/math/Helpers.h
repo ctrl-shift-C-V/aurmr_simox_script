@@ -385,7 +385,7 @@ namespace math
 namespace Eigen
 {
     template <typename Derived>
-    std::ostream& operator<< (std::ostream& os, const QuaternionBase<Derived>& quat)
+    std::ostream& operator<< (std::ostream& os, const Eigen::QuaternionBase<Derived>& quat)
     {
         os << "[ " << quat.w() << " | "
            << quat.x() << " " << quat.y() << "  " << quat.z() << " ]";

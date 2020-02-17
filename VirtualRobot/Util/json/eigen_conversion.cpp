@@ -4,7 +4,7 @@
 namespace Eigen
 {
     template <>
-    void from_json<Vector3f>(const nlohmann::json& j, MatrixBase<Vector3f>& vector)
+    void from_json<Eigen::Vector3f>(const nlohmann::json& j, Eigen::MatrixBase<Eigen::Vector3f>& vector)
     {
         if (j.is_object())
         {
@@ -20,7 +20,7 @@ namespace Eigen
 
 
     template <>
-    void from_json<Matrix4f>(const nlohmann::json& j, MatrixBase<Matrix4f>& matrix)
+    void from_json<Eigen::Matrix4f>(const nlohmann::json& j, Eigen::MatrixBase<Eigen::Matrix4f>& matrix)
     {
         if (j.is_object())
         {

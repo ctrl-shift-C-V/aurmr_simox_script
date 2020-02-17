@@ -22,63 +22,62 @@
 #include "LineR2.h"
 
 
-using namespace math;
-
-
-
-LineR2::LineR2(Eigen::Vector3f pos, Eigen::Vector3f dir)
-    : pos(pos), dir(dir)
+namespace math
 {
+    LineR2::LineR2(Eigen::Vector3f pos, Eigen::Vector3f dir)
+        : pos(pos), dir(dir)
+    {
+    }
+
+    LineR2 LineR2::Normalized()
+    {
+        return LineR2(pos, dir.normalized());
+    }
+
+    Eigen::Vector3f LineR2::Get(float t)
+    {
+        return pos + t * dir;
+    }
+
+    Eigen::Vector3f LineR2::GetDerivative(float)
+    {
+        return dir;
+    }
+
+    Eigen::Vector3f LineR2::GetClosestPoint(Eigen::Vector3f p)
+    {
+        return pos - (pos - p).dot(dir) * dir / dir.squaredNorm();
+    }
+
+    float LineR2::GetT(Eigen::Vector3f p)
+    {
+        return (p - pos).dot(dir) / dir.squaredNorm();
+
+    }
+
+    std::string LineR2::ToString()
+    {
+        std::stringstream ss;
+        ss << "(" << pos << ") (" << dir << ")";
+        return ss.str();
+
+    }
+
+    //bool LineR2::Intersect(const Eigen::Vector3f &pos1, const Eigen::Vector3f &dir1, const Eigen::Vector3f &pos2, const Eigen::Vector3f &dir2, float &t, float &u)
+    //{
+    //
+    //}
+    //
+    //Vec3Opt LineR2::Intersect(const LineR2& l2)
+    //{
+    //    float t, u;
+    //    if (Intersect(this, l2, &t, &u))
+    //    {
+    //        return Vec3Opt(Get(t));
+    //    }
+    //    else
+    //    {
+    //        return Vec3Opt();
+    //    }
+    //}
 }
-
-LineR2 LineR2::Normalized()
-{
-    return LineR2(pos,dir.normalized());
-}
-
-Eigen::Vector3f LineR2::Get(float t)
-{
-    return pos + t * dir;
-}
-
-Eigen::Vector3f LineR2::GetDerivative(float)
-{
-    return dir;
-}
-
-Eigen::Vector3f LineR2::GetClosestPoint(Eigen::Vector3f p)
-{
-    return pos - (pos - p).dot(dir) * dir / dir.squaredNorm();
-}
-
-float LineR2::GetT(Eigen::Vector3f p)
-{
-    return (p - pos).dot(dir) / dir.squaredNorm();
-
-}
-
-std::string LineR2::ToString()
-{
-    std::stringstream ss;
-    ss << "(" << pos << ") (" << dir << ")";
-    return ss.str();
-
-}
-
-//bool LineR2::Intersect(const Eigen::Vector3f &pos1, const Eigen::Vector3f &dir1, const Eigen::Vector3f &pos2, const Eigen::Vector3f &dir2, float &t, float &u)
-//{
-//
-//}
-//
-//Vec3Opt LineR2::Intersect(const LineR2& l2)
-//{
-//    float t, u;
-//    if (Intersect(this, l2, &t, &u))
-//    {
-//        return Vec3Opt(Get(t));
-//    }
-//    else
-//    {
-//        return Vec3Opt();
-//    }
-//}

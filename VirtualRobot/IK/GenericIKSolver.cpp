@@ -15,8 +15,6 @@
 
 #include <algorithm>
 
-using namespace Eigen;
-
 namespace VirtualRobot
 {
 

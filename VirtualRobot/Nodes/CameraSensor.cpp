@@ -2,8 +2,6 @@
 #include "CameraSensor.h"
 #include "CameraSensorFactory.h"
 
-using namespace boost;
-
 namespace VirtualRobot
 {
 

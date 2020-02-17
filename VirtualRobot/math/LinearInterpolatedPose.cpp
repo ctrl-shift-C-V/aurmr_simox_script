@@ -22,23 +22,24 @@
 #include "LinearInterpolatedPose.h"
 #include "Helpers.h"
 
-using namespace math;
-
-LinearInterpolatedPose::LinearInterpolatedPose(const Eigen::Matrix4f &startPose, const Eigen::Matrix4f &endPose, float startT, float endT, bool clamp)
-    : ori(Helpers::GetOrientation(startPose), Helpers::GetOrientation(endPose), startT, endT, clamp),
-      startPos(Helpers::GetPosition(startPose)),
-      endPos(Helpers::GetPosition(endPose)),
-      startT(startT), endT(endT), clamp(clamp)
+namespace math
 {
-
-}
-
-Eigen::Matrix4f LinearInterpolatedPose::Get(float t)
-{
-    float f = Helpers::ILerp(startT, endT, t);
-    if(clamp)
+    LinearInterpolatedPose::LinearInterpolatedPose(const Eigen::Matrix4f& startPose, const Eigen::Matrix4f& endPose, float startT, float endT, bool clamp)
+        : ori(Helpers::GetOrientation(startPose), Helpers::GetOrientation(endPose), startT, endT, clamp),
+          startPos(Helpers::GetPosition(startPose)),
+          endPos(Helpers::GetPosition(endPose)),
+          startT(startT), endT(endT), clamp(clamp)
     {
-        f = Helpers::Clamp(0, 1, f);
+
     }
-    return Helpers::CreatePose(Helpers::Lerp(startPos, endPos, f), ori.Get(t));
+
+    Eigen::Matrix4f LinearInterpolatedPose::Get(float t)
+    {
+        float f = Helpers::ILerp(startT, endT, t);
+        if (clamp)
+        {
+            f = Helpers::Clamp(0, 1, f);
+        }
+        return Helpers::CreatePose(Helpers::Lerp(startPos, endPos, f), ori.Get(t));
+    }
 }

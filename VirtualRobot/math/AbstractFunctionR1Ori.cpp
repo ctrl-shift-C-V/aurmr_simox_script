@@ -23,8 +23,6 @@
 
 #include "AbstractFunctionR1Ori.h"
 
-using namespace armarx;
-
 AbstractFunctionR1Ori::AbstractFunctionR1Ori()
 {
 }

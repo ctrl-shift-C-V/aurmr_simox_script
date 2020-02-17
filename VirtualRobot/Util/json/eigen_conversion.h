@@ -31,25 +31,25 @@ namespace Eigen
 {
 
 
-    // MatrixBase (non-specialized).
+    // Eigen::MatrixBase (non-specialized).
 
     /// Writes the matrix as list of rows.
     template <typename Derived>
-    void to_json(nlohmann::json& j, const MatrixBase<Derived>& matrix);
+    void to_json(nlohmann::json& j, const Eigen::MatrixBase<Derived>& matrix);
 
     /// Reads the matrix from list of rows.
     template <typename Derived>
-    void from_json(const nlohmann::json& j, MatrixBase<Derived>& matrix);
+    void from_json(const nlohmann::json& j, Eigen::MatrixBase<Derived>& matrix);
 
 
-    // Specialization for Vector3f (implemented in .cpp)
+    // Specialization for Eigen::Vector3f (implemented in .cpp)
 
     /// If `j` is an object, reads vector from `x, y, z` keys. Otherwise, reads it as matrix.
     template <>
-    void from_json<Vector3f>(const nlohmann::json& j, MatrixBase<Vector3f>& vector);
+    void from_json<Eigen::Vector3f>(const nlohmann::json& j, Eigen::MatrixBase<Eigen::Vector3f>& vector);
 
 
-    // Specialization for Matrix4f as transformation matrix (implemented in .cpp).
+    // Specialization for Eigen::Matrix4f as transformation matrix (implemented in .cpp).
 
     /**
      * @brief Reads a 4x4 matrix from list of rows or `pos` and `ori` keys.
@@ -58,18 +58,18 @@ namespace Eigen
      * Otherweise, reads it from list of rows.
      */
     template <>
-    void from_json<Matrix4f>(const nlohmann::json& j, MatrixBase<Matrix4f>& matrix);
+    void from_json<Eigen::Matrix4f>(const nlohmann::json& j, Eigen::MatrixBase<Eigen::Matrix4f>& matrix);
 
 
-    // Quaternion
+    // Eigen::Quaternion
 
     /// Writes the quaternion with `qw, qx, qy, qz` keys.
     template <typename Derived>
-    void to_json(nlohmann::json& j, const QuaternionBase<Derived>& quat);
+    void to_json(nlohmann::json& j, const Eigen::QuaternionBase<Derived>& quat);
 
     /// Reads the quaternion from `qw, qx, qy, qz` keys.
     template <typename Derived>
-    void from_json(const nlohmann::json& j, QuaternionBase<Derived>& quat);
+    void from_json(const nlohmann::json& j, Eigen::QuaternionBase<Derived>& quat);
 
 
 
@@ -84,7 +84,7 @@ namespace jsonbase
 
     /// Writes the matrix as list of rows.
     template <typename Derived>
-    void to_json(nlohmann::json& j, const MatrixBase<Derived>& matrix)
+    void to_json(nlohmann::json& j, const Eigen::MatrixBase<Derived>& matrix)
     {
         for (int row = 0; row < matrix.rows(); ++row)
         {
@@ -99,10 +99,10 @@ namespace jsonbase
 
     /// Reads the matrix from list of rows.
     template <typename Derived>
-    void from_json(const nlohmann::json& j, MatrixBase<Derived>& matrix)
+    void from_json(const nlohmann::json& j, Eigen::MatrixBase<Derived>& matrix)
     {
-        using Scalar = typename MatrixBase<Derived>::Scalar;
-        using Index = typename MatrixBase<Derived>::Index;
+        using Scalar = typename Eigen::MatrixBase<Derived>::Scalar;
+        using Index = typename Eigen::MatrixBase<Derived>::Index;
 
         for (std::size_t row = 0; row < j.size(); ++row)
         {
@@ -118,20 +118,20 @@ namespace jsonbase
 
 
     template <typename Derived>
-    void to_json(nlohmann::json& j, const MatrixBase<Derived>& matrix)
+    void to_json(nlohmann::json& j, const Eigen::MatrixBase<Derived>& matrix)
     {
         jsonbase::to_json(j, matrix);
     }
 
     template <typename Derived>
-    void from_json(const nlohmann::json& j, MatrixBase<Derived>& matrix)
+    void from_json(const nlohmann::json& j, Eigen::MatrixBase<Derived>& matrix)
     {
         jsonbase::from_json(j, matrix);
     }
 
 
     template <typename Derived>
-    void to_json(nlohmann::json& j, const QuaternionBase<Derived>& quat)
+    void to_json(nlohmann::json& j, const Eigen::QuaternionBase<Derived>& quat)
     {
         j["qw"] = quat.w();
         j["qx"] = quat.x();
@@ -140,9 +140,9 @@ namespace jsonbase
     }
 
     template <typename Derived>
-    void from_json(const nlohmann::json& j, QuaternionBase<Derived>& quat)
+    void from_json(const nlohmann::json& j, Eigen::QuaternionBase<Derived>& quat)
     {
-        using Scalar = typename QuaternionBase<Derived>::Scalar;
+        using Scalar = typename Eigen::QuaternionBase<Derived>::Scalar;
         quat.w() = j.at("qw").get<Scalar>();
         quat.x() = j.at("qx").get<Scalar>();
         quat.y() = j.at("qy").get<Scalar>();

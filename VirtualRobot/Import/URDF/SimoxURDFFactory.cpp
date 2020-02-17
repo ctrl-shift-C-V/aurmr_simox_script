@@ -18,7 +18,6 @@
 
 
 using namespace std;
-using namespace urdf;
 
 namespace VirtualRobot
 {
@@ -202,7 +201,7 @@ namespace VirtualRobot
         return result;
     }
 
-    VirtualRobot::VisualizationNodePtr SimoxURDFFactory::convertVisu(std::shared_ptr<Geometry> g, urdf::Pose& pose, const std::string& basePath)
+    VirtualRobot::VisualizationNodePtr SimoxURDFFactory::convertVisu(std::shared_ptr<urdf::Geometry> g, urdf::Pose& pose, const std::string& basePath)
     {
 
         const float scale = 1000.0f; // mm
@@ -218,14 +217,14 @@ namespace VirtualRobot
         {
             case urdf::Geometry::BOX:
             {
-                std::shared_ptr<Box> b = boost::dynamic_pointer_cast<Box>(g);
+                std::shared_ptr<urdf::Box> b = boost::dynamic_pointer_cast<urdf::Box>(g);
                 res = factory->createBox(b->dim.x * scale, b->dim.y * scale, b->dim.z * scale);
             }
             break;
 
             case urdf::Geometry::SPHERE:
             {
-                std::shared_ptr<Sphere> s = boost::dynamic_pointer_cast<Sphere>(g);
+                std::shared_ptr<urdf::Sphere> s = boost::dynamic_pointer_cast<urdf::Sphere>(g);
                 res = factory->createSphere(s->radius * scale);
             }
             break;
@@ -233,7 +232,7 @@ namespace VirtualRobot
 
             case urdf::Geometry::CYLINDER:
             {
-                std::shared_ptr<Cylinder> c = boost::dynamic_pointer_cast<Cylinder>(g);
+                std::shared_ptr<urdf::Cylinder> c = boost::dynamic_pointer_cast<urdf::Cylinder>(g);
                 res = factory->createCylinder(c->radius * scale, c->length * scale);
 
             }
@@ -241,7 +240,7 @@ namespace VirtualRobot
 
             case urdf::Geometry::MESH:
             {
-                std::shared_ptr<Mesh> m = boost::dynamic_pointer_cast<Mesh>(g);
+                std::shared_ptr<urdf::Mesh> m = boost::dynamic_pointer_cast<urdf::Mesh>(g);
                 std::string filename = getFilename(m->filename, basePath);
                 res = factory->getVisualizationFromFile(filename, false, m->scale.x, m->scale.y, m->scale.z);
             }
@@ -311,7 +310,7 @@ namespace VirtualRobot
         return res;
     }
 
-    RobotNodePtr SimoxURDFFactory::createBodyNode(RobotPtr robo, std::shared_ptr<Link> urdfBody, const std::string& basePath, bool useColModelsIfNoVisuModel)
+    RobotNodePtr SimoxURDFFactory::createBodyNode(RobotPtr robo, std::shared_ptr<urdf::Link> urdfBody, const std::string& basePath, bool useColModelsIfNoVisuModel)
     {
         RobotNodePtr result;
 
@@ -396,7 +395,7 @@ namespace VirtualRobot
         return result;
     }
 
-    RobotNodePtr SimoxURDFFactory::createJointNode(RobotPtr robo, std::shared_ptr<Joint> urdfJoint)
+    RobotNodePtr SimoxURDFFactory::createJointNode(RobotPtr robo, std::shared_ptr<urdf::Joint> urdfJoint)
     {
         RobotNodePtr result;
 

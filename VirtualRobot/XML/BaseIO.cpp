@@ -579,7 +579,7 @@ namespace VirtualRobot
      */
     void BaseIO::getLowerCase(std::string& aString)
     {
-        std::transform(aString.begin(), aString.end(), aString.begin(), tolower);
+        std::transform(aString.begin(), aString.end(), aString.begin(), [](unsigned char c){ return std::tolower(c); });
     }
 
 

@@ -26,16 +26,7 @@
 
 #include <Inventor/VRMLnodes/SoVRMLGroup.h>
 
-
-namespace
-{
-    namespace fs = std::filesystem;
-    inline fs::path remove_trailing_separator(fs::path p)
-    {
-        p /= "dummy";
-        return p.parent_path();
-    }
-}
+#include <SimoxUtility/filesystem/remove_trailing_separator.h>
 
 
 namespace VirtualRobot
@@ -446,8 +437,8 @@ namespace VirtualRobot
         std::string outFile = filename;
         bool vrml = true; // may be changed later according to file extension
 
-        auto completePath = remove_trailing_separator(modelPath);
-        auto fn = remove_trailing_separator(outFile);
+        auto completePath = simox::fs::remove_trailing_separator(modelPath);
+        auto fn = simox::fs::remove_trailing_separator(outFile);
 
         if (!std::filesystem::is_directory(completePath))
         {

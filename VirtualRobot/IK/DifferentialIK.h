@@ -80,7 +80,7 @@ namespace VirtualRobot
         DifferentialIK dIK(leftArm);
 
         // should yield the target vector.
-        Vector3f target_position;
+        Eigen::Vector3f target_position;
         // ...
 
         // Set the target for the end effector.
@@ -151,10 +151,10 @@ namespace VirtualRobot
             Given a target pose matrix and the actual tcp pose, the pseudo inverse Jacobian matrix can be used to compute the first Taylor expansion of the IK as follows:
             \code
             // given pose matrices
-            Matrix4f target_pose, actual_pose;
+            Eigen::Matrix4f target_pose, actual_pose;
 
             // the error vector
-            VectorXd e(6);
+            Eigen::VectorXd e(6);
 
             // The translational error is just the vector  between the actual and the target position
             e.segment(0,3) = target_pose(0,3,3,1) - actual_pose(0,3,3,1);
@@ -162,11 +162,11 @@ namespace VirtualRobot
             // For the rotational error, the transformation between the poses has to be calculated and
             // reformulated into the rotation axis and angle. The error is then the rotation axis scaled
             // by the angle in radians.
-            Matrix4f orientation = targets_pose * actual_pose.inverse();
-            AngleAxis<float> aa(orientation.block<3,3>(0,0));
+            Eigen::Matrix4f orientation = targets_pose * actual_pose.inverse();
+            Eigen::AngleAxis<float> aa(orientation.block<3,3>(0,0));
             e.segment(3,3) = aa.axis()*aa.angle();
             // or
-            AngleAxis orientation( target_pose * actual_pose.inverse()   )
+            Eigen::AngleAxis orientation( target_pose * actual_pose.inverse()   )
             e.block(3,3) = orientation.axis() * orientation.angle();
 
             // Calculate the IK

@@ -25,7 +25,6 @@
 #include <GraspPlanning/ConvexHullGenerator.h>
 
 using namespace std;
-using namespace Eigen;
 using namespace VirtualRobot;
 
 namespace GraspStudio

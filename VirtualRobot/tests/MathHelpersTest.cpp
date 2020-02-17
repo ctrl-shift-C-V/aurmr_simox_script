@@ -12,10 +12,7 @@
 #include <stdio.h>
 #include <random>
 
-
-using namespace Eigen;
 using Helpers = math::Helpers;
-
 
 BOOST_AUTO_TEST_SUITE(MathHelpers)
 
@@ -118,15 +115,15 @@ struct BlockFixture
 {
     BlockFixture()
     {
-        quat = Quaternionf{
-            AngleAxisf(static_cast<float>(M_PI), Vector3f::UnitZ())
-            * AngleAxisf(static_cast<float>(M_PI_2), Vector3f::UnitY())
+        quat = Eigen::Quaternionf{
+            Eigen::AngleAxisf(static_cast<float>(M_PI), Eigen::Vector3f::UnitZ())
+            * Eigen::AngleAxisf(static_cast<float>(M_PI_2), Eigen::Vector3f::UnitY())
         };
 
-        quat2 = AngleAxisf(static_cast<float>(M_PI_4), Vector3f::UnitX()) * quat;
+        quat2 = Eigen::AngleAxisf(static_cast<float>(M_PI_4), Eigen::Vector3f::UnitX()) * quat;
 
-        pos = Vector3f{ 1, 2, 3 };
-        pos2 = Vector3f{ 4, 5, 6 };
+        pos = Eigen::Vector3f{ 1, 2, 3 };
+        pos2 = Eigen::Vector3f{ 4, 5, 6 };
 
         ori = quat.toRotationMatrix();
         ori2 = quat2.toRotationMatrix();
@@ -136,10 +133,10 @@ struct BlockFixture
         pose.block<3, 3>(0, 0) = ori;
     }
 
-    Matrix4f pose;
-    Vector3f pos, pos2;
-    Matrix3f ori, ori2;
-    Quaternionf quat, quat2;
+    Eigen::Matrix4f pose;
+    Eigen::Vector3f pos, pos2;
+    Eigen::Matrix3f ori, ori2;
+    Eigen::Quaternionf quat, quat2;
 };
 
 
@@ -150,7 +147,7 @@ using namespace math;
 
 BOOST_AUTO_TEST_CASE(test_Position_const)
 {
-    BOOST_CHECK_EQUAL(Helpers::Position(const_cast<const Matrix4f&>(pose)), pos);
+    BOOST_CHECK_EQUAL(Helpers::Position(const_cast<const Eigen::Matrix4f&>(pose)), pos);
 }
 
 BOOST_AUTO_TEST_CASE(test_Position_nonconst)
@@ -188,21 +185,21 @@ BOOST_AUTO_TEST_CASE(test_Pose_matrix_and_rotation_matrix)
 
 BOOST_AUTO_TEST_CASE(test_Pose_position)
 {
-    Matrix4f posePos = posePos.Identity();
+    Eigen::Matrix4f posePos = posePos.Identity();
     posePos.block<3, 1>(0, 3) = pos;
     BOOST_CHECK_EQUAL(Helpers::Pose(pos), posePos);
 }
 
 BOOST_AUTO_TEST_CASE(test_Pose_orientation_matrix)
 {
-    Matrix4f poseOri = poseOri.Identity();
+    Eigen::Matrix4f poseOri = poseOri.Identity();
     poseOri.block<3, 3>(0, 0) = ori;
     BOOST_CHECK_EQUAL(Helpers::Pose(ori), poseOri);
 }
 
 BOOST_AUTO_TEST_CASE(test_Pose_quaternion)
 {
-    Matrix4f poseOri = poseOri.Identity();
+    Eigen::Matrix4f poseOri = poseOri.Identity();
     poseOri.block<3, 3>(0, 0) = ori;
     BOOST_CHECK_EQUAL(Helpers::Pose(quat), poseOri);
 }
@@ -213,8 +210,8 @@ BOOST_AUTO_TEST_SUITE_END()
 
 struct OrthogonolizeFixture
 {
-    void test(double angle, const Vector3d& axis, float noiseAmpl, float precAngularDist, float precOrth = -1);
-    Eigen::Matrix3f test(Matrix3f matrix, float noiseAmpl, float precOrth = -1);
+    void test(double angle, const Eigen::Vector3d& axis, float noiseAmpl, float precAngularDist, float precOrth = -1);
+    Eigen::Matrix3f test(Eigen::Matrix3f matrix, float noiseAmpl, float precOrth = -1);
 
     template <typename Distribution>
     static Eigen::Matrix3f Random(Distribution& distrib)
@@ -226,7 +223,7 @@ struct OrthogonolizeFixture
 
 
 void OrthogonolizeFixture::test(
-        double angle, const Vector3d& axis, float noiseAmpl, float precAngularDist, float precOrth)
+        double angle, const Eigen::Vector3d& axis, float noiseAmpl, float precAngularDist, float precOrth)
 {
     // construct matrix with double to avoid rounding errors
     Eigen::AngleAxisd rot(angle, axis);
@@ -236,12 +233,12 @@ void OrthogonolizeFixture::test(
 
     Eigen::Matrix3f orth = test(matrix, noiseAmpl, precOrth);
 
-    Quaternionf quatOrth(orth);
+    Eigen::Quaternionf quatOrth(orth);
     BOOST_TEST_MESSAGE("Angular distance: " << quatOrth.angularDistance(quat.cast<float>()));
     BOOST_CHECK_LE(quatOrth.angularDistance(quat.cast<float>()), precAngularDist);
 }
 
-Matrix3f OrthogonolizeFixture::test(Matrix3f matrix, float noiseAmpl, float _precOrth)
+Eigen::Matrix3f OrthogonolizeFixture::test(Eigen::Matrix3f matrix, float noiseAmpl, float _precOrth)
 {
     const float precOrth = _precOrth > 0 ? _precOrth : 1e-6f;
 

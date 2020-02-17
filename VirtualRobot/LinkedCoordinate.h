@@ -139,13 +139,13 @@ namespace VirtualRobot
          * unit marix.
          * @returns A homogeneous matrix of the pose
          * @sa getPose()
-         * @details If you are only interested in the translational part use iCoord::getPosition() or Matrix4f::block<3,1>(0,3).
+         * @details If you are only interested in the translational part use iCoord::getPosition() or Eigen::Matrix4f::block<3,1>(0,3).
          * @throw VirtualRobotException An exception is thrown if frame is NULL.
          */
         Eigen::Matrix4f getInFrame(const RobotNodePtr& frame) const;
 
         /** Returns the actual pose stored in this object.
-         * @details If you are only interested in the translational part use iCoord::getPosition() or Matrix4f::block<3,1>(0,3).
+         * @details If you are only interested in the translational part use iCoord::getPosition() or Eigen::Matrix4f::block<3,1>(0,3).
          */
         inline Eigen::Matrix4f getPose() const
         {

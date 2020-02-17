@@ -21,14 +21,12 @@
 
 #include "ImplicitObjectModel.h"
 
-using namespace math;
-
-
+ namespace math
+{
 ImplicitObjectModel::ImplicitObjectModel()
 {
     contacts = ContactListPtr(new ContactList());
 }
-
 
 void ImplicitObjectModel::AddContact(Contact contact)
 {
@@ -36,10 +34,9 @@ void ImplicitObjectModel::AddContact(Contact contact)
     Update();
 }
 
-
 void ImplicitObjectModel::Clear()
 {
     contacts->clear();
     //Update();
 }
-
+ }

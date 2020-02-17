@@ -22,42 +22,39 @@
 #include "GridCacheFloat3.h"
 #include "Array3D.h"
 
-using namespace math;
-
-
-
-GridCacheFloat3::GridCacheFloat3(int size, std::function<float (Index3)>& getData)
+namespace math
 {
-    this->size = size;
-    this->getData = getData;
-    data = Array3DFloatPtr(new Array3D<float>(size));
-    valid = Array3DBoolPtr(new Array3D<bool>(size));
-
-    for (int x = 0; x < size; x++)
+    GridCacheFloat3::GridCacheFloat3(int size, std::function<float (Index3)>& getData)
     {
-        for (int y = 0; y < size; y++)
+        this->size = size;
+        this->getData = getData;
+        data = Array3DFloatPtr(new Array3D<float>(size));
+        valid = Array3DBoolPtr(new Array3D<bool>(size));
+
+        for (int x = 0; x < size; x++)
         {
-            for (int z = 0; z < size; z++)
+            for (int y = 0; y < size; y++)
             {
-                valid->Set(x,y,z, false);
+                for (int z = 0; z < size; z++)
+                {
+                    valid->Set(x, y, z, false);
+                }
             }
         }
     }
 
-}
-
-
-float GridCacheFloat3::Get(int x, int y, int z)
-{
-    if (valid->Get(x,y,z))
+    float GridCacheFloat3::Get(int x, int y, int z)
     {
-        return data->Get(x,y,z);
-    }
-    else
-    {
-        float val = getData(Index3(x, y, z));
-        data->Set(x,y,z,val);
-        valid->Set(x,y,z, true);
-        return val;
+        if (valid->Get(x, y, z))
+        {
+            return data->Get(x, y, z);
+        }
+        else
+        {
+            float val = getData(Index3(x, y, z));
+            data->Set(x, y, z, val);
+            valid->Set(x, y, z, true);
+            return val;
+        }
     }
 }

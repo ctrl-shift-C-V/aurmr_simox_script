@@ -24,8 +24,6 @@
 #include "SimpleAbstractFunctionR1R6.h"
 #include "Helpers.h"
 
-using namespace armarx;
-
 SimpleAbstractFunctionR1R6::SimpleAbstractFunctionR1R6()
 {
 }

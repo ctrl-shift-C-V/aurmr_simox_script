@@ -21,37 +21,36 @@
 
 #include "WeightedAverage.h"
 
-using namespace math;
-
-
-
-void math::WeightedFloatAverage::Add(float value, float weight)
+namespace math
 {
-    sum += value * weight;
-    weightSum += weight;
-}
+    void math::WeightedFloatAverage::Add(float value, float weight)
+    {
+        sum += value * weight;
+        weightSum += weight;
+    }
 
-float WeightedFloatAverage::Average()
-{
-    return sum / weightSum;
-}
+    float WeightedFloatAverage::Average()
+    {
+        return sum / weightSum;
+    }
 
-float WeightedFloatAverage::WeightSum()
-{
-    return weightSum;
-}
-void math::WeightedVec3Average::Add(Eigen::Vector3f value, float weight)
-{
-    sum += value * weight;
-    weightSum += weight;
-}
+    float WeightedFloatAverage::WeightSum()
+    {
+        return weightSum;
+    }
+    void math::WeightedVec3Average::Add(Eigen::Vector3f value, float weight)
+    {
+        sum += value * weight;
+        weightSum += weight;
+    }
 
-Eigen::Vector3f WeightedVec3Average::Average()
-{
-    return sum / weightSum;
-}
+    Eigen::Vector3f WeightedVec3Average::Average()
+    {
+        return sum / weightSum;
+    }
 
-float WeightedVec3Average::WeightSum()
-{
-    return weightSum;
+    float WeightedVec3Average::WeightSum()
+    {
+        return weightSum;
+    }
 }

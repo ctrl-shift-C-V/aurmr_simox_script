@@ -5,8 +5,6 @@
 
 #include <algorithm>
 
-using namespace Eigen;
-
 //#define CHECK_PERFORMANCE
 
 namespace VirtualRobot
@@ -24,12 +22,12 @@ namespace VirtualRobot
     JacobiProvider::~JacobiProvider()
     = default;
 
-    MatrixXd JacobiProvider::getJacobianMatrixD()
+    Eigen::MatrixXd JacobiProvider::getJacobianMatrixD()
     {
         return getJacobianMatrix().cast<double>();
     }
 
-    MatrixXd JacobiProvider::getJacobianMatrixD(SceneObjectPtr tcp)
+    Eigen::MatrixXd JacobiProvider::getJacobianMatrixD(SceneObjectPtr tcp)
     {
         return getJacobianMatrix(tcp).cast<double>();
     }
@@ -39,7 +37,7 @@ namespace VirtualRobot
 #ifdef CHECK_PERFORMANCE
         clock_t startT = clock();
 #endif
-        MatrixXf Jacobian = this->getJacobianMatrix(tcp);
+        Eigen::MatrixXf Jacobian = this->getJacobianMatrix(tcp);
 #ifdef CHECK_PERFORMANCE
         clock_t startT2 = clock();
 #endif
@@ -58,7 +56,7 @@ namespace VirtualRobot
 #ifdef CHECK_PERFORMANCE
         clock_t startT = clock();
 #endif
-        MatrixXd Jacobian = this->getJacobianMatrixD(tcp);
+        Eigen::MatrixXd Jacobian = this->getJacobianMatrixD(tcp);
 #ifdef CHECK_PERFORMANCE
         clock_t startT2 = clock();
 #endif
@@ -106,28 +104,28 @@ namespace VirtualRobot
 
     Eigen::MatrixXf JacobiProvider::getPseudoInverseJacobianMatrix(const Eigen::VectorXf regularization)
     {
-        MatrixXf Jacobian = this->getJacobianMatrix();
+        Eigen::MatrixXf Jacobian = this->getJacobianMatrix();
         return computePseudoInverseJacobianMatrix(Jacobian, regularization);
         //return getPseudoInverseJacobianMatrix(rns->getTCP());
     }
 
     Eigen::MatrixXd JacobiProvider::getPseudoInverseJacobianMatrixD(const Eigen::VectorXd regularization)
     {
-        MatrixXd Jacobian = this->getJacobianMatrixD();
+        Eigen::MatrixXd Jacobian = this->getJacobianMatrixD();
         return computePseudoInverseJacobianMatrixD(Jacobian, regularization);
     }
 
-    Eigen::MatrixXf JacobiProvider::computePseudoInverseJacobianMatrix(const Eigen::MatrixXf& m, const VectorXf regularization) const
+    Eigen::MatrixXf JacobiProvider::computePseudoInverseJacobianMatrix(const Eigen::MatrixXf& m, const Eigen::VectorXf regularization) const
     {
         return computePseudoInverseJacobianMatrix(m, 0.0f, regularization);
     }
 
-    MatrixXd JacobiProvider::computePseudoInverseJacobianMatrixD(const MatrixXd& m, const Eigen::VectorXd regularization) const
+    Eigen::MatrixXd JacobiProvider::computePseudoInverseJacobianMatrixD(const Eigen::MatrixXd& m, const Eigen::VectorXd regularization) const
     {
         return computePseudoInverseJacobianMatrixD(m, 0.0, regularization);
     }
 
-    Eigen::MatrixXf JacobiProvider::computePseudoInverseJacobianMatrix(const Eigen::MatrixXf& m, float invParameter, const VectorXf regularization) const
+    Eigen::MatrixXf JacobiProvider::computePseudoInverseJacobianMatrix(const Eigen::MatrixXf& m, float invParameter, const Eigen::VectorXf regularization) const
     {
         Eigen::MatrixXf result(m.cols(), m.rows());
         updatePseudoInverseJacobianMatrix(result, m, invParameter, regularization);
@@ -141,13 +139,13 @@ namespace VirtualRobot
         return result;
     }
 
-    void JacobiProvider::updatePseudoInverseJacobianMatrix(Eigen::MatrixXf& invJac, const Eigen::MatrixXf& m, float invParameter, VectorXf regularization) const
+    void JacobiProvider::updatePseudoInverseJacobianMatrix(Eigen::MatrixXf& invJac, const Eigen::MatrixXf& m, float invParameter, Eigen::VectorXf regularization) const
     {
         Eigen::MatrixXf m2 = m;
         VR_ASSERT(regularization.rows() == 0 || regularization.rows() == m2.rows());
         if(regularization.rows() != m2.rows())
         {
-            regularization = VectorXf::Ones(m2.rows());
+            regularization = Eigen::VectorXf::Ones(m2.rows());
         }
         //std::cout << "regularization: " << regularization.transpose() << std::endl;
         m2 = regularization.asDiagonal() * m2;
@@ -242,7 +240,7 @@ namespace VirtualRobot
         VR_ASSERT(regularization.rows() == 0 || regularization.rows() == m2.rows());
         if(regularization.rows() != m2.rows())
         {
-            regularization = VectorXd::Ones(m2.rows());
+            regularization = Eigen::VectorXd::Ones(m2.rows());
         }
         m2 = regularization.asDiagonal() * m2;
         updatePseudoInverseJacobianMatrixDInternal(invJac, m2, invParameter);

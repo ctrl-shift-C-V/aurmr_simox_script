@@ -41,14 +41,13 @@
 #include <iostream>
 #include <fstream>
 
-using namespace Eigen;
 using namespace std;
 
 namespace VirtualRobot
 {
     const double TimeOptimalTrajectory::eps = 0.000001;
 
-    TimeOptimalTrajectory::TimeOptimalTrajectory(const Path &path, const VectorXd &maxVelocity, const VectorXd &maxAcceleration, double timeStep) :
+    TimeOptimalTrajectory::TimeOptimalTrajectory(const Path &path, const Eigen::VectorXd &maxVelocity, const Eigen::VectorXd &maxAcceleration, double timeStep) :
         path(path),
         maxVelocity(maxVelocity),
         maxAcceleration(maxAcceleration),
@@ -363,8 +362,8 @@ namespace VirtualRobot
     }
 
     double TimeOptimalTrajectory::getMinMaxPathAcceleration(double pathPos, double pathVel, bool max) {
-        VectorXd configDeriv = path.getTangent(pathPos);
-        VectorXd configDeriv2 = path.getCurvature(pathPos);
+        Eigen::VectorXd configDeriv = path.getTangent(pathPos);
+        Eigen::VectorXd configDeriv2 = path.getCurvature(pathPos);
         double factor = max ? 1.0 : -1.0;
         double maxPathAcceleration = numeric_limits<double>::max();
         for(unsigned int i = 0; i < n; i++) {
@@ -382,8 +381,8 @@ namespace VirtualRobot
 
     double TimeOptimalTrajectory::getAccelerationMaxPathVelocity(double pathPos) const {
         double maxPathVelocity = numeric_limits<double>::infinity();
-        const VectorXd configDeriv = path.getTangent(pathPos);
-        const VectorXd configDeriv2 = path.getCurvature(pathPos);
+        const Eigen::VectorXd configDeriv = path.getTangent(pathPos);
+        const Eigen::VectorXd configDeriv2 = path.getCurvature(pathPos);
         for(unsigned int i = 0; i < n; i++) {
             if(configDeriv[i] != 0.0) {
                 for(unsigned int j = i + 1; j < n; j++) {
@@ -406,7 +405,7 @@ namespace VirtualRobot
 
 
     double TimeOptimalTrajectory::getVelocityMaxPathVelocity(double pathPos) const {
-        const VectorXd tangent = path.getTangent(pathPos);
+        const Eigen::VectorXd tangent = path.getTangent(pathPos);
         double maxPathVelocity = numeric_limits<double>::max();
         for(unsigned int i = 0; i < n; i++) {
             maxPathVelocity = min(maxPathVelocity, maxVelocity[i] / abs(tangent[i]));
@@ -419,7 +418,7 @@ namespace VirtualRobot
     }
 
     double TimeOptimalTrajectory::getVelocityMaxPathVelocityDeriv(double pathPos) {
-        const VectorXd tangent = path.getTangent(pathPos);
+        const Eigen::VectorXd tangent = path.getTangent(pathPos);
         double maxPathVelocity = numeric_limits<double>::max();
         unsigned int activeConstraint;
         for(unsigned int i = 0; i < n; i++) {
@@ -459,7 +458,7 @@ namespace VirtualRobot
         }
     }
 
-    VectorXd TimeOptimalTrajectory::getPosition(double time) const {
+    Eigen::VectorXd TimeOptimalTrajectory::getPosition(double time) const {
         list<TimeOptimalTrajectoryStep>::const_iterator it = getTrajectorySegment(time);
         list<TimeOptimalTrajectoryStep>::const_iterator previous = it;
         previous--;
@@ -473,7 +472,7 @@ namespace VirtualRobot
         return path.getConfig(pathPos);
     }
 
-    VectorXd TimeOptimalTrajectory::getVelocity(double time) const {
+    Eigen::VectorXd TimeOptimalTrajectory::getVelocity(double time) const {
         list<TimeOptimalTrajectoryStep>::const_iterator it = getTrajectorySegment(time);
         list<TimeOptimalTrajectoryStep>::const_iterator previous = it;
         previous--;
