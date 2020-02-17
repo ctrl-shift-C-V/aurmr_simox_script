@@ -1,5 +1,7 @@
 # This is copied from the bullet sources since the openGL support library is usually not included in any linux packages.
 
+set(CMAKE_UNITY_BUILD OFF)
+
 PROJECT(BulletOpenGLSupport)
 
 if (SimDynamics_USE_BULLET AND OPENGL_FOUND)

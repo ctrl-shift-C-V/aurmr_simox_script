@@ -8,6 +8,11 @@ INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
 #global config
 # Set up build type
 
+if(${CMAKE_VERSION} VERSION_GREATER 3.16)
+    set(CMAKE_UNITY_BUILD ON)
+    set(CMAKE_UNITY_BUILD_BATCH_SIZE 0)
+endif()
+
 IF(NOT CMAKE_BUILD_TYPE)
     SET_PROPERTY(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
