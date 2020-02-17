@@ -34,7 +34,7 @@ namespace VirtualRobot
         // robotnode
         if (!rn->hasSensor(name))
         {
-            rn->registerSensor(static_pointer_cast<Sensor>(shared_from_this()));
+            rn->registerSensor(boost::static_pointer_cast<Sensor>(shared_from_this()));
         }
 
         return SceneObject::initialize(parent, children);

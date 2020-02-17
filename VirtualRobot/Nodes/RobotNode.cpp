@@ -66,9 +66,9 @@ namespace VirtualRobot
         THROW_VR_EXCEPTION_IF(!rob, "Could not init RobotNode without robot");
 
         // robot
-        if (!rob->hasRobotNode(static_pointer_cast<RobotNode>(shared_from_this())))
+        if (!rob->hasRobotNode(boost::static_pointer_cast<RobotNode>(shared_from_this())))
         {
-            rob->registerRobotNode(static_pointer_cast<RobotNode>(shared_from_this()));
+            rob->registerRobotNode(boost::static_pointer_cast<RobotNode>(shared_from_this()));
         }
 
         // update visualization of coordinate systems
@@ -348,13 +348,13 @@ namespace VirtualRobot
 
     void RobotNode::collectAllRobotNodes(std::vector< RobotNodePtr >& storeNodes)
     {
-        storeNodes.push_back(static_pointer_cast<RobotNode>(shared_from_this()));
+        storeNodes.push_back(boost::static_pointer_cast<RobotNode>(shared_from_this()));
 
         std::vector< SceneObjectPtr > children = this->getChildren();
 
         for (size_t i = 0; i < children.size(); i++)
         {
-            RobotNodePtr n = dynamic_pointer_cast<RobotNode>(children[i]);
+            RobotNodePtr n = boost::dynamic_pointer_cast<RobotNode>(children[i]);
 
             if (n)
             {
@@ -560,7 +560,7 @@ namespace VirtualRobot
 
             for (size_t i = 0; i < children.size(); i++)
             {
-                RobotNodePtr n = dynamic_pointer_cast<RobotNode>(children[i]);
+                RobotNodePtr n = boost::dynamic_pointer_cast<RobotNode>(children[i]);
 
                 if (n)
                 {
@@ -573,7 +573,7 @@ namespace VirtualRobot
                 }
                 else
                 {
-                    SensorPtr s =  dynamic_pointer_cast<Sensor>(children[i]);
+                    SensorPtr s =  boost::dynamic_pointer_cast<Sensor>(children[i]);
 
                     if (s)
                     {
@@ -758,7 +758,7 @@ namespace VirtualRobot
         std::string attachName2("RobotNodeStructureJoint");
         std::string attachName3("RobotNodeStructurePost");
         SceneObjectPtr par = getParent();
-        RobotNodePtr parRN = dynamic_pointer_cast<RobotNode>(par);
+        RobotNodePtr parRN = boost::dynamic_pointer_cast<RobotNode>(par);
 
         // need to add "pre" visualization to parent node!
         if (parRN && parRN->getVisualization())
@@ -848,7 +848,7 @@ namespace VirtualRobot
 
         for (unsigned int i = 0; i < rn.size(); i++)
         {
-            if (rn[i]->hasChild(static_pointer_cast<SceneObject>(shared_from_this()), true))
+            if (rn[i]->hasChild(boost::static_pointer_cast<SceneObject>(shared_from_this()), true))
             {
                 result.push_back(rn[i]);
             }
@@ -906,7 +906,7 @@ namespace VirtualRobot
 
         if (!parent || parent == rob)
         {
-            if (rob && rob->getRootNode() == static_pointer_cast<RobotNode>(shared_from_this()))
+            if (rob && rob->getRootNode() == boost::static_pointer_cast<RobotNode>(shared_from_this()))
             {
                 Eigen::Matrix4f gpPre = globalPose * getLocalTransformation().inverse();
                 rob->setGlobalPose(gpPre, false);

@@ -1518,7 +1518,7 @@ namespace VirtualRobot
                            const std::string& basePath, const std::string& meshDir)
     {
         mujoco::RobotMjcf mjcf(robot);
-        mjcf.setOutputPaths(fs::path(basePath) / filename, meshDir);
+        mjcf.setOutputPaths(std::filesystem::path(basePath) / filename, meshDir);
         mjcf.build(mujoco::WorldMountMode::FREE, mujoco::ActuatorType::MOTOR);
         mjcf.save();
     }
