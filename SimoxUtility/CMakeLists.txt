@@ -52,6 +52,8 @@ SET(INCLUDES
     SimoxUtility.h
     EigenStdVector.h
 
+    filesystem/remove_trailing_separator.h
+
     meta/eigen/enable_if_compile_time_size.h
     meta/has_member_macros/has_member.hpp
 
