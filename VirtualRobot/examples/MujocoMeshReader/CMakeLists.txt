@@ -1,6 +1,6 @@
 project(MujocoMeshReader)
 
-find_package(Boost COMPONENTS system filesystem REQUIRED)
+find_package(Boost ${Simox_BOOST_VERSION} EXACT COMPONENTS system filesystem REQUIRED)
 
 
 if (Boost_FOUND)

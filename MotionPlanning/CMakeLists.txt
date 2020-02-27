@@ -2,7 +2,7 @@ PROJECT ( Saba )
 
 MESSAGE (STATUS "***** CONFIGURING Simox project Saba *****")
 
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost ${Simox_BOOST_VERSION} EXACT COMPONENTS unit_test_framework REQUIRED)
 
 
 ########################### TESTING #####################################

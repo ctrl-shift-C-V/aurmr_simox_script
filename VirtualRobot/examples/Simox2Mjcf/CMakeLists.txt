@@ -1,27 +1,16 @@
 project(Simox2Mjcf)
 
-#find_package(TinyXML2 7.0.0)
-find_package(Boost COMPONENTS system filesystem REQUIRED)
+find_package(Boost ${Simox_BOOST_VERSION} EXACT COMPONENTS system filesystem REQUIRED)
 
-#if (TINYXML2_FOUND AND Boost_FOUND)
 if (Boost_FOUND)
-
-    #include_directories(${TINYXML2_INCLUDE_DIR})
-
-    set(SOURCES
-        main.cpp
-    )
-
-    set(HEADERS
-    )
+    set(SOURCES main.cpp)
+    set(HEADERS)
 
     set(LIBS
         VirtualRobot
-    #    ${TINYXML2_LIBRARIES}
         ${BOOST_FILESYSTEM_LIBRARIES}
         ${BOOST_SYSTEM_LIBRARIES}
     )
-
 
     add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
     set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Simox_BIN_DIR})
@@ -33,11 +22,9 @@ if (Boost_FOUND)
 
     target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS})
 
-
     #######################################################################################
     ############################ Setup for installation ###################################
     #######################################################################################
-
     install(TARGETS ${PROJECT_NAME}
         # IMPORTANT: Add the library to the "export-set"
         EXPORT SimoxTargets
@@ -46,5 +33,4 @@ if (Boost_FOUND)
 
     message( STATUS " ** Simox application ${PROJECT_NAME} will be placed into " ${Simox_BIN_DIR})
     message( STATUS " ** Simox application ${PROJECT_NAME} will be installed into " bin)
-
 endif()

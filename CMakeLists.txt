@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.10)
 PROJECT(Simox LANGUAGES CXX VERSION 2.3.74.0)
 MESSAGE (STATUS "** Simox version: ${Simox_VERSION}")
 INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
+SET(Simox_BOOST_VERSION 1.65.1)
 #######################################################################################
 #global config
 # Set up build type
@@ -41,7 +42,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 FIND_PACKAGE (Eigen3 REQUIRED)
-FIND_PACKAGE(Boost COMPONENTS
+FIND_PACKAGE(Boost ${Simox_BOOST_VERSION} EXACT COMPONENTS
     filesystem
     system
     program_options
