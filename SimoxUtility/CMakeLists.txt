@@ -115,6 +115,8 @@ SET(INCLUDES
 
     math/periodic_clamp.h
 
+    math/pose.h
+
     json.h
     json/converters.h
     json/eigen_conversion.h

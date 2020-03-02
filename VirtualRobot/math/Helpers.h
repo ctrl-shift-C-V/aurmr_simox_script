@@ -21,7 +21,10 @@
 
 #pragma once
 
+#include <SimoxUtility/math/pose.h>
+
 #include "MathForwardDefinitions.h"
+
 
 namespace math
 {
@@ -61,81 +64,101 @@ namespace math
 
 
         // POSE UTILITY
+        // These methods have been moved to <SimoxUtility/math/pose.h>, but remain here for
+        // backward compatibility.
 
         /// Get the position block from the given pose.
         template <typename Derived>
         static Eigen::Block<Derived, 3, 1>
-        Position(Eigen::MatrixBase<Derived>& pose);
+        Position(Eigen::MatrixBase<Derived>& pose)
+        {
+            return simox::math::position(pose);
+        }
 
         /// Get the position block from the given pose.
         template <typename Derived>
         static const Eigen::Block<const Derived, 3, 1>
-        Position(const Eigen::MatrixBase<Derived>& pose);
+        Position(const Eigen::MatrixBase<Derived>& pose)
+        {
+            return simox::math::position(pose);
+        }
 
 
         /// Get the orientation block from the given pose.
         template <typename Derived>
         static Eigen::Block<Derived, 3, 3>
-        Orientation(Eigen::MatrixBase<Derived>& pose);
+        Orientation(Eigen::MatrixBase<Derived>& pose)
+        {
+            return simox::math::orientation(pose);
+        }
 
         /// Get the orientation block from the given pose.
         template <typename Derived>
         static const Eigen::Block<const Derived, 3, 3>
-        Orientation(const Eigen::MatrixBase<Derived>& pose);
+        Orientation(const Eigen::MatrixBase<Derived>& pose)
+        {
+            return simox::math::orientation(pose);
+        }
 
 
         /// Build a pose matrix from the given position and orientation.
         template <typename PosDerived, typename OriDerived>
         static Eigen::Matrix4f
-        Pose(const Eigen::MatrixBase<PosDerived>& pos, const Eigen::MatrixBase<OriDerived>& ori);
+        Pose(const Eigen::MatrixBase<PosDerived>& pos, const Eigen::MatrixBase<OriDerived>& ori)
+        {
+            return simox::math::pose(pos, ori);
+        }
 
         /// Build a pose matrix from the given position and orientation.
         template <typename PosDerived, typename OriDerived>
         static Eigen::Matrix4f
-        Pose(const Eigen::MatrixBase<PosDerived>& pos, const Eigen::RotationBase<OriDerived, 3>& ori);
+        Pose(const Eigen::MatrixBase<PosDerived>& pos, const Eigen::RotationBase<OriDerived, 3>& ori)
+        {
+            return simox::math::pose(pos, ori);
+        }
 
         /// Build a pose matrix from the given position and identity orientation.
         template <typename Derived,
-                  typename std::enable_if<Eigen::MatrixBase<Derived>::RowsAtCompileTime == 3
-                                       && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 1,
-                                          int>::type = 0>
+                  std::enable_if_t<Eigen::MatrixBase<Derived>::RowsAtCompileTime == 3
+                                   && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 1, int> = 0>
         static Eigen::Matrix4f
         Pose(const Eigen::MatrixBase<Derived>& position)
         {
-            return Pose(position, Eigen::Matrix3f::Identity());
+            return simox::math::pose(position);
         }
 
         /// Build a pose matrix from the given orientation and zero position.
         template <typename Derived,
-                  typename std::enable_if<Eigen::MatrixBase<Derived>::RowsAtCompileTime == 3
-                                       && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 3,
-                                          int>::type = 0>
+                  std::enable_if_t<Eigen::MatrixBase<Derived>::RowsAtCompileTime == 3
+                                   && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 3, int> = 0>
         static Eigen::Matrix4f
         Pose(const Eigen::MatrixBase<Derived>& orientation)
         {
-            return Pose(Eigen::Vector3f::Zero(), orientation);
+            return simox::math::pose(orientation);
         }
-
 
         /// Build a pose matrix from the given orientation and zero position.
         template <typename OriDerived>
         static Eigen::Matrix4f
-        Pose(const Eigen::RotationBase<OriDerived, 3>& ori);
+        Pose(const Eigen::RotationBase<OriDerived, 3>& ori)
+        {
+            return simox::math::pose(ori);
+        }
 
         static Eigen::Matrix4f CreateTranslationPose(const Eigen::Vector3f& pos);
         static Eigen::Matrix4f CreateRotationPose(const Eigen::Matrix3f& ori);
         static Eigen::Matrix4f CreateTranslationRotationTranslationPose(const Eigen::Vector3f& translation1, const Eigen::Matrix3f& rotation, const Eigen::Vector3f& translation2);
 
-        /// Legacy shortcut for Pose().
+        /// Legacy alias for Pose().
         static Eigen::Matrix4f CreatePose(const Eigen::Vector3f& pos, const Eigen::Quaternionf& ori);
-        /// Legacy shortcut for Pose().
+        /// Legacy alias for Pose().
         static Eigen::Matrix4f CreatePose(const Eigen::Vector3f& pos, const Eigen::Matrix3f& ori);
 
         static Eigen::Matrix3f CreateOrientation(const Eigen::Vector3f& e1, const Eigen::Vector3f& e2, const Eigen::Vector3f& e3);
 
-        /// Legacy shortcut for Position() as getter.
+        /// Legacy alias for Position() as getter.
         static Eigen::Vector3f GetPosition(const Eigen::Matrix4f& pose);
-        /// Legacy shortcut for Orientation() as getter.
+        /// Legacy alias for Orientation() as getter.
         static Eigen::Matrix3f GetOrientation(const Eigen::Matrix4f& pose);
 
         /// Translate the given pose by the given offset.
@@ -295,61 +318,6 @@ namespace math
 
     };
 
-
-    template <typename Derived>
-    Eigen::Block<Derived, 3, 1> Helpers::Position(Eigen::MatrixBase<Derived>& pose)
-    {
-        EIGEN_STATIC_ASSERT_MATRIX_SPECIFIC_SIZE(Eigen::MatrixBase<Derived>, 4, 4);
-        return Eigen::Block<Derived, 3, 1>(pose.derived(), 0, 3);
-    }
-
-    template <typename Derived>
-    const Eigen::Block<const Derived, 3, 1> Helpers::Position(const Eigen::MatrixBase<Derived>& pose)
-    {
-        EIGEN_STATIC_ASSERT_MATRIX_SPECIFIC_SIZE(Eigen::MatrixBase<Derived>, 4, 4);
-        return Eigen::Block<const Derived, 3, 1>(pose.derived(), 0, 3);
-    }
-
-
-    template <typename Derived>
-    Eigen::Block<Derived, 3, 3> Helpers::Orientation(Eigen::MatrixBase<Derived>& pose)
-    {
-        EIGEN_STATIC_ASSERT_MATRIX_SPECIFIC_SIZE(Eigen::MatrixBase<Derived>, 4, 4);
-        return Eigen::Block<Derived, 3, 3>(pose.derived(), 0, 0);
-    }
-
-    template <typename Derived>
-    const Eigen::Block<const Derived, 3, 3> Helpers::Orientation(const Eigen::MatrixBase<Derived>& pose)
-    {
-        EIGEN_STATIC_ASSERT_MATRIX_SPECIFIC_SIZE(Eigen::MatrixBase<Derived>, 4, 4);
-        return Eigen::Block<const Derived, 3, 3>(pose.derived(), 0, 0);
-    }
-
-
-    template <typename PosDerived, typename OriDerived>
-    Eigen::Matrix4f Helpers::Pose(const Eigen::MatrixBase<PosDerived>& pos,
-                                  const Eigen::MatrixBase<OriDerived>& ori)
-    {
-        EIGEN_STATIC_ASSERT_MATRIX_SPECIFIC_SIZE(Eigen::MatrixBase<PosDerived>, 3, 1);
-        EIGEN_STATIC_ASSERT_MATRIX_SPECIFIC_SIZE(Eigen::MatrixBase<OriDerived>, 3, 3);
-        Eigen::Matrix4f pose = pose.Identity();
-        Position(pose) = pos;
-        Orientation(pose) = ori;
-        return pose;
-    }
-
-    template <typename PosDerived, typename OriDerived>
-    Eigen::Matrix4f Helpers::Pose(const Eigen::MatrixBase<PosDerived>& pos,
-                                  const Eigen::RotationBase<OriDerived, 3>& ori)
-    {
-        return Pose(pos, ori.toRotationMatrix());
-    }
-
-    template <typename OriDerived>
-    Eigen::Matrix4f Helpers::Pose(const Eigen::RotationBase<OriDerived, 3>& ori)
-    {
-        return Pose(Eigen::Vector3f::Zero(), ori);
-    }
 
     template <typename Derived>
     Eigen::Matrix4f Helpers::InvertedPose(const Eigen::MatrixBase<Derived>& pose)
