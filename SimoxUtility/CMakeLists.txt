@@ -24,6 +24,9 @@ target_link_libraries(SimoxUtility PUBLIC
         Boost::regex
 )
 
+target_compile_options(SimoxUtility PRIVATE -include eigen/AssertAsException.h)
+target_compile_options(SimoxUtility INTERFACE -include SimoxUtility/eigen/AssertAsException.h)
+
 # disable boost auto linking
 if (Boost_USE_STATIC_LIBS)
     target_compile_definitions(SimoxUtility PUBLIC -DBOOST_ALL_NO_LIB -DBOOST_TEST_MAIN)
@@ -62,6 +65,8 @@ SET(INCLUDES
     shapes/OrientedBoxBase.h
     shapes/OrientedBox.h
     shapes/XYConstrainedOrientedBox.h
+
+    eigen/AssertAsException.h
 
     math/convert/rad_to_deg.h
     math/convert/deg_to_rad.h
