@@ -16,3 +16,6 @@ ADD_SU_TEST( XYConstrainedOrientedBoxTest )
 ADD_SU_TEST( DeltaAngleTest )
 ADD_SU_TEST( ConverterTest )
 ADD_SU_TEST( ForEachIf )
+
+ADD_SU_TEST( JsonEigenConversionTest )
+ADD_SU_TEST( JsonIOTest )

@@ -4,13 +4,14 @@
 * @copyright  2018 Rainer Kartmann
 */
 
-#define BOOST_TEST_MODULE VirtualRobot_VirtualRobotJsonEigenConversionTest
+#define BOOST_TEST_MODULE SimoxUtility_JsonEigenConversionTest
 
-#include <VirtualRobot/VirtualRobotTest.h>
+#include <boost/test/included/unit_test.hpp>
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
-#include <VirtualRobot/Util/json/eigen_conversion.h>
+
+#include <SimoxUtility/json/eigen_conversion.h>
 
 
 namespace Eigen
@@ -27,7 +28,7 @@ namespace Eigen
     }
 }
 
-BOOST_AUTO_TEST_SUITE(VirtualRobotJsonEigenConversionTest)
+BOOST_AUTO_TEST_SUITE(JsonEigenConversionTest)
 
 
 

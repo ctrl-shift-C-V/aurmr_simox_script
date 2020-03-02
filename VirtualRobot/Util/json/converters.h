@@ -4,7 +4,7 @@
 
 
 // Legacy overloads redirecting to Simox/math/json
-// Do not add functions here, but add them to <SimoxUtility/json/converters.h>
+// Do not add functions here, but add them to <SimoxUtility/json/converters.h>.
 
 
 namespace VirtualRobot::json
