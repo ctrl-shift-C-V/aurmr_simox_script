@@ -420,7 +420,7 @@ namespace VirtualRobot
     double TimeOptimalTrajectory::getVelocityMaxPathVelocityDeriv(double pathPos) {
         const Eigen::VectorXd tangent = path.getTangent(pathPos);
         double maxPathVelocity = numeric_limits<double>::max();
-        unsigned int activeConstraint;
+        unsigned int activeConstraint = 0;
         for(unsigned int i = 0; i < n; i++) {
             const double thisMaxPathVelocity = maxVelocity[i] / abs(tangent[i]);
             if(thisMaxPathVelocity < maxPathVelocity) {
