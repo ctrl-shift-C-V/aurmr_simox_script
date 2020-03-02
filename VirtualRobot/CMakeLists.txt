@@ -321,9 +321,6 @@ SET(SOURCES
 
     Tools/Gravity.cpp
 
-    Util/json/eigen_conversion.cpp
-    Util/json/io.cpp
-    Util/json/converters.cpp
     Util/xml/tinyxml2.cpp
 
     Visualization/ColorMap.cpp
