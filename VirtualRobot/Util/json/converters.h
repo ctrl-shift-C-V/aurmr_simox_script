@@ -7,13 +7,11 @@
 
 #pragma GCC diagnostic pop
 
-// Legacy overloads redirecting to Simox/math/json
-// Do not add functions here, but add them to <SimoxUtility/json/converters.h>.
-
-
 #include <SimoxUtility/json/converters.h>
+
 
 namespace VirtualRobot
 {
+    // Redirect namespace.
     namespace json = simox::json;
 }
