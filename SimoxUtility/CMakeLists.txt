@@ -46,6 +46,10 @@ MESSAGE (STATUS "\n***** CONFIGURING Simox project SimoxUtility *****")
 #################################### FILES ##################################
 SET(SOURCES
     SimoxUtility.cpp
+
+    json/eigen_conversion.cpp
+    json/io.cpp
+    json/converters.cpp
 )
 
 SET(INCLUDES
@@ -105,6 +109,12 @@ SET(INCLUDES
     math/distance/angle_between.h
 
     math/periodic_clamp.h
+
+    json.h
+    json/converters.h
+    json/eigen_conversion.h
+    json/io.h
+    json/json.hpp
 )
 
 simox_generate_subdir_headers(
