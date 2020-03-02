@@ -2,6 +2,8 @@
 
 #include <SimoxUtility/json/converters.h>
 
+#warning "This header is deprecated. Use <SimoxUtility/json/converters.h> instead."
+
 
 // Legacy overloads redirecting to Simox/math/json
 // Do not add functions here, but add them to <SimoxUtility/json/converters.h>.
