@@ -19,3 +19,7 @@ ADD_SU_TEST( ForEachIf )
 
 ADD_SU_TEST( JsonEigenConversionTest )
 ADD_SU_TEST( JsonIOTest )
+
+ADD_SU_TEST( math_pose_invert_test )
+ADD_SU_TEST( math_pose_orthogonalize_test )
+ADD_SU_TEST( math_pose_pose_test )

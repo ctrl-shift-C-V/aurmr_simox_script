@@ -50,6 +50,9 @@ MESSAGE (STATUS "\n***** CONFIGURING Simox project SimoxUtility *****")
 SET(SOURCES
     SimoxUtility.cpp
 
+    math/pose/invert.cpp
+    math/pose/orthogonalize.cpp
+
     json/eigen_conversion.cpp
     json/io.cpp
     json/converters.cpp
@@ -114,6 +117,10 @@ SET(INCLUDES
     math/distance/angle_between.h
 
     math/periodic_clamp.h
+
+    math/pose/pose.h
+    math/pose/invert.h
+    math/pose/orthogonalize.h
 
     json.h
     json/converters.h
