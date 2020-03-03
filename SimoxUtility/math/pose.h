@@ -3,6 +3,8 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
+#include <SimoxUtility/meta/eigen/enable_if_compile_time_size.h>
+
 
 namespace simox::math
 {
@@ -37,11 +39,12 @@ namespace simox::math
     /**
     * @brief Get the orientation block from the given pose.
     *
-    * You can assign to the result:
+    * You can assign to the result or modify it in-place:
     * @code
     * Eigen::Matrix4f pose;
     * math::orientation(pose) = Eigen::Matrix3f::Identity();
     * math::orientation(pose) = Eigen::Quaternionf::Identity().toRotationMatrix();
+    * math::orientation(pose).transposeInPlace();
     * @endcode
     */
     template <typename Derived>
@@ -84,9 +87,7 @@ namespace simox::math
     }
 
     /// Build a pose matrix from the given position with identity orientation.
-    template <typename Derived,
-              std::enable_if_t<Eigen::MatrixBase<Derived>::RowsAtCompileTime == 3
-                               && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 1, int> = 0>
+    template <typename Derived, simox::meta::enable_if_vec3<Derived, int> = 0>
     Eigen::Matrix4f
     pose(const Eigen::MatrixBase<Derived>& position)
     {
@@ -94,9 +95,7 @@ namespace simox::math
     }
 
     /// Build a pose matrix from the given orientation matrix and zero position.
-    template <typename Derived,
-              std::enable_if_t<Eigen::MatrixBase<Derived>::RowsAtCompileTime == 3
-                               && Eigen::MatrixBase<Derived>::ColsAtCompileTime == 3, int> = 0>
+    template <typename Derived, simox::meta::enable_if_mat3<Derived, int> = 0>
     Eigen::Matrix4f
     pose(const Eigen::MatrixBase<Derived>& orientation)
     {
