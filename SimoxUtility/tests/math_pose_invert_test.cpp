@@ -4,12 +4,12 @@
 * @copyright  2019 Rainer Kartmann
 */
 
-#define BOOST_TEST_MODULE SimoxUtility_math_pose_ops_invert_pose_test
+#define BOOST_TEST_MODULE SimoxUtility_math_pose_invert_pose_test
 
 #include <boost/test/included/unit_test.hpp>
 
-#include <SimoxUtility/math/pose_ops/invert.h>
-#include <SimoxUtility/math/pose.h>
+#include <SimoxUtility/math/pose/invert.h>
+#include <SimoxUtility/math/pose/pose.h>
 
 #include <string>
 #include <stdio.h>

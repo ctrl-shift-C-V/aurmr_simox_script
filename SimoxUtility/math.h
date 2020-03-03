@@ -6,4 +6,3 @@
 #include "math/distance.h"
 #include "math/periodic_clamp.h"
 #include "math/pose.h"
-#include "math/pose_ops.h"

@@ -21,8 +21,8 @@
 
 #pragma once
 
-#include <SimoxUtility/math/pose.h>
-#include <SimoxUtility/math/pose_ops/invert.h>
+#include <SimoxUtility/math/pose/pose.h>
+#include <SimoxUtility/math/pose/invert.h>
 
 #include "MathForwardDefinitions.h"
 

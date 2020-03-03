@@ -22,12 +22,9 @@
 #include "Helpers.h"
 #include "LinearInterpolatedOrientation.h"
 
-#include <Eigen/SVD>
-
 #include <stdexcept>
 
-#include <SimoxUtility/math/pose_ops/invert.h>
-#include <SimoxUtility/math/pose_ops/orthogonalize.h>
+#include <SimoxUtility/math/pose.h>
 
 
 namespace math
@@ -149,7 +146,7 @@ namespace math
     {
         Eigen::Vector3f side = a.cross(up);
         float sign = Sign(b.dot(side));
-        return (float)std::atan2(a.cross(b).norm() * sign, a.dot(b));
+        return float(std::atan2(a.cross(b).norm() * sign, a.dot(b)));
     }
 
     int Helpers::Sign(float x)

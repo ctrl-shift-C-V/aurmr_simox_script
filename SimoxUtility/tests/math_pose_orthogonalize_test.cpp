@@ -4,12 +4,12 @@
 * @copyright  2019 Rainer Kartmann
 */
 
-#define BOOST_TEST_MODULE SimoxUtility_math_pose_ops_orthogonalize_test
+#define BOOST_TEST_MODULE SimoxUtility_math_pose_orthogonalize_test
 
 #include <boost/test/included/unit_test.hpp>
 
-#include <SimoxUtility/math/pose_ops/orthogonalize.h>
-#include <SimoxUtility/math/pose.h>
+#include <SimoxUtility/math/pose/orthogonalize.h>
+#include <SimoxUtility/math/pose/pose.h>
 
 #include <random>
 

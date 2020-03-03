@@ -2,7 +2,7 @@
 
 #include <Eigen/SVD>
 
-#include <SimoxUtility/math/pose.h>
+#include "pose.h"
 
 
 Eigen::Matrix3f simox::math::orthogonalize(const Eigen::Matrix3f& matrix)

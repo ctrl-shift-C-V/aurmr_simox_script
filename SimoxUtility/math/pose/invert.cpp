@@ -1,6 +1,6 @@
 #include "invert.h"
 
-#include <SimoxUtility/math/pose.h>
+#include "pose.h"
 
 
 void simox::math::invert_pose(Eigen::Matrix4f& pose)
