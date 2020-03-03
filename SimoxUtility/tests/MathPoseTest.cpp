@@ -4,7 +4,7 @@
 * @copyright  2019 Rainer Kartmann
 */
 
-#define BOOST_TEST_MODULE VirtualRobot_MathHelpersTest
+#define BOOST_TEST_MODULE SimoxUtility_MathPoseTest
 
 #include <boost/test/included/unit_test.hpp>
 

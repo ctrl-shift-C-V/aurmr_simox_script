@@ -51,6 +51,8 @@ SET(SOURCES
     SimoxUtility.cpp
 
     math/pose_ops/invert.cpp
+    math/pose_ops/orthogonalize.cpp
+
     json/eigen_conversion.cpp
     json/io.cpp
     json/converters.cpp
@@ -118,6 +120,7 @@ SET(INCLUDES
 
     math/pose.h
     math/pose_ops/invert.h
+    math/pose_ops/orthogonalize.h
 
     json.h
     json/converters.h

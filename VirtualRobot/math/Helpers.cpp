@@ -27,6 +27,8 @@
 #include <stdexcept>
 
 #include <SimoxUtility/math/pose_ops/invert.h>
+#include <SimoxUtility/math/pose_ops/orthogonalize.h>
+
 
 namespace math
 {
@@ -387,48 +389,22 @@ namespace math
 
     Eigen::Matrix3f Helpers::Orthogonalize(const Eigen::Matrix3f& matrix)
     {
-        return OrthogonalizeSVD(matrix);
+        return simox::math::orthogonalize(matrix);
     }
 
     Eigen::Matrix3f Helpers::OrthogonalizeSVD(const Eigen::Matrix3f& matrix)
     {
-        auto svd = matrix.jacobiSvd(Eigen::ComputeFullU | Eigen::ComputeFullV);
-
-        Eigen::Matrix3f orth = svd.matrixU() * svd.matrixV().transpose();
-        if (orth.determinant() >= 0)
-        {
-            return orth;
-        }
-        else
-        {
-            return -orth;
-        }
+        return simox::math::orthogonalize_svd(matrix);
     }
 
     Eigen::Matrix3f Helpers::OrthogonalizeQR(const Eigen::Matrix3f& matrix)
     {
-        auto householder = matrix.householderQr();
-        Eigen::Matrix3f orth = householder.householderQ();
-
-        // Upper right triangular matrix of matrixQR() is R matrix.
-        // If a diagonal entry of R is negative, the corresponding column
-        // in Q must be inverted.
-        for (int i = 0; i < matrix.cols(); ++i)
-        {
-            if (householder.matrixQR().diagonal()(i) < 0)
-            {
-                orth.col(i) *= -1;
-            }
-        }
-        return orth;
+        return simox::math::orthogonalize_qr(matrix);
     }
 
     Eigen::Matrix4f Helpers::Orthogonalize(const Eigen::Matrix4f& pose)
     {
-        Eigen::Matrix4f orth = pose;
-        Orientation(orth) = Orthogonalize(Orientation(orth).eval());
-        orth.row(3) << 0, 0, 0, 1;
-        return orth;
+        return simox::math::orthogonalize_pose(pose);
     }
 
     float Helpers::Distance(const Eigen::Matrix4f& a, const Eigen::Matrix4f& b, float rad2mmFactor)

@@ -23,3 +23,4 @@ ADD_SU_TEST( JsonIOTest )
 ADD_SU_TEST( MathPoseTest )
 
 ADD_SU_TEST( math_pose_ops_invert_test )
+ADD_SU_TEST( math_pose_ops_orthogonalize_test )
