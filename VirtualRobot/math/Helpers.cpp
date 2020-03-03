@@ -26,6 +26,7 @@
 
 #include <stdexcept>
 
+#include <SimoxUtility/math/pose_ops/invert.h>
 
 namespace math
 {
@@ -315,8 +316,7 @@ namespace math
 
     void Helpers::InvertPose(Eigen::Matrix4f& pose)
     {
-        Orientation(pose).transposeInPlace();
-        Position(pose) = - Orientation(pose) * Position(pose);
+        simox::math::invert_pose(pose);
     }
 
     void Helpers::ScaleTranslation(Eigen::Matrix4f& pose, float scale)

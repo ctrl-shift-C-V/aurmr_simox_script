@@ -22,6 +22,7 @@
 #pragma once
 
 #include <SimoxUtility/math/pose.h>
+#include <SimoxUtility/math/pose_ops/invert.h>
 
 #include "MathForwardDefinitions.h"
 
@@ -170,7 +171,10 @@ namespace math
         static void InvertPose(Eigen::Matrix4f& pose);
         /// Return the inverted of the given pose.
         template <typename Derived>
-        static Eigen::Matrix4f InvertedPose(const Eigen::MatrixBase<Derived>& pose);
+        static Eigen::Matrix4f InvertedPose(const Eigen::MatrixBase<Derived>& pose)
+        {
+            return simox::math::inverted_pose(pose);
+        }
 
         /// Scale the translation/position of the given pose.
         static void ScaleTranslation(Eigen::Matrix4f& pose, float scale);
@@ -318,14 +322,6 @@ namespace math
 
     };
 
-
-    template <typename Derived>
-    Eigen::Matrix4f Helpers::InvertedPose(const Eigen::MatrixBase<Derived>& pose)
-    {
-        Eigen::Matrix4f inv = pose;
-        InvertPose(inv);
-        return inv;
-    }
 
     template<typename Derived>
     bool Helpers::IsMatrixOrthogonal(const Eigen::MatrixBase<Derived>& matrix, float precision)
