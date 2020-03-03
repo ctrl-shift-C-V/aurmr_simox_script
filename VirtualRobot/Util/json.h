@@ -1,11 +1,6 @@
 #pragma once
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Werror"
-
-#warning "This header is deprecated. Use <SimoxUtility/json.h> instead."
-
-#pragma GCC diagnostic pop
+#pragma message("This header is deprecated. Use <SimoxUtility/json.h> instead.")
 
 #include <SimoxUtility/json.h>
 #include "json/converters.h"
