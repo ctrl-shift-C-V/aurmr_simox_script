@@ -4,13 +4,13 @@
 * @copyright  2018 Rainer Kartmann
 */
 
-#define BOOST_TEST_MODULE VirtualRobot_VirtualRobotJsonIOTest
+#define BOOST_TEST_MODULE SimoxUtility_JsonIOTest
 
-#include <VirtualRobot/VirtualRobotTest.h>
+#include <boost/test/included/unit_test.hpp>
 
 #include <filesystem>
 
-#include <VirtualRobot/Util/json/io.h>
+#include <SimoxUtility/json/io.h>
 
 
 namespace fs = std::filesystem;
@@ -42,7 +42,7 @@ struct Fixture
 };
 
 
-BOOST_FIXTURE_TEST_SUITE(VirtualRobotIOConversionTest, Fixture)
+BOOST_FIXTURE_TEST_SUITE(JsonIOTest, Fixture)
 
 
 BOOST_AUTO_TEST_CASE(test_read_json_existent)

@@ -8,18 +8,19 @@
 namespace fs = std::filesystem;
 
 
-namespace nlohmann
+namespace
 {
-
-    static void checkExists(const std::string& filename, const std::string& prefix = "")
+    void checkExists(const std::string& filename, const std::string& prefix = "")
     {
         if (!fs::exists(filename))
         {
             throw std::ios_base::failure(prefix + "File \"" + filename + "\" does not exist.");
         }
     }
+}
 
-
+namespace nlohmann
+{
     json read_json(const std::string& filename)
     {
         std::ifstream ifs;
@@ -47,7 +48,6 @@ namespace nlohmann
         is >> j;
         return j;
     }
-
 
 
     void write_json(const std::string& filename, const json& j,

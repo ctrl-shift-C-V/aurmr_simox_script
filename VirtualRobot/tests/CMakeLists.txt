@@ -7,7 +7,7 @@ ADD_VR_TEST( VirtualRobotRobotTest )
 ADD_VR_TEST( VirtualRobotTransformationTest )
 
 if (Simox_VISUALIZATION)
-	ADD_VR_TEST( VirtualRobotCollisionTest )
+    ADD_VR_TEST( VirtualRobotCollisionTest )
 endif()
 
 ADD_VR_TEST( VirtualRobotJacobianTest )
@@ -32,9 +32,6 @@ ADD_VR_TEST( VirtualRobotMeshImportTest )
 ADD_VR_TEST( VirtualRobotTimeOptimalTrajectoryTest )
 
 ADD_VR_TEST( VirtualRobotRuntimeEnvironmentTest )
-
-ADD_VR_TEST( VirtualRobotJsonEigenConversionTest )
-ADD_VR_TEST( VirtualRobotJsonIOTest )
 
 ADD_VR_TEST( VirtualRobotMjcfTest )
 

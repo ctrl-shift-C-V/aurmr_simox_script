@@ -1,6 +1,6 @@
 #pragma once
 
-#include "json/json.hpp"
-#include "json/eigen_conversion.h"
-#include "json/io.h"
+#pragma message("This header is deprecated. Use <SimoxUtility/json.h> instead.")
+
+#include <SimoxUtility/json.h>
 #include "json/converters.h"
