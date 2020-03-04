@@ -50,30 +50,35 @@ MESSAGE (STATUS "\n***** CONFIGURING Simox project SimoxUtility *****")
 SET(SOURCES
     SimoxUtility.cpp
 
-    math/pose/invert.cpp
-    math/pose/orthogonalize.cpp
+    color/color.cpp
+    color/GlasbeyLUT.cpp
 
     json/eigen_conversion.cpp
     json/io.cpp
     json/converters.cpp
+
+    math/pose/invert.cpp
+    math/pose/orthogonalize.cpp
 )
 
 SET(INCLUDES
     SimoxUtility.h
     EigenStdVector.h
 
-    filesystem/remove_trailing_separator.h
-
-    meta/eigen/enable_if_compile_time_size.h
-    meta/has_member_macros/has_member.hpp
-
     algorithm/for_each_if.h
 
-    shapes/OrientedBoxBase.h
-    shapes/OrientedBox.h
-    shapes/XYConstrainedOrientedBox.h
+    color/color.h
+    color/GlasbeyLUT.h
 
     eigen/AssertAsException.h
+
+    filesystem/remove_trailing_separator.h
+
+    json.h
+    json/converters.h
+    json/eigen_conversion.h
+    json/io.h
+    json/json.hpp
 
     math/convert/rad_to_deg.h
     math/convert/deg_to_rad.h
@@ -122,11 +127,12 @@ SET(INCLUDES
     math/pose/invert.h
     math/pose/orthogonalize.h
 
-    json.h
-    json/converters.h
-    json/eigen_conversion.h
-    json/io.h
-    json/json.hpp
+    meta/eigen/enable_if_compile_time_size.h
+    meta/has_member_macros/has_member.hpp
+
+    shapes/OrientedBoxBase.h
+    shapes/OrientedBox.h
+    shapes/XYConstrainedOrientedBox.h
 )
 
 simox_generate_subdir_headers(
