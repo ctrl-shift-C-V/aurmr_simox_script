@@ -23,7 +23,7 @@ namespace simox::color
     template <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
     uint8_t to_byte(T value)
     {
-        return static_cast<uint8_t>(std::clamp(value, 0., 1.) * 255);
+        return static_cast<uint8_t>(255 * std::clamp(value, static_cast<T>(0.), static_cast<T>(1.)));
     }
 
     Color to_byte(Colorf c);
