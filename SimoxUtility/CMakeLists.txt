@@ -53,6 +53,8 @@ SET(SOURCES
     color/color.cpp
     color/GlasbeyLUT.cpp
 
+    filesystem/list_directory.cpp
+
     json/eigen_conversion.cpp
     json/io.cpp
     json/converters.cpp
@@ -72,6 +74,7 @@ SET(INCLUDES
 
     eigen/AssertAsException.h
 
+    filesystem/list_directory.h
     filesystem/remove_trailing_separator.h
 
     json.h
