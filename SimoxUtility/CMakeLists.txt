@@ -50,6 +50,8 @@ MESSAGE (STATUS "\n***** CONFIGURING Simox project SimoxUtility *****")
 SET(SOURCES
     SimoxUtility.cpp
 
+    color/color.cpp
+    color/GlasbeyLUT.cpp
 
     json/eigen_conversion.cpp
     json/io.cpp
@@ -65,6 +67,8 @@ SET(INCLUDES
 
     algorithm/for_each_if.h
 
+    color/color.h
+    color/GlasbeyLUT.h
 
     eigen/AssertAsException.h
 
