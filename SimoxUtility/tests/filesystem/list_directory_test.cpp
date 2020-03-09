@@ -4,7 +4,7 @@
 * @copyright  2019 Rainer Kartmann
 */
 
-#define BOOST_TEST_MODULE SimoxUtility_filesystem_list_directory_test
+#define BOOST_TEST_MODULE SimoxUtility/filesystem/list_directory_test
 
 #include <boost/test/included/unit_test.hpp>
 

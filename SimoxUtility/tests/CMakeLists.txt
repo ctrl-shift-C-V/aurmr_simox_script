@@ -32,8 +32,7 @@ ENDMACRO()
 
 ADD_SU_TEST( ForEachIf )
 
-ADD_SU_TEST( filesystem_list_directory_test )
-
+ADD_SUBDIRECTORY(filesystem)
 ADD_SUBDIRECTORY(json)
 ADD_SUBDIRECTORY(math)
 ADD_SUBDIRECTORY(shapes)
