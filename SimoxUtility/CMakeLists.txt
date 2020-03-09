@@ -61,6 +61,7 @@ SET(SOURCES
     json/io.cpp
     json/converters.cpp
 
+    math/pose/align_box_orientation.cpp
     math/pose/check_rotation_matrix.cpp
     math/pose/invert.cpp
     math/pose/orthogonalize.cpp
@@ -131,10 +132,11 @@ SET(INCLUDES
 
     math/periodic_clamp.h
 
-    math/pose/pose.h
+    math/pose/align_box_orientation.h
     math/pose/check_rotation_matrix.h
     math/pose/invert.h
     math/pose/orthogonalize.h
+    math/pose/pose.h
 
     meta/eigen/enable_if_compile_time_size.h
     meta/has_member_macros/has_member.hpp
