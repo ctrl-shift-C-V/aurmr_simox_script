@@ -4,7 +4,7 @@
 * @copyright  2019 Rainer Kartmann
 */
 
-#define BOOST_TEST_MODULE SimoxUtility_math_pose_orthogonalize_test
+#define BOOST_TEST_MODULE SimoxUtility/math/pose/orthogonalize_test
 
 #include <boost/test/included/unit_test.hpp>
 
