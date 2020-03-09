@@ -39,7 +39,7 @@ namespace simox::error
         }
         ss << "Matrix R: \n" << matrix << "\n";
         ss << "Determinant: " << matrix.determinant() << "\n";
-        ss << "Matrix R * R^T\n" << matrix * matrix.transpose() << "\n";
+        ss << "Matrix R * R^T: \n" << matrix * matrix.transpose() << "\n";
         return ss.str();
     }
 }
