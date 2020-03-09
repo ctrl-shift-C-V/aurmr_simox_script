@@ -4,7 +4,7 @@
 * @copyright  2019 Raphael Grimm
 */
 
-#define BOOST_TEST_MODULE SimoxUtility_OrientedBoxTest
+#define BOOST_TEST_MODULE SimoxUtility/shapes/OrientedBoxTest
 
 #include <random>
 #include <iostream>
