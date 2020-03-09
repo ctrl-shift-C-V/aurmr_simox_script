@@ -53,6 +53,8 @@ SET(SOURCES
     color/color.cpp
     color/GlasbeyLUT.cpp
 
+    error/SimoxError.cpp
+
     filesystem/list_directory.cpp
 
     json/eigen_conversion.cpp
@@ -73,6 +75,8 @@ SET(INCLUDES
     color/GlasbeyLUT.h
 
     eigen/AssertAsException.h
+
+    error/SimoxError.h
 
     filesystem/list_directory.h
     filesystem/remove_trailing_separator.h
