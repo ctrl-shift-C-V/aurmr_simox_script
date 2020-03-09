@@ -4,7 +4,7 @@
 * @copyright  2019 Raphael Grimm
 */
 
-#define BOOST_TEST_MODULE SimoxUtility_XYConstrainedOrientedBoxTest
+#define BOOST_TEST_MODULE SimoxUtility/shapes/XYConstrainedOrientedBoxTest
 
 #include <random>
 #include <iostream>

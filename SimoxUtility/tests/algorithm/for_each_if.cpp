@@ -4,7 +4,7 @@
 * @copyright  2019 Raphael Grimm
 */
 
-#define BOOST_TEST_MODULE SimoxUtility_for_each_if
+#define BOOST_TEST_MODULE SimoxUtility/algorithm/for_each_if
 
 #include <random>
 #include <iostream>
@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE(test_for_each_if)
     {
         std::size_t cntEven = 0;
         std::size_t cntOdd = 0;
-        
+
         simox::for_each_if(
             num,
             [](auto n){return n%2;},
@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(test_for_each_if)
     {
         std::size_t cntEven = 0;
         std::size_t cntOdd = 0;
-        
+
         simox::for_each_if(
             num.begin(), num.end(),
             [](auto n){return n%2;},

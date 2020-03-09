@@ -1,27 +1,37 @@
+
+SET(TEST_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
 MACRO(ADD_SU_TEST TEST_NAME)
-    ADD_EXECUTABLE(${TEST_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_NAME}.cpp)
-    TARGET_LINK_LIBRARIES(${TEST_NAME} PRIVATE SimoxUtility Boost::unit_test_framework)
-    target_include_directories(${TEST_NAME} PRIVATE ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/..)
+
+    # message("TEST_ROOT_DIR: ${TEST_ROOT_DIR}")
+    # message("CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
+    SET(TRG_NAME "${TEST_NAME}")
+
+    STRING(REPLACE "${TEST_ROOT_DIR}" "" TEST_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
+    if (TEST_PATH)
+        STRING(SUBSTRING "${TEST_PATH}" 1 -1 TEST_PATH)         # Remove initial /
+        STRING(REPLACE "/" "__" TEST_PREFIX "${TEST_PATH}/")    # Replace / by __
+        # message("TEST_PREFIX: ${TEST_PREFIX}")
+        STRING(PREPEND TRG_NAME "${TEST_PREFIX}")
+    endif()
+    # message("TRG_NAME: ${TRG_NAME}")
+
+
+    ADD_EXECUTABLE(${TRG_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_NAME}.cpp)
+    TARGET_LINK_LIBRARIES(${TRG_NAME} PRIVATE SimoxUtility Boost::unit_test_framework)
+    target_include_directories(${TRG_NAME} PRIVATE ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/..)
     if (NOT Boost_USE_STATIC_LIBS)
-        target_compile_definitions(${TEST_NAME} PRIVATE -DBOOST_TEST_DYN_LINK)
+        target_compile_definitions(${TRG_NAME} PRIVATE -DBOOST_TEST_DYN_LINK)
     endif ()
-    SET_TARGET_PROPERTIES(${TEST_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Simox_TEST_DIR})
-    SET_TARGET_PROPERTIES(${TEST_NAME} PROPERTIES FOLDER "SimoxUtility Tests")
-    ADD_TEST(NAME SimoxUtility_${TEST_NAME}
-        COMMAND ${Simox_TEST_DIR}/${TEST_NAME} --output_format=XML --log_level=all --report_level=no)
+    SET_TARGET_PROPERTIES(${TRG_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Simox_TEST_DIR})
+    SET_TARGET_PROPERTIES(${TRG_NAME} PROPERTIES FOLDER "SimoxUtility Tests")
+    ADD_TEST(NAME SimoxUtility_${TRG_NAME}
+        COMMAND ${Simox_TEST_DIR}/${TRG_NAME} --output_format=XML --log_level=all --report_level=no)
 ENDMACRO()
 
-ADD_SU_TEST( OrientedBoxTest )
-ADD_SU_TEST( XYConstrainedOrientedBoxTest )
-ADD_SU_TEST( DeltaAngleTest )
-ADD_SU_TEST( ConverterTest )
-ADD_SU_TEST( ForEachIf )
 
-ADD_SU_TEST( JsonEigenConversionTest )
-ADD_SU_TEST( JsonIOTest )
-
-ADD_SU_TEST( filesystem_list_directory_test )
-
-ADD_SU_TEST( math_pose_invert_test )
-ADD_SU_TEST( math_pose_orthogonalize_test )
-ADD_SU_TEST( math_pose_pose_test )
+ADD_SUBDIRECTORY(algorithm)
+ADD_SUBDIRECTORY(filesystem)
+ADD_SUBDIRECTORY(json)
+ADD_SUBDIRECTORY(math)
+ADD_SUBDIRECTORY(shapes)
