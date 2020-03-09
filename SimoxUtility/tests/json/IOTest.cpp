@@ -4,7 +4,7 @@
 * @copyright  2018 Rainer Kartmann
 */
 
-#define BOOST_TEST_MODULE SimoxUtility_JsonIOTest
+#define BOOST_TEST_MODULE SimoxUtility/json/IOTest
 
 #include <boost/test/included/unit_test.hpp>
 

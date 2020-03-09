@@ -4,7 +4,7 @@
 * @copyright  2018 Rainer Kartmann
 */
 
-#define BOOST_TEST_MODULE SimoxUtility_JsonEigenConversionTest
+#define BOOST_TEST_MODULE SimoxUtility/json/EigenConversionTest
 
 #include <boost/test/included/unit_test.hpp>
 
