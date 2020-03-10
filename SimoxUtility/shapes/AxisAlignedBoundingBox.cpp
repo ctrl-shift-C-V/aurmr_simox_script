@@ -6,8 +6,8 @@ namespace simox
 
     AxisAlignedBoundingBox::AxisAlignedBoundingBox()
     {
-        setCenter({0, 0, 0});
-        setExtents({0, 0, 0});
+        set_center({0, 0, 0});
+        set_extents({0, 0, 0});
     }
 
     AxisAlignedBoundingBox::AxisAlignedBoundingBox(const Eigen::Vector3f& min, const Eigen::Vector3f& max)
@@ -17,17 +17,17 @@ namespace simox
     }
 
     AxisAlignedBoundingBox::AxisAlignedBoundingBox(
-            const Eigen::Vector2f& limitsX, const Eigen::Vector2f& limitsY, const Eigen::Vector2f& limitsZ)
+            const Eigen::Vector2f& limits_x, const Eigen::Vector2f& limits_y, const Eigen::Vector2f& limits_z)
     {
-        this->limitsX() = limitsX;
-        this->limitsY() = limitsY;
-        this->limitsZ() = limitsZ;
+        this->limits_x() = limits_x;
+        this->limits_y() = limits_y;
+        this->limits_z() = limits_z;
     }
 
-    AxisAlignedBoundingBox::AxisAlignedBoundingBox(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax)
+    AxisAlignedBoundingBox::AxisAlignedBoundingBox(float x_min, float x_max, float y_min, float y_max, float z_min, float z_max)
     {
-        this->min() = Eigen::Vector3f(xMin, yMin, zMin);
-        this->max() = Eigen::Vector3f(xMax, yMax, zMax);
+        this->min() = Eigen::Vector3f(x_min, y_min, z_min);
+        this->max() = Eigen::Vector3f(x_max, y_max, z_max);
     }
 
     AxisAlignedBoundingBox::AxisAlignedBoundingBox(const Eigen::Matrix32f& limits) :
@@ -35,12 +35,7 @@ namespace simox
     {
     }
 
-    AxisAlignedBoundingBox AxisAlignedBoundingBox::Empty()
-    {
-        return AxisAlignedBoundingBox({0, 0, 0}, {0, 0, 0});
-    }
-
-    const Eigen::Matrix32f AxisAlignedBoundingBox::limits() const
+    Eigen::Matrix32f AxisAlignedBoundingBox::limits() const
     {
         return _limits;
     }
@@ -50,12 +45,12 @@ namespace simox
         return _limits;
     }
 
-    void AxisAlignedBoundingBox::setLimits(const Eigen::Matrix32f& value)
+    void AxisAlignedBoundingBox::set_limits(const Eigen::Matrix32f& value)
     {
         this->_limits = value;
     }
 
-    const Eigen::Vector3f AxisAlignedBoundingBox::min() const
+    Eigen::Vector3f AxisAlignedBoundingBox::min() const
     {
         return _limits.col(0);
     }
@@ -65,12 +60,12 @@ namespace simox
         return _limits.col(0);
     }
 
-    void AxisAlignedBoundingBox::setMin(const Eigen::Vector3f& value)
+    void AxisAlignedBoundingBox::set_min(const Eigen::Vector3f& value)
     {
         min() = value;
     }
 
-    const Eigen::Vector3f AxisAlignedBoundingBox::max() const
+    Eigen::Vector3f AxisAlignedBoundingBox::max() const
     {
         return _limits.col(1);
     }
@@ -80,17 +75,17 @@ namespace simox
         return _limits.col(1);
     }
 
-    void AxisAlignedBoundingBox::setMax(const Eigen::Vector3f& value)
+    void AxisAlignedBoundingBox::set_max(const Eigen::Vector3f& value)
     {
         max() = value;
     }
 
-    const Eigen::Vector3f AxisAlignedBoundingBox::center() const
+    Eigen::Vector3f AxisAlignedBoundingBox::center() const
     {
         return 0.5 * (min() + max());
     }
 
-    void AxisAlignedBoundingBox::setCenter(const Eigen::Vector3f& value)
+    void AxisAlignedBoundingBox::set_center(const Eigen::Vector3f& value)
     {
         // Keep current extents, move center.
         const Eigen::Vector3f halfExtents = 0.5 * extents();
@@ -98,12 +93,12 @@ namespace simox
         max() = value + halfExtents;
     }
 
-    const Eigen::Vector3f AxisAlignedBoundingBox::extents() const
+    Eigen::Vector3f AxisAlignedBoundingBox::extents() const
     {
         return max() - min();
     }
 
-    void AxisAlignedBoundingBox::setExtents(const Eigen::Vector3f& value)
+    void AxisAlignedBoundingBox::set_extents(const Eigen::Vector3f& value)
     {
         // Keep current center, move extents.
         const Eigen::Vector3f& _center = center();
@@ -111,172 +106,172 @@ namespace simox
         max() = _center + value/2;
     }
 
-    const Eigen::Vector2f AxisAlignedBoundingBox::limitsX() const
+    Eigen::Vector2f AxisAlignedBoundingBox::limits_x() const
     {
         return _limits.row(0);
     }
 
-    Eigen::Matrix32f::RowXpr AxisAlignedBoundingBox::limitsX()
+    Eigen::Matrix32f::RowXpr AxisAlignedBoundingBox::limits_x()
     {
         return _limits.row(0);
     }
 
-    void AxisAlignedBoundingBox::setLimitsX(const Eigen::Vector2f& value)
+    void AxisAlignedBoundingBox::set_limits_x(const Eigen::Vector2f& value)
     {
-        limitsX() = value;
+        limits_x() = value;
     }
 
-    const Eigen::Vector2f AxisAlignedBoundingBox::limitsY() const
-    {
-        return _limits.row(1);
-    }
-
-    Eigen::Matrix32f::RowXpr AxisAlignedBoundingBox::limitsY()
+    Eigen::Vector2f AxisAlignedBoundingBox::limits_y() const
     {
         return _limits.row(1);
     }
 
-    void AxisAlignedBoundingBox::setLimitsY(const Eigen::Vector2f& value)
+    Eigen::Matrix32f::RowXpr AxisAlignedBoundingBox::limits_y()
     {
-        limitsY() = value;
+        return _limits.row(1);
     }
 
-    const Eigen::Vector2f AxisAlignedBoundingBox::limitsZ() const
+    void AxisAlignedBoundingBox::set_limits_y(const Eigen::Vector2f& value)
+    {
+        limits_y() = value;
+    }
+
+    Eigen::Vector2f AxisAlignedBoundingBox::limits_z() const
     {
         return _limits.row(2);
     }
 
-    Eigen::Matrix32f::RowXpr AxisAlignedBoundingBox::limitsZ()
+    Eigen::Matrix32f::RowXpr AxisAlignedBoundingBox::limits_z()
     {
         return _limits.row(2);
     }
 
-    void AxisAlignedBoundingBox::setLimitsZ(const Eigen::Vector2f& value)
+    void AxisAlignedBoundingBox::set_limits_z(const Eigen::Vector2f& value)
     {
-        limitsZ() = value;
+        limits_z() = value;
     }
 
-    float AxisAlignedBoundingBox::minX() const
-    {
-        return _limits(0, 0);
-    }
-
-    float& AxisAlignedBoundingBox::minX()
+    float AxisAlignedBoundingBox::min_x() const
     {
         return _limits(0, 0);
     }
 
-    void AxisAlignedBoundingBox::setMinX(const float value)
+    float& AxisAlignedBoundingBox::min_x()
     {
-        maxX() = value;
+        return _limits(0, 0);
     }
 
-    float AxisAlignedBoundingBox::maxX() const
+    void AxisAlignedBoundingBox::set_min_x(const float value)
+    {
+        max_x() = value;
+    }
+
+    float AxisAlignedBoundingBox::max_x() const
     {
         return _limits(0, 1);
     }
 
-    float& AxisAlignedBoundingBox::maxX()
+    float& AxisAlignedBoundingBox::max_x()
     {
         return _limits(0, 1);
     }
 
-    void AxisAlignedBoundingBox::setMaxX(const float value)
+    void AxisAlignedBoundingBox::set_max_x(const float value)
     {
-        maxY() = value;
+        max_y() = value;
     }
 
-    float AxisAlignedBoundingBox::minY() const
-    {
-        return _limits(1, 0);
-    }
-
-    float& AxisAlignedBoundingBox::minY()
+    float AxisAlignedBoundingBox::min_y() const
     {
         return _limits(1, 0);
     }
 
-    void AxisAlignedBoundingBox::setMinY(const float value)
+    float& AxisAlignedBoundingBox::min_y()
     {
-        minY() = value;
+        return _limits(1, 0);
     }
 
-    float AxisAlignedBoundingBox::maxY() const
+    void AxisAlignedBoundingBox::set_min_y(const float value)
+    {
+        min_y() = value;
+    }
+
+    float AxisAlignedBoundingBox::max_y() const
     {
         return _limits(1, 1);
     }
 
-    float& AxisAlignedBoundingBox::maxY()
+    float& AxisAlignedBoundingBox::max_y()
     {
         return _limits(1, 1);
     }
 
-    void AxisAlignedBoundingBox::setMaxY(const float value)
+    void AxisAlignedBoundingBox::set_max_y(const float value)
     {
-        maxY() = value;
+        max_y() = value;
     }
 
-    float AxisAlignedBoundingBox::minZ() const
-    {
-        return _limits(2, 0);
-    }
-
-    float& AxisAlignedBoundingBox::minZ()
+    float AxisAlignedBoundingBox::min_z() const
     {
         return _limits(2, 0);
     }
 
-    void AxisAlignedBoundingBox::setMinZ(const float value)
+    float& AxisAlignedBoundingBox::min_z()
     {
-        minZ() = value;
+        return _limits(2, 0);
     }
 
-    float AxisAlignedBoundingBox::maxZ() const
+    void AxisAlignedBoundingBox::set_min_z(const float value)
+    {
+        min_z() = value;
+    }
+
+    float AxisAlignedBoundingBox::max_z() const
     {
         return _limits(2, 1);
     }
 
-    float& AxisAlignedBoundingBox::maxZ()
+    float& AxisAlignedBoundingBox::max_z()
     {
         return _limits(2, 1);
     }
 
-    void AxisAlignedBoundingBox::setMaxZ(const float value)
+    void AxisAlignedBoundingBox::set_max_z(const float value)
     {
-        maxZ() = value;
+        max_z() = value;
     }
 
-    bool AxisAlignedBoundingBox::empty() const
+    bool AxisAlignedBoundingBox::empty(float prec) const
     {
-        return extents().isZero();
+        return extents().isZero(prec);
     }
 
-    float AxisAlignedBoundingBox::centralSquaredDistance(const AxisAlignedBoundingBox& other) const
+    float AxisAlignedBoundingBox::central_squared_distance(const AxisAlignedBoundingBox& other) const
     {
-        return aabb::centralSquaredDistance(*this, other);
+        return aabb::central_squared_distance(*this, other);
     }
 
-    float AxisAlignedBoundingBox::centralDistance(const AxisAlignedBoundingBox& other) const
+    float AxisAlignedBoundingBox::central_distance(const AxisAlignedBoundingBox& other) const
     {
-        return aabb::centralDistance(*this, other);
+        return aabb::central_distance(*this, other);
     }
 
-    bool AxisAlignedBoundingBox::isColliding(const AxisAlignedBoundingBox& b) const
+    bool AxisAlignedBoundingBox::is_colliding(const AxisAlignedBoundingBox& b) const
     {
-        return aabb::isColliding(*this, b);
+        return aabb::is_colliding(*this, b);
     }
 
-    float aabb::centralDistance(const AxisAlignedBoundingBox& lhs, const AxisAlignedBoundingBox& rhs)
+    float aabb::central_distance(const AxisAlignedBoundingBox& lhs, const AxisAlignedBoundingBox& rhs)
     {
         return (lhs.center() - rhs.center()).norm();
     }
 
-    float aabb::centralSquaredDistance(const AxisAlignedBoundingBox& lhs, const AxisAlignedBoundingBox& rhs)
+    float aabb::central_squared_distance(const AxisAlignedBoundingBox& lhs, const AxisAlignedBoundingBox& rhs)
     {
         return (lhs.center() - rhs.center()).squaredNorm();
     }
 
-    bool aabb::isColliding(const AxisAlignedBoundingBox& a, const AxisAlignedBoundingBox& b)
+    bool aabb::is_colliding(const AxisAlignedBoundingBox& a, const AxisAlignedBoundingBox& b)
     {
         return (a.minX() <= b.maxX() and a.maxX() >= b.minX() and
                 a.minY() <= b.maxY() and a.maxY() >= b.minY() and
