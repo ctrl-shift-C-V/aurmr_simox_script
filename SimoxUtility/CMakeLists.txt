@@ -65,6 +65,8 @@ SET(SOURCES
     math/pose/check_rotation_matrix.cpp
     math/pose/invert.cpp
     math/pose/orthogonalize.cpp
+
+    shapes/AxisAlignedBoundingBox.cpp
 )
 
 SET(INCLUDES
@@ -141,6 +143,7 @@ SET(INCLUDES
     meta/eigen/enable_if_compile_time_size.h
     meta/has_member_macros/has_member.hpp
 
+    shapes/AxisAlignedBoundingBox.h
     shapes/OrientedBoxBase.h
     shapes/OrientedBox.h
     shapes/XYConstrainedOrientedBox.h
