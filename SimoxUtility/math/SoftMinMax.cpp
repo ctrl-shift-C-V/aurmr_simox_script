@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <sstream>
 
+
 namespace simox::math
 {
 
@@ -25,7 +26,7 @@ namespace simox::math
         if (percentile < 0 || percentile > 0.5f)
         {
             std::stringstream msg;
-            msg << "percentile must be in [0, 0.5], but was " << percentile;
+            msg << "percentile must be in [0, 0.5], but was " << percentile << ".";
             throw std::invalid_argument(msg.str());
         }
         if (numValues == 0)
@@ -50,15 +51,15 @@ namespace simox::math
 
         if (min_queue.size() < allowed_heap_size())
         {
-            // heaps not full yet
+            // Heaps not full yet
             min_queue.push(value);
             max_queue.push(value);
             return;
         }
 
-        // heaps are full
+        // Heaps are full
 
-        // check minQueue
+        // Check minQueue
         if (value < min_queue.top())
         {
             // insert and pop
@@ -66,7 +67,7 @@ namespace simox::math
             min_queue.pop();
         } // else ignore value
 
-        // check maxQueue
+        // Check maxQueue
         if (value > max_queue.top())
         {
             max_queue.push(value);
@@ -101,7 +102,7 @@ namespace simox::math
 
     std::size_t SoftMinMax::allowed_heap_size() const
     {
-        return std::max(std::size_t(1), num_outside_soft_min_max());
+        return std::max(std::size_t(1), num_outside_soft_min_max() + 1);
     }
 
 }

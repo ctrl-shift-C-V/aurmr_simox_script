@@ -24,7 +24,7 @@ namespace simox::math
          * @brief Constructs a SoftMinMax for given percentile and number of values.
          *
          * @param percentile
-         *  the percentage of values that may excess the soft min/max. Must be in [0..0.5].
+         *  The percentage of values that may excess the soft min/max. Must be in [0..0.5].
          * @param numValues the total number of values that will be added. Must be > 0.
          *
          * @throws `std::invalid_argument`
@@ -34,8 +34,9 @@ namespace simox::math
 
         /**
          * Reinitializes the SoftMinMax with the given arguments.
-         * @see SoftMinMax()
-         * @throws std::invalid_argument if one of the parameters value does not meet the requirements
+         * @see `SoftMinMax()`
+         * @throws `std::invalid_argument`
+         *  If one of the parameters value does not meet the requirements.
          */
         void reset(float percentile, std::size_t numValues);
 
@@ -44,10 +45,10 @@ namespace simox::math
         void add(float value);
 
         /// Get the current soft min.
-        /// @throws `std::out_of_range` if no element was added
+        /// @throws `std::out_of_range` If no element was added.
         float get_soft_min() const;
         /// Get the current soft max.
-        /// @throws `std::out_of_range` if no element was added
+        /// @throws `std::out_of_range` If no element was added.
         float get_soft_max() const;
 
 
@@ -60,7 +61,7 @@ namespace simox::math
         std::size_t allowed_heap_size() const;
 
 
-        /// The percentile in [0, 0.5]
+        /// The percentile in [0, 0.5].
         float percentile = 0;
         /// The number of elements to be added.
         std::size_t num_elements = 0;
