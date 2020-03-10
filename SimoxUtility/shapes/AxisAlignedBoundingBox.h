@@ -92,10 +92,26 @@ namespace simox
         /// Checks whether `*this` is colliding (i.e. overlapping) with `other`.
         bool is_colliding(const AxisAlignedBoundingBox& other) const;
 
+
         /// Indicates whether `point` is inside `*this`.
         template <class PointT>
         bool is_inside(const PointT& p);
 
+        /// Expand `*this` (in-place) to include `point`.
+        template <class PointT>
+        void expand_to(const PointT& p)
+        {
+            expand_to(Eigen::Vector3f(p.x, p.y, p.z));
+        }
+        void expand_to(const Eigen::Vector3f& point);
+
+        /// Return this AABB expanded to include `point`.
+        template <class PointT>
+        void expanded_to(const PointT& p) const
+        {
+            expanded_to(Eigen::Vector3f(p.x, p.y, p.z));
+        }
+        AxisAlignedBoundingBox expanded_to(const Eigen::Vector3f& point) const;
 
 
     private:

@@ -284,6 +284,17 @@ namespace simox
            and p.x() <= aabb.max_x() and p.y() <= aabb.max_y() and p.z() <= aabb.max_z();
     }
 
+    void simox::AxisAlignedBoundingBox::expand_to(const Eigen::Vector3f& point)
+    {
+        min() = min().cwiseMin(point);
+        max() = max().cwiseMax(point);
+    }
+
+    AxisAlignedBoundingBox AxisAlignedBoundingBox::expanded_to(const Eigen::Vector3f& point) const
+    {
+        return { min().cwiseMin(point), max().cwiseMax(point) };
+    }
+
 }
 
 std::ostream& simox::operator<<(std::ostream& os, const AxisAlignedBoundingBox rhs)
