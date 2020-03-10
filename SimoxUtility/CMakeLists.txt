@@ -66,6 +66,8 @@ SET(SOURCES
     math/pose/invert.cpp
     math/pose/orthogonalize.cpp
 
+    math/SoftMinMax.cpp
+
     shapes/AxisAlignedBoundingBox.cpp
 )
 
@@ -139,6 +141,8 @@ SET(INCLUDES
     math/pose/invert.h
     math/pose/orthogonalize.h
     math/pose/pose.h
+
+    math/SoftMinMax.h
 
     meta/eigen/enable_if_compile_time_size.h
     meta/has_member_macros/has_member.hpp
