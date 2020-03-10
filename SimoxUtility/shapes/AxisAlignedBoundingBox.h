@@ -92,6 +92,11 @@ namespace simox
         /// Checks whether `*this` is colliding (i.e. overlapping) with `other`.
         bool is_colliding(const AxisAlignedBoundingBox& other) const;
 
+        /// Indicates whether `point` is inside `*this`.
+        template <class PointT>
+        bool is_inside(const PointT& p);
+
+
 
     private:
 
@@ -123,6 +128,24 @@ namespace aabb
 
     /// Checks whether `lhs` is colliding (i.e. overlapping) with `rhs`.
     bool is_colliding(const AxisAlignedBoundingBox& lhs, const AxisAlignedBoundingBox& rhs);
+
+    /// Indicates whether `point` is inside `aabb`.
+    bool is_inside(const AxisAlignedBoundingBox& aabb, const Eigen::Vector3f& point);
+
+    /// Indicates whether `point` is inside `aabb`.
+    /// `PointT` must have members variables x, y, z.
+    template <class PointT>
+    bool is_inside(const AxisAlignedBoundingBox& aabb, const PointT& p)
+    {
+        return aabb.min_x() <= p.x and aabb.min_y() <= p.y and aabb.min_z() <= p.z
+           and p.x <= aabb.max_x() and p.y <= aabb.max_y() and p.z <= aabb.max_z();
+    }
 }
+
+    template <class PointT>
+    bool AxisAlignedBoundingBox::is_inside(const PointT& p)
+    {
+        return aabb::is_inside(*this, p);
+    }
 
 }

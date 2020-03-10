@@ -273,9 +273,15 @@ namespace simox
 
     bool aabb::is_colliding(const AxisAlignedBoundingBox& a, const AxisAlignedBoundingBox& b)
     {
-        return (a.minX() <= b.maxX() and a.maxX() >= b.minX() and
-                a.minY() <= b.maxY() and a.maxY() >= b.minY() and
-                a.minZ() <= b.maxZ() and a.maxZ() >= b.minZ());
+        return (a.min_x() <= b.max_x() and a.max_x() >= b.min_x() and
+                a.min_y() <= b.max_y() and a.max_y() >= b.min_y() and
+                a.min_z() <= b.max_z() and a.max_z() >= b.min_z());
+    }
+
+    bool aabb::is_inside(const AxisAlignedBoundingBox& aabb, const Eigen::Vector3f& p)
+    {
+        return aabb.min_x() <= p.x() and aabb.min_y() <= p.y() and aabb.min_z() <= p.z()
+           and p.x() <= aabb.max_x() and p.y() <= aabb.max_y() and p.z() <= aabb.max_z();
     }
 
 }
