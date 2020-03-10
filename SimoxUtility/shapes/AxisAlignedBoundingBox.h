@@ -17,7 +17,7 @@ namespace simox
      */
     struct AxisAlignedBoundingBox
     {
-        /// Construct an AABB centered at (0, 0, 0) with extents (0, 0, 0).
+        /// Construct an empty AABB centered at (0, 0, 0) with extents (0, 0, 0).
         AxisAlignedBoundingBox();
 
         /// Construct an AABB with minimal and maximal values.
@@ -95,7 +95,7 @@ namespace simox
 
         /// Indicates whether `point` is inside `*this`.
         template <class PointT>
-        bool is_inside(const PointT& p);
+        bool is_inside(const PointT& p) const;
 
         /// Expand `*this` (in-place) to include `point`.
         template <class PointT>
@@ -117,7 +117,7 @@ namespace simox
     private:
 
         /**
-         * @brief The limits structured as follows:
+         * The limits structured as follows:
          *
          * @code
          *    min    max
@@ -159,7 +159,7 @@ namespace aabb
 }
 
     template <class PointT>
-    bool AxisAlignedBoundingBox::is_inside(const PointT& p)
+    bool AxisAlignedBoundingBox::is_inside(const PointT& p) const
     {
         return aabb::is_inside(*this, p);
     }
