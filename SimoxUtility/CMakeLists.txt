@@ -77,6 +77,7 @@ SET(INCLUDES
 
     algorithm/for_each_if.h
 
+    color/convert_byte_float.hpp
     color/Color.h
     color/GlasbeyLUT.h
 

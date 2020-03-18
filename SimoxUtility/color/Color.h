@@ -4,39 +4,11 @@
 
 #include <Eigen/Core>
 
+#include "convert_byte_float.hpp"
+
 
 namespace simox::color
 {
-
-    /// Convert an integral type to a byte in [0, 255].
-    template <typename Int, std::enable_if_t<std::is_integral_v<Int>, int> = 0>
-    uint8_t to_byte(Int value)
-    {
-        return static_cast<uint8_t>(std::clamp(value, static_cast<Int>(0), static_cast<Int>(255)));
-    }
-
-    /// Convert a floating point type to a byte in [0, 255].
-    template <typename Float, std::enable_if_t<std::is_floating_point_v<Float>, int> = 0>
-    uint8_t to_byte(Float value)
-    {
-        return static_cast<uint8_t>(255 * std::clamp(value, static_cast<Float>(0.), static_cast<Float>(1.)));
-    }
-
-
-    /// Convert an integral point type to a float in [0.0, 1.0].
-    template <typename Int, std::enable_if_t<std::is_integral_v<Int>, int> = 0>
-    float to_float(Int value)
-    {
-        return to_byte(value) / 255.f;
-    }
-
-    /// Convert a floating pont type to a float in [0.0, 1.0].
-    template <typename Float, std::enable_if_t<std::is_floating_point_v<Float>, int> = 0>
-    float to_float(Float value)
-    {
-        return std::clamp(value, static_cast<Float>(0.), static_cast<Float>(1.));
-    }
-
 
     /**
      * @brief An RGBA color, where each component is a byte in [0, 255].
@@ -72,11 +44,11 @@ namespace simox::color
         Color(Float r, Float g, Float b, Float a = 1.0) : Color(to_byte(r), to_byte(g), to_byte(b), to_byte(a))
         {}
 
-        /// Construct a color from an RGB Eigen vector.
+        /// Construct a color from an RGB vector.
         template <typename T>
         Color(Eigen::Matrix<T, 3, 1> vector3) : Color(vector3(0), vector3(1), vector3(2))
         {}
-        /// Construct a color from an RGBA Eigen vector.
+        /// Construct a color from an RGBA vector.
         template <typename T>
         Color(Eigen::Matrix<T, 4, 1> vector4) : Color(vector4(0), vector4(1), vector4(2), vector4(3))
         {}
@@ -84,8 +56,8 @@ namespace simox::color
 
         // Converters.
 
-        Eigen::Matrix<uint8_t, 3, 1> to_vector3b() const;
-        Eigen::Matrix<uint8_t, 4, 1> to_vector4b() const;
+        Eigen::Vector3i to_vector3i() const;
+        Eigen::Vector4i to_vector4i() const;
         Eigen::Vector3f to_vector3f() const;
         Eigen::Vector4f to_vector4f() const;
 

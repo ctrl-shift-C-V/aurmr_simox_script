@@ -7,14 +7,14 @@ namespace simox::color
     Color::Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) : r(r), g(g), b(b), a(a)
     {}
 
-    Eigen::Matrix<uint8_t, 3, 1> Color::to_vector3b() const
+    Eigen::Vector3i Color::to_vector3i() const
     {
         return { r, g, b };
     }
 
-    Eigen::Matrix<uint8_t, 4, 1> Color::to_vector4b() const
+    Eigen::Vector4i Color::to_vector4i() const
     {
-        return { r, g, b, a};
+        return { r, g, b, a };
     }
 
     Eigen::Vector3f Color::to_vector3f() const
