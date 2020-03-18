@@ -15,7 +15,7 @@ namespace simox::math
         vector /= len;
 
         const Eigen::Matrix<Scalar, 3, 1> v2 =
-            (vector(0) < 0.5f) ?
+            (std::abs(vector(0)) < 0.5f) ?
             Eigen::Matrix<Scalar, 3, 1>::UnitX() :
             Eigen::Matrix<Scalar, 3, 1>::UnitY();
         return vector.cross(v2).normalized();
