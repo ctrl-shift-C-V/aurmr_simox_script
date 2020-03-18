@@ -4,3 +4,4 @@
 
 #include "color/Color.h"
 #include "color/GlasbeyLUT.h"
+#include "color/hsv.h"
