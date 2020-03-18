@@ -141,6 +141,11 @@ SET(INCLUDES
     math/pose/invert.h
     math/pose/orthogonalize.h
     math/pose/pose.h
+    math/pose/transform.h
+
+    math/normal/orthogonal_vector.h
+    math/normal/normal_to_mat3.h
+    math/normal/normal_to_mat4.h
 
     math/SoftMinMax.h
 
