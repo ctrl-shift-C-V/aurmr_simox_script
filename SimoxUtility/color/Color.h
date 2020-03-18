@@ -142,9 +142,9 @@ namespace simox::color
         }
 
         /// Red + Blue
-        static inline Color magenta(int p = 255, int a = 255)
+        static inline Color magenta(int m = 255, int a = 255)
         {
-            return Color(p, 0, p, a);
+            return Color(m, 0, m, a);
         }
 
 
@@ -157,9 +157,9 @@ namespace simox::color
         }
 
         /// 2 Red + 1 Blue
-        static inline Color pink(int o = 255, int a = 255)
+        static inline Color pink(int p = 255, int a = 255)
         {
-            return Color(o, o / 2, 0, a);
+            return Color(p, p / 2, 0, a);
         }
 
         /// 2 Green + 1 Red
@@ -175,15 +175,15 @@ namespace simox::color
         }
 
         /// 2 Blue + 1 Green
-        static inline Color azure(int c = 255, int a = 255)
+        static inline Color azure(int az = 255, int a = 255)
         {
-            return Color(0, c / 2, c, a);
+            return Color(0, az / 2, az, a);
         }
 
         /// 2 Blue + 1 Red
-        static inline Color purple(int c = 255, int a = 255)
+        static inline Color purple(int p = 255, int a = 255)
         {
-            return Color(0, c / 2, c, a);
+            return Color(0, p / 2, p, a);
         }
 
     };
