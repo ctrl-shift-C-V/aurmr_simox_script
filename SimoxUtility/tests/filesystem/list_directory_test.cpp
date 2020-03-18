@@ -17,43 +17,39 @@
 
 namespace fs = simox::fs;
 
-
-namespace
+struct list_directory_test_Fixture
 {
-    struct Fixture
+    const fs::path directory = "filesystem_list_directory_test.dir";
+    std::vector<fs::path> filenames =
     {
-        const fs::path directory = "filesystem_list_directory_test.dir";
-        std::vector<fs::path> filenames =
-        {
-            "file1", "file2.txt", "file3.txt.temp", "~file4", ".file5"
-        };
-
-        bool sort = true;
-
-
-        Fixture()
-        {
-            std::sort(filenames.begin(), filenames.end());
-
-            BOOST_REQUIRE(!std::filesystem::exists(directory));
-            std::filesystem::create_directories(directory);
-
-            for (auto file : filenames)
-            {
-                std::ofstream ofs(directory / file);
-                BOOST_REQUIRE(std::filesystem::exists(directory / file));
-            }
-        }
-        ~Fixture()
-        {
-            std::filesystem::remove_all(directory);
-            BOOST_REQUIRE(!std::filesystem::exists(directory));
-        }
+        "file1", "file2.txt", "file3.txt.temp", "~file4", ".file5"
     };
-}
+
+    bool sort = true;
 
 
-BOOST_FIXTURE_TEST_SUITE(list_directory_test, Fixture)
+    list_directory_test_Fixture()
+    {
+        std::sort(filenames.begin(), filenames.end());
+
+        BOOST_REQUIRE(!std::filesystem::exists(directory));
+        std::filesystem::create_directories(directory);
+
+        for (auto file : filenames)
+        {
+            std::ofstream ofs(directory / file);
+            BOOST_REQUIRE(std::filesystem::exists(directory / file));
+        }
+    }
+    ~list_directory_test_Fixture()
+    {
+        std::filesystem::remove_all(directory);
+        BOOST_REQUIRE(!std::filesystem::exists(directory));
+    }
+};
+
+
+BOOST_FIXTURE_TEST_SUITE(list_directory_test, list_directory_test_Fixture)
 
 
 BOOST_AUTO_TEST_CASE(test_list_directory_local)

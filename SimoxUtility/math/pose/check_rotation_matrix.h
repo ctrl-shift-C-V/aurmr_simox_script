@@ -7,6 +7,7 @@
 
 namespace simox::math
 {
+    bool is_rotation_matrix(const Eigen::Matrix3f& rotation, float precision = 1e-6f);
 
     /**
      * @brief Checks whether `rotation` is a valid rotation matrix.

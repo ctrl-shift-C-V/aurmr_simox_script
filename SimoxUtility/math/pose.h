@@ -7,3 +7,4 @@
 #include "pose/invert.h"
 #include "pose/orthogonalize.h"
 #include "pose/pose.h"
+#include "pose/transform.h"
