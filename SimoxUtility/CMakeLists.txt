@@ -53,6 +53,7 @@ SET(SOURCES
     color/Color.cpp
     color/GlasbeyLUT.cpp
     color/hsv.cpp
+    color/json.cpp
 
     error/SimoxError.cpp
 
@@ -82,6 +83,7 @@ SET(INCLUDES
     color/Color.h
     color/GlasbeyLUT.h
     color/hsv.h
+    color/json.h
 
     eigen/AssertAsException.h
 
