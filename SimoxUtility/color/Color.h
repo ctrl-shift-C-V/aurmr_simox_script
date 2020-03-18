@@ -1,19 +1,21 @@
 #pragma once
 
-#include <Eigen/Core>
-
 #include <type_traits>
+
+#include <Eigen/Core>
 
 
 namespace simox::color
 {
 
+    /// Convert an integral type to a byte in [0, 255].
     template <typename Int, std::enable_if_t<std::is_integral_v<Int>, int> = 0>
     uint8_t to_byte(Int value)
     {
         return static_cast<uint8_t>(std::clamp(value, static_cast<Int>(0), static_cast<Int>(255)));
     }
 
+    /// Convert a floating point type to a byte in [0, 255].
     template <typename Float, std::enable_if_t<std::is_floating_point_v<Float>, int> = 0>
     uint8_t to_byte(Float value)
     {
@@ -21,12 +23,14 @@ namespace simox::color
     }
 
 
+    /// Convert an integral point type to a float in [0.0, 1.0].
     template <typename Int, std::enable_if_t<std::is_integral_v<Int>, int> = 0>
     float to_float(Int value)
     {
         return to_byte(value) / 255.f;
     }
 
+    /// Convert a floating pont type to a float in [0.0, 1.0].
     template <typename Float, std::enable_if_t<std::is_floating_point_v<Float>, int> = 0>
     float to_float(Float value)
     {
@@ -34,6 +38,9 @@ namespace simox::color
     }
 
 
+    /**
+     * @brief An RGBA color, where each component is a byte in [0, 255].
+     */
     struct Color
     {
         // Attributes.
@@ -77,11 +84,134 @@ namespace simox::color
 
         // Converters.
 
-        Eigen::Matrix<uint8_t, 3, 1> toVector3b() const;
-        Eigen::Matrix<uint8_t, 4, 1> toVector4b() const;
-        Eigen::Vector3f toVector3f() const;
-        Eigen::Vector4f toVector4f() const;
+        Eigen::Matrix<uint8_t, 3, 1> to_vector3b() const;
+        Eigen::Matrix<uint8_t, 4, 1> to_vector4b() const;
+        Eigen::Vector3f to_vector3f() const;
+        Eigen::Vector4f to_vector4f() const;
+
+
+        // Named colors.
+
+        // Colorless
+
+        static inline Color black(int a = 255)
+        {
+            return Color(0, 0, 0, a);
+        }
+
+        static inline Color white(int a = 255)
+        {
+            return Color(255, 255, 255, a);
+        }
+
+        static inline Color gray(int g = 128, int a = 255)
+        {
+            return Color(g, g, g, a);
+        }
+
+        // Primary colors
+
+        static inline Color red(int r = 255, int a = 255)
+        {
+            return Color(r, 0, 0, a);
+        }
+
+        static inline Color green(int g = 255, int a = 255)
+        {
+            return Color(0, g, 0, a);
+        }
+
+        static inline Color blue(int b = 255, int a = 255)
+        {
+            return Color(0, 0, b, a);
+        }
+
+
+        // Secondary colors
+
+        /// Green + Blue
+        static inline Color cyan(int c = 255, int a = 255)
+        {
+            return Color(0, c, c, a);
+        }
+
+        /// Red + Green
+        static inline Color yellow(int y = 255, int a = 255)
+        {
+            return Color(y, y, 0, a);
+        }
+
+        /// Red + Blue
+        static inline Color magenta(int p = 255, int a = 255)
+        {
+            return Color(p, 0, p, a);
+        }
+
+
+        // 2:1 Mixed colors
+
+        /// 2 Red + 1 Green
+        static inline Color orange(int o = 255, int a = 255)
+        {
+            return Color(o, o / 2, 0, a);
+        }
+
+        /// 2 Red + 1 Blue
+        static inline Color pink(int o = 255, int a = 255)
+        {
+            return Color(o, o / 2, 0, a);
+        }
+
+        /// 2 Green + 1 Red
+        static inline Color lime(int l = 255, int a = 255)
+        {
+            return Color(l / 2, l, 0, a);
+        }
+
+        /// 2 Green + 1 Blue
+        static inline Color turquoise(int t = 255, int a = 255)
+        {
+            return Color(0, t, t / 2, a);
+        }
+
+        /// 2 Blue + 1 Green
+        static inline Color azure(int c = 255, int a = 255)
+        {
+            return Color(0, c / 2, c, a);
+        }
+
+        /// 2 Blue + 1 Red
+        static inline Color purple(int c = 255, int a = 255)
+        {
+            return Color(0, c / 2, c, a);
+        }
 
     };
 
+
+    inline std::ostream& operator<<(std::ostream& os, const Color& c)
+    {
+        return os << "(" << int(c.r) << " " << int(c.g) << " " << int(c.b)
+               << " | " << int(c.a) << ")";
+    }
+
+    inline bool operator==(const Color& lhs, const Color& rhs)
+    {
+        return lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b && lhs.a == rhs.a;
+    }
+
+    inline bool operator!=(const Color& lhs, const Color& rhs)
+    {
+        return !(lhs == rhs);
+    }
+
+}
+
+
+namespace simox
+{
+    // Expose color type as `simox::Color`.
+
+    /// An RGBA color, where each component is a byte in [0, 255].
+    using Color = color::Color;
 }

@@ -280,7 +280,7 @@ namespace simox::color
 
     Eigen::Vector4f GlasbeyLUT::atf(std::size_t id, float alpha)
     {
-        return at(id, to_byte(alpha)).toVector4f();
+        return at(id, to_byte(alpha)).to_vector4f();
     }
 
 

@@ -6,7 +6,7 @@
 #include <Eigen/Core>
 
 
-#include "color.h"
+#include "Color.h"
 
 
 namespace simox::color
