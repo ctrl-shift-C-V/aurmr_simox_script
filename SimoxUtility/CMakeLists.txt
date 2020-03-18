@@ -151,6 +151,7 @@ SET(INCLUDES
 
     meta/eigen/enable_if_compile_time_size.h
     meta/has_member_macros/has_member.hpp
+    meta/type_name.h
 
     shapes/AxisAlignedBoundingBox.h
     shapes/OrientedBoxBase.h
