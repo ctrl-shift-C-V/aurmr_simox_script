@@ -6,6 +6,18 @@
 
 #include "orthogonalize.h"
 
+bool simox::math::is_rotation_matrix(const Eigen::Matrix3f& rotation, float precision)
+{
+    if (!simox::math::is_matrix_orthogonal(rotation, precision))
+    {
+        return false;
+    }
+    if (std::abs(rotation.determinant() - 1.f) > precision)
+    {
+        return false;
+    }
+    return true;
+}
 
 void simox::math::check_rotation_matrix(const Eigen::Matrix3f& rotation, float precision)
 {

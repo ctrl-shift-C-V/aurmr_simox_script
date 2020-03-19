@@ -37,6 +37,8 @@ namespace simox::math
         }
         this->percentile = percentile;
         this->num_elements = numValues;
+
+        allowed_heap_size_cache = allowed_heap_size();
     }
 
     void SoftMinMax::add(float value)
@@ -49,7 +51,7 @@ namespace simox::math
             throw std::logic_error(msg.str());
         }
 
-        if (min_queue.size() < allowed_heap_size())
+        if (min_queue.size() < allowed_heap_size_cache)
         {
             // Heaps not full yet
             min_queue.push(value);
