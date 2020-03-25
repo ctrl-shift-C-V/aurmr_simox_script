@@ -66,6 +66,8 @@ namespace simox::math
         /// The number of elements to be added.
         std::size_t num_elements = 0;
 
+        std::size_t allowed_heap_size_cache = 0;
+
 
         using Container = std::vector<float>;
         using MaxCompare = std::less<float>;     // Results in max heap.

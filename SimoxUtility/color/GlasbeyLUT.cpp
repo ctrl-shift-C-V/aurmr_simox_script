@@ -274,24 +274,13 @@ namespace simox::color
     {
         id = id % size();
 
-        Color color;
-        color(0) = GLASBEY_LUT[id * 3 + 0];
-        color(1) = GLASBEY_LUT[id * 3 + 1];
-        color(2) = GLASBEY_LUT[id * 3 + 2];
-        color(3) = to_byte(alpha);
+        Color color(GLASBEY_LUT[id * 3 + 0], GLASBEY_LUT[id * 3 + 1], GLASBEY_LUT[id * 3 + 2], to_byte(alpha));
         return color;
     }
 
-    Colorf GlasbeyLUT::atf(std::size_t id, float alpha)
+    Eigen::Vector4f GlasbeyLUT::atf(std::size_t id, float alpha)
     {
-        id = id % size();
-
-        Colorf color;
-        color(0) = to_float(GLASBEY_LUT[id * 3 + 0]);
-        color(1) = to_float(GLASBEY_LUT[id * 3 + 1]);
-        color(2) = to_float(GLASBEY_LUT[id * 3 + 2]);
-        color(3) = alpha;
-        return color;
+        return at(id, to_byte(alpha)).to_vector4f();
     }
 
 

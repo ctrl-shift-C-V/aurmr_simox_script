@@ -2,5 +2,7 @@
 
 // This file is generated!
 
+#include "color/Color.h"
 #include "color/GlasbeyLUT.h"
-#include "color/color.h"
+#include "color/hsv.h"
+#include "color/json.h"

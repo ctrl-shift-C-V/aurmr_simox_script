@@ -6,7 +6,7 @@
 #include <Eigen/Core>
 
 
-#include "color.h"
+#include "Color.h"
 
 
 namespace simox::color
@@ -35,7 +35,7 @@ namespace simox::color
          * @brief Get a color from the lookup table with given ID (with float values).
          * The ID is automaticall wrapped if greater than `size()`.
          */
-        static Colorf atf(std::size_t id, float alpha = 1.f);
+        static Eigen::Vector4f atf(std::size_t id, float alpha = 1.f);
 
 
         /**
@@ -64,7 +64,7 @@ namespace simox::color
          * The ID is automaticall wrapped if greater than `size()`.
          */
         template <typename UIntT, std::enable_if_t<std::is_unsigned_v<UIntT>, int> = 0>
-        static Colorf atf(UIntT id, float alpha = 1.f)
+        static Eigen::Vector4f atf(UIntT id, float alpha = 1.f)
         {
             return atf(static_cast<std::size_t>(id), alpha);
         }
@@ -74,7 +74,7 @@ namespace simox::color
          * If `id` is negative, its absolute value is used.
          */
         template <typename IntT, std::enable_if_t<std::is_signed_v<IntT>, int> = 0>
-        static Colorf atf(IntT id, float alpha = 1.f)
+        static Eigen::Vector4f atf(IntT id, float alpha = 1.f)
         {
             return atf(static_cast<std::size_t>(id >= 0 ? id : std::abs(id)), alpha);
         }
