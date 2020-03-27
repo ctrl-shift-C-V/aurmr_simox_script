@@ -51,6 +51,7 @@ SET(SOURCES
     SimoxUtility.cpp
 
     color/Color.cpp
+    color/ColorMap.cpp
     color/GlasbeyLUT.cpp
     color/hsv.cpp
     color/interpolation.cpp
@@ -82,6 +83,7 @@ SET(INCLUDES
 
     color/convert_byte_float.hpp
     color/Color.h
+    color/ColorMap.h
     color/GlasbeyLUT.h
     color/hsv.h
     color/interpolation.h
