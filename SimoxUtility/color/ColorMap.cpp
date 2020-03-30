@@ -8,6 +8,23 @@ namespace simox::color
     {
     }
 
+    ColorMap::ColorMap(std::initializer_list<Color> init)
+    {
+        if (init.size() == 1)
+        {
+            addKey(0, *init.begin());
+        }
+        else
+        {
+            size_t i = 0;
+            float max = init.size() - 1;
+            for (const auto& color : init)
+            {
+                addKey(i++ / max, color);
+            }
+        }
+    }
+
     ColorMap::ColorMap(std::initializer_list<std::pair<float, Color> > init)
     {
         for (const auto& [v, c] : init)

@@ -14,6 +14,7 @@ namespace simox::color
     public:
 
         ColorMap();
+        ColorMap(std::initializer_list<Color> init);
         ColorMap(std::initializer_list<std::pair<float, Color>> init);
 
         bool empty() const;
