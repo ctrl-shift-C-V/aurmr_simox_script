@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-#include "ColorMap.h"
+#include <SimoxUtility/color/ColorMap.h>
 
 
 namespace simox::color::cmaps
@@ -65,16 +65,6 @@ namespace simox::color::cmaps
     {
         return Named::has(name);
     }
-
-
-
-    // Color Map factories.
-
-    ColorMap viridis();
-    ColorMap plasma();
-    ColorMap inferno();
-    ColorMap magma();
-    ColorMap cividis();
 
 }
 

@@ -25,7 +25,7 @@
 #include <boost/test/included/unit_test.hpp>
 
 #include <SimoxUtility/color/ColorMap.h>
-#include <SimoxUtility/color/colormaps.h>
+#include <SimoxUtility/color/cmaps.h>
 
 #include <iostream>
 
@@ -138,7 +138,21 @@ BOOST_AUTO_TEST_CASE(test_named_colormaps)
 
     cmap = simox::color::cmaps::get_named("viridis");
     BOOST_CHECK_EQUAL(cmap.name(), "viridis");
+
+    namespace cmaps = simox::color::cmaps;
+    BOOST_CHECK_GT(cmaps::Named::all().size(), 0);
+
+    for (const auto& [name, cmap] : cmaps::Named::all())
+    {
+        BOOST_TEST_CONTEXT("ColorMap '" << name << "'")
+        {
+            BOOST_CHECK_EQUAL(cmap.name(), name);
+            BOOST_CHECK_GE(cmap.size(), 2);
+        }
+    }
 }
+
+
 
 
 BOOST_AUTO_TEST_SUITE_END()

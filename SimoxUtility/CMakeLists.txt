@@ -50,9 +50,10 @@ MESSAGE (STATUS "\n***** CONFIGURING Simox project SimoxUtility *****")
 SET(SOURCES
     SimoxUtility.cpp
 
+    color/cmaps/colormaps.cpp
+    color/cmaps/Named.cpp
     color/Color.cpp
     color/ColorMap.cpp
-    color/colormaps.cpp
     color/GlasbeyLUT.cpp
     color/hsv.cpp
     color/interpolation.cpp
@@ -82,10 +83,11 @@ SET(INCLUDES
 
     algorithm/for_each_if.h
 
+    color/cmaps/colormaps.h
+    color/cmaps/Named.h
     color/convert_byte_float.hpp
     color/Color.h
     color/ColorMap.h
-    color/colormaps.h
     color/GlasbeyLUT.h
     color/hsv.h
     color/interpolation.h
