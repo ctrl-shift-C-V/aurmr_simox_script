@@ -6,6 +6,9 @@
 namespace simox::color::cmaps
 {
 
+    // Source: https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html
+
+
     // Perceptually Uniform Sequential
 
     ColorMap viridis();
