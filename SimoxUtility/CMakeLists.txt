@@ -82,6 +82,7 @@ SET(INCLUDES
     EigenStdVector.h
 
     algorithm/for_each_if.h
+    algorithm/apply.hpp
 
     color/cmaps/colormaps.h
     color/cmaps/Named.h

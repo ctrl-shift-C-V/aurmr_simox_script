@@ -4,6 +4,8 @@
 #include <map>
 #include <string>
 
+#include <SimoxUtility/algorithm/apply.hpp>
+
 #include "Color.h"
 #include "interpolation.h"
 
@@ -56,10 +58,10 @@ namespace simox::color
 
         /// Apply this colormap to a vector.
         template <typename V>
-        std::vector<Color> operator()(const std::vector<V>& vector) const;
+        std::vector<Color> operator()(const std::vector<V>& vector) const { return simox::apply(vector, *this); }
         /// Apply this colormap to a map.
         template <typename K, typename V>
-        std::map<K, Color> operator()(const std::map<K, V>& map) const;
+        std::map<K, Color> operator()(const std::map<K, V>& map) const { return simox::apply(map, *this); }
 
         std::string name() const { return _name; }
         void setName(const std::string& name) { this->_name = name; }
@@ -98,26 +100,6 @@ namespace simox::color
         std::optional<float> _vmax = std::nullopt;
 
     };
-
-
-    template<typename V>
-    std::vector<Color> ColorMap::operator()(const std::vector<V>& vector) const
-    {
-        std::vector<Color> result;
-        std::transform(vector.begin(), vector.end(), std::back_inserter(result), *this);
-        return result;
-    }
-
-    template<typename K, typename V>
-    std::map<K, Color> ColorMap::operator()(const std::map<K, V>& map) const
-    {
-        std::map<K, Color> result;
-        for (const auto& [name, value] : map)
-        {
-            result[name] = (*this)(value);
-        }
-        return result;
-    }
 
 }
 
