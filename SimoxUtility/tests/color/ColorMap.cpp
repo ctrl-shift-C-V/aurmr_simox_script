@@ -25,6 +25,7 @@
 #include <boost/test/included/unit_test.hpp>
 
 #include <SimoxUtility/color/ColorMap.h>
+#include <SimoxUtility/color/colormaps.h>
 
 #include <iostream>
 
@@ -127,6 +128,16 @@ BOOST_AUTO_TEST_CASE(test_three_elements)
     BOOST_CHECK_EQUAL(cmap.at(0.5), simox::Color(0.375, 0.5, 0.625));
     BOOST_CHECK_EQUAL(cmap.at(1.0), simox::Color(0.250, 0.5, 0.750));
     BOOST_CHECK_EQUAL(cmap.at(1.5), simox::Color(0.125, 0.5, 0.875));
+}
+
+
+BOOST_AUTO_TEST_CASE(test_named_colormaps)
+{
+    simox::color::ColorMap cmap = simox::color::cmaps::viridis();
+    BOOST_CHECK_EQUAL(cmap.name(), "viridis");
+
+    cmap = simox::color::cmaps::get_named("viridis");
+    BOOST_CHECK_EQUAL(cmap.name(), "viridis");
 }
 
 

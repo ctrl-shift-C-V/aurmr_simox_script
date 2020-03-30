@@ -52,6 +52,7 @@ SET(SOURCES
 
     color/Color.cpp
     color/ColorMap.cpp
+    color/colormaps.cpp
     color/GlasbeyLUT.cpp
     color/hsv.cpp
     color/interpolation.cpp
@@ -84,6 +85,7 @@ SET(INCLUDES
     color/convert_byte_float.hpp
     color/Color.h
     color/ColorMap.h
+    color/colormaps.h
     color/GlasbeyLUT.h
     color/hsv.h
     color/interpolation.h
