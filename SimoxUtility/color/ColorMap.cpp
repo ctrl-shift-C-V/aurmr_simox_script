@@ -8,7 +8,16 @@ namespace simox::color
     {
     }
 
-    ColorMap::ColorMap(std::initializer_list<Color> init)
+    ColorMap::ColorMap(std::initializer_list<Color> init) : ColorMap("", init)
+    {
+    }
+
+    ColorMap::ColorMap(std::initializer_list<std::pair<float, Color> > init) : ColorMap("", init)
+    {
+    }
+
+    ColorMap::ColorMap(const std::string& name, std::initializer_list<Color> init) :
+        _name(name)
     {
         if (init.size() == 1)
         {
@@ -25,7 +34,8 @@ namespace simox::color
         }
     }
 
-    ColorMap::ColorMap(std::initializer_list<std::pair<float, Color> > init)
+    ColorMap::ColorMap(const std::string& name, std::initializer_list<std::pair<float, Color> > init) :
+        _name(name)
     {
         for (const auto& [v, c] : init)
         {
