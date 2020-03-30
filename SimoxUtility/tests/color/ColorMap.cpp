@@ -131,6 +131,66 @@ BOOST_AUTO_TEST_CASE(test_three_elements)
 }
 
 
+BOOST_AUTO_TEST_CASE(test_vmin)
+{
+    const simox::Color colorA(1.0, 0.5, 0.0);
+    const simox::Color colorB(0.0, 0.5, 1.0);
+
+    simox::color::ColorMap cmap { { 1, colorA }, { 2, colorB } };
+    cmap.set_vmin(0);
+
+    BOOST_CHECK_EQUAL(cmap.at(-1), colorA);
+    BOOST_CHECK_EQUAL(cmap.at( 0), colorA);
+
+    BOOST_CHECK_EQUAL(cmap.at( 0.5), simox::Color(0.75, 0.5, 0.25));
+    BOOST_CHECK_EQUAL(cmap.at( 1.0), simox::Color(0.50, 0.5, 0.50));
+    BOOST_CHECK_EQUAL(cmap.at( 1.5), simox::Color(0.25, 0.5, 0.75));
+
+    BOOST_CHECK_EQUAL(cmap.at( 2), colorB);
+    BOOST_CHECK_EQUAL(cmap.at( 3), colorB);
+}
+
+
+BOOST_AUTO_TEST_CASE(test_vmax)
+{
+    const simox::Color colorA(1.0, 0.5, 0.0);
+    const simox::Color colorB(0.0, 0.5, 1.0);
+
+    simox::color::ColorMap cmap { { 1, colorA }, { 2, colorB } };
+    cmap.set_vmax(3);
+
+    BOOST_CHECK_EQUAL(cmap.at( 0), colorA);
+    BOOST_CHECK_EQUAL(cmap.at( 1), colorA);
+
+    BOOST_CHECK_EQUAL(cmap.at( 1.5), simox::Color(0.75, 0.5, 0.25));
+    BOOST_CHECK_EQUAL(cmap.at( 2.0), simox::Color(0.50, 0.5, 0.50));
+    BOOST_CHECK_EQUAL(cmap.at( 2.5), simox::Color(0.25, 0.5, 0.75));
+
+    BOOST_CHECK_EQUAL(cmap.at( 3), colorB);
+    BOOST_CHECK_EQUAL(cmap.at( 4), colorB);
+}
+
+
+BOOST_AUTO_TEST_CASE(test_vlimits)
+{
+    const simox::Color colorA(1.0, 0.5, 0.0);
+    const simox::Color colorB(0.0, 0.5, 1.0);
+
+    simox::color::ColorMap cmap { { 1, colorA }, { 2, colorB } };
+    cmap.set_vlimits(100, 200);
+
+    BOOST_CHECK_EQUAL(cmap.at(  99), colorA);
+    BOOST_CHECK_EQUAL(cmap.at( 100), colorA);
+
+    BOOST_CHECK_EQUAL(cmap.at( 125), simox::Color(0.75, 0.5, 0.25));
+    BOOST_CHECK_EQUAL(cmap.at( 150), simox::Color(0.50, 0.5, 0.50));
+    BOOST_CHECK_EQUAL(cmap.at( 175), simox::Color(0.25, 0.5, 0.75));
+
+    BOOST_CHECK_EQUAL(cmap.at( 200), colorB);
+    BOOST_CHECK_EQUAL(cmap.at( 201), colorB);
+}
+
+
 BOOST_AUTO_TEST_CASE(test_named_colormaps)
 {
     simox::color::ColorMap cmap = simox::color::cmaps::viridis();
@@ -153,6 +213,37 @@ BOOST_AUTO_TEST_CASE(test_named_colormaps)
 }
 
 
+BOOST_AUTO_TEST_CASE(test_apply_vector)
+{
+    const simox::ColorMap cmap = simox::color::cmaps::viridis();
+
+    const std::vector<float> vector = {0, 1, 2};
+    const std::vector<simox::Color> cvector = cmap(vector);
+
+    BOOST_CHECK_EQUAL(cvector.size(), vector.size());
+
+    for (size_t i = 0; i < vector.size(); ++i)
+    {
+        BOOST_CHECK_EQUAL(cvector[i], cmap(vector[i]));
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE(test_apply_map)
+{
+    const simox::ColorMap colormap = simox::color::cmaps::viridis();
+
+    const std::map<std::string, float> map = { {"0", 0.0} , {"1", 1.0}, {"2", 2.0} };
+    const std::map<std::string, simox::Color> cmap = colormap(map);
+
+    BOOST_CHECK_EQUAL(map.size(), cmap.size());
+
+    for (const auto& [name, color] : cmap)
+    {
+        BOOST_CHECK_GT(map.count(name), 0);
+        BOOST_CHECK_EQUAL(color, colormap(map.at(name)));
+    }
+}
 
 
 BOOST_AUTO_TEST_SUITE_END()

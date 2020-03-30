@@ -21,7 +21,7 @@ namespace simox::color
     {
         if (init.size() == 1)
         {
-            addKey(0, *init.begin());
+            add_key(0, *init.begin());
         }
         else
         {
@@ -29,7 +29,7 @@ namespace simox::color
             float max = init.size() - 1;
             for (const auto& color : init)
             {
-                addKey(i++ / max, color);
+                add_key(i++ / max, color);
             }
         }
     }
@@ -39,31 +39,8 @@ namespace simox::color
     {
         for (const auto& [v, c] : init)
         {
-            addKey(v, c);
+            add_key(v, c);
         }
-    }
-
-
-    bool ColorMap::empty() const
-    {
-        return keys.empty();
-    }
-
-    size_t ColorMap::size() const
-    {
-        return keys.size();
-    }
-
-
-    void ColorMap::clear()
-    {
-        keys.clear();
-    }
-
-
-    void ColorMap::addKey(float value, const Color& color)
-    {
-        keys[value] = color;
     }
 
 
@@ -77,6 +54,16 @@ namespace simox::color
         if (keys.size() == 1)
         {
             return keys.begin()->second;
+        }
+
+        if (_vmin || _vmax)
+        {
+            // Native: [1 .. 2]
+            // Virtual: [100 .. 200]
+            // => Scale 150 to 1.5
+
+            value = (value - vmin()) / (vmax() - vmin());  // 150 -> 0.5
+            value = value * (original_vmax() - original_vmin()) + original_vmin(); // 0.5 -> 1.5
         }
 
         // keys.size() >= 2
@@ -105,6 +92,28 @@ namespace simox::color
         // t = 0 => full lower,  t = 1 => full upper
 
         return interpol::linear(t, lower->second, upper->second);
+    }
+
+
+    float ColorMap::original_vmin() const
+    {
+        if (empty())
+        {
+            return 0;
+        }
+        return keys.begin()->first;
+    }
+
+
+    float ColorMap::original_vmax() const
+    {
+        if (empty())
+        {
+            return 1;
+        }
+        auto it = keys.end();
+        --it;
+        return it->first;
     }
 
 }
