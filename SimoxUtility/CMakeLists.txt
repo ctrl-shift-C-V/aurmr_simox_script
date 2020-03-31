@@ -167,6 +167,7 @@ SET(INCLUDES
     meta/has_member_macros/has_member.hpp
     meta/EnumNames.hpp
     meta/type_name.h
+    meta/boost_hana/has_hana_accessor.h
 
     shapes/AxisAlignedBoundingBox.h
     shapes/OrientedBoxBase.h
