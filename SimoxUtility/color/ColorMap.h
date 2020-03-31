@@ -58,25 +58,33 @@ namespace simox::color
 
         /// Apply this colormap to a vector.
         template <typename V>
-        std::vector<Color> operator()(const std::vector<V>& vector) const { return simox::apply(vector, *this); }
-        /// Apply this colormap to a map.
+        std::vector<Color> operator()(const std::vector<V>& vector) const { return simox::alg::apply(*this, vector); }
+        /// Apply this colormap to a map's values.
         template <typename K, typename V>
-        std::map<K, Color> operator()(const std::map<K, V>& map) const { return simox::apply(map, *this); }
+        std::map<K, Color> operator()(const std::map<K, V>& map) const { return simox::alg::apply(*this, map); }
+
 
         std::string name() const { return _name; }
         void setName(const std::string& name) { this->_name = name; }
 
 
+        /// The value corresponding to the bottom color.
         float vmin() const { return _vmin ? *_vmin : original_vmin(); }
-        float vmax() const { return _vmax ? *_vmax : original_vmax(); }
         void set_vmin(float vmin) { this->_vmin = vmin; }
+        /// The value corresponding to the top color.
+        float vmax() const { return _vmax ? *_vmax : original_vmax(); }
         void set_vmax(float vmax) { this->_vmax = vmax; }
 
+        /// Sets the value limits, i.e. scales the color map to the range [vmin, vmax].
         void set_vlimits(float vmin, float vmax)
         {
             set_vmin(vmin);
             set_vmax(vmax);
         }
+
+
+        /// Get this colormap reversed (but defined in the same value range as this).
+        ColorMap reversed() const;
 
 
     private:
@@ -96,7 +104,9 @@ namespace simox::color
         std::string _name = "";
 
 
+        /// The "virtual" minimal value.
         std::optional<float> _vmin = std::nullopt;
+        /// The "virtual" maximal value.
         std::optional<float> _vmax = std::nullopt;
 
     };

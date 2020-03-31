@@ -95,6 +95,30 @@ namespace simox::color
     }
 
 
+    ColorMap ColorMap::reversed() const
+    {
+        ColorMap rev;
+        if (!empty())
+        {
+            auto fit = keys.begin();
+            auto bit = keys.end();
+            --bit;
+            while (fit != keys.end())
+            {
+                rev.keys[fit->first] = bit->second;
+
+                ++fit;
+                --bit;
+            }
+        }
+        rev._vmin = _vmin;
+        rev._vmax = _vmax;
+        rev._name = _name + "_r";
+
+        return rev;
+    }
+
+
     float ColorMap::original_vmin() const
     {
         if (empty())

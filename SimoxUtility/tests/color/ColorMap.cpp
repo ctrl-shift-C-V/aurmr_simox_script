@@ -246,4 +246,32 @@ BOOST_AUTO_TEST_CASE(test_apply_map)
 }
 
 
+BOOST_AUTO_TEST_CASE(test_reversed)
+{
+    const simox::Color colorA(1.0, 0.5, 0.0);
+    const simox::Color colorB(0.5, 0.5, 0.5);
+    const simox::Color colorC(0.0, 0.5, 1.0);
+
+    const simox::color::ColorMap cmap {
+        { -1, colorC }, { 0, colorB }, { 2, colorA }
+    };
+
+    const simox::color::ColorMap rev = cmap.reversed();
+
+    BOOST_CHECK_EQUAL(rev.at(-2), colorA);
+    BOOST_CHECK_EQUAL(rev.at(-1), colorA);
+    BOOST_CHECK_EQUAL(rev.at( 0), colorB);
+    BOOST_CHECK_EQUAL(rev.at( 2), colorC);
+    BOOST_CHECK_EQUAL(rev.at( 3), colorC);
+
+    BOOST_CHECK_EQUAL(rev.at(-0.75), simox::Color(0.875, 0.5, 0.125));
+    BOOST_CHECK_EQUAL(rev.at(-0.50), simox::Color(0.750, 0.5, 0.250));
+    BOOST_CHECK_EQUAL(rev.at(-0.25), simox::Color(0.625, 0.5, 0.375));
+
+    BOOST_CHECK_EQUAL(rev.at(0.5), simox::Color(0.375, 0.5, 0.625));
+    BOOST_CHECK_EQUAL(rev.at(1.0), simox::Color(0.250, 0.5, 0.750));
+    BOOST_CHECK_EQUAL(rev.at(1.5), simox::Color(0.125, 0.5, 0.875));
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
