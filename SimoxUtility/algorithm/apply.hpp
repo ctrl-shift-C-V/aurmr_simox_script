@@ -1,40 +1,34 @@
 #pragma once
 
-#include <functional>
+#include <algorithm>
 #include <map>
+#include <type_traits>
 #include <vector>
 
 
-namespace simox
+namespace simox::alg
 {
 
-
-    template <typename ValueIn, typename ValueOut>
-    ValueOut apply(const ValueIn& value, const std::function<ValueIn(ValueOut)>& op)
+    template <typename ValueIn, typename UnaryOp>
+    std::vector<std::invoke_result_t<UnaryOp, ValueIn>>
+    apply(const UnaryOp& op, const std::vector<ValueIn>& vector)
     {
-        return op(value);
-    }
-
-
-    template <typename ValueIn, typename ValueOut>
-    std::vector<ValueOut> apply(const std::vector<ValueIn>& vector, const std::function<ValueIn(ValueOut)>& op)
-    {
+        using ValueOut = std::invoke_result_t<UnaryOp, ValueIn>;
         std::vector<ValueOut> result;
-        std::transform(vector.begin(), vector.end(), std::back_inserter(result), [&op](const auto& v)
-        {
-            return apply(v, op);
-        });
+        std::transform(vector.begin(), vector.end(), std::back_inserter(result), op);
         return result;
     }
 
 
-    template <typename ValueIn, typename ValueOut, typename Key>
-    std::map<Key, ValueOut> apply(const std::map<Key, ValueIn>& map, const std::function<ValueIn(ValueOut)>& op)
+    template <typename Key, typename ValueIn, typename UnaryOp>
+    std::map<Key, std::invoke_result_t<UnaryOp, ValueIn>>
+    apply(const UnaryOp& op, const std::map<Key, ValueIn>& map)
     {
+        using ValueOut = std::invoke_result_t<UnaryOp, ValueIn>;
         std::map<Key, ValueOut> result;
         for (const auto& [name, value] : map)
         {
-            result[name] = apply(value, op);
+            result[name] = op(value);
         }
         return result;
     }
