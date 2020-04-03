@@ -50,9 +50,13 @@ MESSAGE (STATUS "\n***** CONFIGURING Simox project SimoxUtility *****")
 SET(SOURCES
     SimoxUtility.cpp
 
+    color/cmaps/colormaps.cpp
+    color/cmaps/Named.cpp
     color/Color.cpp
+    color/ColorMap.cpp
     color/GlasbeyLUT.cpp
     color/hsv.cpp
+    color/interpolation.cpp
     color/json.cpp
 
     error/SimoxError.cpp
@@ -78,11 +82,16 @@ SET(INCLUDES
     EigenStdVector.h
 
     algorithm/for_each_if.h
+    algorithm/apply.hpp
 
+    color/cmaps/colormaps.h
+    color/cmaps/Named.h
     color/convert_byte_float.hpp
     color/Color.h
+    color/ColorMap.h
     color/GlasbeyLUT.h
     color/hsv.h
+    color/interpolation.h
     color/json.h
 
     eigen/AssertAsException.h
