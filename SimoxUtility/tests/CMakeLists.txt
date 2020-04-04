@@ -14,8 +14,8 @@ MACRO(ADD_SU_TEST TEST_NAME)
         # message("TEST_PREFIX: ${TEST_PREFIX}")
         STRING(PREPEND TRG_NAME "${TEST_PREFIX}")
     endif()
+    SET(TRG_NAME "SimoxUtility__${TRG_NAME}")
     # message("TRG_NAME: ${TRG_NAME}")
-
 
     ADD_EXECUTABLE(${TRG_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_NAME}.cpp)
     TARGET_LINK_LIBRARIES(${TRG_NAME} PRIVATE SimoxUtility Boost::unit_test_framework)
@@ -25,7 +25,7 @@ MACRO(ADD_SU_TEST TEST_NAME)
     endif ()
     SET_TARGET_PROPERTIES(${TRG_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Simox_TEST_DIR})
     SET_TARGET_PROPERTIES(${TRG_NAME} PROPERTIES FOLDER "SimoxUtility Tests")
-    ADD_TEST(NAME SimoxUtility_${TRG_NAME}
+    ADD_TEST(NAME ${TRG_NAME}
         COMMAND ${Simox_TEST_DIR}/${TRG_NAME} --output_format=XML --log_level=all --report_level=no)
 ENDMACRO()
 
