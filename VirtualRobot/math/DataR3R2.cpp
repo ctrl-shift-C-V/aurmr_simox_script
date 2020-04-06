@@ -21,23 +21,24 @@
 
 #include "DataR3R2.h"
 
-using namespace math;
 
-
-DataR3R2::DataR3R2(Eigen::Vector3f position, float value1, float value2)
-    : position(position), value(value1, value2)
+namespace math
 {
-}
+    DataR3R2::DataR3R2(Eigen::Vector3f position, float value1, float value2)
+        : position(position), value(value1, value2)
+    {
+    }
 
-DataR3R2::DataR3R2(float x, float y, float z, float value1, float value2)
-    : position(x, y, z), value(value1, value2)
-{
+    DataR3R2::DataR3R2(float x, float y, float z, float value1, float value2)
+        : position(x, y, z), value(value1, value2)
+    {
 
-}
+    }
 
-std::string DataR3R2::ToString()
-{
-    std::stringstream ss;
-    ss << "(" << position << ") " << value(0) << " " << value(1);
-    return ss.str();
+    std::string DataR3R2::ToString()
+    {
+        std::stringstream ss;
+        ss << "(" << position << ") " << value(0) << " " << value(1);
+        return ss.str();
+    }
 }

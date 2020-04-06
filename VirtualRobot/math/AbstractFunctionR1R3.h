@@ -27,11 +27,11 @@
 namespace math
 {
     class VIRTUAL_ROBOT_IMPORT_EXPORT AbstractFunctionR1R3 :
-            public SimpleAbstractFunctionR1R3
+        public SimpleAbstractFunctionR1R3
     {
     public:
         AbstractFunctionR1R3();
-        virtual Eigen::Vector3f GetDerivative(float t)= 0;
+        virtual Eigen::Vector3f GetDerivative(float t) = 0;
         float FindClosestPoint(Eigen::Vector3f p, float t1, float t2, int segments);
         float MoveLengthOnCurve(float x, float l, int steps);
         float GetLength(float t1, float t2, int steps);

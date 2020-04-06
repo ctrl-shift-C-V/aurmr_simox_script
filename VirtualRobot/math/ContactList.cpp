@@ -23,49 +23,54 @@
 #include <sstream>
 
 
-using namespace math;
 
-ContactList::ContactList()
-    : std::vector<Contact>()
+namespace math
 {
-}
-
-std::vector<Eigen::Vector3f> ContactList::GetPoints()
-{
-    std::vector<Eigen::Vector3f> points;
-    for(Contact c: *this){
-        points.push_back(c.Position());
-    }
-    return points;
-}
-
-Contact ContactList::Last()
-{
-    if (size() == 0){
-        throw std::runtime_error("size == 0");
-    }else{
-        return this->at(size()-1);
-    }
-}
-
-std::string ContactList::ToString()
-{
-    std::stringstream ss;
-    bool first1 = true;
-    for(Contact c : *this)
+    ContactList::ContactList()
+        : std::vector<Contact>()
     {
-        if (first1)
+    }
+
+    std::vector<Eigen::Vector3f> ContactList::GetPoints()
+    {
+        std::vector<Eigen::Vector3f> points;
+        for (Contact c : *this)
         {
-            ss << "[" << c.ToString() << "]";
-            first1 = false;
+            points.push_back(c.Position());
+        }
+        return points;
+    }
+
+    Contact ContactList::Last()
+    {
+        if (size() == 0)
+        {
+            throw std::runtime_error("size == 0");
         }
         else
         {
-            ss << ", [" << c.ToString() << "]";
+            return this->at(size() - 1);
         }
     }
-    return ss.str();
 
+    std::string ContactList::ToString()
+    {
+        std::stringstream ss;
+        bool first1 = true;
+        for (Contact c : *this)
+        {
+            if (first1)
+            {
+                ss << "[" << c.ToString() << "]";
+                first1 = false;
+            }
+            else
+            {
+                ss << ", [" << c.ToString() << "]";
+            }
+        }
+        return ss.str();
+
+    }
 }
-
 

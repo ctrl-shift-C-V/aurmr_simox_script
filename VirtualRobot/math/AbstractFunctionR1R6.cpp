@@ -21,5 +21,9 @@
 
 #include "AbstractFunctionR1R6.h"
 
-using namespace math;
+
+namespace math
+{
+
+}
 

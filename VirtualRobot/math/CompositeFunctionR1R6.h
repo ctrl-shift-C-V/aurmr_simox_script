@@ -30,7 +30,7 @@ namespace math
 {
 
     class CompositeFunctionR1R6
-            : public AbstractFunctionR1R6
+        : public AbstractFunctionR1R6
     {
     public:
         CompositeFunctionR1R6(const AbstractFunctionR1R3Ptr& position, const AbstractFunctionR1OriPtr& orientation, float startT, float endT);

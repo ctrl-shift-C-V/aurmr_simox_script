@@ -21,26 +21,27 @@
 
 #include "FitPlane.h"
 
-using namespace math;
 
-Plane FitPlane::Fit(const std::vector<Eigen::Vector3f>& points)
+namespace math
 {
-    Eigen::Vector3f mean = Eigen::Vector3f::Zero();
-    for(const Eigen::Vector3f& p : points)
+    Plane FitPlane::Fit(const std::vector<Eigen::Vector3f>& points)
     {
-        mean += p;
-    }
-    mean /= points.size();
-    Eigen::MatrixXf matrix(3, points.size());
-    for(size_t i = 0; i < points.size(); i++)
-    {
-        matrix.block<3, 1>(0, i) = points.at(i) - mean;
-    }
+        Eigen::Vector3f mean = Eigen::Vector3f::Zero();
+        for (const Eigen::Vector3f& p : points)
+        {
+            mean += p;
+        }
+        mean /= points.size();
+        Eigen::MatrixXf matrix(3, points.size());
+        for (size_t i = 0; i < points.size(); i++)
+        {
+            matrix.block<3, 1>(0, i) = points.at(i) - mean;
+        }
 
-    Eigen::JacobiSVD<Eigen::MatrixXf> svd(matrix, Eigen::ComputeThinU | Eigen::ComputeThinV);
-    Eigen::MatrixXf matrixU = svd.matrixU();
-    Eigen::Vector3f dir1 = matrixU.block<3, 1>(0, 0);
-    Eigen::Vector3f dir2 = matrixU.block<3, 1>(0, 1);
-    return Plane(mean, dir1.normalized(), dir2.normalized());
+        Eigen::JacobiSVD<Eigen::MatrixXf> svd(matrix, Eigen::ComputeThinU | Eigen::ComputeThinV);
+        Eigen::MatrixXf matrixU = svd.matrixU();
+        Eigen::Vector3f dir1 = matrixU.block<3, 1>(0, 0);
+        Eigen::Vector3f dir2 = matrixU.block<3, 1>(0, 1);
+        return Plane(mean, dir1.normalized(), dir2.normalized());
+    }
 }
-

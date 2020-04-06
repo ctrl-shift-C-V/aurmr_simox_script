@@ -23,9 +23,12 @@
 #include "AbstractFunctionR1R2.h"
 #include <Eigen/Geometry>
 
-using namespace math;
 
-Eigen::Vector2f math::AbstractFunctionR1R2::GetNormalizedNormal(float t){
-    Eigen::Rotation2Df rot(M_PI_2);
-    return (rot * GetDerivative(t)).normalized();
+namespace math
+{
+    Eigen::Vector2f math::AbstractFunctionR1R2::GetNormalizedNormal(float t)
+    {
+        Eigen::Rotation2Df rot(M_PI_2);
+        return (rot * GetDerivative(t)).normalized();
+    }
 }

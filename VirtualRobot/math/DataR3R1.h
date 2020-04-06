@@ -29,8 +29,14 @@ namespace math
     class DataR3R1
     {
     public:
-        Eigen::Vector3f Position() const { return position; }
-        float Value() const { return value; }
+        Eigen::Vector3f Position() const
+        {
+            return position;
+        }
+        float Value() const
+        {
+            return value;
+        }
         DataR3R1(Eigen::Vector3f position, float value);
         std::string ToString();
     private:

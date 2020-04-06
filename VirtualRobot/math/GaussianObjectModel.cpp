@@ -23,42 +23,46 @@
 #include "MathForwardDefinitions.h"
 #include "Kernels.h"
 
-using namespace math;
 
-GaussianObjectModel::GaussianObjectModel(float noise)
-   : noise(noise)
+namespace math
 {
-    model = gpModel = GaussianImplicitSurface3DPtr(new GaussianImplicitSurface3D(std::unique_ptr<WilliamsPlusKernel>(new WilliamsPlusKernel)));
-}
-
-void GaussianObjectModel::AddContact(Contact contact)
-{
-     ImplicitObjectModel::AddContact(contact);
-}
-
-
-
-void GaussianObjectModel::Update()
-{
-    gpModel->Calculate(CreateSamples(),noise);
-}
-
-std::vector<float> GaussianObjectModel::GetContactWeights()
-{
-    std::vector<float> result;
-    for (size_t i = 0; i < contacts->size(); ++i) {
-        result.push_back(1.f);
+    GaussianObjectModel::GaussianObjectModel(float noise)
+        : noise(noise)
+    {
+        model = gpModel = GaussianImplicitSurface3DPtr(new GaussianImplicitSurface3D(std::unique_ptr<WilliamsPlusKernel>(new WilliamsPlusKernel)));
     }
-    return result;
-}
 
-std::vector<DataR3R1> GaussianObjectModel::CreateSamples()
-{
-    std::vector<DataR3R1> samples;
-    for(Contact c: *contacts) {
-        samples.push_back(DataR3R1(c.Position(),0));
-        samples.push_back(DataR3R1(c.Position()- c.Normal()*0.05,-1));
-        samples.push_back(DataR3R1(c.Position()+ c.Normal()*0.05,+1));
+    void GaussianObjectModel::AddContact(Contact contact)
+    {
+        ImplicitObjectModel::AddContact(contact);
     }
-    return samples;
+
+
+
+    void GaussianObjectModel::Update()
+    {
+        gpModel->Calculate(CreateSamples(), noise);
+    }
+
+    std::vector<float> GaussianObjectModel::GetContactWeights()
+    {
+        std::vector<float> result;
+        for (size_t i = 0; i < contacts->size(); ++i)
+        {
+            result.push_back(1.f);
+        }
+        return result;
+    }
+
+    std::vector<DataR3R1> GaussianObjectModel::CreateSamples()
+    {
+        std::vector<DataR3R1> samples;
+        for (Contact c : *contacts)
+        {
+            samples.push_back(DataR3R1(c.Position(), 0));
+            samples.push_back(DataR3R1(c.Position() - c.Normal() * 0.05, -1));
+            samples.push_back(DataR3R1(c.Position() + c.Normal() * 0.05, +1));
+        }
+        return samples;
+    }
 }

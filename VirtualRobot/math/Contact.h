@@ -36,8 +36,14 @@ namespace math
         Contact(Eigen::Vector3f position, Eigen::Vector3f normal);
         Contact(float px, float py, float pz, float nx, float ny, float nz);
 
-        Eigen::Vector3f Position() const {  return position;  }
-        Eigen::Vector3f Normal() const {  return normal;  }
+        Eigen::Vector3f Position() const
+        {
+            return position;
+        }
+        Eigen::Vector3f Normal() const
+        {
+            return normal;
+        }
 
         Contact Normalized();
 

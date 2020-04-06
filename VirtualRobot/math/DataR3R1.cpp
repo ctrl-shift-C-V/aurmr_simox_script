@@ -21,17 +21,18 @@
 
 #include "DataR3R1.h"
 
-using namespace math;
 
-
-DataR3R1::DataR3R1(Eigen::Vector3f position, float value)
-    :position(position), value(value)
+namespace math
 {
-}
+    DataR3R1::DataR3R1(Eigen::Vector3f position, float value)
+        : position(position), value(value)
+    {
+    }
 
-std::string DataR3R1::ToString()
-{
-    std::stringstream ss;
-    ss << "(" << position << ") " << value;
-    return ss.str();
+    std::string DataR3R1::ToString()
+    {
+        std::stringstream ss;
+        ss << "(" << position << ") " << value;
+        return ss.str();
+    }
 }

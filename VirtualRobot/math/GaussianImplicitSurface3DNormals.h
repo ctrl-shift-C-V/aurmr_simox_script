@@ -31,32 +31,31 @@
 
 namespace math
 {
-
-class VIRTUAL_ROBOT_IMPORT_EXPORT GaussianImplicitSurface3DNormals :
+    class VIRTUAL_ROBOT_IMPORT_EXPORT GaussianImplicitSurface3DNormals :
         public SimpleAbstractFunctionR3R1
-{
-public:
-    GaussianImplicitSurface3DNormals(std::unique_ptr<KernelWithDerivatives> kernel);
-    void Calculate(const ContactList& samples, float noise, float normalNoise, float normalScale);
-    float Get(Eigen::Vector3f pos) override;
-    float GetVariance(const Eigen::Vector3f& pos);
+    {
+    public:
+        GaussianImplicitSurface3DNormals(std::unique_ptr<KernelWithDerivatives> kernel);
+        void Calculate(const ContactList& samples, float noise, float normalNoise, float normalScale);
+        float Get(Eigen::Vector3f pos) override;
+        float GetVariance(const Eigen::Vector3f& pos);
 
-private:
-    Eigen::MatrixXd covariance;
-    Eigen::MatrixXd covariance_inv;
-    Eigen::VectorXd alpha;
+    private:
+        Eigen::MatrixXd covariance;
+        Eigen::MatrixXd covariance_inv;
+        Eigen::VectorXd alpha;
 
-    ContactList samples;
-    float R;
-    float R3;
-    std::unique_ptr<KernelWithDerivatives> kernel;
+        ContactList samples;
+        float R;
+        float R3;
+        std::unique_ptr<KernelWithDerivatives> kernel;
 
-    float Predict(const Eigen::Vector3f& pos);
-    void CalculateCovariance(const std::vector<Eigen::Vector3f>& points, float R, float noise, float normalNoise);
+        float Predict(const Eigen::Vector3f& pos);
+        void CalculateCovariance(const std::vector<Eigen::Vector3f>& points, float R, float noise, float normalNoise);
 
-    void MatrixInvert(const Eigen::VectorXd& b);
-    static Eigen::Vector3f Average(const ContactList& samples);
-    Eigen::VectorXd getCux(const Eigen::Vector3f& pos);
-};
+        void MatrixInvert(const Eigen::VectorXd& b);
+        static Eigen::Vector3f Average(const ContactList& samples);
+        Eigen::VectorXd getCux(const Eigen::Vector3f& pos);
+    };
 }
 

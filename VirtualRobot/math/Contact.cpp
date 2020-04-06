@@ -21,39 +21,42 @@
 
 #include "Contact.h"
 #include "Helpers.h"
-using namespace math;
 
 
-Contact::Contact()
-    : position(Eigen::Vector3f(0,0,0)), normal(Eigen::Vector3f(0,0,0))
-{
-}
-
-Contact::Contact(Eigen::Vector3f position, Eigen::Vector3f normal)
-    : position(position), normal(normal)
-{
-}
-
-Contact::Contact(float px, float py, float pz, float nx, float ny, float nz)
-    : position(px, py, pz), normal(nx, ny, nz)
+namespace math
 {
 
-}
+    Contact::Contact()
+        : position(Eigen::Vector3f(0, 0, 0)), normal(Eigen::Vector3f(0, 0, 0))
+    {
+    }
 
-Contact Contact::Normalized()
-{
-    return Contact(position, normal.normalized());
-}
+    Contact::Contact(Eigen::Vector3f position, Eigen::Vector3f normal)
+        : position(position), normal(normal)
+    {
+    }
 
-std::string Contact::ToString()
-{
-    std::stringstream ss;
-    ss << "(" << position.transpose() << ") (" << normal.transpose() << ")";
-    return ss.str();
-}
+    Contact::Contact(float px, float py, float pz, float nx, float ny, float nz)
+        : position(px, py, pz), normal(nx, ny, nz)
+    {
 
-Contact Contact::Lerp(Contact a, Contact b, float f)
-{
-    return Contact(Helpers::Lerp(a.position, b.position, f),
-                   Helpers::Lerp(a.normal, b.normal, f).normalized());
+    }
+
+    Contact Contact::Normalized()
+    {
+        return Contact(position, normal.normalized());
+    }
+
+    std::string Contact::ToString()
+    {
+        std::stringstream ss;
+        ss << "(" << position.transpose() << ") (" << normal.transpose() << ")";
+        return ss.str();
+    }
+
+    Contact Contact::Lerp(Contact a, Contact b, float f)
+    {
+        return Contact(Helpers::Lerp(a.position, b.position, f),
+                       Helpers::Lerp(a.normal, b.normal, f).normalized());
+    }
 }

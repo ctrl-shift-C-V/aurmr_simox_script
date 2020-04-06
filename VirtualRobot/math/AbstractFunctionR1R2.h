@@ -30,14 +30,14 @@
 namespace math
 {
 
-class VIRTUAL_ROBOT_IMPORT_EXPORT AbstractFunctionR1R2
-{
-public:
-    virtual Eigen::Vector2f Get(float t) = 0;
-    virtual Eigen::Vector2f GetDerivative(float t)= 0;
-    Eigen::Vector2f GetNormalizedNormal(float t);
+    class VIRTUAL_ROBOT_IMPORT_EXPORT AbstractFunctionR1R2
+    {
+    public:
+        virtual Eigen::Vector2f Get(float t) = 0;
+        virtual Eigen::Vector2f GetDerivative(float t) = 0;
+        Eigen::Vector2f GetNormalizedNormal(float t);
 
-private:
-};
+    private:
+    };
 }
 

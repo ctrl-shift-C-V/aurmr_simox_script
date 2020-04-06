@@ -24,70 +24,84 @@
 #include "Plane.h"
 #include <stdexcept>
 
-using namespace math;
 
-AbstractFunctionR2R3::AbstractFunctionR2R3()
+namespace math
 {
-}
-
-Eigen::Vector3f AbstractFunctionR2R3::GetNormal(float u, float v)
-{
-    Eigen::Vector3f dduVec = GetDdu(u, v);
-    Eigen::Vector3f ddvVec = GetDdv(u, v);
-    return dduVec.cross(ddvVec);
-}
-
-Plane AbstractFunctionR2R3::GetContactPlane(float u, float v)
-{
-    return Plane(GetPoint(u, v), GetDdu(u, v), GetDdv(u, v));
-}
-
-Contact AbstractFunctionR2R3::GetContact(float u, float v)
-{
-     return Contact(GetPoint(u, v), GetNormal(u, v));
-}
-
-Eigen::Vector3f AbstractFunctionR2R3::GetNormal(Eigen::Vector2f uv) { return GetNormal(uv.x(), uv.y()); }
-
-Eigen::Vector3f AbstractFunctionR2R3::GetDdu(Eigen::Vector2f uv) { return GetDdu(uv.x(), uv.y()); }
-
-Eigen::Vector3f AbstractFunctionR2R3::GetDdv(Eigen::Vector2f uv) { return GetDdv(uv.x(), uv.y()); }
-
-Eigen::Vector2f AbstractFunctionR2R3::GetUVFromPos(Eigen::Vector3f pos)
-{
-    float u, v;
-    GetUV(pos,  u,  v);
-    return  Eigen::Vector2f(u, v);
-}
-
-Eigen::Vector3f AbstractFunctionR2R3::GetVector(Eigen::Vector2f pos, Eigen::Vector2f dir) { return GetDdu(pos) * dir.x() + GetDdv(pos) * dir.y(); }
-
-float AbstractFunctionR2R3::GetDistance(Eigen::Vector3f pos, AbstractFunctionR2R3::ProjectionType projection)
-{
-    return (GetPointOnFunction(pos, projection) - pos).norm();
-}
-
-Eigen::Vector3f AbstractFunctionR2R3::GetPointOnFunction(Eigen::Vector3f pos, AbstractFunctionR2R3::ProjectionType projection)
-{
-    switch (projection)
+    AbstractFunctionR2R3::AbstractFunctionR2R3()
     {
-        case SimpleProjection:
-            return ProjectPointOntoFunction(pos);
-        case FindClosestPointType:
-            return FindClosestPoint(pos);
-        default:
-            throw std::runtime_error("invalid case");
     }
-}
 
-Eigen::Vector3f AbstractFunctionR2R3::ProjectPointOntoFunction(Eigen::Vector3f pos)
-{
-    float u, v;
-    GetUV(pos, u, v);
-    return GetPoint(u, v);
-}
+    Eigen::Vector3f AbstractFunctionR2R3::GetNormal(float u, float v)
+    {
+        Eigen::Vector3f dduVec = GetDdu(u, v);
+        Eigen::Vector3f ddvVec = GetDdv(u, v);
+        return dduVec.cross(ddvVec);
+    }
 
-Eigen::Vector3f AbstractFunctionR2R3::FindClosestPoint(Eigen::Vector3f /*pos*/, float /*epsilon*/)
-{
-    throw std::runtime_error("FindClosestPoint is not implemented");
+    Plane AbstractFunctionR2R3::GetContactPlane(float u, float v)
+    {
+        return Plane(GetPoint(u, v), GetDdu(u, v), GetDdv(u, v));
+    }
+
+    Contact AbstractFunctionR2R3::GetContact(float u, float v)
+    {
+        return Contact(GetPoint(u, v), GetNormal(u, v));
+    }
+
+    Eigen::Vector3f AbstractFunctionR2R3::GetNormal(Eigen::Vector2f uv)
+    {
+        return GetNormal(uv.x(), uv.y());
+    }
+
+    Eigen::Vector3f AbstractFunctionR2R3::GetDdu(Eigen::Vector2f uv)
+    {
+        return GetDdu(uv.x(), uv.y());
+    }
+
+    Eigen::Vector3f AbstractFunctionR2R3::GetDdv(Eigen::Vector2f uv)
+    {
+        return GetDdv(uv.x(), uv.y());
+    }
+
+    Eigen::Vector2f AbstractFunctionR2R3::GetUVFromPos(Eigen::Vector3f pos)
+    {
+        float u, v;
+        GetUV(pos,  u,  v);
+        return  Eigen::Vector2f(u, v);
+    }
+
+    Eigen::Vector3f AbstractFunctionR2R3::GetVector(Eigen::Vector2f pos, Eigen::Vector2f dir)
+    {
+        return GetDdu(pos) * dir.x() + GetDdv(pos) * dir.y();
+    }
+
+    float AbstractFunctionR2R3::GetDistance(Eigen::Vector3f pos, AbstractFunctionR2R3::ProjectionType projection)
+    {
+        return (GetPointOnFunction(pos, projection) - pos).norm();
+    }
+
+    Eigen::Vector3f AbstractFunctionR2R3::GetPointOnFunction(Eigen::Vector3f pos, AbstractFunctionR2R3::ProjectionType projection)
+    {
+        switch (projection)
+        {
+            case SimpleProjection:
+                return ProjectPointOntoFunction(pos);
+            case FindClosestPointType:
+                return FindClosestPoint(pos);
+            default:
+                throw std::runtime_error("invalid case");
+        }
+    }
+
+    Eigen::Vector3f AbstractFunctionR2R3::ProjectPointOntoFunction(Eigen::Vector3f pos)
+    {
+        float u, v;
+        GetUV(pos, u, v);
+        return GetPoint(u, v);
+    }
+
+    Eigen::Vector3f AbstractFunctionR2R3::FindClosestPoint(Eigen::Vector3f /*pos*/, float /*epsilon*/)
+    {
+        throw std::runtime_error("FindClosestPoint is not implemented");
+    }
 }
