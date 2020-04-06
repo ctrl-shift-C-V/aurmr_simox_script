@@ -129,7 +129,7 @@ namespace simox::meta
 
             template <typename E, typename N>
             UnknownEnumValue(E value, const EnumNames<E, N>& names) :
-                std::out_of_range(make_msg(value, names, "value"))
+                std::out_of_range(make_msg(int(value), names, "value"))
             {}
 
             template <typename E, typename N>
@@ -142,7 +142,7 @@ namespace simox::meta
             static std::string make_msg(const Key& value, const EnumNames<E, N>& names, const std::string& what)
             {
                 std::stringstream ss;
-                ss << "Unknown enum " << what << " '" << int(value) << "'"
+                ss << "Unknown enum " << what << " '" << value << "'"
                    << " of type '" << simox::meta::get_type_name<E>() << "'."
                    << "\n" << names;
                 return ss.str();
