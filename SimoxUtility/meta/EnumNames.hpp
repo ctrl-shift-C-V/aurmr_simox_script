@@ -142,7 +142,7 @@ namespace simox::meta
             static std::string make_msg(const Key& value, const EnumNames<E, N>& names, const std::string& what)
             {
                 std::stringstream ss;
-                ss << "Unknown enum " << what << " '" << value << "'"
+                ss << "Unknown enum " << what << " '" << int(value) << "'"
                    << " of type '" << simox::meta::get_type_name<E>() << "'."
                    << "\n" << names;
                 return ss.str();
@@ -184,7 +184,7 @@ namespace simox::meta
         os << "Names of enum '" << simox::meta::get_type_name<E>() << "':";
         for (const auto& it : rhs._names.left)
         {
-            os << "\n\t" << it.first << ": '" << it.second << "'";
+            os << "\n\t" << int(it.first) << ": '" << it.second << "'";
         }
         return os;
     }
