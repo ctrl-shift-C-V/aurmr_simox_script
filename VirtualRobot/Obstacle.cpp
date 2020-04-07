@@ -328,7 +328,7 @@ namespace VirtualRobot
     }
 
 
-    std::string Obstacle::getFilename()
+    std::string Obstacle::getFilename() const
     {
         return filename;
     }
