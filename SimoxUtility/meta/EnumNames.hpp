@@ -129,7 +129,7 @@ namespace simox::meta
 
             template <typename E, typename N>
             UnknownEnumValue(E value, const EnumNames<E, N>& names) :
-                std::out_of_range(make_msg(value, names, "value"))
+                std::out_of_range(make_msg(int(value), names, "value"))
             {}
 
             template <typename E, typename N>
@@ -184,7 +184,7 @@ namespace simox::meta
         os << "Names of enum '" << simox::meta::get_type_name<E>() << "':";
         for (const auto& it : rhs._names.left)
         {
-            os << "\n\t" << it.first << ": '" << it.second << "'";
+            os << "\n\t" << int(it.first) << ": '" << it.second << "'";
         }
         return os;
     }

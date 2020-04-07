@@ -62,6 +62,14 @@ namespace simox::color
         Eigen::Vector4f to_vector4f() const;
 
 
+        /// Return a copy of this with the given alpha.
+        template <typename IntOrFloat>
+        Color with_alpha(IntOrFloat a) const
+        {
+            return Color(r, g, b, to_byte(a));
+        }
+
+
         // Named colors.
 
         // Colorless
