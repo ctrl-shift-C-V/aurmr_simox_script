@@ -1,11 +1,11 @@
-#include <Bullet3Common/b3Scalar.h>
-
 #include "BulletEngine.h"
 #include "BulletObject.h"
 #include "SimoxCollisionDispatcher.h"
 #include "../../DynamicsWorld.h"
 #include <VirtualRobot/Obstacle.h>
 #include <VirtualRobot/MathTools.h>
+
+#include "DetectBulletVersion.h"
 
 //#define DEBUG_FIXED_OBJECTS
 
@@ -26,7 +26,7 @@ namespace SimDynamics
         bulletSolverIterations = 250;
         bulletSolverGlobalContactForceMixing = 0.0;
         bulletSolverGlobalErrorReductionParameter = btScalar(0.6);
-#if (B3_BULLET_VERSION < 300)
+#ifdef SIMOX_USES_OLD_BULLET
         bulletSolverSuccessiveOverRelaxation = btScalar(0.0);
 #else
         bulletSolverSuccessiveOverRelaxation = btScalar(1.0);
@@ -582,7 +582,7 @@ namespace SimDynamics
                     cout << "     hinge motor enabled:" << hinge->getEnableAngularMotor() << endl;
                     cout << "     hinge angle :" << hinge->getHingeAngle() << endl;
                     cout << "     hinge max motor impulse :" << hinge->getMaxMotorImpulse() << endl;
-#if (B3_BULLET_VERSION < 300)
+#ifdef SIMOX_USES_OLD_BULLET
                     cout << "     hinge motor target vel :" << hinge->getMotorTargetVelosity() << endl;
 #else
                     cout << "     hinge motor target vel :" << hinge->getMotorTargetVelocity() << endl;

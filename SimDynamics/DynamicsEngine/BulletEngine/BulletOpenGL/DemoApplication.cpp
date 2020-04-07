@@ -12,8 +12,6 @@ subject to the following restrictions:
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source distribution.
 */
-#include <Bullet3Common/b3Scalar.h>
-
 #include "DemoApplication.h"
 #include "LinearMath/btIDebugDraw.h"
 #include "BulletDynamics/Dynamics/btDynamicsWorld.h"
@@ -33,6 +31,7 @@ subject to the following restrictions:
 #include "LinearMath/btSerializer.h"
 #include "GLDebugFont.h"
 
+#include "../DetectBulletVersion.h"
 
 extern bool gDisableDeactivation;
 int numObjects = 0;
@@ -44,11 +43,11 @@ btCollisionShape* gShapePtr[maxNumObjects];//1 rigidbody has 1 shape (no re-use 
 extern int gNumClampedCcdMotions;
 
 #ifdef SHOW_NUM_DEEP_PENETRATIONS
-#if (B3_BULLET_VERSION < 300)
+#ifdef SIMOX_USES_OLD_BULLET
 extern int gNumDeepPenetrationChecks;
 #endif
 extern int gNumSplitImpulseRecoveries;
-#if (B3_BULLET_VERSION < 300)
+#ifdef SIMOX_USES_OLD_BULLET
 extern int gNumGjkChecks;
 #endif
 extern int gNumAlignedAllocs;
@@ -1575,7 +1574,7 @@ void    DemoApplication::clientResetScene()
     removePickingConstraint();
 
 #ifdef SHOW_NUM_DEEP_PENETRATIONS
-#if (B3_BULLET_VERSION < 300)
+#ifdef SIMOX_USES_OLD_BULLET
     gNumDeepPenetrationChecks = 0;
     gNumGjkChecks = 0;
 #endif
