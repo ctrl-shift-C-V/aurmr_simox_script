@@ -113,7 +113,7 @@ namespace VirtualRobot
         virtual std::string toXML(const std::string& basePath, int tabs = 0);
 
         void setFilename(const std::string& filename);
-        std::string getFilename();
+        std::string getFilename() const;
 
     protected:
 
