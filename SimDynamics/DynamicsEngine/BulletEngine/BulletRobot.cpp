@@ -1,3 +1,5 @@
+#include <Bullet3Common/b3Scalar.h>
+
 #include "BulletRobot.h"
 #include "BulletEngine.h"
 #include "BulletEngineFactory.h"
@@ -1095,8 +1097,11 @@ namespace SimDynamics
         if (rn->isRotationalJoint())
         {
             boost::shared_ptr<btHingeConstraint> hinge = boost::dynamic_pointer_cast<btHingeConstraint>(link.joint);
-
+#if (B3_BULLET_VERSION < 300)
             return hinge->getMotorTargetVelosity();
+#else
+            return hinge->getMotorTargetVelocity();
+#endif
         }
         else if (rn->isTranslationalJoint())
         {
