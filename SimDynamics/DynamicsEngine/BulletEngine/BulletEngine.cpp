@@ -92,8 +92,8 @@ namespace SimDynamics
         dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, constraintSolver, collision_config);
 
         dynamicsWorld->setGravity(btVector3(btScalar(config->gravity[0] * BulletObject::ScaleFactor),
-                                  btScalar(config->gravity[1] * BulletObject::ScaleFactor),
-                btScalar(config->gravity[2] * BulletObject::ScaleFactor)));
+                                            btScalar(config->gravity[1] * BulletObject::ScaleFactor),
+                                            btScalar(config->gravity[2] * BulletObject::ScaleFactor)));
 
         collisionFilterCallback = new BulletEngine::CustomCollisionCallback(this);
         dynamicsWorld->getPairCache()->setOverlapFilterCallback(collisionFilterCallback);
@@ -116,7 +116,7 @@ namespace SimDynamics
         //only enable split impulse position correction when the penetration is deeper than this m_splitImpulsePenetrationThreshold, otherwise use the regular velocity/position constraint coupling (Baumgarte).
         solverInfo.m_splitImpulsePenetrationThreshold = config->bulletSolverSplitImpulsePenetrationThreshold;
 
-//        dynamicsWorld->setInternalTickCallback(externalCallbacks, this, true);
+        //        dynamicsWorld->setInternalTickCallback(externalCallbacks, this, true);
         dynamicsWorld->addAction(this);
         return true;
     }
@@ -166,8 +166,8 @@ namespace SimDynamics
         bulletConfig = newConfig;
 
         dynamicsWorld->setGravity(btVector3(btScalar(newConfig->gravity[0] * BulletObject::ScaleFactor),
-                                  btScalar(newConfig->gravity[1] * BulletObject::ScaleFactor),
-                btScalar(newConfig->gravity[2] * BulletObject::ScaleFactor)));
+                                            btScalar(newConfig->gravity[1] * BulletObject::ScaleFactor),
+                                            btScalar(newConfig->gravity[2] * BulletObject::ScaleFactor)));
 
         btContactSolverInfo& solverInfo = dynamicsWorld->getSolverInfo();
         solverInfo.m_numIterations = newConfig->bulletSolverIterations;
@@ -188,7 +188,7 @@ namespace SimDynamics
             auto friction = btObject->getSceneObject()->getPhysics().friction;
 
             btObject->getRigidBody()->setRestitution(bulletConfig->bulletObjectRestitution);
-            btObject->getRigidBody()->setFriction(friction>0.0?friction:bulletConfig->bulletObjectFriction);
+            btObject->getRigidBody()->setFriction(friction > 0.0 ? friction : bulletConfig->bulletObjectFriction);
             btObject->getRigidBody()->setFriction(bulletConfig->bulletObjectFriction);
             btObject->getRigidBody()->setDamping(bulletConfig->bulletObjectDampingLinear, bulletConfig->bulletObjectDampingAngular);
             btObject->getRigidBody()->setDeactivationTime(bulletConfig->bulletObjectDeactivation);
@@ -233,7 +233,7 @@ namespace SimDynamics
         auto friction = o->getSceneObject()->getPhysics().friction;
         btObject->getRigidBody()->setCollisionFlags(btColFlag);
         btObject->getRigidBody()->setRestitution(bulletConfig->bulletObjectRestitution);
-        btObject->getRigidBody()->setFriction(friction>0.0?friction:bulletConfig->bulletObjectFriction);
+        btObject->getRigidBody()->setFriction(friction > 0.0 ? friction : bulletConfig->bulletObjectFriction);
         btObject->getRigidBody()->setDamping(bulletConfig->bulletObjectDampingLinear, bulletConfig->bulletObjectDampingAngular);
         btObject->getRigidBody()->setDeactivationTime(bulletConfig->bulletObjectDeactivation);//5.0f);
         btObject->getRigidBody()->setSleepingThresholds(bulletConfig->bulletObjectSleepingThresholdLinear, bulletConfig->bulletObjectSleepingThresholdAngular); //0.05f, 0.05f);
@@ -284,7 +284,9 @@ namespace SimDynamics
         MutexLockPtr lock = getScopedLock();
 
         if (friction <= 0)
+        {
             friction = bulletConfig->bulletObjectFriction;
+        }
         DynamicsEngine::createFloorPlane(pos, up);
         float size = float(floorExtendMM);//50000.0f; // mm
         float sizeSmall = float(floorDepthMM);// 500.0f;
@@ -439,12 +441,12 @@ namespace SimDynamics
         std::vector<BulletRobot::LinkInfo> links = btRobot->getLinks();
         std::vector<DynamicsObjectPtr> nodes = btRobot->getDynamicsRobotNodes();
 
-        for (const auto & node : nodes)
+        for (const auto& node : nodes)
         {
             addObject(node);
         }
 
-        for (auto & link : links)
+        for (auto& link : links)
         {
             addLink(link);
         }
@@ -473,7 +475,7 @@ namespace SimDynamics
 
         e->updateRobots(timeStep);
 
-        for (auto & callback : e->callbacks)
+        for (auto& callback : e->callbacks)
         {
             callback.first(callback.second, timeStep);
         }
@@ -482,7 +484,7 @@ namespace SimDynamics
 
     void BulletEngine::updateRobots(btScalar timeStep)
     {
-        for (auto & robot : robots)
+        for (auto& robot : robots)
         {
             robot->actuateJoints(static_cast<double>(timeStep));
             robot->updateSensors(static_cast<double>(timeStep));
@@ -504,12 +506,12 @@ namespace SimDynamics
         std::vector<DynamicsObjectPtr> nodes = btRobot->getDynamicsRobotNodes();
 
 
-        for (auto & link : links)
+        for (auto& link : links)
         {
             removeLink(link);
         }
 
-        for (const auto & node : nodes)
+        for (const auto& node : nodes)
         {
             removeObject(node);
         }
@@ -526,7 +528,7 @@ namespace SimDynamics
         dynamicsWorld->addConstraint(l.joint.get(), true);
 #endif
 
-        for (auto & disabledCollisionPair : l.disabledCollisionPairs)
+        for (auto& disabledCollisionPair : l.disabledCollisionPairs)
         {
             this->disableCollision(static_cast<DynamicsObject*>(disabledCollisionPair.first.get()), static_cast<DynamicsObject*>(disabledCollisionPair.second.get()));
         }
@@ -621,9 +623,13 @@ namespace SimDynamics
                 btManifoldPoint& pt = contactManifold->getContactPoint(j);
                 DynamicsContactInfo i;
                 if (dynObjA)
+                {
                     i.objectAName = dynObjA->getName();
+                }
                 if (dynObjB)
+                {
                     i.objectBName = dynObjB->getName();
+                }
                 const btVector3& ptA = pt.getPositionWorldOnA();
                 const btVector3& ptB = pt.getPositionWorldOnB();
                 const btVector3& normalOnB = pt.m_normalWorldOnB;
@@ -724,7 +730,7 @@ namespace SimDynamics
 
         std::vector<BulletRobot::LinkInfo> links = br->getLinks(bo);
 
-        for (auto & link : links)
+        for (auto& link : links)
         {
             removeLink(link);
         }
@@ -743,7 +749,7 @@ namespace SimDynamics
 } // namespace SimDynamics
 
 #include <chrono>
-void SimDynamics::BulletEngine::updateAction(btCollisionWorld */*collisionWorld*/, btScalar deltaTimeStep)
+void SimDynamics::BulletEngine::updateAction(btCollisionWorld* /*collisionWorld*/, btScalar deltaTimeStep)
 {
     auto start = std::chrono::system_clock::now();
     // apply lock
@@ -751,14 +757,14 @@ void SimDynamics::BulletEngine::updateAction(btCollisionWorld */*collisionWorld*
 
     updateRobots(deltaTimeStep);
 
-    for (auto & callback : callbacks)
+    for (auto& callback : callbacks)
     {
         callback.first(callback.second, deltaTimeStep);
     }
-    std::chrono::duration<double> diff = (std::chrono::system_clock::now()-start);
-//    cout << "duration: " << diff.count() << endl;
+    std::chrono::duration<double> diff = (std::chrono::system_clock::now() - start);
+    //    cout << "duration: " << diff.count() << endl;
 }
 
-void SimDynamics::BulletEngine::debugDraw(btIDebugDraw */*debugDrawer*/)
+void SimDynamics::BulletEngine::debugDraw(btIDebugDraw* /*debugDrawer*/)
 {
 }
