@@ -72,6 +72,8 @@ SET(SOURCES
     math/pose/invert.cpp
     math/pose/orthogonalize.cpp
 
+    math/periodic/periodic_diff.cpp
+
     math/SoftMinMax.cpp
 
     shapes/AxisAlignedBoundingBox.cpp
@@ -149,6 +151,7 @@ SET(INCLUDES
     math/distance/angle_between.h
 
     math/periodic_clamp.h
+    math/periodic/periodic_diff.h
 
     math/pose/align_box_orientation.h
     math/pose/check_rotation_matrix.h
