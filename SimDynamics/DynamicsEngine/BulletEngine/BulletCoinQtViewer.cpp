@@ -112,7 +112,7 @@ namespace SimDynamics
 
         // setup
         viewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-        viewer->setAccumulationBuffer(true);
+        viewer->setAccumulationBuffer(false);
 
         //viewer->setAntialiasing(true, 4);
 

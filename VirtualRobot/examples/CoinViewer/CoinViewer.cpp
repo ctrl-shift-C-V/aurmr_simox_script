@@ -45,12 +45,12 @@ CoinViewerExample::CoinViewerExample()
         UI.setupUi(this);
         viewer = new SoQtExaminerViewer(UI.frameViewer, "", TRUE, SoQtExaminerViewer::BUILD_POPUP);
         viewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-        viewer->setAccumulationBuffer(true);
 
         viewer->setAntialiasing(true, 4);
 
         viewer->setGLRenderAction(new SoLineHighlightRenderAction);
         viewer->setTransparencyType(SoGLRenderAction::BLEND);
+        viewer->setAccumulationBuffer(false);
         viewer->setFeedbackVisibility(true);
         viewer->setSceneGraph(sceneSep);
 

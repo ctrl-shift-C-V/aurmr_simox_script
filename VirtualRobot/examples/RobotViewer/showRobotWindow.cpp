@@ -106,7 +106,7 @@ void showRobotWindow::setupUI()
     viewer->setSceneGraph(sceneSep);
     viewer->viewAll();
 
-    viewer->setAccumulationBuffer(true);
+    viewer->setAccumulationBuffer(false);
     viewer->setAntialiasing(true, 4);
 
     connect(UI.pushButtonReset, SIGNAL(clicked()), this, SLOT(resetSceneryAll()));
