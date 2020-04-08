@@ -150,7 +150,8 @@ SET(INCLUDES
     math/distance/delta_angle.h
     math/distance/angle_between.h
 
-    math/periodic_clamp.h
+    math/periodic_clamp.h  # Legacy header.
+    math/periodic/periodic_clamp.h
     math/periodic/periodic_diff.h
 
     math/pose/align_box_orientation.h
