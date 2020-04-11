@@ -164,6 +164,7 @@ SET(INCLUDES
     math/SoftMinMax.h
 
     meta/eigen/enable_if_compile_time_size.h
+    meta/eigen/is_eigen_array.h
     meta/eigen/is_eigen_matrix.h
     meta/has_member_macros/has_member.hpp
     meta/EnumNames.hpp
