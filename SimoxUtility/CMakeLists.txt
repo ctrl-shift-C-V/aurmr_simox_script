@@ -166,6 +166,7 @@ SET(INCLUDES
     math/normal/normal_to_mat4.h
 
     math/SoftMinMax.h
+    math/rescale.h
 
     meta/eigen/enable_if_compile_time_size.h
     meta/eigen/is_eigen_matrix.h

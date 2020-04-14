@@ -9,3 +9,4 @@
 #include "math/periodic.h"
 #include "math/periodic_clamp.h"
 #include "math/pose.h"
+#include "math/rescale.h"
