@@ -13,6 +13,7 @@
 
 #include <SimoxUtility/math/periodic/periodic_clamp.h>
 #include <SimoxUtility/math/periodic/periodic_diff.h>
+#include <SimoxUtility/math/periodic/periodic_mean.h>
 
 
 BOOST_AUTO_TEST_CASE(test_periodic_clamp)
@@ -82,3 +83,43 @@ BOOST_AUTO_TEST_CASE(test_periodic_diff)
         }
     }
 }
+
+
+BOOST_AUTO_TEST_CASE(test_periodic_mean_single_values)
+{
+    static const double pi = M_PI;
+    static const double prec = 1e-4;
+
+    BOOST_CHECK_SMALL(simox::math::periodic_mean({0}, 0, 2*pi), prec);
+    BOOST_CHECK_CLOSE(simox::math::periodic_mean({1}, 0, 2*pi), 1, prec);
+    BOOST_CHECK_CLOSE(simox::math::periodic_mean({2}, 0, 2*pi), 2, prec);
+    BOOST_CHECK_CLOSE(simox::math::periodic_mean({1 + 2*pi}, 0, 2*pi), 1, prec);
+
+    BOOST_CHECK_SMALL(simox::math::periodic_mean({  0}, 0., 360.), prec);
+    BOOST_CHECK_CLOSE(simox::math::periodic_mean({180}, 0., 360.), 180, prec);
+    BOOST_CHECK_SMALL(simox::math::periodic_mean({360}, 0., 360.), prec);
+    BOOST_CHECK_CLOSE(simox::math::periodic_mean({360+180}, 0., 360.), 180, prec);
+}
+
+
+BOOST_AUTO_TEST_CASE(test_periodic_mean)
+{
+    using namespace simox::math;
+
+    static const double pi = M_PI;
+    static const double prec = 1e-4;
+
+    BOOST_CHECK_SMALL(periodic_diff(periodic_mean({-3, -2, -1, 0, 1, 2, 3}, -pi, pi),
+                                    pi, 0, 2*pi), prec);
+    BOOST_CHECK_SMALL(periodic_diff(periodic_mean({-3+pi, -2+pi, -1+pi, 0+pi, 1+pi, 2+pi, 3+pi}, 0, 2*pi),
+                                    0, 0, 2*pi), prec);
+
+    BOOST_CHECK_SMALL(periodic_diff(periodic_mean({0, 360}, 0., 360.),
+                                    0., 0., 360.), prec);
+    BOOST_CHECK_SMALL(periodic_diff(periodic_mean({350, 10}, 0., 360.),
+                                    0., 0., 360.), prec);
+
+    BOOST_CHECK_SMALL(periodic_diff(periodic_mean({170, 190}, 0., 360.),
+                                    180., 0., 360.), prec);
+}
+
