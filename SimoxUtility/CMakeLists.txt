@@ -73,6 +73,7 @@ SET(SOURCES
     math/pose/orthogonalize.cpp
 
     math/periodic/periodic_diff.cpp
+    math/periodic/periodic_mean.cpp
 
     math/SoftMinMax.cpp
 
@@ -153,6 +154,7 @@ SET(INCLUDES
     math/periodic_clamp.h  # Legacy header.
     math/periodic/periodic_clamp.h
     math/periodic/periodic_diff.h
+    math/periodic/periodic_mean.h
 
     math/pose/align_box_orientation.h
     math/pose/check_rotation_matrix.h
