@@ -1,5 +1,7 @@
 #include "ColorMap.h"
 
+#include <SimoxUtility/math/rescale.h>
+
 
 namespace simox::color
 {
@@ -58,12 +60,10 @@ namespace simox::color
 
         if (_vmin || _vmax)
         {
-            // Native: [1 .. 2]
-            // Virtual: [100 .. 200]
+            // Original: [1 .. 2]
+            // Virtual:  [100 .. 200]
             // => Scale 150 to 1.5
-
-            value = (value - vmin()) / (vmax() - vmin());  // 150 -> 0.5
-            value = value * (original_vmax() - original_vmin()) + original_vmin(); // 0.5 -> 1.5
+            value = simox::math::rescale(value, vmin(), vmax(), original_vmin(), original_vmax());
         }
 
         // keys.size() >= 2
