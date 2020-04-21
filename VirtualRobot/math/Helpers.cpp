@@ -427,7 +427,7 @@ namespace math
                 scale = std::min(scale, maxLen(j) / std::abs(vec(i)));
             }
         }
-        return vec / scale;
+        return vec * scale;
     }
 
     Eigen::AngleAxisf Helpers::GetAngleAxisFromTo(const Eigen::Matrix3f& start, const Eigen::Matrix3f& target)
