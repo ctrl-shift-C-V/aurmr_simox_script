@@ -765,7 +765,7 @@ namespace VirtualRobot
         std::filesystem::path filenameNew(filename);
         std::filesystem::path filenameBasePath(basePath);
 
-        std::filesystem::path filenameNewComplete = std::filesystem::operator/(filenameBasePath, filenameNew);
+        std::filesystem::path filenameNewComplete = filenameBasePath / filenameNew;
         filename = filenameNewComplete.string();
     }
 

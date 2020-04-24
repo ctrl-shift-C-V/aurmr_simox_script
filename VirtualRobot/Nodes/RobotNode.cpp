@@ -1060,9 +1060,9 @@ namespace VirtualRobot
             std::string visuFile = getFilenameReplacementVisuModel();
 
             std::filesystem::path pModel(modelPathRelative);
-            std::filesystem::path modelDirComplete = std::filesystem::operator/(pBase, pModel);
+            std::filesystem::path modelDirComplete = pBase / pModel;
             std::filesystem::path fn(visuFile);
-            std::filesystem::path modelFileComplete = std::filesystem::operator/(modelDirComplete, fn);
+            std::filesystem::path modelFileComplete = modelDirComplete / fn;
 
             ss << visualizationModel->toXML(pBase.string(), modelFileComplete.string(), 2);
         }
@@ -1071,9 +1071,9 @@ namespace VirtualRobot
         {
             std::string colFile = getFilenameReplacementColModel();
             std::filesystem::path pModel(modelPathRelative);
-            std::filesystem::path modelDirComplete = std::filesystem::operator/(pBase, pModel);
+            std::filesystem::path modelDirComplete = pBase / pModel;
             std::filesystem::path fn(colFile);
-            std::filesystem::path modelFileComplete = std::filesystem::operator/(modelDirComplete, fn);
+            std::filesystem::path modelFileComplete = modelDirComplete / fn;
             ss << collisionModel->toXML(pBase.string(), modelFileComplete.string(), 2);
         }
 
