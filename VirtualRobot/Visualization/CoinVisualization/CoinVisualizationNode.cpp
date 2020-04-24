@@ -449,7 +449,7 @@ namespace VirtualRobot
             }
         }
 
-        std::filesystem::path completeFile = std::filesystem::operator/(completePath, fn);
+        std::filesystem::path completeFile = completePath / fn;
 
         SoOutput* so = new SoOutput();
 
