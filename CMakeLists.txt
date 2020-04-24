@@ -64,6 +64,7 @@ if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0)
     add_compile_options(-Wno-error=unused-but-set-variable)
     add_compile_options(-Wno-error=unused-variable)
     add_compile_options(-Wno-error=unused-parameter)
+    add_compile_options(-Wno-error=deprecated)
 endif()
 
 #######################################################################################
