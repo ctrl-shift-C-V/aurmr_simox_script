@@ -162,6 +162,8 @@ namespace VirtualRobot
                                           SoMaterial* matAxisZ = NULL
                                          );
 
+        static SoSeparator* CreateCylindroid(float axisLengthX, float axisLengthY, float height, SoMaterial* matBody = nullptr);
+
         static SoSeparator* Create2DMap(const Eigen::MatrixXf& d, float extendCellX, float extendCellY, const VirtualRobot::ColorMap cm = VirtualRobot::ColorMap(VirtualRobot::ColorMap::eHot), bool drawZeroCells = false, bool drawLines = true);
         static SoSeparator* Create2DHeightMap(const Eigen::MatrixXf& d, float extendCellX, float extendCellY, float heightZ, const VirtualRobot::ColorMap cm = VirtualRobot::ColorMap(VirtualRobot::ColorMap::eHot), bool drawZeroCells = false, bool drawLines = true);
 

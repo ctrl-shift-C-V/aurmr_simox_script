@@ -30,7 +30,6 @@
 namespace Eigen
 {
 
-
     // Eigen::MatrixBase (non-specialized).
 
     /// Writes the matrix as list of rows.
