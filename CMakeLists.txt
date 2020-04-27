@@ -5,6 +5,15 @@ PROJECT(Simox LANGUAGES CXX VERSION 2.3.74.0)
 MESSAGE (STATUS "** Simox version: ${Simox_VERSION}")
 INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
 SET(Simox_BOOST_VERSION 1.65.1)
+# If OS is Ubuntu 20, use another Boost version.
+execute_process(COMMAND lsb_release -cs
+    OUTPUT_VARIABLE RELEASE_CODENAME
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+if (RELEASE_CODENAME STREQUAL focal)
+    message(STATUS "Detected Ubuntu 20, using Boost 1.71.0")
+    SET(Simox_BOOST_VERSION 1.71.0)
+endif()
 #######################################################################################
 #global config
 # Set up build type
