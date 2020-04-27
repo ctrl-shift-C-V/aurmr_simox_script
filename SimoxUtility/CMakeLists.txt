@@ -148,6 +148,14 @@ SET(INCLUDES
     math/distance/delta_angle.h
     math/distance/angle_between.h
 
+    math/compare/is_equal.h
+    math/compare/is_greater.h
+    math/compare/is_greater_equal.h
+    math/compare/is_inequal.h
+    math/compare/is_less.h
+    math/compare/is_less_equal.h
+    math/compare/value_in_limits_of.h
+
     math/periodic_clamp.h
 
     math/pose/align_box_orientation.h

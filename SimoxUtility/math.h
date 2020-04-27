@@ -3,6 +3,7 @@
 // This file is generated!
 
 #include "math/SoftMinMax.h"
+#include "math/compare.h"
 #include "math/convert.h"
 #include "math/distance.h"
 #include "math/normal.h"
