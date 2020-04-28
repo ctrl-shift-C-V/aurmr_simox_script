@@ -8,3 +8,4 @@
 #include "math/normal.h"
 #include "math/periodic_clamp.h"
 #include "math/pose.h"
+#include "math/vector_similarity.h"

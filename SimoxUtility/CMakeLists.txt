@@ -163,6 +163,9 @@ SET(INCLUDES
 
     math/SoftMinMax.h
 
+    math/vector_similarity/cosine_similarity.h
+    math/vector_similarity/angular_similarity.h
+
     meta/eigen/enable_if_compile_time_size.h
     meta/eigen/is_eigen_array.h
     meta/eigen/is_eigen_matrix.h
