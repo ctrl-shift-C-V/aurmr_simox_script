@@ -30,10 +30,13 @@ namespace simox::math
     angular_similarity(
         const Eigen::Matrix<float, rows, 1>& v1,
         const Eigen::Matrix<float, rows, 1>& v2)
-    noexcept
     {
-        const float angular_distance = std::acos(cosine_similarity(v1, v2)) / M_PI;
-        return 1.f - angular_distance;
+        const float cosine_similarity = math::cosine_similarity(v1, v2);
+        const float angular_distance = std::acos(cosine_similarity) / M_PI;
+        const float angular_similarity = 1.f - angular_distance;
+
+        // Clamp to deal with numerical inaccuracies.
+        return std::clamp(angular_similarity, 0.f, 1.f);
     }
 
 }

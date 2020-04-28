@@ -34,7 +34,10 @@ namespace simox::math
             throw std::logic_error{"Cosine similarity is not defined on operands which are zero."};
         }
 
-        return v1.dot(v2) / (v1.norm() * v2.norm());
+        const float cosine_similarity = v1.dot(v2) / (v1.norm() * v2.norm());
+
+        // Clamp to deal with numerical inaccuracies.
+        return std::clamp(cosine_similarity, -1.f, 1.f);
     }
 
 }
