@@ -8,7 +8,7 @@
 #include <Eigen/Core>
 
 // Simox
-#include <SimoxUtility/math/vector_similarity/cosine_similarity.h>
+#include <SimoxUtility/math/similarity/cosine_similarity.h>
 
 
 namespace simox::math
