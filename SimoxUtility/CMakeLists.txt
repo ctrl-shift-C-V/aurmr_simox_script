@@ -178,6 +178,7 @@ SET(INCLUDES
     meta/EnumNames.hpp
     meta/type_name.h
     meta/boost_hana/has_hana_accessor.h
+    meta/boost_hana/hana_member_name.h
     meta/type_traits/is_any_of.h
     meta/type_traits/is_std_array.h
     meta/type_traits/are_arithmetic.h
