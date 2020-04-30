@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <initializer_list>
 #include <map>
 #include <string>
@@ -70,16 +71,25 @@ namespace simox::color
 
         /// The value corresponding to the bottom color.
         float vmin() const { return _vmin ? *_vmin : original_vmin(); }
-        void set_vmin(float vmin) { this->_vmin = vmin; }
         /// The value corresponding to the top color.
         float vmax() const { return _vmax ? *_vmax : original_vmax(); }
+
+        void set_vmin(float vmin) { this->_vmin = vmin; }
         void set_vmax(float vmax) { this->_vmax = vmax; }
+        void set_vmin(const std::vector<float>& values) { set_vmin(*std::max_element(values.begin(), values.end())); }
+        void set_vmax(const std::vector<float>& values) { set_vmax(*std::max_element(values.begin(), values.end())); }
 
         /// Sets the value limits, i.e. scales the color map to the range [vmin, vmax].
         void set_vlimits(float vmin, float vmax)
         {
             set_vmin(vmin);
             set_vmax(vmax);
+        }
+        void set_vlimits(const std::vector<float>& values)
+        {
+            const auto [min, max] = std::minmax_element(values.begin(), values.end());
+            set_vmin(*min);
+            set_vmax(*max);
         }
 
 

@@ -72,6 +72,9 @@ SET(SOURCES
     math/pose/invert.cpp
     math/pose/orthogonalize.cpp
 
+    math/periodic/periodic_diff.cpp
+    math/periodic/periodic_mean.cpp
+
     math/SoftMinMax.cpp
 
     shapes/AxisAlignedBoundingBox.cpp
@@ -109,46 +112,52 @@ SET(INCLUDES
 
     math/convert/rad_to_deg.h
     math/convert/deg_to_rad.h
-
     math/convert/aa_to_mat3f.h
     math/convert/aa_to_mat4f.h
     math/convert/aa_to_quat.h
     math/convert/aa_to_rpy.h
-
     math/convert/mat3f_to_aa.h
     math/convert/mat3f_to_mat4f.h
     math/convert/mat3f_to_quat.h
     math/convert/mat3f_to_rpy.h
-
     math/convert/mat4f_to_aa.h
     math/convert/mat4f_to_mat3f.h
     math/convert/mat4f_to_pos.h
     math/convert/mat4f_to_quat.h
     math/convert/mat4f_to_rpy.h
-
     math/convert/pos_aa_to_mat4f.h
     math/convert/pos_mat3f_to_mat4f.h
     math/convert/pos_quat_to_mat4f.h
     math/convert/pos_rpy_to_mat4f.h
     math/convert/pos_to_mat4f.h
-
     math/convert/quat_to_aa.h
     math/convert/quat_to_mat3f.h
     math/convert/quat_to_mat4f.h
     math/convert/quat_to_rpy.h
-
     math/convert/rpy_to_aa.h
     math/convert/rpy_to_mat3f.h
     math/convert/rpy_to_mat4f.h
     math/convert/rpy_to_quat.h
-
     math/convert/mat4f_to_xyyaw.h
     math/convert/xyyaw_to_mat4f.h
 
     math/distance/delta_angle.h
     math/distance/angle_between.h
 
-    math/periodic_clamp.h
+    math/mean.h
+
+    math/norm/norm_clamp.h
+    math/norm/norm_max.h
+    math/norm/norm_min.h
+
+    math/normal/orthogonal_vector.h
+    math/normal/normal_to_mat3.h
+    math/normal/normal_to_mat4.h
+
+    math/periodic_clamp.h  # Legacy header.
+    math/periodic/periodic_clamp.h
+    math/periodic/periodic_diff.h
+    math/periodic/periodic_mean.h
 
     math/pose/align_box_orientation.h
     math/pose/check_rotation_matrix.h
@@ -157,11 +166,15 @@ SET(INCLUDES
     math/pose/pose.h
     math/pose/transform.h
 
-    math/normal/orthogonal_vector.h
-    math/normal/normal_to_mat3.h
-    math/normal/normal_to_mat4.h
+    math/similarity/cosine_similarity.h
+    math/similarity/angular_similarity.h
+
+    math/sum.h
 
     math/SoftMinMax.h
+    math/rescale.h
+
+    math/zero.h
 
     meta/eigen/enable_if_compile_time_size.h
     meta/eigen/is_eigen_array.h
