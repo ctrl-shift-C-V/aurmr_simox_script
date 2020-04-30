@@ -88,12 +88,19 @@ namespace jsonbase
     {
         for (int row = 0; row < matrix.rows(); ++row)
         {
-            nlohmann::json jrow = nlohmann::json::array();
-            for (int col = 0; col < matrix.cols(); ++col)
+            if (matrix.cols() > 1)
             {
-                jrow.push_back(matrix(row, col));
+                nlohmann::json jrow = nlohmann::json::array();
+                for (int col = 0; col < matrix.cols(); ++col)
+                {
+                    jrow.push_back(matrix(row, col));
+                }
+                j.push_back(jrow);
             }
-            j.push_back(jrow);
+            else
+            {
+                j.push_back(matrix(row, 0));
+            }
         }
     }
 
@@ -107,10 +114,17 @@ namespace jsonbase
         for (std::size_t row = 0; row < j.size(); ++row)
         {
             const auto& jrow = j.at(row);
-            for (std::size_t col = 0; col < jrow.size(); ++col)
+            if (jrow.is_array())
             {
-                const auto& value = jrow.at(col);
-                matrix(static_cast<Index>(row), static_cast<Index>(col)) = value.get<Scalar>();
+                for (std::size_t col = 0; col < jrow.size(); ++col)
+                {
+                    const auto& value = jrow.at(col);
+                    matrix(static_cast<Index>(row), static_cast<Index>(col)) = value.get<Scalar>();
+                }
+            }
+            else
+            {
+                matrix(static_cast<Index>(row), 0) = jrow.get<Scalar>();
             }
         }
     }
