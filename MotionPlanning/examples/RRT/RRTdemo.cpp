@@ -52,7 +52,7 @@ void show(SoNode* n)
     sensor_mgr->insertTimerSensor(timer);
     */
     viewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-    viewer->setAccumulationBuffer(true);
+    viewer->setAccumulationBuffer(false);
     viewer->setAntialiasing(true, 4);
     viewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
     viewer->setFeedbackVisibility(true);

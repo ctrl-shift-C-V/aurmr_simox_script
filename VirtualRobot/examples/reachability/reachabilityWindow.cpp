@@ -85,7 +85,7 @@ void reachabilityWindow::setupUI()
 
     // setup
     m_pExViewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-    m_pExViewer->setAccumulationBuffer(true);
+    m_pExViewer->setAccumulationBuffer(false);
 
     m_pExViewer->setAntialiasing(true, 4);
 
@@ -125,7 +125,7 @@ void reachabilityWindow::setupUI()
     UI.sliderCutMaxAngle->setEnabled(false);
     UI.checkBoxReachabilityCut->setEnabled(false);
 
-    m_pExViewer->setAccumulationBuffer(true);
+    m_pExViewer->setAccumulationBuffer(false);
     m_pExViewer->setAntialiasing(true, 4);
 
 }

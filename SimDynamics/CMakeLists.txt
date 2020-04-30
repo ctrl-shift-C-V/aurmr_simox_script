@@ -159,6 +159,7 @@ if (SimDynamics_DYNAMICSENGINE)
     	DynamicsEngine/BulletEngine/BulletRobotLogger.h
     	DynamicsEngine/BulletEngine/SimoxMotionState.h
      	DynamicsEngine/BulletEngine/SimoxCollisionDispatcher.h
+        DynamicsEngine/BulletEngine/DetectBulletVersion.h
   	)
   	
   	if (SimDynamics_BULLET_OpenGL)

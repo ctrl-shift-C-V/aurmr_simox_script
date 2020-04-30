@@ -116,7 +116,7 @@ void GraspQualityWindow::setupUI()
 
     // setup
     m_pExViewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-    m_pExViewer->setAccumulationBuffer(true);
+    m_pExViewer->setAccumulationBuffer(false);
 
     m_pExViewer->setAntialiasing(true, 4);
 

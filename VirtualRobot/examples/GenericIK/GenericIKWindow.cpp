@@ -58,7 +58,7 @@ void GenericIKWindow::setupUI()
 
     // setup
     exViewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-    exViewer->setAccumulationBuffer(true);
+    exViewer->setAccumulationBuffer(false);
     exViewer->setAntialiasing(true, 4);
 
     exViewer->setTransparencyType(SoGLRenderAction::BLEND);

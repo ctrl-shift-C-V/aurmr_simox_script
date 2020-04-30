@@ -4132,23 +4132,11 @@ namespace VirtualRobot
 
     SoSeparator* CoinVisualizationFactory::CreateEllipse(float x, float y, float z, SoMaterial* matBody, bool showAxes, float axesHeight, float axesWidth, SoMaterial* matX, SoMaterial* matY, SoMaterial* matZ)
     {
-        // check for min size
-        float minSize = 1e-6f;
-
-        if (x < minSize)
-        {
-            x = minSize;
-        }
-
-        if (y < minSize)
-        {
-            y = minSize;
-        }
-
-        if (z < minSize)
-        {
-            z = minSize;
-        }
+        // Check for min size.
+        const float minSize = 1e-6f;
+        x = std::max(x, minSize);
+        y = std::max(y, minSize);
+        z = std::max(z, minSize);
 
         if (!matBody)
         {
@@ -4190,7 +4178,6 @@ namespace VirtualRobot
         c->type.setValue(SoComplexity::OBJECT_SPACE);
         c->value.setValue(1.0f);
         result->addChild(c);
-
 
         SoSeparator* p1 = new SoSeparator;
         result->addChild(p1);
@@ -4257,6 +4244,53 @@ namespace VirtualRobot
 
         result->unrefNoDelete();
         return result;
+    }
+
+    SoSeparator* CoinVisualizationFactory::CreateCylindroid(float axisLengthX, float axisLengthY, float height, SoMaterial* material)
+    {
+        // Check for min size.
+        const float minSize = 1e-6f;
+        axisLengthX = std::max(axisLengthX, minSize);
+        axisLengthY = std::max(axisLengthY, minSize);
+        height = std::max(height, minSize);
+
+        if (!material)
+        {
+            material = new SoMaterial;
+            material->diffuseColor.setValue(0.3f, 0.6f, 0.9f);
+            material->ambientColor.setValue(0.3f, 0.6f, 0.9f);
+            material->transparency.setValue(0.3f);
+        }
+
+        // Ensure good quality.
+        SoComplexity* complexity = new SoComplexity;
+        complexity->type.setValue(SoComplexity::OBJECT_SPACE);
+        complexity->value.setValue(1.0f);
+
+        SoSeparator* cylindroid = new SoSeparator;
+
+        SoScale* scale = new SoScale;
+        scale->scaleFactor.setValue(axisLengthX, height, axisLengthY);
+
+        SoRotationXYZ* rotation = new SoRotationXYZ;
+        rotation->angle = -M_PI_2;
+        rotation->axis = SoRotationXYZ::X;
+
+        SoCylinder* cylinder = new SoCylinder;
+        cylinder->radius = 1;
+        cylinder->height = 1;
+
+        SoSeparator* root = new SoSeparator;
+        root->ref();
+        root->addChild(complexity);
+        cylindroid->addChild(material);
+        cylindroid->addChild(rotation);
+        cylindroid->addChild(scale);
+        cylindroid->addChild(cylinder);
+        root->addChild(cylindroid);
+        root->unrefNoDelete();
+
+        return root;
     }
 
     void CoinVisualizationFactory::applyDisplacement(VisualizationNodePtr o, Eigen::Matrix4f& m)

@@ -1,8 +1,12 @@
 #pragma once
 
+
+// STD/STL
 #include <type_traits>
 
+// Eigen
 #include <Eigen/Core>
+
 
 namespace simox::meta
 {

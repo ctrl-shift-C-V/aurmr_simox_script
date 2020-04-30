@@ -832,7 +832,7 @@ namespace VirtualRobot
                 std::filesystem::path filenameNew(i.filename);
                 std::filesystem::path filenameBasePath(basePath);
 
-                std::filesystem::path filenameNewComplete = std::filesystem::operator/(filenameBasePath, filenameNew);
+                std::filesystem::path filenameNewComplete = filenameBasePath / filenameNew;
                 VR_INFO << "Searching robot: " << filenameNewComplete.string() << endl;
 
                 try
