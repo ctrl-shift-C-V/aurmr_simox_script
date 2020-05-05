@@ -5,5 +5,7 @@ ADD_SU_TEST( SoftMinMax )
 ADD_SU_TEST( Normal )
 ADD_SU_TEST( Compare )
 
+ADD_SU_TEST( periodic )
+
 
 ADD_SUBDIRECTORY(pose)

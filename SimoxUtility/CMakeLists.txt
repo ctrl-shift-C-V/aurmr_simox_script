@@ -72,6 +72,9 @@ SET(SOURCES
     math/pose/invert.cpp
     math/pose/orthogonalize.cpp
 
+    math/periodic/periodic_diff.cpp
+    math/periodic/periodic_mean.cpp
+
     math/SoftMinMax.cpp
 
     shapes/AxisAlignedBoundingBox.cpp
@@ -148,6 +151,8 @@ SET(INCLUDES
     math/distance/delta_angle.h
     math/distance/angle_between.h
 
+    math/mean.h
+
     math/compare/is_equal.h
     math/compare/is_greater.h
     math/compare/is_greater_equal.h
@@ -156,7 +161,18 @@ SET(INCLUDES
     math/compare/is_less_equal.h
     math/compare/value_in_limits_of.h
 
-    math/periodic_clamp.h
+    math/norm/norm_clamp.h
+    math/norm/norm_max.h
+    math/norm/norm_min.h
+
+    math/normal/orthogonal_vector.h
+    math/normal/normal_to_mat3.h
+    math/normal/normal_to_mat4.h
+
+    math/periodic_clamp.h  # Legacy header.
+    math/periodic/periodic_clamp.h
+    math/periodic/periodic_diff.h
+    math/periodic/periodic_mean.h
 
     math/pose/align_box_orientation.h
     math/pose/check_rotation_matrix.h
@@ -165,11 +181,15 @@ SET(INCLUDES
     math/pose/pose.h
     math/pose/transform.h
 
-    math/normal/orthogonal_vector.h
-    math/normal/normal_to_mat3.h
-    math/normal/normal_to_mat4.h
+    math/similarity/cosine_similarity.h
+    math/similarity/angular_similarity.h
+
+    math/sum.h
 
     math/SoftMinMax.h
+    math/rescale.h
+
+    math/zero.h
 
     meta/eigen/enable_if_compile_time_size.h
     meta/eigen/is_eigen_array.h

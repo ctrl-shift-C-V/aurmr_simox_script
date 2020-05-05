@@ -96,10 +96,10 @@ namespace VirtualRobot
             if (!pathFound)
             {
                 std::filesystem::path p(std::filesystem::current_path());
-                std::filesystem::path p1 = std::filesystem::operator/(p, "../VirtualRobot/data");
-                std::filesystem::path p2 = std::filesystem::operator/(p, "../../VirtualRobot/data");
-                std::filesystem::path p3 = std::filesystem::operator/(p, "../../../VirtualRobot/data");
-                std::filesystem::path p4 = std::filesystem::operator/(p, "../../../../VirtualRobot/data");
+                std::filesystem::path p1 = p / "../VirtualRobot/data";
+                std::filesystem::path p2 = p / "../../VirtualRobot/data";
+                std::filesystem::path p3 = p / "../../../VirtualRobot/data";
+                std::filesystem::path p4 = p / "../../../../VirtualRobot/data";
                 pathFound = pathFound | addDataPath(p1.string(), true);
                 pathFound = pathFound | addDataPath(p2.string(), true);
                 pathFound = pathFound | addDataPath(p3.string(), true);
@@ -136,7 +136,7 @@ namespace VirtualRobot
         {
             std::filesystem::path p(dataPath);
 
-            std::filesystem::path fnComplete = std::filesystem::operator/(p, fn);
+            std::filesystem::path fnComplete = p / fn;
 
             try
             {
