@@ -10,7 +10,7 @@ namespace simox::math
     std::enable_if_t <simox::meta::are_arithmetic_v<TargetT, T>, bool>
     value_in_limits_of_type(T v)
     {
-        return simox::math::is_less_equal(std::numeric_limits<TargetT>::min(), v) &&
+        return simox::math::is_less_equal(std::numeric_limits<TargetT>::lowest(), v) &&
                simox::math::is_greater_equal(std::numeric_limits<TargetT>::max(), v);
     }
 
