@@ -1,5 +1,6 @@
 PROJECT ( SimoxUtility )
 
+set(CMAKE_INCLUDE_CURRENT_DIR OFF)
 add_library(SimoxUtility SHARED) # SimoxUtility.h) # sources will be added later
 
 target_include_directories(SimoxUtility PUBLIC
@@ -24,8 +25,7 @@ target_link_libraries(SimoxUtility PUBLIC
         Boost::regex
 )
 
-target_compile_options(SimoxUtility PRIVATE -include eigen/AssertAsException.h)
-target_compile_options(SimoxUtility INTERFACE -include SimoxUtility/eigen/AssertAsException.h)
+target_compile_options(SimoxUtility PUBLIC -include SimoxUtility/eigen/AssertAsException.h)
 
 # disable boost auto linking
 if (Boost_USE_STATIC_LIBS)

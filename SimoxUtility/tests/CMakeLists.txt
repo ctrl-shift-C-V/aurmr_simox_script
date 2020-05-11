@@ -19,7 +19,6 @@ MACRO(ADD_SU_TEST TEST_NAME)
 
     ADD_EXECUTABLE(${TRG_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_NAME}.cpp)
     TARGET_LINK_LIBRARIES(${TRG_NAME} PRIVATE SimoxUtility Boost::unit_test_framework)
-    target_include_directories(${TRG_NAME} PRIVATE ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/..)
     if (NOT Boost_USE_STATIC_LIBS)
         target_compile_definitions(${TRG_NAME} PRIVATE -DBOOST_TEST_DYN_LINK)
     endif ()
