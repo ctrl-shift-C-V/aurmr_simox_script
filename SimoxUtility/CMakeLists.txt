@@ -203,6 +203,7 @@ SET(INCLUDES
     meta/type_traits/is_any_of.h
     meta/type_traits/is_std_array.h
     meta/type_traits/are_arithmetic.h
+    meta/type_traits/is_string_like.h
 
     shapes/AxisAlignedBoundingBox.h
     shapes/OrientedBoxBase.h
