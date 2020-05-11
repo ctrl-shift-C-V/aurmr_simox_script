@@ -82,7 +82,6 @@ SET(SOURCES
 
 SET(INCLUDES
     SimoxUtility.h
-    EigenStdVector.h
 
     algorithm/for_each_if.h
     algorithm/apply.hpp
@@ -97,6 +96,8 @@ SET(INCLUDES
     color/interpolation.h
     color/json.h
 
+    EigenStdVector.h
+    eigen/EigenStdVector.h
     eigen/AssertAsException.h
 
     error/SimoxError.h
