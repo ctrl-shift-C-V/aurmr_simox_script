@@ -83,6 +83,9 @@ SET(SOURCES
 SET(INCLUDES
     SimoxUtility.h
 
+    preprocessor/variadic_for_each.h
+    preprocessor/drop_front.h
+
     algorithm/for_each_if.h
     algorithm/apply.hpp
 
