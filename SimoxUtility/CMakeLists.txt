@@ -196,6 +196,7 @@ SET(INCLUDES
     math/zero.h
 
     meta/undefined_t/undefined_t.h
+    meta/undefined_t/is_set.h
     meta/eigen/enable_if_compile_time_size.h
     meta/eigen/is_eigen_array.h
     meta/eigen/is_eigen_matrix.h
