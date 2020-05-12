@@ -4,6 +4,7 @@
 
 #include <boost/lexical_cast.hpp>
 
+#include <SimoxUtility/meta/undefined_t.h>
 #include <SimoxUtility/meta/type_traits/is_string_like.h>
 #include <SimoxUtility/meta/type_name.h>
 #include <SimoxUtility/meta/enum/EnumNames.hpp>
@@ -21,6 +22,24 @@ namespace simox::meta
 
     template<class T, class R = void>
     using enable_if_enum_adapted_t = typename enable_if_is_enum_adapted<T, R>::type;
+
+    template<class T>
+    constexpr undefined_t enum_names;
+
+    template<class T>
+    struct is_enum_adapted <
+        T,
+        std::enable_if_t<
+            has_type_of<simox::meta::EnumNames<T>>(enum_names<T>)
+        >
+    > : std::true_type
+    {
+        static_assert(std::is_enum_v<T>);
+        static const auto& names()
+        {
+            return enum_names<T>;
+        }
+    };
 }
 
 namespace std
@@ -120,7 +139,7 @@ namespace boost::detail
     make_specialization(char[7]);
     make_specialization(char[8]);
     make_specialization(char[9]);
-    
+
     make_specialization(char[10]);
     make_specialization(char[11]);
     make_specialization(char[12]);
@@ -131,7 +150,7 @@ namespace boost::detail
     make_specialization(char[17]);
     make_specialization(char[18]);
     make_specialization(char[19]);
-    
+
     make_specialization(char[20]);
     make_specialization(char[21]);
     make_specialization(char[22]);
@@ -142,7 +161,7 @@ namespace boost::detail
     make_specialization(char[27]);
     make_specialization(char[28]);
     make_specialization(char[29]);
-    
+
     make_specialization(char[30]);
     make_specialization(char[31]);
     make_specialization(char[32]);
@@ -153,7 +172,7 @@ namespace boost::detail
     make_specialization(char[37]);
     make_specialization(char[38]);
     make_specialization(char[39]);
-    
+
     make_specialization(char[40]);
     make_specialization(char[41]);
     make_specialization(char[42]);
@@ -164,7 +183,7 @@ namespace boost::detail
     make_specialization(char[47]);
     make_specialization(char[48]);
     make_specialization(char[49]);
-    
+
     make_specialization(char[50]);
     make_specialization(char[51]);
     make_specialization(char[52]);
@@ -175,7 +194,7 @@ namespace boost::detail
     make_specialization(char[57]);
     make_specialization(char[58]);
     make_specialization(char[59]);
-    
+
     make_specialization(char[60]);
     make_specialization(char[61]);
     make_specialization(char[62]);

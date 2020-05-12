@@ -17,6 +17,7 @@
 namespace ns
 {
     enum class enum_1 {e0, e1, e2};
+    enum class enum_2 {e0, e1, e2};
 }
 
 namespace simox::meta
@@ -35,20 +36,42 @@ namespace simox::meta
             return names;
         }
     };
+
+    template<>
+    const simox::meta::EnumNames<ns::enum_2> enum_names<ns::enum_2>
+    {
+        { ns::enum_2::e0, "enum_2::e0" },
+        { ns::enum_2::e1, "enum_2::e1" },
+        { ns::enum_2::e2, "enum_2::e2" }
+    };
 }
 
 BOOST_AUTO_TEST_CASE(test_adapt_enum)
 {
-    std::cout << ns::enum_1::e0 << '\n';
-    std::cout << ns::enum_1::e1 << '\n';
-    std::cout << ns::enum_1::e2 << '\n';
-    
-    BOOST_CHECK_EQUAL("enum_1::e0", boost::lexical_cast<std::string>(ns::enum_1::e0));
-    BOOST_CHECK_EQUAL("enum_1::e1", boost::lexical_cast<std::string>(ns::enum_1::e1));
-    BOOST_CHECK_EQUAL("enum_1::e2", boost::lexical_cast<std::string>(ns::enum_1::e2));
+    {
+        std::cout << ns::enum_1::e0 << '\n';
+        std::cout << ns::enum_1::e1 << '\n';
+        std::cout << ns::enum_1::e2 << '\n';
 
-    BOOST_CHECK(ns::enum_1::e0 == boost::lexical_cast<ns::enum_1>("enum_1::e0"));
-    BOOST_CHECK(ns::enum_1::e1 == boost::lexical_cast<ns::enum_1>("enum_1::e1"));
-    BOOST_CHECK(ns::enum_1::e2 == boost::lexical_cast<ns::enum_1>("enum_1::e2"));
+        BOOST_CHECK_EQUAL("enum_1::e0", boost::lexical_cast<std::string>(ns::enum_1::e0));
+        BOOST_CHECK_EQUAL("enum_1::e1", boost::lexical_cast<std::string>(ns::enum_1::e1));
+        BOOST_CHECK_EQUAL("enum_1::e2", boost::lexical_cast<std::string>(ns::enum_1::e2));
 
+        BOOST_CHECK(ns::enum_1::e0 == boost::lexical_cast<ns::enum_1>("enum_1::e0"));
+        BOOST_CHECK(ns::enum_1::e1 == boost::lexical_cast<ns::enum_1>("enum_1::e1"));
+        BOOST_CHECK(ns::enum_1::e2 == boost::lexical_cast<ns::enum_1>("enum_1::e2"));
+    }
+    {
+        std::cout << ns::enum_2::e0 << '\n';
+        std::cout << ns::enum_2::e1 << '\n';
+        std::cout << ns::enum_2::e2 << '\n';
+
+        BOOST_CHECK_EQUAL("enum_2::e0", boost::lexical_cast<std::string>(ns::enum_2::e0));
+        BOOST_CHECK_EQUAL("enum_2::e1", boost::lexical_cast<std::string>(ns::enum_2::e1));
+        BOOST_CHECK_EQUAL("enum_2::e2", boost::lexical_cast<std::string>(ns::enum_2::e2));
+
+        BOOST_CHECK(ns::enum_2::e0 == boost::lexical_cast<ns::enum_2>("enum_2::e0"));
+        BOOST_CHECK(ns::enum_2::e1 == boost::lexical_cast<ns::enum_2>("enum_2::e1"));
+        BOOST_CHECK(ns::enum_2::e2 == boost::lexical_cast<ns::enum_2>("enum_2::e2"));
+    }
 }
