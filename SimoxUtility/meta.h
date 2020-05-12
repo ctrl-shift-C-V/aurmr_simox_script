@@ -7,3 +7,4 @@
 #include "meta/enum.h"
 #include "meta/type_name.h"
 #include "meta/type_traits.h"
+#include "meta/undefined_t.h"
