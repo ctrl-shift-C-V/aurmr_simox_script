@@ -31,7 +31,6 @@ namespace simox::meta
     {
         return std::is_same_v<T, Expected>;
     }
-
     template<class Expected, class T>
     constexpr bool has_type_of(const T&)
     {
@@ -39,15 +38,25 @@ namespace simox::meta
     }
 
     template<class Expected, class T>
-    constexpr bool undefined_t_or_type(T)
+    constexpr bool undefined_t_or_type()
     {
         return ! is_not_undefined_t<T>() || has_type_of<Expected, T>();
     }
+    template<class Expected, class T>
+    constexpr bool undefined_t_or_type(T)
+    {
+        return undefined_t_or_type<Expected, T>();
+    }
 
+    template<class Expected, class T>
+    constexpr bool undefined_t_or_type_or_array_sz_1()
+    {
+        return undefined_t_or_type<Expected, T>() || has_type_of<std::array<Expected, 1>, T>();
+    }
     template<class Expected, class T>
     constexpr bool undefined_t_or_type_or_array_sz_1(T)
     {
-        return undefined_t_or_type<T>() || has_type_of<std::array<Expected, 1>, T>();
+        return undefined_t_or_type_or_array_sz_1<Expected, T>();
     }
 }
 
