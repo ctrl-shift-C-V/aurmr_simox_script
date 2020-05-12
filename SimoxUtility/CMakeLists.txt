@@ -199,7 +199,6 @@ SET(INCLUDES
     meta/eigen/is_eigen_array.h
     meta/eigen/is_eigen_matrix.h
     meta/has_member_macros/has_member.hpp
-    meta/EnumNames.hpp
     meta/type_name.h
     meta/boost_hana/has_hana_accessor.h
     meta/boost_hana/hana_member_name.h
@@ -207,6 +206,10 @@ SET(INCLUDES
     meta/type_traits/is_std_array.h
     meta/type_traits/are_arithmetic.h
     meta/type_traits/is_string_like.h
+
+    meta/EnumNames.hpp
+    meta/enum/adapt_enum.h
+    meta/enum/EnumNames.hpp
 
     shapes/AxisAlignedBoundingBox.h
     shapes/OrientedBoxBase.h
