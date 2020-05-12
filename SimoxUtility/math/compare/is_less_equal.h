@@ -14,7 +14,15 @@ namespace simox::math
     {
         constexpr bool signed_l = std::is_signed_v<L>;
         constexpr bool signed_r = std::is_signed_v<R>;
-        if constexpr(signed_l == signed_r)
+        constexpr bool floating_l = std::is_floating_point_v<L>;
+        constexpr bool floating_r = std::is_floating_point_v<R>;
+        if constexpr(floating_l != floating_r)
+        {
+            //same sign -> cast to bigger type and compare
+            using floating_t = std::conditional_t < floating_l, L, R >;
+            return static_cast<floating_t>(l) <= static_cast<floating_t>(r);
+        }
+        else if constexpr(signed_l == signed_r)
         {
             //same sign -> cast to bigger type and compare
             using big_t = std::conditional_t < (sizeof(L) > sizeof(R)), L, R >;
