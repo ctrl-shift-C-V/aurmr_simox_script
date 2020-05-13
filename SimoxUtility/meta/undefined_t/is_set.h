@@ -2,6 +2,8 @@
 
 #include "undefined_t.h"
 
+#include <array>
+
 namespace simox::meta
 {
     template<class T>
