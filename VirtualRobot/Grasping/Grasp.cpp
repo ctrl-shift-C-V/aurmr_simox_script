@@ -150,6 +150,11 @@ namespace VirtualRobot
         return result;
     }
 
+    Eigen::Matrix4f Grasp::getTcpPoseRobotRoot(const Eigen::Matrix4f& objectPose, const RobotPtr& robot) const
+    {
+        return robot->getGlobalPose().inverse() * getTcpPoseGlobal(objectPose);
+    }
+
     Eigen::Matrix4f Grasp::getObjectTargetPoseGlobal(const Eigen::Matrix4f& graspingPose) const
     {
         Eigen::Matrix4f result = graspingPose * poseTcp;
