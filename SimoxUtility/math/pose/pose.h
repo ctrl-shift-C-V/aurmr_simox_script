@@ -111,4 +111,18 @@ namespace simox::math
         return pose(Eigen::Vector3f::Zero(), ori);
     }
 
+    template <class Derived>
+    simox::meta::enable_if_mat4<Derived>
+    scale_position(Eigen::MatrixBase<Derived>& pose, float factor)
+    {
+        pose.template topRightCorner<3, 1>() *= factor;
+    }
+    template <class Derived>
+    simox::meta::enable_if_mat4<Derived, Eigen::Matrix4f>
+    scaled_position(const Eigen::MatrixBase<Derived>& pose, float factor)
+    {
+        Eigen::Matrix4f m = pose;
+        scale_position(m, factor);
+        return m;
+    }
 }
