@@ -180,6 +180,7 @@ SET(INCLUDES
 
     math/pose/align_box_orientation.h
     math/pose/check_rotation_matrix.h
+    math/pose/is_homogeneous_transform.h
     math/pose/invert.h
     math/pose/orthogonalize.h
     math/pose/pose.h
