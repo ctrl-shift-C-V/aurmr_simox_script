@@ -6,6 +6,7 @@
 #include "math/compare.h"
 #include "math/convert.h"
 #include "math/distance.h"
+#include "math/is_finite.h"
 #include "math/mean.h"
 #include "math/norm.h"
 #include "math/normal.h"

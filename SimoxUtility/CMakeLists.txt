@@ -195,6 +195,7 @@ SET(INCLUDES
     math/rescale.h
 
     math/zero.h
+    math/is_finite.h
 
     meta/undefined_t/undefined_t.h
     meta/undefined_t/is_set.h
