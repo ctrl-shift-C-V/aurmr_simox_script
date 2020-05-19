@@ -36,8 +36,8 @@ namespace VirtualRobot
 
         auto addF = [&](auto v0, auto v1, auto v2, auto v3)
         {
-            m.addFace(v0, v1, v2);
-            m.addFace(v0, v2, v3);
+            m.addFace(v1, v0, v2);
+            m.addFace(v2, v0, v3);
         };
         addF(0, 1, 2, 3);
         addF(3, 2, 6, 7);
