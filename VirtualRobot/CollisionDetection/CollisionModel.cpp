@@ -11,7 +11,7 @@
 namespace VirtualRobot
 {
 
-    CollisionModel::CollisionModel(VisualizationNodePtr visu, const std::string& name, CollisionCheckerPtr colChecker, int id, float margin)
+    CollisionModel::CollisionModel(const VisualizationNodePtr& visu, const std::string& name, CollisionCheckerPtr colChecker, int id, float margin)
     {
         globalPose = Eigen::Matrix4f::Identity();
         this->id = id;
@@ -34,7 +34,15 @@ namespace VirtualRobot
         setVisualization(visu);
     }
 
-    CollisionModel::CollisionModel(VisualizationNodePtr visu, const std::string& name, CollisionCheckerPtr colChecker, int id, InternalCollisionModelPtr collisionModel)
+    CollisionModel::CollisionModel(const TriMeshModelPtr& mesh) :
+        CollisionModel(boost::make_shared<VisualizationNode>(mesh))
+    {}
+
+    CollisionModel::CollisionModel(const TriMeshModel& mesh) :
+        CollisionModel(boost::make_shared<VisualizationNode>(mesh))
+    {}
+
+    CollisionModel::CollisionModel(const VisualizationNodePtr& visu, const std::string& name, CollisionCheckerPtr colChecker, int id, InternalCollisionModelPtr collisionModel)
     {
         margin = 0.0;
         globalPose = Eigen::Matrix4f::Identity();
