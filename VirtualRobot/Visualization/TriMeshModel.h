@@ -64,6 +64,22 @@ namespace VirtualRobot
         /// Virtual destructor.
         virtual ~TriMeshModel() = default;
 
+        Eigen::Vector3f nonUniformSampleSurface(auto& gen) const
+        {
+            if (faces.empty())
+            {
+                return Eigen::Vector3f::Zero();
+            }
+            std::uniform_int_distribution<std::size_t> d{0, faces.size()};
+            const auto& f = faces.at(d(gen));
+            const float f0 = 1 + d(gen);
+            const float f1 = 1 + d(gen);
+            const float f2 = 1 + d(gen);
+            const Eigen::Vector3f factors = Eigen::Vector3f{f0, f1, f2}.normalized();
+            return factors(0) * vertices.at(f.id1) +
+                   factors(1) * vertices.at(f.id2) +
+                   factors(2) * vertices.at(f.id3);
+        }
 
         void addTriangleWithFace(const Eigen::Vector3f& vertex1, const Eigen::Vector3f& vertex2, const Eigen::Vector3f& vertex3);
         void addTriangleWithFace(const Eigen::Vector3f& vertex1, const Eigen::Vector3f& vertex2, const Eigen::Vector3f& vertex3, Eigen::Vector3f normal,
