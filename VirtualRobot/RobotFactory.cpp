@@ -20,10 +20,10 @@ namespace VirtualRobot
 
 
     RobotFactory::RobotFactory()
-    = default;
+        = default;
 
     RobotFactory::~RobotFactory()
-    = default;
+        = default;
 
 
     RobotPtr RobotFactory::createRobot(const std::string& name, const std::string& type)
@@ -88,7 +88,7 @@ namespace VirtualRobot
         // register root (performs an initialization of all robot nodes)
         robot->setRootNode(rootNode);
 
-        for (auto & robotNode : robotNodes)
+        for (auto& robotNode : robotNodes)
         {
             if (!robotNode->getParent() && robotNode != rootNode)
             {
@@ -159,7 +159,7 @@ namespace VirtualRobot
                 edges.push_back(edge);
             }
 
-            for (auto & i : children)
+            for (auto& i : children)
             {
                 if (i != currentEdge.first)
                 {
@@ -200,7 +200,7 @@ namespace VirtualRobot
         if (cloneEEF)
         {
             // Copy end effectors
-            for(auto &eef : robot->getEndEffectors())
+            for (auto& eef : robot->getEndEffectors())
             {
                 eef->clone(r);
             }
@@ -358,7 +358,7 @@ namespace VirtualRobot
         std::map<RobotNodePtr, std::vector<SensorPtr> > sensorMap;
         std::map<RobotNodePtr, bool> directionInversion;
 
-        for (auto & i : newStructure.parentChildMapping)
+        for (auto& i : newStructure.parentChildMapping)
         {
             if (!robot->hasRobotNode(i.name))
             {
@@ -415,7 +415,7 @@ namespace VirtualRobot
                         vf->applyDisplacement(v, tr2);
                         visuMap[parent] = v;
 
-                        for (auto & primitive : v->primitives)
+                        for (auto& primitive : v->primitives)
                         {
                             primitive->transform = tr * primitive->transform;
                         }
@@ -433,7 +433,7 @@ namespace VirtualRobot
                         c->setVisualization(v);
                         colMap[parent] = c;
 
-                        for (auto & primitive : v->primitives)
+                        for (auto& primitive : v->primitives)
                         {
                             primitive->transform = tr * primitive->transform;
                         }
@@ -541,7 +541,7 @@ namespace VirtualRobot
 
         std::vector<RobotNodePtr> nodes = newRobot->getRobotNodes();
 
-        for (auto & node : nodes)
+        for (auto& node : nodes)
         {
             if (visuMap.find(node) != visuMap.end())
             {
