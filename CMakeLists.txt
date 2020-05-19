@@ -24,7 +24,7 @@ if(${CMAKE_VERSION} VERSION_GREATER 3.16)
 endif()
 
 IF(NOT CMAKE_BUILD_TYPE)
-    SET_PROPERTY(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+    SET_PROPERTY(CACHE CMAKE_BUILD_TYPE PROPERTY STRING "RelWithDebInfo")
 endif()
 
 #we want Release and RelWithDebInfo to use the same optimization level
