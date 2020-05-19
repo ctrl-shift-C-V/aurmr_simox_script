@@ -70,7 +70,7 @@ namespace VirtualRobot
             {
                 return Eigen::Vector3f::Zero();
             }
-            std::uniform_int_distribution<std::size_t> d{0, faces.size()};
+            std::uniform_int_distribution<std::size_t> d{0, faces.size() - 1};
             const auto& f = faces.at(d(gen));
             const float f0 = 1 + d(gen);
             const float f1 = 1 + d(gen);
