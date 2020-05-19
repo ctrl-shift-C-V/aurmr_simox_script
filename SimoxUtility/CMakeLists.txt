@@ -88,6 +88,7 @@ SET(INCLUDES
 
     algorithm/for_each_if.h
     algorithm/apply.hpp
+    algorithm/get_map_keys_values.h
 
     color/cmaps/colormaps.h
     color/cmaps/Named.h
