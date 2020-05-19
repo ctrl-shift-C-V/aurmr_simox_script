@@ -6,11 +6,10 @@
 
 namespace simox::math
 {
-    // using std::isfinite;  // Is this really necessary?
-
+    using std::isfinite;
 
     template <class Derived>
-    bool is_finite(const Eigen::MatrixBase<Derived>& mat)
+    bool isfinite(const Eigen::MatrixBase<Derived>& mat)
     {
         for (int x = 0; x < mat.rows(); ++x)
         {

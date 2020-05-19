@@ -3,7 +3,7 @@
 #include <Eigen/Core>
 
 #include <SimoxUtility/math/pose/check_rotation_matrix.h>
-#include <SimoxUtility/math/is_finite.h>
+#include <SimoxUtility/math/isfinite.h>
 
 
 namespace simox::math
@@ -13,7 +13,7 @@ namespace simox::math
             float precision = 1e-6f)
     {
         return is_rotation_matrix(mat.template topLeftCorner<3, 3>(), precision) &&
-                is_finite(mat.template topRightCorner<3, 1>()) &&
+                isfinite(mat.template topRightCorner<3, 1>()) &&
                 std::abs(mat(3,0)) < precision &&
                 std::abs(mat(3,1)) < precision &&
                 std::abs(mat(3,2)) < precision &&
