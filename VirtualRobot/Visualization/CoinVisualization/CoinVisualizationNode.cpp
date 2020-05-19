@@ -31,8 +31,12 @@
 
 namespace VirtualRobot
 {
-    CoinVisualizationNode::CoinVisualizationNode(TriMeshModelPtr tri):
+    CoinVisualizationNode::CoinVisualizationNode(const TriMeshModelPtr& tri):
         CoinVisualizationNode(CoinVisualizationFactory::getCoinVisualization(tri))
+    {}
+
+    CoinVisualizationNode::CoinVisualizationNode(const TriMeshModel& tri) :
+        CoinVisualizationNode(boost::make_shared<TriMeshModel>(tri))
     {}
     /**
      * Store a reference to \p visualizationNode in the member
