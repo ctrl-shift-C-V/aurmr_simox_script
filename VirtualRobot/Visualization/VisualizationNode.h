@@ -44,6 +44,7 @@ namespace VirtualRobot
         Constructor
         */
         VisualizationNode(const TriMeshModelPtr& triMeshModel = nullptr);
+        VisualizationNode(const TriMeshModel& triMeshModel);
 
         /*!
         */
