@@ -40,6 +40,11 @@ namespace VirtualRobot
 
         /// Constructor.
         TriMeshModel();
+        TriMeshModel(TriMeshModel&&) = default;
+        TriMeshModel(const TriMeshModel&) = default;
+
+        TriMeshModel& operator=(TriMeshModel&&) = default;
+        TriMeshModel& operator=(const TriMeshModel&) = default;
 
         struct triangle
         {
