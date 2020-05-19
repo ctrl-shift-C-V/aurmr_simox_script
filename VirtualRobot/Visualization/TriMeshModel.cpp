@@ -21,6 +21,33 @@ namespace VirtualRobot
 
     TriMeshModel::TriMeshModel() = default;
 
+    TriMeshModel TriMeshModel::MakeBox(float a, float b, float c)
+    {
+        TriMeshModel m;
+        m.addVertex(0, 0, 0);
+        m.addVertex(0, b, 0);
+        m.addVertex(a, b, 0);
+        m.addVertex(a, 0, 0);
+
+        m.addVertex(0, 0, c);
+        m.addVertex(0, b, c);
+        m.addVertex(a, b, c);
+        m.addVertex(a, 0, c);
+
+        auto addF = [&](auto v0, auto v1, auto v2, auto v3)
+        {
+            m.addFace(v0, v1, v2);
+            m.addFace(v0, v2, v3);
+        };
+        addF(0, 1, 2, 3);
+        addF(3, 2, 6, 7);
+        addF(1, 5, 6, 2);
+        addF(4, 0, 3, 7);
+        addF(7, 6, 5, 4);
+        addF(4, 5, 1, 0);
+        return m;
+    }
+
     TriMeshModel::TriMeshModel(const std::vector<triangle>& triangles)
     {
         for (const auto& triangle : triangles)
