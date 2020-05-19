@@ -27,6 +27,7 @@
 #ifndef Q_MOC_RUN // workaround for some bug in some QT/boost versions
 #include <boost/shared_ptr.hpp>
 #endif
+#include <SimoxUtility/eigen/EigenStdVector.h>
 #include <Eigen/Dense>
 #include <stdexcept>
 #include <vector>
