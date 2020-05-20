@@ -43,7 +43,8 @@ namespace VirtualRobot
     {
         friend class CoinVisualizationFactory;
     public:
-        CoinVisualizationNode(TriMeshModelPtr tri);
+        CoinVisualizationNode(const TriMeshModelPtr &tri);
+        CoinVisualizationNode(const TriMeshModel& tri);
         CoinVisualizationNode(SoNode* visualizationNode, float margin = 0.0f);
         ~CoinVisualizationNode() override;
         TriMeshModelPtr getTriMeshModel() override;

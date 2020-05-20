@@ -64,7 +64,11 @@ namespace VirtualRobot
             \param colChecker If not specified, the global singleton instance is used. Only useful, when parallel collision checks should be performed.
             \param id A user id.
         */
-        CollisionModel(const VisualizationNodePtr visu, const std::string& name = "", CollisionCheckerPtr colChecker = CollisionCheckerPtr(), int id = 666, float margin = 0.0f);
+        CollisionModel(const VisualizationNodePtr& visu, const std::string& name = "", CollisionCheckerPtr colChecker = CollisionCheckerPtr(), int id = 666, float margin = 0.0f);
+
+        CollisionModel(const TriMeshModelPtr& mesh);
+
+        CollisionModel(const TriMeshModel& mesh);
         /*!Standard Destructor
         */
         virtual ~CollisionModel();
@@ -179,7 +183,7 @@ namespace VirtualRobot
 
     protected:
         // internal constructor needed for flat copy of internal collision model
-        CollisionModel(VisualizationNodePtr visu, const std::string& name, CollisionCheckerPtr colChecker, int id, InternalCollisionModelPtr collisionModel);
+        CollisionModel(const VisualizationNodePtr& visu, const std::string& name, CollisionCheckerPtr colChecker, int id, InternalCollisionModelPtr collisionModel);
 
         //! delete all data
         void destroyData();

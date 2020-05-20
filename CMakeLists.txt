@@ -18,13 +18,14 @@ endif()
 #global config
 # Set up build type
 
-if(${CMAKE_VERSION} VERSION_GREATER 3.16)
+if(NOT "$ENV{CMAKE_UNITY_BUILD_BATCH_SIZE}" STREQUAL "")
+    message(STATUS "CMAKE_UNITY_BUILD_BATCH_SIZE -> $ENV{CMAKE_UNITY_BUILD_BATCH_SIZE}")
     set(CMAKE_UNITY_BUILD ON)
-    set(CMAKE_UNITY_BUILD_BATCH_SIZE 0)
+    set(CMAKE_UNITY_BUILD_BATCH_SIZE $ENV{CMAKE_UNITY_BUILD_BATCH_SIZE})
 endif()
 
 IF(NOT CMAKE_BUILD_TYPE)
-    SET_PROPERTY(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+    SET_PROPERTY(CACHE CMAKE_BUILD_TYPE PROPERTY STRING "RelWithDebInfo")
 endif()
 
 #we want Release and RelWithDebInfo to use the same optimization level

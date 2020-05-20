@@ -497,10 +497,11 @@ namespace VirtualRobot
 
     bool CollisionChecker::checkCollision(CollisionModelPtr model1, CollisionModelPtr model2)
     {
-        VR_ASSERT(model1 && model2);
+        THROW_VR_EXCEPTION_IF(!model1, "model1 is null");
+        THROW_VR_EXCEPTION_IF(!model2, "model2 is null");
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == model2->getCollisionChecker(), "Collision models are linked to different Collision Checker instances");
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == shared_from_this(), "Collision models are linked to different Collision Checker instances");
-        VR_ASSERT(isInitialized());
+        THROW_VR_EXCEPTION_IF(!isInitialized(), "checker not initialized");
 
         return collisionCheckerImplementation->checkCollision(model1, model2);//, storeContact);
     }

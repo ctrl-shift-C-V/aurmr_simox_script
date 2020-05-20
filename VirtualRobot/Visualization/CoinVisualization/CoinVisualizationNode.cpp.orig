@@ -31,14 +31,19 @@
 
 namespace VirtualRobot
 {
+<<<<<<< HEAD
     using std::cout;
     using std::endl;
+
+    CoinVisualizationNode::CoinVisualizationNode(TriMeshModelPtr tri):
+=======
     CoinVisualizationNode::CoinVisualizationNode(const TriMeshModelPtr& tri):
+>>>>>>> origin/master
         CoinVisualizationNode(CoinVisualizationFactory::getCoinVisualization(tri))
     {}
 
     CoinVisualizationNode::CoinVisualizationNode(const TriMeshModel& tri) :
-        CoinVisualizationNode(std::make_shared<TriMeshModel>(tri))
+        CoinVisualizationNode(boost::make_shared<TriMeshModel>(tri))
     {}
     /**
      * Store a reference to \p visualizationNode in the member

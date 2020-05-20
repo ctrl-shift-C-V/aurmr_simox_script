@@ -29,6 +29,10 @@ namespace VirtualRobot
         globalPose.setIdentity();
     }
 
+    VisualizationNode::VisualizationNode(const TriMeshModel& triMeshModel) :
+        VisualizationNode(std::make_shared<TriMeshModel>(triMeshModel))
+    {}
+
     VisualizationNode::~VisualizationNode()
     {
         attachedVisualizations.clear();

@@ -88,6 +88,7 @@ SET(INCLUDES
 
     algorithm/for_each_if.h
     algorithm/apply.hpp
+    algorithm/get_map_keys_values.h
 
     color/cmaps/colormaps.h
     color/cmaps/Named.h
@@ -180,6 +181,7 @@ SET(INCLUDES
 
     math/pose/align_box_orientation.h
     math/pose/check_rotation_matrix.h
+    math/pose/is_homogeneous_transform.h
     math/pose/invert.h
     math/pose/orthogonalize.h
     math/pose/pose.h
@@ -194,6 +196,7 @@ SET(INCLUDES
     math/rescale.h
 
     math/zero.h
+    math/isfinite.h
 
     meta/undefined_t/undefined_t.h
     meta/undefined_t/is_set.h
