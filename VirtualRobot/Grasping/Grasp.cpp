@@ -7,7 +7,8 @@
 
 namespace VirtualRobot
 {
-
+    using std::cout;
+    using std::endl;
 
     Grasp::Grasp(const std::string& name, const std::string& robotType, const std::string& eef,
                  const Eigen::Matrix4f& poseInTCPCoordSystem, const std::string& creation,

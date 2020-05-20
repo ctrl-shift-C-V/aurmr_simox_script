@@ -18,6 +18,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     EndEffectorActor::EndEffectorActor(const std::string& name, const std::vector< ActorDefinition >& a, CollisionCheckerPtr colChecker) :
         name(name),
@@ -138,7 +140,7 @@ namespace VirtualRobot
                 {
                     for (auto& node : eef->getStatics())
                     {
-                        SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(node);
+                        SceneObjectPtr so = std::dynamic_pointer_cast<SceneObject>(node);
 
                         //(don't store contacts)
                         //if( isColliding(eef,so,newContacts,eStatic) )
@@ -284,7 +286,7 @@ namespace VirtualRobot
     {
         for (auto& actor : actors)
         {
-            SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(actor.robotNode);
+            SceneObjectPtr so = std::dynamic_pointer_cast<SceneObject>(actor.robotNode);
 
             if ((actor.colMode & eActors) && obstacle->isColliding(so))
             {
@@ -314,7 +316,7 @@ namespace VirtualRobot
 
         for (auto& obstacleStatic : obstacleStatics)
         {
-            SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(obstacleStatic);
+            SceneObjectPtr so = std::dynamic_pointer_cast<SceneObject>(obstacleStatic);
 
             if (isColliding(so, EndEffectorActor::eStatic))
             {
@@ -344,7 +346,7 @@ namespace VirtualRobot
 
         for (auto& obstacleStatic : obstacleStatics)
         {
-            SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(obstacleStatic);
+            SceneObjectPtr so = std::dynamic_pointer_cast<SceneObject>(obstacleStatic);
 
             if (isColliding(eef, so, storeContacts, EndEffectorActor::eStatic))
             {
@@ -359,7 +361,7 @@ namespace VirtualRobot
     {
         for (auto& actor : actors)
         {
-            SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(actor.robotNode);
+            SceneObjectPtr so = std::dynamic_pointer_cast<SceneObject>(actor.robotNode);
 
             if ((actor.colMode & eActors) && obstacle->isColliding(eef, so, storeContacts))
             {

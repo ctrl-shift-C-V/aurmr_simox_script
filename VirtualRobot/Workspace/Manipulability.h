@@ -47,7 +47,7 @@ namespace VirtualRobot
             \see PoseQualityManipulability
             \see PoseQualityExtendedManipulability
     */
-    class VIRTUAL_ROBOT_IMPORT_EXPORT Manipulability : public WorkspaceRepresentation, public boost::enable_shared_from_this<Manipulability>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT Manipulability : public WorkspaceRepresentation, public std::enable_shared_from_this<Manipulability>
     {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -204,7 +204,7 @@ namespace VirtualRobot
 
     };
 
-    typedef boost::shared_ptr<Manipulability> ManipulabilityPtr;
+    typedef std::shared_ptr<Manipulability> ManipulabilityPtr;
 
 } // namespace VirtualRobot
 

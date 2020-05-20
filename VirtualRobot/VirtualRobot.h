@@ -109,52 +109,11 @@
 
 #include <SimoxUtility/EigenStdVector.h>
 
-#ifndef Q_MOC_RUN // workaround for some bug in some QT/boost versions
-#include <boost/shared_ptr.hpp>
-#include <boost/assert.hpp>
-#include <boost/weak_ptr.hpp>
-#include <boost/thread.hpp>
-#include <boost/pointer_cast.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/thread/shared_mutex.hpp>
-#include <boost/type_traits/is_base_of.hpp>
-#include <boost/bind.hpp>
-#include <filesystem>
-#include <boost/mem_fn.hpp>
-#include <boost/foreach.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/program_options.hpp>
-#include <boost/math/special_functions/fpclassify.hpp>
-#include <boost/version.hpp>
-#include <boost/format.hpp>
-#include <boost/mpl/assert.hpp>
-#include <boost/thread/recursive_mutex.hpp>
-#include <boost/unordered_set.hpp>
-#include <boost/unordered_map.hpp>
-#include <boost/current_function.hpp>
-#endif
+#include <memory>
 
-
-#include <iostream>
-#include <sstream>
-#include <cmath>
-
-//#ifdef _DEBUG
-//#ifdef WIN32
-// ENABLE MEMORY LEAK CHECKING FOR WINDOWS
-//#define _CRTDBG_MAP_ALLOC
-//#include <stdlib.h>
-//#include <crtdbg.h>
-//#endif
-//#endif
 
 namespace VirtualRobot
 {
-
-    // only valid within the VirtualRobot namespace
-    using std::cout;
-    using std::endl;
 
     class CoMIK;
     class DifferentialIK;
@@ -204,55 +163,55 @@ namespace VirtualRobot
     class ContactSensor;
     class LocalRobot;
 
-    typedef boost::shared_ptr<CoMIK> CoMIKPtr;
-    typedef boost::shared_ptr<HierarchicalIK> HierarchicalIKPtr;
-    typedef boost::shared_ptr<DifferentialIK> DifferentialIKPtr;
-    typedef boost::shared_ptr<Constraint> ConstraintPtr;
-    typedef boost::shared_ptr<TSRConstraint> TSRConstraintPtr;
-    typedef boost::shared_ptr<BalanceConstraint> BalanceConstraintPtr;
-    typedef boost::shared_ptr<PoseConstraint> PoseConstraintPtr;
-    typedef boost::shared_ptr<PositionConstraint> PositionConstraintPtr;
-    typedef boost::shared_ptr<OrientationConstraint> OrientationConstraintPtr;
-    typedef boost::shared_ptr<RobotNode> RobotNodePtr;
-    typedef boost::shared_ptr<SupportPolygon> SupportPolygonPtr;
-    typedef boost::shared_ptr<RobotNodeRevolute> RobotNodeRevolutePtr;
-    typedef boost::shared_ptr<RobotNodeSet> RobotNodeSetPtr;
-    typedef boost::shared_ptr<KinematicChain> KinematicChainPtr;
-    typedef boost::weak_ptr<RobotNode> RobotNodeWeakPtr;
-    typedef boost::shared_ptr<RobotNodeFactory> RobotNodeFactoryPtr;
-    typedef boost::shared_ptr<Robot> RobotPtr;
-    typedef boost::weak_ptr<Robot> RobotWeakPtr;
-    typedef boost::shared_ptr<EndEffector> EndEffectorPtr;
-    typedef boost::shared_ptr<EndEffectorActor> EndEffectorActorPtr;
-    typedef boost::shared_ptr<CollisionModel> CollisionModelPtr;
-    typedef boost::shared_ptr<CollisionChecker> CollisionCheckerPtr;
-    typedef boost::shared_ptr<SceneObjectSet> SceneObjectSetPtr;
-    typedef boost::shared_ptr<TriMeshModel> TriMeshModelPtr;
-    typedef boost::shared_ptr<SceneObject> SceneObjectPtr;
-    typedef boost::weak_ptr<SceneObject> SceneObjectWeakPtr;
-    typedef boost::shared_ptr<Obstacle> ObstaclePtr;
-    typedef boost::shared_ptr<Visualization> VisualizationPtr;
-    typedef boost::shared_ptr<VisualizationNode> VisualizationNodePtr;
-    typedef boost::shared_ptr<VisualizationFactory> VisualizationFactoryPtr;
-    typedef boost::shared_ptr<WorkspaceData> WorkspaceDataPtr;
-    typedef boost::shared_ptr<WorkspaceDataArray> WorkspaceDataArrayPtr;
-    typedef boost::shared_ptr<WorkspaceRepresentation> WorkspaceRepresentationPtr;
-    typedef boost::shared_ptr<Reachability> ReachabilityPtr;
-    typedef boost::shared_ptr<Scene> ScenePtr;
-    typedef boost::shared_ptr<RobotConfig> RobotConfigPtr;
-    typedef boost::shared_ptr<Grasp> GraspPtr;
-    typedef boost::shared_ptr<GraspSet> GraspSetPtr;
-    typedef boost::shared_ptr<ManipulationObject> ManipulationObjectPtr;
-    typedef boost::shared_ptr<CDManager> CDManagerPtr;
-    typedef boost::shared_ptr<PoseQualityMeasurement> PoseQualityMeasurementPtr;
-    typedef boost::shared_ptr<PoseQualityManipulability> PoseQualityManipulabilityPtr;
-    typedef boost::shared_ptr<Trajectory> TrajectoryPtr;
-    typedef boost::shared_ptr<SphereApproximator> SphereApproximatorPtr;
-    typedef boost::shared_ptr<BasicGraspQualityMeasure> BasicGraspQualityMeasurePtr;
-    typedef boost::shared_ptr<WorkspaceGrid> WorkspaceGridPtr;
-    typedef boost::shared_ptr<ForceTorqueSensor> ForceTorqueSensorPtr;
-    typedef boost::shared_ptr<ContactSensor> ContactSensorPtr;
-    typedef boost::shared_ptr<LocalRobot> LocalRobotPtr;
+    typedef std::shared_ptr<CoMIK> CoMIKPtr;
+    typedef std::shared_ptr<HierarchicalIK> HierarchicalIKPtr;
+    typedef std::shared_ptr<DifferentialIK> DifferentialIKPtr;
+    typedef std::shared_ptr<Constraint> ConstraintPtr;
+    typedef std::shared_ptr<TSRConstraint> TSRConstraintPtr;
+    typedef std::shared_ptr<BalanceConstraint> BalanceConstraintPtr;
+    typedef std::shared_ptr<PoseConstraint> PoseConstraintPtr;
+    typedef std::shared_ptr<PositionConstraint> PositionConstraintPtr;
+    typedef std::shared_ptr<OrientationConstraint> OrientationConstraintPtr;
+    typedef std::shared_ptr<RobotNode> RobotNodePtr;
+    typedef std::shared_ptr<SupportPolygon> SupportPolygonPtr;
+    typedef std::shared_ptr<RobotNodeRevolute> RobotNodeRevolutePtr;
+    typedef std::shared_ptr<RobotNodeSet> RobotNodeSetPtr;
+    typedef std::shared_ptr<KinematicChain> KinematicChainPtr;
+    typedef std::weak_ptr<RobotNode> RobotNodeWeakPtr;
+    typedef std::shared_ptr<RobotNodeFactory> RobotNodeFactoryPtr;
+    typedef std::shared_ptr<Robot> RobotPtr;
+    typedef std::weak_ptr<Robot> RobotWeakPtr;
+    typedef std::shared_ptr<EndEffector> EndEffectorPtr;
+    typedef std::shared_ptr<EndEffectorActor> EndEffectorActorPtr;
+    typedef std::shared_ptr<CollisionModel> CollisionModelPtr;
+    typedef std::shared_ptr<CollisionChecker> CollisionCheckerPtr;
+    typedef std::shared_ptr<SceneObjectSet> SceneObjectSetPtr;
+    typedef std::shared_ptr<TriMeshModel> TriMeshModelPtr;
+    typedef std::shared_ptr<SceneObject> SceneObjectPtr;
+    typedef std::weak_ptr<SceneObject> SceneObjectWeakPtr;
+    typedef std::shared_ptr<Obstacle> ObstaclePtr;
+    typedef std::shared_ptr<Visualization> VisualizationPtr;
+    typedef std::shared_ptr<VisualizationNode> VisualizationNodePtr;
+    typedef std::shared_ptr<VisualizationFactory> VisualizationFactoryPtr;
+    typedef std::shared_ptr<WorkspaceData> WorkspaceDataPtr;
+    typedef std::shared_ptr<WorkspaceDataArray> WorkspaceDataArrayPtr;
+    typedef std::shared_ptr<WorkspaceRepresentation> WorkspaceRepresentationPtr;
+    typedef std::shared_ptr<Reachability> ReachabilityPtr;
+    typedef std::shared_ptr<Scene> ScenePtr;
+    typedef std::shared_ptr<RobotConfig> RobotConfigPtr;
+    typedef std::shared_ptr<Grasp> GraspPtr;
+    typedef std::shared_ptr<GraspSet> GraspSetPtr;
+    typedef std::shared_ptr<ManipulationObject> ManipulationObjectPtr;
+    typedef std::shared_ptr<CDManager> CDManagerPtr;
+    typedef std::shared_ptr<PoseQualityMeasurement> PoseQualityMeasurementPtr;
+    typedef std::shared_ptr<PoseQualityManipulability> PoseQualityManipulabilityPtr;
+    typedef std::shared_ptr<Trajectory> TrajectoryPtr;
+    typedef std::shared_ptr<SphereApproximator> SphereApproximatorPtr;
+    typedef std::shared_ptr<BasicGraspQualityMeasure> BasicGraspQualityMeasurePtr;
+    typedef std::shared_ptr<WorkspaceGrid> WorkspaceGridPtr;
+    typedef std::shared_ptr<ForceTorqueSensor> ForceTorqueSensorPtr;
+    typedef std::shared_ptr<ContactSensor> ContactSensorPtr;
+    typedef std::shared_ptr<LocalRobot> LocalRobotPtr;
 
     /*
      * Predefine for MathTools.h
@@ -275,9 +234,9 @@ namespace VirtualRobot
 
         typedef BaseLine<Eigen::Vector3f> Line;
         typedef BaseLine<Eigen::Vector2f> Line2D;
-        typedef boost::shared_ptr<ConvexHull2D> ConvexHull2DPtr;
-        typedef boost::shared_ptr<ConvexHull3D> ConvexHull3DPtr;
-        typedef boost::shared_ptr<ConvexHull6D> ConvexHull6DPtr;
+        typedef std::shared_ptr<ConvexHull2D> ConvexHull2DPtr;
+        typedef std::shared_ptr<ConvexHull3D> ConvexHull3DPtr;
+        typedef std::shared_ptr<ConvexHull6D> ConvexHull6DPtr;
 
    }
 

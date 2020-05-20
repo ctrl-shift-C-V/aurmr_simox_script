@@ -29,6 +29,9 @@ using std::cin;
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
+
     VirtualRobot::Dynamics::Dynamics(RobotNodeSetPtr rns, RobotNodeSetPtr rnsBodies, bool verbose) : rns(rns), rnsBodies(rnsBodies), verbose(verbose)
     {
         if (!rns)
@@ -37,7 +40,7 @@ namespace VirtualRobot
         }
         VERBOSE_OUT << "joint values:\n" << rns->getJointValuesEigen() << endl;
         gravity = RigidBodyDynamics::Math::Vector3d(0, 0, -9.81);
-        model = boost::shared_ptr<RigidBodyDynamics::Model>(new RigidBodyDynamics::Model());
+        model = std::shared_ptr<RigidBodyDynamics::Model>(new RigidBodyDynamics::Model());
 
         model->gravity = gravity;
 
@@ -204,7 +207,7 @@ namespace VirtualRobot
         verbose = value;
     }
 
-    boost::shared_ptr<RigidBodyDynamics::Model> Dynamics::getModel() const
+    std::shared_ptr<RigidBodyDynamics::Model> Dynamics::getModel() const
     {
         return model;
     }
@@ -217,9 +220,9 @@ namespace VirtualRobot
             return RobotNodePtr();
         }
 
-        BOOST_FOREACH(SceneObjectPtr child, node->getChildren())
+        for (SceneObjectPtr const& child : node->getChildren())
         {
-            RobotNodePtr childPtr = boost::dynamic_pointer_cast<RobotNode>(child);
+            RobotNodePtr childPtr = std::dynamic_pointer_cast<RobotNode>(child);
 
             if (childPtr != 0 &&                    // existing
                 childPtr->getMass() > 0 &&      // has mass
@@ -229,9 +232,9 @@ namespace VirtualRobot
                 return childPtr;
             }
         }
-        BOOST_FOREACH(SceneObjectPtr child, node->getChildren())
+        for (SceneObjectPtr const& child : node->getChildren())
         {
-            RobotNodePtr rnPtr = boost::dynamic_pointer_cast<RobotNode>(child);
+            RobotNodePtr rnPtr = std::dynamic_pointer_cast<RobotNode>(child);
             RobotNodePtr childPtr;
 
             if (rnPtr && !rnPtr->isRotationalJoint()) // break recursion if child is rot joint
@@ -252,7 +255,7 @@ namespace VirtualRobot
         std::set<RobotNodePtr> result;
         for (auto& obj : node->getChildren())
         {
-            auto node = boost::dynamic_pointer_cast<VirtualRobot::RobotNode>(obj);
+            auto node = std::dynamic_pointer_cast<VirtualRobot::RobotNode>(obj);
 
             if (node && nodeSet->hasRobotNode(node))
             {
@@ -272,7 +275,7 @@ namespace VirtualRobot
     }
 
     // rbdl: (trafo->joint->body) -> (trafo->joint->body) -> (trafo->joint->body) ...
-    void Dynamics::toRBDLRecursive(boost::shared_ptr<RigidBodyDynamics::Model> model, RobotNodePtr node, Eigen::Matrix4f accumulatedTransformPreJoint, Eigen::Matrix4f accumulatedTransformPostJoint, RobotNodePtr jointNode, int parentID)
+    void Dynamics::toRBDLRecursive(std::shared_ptr<RigidBodyDynamics::Model> model, RobotNodePtr node, Eigen::Matrix4f accumulatedTransformPreJoint, Eigen::Matrix4f accumulatedTransformPostJoint, RobotNodePtr jointNode, int parentID)
     {
         VR_ASSERT(model);
         VR_ASSERT(node);
@@ -332,7 +335,7 @@ namespace VirtualRobot
             if (jointNode && jointNode->isRotationalJoint())
             {
                 RigidBodyDynamics::JointType joint_type = RigidBodyDynamics::JointTypeRevolute;
-                boost::shared_ptr<RobotNodeRevolute> rev = boost::dynamic_pointer_cast<RobotNodeRevolute>(jointNode);
+                std::shared_ptr<RobotNodeRevolute> rev = std::dynamic_pointer_cast<RobotNodeRevolute>(jointNode);
                 VR_ASSERT(rev);
                 RigidBodyDynamics::Math::Vector3d joint_axis = rev->getJointRotationAxisInJointCoordSystem().cast<double>();
 
@@ -343,7 +346,7 @@ namespace VirtualRobot
             else if (jointNode && jointNode->isTranslationalJoint())
             {
                 RigidBodyDynamics::JointType joint_type = RigidBodyDynamics::JointTypePrismatic;
-                boost::shared_ptr<RobotNodePrismatic> prism = boost::dynamic_pointer_cast<RobotNodePrismatic>(jointNode);
+                std::shared_ptr<RobotNodePrismatic> prism = std::dynamic_pointer_cast<RobotNodePrismatic>(jointNode);
                 RigidBodyDynamics::Math::Vector3d joint_axis = prism->getJointTranslationDirectionJointCoordSystem().cast<double>();
 
                 joint = RigidBodyDynamics::Joint(joint_type, joint_axis);
@@ -401,9 +404,9 @@ namespace VirtualRobot
 
         std::vector<SceneObjectPtr> children = node->getChildren();
 
-        BOOST_FOREACH(SceneObjectPtr child, children)
+        for (SceneObjectPtr const& child : children)
         {
-            boost::shared_ptr<RobotNode> childRobotNode = boost::dynamic_pointer_cast<RobotNode>(child);
+            std::shared_ptr<RobotNode> childRobotNode = std::dynamic_pointer_cast<RobotNode>(child);
 
             if (childRobotNode) // if cast returns 0 pointer, child is a sensor and can be omitted. also, child must be contained in the robotnodeset
             {
@@ -421,7 +424,7 @@ namespace VirtualRobot
 
 
 
-    void Dynamics::toRBDL(boost::shared_ptr<RigidBodyDynamics::Model> model, RobotNodePtr node, RobotNodeSetPtr nodeSet, RobotNodePtr parentNode, int parentID)
+    void Dynamics::toRBDL(std::shared_ptr<RigidBodyDynamics::Model> model, RobotNodePtr node, RobotNodeSetPtr nodeSet, RobotNodePtr parentNode, int parentID)
     {
         VERBOSE_OUT << "#######ADDING NODE " << node->getName() << endl;
         RobotNodePtr physicsFromChild;
@@ -464,7 +467,7 @@ namespace VirtualRobot
         if (node->isRotationalJoint())
         {
             RigidBodyDynamics::JointType joint_type = RigidBodyDynamics::JointTypeRevolute;
-            boost::shared_ptr<RobotNodeRevolute> rev = boost::dynamic_pointer_cast<RobotNodeRevolute>(node);
+            std::shared_ptr<RobotNodeRevolute> rev = std::dynamic_pointer_cast<RobotNodeRevolute>(node);
             RigidBodyDynamics::Math::Vector3d joint_axis = rev->getJointRotationAxisInJointCoordSystem().cast<double>();
 
             joint = RigidBodyDynamics::Joint(joint_type, joint_axis);
@@ -474,7 +477,7 @@ namespace VirtualRobot
         else if (node->isTranslationalJoint())
         {
             RigidBodyDynamics::JointType joint_type = RigidBodyDynamics::JointTypePrismatic;
-            boost::shared_ptr<RobotNodePrismatic> prism = boost::dynamic_pointer_cast<RobotNodePrismatic>(node);
+            std::shared_ptr<RobotNodePrismatic> prism = std::dynamic_pointer_cast<RobotNodePrismatic>(node);
             RigidBodyDynamics::Math::Vector3d joint_axis = prism->getJointTranslationDirectionJointCoordSystem().cast<double>();
 
             joint = RigidBodyDynamics::Joint(joint_type, joint_axis);
@@ -517,35 +520,6 @@ namespace VirtualRobot
                 toRBDL(model, nodeSet->getNode(i + 1), rns, node, nodeID);
             }
         }
-
-        //    std::vector<SceneObjectPtr> children;
-
-
-        //    // pick correct children to proceed the recursion
-        //    if (physicsFromChild != 0)
-        //    {
-        //        children = physicsFromChild->getChildren();
-        //    }
-        //    else
-        //    {
-        //        children = node->getChildren();
-        //    }
-
-        //    BOOST_FOREACH(SceneObjectPtr child, children)
-        //    {
-        //        boost::shared_ptr<RobotNode> childRobotNode = boost::dynamic_pointer_cast<RobotNode>(child);
-
-        //        if (childRobotNode && Dynamics::rns->hasRobotNode(childRobotNode)) // if cast returns 0 pointer, child is a sensor and can be omitted. also, child must be contained in the robotnodeset
-        //        {
-        //            if (joint.mJointType == RigidBodyDynamics::JointTypeFixed) // if current node is fixed, make its parent the parent of the next recursion step and thereby skip it
-        //            {
-        //                node = parentNode;
-        //            }
-
-        //            toRBDL(model, childRobotNode, rns, node, nodeID);
-
-        //        }
-        //    }
 
         return;
     }

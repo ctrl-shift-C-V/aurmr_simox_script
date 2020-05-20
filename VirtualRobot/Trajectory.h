@@ -35,7 +35,7 @@ namespace VirtualRobot
     /*!
         A representation of a trajectory in joint space, associated with a RobotNodeSet.
     */
-    class VIRTUAL_ROBOT_IMPORT_EXPORT Trajectory : public boost::enable_shared_from_this<Trajectory>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT Trajectory : public std::enable_shared_from_this<Trajectory>
     {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW

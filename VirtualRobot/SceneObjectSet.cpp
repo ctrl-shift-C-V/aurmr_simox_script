@@ -10,6 +10,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     //----------------------------------------------------------------------
     // class SceneObjectSet constructor
@@ -119,7 +121,7 @@ namespace VirtualRobot
     {
         for (auto& robotNode : robotNodes)
         {
-            SceneObjectPtr cm = boost::dynamic_pointer_cast<SceneObject>(robotNode);
+            SceneObjectPtr cm = std::dynamic_pointer_cast<SceneObject>(robotNode);
 
             if (cm)
             {
@@ -152,7 +154,7 @@ namespace VirtualRobot
     {
         for (auto& mobj : mos)
         {
-            SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(mobj);
+            SceneObjectPtr so = std::dynamic_pointer_cast<SceneObject>(mobj);
             addSceneObject(so);
         }
     }

@@ -29,7 +29,7 @@
 
 namespace VirtualRobot
 {
-    class VIRTUAL_ROBOT_IMPORT_EXPORT PoseConstraint : public Constraint, public boost::enable_shared_from_this<PoseConstraint>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT PoseConstraint : public Constraint, public std::enable_shared_from_this<PoseConstraint>
     {
     public:
         PoseConstraint(const RobotPtr& robot, const RobotNodeSetPtr& nodeSet, const SceneObjectPtr& eef, const Eigen::Matrix4f& target,
@@ -79,6 +79,6 @@ namespace VirtualRobot
         float posRotTradeoff;
     };
 
-    typedef boost::shared_ptr<PoseConstraint> PoseConstraintPtr;
+    typedef std::shared_ptr<PoseConstraint> PoseConstraintPtr;
 }
 

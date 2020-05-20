@@ -206,7 +206,7 @@ namespace VirtualRobot
 
     TriMeshModelPtr AssimpReader::readFileAsTriMesh(const std::string& filename)
     {
-        auto tri = boost::make_shared<TriMeshModel>();
+        auto tri = std::make_shared<TriMeshModel>();
         if (!readFileAsTriMesh(filename, tri))
         {
             return nullptr;
@@ -216,7 +216,7 @@ namespace VirtualRobot
 
     TriMeshModelPtr AssimpReader::readBufferAsTriMesh(const std::string_view& v)
     {
-        auto tri = boost::make_shared<TriMeshModel>();
+        auto tri = std::make_shared<TriMeshModel>();
         if (!readBufferAsTriMesh(v, tri))
         {
             return nullptr;
@@ -228,7 +228,7 @@ namespace VirtualRobot
     {
         if (auto tri = readFileAsTriMesh(filename))
         {
-            return boost::make_shared<ManipulationObject>(name, tri, filename);
+            return std::make_shared<ManipulationObject>(name, tri, filename);
         }
         return nullptr;
     }
@@ -236,7 +236,7 @@ namespace VirtualRobot
     {
         if (auto tri = readBufferAsTriMesh(v))
         {
-            return boost::make_shared<ManipulationObject>(name, tri);
+            return std::make_shared<ManipulationObject>(name, tri);
         }
         return nullptr;
     }

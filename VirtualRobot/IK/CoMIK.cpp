@@ -5,10 +5,15 @@
 #include "../VirtualRobotException.h"
 #include "../Robot.h"
 
+#include <Eigen/Geometry>
+
 #include <cfloat>
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
+
     CoMIK::CoMIK(RobotNodeSetPtr rnsJoints, RobotNodeSetPtr rnsBodies, RobotNodePtr coordSystem, int dimensions)
         : JacobiProvider(rnsJoints), coordSystem(coordSystem)
     {
@@ -67,8 +72,8 @@ namespace VirtualRobot
                 if (dof->isRotationalJoint())
                 {
                     // get axis
-                    boost::shared_ptr<RobotNodeRevolute> revolute
-                        = boost::dynamic_pointer_cast<RobotNodeRevolute>(dof);
+                    std::shared_ptr<RobotNodeRevolute> revolute
+                        = std::dynamic_pointer_cast<RobotNodeRevolute>(dof);
                     THROW_VR_EXCEPTION_IF(!revolute, "Internal error: expecting revolute joint");
                     // todo: find a better way of handling different joint types
                     Eigen::Vector3f axis = revolute->getJointRotationAxis(coordSystem);
@@ -89,8 +94,8 @@ namespace VirtualRobot
                 else if (dof->isTranslationalJoint())
                 {
                     // -> prismatic joint
-                    boost::shared_ptr<RobotNodePrismatic> prismatic
-                        = boost::dynamic_pointer_cast<RobotNodePrismatic>(dof);
+                    std::shared_ptr<RobotNodePrismatic> prismatic
+                        = std::dynamic_pointer_cast<RobotNodePrismatic>(dof);
                     THROW_VR_EXCEPTION_IF(!prismatic, "Internal error: expecting prismatic joint");
                     // todo: find a better way of handling different joint types
                     Eigen::Vector3f axis = prismatic->getJointTranslationDirection(coordSystem);

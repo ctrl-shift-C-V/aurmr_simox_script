@@ -41,7 +41,7 @@ namespace GraspStudio
      *   "Pose Error Robust Grasping from Contact Wrench Space Metrics",
      *   2012 IEEE International Conference on Robotics and Automation.
      */
-    class GRASPSTUDIO_IMPORT_EXPORT GraspEvaluationPoseUncertainty : public boost::enable_shared_from_this<GraspEvaluationPoseUncertainty>
+    class GRASPSTUDIO_IMPORT_EXPORT GraspEvaluationPoseUncertainty : public std::enable_shared_from_this<GraspEvaluationPoseUncertainty>
     {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW

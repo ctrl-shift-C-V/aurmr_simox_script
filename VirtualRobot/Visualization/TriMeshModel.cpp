@@ -8,16 +8,19 @@
 #include "../VirtualRobot.h"
 #include "../DataStructures/nanoflann.hpp"
 #include "../DataStructures/KdTreePointCloud.h"
+
 #include<Eigen/Geometry>
 
 #include <algorithm>
 #include <fstream>
 #include <iomanip>
+#include <set>
 
 
 namespace VirtualRobot
 {
-
+    using std::cout;
+    using std::endl;
 
     TriMeshModel::TriMeshModel() = default;
 
@@ -94,7 +97,7 @@ namespace VirtualRobot
         face.normal = normal;
         if (face.normal.hasNaN())
         {
-            VR_ERROR << "*** NANNNNNNNNNNNNNNNNNNNNN" << endl;
+            VR_ERROR << "*** NANNNNNNNNNNNNNNNNNNNNN" << std::endl;
         }
 
         this->addFace(face);
@@ -182,7 +185,7 @@ namespace VirtualRobot
     {
         if (std::isnan(vertex[0]) || std::isnan(vertex[1]) || std::isnan(vertex[2]))
         {
-            VR_ERROR << "NAN vertex added!!!" << endl;
+            VR_ERROR << "NAN vertex added!!!" << std::endl;
             return -1;
         }
         vertices.push_back(vertex);

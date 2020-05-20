@@ -2,6 +2,9 @@
 
 using namespace VirtualRobot;
 
+using std::cout;
+using std::endl;
+
 ConstrainedIK::ConstrainedIK(RobotPtr& robot, const RobotNodeSetPtr& nodeSet, int maxIterations, float stall_epsilon, float raise_epsilon, bool reduceRobot) :
     originalRobot(robot),
     nodeSet(nodeSet),
@@ -179,7 +182,7 @@ void ConstrainedIK::getUnitableNodes(const RobotNodePtr &robotNode, const RobotN
             std::vector<SceneObjectPtr> children = robotNode->getChildren();
             for (auto &child : children)
             {
-                RobotNodePtr childRobotNode = boost::dynamic_pointer_cast<RobotNode>(child);
+                RobotNodePtr childRobotNode = std::dynamic_pointer_cast<RobotNode>(child);
                 if (childRobotNode)
                 {
                     getUnitableNodes(childRobotNode, nodeSet, unitable);

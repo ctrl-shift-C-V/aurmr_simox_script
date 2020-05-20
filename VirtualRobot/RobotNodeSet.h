@@ -38,7 +38,7 @@ namespace VirtualRobot
         - the kinematic root (the topmost RobotNode of the Robot's kinematic tree that has to be updated in order to update all covered RobotNodes)
         - the Tool Center point (TCP)
     */
-    class VIRTUAL_ROBOT_IMPORT_EXPORT RobotNodeSet : public SceneObjectSet, public boost::enable_shared_from_this<RobotNodeSet>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT RobotNodeSet : public SceneObjectSet, public std::enable_shared_from_this<RobotNodeSet>
     {
     public:
         typedef std::vector<RobotNodePtr> NodeContainerT;

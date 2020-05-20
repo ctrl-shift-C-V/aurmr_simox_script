@@ -7,6 +7,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     WorkspaceDataArray::WorkspaceDataArray(unsigned int size1, unsigned int size2, unsigned int size3,
                                            unsigned int size4, unsigned int size5, unsigned int size6, bool adjustOnOverflow)

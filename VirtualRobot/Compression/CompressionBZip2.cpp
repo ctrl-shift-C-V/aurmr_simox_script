@@ -236,7 +236,8 @@
 
 namespace VirtualRobot
 {
-
+    using std::cout;
+    using std::endl;
 
     const CompressionBZip2::UInt32 CompressionBZip2::BZ2_crc32Table[256] =
     {

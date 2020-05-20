@@ -11,7 +11,7 @@
 
 namespace VirtualRobot
 {
-
+    using std::endl;
 
     SceneIO::SceneIO()
         = default;

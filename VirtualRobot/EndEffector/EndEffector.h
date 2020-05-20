@@ -33,7 +33,7 @@ namespace VirtualRobot
 {
     class EndEffectorActor;
 
-    class VIRTUAL_ROBOT_IMPORT_EXPORT EndEffector : public boost::enable_shared_from_this<EndEffector>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT EndEffector : public std::enable_shared_from_this<EndEffector>
     {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW

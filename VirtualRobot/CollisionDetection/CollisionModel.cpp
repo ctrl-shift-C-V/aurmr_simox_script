@@ -4,12 +4,17 @@
 #include "../Visualization/TriMeshModel.h"
 #include "../Visualization/VisualizationNode.h"
 #include "../XML/BaseIO.h"
+
+#include <boost/assert.hpp>
+
+#include <filesystem>
 #include <algorithm>
 
 
 
 namespace VirtualRobot
 {
+    using std::endl;
 
     CollisionModel::CollisionModel(VisualizationNodePtr visu, const std::string& name, CollisionCheckerPtr colChecker, int id, float margin)
     {
@@ -59,7 +64,7 @@ namespace VirtualRobot
         {
             VR_WARNING << "internal collision model is NULL for " << name << endl;
         }
-        collisionModelImplementation = boost::dynamic_pointer_cast<InternalCollisionModel>(collisionModel->clone(false));
+        collisionModelImplementation = std::dynamic_pointer_cast<InternalCollisionModel>(collisionModel->clone(false));
         VR_ASSERT(collisionModelImplementation->getPQPModel());
         setVisualization(visu);
     }

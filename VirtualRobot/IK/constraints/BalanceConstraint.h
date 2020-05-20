@@ -55,9 +55,9 @@ namespace VirtualRobot
         std::vector<Eigen::Matrix2f> matrices;
         std::vector<Eigen::Vector2f> displacements;
     };
-    typedef boost::shared_ptr<BalanceConstraintOptimizationFunction> BalanceConstraintOptimizationFunctionPtr;
+    typedef std::shared_ptr<BalanceConstraintOptimizationFunction> BalanceConstraintOptimizationFunctionPtr;
 
-    class VIRTUAL_ROBOT_IMPORT_EXPORT BalanceConstraint : public Constraint, public boost::enable_shared_from_this<BalanceConstraint>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT BalanceConstraint : public Constraint, public std::enable_shared_from_this<BalanceConstraint>
     {
     public:
         BalanceConstraint(const RobotPtr& robot, const RobotNodeSetPtr& joints, const RobotNodeSetPtr& bodies, const SceneObjectSetPtr& contactNodes,
@@ -108,6 +108,6 @@ namespace VirtualRobot
         BalanceConstraintOptimizationFunctionPtr differnentiableStability;
     };
 
-    typedef boost::shared_ptr<BalanceConstraint> BalanceConstraintPtr;
+    typedef std::shared_ptr<BalanceConstraint> BalanceConstraintPtr;
 }
 

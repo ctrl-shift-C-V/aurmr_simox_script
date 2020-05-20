@@ -12,6 +12,8 @@
 #include <cfloat>
 #include <ctime>
 
+#include <Eigen/Geometry>
+
 using namespace std;
 
 namespace Saba

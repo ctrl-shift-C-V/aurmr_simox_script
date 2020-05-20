@@ -67,7 +67,7 @@ namespace SimDynamics
 
     };
 
-    typedef boost::shared_ptr<DynamicsEngineFactory> DynamicsEngineFactoryPtr;
+    typedef std::shared_ptr<DynamicsEngineFactory> DynamicsEngineFactoryPtr;
 
 } // namespace SimDynamics
 

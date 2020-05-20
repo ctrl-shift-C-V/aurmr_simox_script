@@ -23,7 +23,7 @@
 #include "RobotImporterFactory.h"
 #include <Eigen/Core>
 
-
+#include <boost/algorithm/string/join.hpp>
 
 
 using namespace std;
@@ -34,7 +34,7 @@ namespace VirtualRobot
     string RobotImporterFactory::getAllFileFilters()
     {
         vector<string> filter;
-        BOOST_FOREACH(string subclass, RobotImporterFactory::getSubclassList())
+        for (string const& subclass : RobotImporterFactory::getSubclassList())
         {
             filter.push_back(RobotImporterFactory::fromName(subclass, NULL)->getFileFilter());
         }
@@ -44,7 +44,7 @@ namespace VirtualRobot
     string RobotImporterFactory::getAllExtensions()
     {
         vector<string> filter;
-        BOOST_FOREACH(string subclass, RobotImporterFactory::getSubclassList())
+        for (string const& subclass : RobotImporterFactory::getSubclassList())
         {
             string extension = RobotImporterFactory::fromName(subclass, NULL)->getFileExtension();
             filter.push_back("*." + extension);
@@ -54,7 +54,7 @@ namespace VirtualRobot
 
     RobotImporterFactoryPtr RobotImporterFactory::fromFileExtension(string type, void* params)
     {
-        BOOST_FOREACH(string subclass, RobotImporterFactory::getSubclassList())
+        for (string const& subclass : RobotImporterFactory::getSubclassList())
         {
             string subclassType = RobotImporterFactory::fromName(subclass, NULL)->getFileExtension();
 

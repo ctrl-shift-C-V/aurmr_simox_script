@@ -6,6 +6,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     RobotConfig::RobotConfig(RobotWeakPtr robot, const std::string& name)
         : name(name),

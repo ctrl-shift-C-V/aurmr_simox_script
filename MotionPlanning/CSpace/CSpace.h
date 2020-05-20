@@ -55,7 +55,7 @@ namespace Saba
      @see CSpaceSampled
 
      */
-    class SABA_IMPORT_EXPORT CSpace : public boost::enable_shared_from_this<CSpace>
+    class SABA_IMPORT_EXPORT CSpace : public std::enable_shared_from_this<CSpace>
     {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -341,7 +341,7 @@ namespace Saba
         std::vector< bool > borderLessDimension;         // store borderless state
 
         bool multiThreaded;                             // indicates that more than one CSpace is used by some threads
-        static boost::mutex colCheckMutex;              // only needed when multithreading support is enabled
+        static std::mutex colCheckMutex;              // only needed when multithreading support is enabled
         //  -> setting the configurations and checking against collisions is protected by this mutex
         std::vector<ConfigurationConstraintPtr>  constraints;
 

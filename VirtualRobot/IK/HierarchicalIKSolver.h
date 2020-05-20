@@ -4,7 +4,7 @@
 
 using namespace VirtualRobot;
 
-class HierarchicalIKSolver : public HierarchicalIK, public boost::enable_shared_from_this<HierarchicalIKSolver>
+class HierarchicalIKSolver : public HierarchicalIK, public std::enable_shared_from_this<HierarchicalIKSolver>
 {
 
 public:
@@ -20,4 +20,4 @@ protected:
     std::vector<JacobiProviderPtr> jacobies;
 };
 
-typedef boost::shared_ptr<HierarchicalIKSolver> HierarchicalIKSolverPtr;
+typedef std::shared_ptr<HierarchicalIKSolver> HierarchicalIKSolverPtr;

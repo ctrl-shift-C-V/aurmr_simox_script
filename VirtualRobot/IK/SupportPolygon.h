@@ -37,7 +37,7 @@ namespace VirtualRobot
             In this implementation, contacts are defined as all surface points of the passed collision models which have
             a distance to MathTools::FloorPlane that is lower than 5mm.
     */
-    class VIRTUAL_ROBOT_IMPORT_EXPORT SupportPolygon : public boost::enable_shared_from_this<SupportPolygon>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT SupportPolygon : public std::enable_shared_from_this<SupportPolygon>
     {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -73,7 +73,7 @@ namespace VirtualRobot
         MathTools::ConvexHull2DPtr suportPolygonFloor;
     };
 
-    typedef boost::shared_ptr<SupportPolygon> SupportPolygonPtr;
+    typedef std::shared_ptr<SupportPolygon> SupportPolygonPtr;
 
 } // namespace VirtualRobot
 

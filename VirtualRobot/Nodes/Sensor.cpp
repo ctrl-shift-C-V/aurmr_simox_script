@@ -10,6 +10,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     Sensor::Sensor(RobotNodeWeakPtr robotNode,
                    const std::string& name,
@@ -34,7 +36,7 @@ namespace VirtualRobot
         // robotnode
         if (!rn->hasSensor(name))
         {
-            rn->registerSensor(boost::static_pointer_cast<Sensor>(shared_from_this()));
+            rn->registerSensor(std::static_pointer_cast<Sensor>(shared_from_this()));
         }
 
         return SceneObject::initialize(parent, children);

@@ -14,6 +14,8 @@
 #include <VirtualRobot/Nodes/RobotNode.h>
 #include <string>
 
+#include <boost/thread.hpp>
+
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>

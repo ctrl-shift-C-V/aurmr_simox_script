@@ -18,7 +18,7 @@ namespace VirtualRobot
 
         if (!colChecker)
         {
-            VR_WARNING << "no col checker..." << endl;
+            VR_WARNING << "no col checker...\n";
         }
         else
         {
@@ -48,7 +48,7 @@ namespace VirtualRobot
     {
         if (!modelData)
         {
-            VR_WARNING << "no model data in PQP!" << endl;
+            VR_WARNING << "no model data in PQP!\n";
             return;
         }
 
@@ -82,11 +82,11 @@ namespace VirtualRobot
 
     void CollisionModelPQP::print()
     {
-        cout << "   CollisionModelPQP: ";
+        std::cout << "   CollisionModelPQP: ";
 
         if (pqpModel)
         {
-            cout << pqpModel->num_tris << " triangles." << endl;
+            std::cout << pqpModel->num_tris << " triangles.\n";
             float mi[3];
             float ma[3];
 
@@ -133,21 +133,21 @@ namespace VirtualRobot
                     }
                 }
 
-                cout << "    Min point: (" << mi[0] << "," << mi[1] << "," << mi[2] << ")" << endl;
-                cout << "    Max point: (" << ma[0] << "," << ma[1] << "," << ma[2] << ")" << endl;
+                std::cout << "    Min point: (" << mi[0] << "," << mi[1] << "," << mi[2] << ")\n";
+                std::cout << "    Max point: (" << ma[0] << "," << ma[1] << "," << ma[2] << ")\n";
             }
         }
         else
         {
-            cout << "no model." << endl;
+            std::cout << "no model.\n";
         }
 
-        cout << endl;
+        std::cout << std::endl;
     }
 
-    boost::shared_ptr<CollisionModelImplementation> CollisionModelPQP::clone(bool deepCopy) const
+    std::shared_ptr<CollisionModelImplementation> CollisionModelPQP::clone(bool deepCopy) const
     {
-        boost::shared_ptr<CollisionModelPQP> p(new CollisionModelPQP(*this));
+        std::shared_ptr<CollisionModelPQP> p(new CollisionModelPQP(*this));
         if(deepCopy)
         {
             p->createPQPModel();

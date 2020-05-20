@@ -31,6 +31,9 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
+
     CoinVisualizationNode::CoinVisualizationNode(TriMeshModelPtr tri):
         CoinVisualizationNode(CoinVisualizationFactory::getCoinVisualization(tri))
     {}
@@ -281,7 +284,7 @@ namespace VirtualRobot
     {
         VisualizationNode::attachVisualization(name, v);
 
-        boost::shared_ptr<CoinVisualizationNode> coinVisualizationNode = boost::dynamic_pointer_cast<CoinVisualizationNode>(v);
+        std::shared_ptr<CoinVisualizationNode> coinVisualizationNode = std::dynamic_pointer_cast<CoinVisualizationNode>(v);
 
         if (coinVisualizationNode && coinVisualizationNode->getCoinVisualization())
         {

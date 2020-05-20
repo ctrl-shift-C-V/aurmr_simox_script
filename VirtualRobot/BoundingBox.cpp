@@ -69,11 +69,11 @@ namespace VirtualRobot
 
     void BoundingBox::print()
     {
-        cout << "* Bounding Box\n";
-        std::streamsize pr = cout.precision(2);
-        cout << "** min <" << min(0) << "," << min(1) << "," << min(2) << ">\n";
-        cout << "** max <" << max(0) << "," << max(1) << "," << max(2) << ">\n";
-        cout.precision(pr);
+        std::cout << "* Bounding Box\n";
+        std::streamsize pr = std::cout.precision(2);
+        std::cout << "** min <" << min(0) << "," << min(1) << "," << min(2) << ">\n";
+        std::cout << "** max <" << max(0) << "," << max(1) << "," << max(2) << ">\n";
+        std::cout.precision(pr);
 
     }
 

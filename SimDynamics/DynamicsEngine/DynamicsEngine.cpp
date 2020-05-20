@@ -5,7 +5,7 @@
 namespace SimDynamics
 {
 
-    DynamicsEngine::DynamicsEngine(boost::shared_ptr <boost::recursive_mutex> engineMutex)
+    DynamicsEngine::DynamicsEngine(std::shared_ptr <std::recursive_mutex> engineMutex)
     {
         floorPos.setZero();
         floorUp.setZero();
@@ -43,7 +43,7 @@ namespace SimDynamics
         return true;
     }
 
-    void DynamicsEngine::setMutex(boost::shared_ptr<boost::recursive_mutex> engineMutex)
+    void DynamicsEngine::setMutex(std::shared_ptr<std::recursive_mutex> engineMutex)
     {
         engineMutexPtr = engineMutex;
     }
@@ -407,11 +407,11 @@ namespace SimDynamics
 
     DynamicsEngine::MutexLockPtr DynamicsEngine::getScopedLock()
     {
-        boost::shared_ptr< boost::recursive_mutex::scoped_lock > scoped_lock;
+        std::shared_ptr< std::scoped_lock<std::recursive_mutex> > scoped_lock;
 
         if (engineMutexPtr)
         {
-            scoped_lock.reset(new boost::recursive_mutex::scoped_lock(*engineMutexPtr));
+            scoped_lock.reset(new std::scoped_lock<std::recursive_mutex>(*engineMutexPtr));
         }
 
         return scoped_lock;

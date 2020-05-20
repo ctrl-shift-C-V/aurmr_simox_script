@@ -22,6 +22,7 @@
 
 namespace VirtualRobot
 {
+    using std::endl;
 
     CoinVisualization::CoinVisualization(const VisualizationNodePtr visualizationNode) :
         Visualization(visualizationNode)
@@ -89,9 +90,9 @@ namespace VirtualRobot
 
         visuRoot->addChild(visualization);
 
-        BOOST_FOREACH(VisualizationNodePtr visualizationNode, visualizationNodes)
+        for (VisualizationNodePtr const& visualizationNode : visualizationNodes)
         {
-            boost::shared_ptr<CoinVisualizationNode> coinVisualizationNode = boost::dynamic_pointer_cast<CoinVisualizationNode>(visualizationNode);
+            std::shared_ptr<CoinVisualizationNode> coinVisualizationNode = std::dynamic_pointer_cast<CoinVisualizationNode>(visualizationNode);
 
             if (coinVisualizationNode && coinVisualizationNode->getCoinVisualization())
             {
@@ -145,7 +146,7 @@ namespace VirtualRobot
             return false;
         }
 
-        boost::shared_ptr<CoinVisualizationNode> coinVisualizationNode = boost::dynamic_pointer_cast<CoinVisualizationNode>(visualizationNode);
+        std::shared_ptr<CoinVisualizationNode> coinVisualizationNode = std::dynamic_pointer_cast<CoinVisualizationNode>(visualizationNode);
 
 
         if (coinVisualizationNode)

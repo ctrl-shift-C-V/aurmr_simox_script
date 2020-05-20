@@ -29,7 +29,7 @@ namespace Saba
 
     void PathProcessingThread::start(int optimizeSteps)
     {
-        boost::lock_guard<boost::mutex> lock(mutex);
+        std::scoped_lock lock(mutex);
 
         if (threadStarted)
         {
@@ -43,7 +43,10 @@ namespace Saba
         this->optimizeSteps = optimizeSteps;
         resultPath.reset();
 
-        processingThread = boost::thread(&PathProcessingThread::workingMethod, this);
+        processingThread = std::thread([this]()
+        {
+            this->workingMethod();;
+        });
     }
 
     void PathProcessingThread::interrupt(bool waitUntilStopped)
@@ -77,7 +80,7 @@ namespace Saba
 
     bool PathProcessingThread::isRunning()
     {
-        boost::lock_guard<boost::mutex> lock(mutex);
+        std::scoped_lock lock(mutex);
         return threadStarted;
     }
 

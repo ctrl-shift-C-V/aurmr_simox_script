@@ -44,7 +44,7 @@ namespace VirtualRobot
 #else
     typedef CollisionModelDummy InternalCollisionModel;
 #endif
-    typedef boost::shared_ptr< InternalCollisionModel > InternalCollisionModelPtr;
+    typedef std::shared_ptr< InternalCollisionModel > InternalCollisionModelPtr;
     class CollisionChecker;
 
     /*!
@@ -104,12 +104,12 @@ namespace VirtualRobot
         }
 
 #if defined(VR_COLLISION_DETECTION_PQP)
-        const boost::shared_ptr< CollisionModelPQP >& getCollisionModelImplementation()
+        const std::shared_ptr< CollisionModelPQP >& getCollisionModelImplementation()
         {
             return collisionModelImplementation;
         }
 #else
-        const boost::shared_ptr< CollisionModelDummy >& getCollisionModelImplementation()
+        const std::shared_ptr< CollisionModelDummy >& getCollisionModelImplementation()
         {
             return collisionModelImplementation;
         }
@@ -202,9 +202,9 @@ namespace VirtualRobot
 
 
 #if defined(VR_COLLISION_DETECTION_PQP)
-        boost::shared_ptr< CollisionModelPQP > collisionModelImplementation;
+        std::shared_ptr< CollisionModelPQP > collisionModelImplementation;
 #else
-        boost::shared_ptr< CollisionModelDummy > collisionModelImplementation;
+        std::shared_ptr< CollisionModelDummy > collisionModelImplementation;
 #endif
     };
 

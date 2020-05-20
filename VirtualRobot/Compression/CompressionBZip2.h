@@ -500,7 +500,7 @@ namespace VirtualRobot
 
     };
 
-    typedef boost::shared_ptr<CompressionBZip2> CompressionBZip2Ptr;
+    typedef std::shared_ptr<CompressionBZip2> CompressionBZip2Ptr;
 
 } // namespace
 

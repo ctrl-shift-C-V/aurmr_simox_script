@@ -5,6 +5,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     ForceTorqueSensor::ForceTorqueSensor(RobotNodeWeakPtr robotNode,
                                          const std::string& name,

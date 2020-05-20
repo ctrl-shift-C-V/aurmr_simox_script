@@ -23,10 +23,14 @@
 #pragma once
 
 #include "VirtualRobot.h"
+
+#include <boost/current_function.hpp>
+
 #include <string>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+
 #ifdef WIN32
 #pragma warning(disable:4275)
 #endif

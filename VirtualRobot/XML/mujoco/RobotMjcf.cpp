@@ -363,13 +363,13 @@ mjcf::Joint RobotMjcf::addNodeJoint(RobotNodePtr node, mjcf::Body body)
     Eigen::Vector3f axis;
     if (node->isRotationalJoint())
     {
-        RobotNodeRevolutePtr revolute = boost::dynamic_pointer_cast<RobotNodeRevolute>(node);
+        RobotNodeRevolutePtr revolute = std::dynamic_pointer_cast<RobotNodeRevolute>(node);
         VR_CHECK(revolute);
         axis = revolute->getJointRotationAxisInJointCoordSystem();
     }
     else if (node->isTranslationalJoint())
     {
-        RobotNodePrismaticPtr prismatic = boost::dynamic_pointer_cast<RobotNodePrismatic>(node);
+        RobotNodePrismaticPtr prismatic = std::dynamic_pointer_cast<RobotNodePrismatic>(node);
         VR_CHECK(prismatic);
         axis = prismatic->getJointTranslationDirectionJointCoordSystem();
     }

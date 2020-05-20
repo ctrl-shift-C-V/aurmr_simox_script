@@ -1,6 +1,7 @@
 #pragma once
 
-
+#include <memory>
+#include <mutex>
 
 template <class T>
 class ConditionedLock
@@ -9,8 +10,8 @@ private:
     T _lock;
     bool _enabled;
 public:
-    ConditionedLock(boost::recursive_mutex&   mutex, bool enabled) :
-        _lock(mutex, boost::defer_lock), _enabled(enabled)
+    ConditionedLock(std::recursive_mutex&   mutex, bool enabled) :
+        _lock(mutex, std::defer_lock), _enabled(enabled)
     {
         if (_enabled)
         {
@@ -26,10 +27,10 @@ public:
     }
 };
 
-typedef ConditionedLock<boost::unique_lock<boost::recursive_mutex> > ReadLock;
-typedef ConditionedLock<boost::unique_lock<boost::recursive_mutex> > WriteLock;
+typedef ConditionedLock<std::unique_lock<std::recursive_mutex> > ReadLock;
+typedef ConditionedLock<std::unique_lock<std::recursive_mutex> > WriteLock;
 //typedef ConditionedLock<boost::shared_lock<boost::shared_mutex> > ReadLock;
 //typedef ConditionedLock<boost::unique_lock<boost::shared_mutex> > WriteLock;
-typedef boost::shared_ptr< ReadLock > ReadLockPtr;
-typedef boost::shared_ptr< WriteLock > WriteLockPtr;
+typedef std::shared_ptr< ReadLock > ReadLockPtr;
+typedef std::shared_ptr< WriteLock > WriteLockPtr;
 

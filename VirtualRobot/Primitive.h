@@ -60,7 +60,7 @@ namespace VirtualRobot
             std::string toXMLString(int tabs = 0) override;
         };
 
-        typedef boost::shared_ptr<Primitive> PrimitivePtr;
+        typedef std::shared_ptr<Primitive> PrimitivePtr;
 
     } //namespace Primitive
 } //namespace VirtualRobot

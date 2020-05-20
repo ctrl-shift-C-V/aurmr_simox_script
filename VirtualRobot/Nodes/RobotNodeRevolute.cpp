@@ -9,7 +9,8 @@
 
 namespace VirtualRobot
 {
-
+    using std::cout;
+    using std::endl;
 
     RobotNodeRevolute::RobotNodeRevolute(RobotWeakPtr rob,
                                          const std::string& name,
@@ -116,7 +117,8 @@ namespace VirtualRobot
 
         if (printChildren)
         {
-            std::for_each(children.begin(), children.end(), boost::bind(&SceneObject::print, _1, true, true));
+            std::for_each(children.begin(), children.end(), std::bind(&SceneObject::print,
+                                                                      std::placeholders::_1, true, true));
         }
     }
 

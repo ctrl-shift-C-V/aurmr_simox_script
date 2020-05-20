@@ -4,6 +4,8 @@
 #include <VirtualRobot/RobotNodeSet.h>
 #include <VirtualRobot/Random.h>
 
+#include <boost/math/special_functions/fpclassify.hpp>
+
 #include <algorithm>
 #include <cfloat>
 

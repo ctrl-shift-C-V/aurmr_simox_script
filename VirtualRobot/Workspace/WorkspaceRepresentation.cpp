@@ -22,6 +22,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     WorkspaceRepresentation::WorkspaceRepresentation(RobotPtr robot)
     {

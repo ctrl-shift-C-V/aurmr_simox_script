@@ -8,9 +8,17 @@
 #include "VirtualRobotException.h"
 #include "Visualization/VisualizationFactory.h"
 
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
+
+#include <filesystem>
+
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
+
     bool RuntimeEnvironment::pathInitialized = false;
 
     std::string RuntimeEnvironment::caption = "Simox runtime options";

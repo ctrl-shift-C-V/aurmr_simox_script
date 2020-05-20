@@ -31,7 +31,7 @@
 
 namespace VirtualRobot
 {
-    class VIRTUAL_ROBOT_IMPORT_EXPORT StackedIK : public boost::enable_shared_from_this<StackedIK>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT StackedIK : public std::enable_shared_from_this<StackedIK>
     {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -50,7 +50,7 @@ namespace VirtualRobot
         bool verbose;
     };
 
-    typedef boost::shared_ptr<StackedIK> StackedIKPtr;
+    typedef std::shared_ptr<StackedIK> StackedIKPtr;
 
 } // namespace VirtualRobot
 

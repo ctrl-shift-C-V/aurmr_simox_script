@@ -1,6 +1,8 @@
 
 #include "PoseQualityExtendedManipulability.h"
 
+#include <boost/math/special_functions/fpclassify.hpp>
+
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
 #include <cfloat>

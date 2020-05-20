@@ -15,7 +15,7 @@ namespace Saba
 {
 
     Rrt::Rrt(CSpacePtr cspace, RrtMethod mode, float probabilityExtendToGoal, float samplingSize)
-        : MotionPlanner(boost::dynamic_pointer_cast<CSpace>(cspace))
+        : MotionPlanner(std::dynamic_pointer_cast<CSpace>(cspace))
     {
         rrtMode = mode;
         tree.reset(new CSpaceTree(cspace));
@@ -33,7 +33,7 @@ namespace Saba
         }
 
         extendGoToGoal = probabilityExtendToGoal;
-        CSpaceSampledPtr sampledCSpace = boost::dynamic_pointer_cast<CSpaceSampled>(cspace);
+        CSpaceSampledPtr sampledCSpace = std::dynamic_pointer_cast<CSpaceSampled>(cspace);
         if(samplingSize > 0)
             this->extendStepSize = samplingSize;
         else if(sampledCSpace)
@@ -358,7 +358,7 @@ namespace Saba
 
         float DCDsize = 0.0f;
         float Pathsize = 0.0f;
-        CSpaceSampledPtr cs = boost::dynamic_pointer_cast<CSpaceSampled>(cspace);
+        CSpaceSampledPtr cs = std::dynamic_pointer_cast<CSpaceSampled>(cspace);
 
         if (cs)
         {

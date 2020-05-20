@@ -19,6 +19,9 @@
 #include <fstream>
 #include <string>
 #include <cfloat>
+
+#include <Eigen/Geometry>
+
 // if defined, the inverted contact normals are used
 //#define INVERT_NORMALS
 

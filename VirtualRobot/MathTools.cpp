@@ -10,6 +10,7 @@
 
 #include <VirtualRobot/Random.h>
 
+#include <boost/math/special_functions/fpclassify.hpp>
 
 #include <Eigen/Geometry>
 
@@ -18,6 +19,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     /*
     void MathTools::Quat2RPY(float *PosQuat, float *storeResult)

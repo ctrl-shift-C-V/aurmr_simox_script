@@ -25,6 +25,8 @@
 #include "float.h"
 #include "Helpers.h"
 
+#include <Eigen/Geometry>
+
 namespace math
 {
     Line::Line(Eigen::Vector3f pos, Eigen::Vector3f dir)

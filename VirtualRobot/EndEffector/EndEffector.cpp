@@ -18,6 +18,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     EndEffector::EndEffector(const std::string& nameString, const std::vector<EndEffectorActorPtr>& actorsVector, const std::vector<RobotNodePtr>& staticPartVector, RobotNodePtr baseNodePtr, RobotNodePtr tcpNodePtr, RobotNodePtr gcpNodePtr, std::vector< RobotConfigPtr > preshapes) :
         name(nameString),

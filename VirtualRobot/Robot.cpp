@@ -10,6 +10,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     const RobotPtr Robot::NullPtr{nullptr};
     Robot::Robot(const std::string& name, const std::string& type)
@@ -510,11 +512,11 @@ namespace VirtualRobot
         }
     }
 
-    boost::shared_ptr<Robot> Robot::shared_from_this() const
+    std::shared_ptr<Robot> Robot::shared_from_this() const
     {
         auto sceneObject = SceneObject::shared_from_this();
-        boost::shared_ptr<const Robot> robotPtr = boost::static_pointer_cast<const Robot>(sceneObject);
-        boost::shared_ptr<Robot> result = boost::const_pointer_cast<Robot>(robotPtr);
+        std::shared_ptr<const Robot> robotPtr = std::static_pointer_cast<const Robot>(sceneObject);
+        std::shared_ptr<Robot> result = std::const_pointer_cast<Robot>(robotPtr);
         return result;
     }
 

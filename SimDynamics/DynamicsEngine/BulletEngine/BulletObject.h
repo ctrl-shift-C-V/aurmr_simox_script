@@ -44,7 +44,7 @@ namespace SimDynamics
         ~BulletObject() override;
 
 
-        boost::shared_ptr<btRigidBody> getRigidBody();
+        std::shared_ptr<btRigidBody> getRigidBody();
 
 
         /*!
@@ -102,8 +102,8 @@ namespace SimDynamics
 
         btCollisionShape* createConvexHullShape(VirtualRobot::TriMeshModelPtr trimesh);
 
-        boost::shared_ptr<btRigidBody> rigidBody;
-        boost::shared_ptr<btCollisionShape> collisionShape; // bullet collision shape
+        std::shared_ptr<btRigidBody> rigidBody;
+        std::shared_ptr<btCollisionShape> collisionShape; // bullet collision shape
         std::unique_ptr<btTriangleMesh> btTrimesh;
 
         Eigen::Vector3f com; // com offset of trimesh
@@ -113,7 +113,7 @@ namespace SimDynamics
 
     };
 
-    typedef boost::shared_ptr<BulletObject> BulletObjectPtr;
+    typedef std::shared_ptr<BulletObject> BulletObjectPtr;
 
 } // namespace SimDynamics
 

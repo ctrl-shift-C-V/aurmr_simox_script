@@ -64,9 +64,9 @@ namespace VirtualRobot
     /**
      * \return new instance of RobotNodePrismaticFactory.
      */
-    boost::shared_ptr<RobotNodeFactory> RobotNodePrismaticFactory::createInstance(void*)
+    std::shared_ptr<RobotNodeFactory> RobotNodePrismaticFactory::createInstance(void*)
     {
-        boost::shared_ptr<RobotNodePrismaticFactory> prismaticNodeFactory(new RobotNodePrismaticFactory());
+        std::shared_ptr<RobotNodePrismaticFactory> prismaticNodeFactory(new RobotNodePrismaticFactory());
         return prismaticNodeFactory;
     }
 

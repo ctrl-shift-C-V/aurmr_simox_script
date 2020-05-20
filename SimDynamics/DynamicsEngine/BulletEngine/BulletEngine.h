@@ -64,13 +64,13 @@ namespace SimDynamics
         btScalar bulletSolverSplitImpulsePenetrationThreshold;
     };
 
-    typedef boost::shared_ptr<BulletEngineConfig> BulletEngineConfigPtr;
+    typedef std::shared_ptr<BulletEngineConfig> BulletEngineConfigPtr;
 
     /*!
         This class encapsulates all calls to the bullet physics engine.
         Usually there is no need to instantiate this object by your own, it is automatically created when calling DynamicsWorld::Init().
     */
-    class SIMDYNAMICS_IMPORT_EXPORT BulletEngine : public DynamicsEngine, public btActionInterface, public boost::enable_shared_from_this<BulletEngine>
+    class SIMDYNAMICS_IMPORT_EXPORT BulletEngine : public DynamicsEngine, public btActionInterface, public std::enable_shared_from_this<BulletEngine>
     {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -81,7 +81,7 @@ namespace SimDynamics
             Constructor
             \param engineMutex Optionally, all engine access methods can be protected by an external mutex. If not set, an internal mutex is creeated.
         */
-        BulletEngine(boost::shared_ptr <boost::recursive_mutex> engineMutex = boost::shared_ptr<boost::recursive_mutex>());
+        BulletEngine(std::shared_ptr <std::recursive_mutex> engineMutex = std::shared_ptr<std::recursive_mutex>());
 
         /*!
         */
@@ -202,7 +202,7 @@ namespace SimDynamics
         void debugDraw(btIDebugDraw* debugDrawer) override;
     };
 
-    typedef boost::shared_ptr<BulletEngine> BulletEnginePtr;
+    typedef std::shared_ptr<BulletEngine> BulletEnginePtr;
 
 } // namespace SimDynamics
 

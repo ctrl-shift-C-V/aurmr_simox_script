@@ -94,8 +94,10 @@ namespace filesystem = std::filesystem;
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
-    boost::mutex CoinVisualizationFactory::globalTextureCacheMutex;
+    std::mutex CoinVisualizationFactory::globalTextureCacheMutex;
     CoinVisualizationFactory::TextureCacheMap CoinVisualizationFactory::globalTextureCache;
 
     CoinVisualizationFactory::CoinVisualizationFactory() = default;
@@ -179,7 +181,7 @@ namespace VirtualRobot
 
         if (primitive->type == Primitive::Box::TYPE)
         {
-            Primitive::Box* box = boost::dynamic_pointer_cast<Primitive::Box>(primitive).get();
+            Primitive::Box* box = std::dynamic_pointer_cast<Primitive::Box>(primitive).get();
             SoCube* soBox = new SoCube;
             soBox->width = box->width / 1000.f;
             soBox->height = box->height / 1000.f;
@@ -188,14 +190,14 @@ namespace VirtualRobot
         }
         else if (primitive->type == Primitive::Sphere::TYPE)
         {
-            Primitive::Sphere* sphere = boost::dynamic_pointer_cast<Primitive::Sphere>(primitive).get();
+            Primitive::Sphere* sphere = std::dynamic_pointer_cast<Primitive::Sphere>(primitive).get();
             SoSphere* soSphere = new SoSphere;
             soSphere->radius = sphere->radius / 1000.f;
             coinVisualization->addChild(soSphere);
         }
         else if (primitive->type == Primitive::Cylinder::TYPE)
         {
-            Primitive::Cylinder* cylinder = boost::dynamic_pointer_cast<Primitive::Cylinder>(primitive).get();
+            Primitive::Cylinder* cylinder = std::dynamic_pointer_cast<Primitive::Cylinder>(primitive).get();
             SoCylinder* soCylinder = new SoCylinder;
             soCylinder->radius = cylinder->radius / 1000.f;
             soCylinder->height = cylinder->height / 1000.f;
@@ -394,12 +396,12 @@ namespace VirtualRobot
 
     VisualizationPtr CoinVisualizationFactory::getVisualization(const std::vector<VisualizationNodePtr>& visus)
     {
-        return boost::make_shared<CoinVisualization>(visus);
+        return std::make_shared<CoinVisualization>(visus);
     }
 
     VisualizationPtr CoinVisualizationFactory::getVisualization(VisualizationNodePtr visu)
     {
-        return boost::make_shared<CoinVisualization>(visu);
+        return std::make_shared<CoinVisualization>(visu);
     }
 
     SoSeparator* CoinVisualizationFactory::CreateBoundingBox(SoNode* ivModel, bool wireFrame)
@@ -470,14 +472,14 @@ namespace VirtualRobot
     * \return new instance of CoinVisualizationFactory and call SoDB::init()
     * if it has not already been called.
     */
-    boost::shared_ptr<VisualizationFactory> CoinVisualizationFactory::createInstance(void*)
+    std::shared_ptr<VisualizationFactory> CoinVisualizationFactory::createInstance(void*)
     {
         if (!SoDB::isInitialized())
         {
             SoDB::init();
         }
 
-        boost::shared_ptr<CoinVisualizationFactory> coinFactory(new CoinVisualizationFactory());
+        std::shared_ptr<CoinVisualizationFactory> coinFactory(new CoinVisualizationFactory());
         return coinFactory;
     }
 
@@ -1100,7 +1102,7 @@ namespace VirtualRobot
         public:
             void dyingReference() override
             {
-                boost::mutex::scoped_lock lock(CoinVisualizationFactory::globalTextureCacheMutex);
+                std::scoped_lock lock(CoinVisualizationFactory::globalTextureCacheMutex);
                 CoinVisualizationFactory::globalTextureCache.erase(std::make_pair(filesize, path));
                 delete this;
             }
@@ -1120,7 +1122,7 @@ namespace VirtualRobot
         sa.apply(node);
         SoPathList& pl = sa.getPaths();
 
-        boost::mutex::scoped_lock lock(globalTextureCacheMutex);
+        std::scoped_lock lock(globalTextureCacheMutex);
         for (int i = 0; i < pl.getLength(); i++)
         {
             SoFullPath* p = (SoFullPath*) pl[i];
@@ -1392,7 +1394,7 @@ namespace VirtualRobot
             return new SoSeparator;
         }
 
-        boost::shared_ptr<VirtualRobot::CoinVisualization> visualizationRobot = robot->getVisualization<CoinVisualization>(visuType);
+        std::shared_ptr<VirtualRobot::CoinVisualization> visualizationRobot = robot->getVisualization<CoinVisualization>(visuType);
 
         if (visualizationRobot)
         {
@@ -1413,7 +1415,7 @@ namespace VirtualRobot
             return new SoSeparator;
         }
 
-        boost::shared_ptr<VirtualRobot::CoinVisualization> visualizationObject = object->getVisualization<CoinVisualization>(visuType);
+        std::shared_ptr<VirtualRobot::CoinVisualization> visualizationObject = object->getVisualization<CoinVisualization>(visuType);
 
         if (visualizationObject)
         {
@@ -1430,7 +1432,7 @@ namespace VirtualRobot
 
     SoNode* CoinVisualizationFactory::getCoinVisualization(VisualizationNodePtr visu)
     {
-        boost::shared_ptr< CoinVisualizationNode > coinVisu(boost::dynamic_pointer_cast< CoinVisualizationNode >(visu));
+        std::shared_ptr< CoinVisualizationNode > coinVisu(std::dynamic_pointer_cast< CoinVisualizationNode >(visu));
 
         if (!coinVisu)
         {
@@ -2318,7 +2320,7 @@ namespace VirtualRobot
             torusCompletion = 0;
         }
         auto torusNode = createTorus(radius, tubeRadius, torusCompletion, colorR, colorG, colorB, transparency);
-        SoNode* torus = boost::dynamic_pointer_cast<CoinVisualizationNode>(torusNode)->getCoinVisualization();
+        SoNode* torus = std::dynamic_pointer_cast<CoinVisualizationNode>(torusNode)->getCoinVisualization();
 
         SoSeparator* s = new SoSeparator();
         s->ref();

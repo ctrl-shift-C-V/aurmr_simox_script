@@ -23,6 +23,7 @@
 #include <cmath>
 #include <iostream>
 
+#include <Eigen/QR>
 
 namespace math
 {

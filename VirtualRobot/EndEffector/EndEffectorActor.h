@@ -30,7 +30,7 @@
 
 namespace VirtualRobot
 {
-    class VIRTUAL_ROBOT_IMPORT_EXPORT EndEffectorActor : public boost::enable_shared_from_this<EndEffectorActor>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT EndEffectorActor : public std::enable_shared_from_this<EndEffectorActor>
     {
     public:
         enum CollisionMode

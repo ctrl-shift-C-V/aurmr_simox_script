@@ -19,6 +19,7 @@
 #include <Inventor/nodes/SoLightModel.h>
 #include <Inventor/nodes/SoUnits.h>
 #include <sstream>
+#include <filesystem>
 
 using namespace std;
 using namespace VirtualRobot;

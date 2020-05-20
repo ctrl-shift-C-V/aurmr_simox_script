@@ -8,6 +8,8 @@
 #include "inventor.h"
 #include "ColladaSimox.h"
 
+#include <boost/foreach.hpp>
+
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 

@@ -23,17 +23,18 @@
 
 namespace VirtualRobot
 {
+    using std::endl;
 
     namespace
     {
-        boost::mutex mutex;
+        std::mutex mutex;
     }
 
     CollisionCheckerPtr CollisionChecker::globalCollisionChecker;
 
     CollisionChecker::Cleanup::~Cleanup()
     {
-        boost::lock_guard<boost::mutex> lock(mutex);
+        std::scoped_lock lock(mutex);
         CollisionChecker::globalCollisionChecker.reset();
     }
 
@@ -44,7 +45,7 @@ namespace VirtualRobot
 
         if (true)
         {
-            boost::lock_guard<boost::mutex> lock(mutex);
+            std::scoped_lock lock(mutex);
 
             if (!globalCollisionChecker)
             {
@@ -96,7 +97,7 @@ namespace VirtualRobot
     float CollisionChecker::calculateDistance(SceneObjectPtr model1, SceneObjectSetPtr model2)
     {
         VR_ASSERT(model1 && model2);
-        RobotPtr r = boost::dynamic_pointer_cast<Robot>(model1);
+        RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
 
         if (r)
         {
@@ -112,8 +113,8 @@ namespace VirtualRobot
     float CollisionChecker::calculateDistance(SceneObjectPtr model1, SceneObjectPtr model2)
     {
         VR_ASSERT(model1 && model2);
-        RobotPtr r = boost::dynamic_pointer_cast<Robot>(model1);
-        RobotPtr r2 = boost::dynamic_pointer_cast<Robot>(model2);
+        RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
+        RobotPtr r2 = std::dynamic_pointer_cast<Robot>(model2);
 
         if (r && r2)
         {
@@ -141,7 +142,7 @@ namespace VirtualRobot
     float CollisionChecker::calculateDistance(SceneObjectPtr model1, SceneObjectSetPtr model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
     {
         VR_ASSERT(model1 && model2);
-        RobotPtr r = boost::dynamic_pointer_cast<Robot>(model1);
+        RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
 
         if (r)
         {
@@ -157,8 +158,8 @@ namespace VirtualRobot
     float CollisionChecker::calculateDistance(SceneObjectPtr model1, SceneObjectPtr model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
     {
         VR_ASSERT(model1 && model2);
-        RobotPtr r = boost::dynamic_pointer_cast<Robot>(model1);
-        RobotPtr r2 = boost::dynamic_pointer_cast<Robot>(model2);
+        RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
+        RobotPtr r2 = std::dynamic_pointer_cast<Robot>(model2);
 
         if (r && r2)
         {
@@ -194,7 +195,7 @@ namespace VirtualRobot
 
         if (colModels1.size() == 0 || colModels2.size() == 0)
         {
-            VR_WARNING << "no internal data..." << endl;
+            VR_WARNING << "no internal data..." << std::endl;
             return -1.0f;
         }
 
@@ -372,7 +373,7 @@ namespace VirtualRobot
     bool CollisionChecker::checkCollision(SceneObjectPtr model1, SceneObjectSetPtr model2)
     {
         VR_ASSERT(model1 && model2);
-        RobotPtr r = boost::dynamic_pointer_cast<Robot>(model1);
+        RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
 
         if (r)
         {
@@ -435,8 +436,8 @@ namespace VirtualRobot
     bool CollisionChecker::checkCollision(SceneObjectPtr model1, SceneObjectPtr model2)
     {
         VR_ASSERT(model1 && model2);
-        RobotPtr r = boost::dynamic_pointer_cast<Robot>(model1);
-        RobotPtr r2 = boost::dynamic_pointer_cast<Robot>(model2);
+        RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
+        RobotPtr r2 = std::dynamic_pointer_cast<Robot>(model2);
 
         if (r && r2)
         {

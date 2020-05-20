@@ -182,20 +182,20 @@ namespace SimDynamics
 
         if (primitive->type == Primitive::Box::TYPE)
         {
-            Primitive::Box* box = boost::dynamic_pointer_cast<Primitive::Box>(primitive).get();
+            Primitive::Box* box = std::dynamic_pointer_cast<Primitive::Box>(primitive).get();
             // w/h/d have to be halved
             btBoxShape* boxShape = new btBoxShape(btVector3(box->width / 2000.f * ScaleFactor, box->height / 2000.f * ScaleFactor, box->depth / 2000.f * ScaleFactor));
             result = boxShape;
         }
         else if (primitive->type == Primitive::Sphere::TYPE)
         {
-            Primitive::Sphere* sphere = boost::dynamic_pointer_cast<Primitive::Sphere>(primitive).get();
+            Primitive::Sphere* sphere = std::dynamic_pointer_cast<Primitive::Sphere>(primitive).get();
             btSphereShape* sphereShape = new btSphereShape(btScalar(sphere->radius / 1000.0  * ScaleFactor));
             result = sphereShape;
         }
         else if (primitive->type == Primitive::Cylinder::TYPE)
         {
-            Primitive::Cylinder* cyl = boost::dynamic_pointer_cast<Primitive::Cylinder>(primitive).get();
+            Primitive::Cylinder* cyl = std::dynamic_pointer_cast<Primitive::Cylinder>(primitive).get();
             btCylinderShape* cylShape = new btCylinderShape(btVector3(cyl->radius / 1000.0  * ScaleFactor, cyl->height / 1000.0  * ScaleFactor, cyl->radius / 1000.0  * ScaleFactor));
             result = cylShape;
         }
@@ -257,10 +257,10 @@ namespace SimDynamics
         else
         {
             // build convex hull
-            boost::shared_ptr<btConvexShape> btConvexShape(new btConvexTriangleMeshShape(btTrimesh.get()));
+            std::shared_ptr<btConvexShape> btConvexShape(new btConvexTriangleMeshShape(btTrimesh.get()));
             btConvexShape->setMargin(btMargin);
 
-            boost::shared_ptr<btShapeHull> btHull(new btShapeHull(btConvexShape.get()));
+            std::shared_ptr<btShapeHull> btHull(new btShapeHull(btConvexShape.get()));
             btHull->buildHull(btMargin);
             btConvexHullShape* btConvex = new btConvexHullShape();
             btConvex->setLocalScaling(btVector3(1, 1, 1));
@@ -278,7 +278,7 @@ namespace SimDynamics
         }
     }
 
-    boost::shared_ptr<btRigidBody> BulletObject::getRigidBody()
+    std::shared_ptr<btRigidBody> BulletObject::getRigidBody()
     {
         return rigidBody;
     }
@@ -301,7 +301,7 @@ namespace SimDynamics
         this->rigidBody->setWorldTransform(BulletEngine::getPoseBullet(poseGlobal));
 
         // notify motionState of non-robot nodes
-        if(!boost::dynamic_pointer_cast<VirtualRobot::RobotNode>(sceneObject))
+        if(!std::dynamic_pointer_cast<VirtualRobot::RobotNode>(sceneObject))
         {
             motionState->setGlobalPose(pose);
         }

@@ -40,7 +40,7 @@ namespace VirtualRobot
             bool soft;
     };
 
-    class VIRTUAL_ROBOT_IMPORT_EXPORT Constraint : public JacobiProvider, public boost::enable_shared_from_this<Constraint>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT Constraint : public JacobiProvider, public std::enable_shared_from_this<Constraint>
     {
     public:
         Constraint(const RobotNodeSetPtr& nodeSet);
@@ -95,6 +95,6 @@ namespace VirtualRobot
         float optimizationFunctionFactor;
     };
 
-    typedef boost::shared_ptr<Constraint> ConstraintPtr;
+    typedef std::shared_ptr<Constraint> ConstraintPtr;
 }
 

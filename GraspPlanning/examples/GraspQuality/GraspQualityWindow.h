@@ -125,7 +125,7 @@ protected:
 
     GraspStudio::GraspQualityMeasureWrenchSpacePtr qualityMeasure;
 
-    boost::shared_ptr<VirtualRobot::CoinVisualization> visualizationRobot;
-    boost::shared_ptr<VirtualRobot::CoinVisualization> visualizationObject;
+    std::shared_ptr<VirtualRobot::CoinVisualization> visualizationRobot;
+    std::shared_ptr<VirtualRobot::CoinVisualization> visualizationObject;
 };
 

@@ -10,6 +10,8 @@
 
 #include <VirtualRobot/Visualization/TriMeshModel.h>
 
+#include <boost/assert.hpp>
+
 ///
 /// \brief Computes the intersection line between two triangles V and U
 /// \param V0 Vertex 0 of triangle V
@@ -87,8 +89,8 @@ namespace VirtualRobot
 
     float CollisionCheckerPQP::calculateDistance(const CollisionModelPtr& model1, const CollisionModelPtr& model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
     {
-        boost::shared_ptr<PQP::PQP_Model> m1 = model1->getCollisionModelImplementation()->getPQPModel();
-        boost::shared_ptr<PQP::PQP_Model> m2 = model2->getCollisionModelImplementation()->getPQPModel();
+        std::shared_ptr<PQP::PQP_Model> m1 = model1->getCollisionModelImplementation()->getPQPModel();
+        std::shared_ptr<PQP::PQP_Model> m2 = model2->getCollisionModelImplementation()->getPQPModel();
         VR_ASSERT_MESSAGE(m1 && m2, "NULL data in ColChecker!");
 
         float res = getMinDistance(m1, m2, model1->getCollisionModelImplementation()->getGlobalPose(), model2->getCollisionModelImplementation()->getGlobalPose(), P1, P2, trID1, trID2);
@@ -109,8 +111,8 @@ namespace VirtualRobot
         const auto& Impl2 = model2->getCollisionModelImplementation();
         BOOST_ASSERT(Impl1);
         BOOST_ASSERT(Impl2);
-        const boost::shared_ptr<PQP::PQP_Model>& m1 = Impl1->getPQPModel();
-        const boost::shared_ptr<PQP::PQP_Model>& m2 = Impl2->getPQPModel();
+        const std::shared_ptr<PQP::PQP_Model>& m1 = Impl1->getPQPModel();
+        const std::shared_ptr<PQP::PQP_Model>& m2 = Impl2->getPQPModel();
         BOOST_ASSERT_MSG(m1, "NULL data in ColChecker in m1!");
         BOOST_ASSERT_MSG(m2, "NULL data in ColChecker in m2!");
 
@@ -155,7 +157,7 @@ namespace VirtualRobot
     {
         BOOST_ASSERT(model1);
         BOOST_ASSERT(model1->getCollisionModelImplementation());
-        boost::shared_ptr<PQP::PQP_Model> m1 = model1->getCollisionModelImplementation()->getPQPModel();
+        std::shared_ptr<PQP::PQP_Model> m1 = model1->getCollisionModelImplementation()->getPQPModel();
         VR_ASSERT_MESSAGE(m1, "NULL data in ColChecker!");
 
         PQP::PQP_REAL R1[3][3];
@@ -196,8 +198,8 @@ namespace VirtualRobot
         BOOST_ASSERT(model1->getCollisionModelImplementation());
         BOOST_ASSERT(model2);
         BOOST_ASSERT(model2->getCollisionModelImplementation());
-        boost::shared_ptr<PQP::PQP_Model> m1 = model1->getCollisionModelImplementation()->getPQPModel();
-        boost::shared_ptr<PQP::PQP_Model> m2 = model2->getCollisionModelImplementation()->getPQPModel();
+        std::shared_ptr<PQP::PQP_Model> m1 = model1->getCollisionModelImplementation()->getPQPModel();
+        std::shared_ptr<PQP::PQP_Model> m2 = model2->getCollisionModelImplementation()->getPQPModel();
 
         VR_ASSERT_MESSAGE(m1, "NULL data in ColChecker!");
         VR_ASSERT_MESSAGE(m2, "NULL data in ColChecker!");
@@ -345,7 +347,7 @@ namespace VirtualRobot
 
 
     // returns min distance between the objects
-    float CollisionCheckerPQP::getMinDistance(boost::shared_ptr<PQP::PQP_Model> m1, boost::shared_ptr<PQP::PQP_Model> m2, const Eigen::Matrix4f& mat1, const Eigen::Matrix4f& mat2)
+    float CollisionCheckerPQP::getMinDistance(std::shared_ptr<PQP::PQP_Model> m1, std::shared_ptr<PQP::PQP_Model> m2, const Eigen::Matrix4f& mat1, const Eigen::Matrix4f& mat2)
     {
         PQP::PQP_DistanceResult result;
         CollisionCheckerPQP::GetPQPDistance(m1, m2, mat1, mat2, result);
@@ -355,7 +357,7 @@ namespace VirtualRobot
 
 
     // returns min distance between the objects
-    float CollisionCheckerPQP::getMinDistance(boost::shared_ptr<PQP::PQP_Model> m1, boost::shared_ptr<PQP::PQP_Model> m2, const Eigen::Matrix4f& mat1, const Eigen::Matrix4f& mat2, Eigen::Vector3f& storeP1, Eigen::Vector3f& storeP2, int* storeID1, int* storeID2)
+    float CollisionCheckerPQP::getMinDistance(std::shared_ptr<PQP::PQP_Model> m1, std::shared_ptr<PQP::PQP_Model> m2, const Eigen::Matrix4f& mat1, const Eigen::Matrix4f& mat2, Eigen::Vector3f& storeP1, Eigen::Vector3f& storeP2, int* storeID1, int* storeID2)
     {
         VR_ASSERT_MESSAGE(m1 && m2, "NULL data in ColChecker!");
 
@@ -387,7 +389,7 @@ namespace VirtualRobot
     }
 
 
-    void CollisionCheckerPQP::GetPQPDistance(const boost::shared_ptr<PQP::PQP_Model>& model1, const boost::shared_ptr<PQP::PQP_Model>& model2, const Eigen::Matrix4f& matrix1, const Eigen::Matrix4f& matrix2, PQP::PQP_DistanceResult& pqpResult)
+    void CollisionCheckerPQP::GetPQPDistance(const std::shared_ptr<PQP::PQP_Model>& model1, const std::shared_ptr<PQP::PQP_Model>& model2, const Eigen::Matrix4f& matrix1, const Eigen::Matrix4f& matrix2, PQP::PQP_DistanceResult& pqpResult)
     {
         VR_ASSERT_MESSAGE(pqpChecker, "NULL data in ColChecker!");
 

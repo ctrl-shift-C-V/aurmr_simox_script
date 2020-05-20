@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 {
 
     VirtualRobot::init(argc, argv, "Stability Demo");
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     //std::string filenameRob("robots/ArmarIII/ArmarIII.xml");
     std::string filenameRob("robots/iCub/iCub.xml");
@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     VirtualRobot::RuntimeEnvironment::processCommandLine(argc, argv);
     VirtualRobot::RuntimeEnvironment::print();
 
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     if (VirtualRobot::RuntimeEnvironment::hasValue("robot"))
     {
@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    cout << "Using robot at " << filenameRob << endl;
+    std::cout << "Using robot at " << filenameRob << std::endl;
 
     stabilityWindow rw(filenameRob);
     rw.main();

@@ -119,19 +119,19 @@ namespace VirtualRobot
             //cout << "was (sqrt): " << tmp;
             if (verbose)
             {
-                VR_INFO << "Creating Voxelized tree data structure. " << endl;
-                VR_INFO << "Extends (min/max/size):" << endl;
+                VR_INFO << "Creating Voxelized tree data structure. " << std::endl;
+                VR_INFO << "Extends (min/max/size):" << std::endl;
                 std::streamsize pr = std::cout.precision(2);
 
                 for (unsigned int i = 0; i < N; i++)
                 {
-                    cout << std::fixed << minExtend[i] << "," << maxExtend[i] << " -> " << size[i] << endl;
-                    cout << std::fixed << "\tdiscretization:" << discretization[i] << ". Max leafs:" << (int)(size[i] / discretization[i] + 0.5f) << endl;
+                    std::cout << std::fixed << minExtend[i] << "," << maxExtend[i] << " -> " << size[i] << std::endl;
+                    std::cout << std::fixed << "\tdiscretization:" << discretization[i] << ". Max leafs:" << (int)(size[i] / discretization[i] + 0.5f) << std::endl;
                 }
 
                 std::cout << std::resetiosflags(std::ios::fixed);
                 std::cout.precision(pr);
-                VR_INFO << "--> Max Levels:" << maxLevels << endl;
+                VR_INFO << "--> Max Levels:" << maxLevels << std::endl;
             }
 
             THROW_VR_EXCEPTION_IF(maxLevels <= 0, "Invalid parameters...");
@@ -333,7 +333,7 @@ namespace VirtualRobot
 
                     if (static_cast<size_t>(n) != dataSize)
                     {
-                        VR_ERROR << "Invalid number of bytes?!" << endl;
+                        VR_ERROR << "Invalid number of bytes?!" << std::endl;
                         bzip2->close();
                         file.close();
                         delete tree;
@@ -380,7 +380,7 @@ namespace VirtualRobot
 
                     if (static_cast<size_t>(n) != dataSize)
                     {
-                        VR_ERROR << "Invalid number of bytes?!" << endl;
+                        VR_ERROR << "Invalid number of bytes?!" << std::endl;
                         bzip2->close();
                         file.close();
                         delete tree;
@@ -397,7 +397,7 @@ namespace VirtualRobot
 
                         if (static_cast<size_t>(n) != dataSize)
                         {
-                            VR_ERROR << "Invalid number of bytes?!" << endl;
+                            VR_ERROR << "Invalid number of bytes?!" << std::endl;
                             bzip2->close();
                             file.close();
                             delete tree;
@@ -413,7 +413,7 @@ namespace VirtualRobot
 
                         if (static_cast<size_t>(n) != dataSize)
                         {
-                            VR_ERROR << "Invalid number of bytes?!" << endl;
+                            VR_ERROR << "Invalid number of bytes?!" << std::endl;
                             bzip2->close();
                             file.close();
                             delete tree;
@@ -431,7 +431,7 @@ namespace VirtualRobot
                     //VoxelTreeNDElement<T,N> *e = idElementMapping[unsigned int(i+1)];
                     if (!e->read(d, idElementMapping))
                     {
-                        VR_ERROR << "Could not create element" << endl;
+                        VR_ERROR << "Could not create element" << std::endl;
                         bzip2->close();
                         file.close();
                         delete tree;
@@ -449,7 +449,7 @@ namespace VirtualRobot
             }
             catch (VirtualRobotException& e)
             {
-                VR_ERROR << e.what() << endl;
+                VR_ERROR << e.what() << std::endl;
                 file.close();
                 throw;
             }
@@ -519,7 +519,7 @@ namespace VirtualRobot
 
                     if (!e->write(d))
                     {
-                        VR_ERROR << "Could not convert data..." << endl;
+                        VR_ERROR << "Could not convert data..." << std::endl;
                         bzip2->close();
                         file.close();
                         return false;
@@ -575,7 +575,7 @@ namespace VirtualRobot
             }
             catch (VirtualRobotException& e)
             {
-                VR_ERROR << e.what() << endl;
+                VR_ERROR << e.what() << std::endl;
                 file.close();
                 throw;
             }
@@ -601,43 +601,43 @@ namespace VirtualRobot
 
         void print()
         {
-            cout << " **** VoxelTreeND ****" << endl;
-            cout << "N=" << N << endl;
-            cout << "max levels:" << maxLevels << endl;
-            cout << "Element Count:" << currentElementID - 1 << endl;
-            cout << "MinExtend:";
+            std::cout << " **** VoxelTreeND ****" << std::endl;
+            std::cout << "N=" << N << std::endl;
+            std::cout << "max levels:" << maxLevels << std::endl;
+            std::cout << "Element Count:" << currentElementID - 1 << std::endl;
+            std::cout << "MinExtend:";
 
             for (int i = 0; i < N; i++)
             {
-                cout << minExtend[i] << ",";
+                std::cout << minExtend[i] << ",";
             }
 
-            cout << endl;
-            cout << "MaxExtend:";
+            std::cout << std::endl;
+            std::cout << "MaxExtend:";
 
             for (int i = 0; i < N; i++)
             {
-                cout << maxExtend[i] << ",";
+                std::cout << maxExtend[i] << ",";
             }
 
-            cout << endl;
-            cout << "Size:";
+            std::cout << std::endl;
+            std::cout << "Size:";
 
             for (int i = 0; i < N; i++)
             {
-                cout << size[i] << ",";
+                std::cout << size[i] << ",";
             }
 
-            cout << endl;
-            cout << "Discretization:";
+            std::cout << std::endl;
+            std::cout << "Discretization:";
 
             for (int i = 0; i < N; i++)
             {
-                cout << discretization[i] << ",";
+                std::cout << discretization[i] << ",";
             }
 
-            cout << endl;
-            cout << " *********************" << endl;
+            std::cout << std::endl;
+            std::cout << " *********************" << std::endl;
         }
 
         int getMaxLevels()
@@ -670,7 +670,7 @@ namespace VirtualRobot
 
                 if (!currentElement || !currentElement->isLeaf())
                 {
-                    VR_ERROR << "Could not determine first leaf element" << endl;
+                    VR_ERROR << "Could not determine first leaf element" << std::endl;
                 }
                 else
                 {
@@ -698,7 +698,7 @@ namespace VirtualRobot
 
                 if (!currentElement->isLeaf())
                 {
-                    VR_ERROR << "not at leaf element..." << endl;
+                    VR_ERROR << "not at leaf element..." << std::endl;
                     return NULL;
                 }
 
@@ -738,7 +738,7 @@ namespace VirtualRobot
 
                 if (!currentElement || !currentElement->isLeaf())
                 {
-                    VR_ERROR << "Could not determine next leaf element" << endl;
+                    VR_ERROR << "Could not determine next leaf element" << std::endl;
                     return NULL;
                 }
                 else
@@ -757,14 +757,14 @@ namespace VirtualRobot
         protected:
             void printStack()
             {
-                cout << "Stack: [" << elementStack[0]->getLevel() << "]";
+                std::cout << "Stack: [" << elementStack[0]->getLevel() << "]";
 
                 for (size_t i = 0; i < idStack.size(); i++)
                 {
-                    cout << "->" << idStack[i] << " ->" << "[" << elementStack[i + 1]->getLevel() << "]";
+                    std::cout << "->" << idStack[i] << " ->" << "[" << elementStack[i + 1]->getLevel() << "]";
                 }
 
-                cout << endl;
+                std::cout << std::endl;
             }
 
             std::vector<VoxelTreeNDElement<T, N>*> elementStack;

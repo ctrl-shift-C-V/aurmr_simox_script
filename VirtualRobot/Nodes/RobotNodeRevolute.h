@@ -140,7 +140,7 @@ namespace VirtualRobot
         Eigen::Matrix4f tmpRotMat;
     };
 
-    typedef boost::shared_ptr<RobotNodeRevolute> RobotNodeRevolutePtr;
+    typedef std::shared_ptr<RobotNodeRevolute> RobotNodeRevolutePtr;
 
 } // namespace VirtualRobot
 

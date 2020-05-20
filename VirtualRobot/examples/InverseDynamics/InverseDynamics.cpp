@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     std::string filename("robots/ArmarIII/ArmarIII.xml");
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(filename);
     VirtualRobot::RuntimeEnvironment::processCommandLine(argc, argv);
-    cout << "Using robot at " << filename << endl;
+    cout << "Using robot at " << filename << std::endl;
     RobotPtr rob;
 
     try
@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
     }
     catch (VirtualRobotException& e)
     {
-        cout << "Error: " << e.what() << endl;
+        cout << "Error: " << e.what() << std::endl;
         return -1;
     }
 
@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
         Gravity g(rob, ns, bodyNs);
         for(auto& pair:g.getMasses())
         {
-            cout << pair.first <<": " << pair.second << endl;
+            std::cout << pair.first <<": " << pair.second << std::endl;
         }
         VirtualRobot::Dynamics dynamics = VirtualRobot::Dynamics(ns, bodyNs, true);
         dynamics.print();
@@ -91,30 +91,30 @@ int main(int argc, char* argv[])
         }
 
         Eigen::VectorXd invDyn = dynamics.getInverseDynamics(q, qdot, qddot);
-        cout << "Joint values:\n" << q << endl;
+        std::cout << "Joint values:\n" << q << std::endl;
         ns->setJointValues(q.cast<float>());
-        cout << "Joint values in VR:\n" << q << endl;
+        std::cout << "Joint values in VR:\n" << q << std::endl;
         std::vector<float> gravityVR;
         g.computeGravityTorque(gravityVR);
 
 //        cout << "joint torques from inverse dynamics: " << endl << invDyn << endl;
-        cout << "joint space inertia matrix: " << endl << dynamics.getInertiaMatrix(q) << endl;
-        cout << "joint space gravitational matrix:" << endl << dynamics.getGravityMatrix(q) << endl;
-        cout << "joint space VR gravity :" << endl;
+        std::cout << "joint space inertia matrix: " << std::endl << dynamics.getInertiaMatrix(q) << std::endl;
+        std::cout << "joint space gravitational matrix:" << std::endl << dynamics.getGravityMatrix(q) << std::endl;
+        std::cout << "joint space VR gravity :" << std::endl;
         int i=0;
         for(auto & val: gravityVR)
         {
-            cout << ns->getNode(i)->getName() << ": " << val << endl;
+            std::cout << ns->getNode(i)->getName() << ": " << val << std::endl;
             i++;
         }
-        cout << "joint space coriolis matrix:" << endl << dynamics.getCoriolisMatrix(q, qdot) << endl;
-        cout << "joint space accelerations from forward dynamics:" << endl << dynamics.getForwardDynamics(q, qdot, tau) << endl;
+        std::cout << "joint space coriolis matrix:" << std::endl << dynamics.getCoriolisMatrix(q, qdot) << std::endl;
+        std::cout << "joint space accelerations from forward dynamics:" << std::endl << dynamics.getForwardDynamics(q, qdot, tau) << std::endl;
 //        cout << "Identifier for Elbow R:" << endl << dynamics.getIdentifier("Elbow R") << endl;
 
     }
     else
     {
-        cout << " ERROR while creating robobt" << endl;
+        std::cout << " ERROR while creating robobt" << std::endl;
     }
 }
 

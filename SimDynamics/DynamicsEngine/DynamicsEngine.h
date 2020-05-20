@@ -47,7 +47,7 @@ namespace SimDynamics
     };
 
 
-    typedef boost::shared_ptr<DynamicsEngineConfig> DynamicsEngineConfigPtr;
+    typedef std::shared_ptr<DynamicsEngineConfig> DynamicsEngineConfigPtr;
 
     /*!
         An interface class to encapsulates all calls to the underlying physics engine.
@@ -62,7 +62,7 @@ namespace SimDynamics
             Constructor
             \param engineMutex Optionally, all engine access methods can be protected by an external mutex. If not set, an internal mutex is creeated.
         */
-        DynamicsEngine(boost::shared_ptr <boost::recursive_mutex> engineMutex = boost::shared_ptr<boost::recursive_mutex>());
+        DynamicsEngine(std::shared_ptr <std::recursive_mutex> engineMutex = std::shared_ptr<std::recursive_mutex>());
 
         /*!
         */
@@ -73,7 +73,7 @@ namespace SimDynamics
         */
         virtual bool init(DynamicsEngineConfigPtr config);
 
-        void setMutex(boost::shared_ptr <boost::recursive_mutex> engineMutex);
+        void setMutex(std::shared_ptr <std::recursive_mutex> engineMutex);
 
         Eigen::Vector3f getGravity();
 
@@ -183,7 +183,7 @@ namespace SimDynamics
         */
         virtual void activateAllObjects();
 
-        typedef boost::shared_ptr< boost::recursive_mutex::scoped_lock > MutexLockPtr;
+        typedef std::shared_ptr< std::scoped_lock<std::recursive_mutex> > MutexLockPtr;
 
         /*!
             This lock can be used to protect data access. It locks the mutex until deletion.
@@ -218,11 +218,11 @@ namespace SimDynamics
         double floorExtendMM;
         double floorDepthMM;
 
-        boost::shared_ptr <boost::recursive_mutex> engineMutexPtr;
+        std::shared_ptr <std::recursive_mutex> engineMutexPtr;
 
     };
 
-    typedef boost::shared_ptr<DynamicsEngine> DynamicsEnginePtr;
+    typedef std::shared_ptr<DynamicsEngine> DynamicsEnginePtr;
 
 
 } // namespace SimDynamics

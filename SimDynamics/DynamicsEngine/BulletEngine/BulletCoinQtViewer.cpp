@@ -34,7 +34,7 @@ namespace SimDynamics
 
         SIMDYNAMICS_ASSERT(world);
 
-        bulletEngine = boost::dynamic_pointer_cast<BulletEngine>(world->getEngine());
+        bulletEngine = std::dynamic_pointer_cast<BulletEngine>(world->getEngine());
 
         SIMDYNAMICS_ASSERT(bulletEngine);
 
@@ -243,7 +243,7 @@ namespace SimDynamics
         //VR_ASSERT(so);
         removeVisualization(robot);
 
-        boost::shared_ptr<VirtualRobot::CoinVisualization> visualization = robot->getVisualization<CoinVisualization>(visuType);
+        std::shared_ptr<VirtualRobot::CoinVisualization> visualization = robot->getVisualization<CoinVisualization>(visuType);
         SoNode* n = visualization->getCoinVisualization();
 
         if (n)
@@ -336,9 +336,9 @@ namespace SimDynamics
         }
 
         SoSeparator* n = new SoSeparator();
-        BOOST_FOREACH(VisualizationNodePtr visualizationNode, collectedVisualizationNodes)
+        for (VisualizationNodePtr const& visualizationNode : collectedVisualizationNodes)
         {
-            boost::shared_ptr<CoinVisualizationNode> coinVisualizationNode = boost::dynamic_pointer_cast<CoinVisualizationNode>(visualizationNode);
+            std::shared_ptr<CoinVisualizationNode> coinVisualizationNode = std::dynamic_pointer_cast<CoinVisualizationNode>(visualizationNode);
 
             if (coinVisualizationNode && coinVisualizationNode->getCoinVisualization())
             {
@@ -482,18 +482,18 @@ namespace SimDynamics
         }
     }
 
-    void BulletCoinQtViewer::setMutex(boost::shared_ptr<boost::recursive_mutex> engineMutexPtr)
+    void BulletCoinQtViewer::setMutex(std::shared_ptr<std::recursive_mutex> engineMutexPtr)
     {
         this->engineMutexPtr = engineMutexPtr;
     }
 
     BulletCoinQtViewer::MutexLockPtr BulletCoinQtViewer::getScopedLock()
     {
-        boost::shared_ptr< boost::recursive_mutex::scoped_lock > scoped_lock;
+        std::shared_ptr< std::scoped_lock<std::recursive_mutex> > scoped_lock;
 
         if (engineMutexPtr)
         {
-            scoped_lock.reset(new boost::recursive_mutex::scoped_lock(*engineMutexPtr));
+            scoped_lock.reset(new std::scoped_lock<std::recursive_mutex>(*engineMutexPtr));
         }
 
         return scoped_lock;

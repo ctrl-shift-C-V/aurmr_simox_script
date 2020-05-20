@@ -9,6 +9,7 @@
 #include "Robot.h"
 #include <cmath>
 #include <algorithm>
+#include <filesystem>
 #include <Eigen/Dense>
 #include "math/Helpers.h"
 
@@ -16,7 +17,8 @@
 
 namespace VirtualRobot
 {
-
+    using std::cout;
+    using std::endl;
 
     SceneObject::SceneObject(const std::string& name, VisualizationNodePtr visualization /*= VisualizationNodePtr()*/, CollisionModelPtr collisionModel /*= CollisionModelPtr()*/, const Physics& p /*= Physics()*/, CollisionCheckerPtr colChecker /*= CollisionCheckerPtr()*/)
     {

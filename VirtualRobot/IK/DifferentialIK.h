@@ -104,7 +104,7 @@ namespace VirtualRobot
         @endcode
     */
 
-    class VIRTUAL_ROBOT_IMPORT_EXPORT DifferentialIK : public JacobiProvider, public boost::enable_shared_from_this<DifferentialIK>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT DifferentialIK : public JacobiProvider, public std::enable_shared_from_this<DifferentialIK>
     {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -335,6 +335,6 @@ namespace VirtualRobot
 
     };
 
-    typedef boost::shared_ptr<DifferentialIK> DifferentialIKPtr;
+    typedef std::shared_ptr<DifferentialIK> DifferentialIKPtr;
 } // namespace VirtualRobot
 

@@ -8,8 +8,8 @@
 
 namespace VirtualRobot
 {
-
-
+    using std::cout;
+    using std::endl;
 
     Scene::Scene(const std::string& name)
         : name(name)

@@ -4,14 +4,7 @@
 #include "pugixml/pugixml.hpp"
 #include <map>
 #include <vector>
-
-#ifndef Q_MOC_RUN
-#include <boost/shared_ptr.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/foreach.hpp>
-#endif
-
+#include <memory>
 
 #define COLLADA_IMPORT_USE_SENSORS
 
@@ -22,7 +15,7 @@ namespace Collada
     typedef std::vector<pugi::xml_node> XmlNodeVector;
 
     struct ColladaRobotNode;
-    typedef boost::shared_ptr<ColladaRobotNode> ColladaRobotNodePtr;
+    typedef std::shared_ptr<ColladaRobotNode> ColladaRobotNodePtr;
     typedef std::vector<ColladaRobotNodePtr> ColladaRobotNodeSet;
     typedef std::map<pugi::xml_node, ColladaRobotNodePtr> StructureMap;
     typedef std::map<pugi::xml_node, pugi::xml_node> XmlMap;
@@ -60,7 +53,7 @@ namespace Collada
         StructureMap structureMap;
         XmlMap physicsMap;
     };
-    typedef boost::shared_ptr<ColladaWalker> ColladaWalkerPtr;
+    typedef std::shared_ptr<ColladaWalker> ColladaWalkerPtr;
 
 
     class ColladaRobot
@@ -108,20 +101,7 @@ namespace Collada
 
     /// Obtains a vector by casting each of the strings values (separated by spaces)
     template<typename T>
-    std::vector<T> getVector(std::string text)
-    {
-        std::vector<std::string> splitted;
-        boost::algorithm::trim(text);
-        std::vector<T> result;
-        boost::algorithm::split(splitted, text, boost::algorithm::is_space());
-        BOOST_FOREACH(std::string number, splitted)
-        {
-            result.push_back(boost::lexical_cast<T>(number));
-        }
-
-
-        return result;
-    }
+    std::vector<T> getVector(std::string text);
 
     template<typename T>
     struct TraversalStack

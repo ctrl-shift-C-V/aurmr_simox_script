@@ -45,7 +45,9 @@
 #include <cmath>
 
 
-
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/foreach.hpp>
 
 
 #ifdef TIMER_DEBUG
@@ -70,6 +72,36 @@ using namespace std;
 
 namespace Collada
 {
+
+    template<>
+    std::vector<int> getVector(std::string text)
+    {
+        std::vector<std::string> splitted;
+        boost::algorithm::trim(text);
+        std::vector<int> result;
+        boost::algorithm::split(splitted, text, boost::algorithm::is_space());
+        for (std::string const& number : splitted)
+        {
+            result.push_back(boost::lexical_cast<int>(number));
+        }
+
+        return result;
+    }
+
+    template<>
+    std::vector<float> getVector(std::string text)
+    {
+        std::vector<std::string> splitted;
+        boost::algorithm::trim(text);
+        std::vector<float> result;
+        boost::algorithm::split(splitted, text, boost::algorithm::is_space());
+        for (std::string const& number : splitted)
+        {
+            result.push_back(boost::lexical_cast<float>(number));
+        }
+
+        return result;
+    }
 
     std::ostream& operator<<(std::ostream& os, const ColladaRobotNode& node)
     {

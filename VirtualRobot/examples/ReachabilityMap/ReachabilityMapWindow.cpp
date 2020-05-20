@@ -337,7 +337,7 @@ void ReachabilityMapWindow::buildRobotVisu()
         return;
     }
 
-    boost::shared_ptr<VirtualRobot::CoinVisualization> visualization = robot->getVisualization<CoinVisualization>();
+    std::shared_ptr<VirtualRobot::CoinVisualization> visualization = robot->getVisualization<CoinVisualization>();
     SoNode* visualisationNode = nullptr;
 
     if (visualization)
@@ -360,7 +360,7 @@ void ReachabilityMapWindow::buildObjectVisu()
         return;
     }
 
-    boost::shared_ptr<VirtualRobot::CoinVisualization> visualization = graspObject->getVisualization<CoinVisualization>();
+    std::shared_ptr<VirtualRobot::CoinVisualization> visualization = graspObject->getVisualization<CoinVisualization>();
     SoNode* visualisationNode = nullptr;
 
     if (visualization)

@@ -24,6 +24,7 @@
 
 #include "../VirtualRobot.h"
 
+#include <iostream>
 #include <string>
 #include <vector>
 #include <map>
@@ -73,7 +74,7 @@ namespace VirtualRobot
 
         virtual void print()
         {
-            cout << "Dummy Collision Model Implementation..." << endl;
+            std::cout << "Dummy Collision Model Implementation..." << std::endl;
         };
 
         TriMeshModelPtr getTriMeshModel()
@@ -82,7 +83,7 @@ namespace VirtualRobot
         }
 
 
-        virtual boost::shared_ptr<CollisionModelImplementation> clone(bool deepCopy = false) const = 0;
+        virtual std::shared_ptr<CollisionModelImplementation> clone(bool deepCopy = false) const = 0;
     protected:
 
         //! delete all data

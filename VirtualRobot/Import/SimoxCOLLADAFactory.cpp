@@ -28,14 +28,14 @@ namespace VirtualRobot
         }
         catch (VirtualRobotException& e)
         {
-            cout << " ERROR while creating robot (exception)" << endl;
-            cout << e.what();
+            std::cout << " ERROR while creating robot (exception)" << std::endl;
+            std::cout << e.what();
             return robot;
         }
 
         if (!robot)
         {
-            VR_ERROR << " ERROR while loading robot from file:" << filename << endl;
+            VR_ERROR << " ERROR while loading robot from file:" << filename << std::endl;
         }
 
         return robot;
@@ -69,9 +69,9 @@ namespace VirtualRobot
     /**
      * \return new instance of SimoxCOLLADAFactory.
      */
-    boost::shared_ptr<RobotImporterFactory> SimoxCOLLADAFactory::createInstance(void*)
+    std::shared_ptr<RobotImporterFactory> SimoxCOLLADAFactory::createInstance(void*)
     {
-        boost::shared_ptr<SimoxCOLLADAFactory> COLLADAFactory(new SimoxCOLLADAFactory());
+        std::shared_ptr<SimoxCOLLADAFactory> COLLADAFactory(new SimoxCOLLADAFactory());
         return COLLADAFactory;
     }
 

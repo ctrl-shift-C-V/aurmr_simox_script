@@ -5,6 +5,8 @@
 #include "../RobotNodeSet.h"
 #include "../Robot.h"
 
+#include <Eigen/Geometry>
+
 using namespace VirtualRobot;
 
 Gravity::Gravity(VirtualRobot::RobotPtr robot, VirtualRobot::RobotNodeSetPtr rnsJoints, VirtualRobot::RobotNodeSetPtr rnsBodies) :
@@ -143,7 +145,7 @@ void Gravity::GravityData::init(SceneObjectPtr node, const std::vector<RobotNode
     this->node = node;
     dataVec.resize(joints.size());
 
-    RobotNodePtr thisNode = boost::dynamic_pointer_cast<RobotNode>(node);
+    RobotNodePtr thisNode = std::dynamic_pointer_cast<RobotNode>(node);
     for (size_t i = 0; i < joints.size(); ++i) {
         if(thisNode == joints.at(i)){
             computeTorque = true;
@@ -166,7 +168,7 @@ void Gravity::GravityData::init(SceneObjectPtr node, const std::vector<RobotNode
         GravityDataPtr data;
         data = GravityData::create(child, joints, bodies, dataVec);
         children[child->getName()] = data;
-        auto childNode = boost::dynamic_pointer_cast<RobotNode>(child);
+        auto childNode = std::dynamic_pointer_cast<RobotNode>(child);
         //                    VR_INFO << "adding child mass sum: " << child->getName() << " : " << data->massSum << std::endl;
         massSum += data->massSum;
     }
@@ -201,7 +203,7 @@ void Gravity::GravityData::computeCoMAndTorque(Eigen::Vector3f &comPositionGloba
 //        VR_INFO << "CoM of " << node->getName() << ": " << node->getCoMGlobal() << " accumulated CoM: " << comPositionGlobal << "\nmass: " << node->getMass() << " massSum: " << massSum << std::endl;
     if(computeTorque)
     {
-        VirtualRobot::RobotNodeRevolutePtr rnRevolute = boost::dynamic_pointer_cast<VirtualRobot::RobotNodeRevolute>(node);
+        VirtualRobot::RobotNodeRevolutePtr rnRevolute = std::dynamic_pointer_cast<VirtualRobot::RobotNodeRevolute>(node);
         Eigen::Vector3f axisGlobal = rnRevolute->getJointRotationAxis();
         VirtualRobot::MathTools::BaseLine<Eigen::Vector3f> l(node->getGlobalPose().block<3,1>(0,3), axisGlobal);
         Eigen::Vector3f pointOnAxis = VirtualRobot::MathTools::nearestPointOnLine<Eigen::Vector3f>(l, comPositionGlobal);

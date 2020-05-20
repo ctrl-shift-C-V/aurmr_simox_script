@@ -14,11 +14,14 @@
 #include "../Visualization/VisualizationFactory.h"
 #include "rapidxml.hpp"
 
+#include <filesystem>
+
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
-
-    boost::mutex BaseIO::mutex;
+    std::mutex BaseIO::mutex;
 
     BaseIO::BaseIO() = default;
 

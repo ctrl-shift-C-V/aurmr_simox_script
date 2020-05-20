@@ -21,6 +21,7 @@
 
 namespace VirtualRobot
 {
+    using std::endl;
 
     AdvancedIKSolver::AdvancedIKSolver(RobotNodeSetPtr rns) :
         IKSolver(), rns(rns)
@@ -46,7 +47,7 @@ namespace VirtualRobot
 
     void AdvancedIKSolver::collisionDetection(ObstaclePtr avoidCollisionsWith)
     {
-        SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(avoidCollisionsWith);
+        SceneObjectPtr so = std::dynamic_pointer_cast<SceneObject>(avoidCollisionsWith);
         collisionDetection(so);
     }
 

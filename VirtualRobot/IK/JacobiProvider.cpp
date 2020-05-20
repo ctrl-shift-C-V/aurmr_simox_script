@@ -9,6 +9,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     JacobiProvider::JacobiProvider(RobotNodeSetPtr rns, InverseJacobiMethod invJacMethod) :
         name("JacobiProvvider"), rns(rns), inverseMethod(invJacMethod)

@@ -592,7 +592,7 @@ void reachabilityWindow::createReach()
         if (measure != "Reachability")
         {
             reachSpace.reset(new Manipulability(robot));
-            ManipulabilityPtr manipSpace = boost::dynamic_pointer_cast<Manipulability>(reachSpace);
+            ManipulabilityPtr manipSpace = std::dynamic_pointer_cast<Manipulability>(reachSpace);
             manipSpace->setMaxManipulability(UICreate.doubleSpinBoxMaxManip->value());
         }
 
@@ -600,7 +600,7 @@ void reachabilityWindow::createReach()
 
         if (measure == "Ext. Manipulability")
         {
-            ManipulabilityPtr man = boost::dynamic_pointer_cast<Manipulability>(reachSpace);
+            ManipulabilityPtr man = std::dynamic_pointer_cast<Manipulability>(reachSpace);
             PoseQualityExtendedManipulabilityPtr manMeasure(new PoseQualityExtendedManipulability(currentRobotNodeSet));
             man->setManipulabilityMeasure(manMeasure);
             if (UICreate.checkBoxColDetecion->isChecked() && UICreate.checkBoxSelfDistance->isChecked())
@@ -792,7 +792,7 @@ void reachabilityWindow::updateQualityInfo()
     float poseManip = 1.0f;
     if (reachSpace)
     {
-        ManipulabilityPtr p = boost::dynamic_pointer_cast<Manipulability>(reachSpace);
+        ManipulabilityPtr p = std::dynamic_pointer_cast<Manipulability>(reachSpace);
         if (p)
         {
             reachManip = p->getManipulabilityAtPose(p->getTCP()->getGlobalPose());

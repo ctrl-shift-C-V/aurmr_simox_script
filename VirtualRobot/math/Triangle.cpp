@@ -21,6 +21,8 @@
 
 #include "Triangle.h"
 
+#include <Eigen/Geometry>
+
 namespace math
 {
     Triangle::Triangle()

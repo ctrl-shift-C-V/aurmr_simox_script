@@ -212,7 +212,7 @@ void MTPlanningScenery::buildScene()
         m.block(0, 3, 3, 1) = p;
         o->setGlobalPose(m);
         environment->addSceneObject(o);
-        boost::shared_ptr<CoinVisualization> visualization = o->getVisualization<CoinVisualization>();
+        std::shared_ptr<CoinVisualization> visualization = o->getVisualization<CoinVisualization>();
         SoNode* visualisationNode = nullptr;
 
         if (visualization)
@@ -637,7 +637,7 @@ void MTPlanningScenery::loadRobotMTPlanning(bool bMultiCollisionCheckers)
 
     if ((int)robots.size() == 1)
     {
-        boost::shared_ptr<CoinVisualization> visualization = robots[0]->getVisualization<CoinVisualization>(robotModelVisuColModel ? SceneObject::Full : SceneObject::Collision);
+        std::shared_ptr<CoinVisualization> visualization = robots[0]->getVisualization<CoinVisualization>(robotModelVisuColModel ? SceneObject::Full : SceneObject::Collision);
         //SoNode* visualisationNode = NULL;
         robotSep = new SoSeparator();
 
@@ -762,7 +762,7 @@ void MTPlanningScenery::setRobotModelShape(bool collisionModel)
     //sceneSep->removeChild(robotSep);
     if (robots.size() > 0)
     {
-        boost::shared_ptr<CoinVisualization> visualization = robots[0]->getVisualization<CoinVisualization>(robotModelVisuColModel ? SceneObject::Full : SceneObject::Collision);
+        std::shared_ptr<CoinVisualization> visualization = robots[0]->getVisualization<CoinVisualization>(robotModelVisuColModel ? SceneObject::Full : SceneObject::Collision);
         //SoNode* visualisationNode = NULL;
         robotSep = new SoSeparator();
 

@@ -36,7 +36,7 @@ namespace SimDynamics
     }
 
 
-    BulletEngine::BulletEngine(boost::shared_ptr <boost::recursive_mutex> engineMutex)
+    BulletEngine::BulletEngine(std::shared_ptr <std::recursive_mutex> engineMutex)
         : DynamicsEngine(engineMutex)
     {
         collision_config = nullptr;
@@ -55,7 +55,7 @@ namespace SimDynamics
     bool BulletEngine::init(DynamicsEngineConfigPtr config)
     {
         // first check if config is of type BulletEngineConfig
-        BulletEngineConfigPtr test = boost::dynamic_pointer_cast<BulletEngineConfig>(config);
+        BulletEngineConfigPtr test = std::dynamic_pointer_cast<BulletEngineConfig>(config);
 
         if (!config || !test)
         {
@@ -184,7 +184,7 @@ namespace SimDynamics
 
         for (std::vector<DynamicsObjectPtr>::const_iterator i = objects.begin(); i != objects.end(); ++i)
         {
-            BulletObjectPtr btObject = boost::dynamic_pointer_cast<BulletObject>(*i);
+            BulletObjectPtr btObject = std::dynamic_pointer_cast<BulletObject>(*i);
 
             if (!btObject)
             {
@@ -205,7 +205,7 @@ namespace SimDynamics
     bool BulletEngine::addObject(DynamicsObjectPtr o)
     {
         MutexLockPtr lock = getScopedLock();
-        BulletObjectPtr btObject = boost::dynamic_pointer_cast<BulletObject>(o);
+        BulletObjectPtr btObject = std::dynamic_pointer_cast<BulletObject>(o);
 
         if (!btObject)
         {
@@ -257,7 +257,7 @@ namespace SimDynamics
     bool BulletEngine::removeObject(DynamicsObjectPtr o)
     {
         MutexLockPtr lock = getScopedLock();
-        BulletObjectPtr btObject = boost::dynamic_pointer_cast<BulletObject>(o);
+        BulletObjectPtr btObject = std::dynamic_pointer_cast<BulletObject>(o);
 
         if (!btObject)
         {
@@ -436,7 +436,7 @@ namespace SimDynamics
     bool BulletEngine::addRobot(DynamicsRobotPtr r)
     {
         MutexLockPtr lock = getScopedLock();
-        BulletRobotPtr btRobot = boost::dynamic_pointer_cast<BulletRobot>(r);
+        BulletRobotPtr btRobot = std::dynamic_pointer_cast<BulletRobot>(r);
 
         if (!btRobot)
         {
@@ -500,7 +500,7 @@ namespace SimDynamics
     bool BulletEngine::removeRobot(DynamicsRobotPtr r)
     {
         MutexLockPtr lock = getScopedLock();
-        BulletRobotPtr btRobot = boost::dynamic_pointer_cast<BulletRobot>(r);
+        BulletRobotPtr btRobot = std::dynamic_pointer_cast<BulletRobot>(r);
 
         if (!btRobot)
         {
@@ -552,8 +552,8 @@ namespace SimDynamics
             cout << "++ Object " << i << ":" << objects[i]->getName() << endl;
             Eigen::Matrix4f m = objects[i]->getSceneObject()->getGlobalPose();
             cout << "   pos (simox)  " << m(0, 3) << "," << m(1, 3) << "," << m(2, 3) << endl;
-            BulletObjectPtr bo = boost::dynamic_pointer_cast<BulletObject>(objects[i]);
-            boost::shared_ptr<btRigidBody> rb = bo->getRigidBody();
+            BulletObjectPtr bo = std::dynamic_pointer_cast<BulletObject>(objects[i]);
+            std::shared_ptr<btRigidBody> rb = bo->getRigidBody();
             btVector3 v = rb->getWorldTransform().getOrigin();
             cout << "   pos (bullet) " << v[0] << "," << v[1]  << "," << v[2]  << endl;
             btVector3 va = rb->getAngularVelocity();
@@ -565,7 +565,7 @@ namespace SimDynamics
         for (size_t i = 0; i < robots.size(); i++)
         {
             cout << "++ Robot " << i << ":" << objects[i]->getName() << endl;
-            BulletRobotPtr br = boost::dynamic_pointer_cast<BulletRobot>(robots[i]);
+            BulletRobotPtr br = std::dynamic_pointer_cast<BulletRobot>(robots[i]);
             std::vector<BulletRobot::LinkInfo> links = br->getLinks();
 
             for (size_t j = 0; j < links.size(); j++)
@@ -575,7 +575,7 @@ namespace SimDynamics
                 cout << "++++ - ColModelB " << j << ":" << links[j].nodeB->getName();
 
                 cout << "     enabled:" << links[j].joint->isEnabled() << endl;
-                boost::shared_ptr<btHingeConstraint> hinge = boost::dynamic_pointer_cast<btHingeConstraint>(links[j].joint);
+                std::shared_ptr<btHingeConstraint> hinge = std::dynamic_pointer_cast<btHingeConstraint>(links[j].joint);
 
                 if (hinge)
                 {
@@ -589,7 +589,7 @@ namespace SimDynamics
 #endif
                 }
 
-                boost::shared_ptr<btGeneric6DofConstraint> dof = boost::dynamic_pointer_cast<btGeneric6DofConstraint>(links[j].joint);
+                std::shared_ptr<btGeneric6DofConstraint> dof = std::dynamic_pointer_cast<btGeneric6DofConstraint>(links[j].joint);
 
                 if (dof)
                 {
@@ -688,7 +688,7 @@ namespace SimDynamics
         }
 
 
-        BulletRobotPtr br = boost::dynamic_pointer_cast<BulletRobot>(r);
+        BulletRobotPtr br = std::dynamic_pointer_cast<BulletRobot>(r);
 
         if (!br)
         {
@@ -722,7 +722,7 @@ namespace SimDynamics
         }
 
 
-        BulletRobotPtr br = boost::dynamic_pointer_cast<BulletRobot>(r);
+        BulletRobotPtr br = std::dynamic_pointer_cast<BulletRobot>(r);
 
         if (!br)
         {
@@ -730,7 +730,7 @@ namespace SimDynamics
             return false;
         }
 
-        BulletObjectPtr bo = boost::dynamic_pointer_cast<BulletObject>(object);
+        BulletObjectPtr bo = std::dynamic_pointer_cast<BulletObject>(object);
 
         if (!bo)
         {

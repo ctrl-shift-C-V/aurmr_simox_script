@@ -25,7 +25,7 @@
 
 namespace VirtualRobot
 {
-
+    using std::endl;
 
     std::map<std::string, int> RobotIO::robot_name_counter;
 
@@ -583,7 +583,7 @@ namespace VirtualRobot
 
         if (scaleVisu)
         {
-            boost::shared_ptr<RobotNodePrismatic> rnPM = boost::dynamic_pointer_cast<RobotNodePrismatic>(robotNode);
+            std::shared_ptr<RobotNodePrismatic> rnPM = std::dynamic_pointer_cast<RobotNodePrismatic>(robotNode);
 
             if (rnPM)
             {
@@ -917,7 +917,7 @@ namespace VirtualRobot
 
         if (!attr)
         {
-            VR_WARNING << "Robot definition expects attribute 'type'" << endl;
+            VR_WARNING << "Robot definition expects attribute 'type'" << std::endl;
             robotType = "not set";
         }
         else
@@ -927,7 +927,7 @@ namespace VirtualRobot
 
         // check name counter
         {
-            boost::lock_guard<boost::mutex> lock(mutex);
+            std::scoped_lock lock(mutex);
 
             if (robot_name_counter.find(robotType) != robot_name_counter.end())
             {
@@ -946,7 +946,7 @@ namespace VirtualRobot
         {
             std::stringstream ss;
             {
-                boost::lock_guard<boost::mutex> lock(mutex);
+                std::scoped_lock lock(mutex);
 
                 if (robot_name_counter[robotType] == 1)
                 {

@@ -9,6 +9,7 @@
 
 namespace VirtualRobot
 {
+    using std::endl;
 
     CameraSensorFactory::CameraSensorFactory()
     = default;
@@ -110,9 +111,9 @@ namespace VirtualRobot
     /**
      * \return new instance of CameraSensorFactory.
      */
-    boost::shared_ptr<SensorFactory> CameraSensorFactory::createInstance(void*)
+    std::shared_ptr<SensorFactory> CameraSensorFactory::createInstance(void*)
     {
-        boost::shared_ptr<CameraSensorFactory> psFactory(new CameraSensorFactory());
+        std::shared_ptr<CameraSensorFactory> psFactory(new CameraSensorFactory());
         return psFactory;
     }
 

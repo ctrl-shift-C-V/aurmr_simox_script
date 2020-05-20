@@ -12,6 +12,8 @@
 #include <iostream>
 #include "VirtualRobot/Visualization/TriMeshModel.h"
 
+#include <Eigen/Geometry>
+
 using namespace std;
 
 namespace VirtualRobot

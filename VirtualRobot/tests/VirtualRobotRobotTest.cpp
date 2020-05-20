@@ -400,7 +400,7 @@ BOOST_AUTO_TEST_CASE(testVirtualRobotToXML)
 
     // check sensor
     BOOST_REQUIRE(rn2->hasSensor("sensor2"));
-    VirtualRobot::PositionSensorPtr ps = boost::dynamic_pointer_cast<VirtualRobot::PositionSensor>(rn2->getSensor("sensor2"));
+    VirtualRobot::PositionSensorPtr ps = std::dynamic_pointer_cast<VirtualRobot::PositionSensor>(rn2->getSensor("sensor2"));
     BOOST_REQUIRE(ps);
     Eigen::Matrix4f p = ps->getGlobalPose();
     Eigen::Matrix4f p2 = Eigen::Matrix4f::Identity();
@@ -443,7 +443,7 @@ BOOST_AUTO_TEST_CASE(testVirtualRobotToXML)
 
     // check sensor
     BOOST_REQUIRE(rn2->hasSensor("sensor2"));
-    ps = boost::dynamic_pointer_cast<VirtualRobot::PositionSensor>(rn2->getSensor("sensor2"));
+    ps = std::dynamic_pointer_cast<VirtualRobot::PositionSensor>(rn2->getSensor("sensor2"));
     BOOST_REQUIRE(ps);
     p = ps->getGlobalPose();
     p2 = Eigen::Matrix4f::Identity();

@@ -50,7 +50,7 @@ namespace VirtualRobot
          Returns number of triangles used for building the collision model
          */
         //virtual int BuildColModel(std::map<SoNode*,int> &mIVIDMapping, std::vector<int> & vStoreIDs, SoSeparator *pAddIVModel);
-        virtual boost::shared_ptr<CollisionModelImplementation> clone(bool deepCopy = false) const{}
+        virtual std::shared_ptr<CollisionModelImplementation> clone(bool deepCopy = false) const{}
     protected:
 
         //! delete all data

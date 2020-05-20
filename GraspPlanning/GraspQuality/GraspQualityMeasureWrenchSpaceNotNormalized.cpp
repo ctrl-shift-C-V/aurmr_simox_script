@@ -20,6 +20,8 @@
 #include <string>
 #include <cfloat>
 
+#include <Eigen/Geometry>
+
 
 using namespace std;
 using namespace VirtualRobot;

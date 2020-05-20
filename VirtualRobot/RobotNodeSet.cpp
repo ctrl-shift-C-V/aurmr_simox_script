@@ -6,10 +6,14 @@
 #include "VirtualRobotException.h"
 #include "CollisionDetection/CollisionChecker.h"
 
+#include <boost/mem_fn.hpp>
+
 #include <algorithm>
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     RobotNodeSet::RobotNodeSet(const std::string& name,
                                RobotWeakPtr r,
@@ -62,7 +66,7 @@ namespace VirtualRobot
         // now, the objects are stored in the parent's (SceneObjectSet) data structure, so that the methods of SceneObjectSet do work
         for (const auto& robotNode : robotNodes)
         {
-            SceneObjectPtr cm = boost::dynamic_pointer_cast<SceneObject>(robotNode);
+            SceneObjectPtr cm = std::dynamic_pointer_cast<SceneObject>(robotNode);
 
             if (cm)
             {

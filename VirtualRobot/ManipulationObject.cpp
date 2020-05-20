@@ -7,6 +7,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     ManipulationObject::ManipulationObject(const std::string& name, VisualizationNodePtr visualization, CollisionModelPtr collisionModel, const SceneObject::Physics& p, CollisionCheckerPtr colChecker)
         : Obstacle(name, visualization, collisionModel, p, colChecker)

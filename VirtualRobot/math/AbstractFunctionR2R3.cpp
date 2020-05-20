@@ -24,6 +24,8 @@
 #include "Plane.h"
 #include <stdexcept>
 
+#include <Eigen/Geometry>
+
 
 namespace math
 {

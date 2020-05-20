@@ -27,6 +27,7 @@
 #include "VirtualRobot.h"
 #include <string>
 #include <fstream>
+#include <iostream>
 
 #ifndef WIN32
 struct OutputConfiguration

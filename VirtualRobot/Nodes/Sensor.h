@@ -42,7 +42,7 @@ namespace VirtualRobot
 {
 
     class Sensor;
-    typedef boost::shared_ptr<Sensor> SensorPtr;
+    typedef std::shared_ptr<Sensor> SensorPtr;
 
 
     /*!

@@ -9,6 +9,7 @@
 
 namespace VirtualRobot
 {
+    using std::endl;
 
     ForceTorqueSensorFactory::ForceTorqueSensorFactory()
     = default;
@@ -110,9 +111,9 @@ namespace VirtualRobot
     /**
      * \return new instance of ForceTorqueSensorFactory.
      */
-    boost::shared_ptr<SensorFactory> ForceTorqueSensorFactory::createInstance(void*)
+    std::shared_ptr<SensorFactory> ForceTorqueSensorFactory::createInstance(void*)
     {
-        boost::shared_ptr<ForceTorqueSensorFactory> psFactory(new ForceTorqueSensorFactory());
+        std::shared_ptr<ForceTorqueSensorFactory> psFactory(new ForceTorqueSensorFactory());
         return psFactory;
     }
 

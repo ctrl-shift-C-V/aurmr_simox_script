@@ -48,7 +48,7 @@ namespace VirtualRobot
 
 
     */
-    class VIRTUAL_ROBOT_IMPORT_EXPORT CollisionChecker : public boost::enable_shared_from_this<CollisionChecker>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT CollisionChecker : public std::enable_shared_from_this<CollisionChecker>
     {
     public:
 
@@ -186,12 +186,12 @@ namespace VirtualRobot
         static bool IsSupported_Multithreading_MultipleColCheckers();
 
 #if defined(VR_COLLISION_DETECTION_PQP)
-        boost::shared_ptr<CollisionCheckerPQP> getCollisionCheckerImplementation()
+        std::shared_ptr<CollisionCheckerPQP> getCollisionCheckerImplementation()
         {
             return collisionCheckerImplementation;
         }
 #else
-        boost::shared_ptr<CollisionCheckerDummy> getCollisionCheckerImplementation()
+        std::shared_ptr<CollisionCheckerDummy> getCollisionCheckerImplementation()
         {
             return collisionCheckerImplementation;
         }
@@ -219,9 +219,9 @@ namespace VirtualRobot
 
 
 #if defined(VR_COLLISION_DETECTION_PQP)
-        boost::shared_ptr<CollisionCheckerPQP> collisionCheckerImplementation;
+        std::shared_ptr<CollisionCheckerPQP> collisionCheckerImplementation;
 #else
-        boost::shared_ptr<CollisionCheckerDummy> collisionCheckerImplementation;
+        std::shared_ptr<CollisionCheckerDummy> collisionCheckerImplementation;
 #endif
     };
 } // namespace VirtualRobot

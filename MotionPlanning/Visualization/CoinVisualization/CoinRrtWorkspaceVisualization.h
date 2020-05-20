@@ -84,7 +84,7 @@ namespace Saba
         SoSeparator* visualization;
     };
 
-    typedef boost::shared_ptr<CoinRrtWorkspaceVisualization> CoinRrtWorkspaceVisualizationPtr;
+    typedef std::shared_ptr<CoinRrtWorkspaceVisualization> CoinRrtWorkspaceVisualizationPtr;
 
 
 } // namespace Saba

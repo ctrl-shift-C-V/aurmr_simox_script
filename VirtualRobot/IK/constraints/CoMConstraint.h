@@ -29,7 +29,7 @@
 
 namespace VirtualRobot
 {
-    class VIRTUAL_ROBOT_IMPORT_EXPORT CoMConstraint : public Constraint, public boost::enable_shared_from_this<CoMConstraint>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT CoMConstraint : public Constraint, public std::enable_shared_from_this<CoMConstraint>
     {
     public:
         CoMConstraint(const RobotPtr& robot, const RobotNodeSetPtr& joints, const RobotNodeSetPtr& bodies, const Eigen::Vector3f& target, float tolerance);
@@ -53,7 +53,7 @@ namespace VirtualRobot
         float tolerance;
     };
 
-    typedef boost::shared_ptr<CoMConstraint> CoMConstraintPtr;
+    typedef std::shared_ptr<CoMConstraint> CoMConstraintPtr;
 }
 
 

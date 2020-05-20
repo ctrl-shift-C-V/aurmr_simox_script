@@ -147,7 +147,7 @@ protected:
     Saba::CSpaceTreePtr tree;
     GraspStudio::GraspQualityMeasureWrenchSpacePtr graspQuality;
 
-    boost::shared_ptr<VirtualRobot::CoinVisualization> visualization;
+    std::shared_ptr<VirtualRobot::CoinVisualization> visualization;
 
     Saba::GraspRrtPtr test_graspRrt;
     Saba::CSpaceSampledPtr test_cspace;

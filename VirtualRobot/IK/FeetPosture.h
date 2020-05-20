@@ -37,7 +37,7 @@ namespace VirtualRobot
             * The TCPs of both feet
             * the Cartesian relation of both feet when applying the posture
     */
-    class VIRTUAL_ROBOT_IMPORT_EXPORT FeetPosture : public boost::enable_shared_from_this<FeetPosture>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT FeetPosture : public std::enable_shared_from_this<FeetPosture>
     {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -88,7 +88,7 @@ namespace VirtualRobot
 
     };
 
-    typedef boost::shared_ptr<FeetPosture> FeetPosturePtr;
+    typedef std::shared_ptr<FeetPosture> FeetPosturePtr;
 
 } // namespace VirtualRobot
 

@@ -9,6 +9,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     RobotNodePrismatic::RobotNodePrismatic(RobotWeakPtr rob,
                                            const std::string& name,
@@ -135,7 +137,7 @@ namespace VirtualRobot
 
         if (printDecoration)
         {
-            cout << "******** RobotNodePrismatic ********" << endl;
+            std::cout << "******** RobotNodePrismatic ********" << std::endl;
         }
 
         RobotNode::print(false, false);
@@ -145,16 +147,16 @@ namespace VirtualRobot
 
         if (visuScaling)
         {
-            cout << visuScaleFactor[0] << ", " << visuScaleFactor[1] << "," << visuScaleFactor[2] << endl;
+            std::cout << visuScaleFactor[0] << ", " << visuScaleFactor[1] << "," << visuScaleFactor[2] << std::endl;
         }
         else
         {
-            cout << "disabled" << endl;
+            std::cout << "disabled" << std::endl;
         }
 
         if (printDecoration)
         {
-            cout << "******** End RobotNodePrismatic ********" << endl;
+            std::cout << "******** End RobotNodePrismatic ********" << std::endl;
         }
 
 
@@ -162,13 +164,14 @@ namespace VirtualRobot
 
         if (printChildren)
         {
-            std::for_each(children.begin(), children.end(), boost::bind(&SceneObject::print, _1, true, true));
+            std::for_each(children.begin(), children.end(), std::bind(&SceneObject::print,
+                                                                      std::placeholders::_1, true, true));
         }
     }
 
     RobotNodePtr RobotNodePrismatic::_clone(const RobotPtr newRobot, const VisualizationNodePtr visualizationModel, const CollisionModelPtr collisionModel, CollisionCheckerPtr colChecker, float scaling)
     {
-        boost::shared_ptr<RobotNodePrismatic> result;
+        std::shared_ptr<RobotNodePrismatic> result;
         ReadLockPtr lock = getRobot()->getReadLock();
         Physics p = physics.scale(scaling);
 

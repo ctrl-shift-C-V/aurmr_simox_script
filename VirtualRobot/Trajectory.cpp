@@ -6,6 +6,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     Trajectory::Trajectory(RobotNodeSetPtr rns, const std::string& name)
         : rns(rns), name(name)

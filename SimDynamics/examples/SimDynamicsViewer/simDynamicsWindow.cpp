@@ -450,7 +450,7 @@ void SimDynamicsWindow::updateJointInfo()
     }
 
     SimDynamics::DynamicsObjectPtr dynRN = dynamicsRobot->getDynamicsRobotNode(rn);
-    SimDynamics::BulletObjectPtr bulletRN = boost::dynamic_pointer_cast<SimDynamics::BulletObject>(dynRN);
+    SimDynamics::BulletObjectPtr bulletRN = std::dynamic_pointer_cast<SimDynamics::BulletObject>(dynRN);
 
     if (bulletRN)
     {
@@ -461,7 +461,7 @@ void SimDynamicsWindow::updateJointInfo()
 
     }
 
-    BulletRobotPtr bulletRobot = boost::dynamic_pointer_cast<SimDynamics::BulletRobot>(dynamicsRobot);
+    BulletRobotPtr bulletRobot = std::dynamic_pointer_cast<SimDynamics::BulletRobot>(dynamicsRobot);
 
     if (rn && bulletRobot && bulletRobot->hasLink(rn))
     {

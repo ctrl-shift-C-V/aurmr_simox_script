@@ -24,6 +24,8 @@
 #include "../VirtualRobot.h"
 #include "MathForwardDefinitions.h"
 
+#include <Eigen/Geometry>
+
 namespace math
 {
     class VIRTUAL_ROBOT_IMPORT_EXPORT SimpleAbstractFunctionR1Ori

@@ -1,6 +1,7 @@
 #include "Primitive.h"
 #include "MathTools.h"
 
+#include <boost/format.hpp>
 
 namespace VirtualRobot
 {

@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <cfloat>
 
 struct aiScene;
 
@@ -53,6 +54,6 @@ namespace VirtualRobot
         ResultMetaData resultMetaData;
     };
 
-    typedef boost::shared_ptr<AssimpReader> AssimpReaderPtr;
+    typedef std::shared_ptr<AssimpReader> AssimpReaderPtr;
 }
 

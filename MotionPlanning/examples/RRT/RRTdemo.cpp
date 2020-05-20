@@ -174,7 +174,7 @@ void startRRTVisualization()
     SoSeparator* sep = new SoSeparator();
     SceneObject::VisualizationType colModel = SceneObject::Full;
 
-    boost::shared_ptr<CoinVisualization> visualization = robot->getVisualization<CoinVisualization>(colModel);
+    std::shared_ptr<CoinVisualization> visualization = robot->getVisualization<CoinVisualization>(colModel);
     SoNode* visualisationNode = nullptr;
 
     if (visualization)
@@ -188,12 +188,12 @@ void startRRTVisualization()
     VisualizationNodePtr visuObstacle = o->getVisualization();
     std::vector<VisualizationNodePtr> visus;
     visus.push_back(visuObstacle);
-    boost::shared_ptr<CoinVisualization> visualizationO(new CoinVisualization(visus));
+    std::shared_ptr<CoinVisualization> visualizationO(new CoinVisualization(visus));
     SoNode* obstacleSoNode = visualizationO->getCoinVisualization();
     sep->addChild(obstacleSoNode);
 
     // show rrt visu
-    boost::shared_ptr<CoinRrtWorkspaceVisualization> w(new CoinRrtWorkspaceVisualization(robot, cspace, "EndPoint"));
+    std::shared_ptr<CoinRrtWorkspaceVisualization> w(new CoinRrtWorkspaceVisualization(robot, cspace, "EndPoint"));
     w->addTree(tree);
 #ifdef USE_BIRRT
     CSpaceTreePtr tree2 = rrt->getTree2();

@@ -56,13 +56,13 @@ namespace VirtualRobot
         */
         ~CollisionModelPQP() override;
 
-        const boost::shared_ptr<PQP::PQP_Model>& getPQPModel()
+        const std::shared_ptr<PQP::PQP_Model>& getPQPModel()
         {
             return pqpModel;
         }
 
         void print() override;
-        boost::shared_ptr<CollisionModelImplementation> clone(bool deepCopy = false) const override;
+        std::shared_ptr<CollisionModelImplementation> clone(bool deepCopy = false) const override;
     protected:
         CollisionModelPQP(const CollisionModelPQP& orig);
 
@@ -70,9 +70,9 @@ namespace VirtualRobot
         void destroyData() override;
         void createPQPModel();
 
-        boost::shared_ptr<PQP::PQP_Model> pqpModel;
+        std::shared_ptr<PQP::PQP_Model> pqpModel;
 
-        boost::shared_ptr<CollisionCheckerPQP> colCheckerPQP;
+        std::shared_ptr<CollisionCheckerPQP> colCheckerPQP;
     };
 
 } // namespace

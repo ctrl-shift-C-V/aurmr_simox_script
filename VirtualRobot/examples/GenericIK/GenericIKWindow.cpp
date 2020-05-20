@@ -194,7 +194,7 @@ void GenericIKWindow::collisionModel()
     useColModel = UI.checkBoxColModel->checkState() == Qt::Checked;
     SceneObject::VisualizationType colModel = useColModel ? SceneObject::Collision : SceneObject::Full;
 
-    boost::shared_ptr<CoinVisualization> visualization = robot->getVisualization<CoinVisualization>(colModel);
+    std::shared_ptr<CoinVisualization> visualization = robot->getVisualization<CoinVisualization>(colModel);
     SoNode* visualisationNode = nullptr;
 
     if (visualization)
@@ -304,7 +304,7 @@ void GenericIKWindow::selectKC(int nr)
 
     if (kc->getNode(kc->getSize() - 1)->isTranslationalJoint())
     {
-        ikGazeSolver.reset(new GazeIK(kc, boost::dynamic_pointer_cast<RobotNodePrismatic>(kc->getNode(kc->getSize() - 1))));
+        ikGazeSolver.reset(new GazeIK(kc, std::dynamic_pointer_cast<RobotNodePrismatic>(kc->getNode(kc->getSize() - 1))));
     }
     else
     {

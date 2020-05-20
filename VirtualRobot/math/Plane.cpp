@@ -22,6 +22,8 @@
 #include "Plane.h"
 #include "Helpers.h"
 
+#include <Eigen/Geometry>
+
 namespace math
 {
     Plane::Plane(Eigen::Vector3f pos, Eigen::Vector3f dir1, Eigen::Vector3f dir2)

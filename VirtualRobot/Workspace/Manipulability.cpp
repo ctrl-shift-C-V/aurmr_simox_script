@@ -22,7 +22,8 @@
 
 namespace VirtualRobot
 {
-
+    using std::cout;
+    using std::endl;
 
     Manipulability::Manipulability(RobotPtr robot) : WorkspaceRepresentation(robot)
     {
@@ -293,7 +294,7 @@ namespace VirtualRobot
         // init self dist
         if (considerSelfDist)
         {
-            PoseQualityExtendedManipulabilityPtr pqm = boost::dynamic_pointer_cast<PoseQualityExtendedManipulability>(measure);
+            PoseQualityExtendedManipulabilityPtr pqm = std::dynamic_pointer_cast<PoseQualityExtendedManipulability>(measure);
             if (pqm)
             {
                 VR_INFO << "Setting up self dist, alpha:" << selfDistAlpha << ", beta:" << selfDistBeta << endl;
@@ -351,7 +352,7 @@ namespace VirtualRobot
         // since 2.9: alpha and beta for self dist
         float selfDistA = 0.0f;
         float selfDistB = 0.0f;
-        PoseQualityExtendedManipulabilityPtr pqm = boost::dynamic_pointer_cast<PoseQualityExtendedManipulability>(measure);
+        PoseQualityExtendedManipulabilityPtr pqm = std::dynamic_pointer_cast<PoseQualityExtendedManipulability>(measure);
         if (pqm)
         {
             pqm->getSelfDistParameters(selfDistA, selfDistB);

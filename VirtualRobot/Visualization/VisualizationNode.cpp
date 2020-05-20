@@ -16,6 +16,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     VisualizationNode::VisualizationNode(const TriMeshModelPtr& triMeshModel) :
         triMeshModel{triMeshModel}

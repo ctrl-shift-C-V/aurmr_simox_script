@@ -28,6 +28,9 @@
 #include <VirtualRobot/VirtualRobot.h>
 #include "MotionPlanner.h"
 
+#include <thread>
+#include <mutex>
+
 
 namespace Saba
 {
@@ -86,8 +89,8 @@ namespace Saba
         bool threadStarted;
         bool plannerFinished;
         MotionPlannerPtr planner;
-        boost::thread planningThread;
-        boost::mutex mutex;
+        std::thread planningThread;
+        std::mutex mutex;
 
     };
 

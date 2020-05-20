@@ -27,6 +27,9 @@
 
 using namespace VirtualRobot;
 
+using std::cout;
+using std::endl;
+
 BalanceConstraintOptimizationFunction::BalanceConstraintOptimizationFunction(const SupportPolygonPtr &supportPolygon) :
     supportPolygon(supportPolygon)
 {

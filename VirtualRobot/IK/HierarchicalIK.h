@@ -41,7 +41,7 @@ namespace VirtualRobot
         Advanced Robotics, 1991. 'Robots in Unstructured Environments', 91 ICAR., Fifth International Conference on
 
     */
-    class VIRTUAL_ROBOT_IMPORT_EXPORT HierarchicalIK : public boost::enable_shared_from_this<HierarchicalIK>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT HierarchicalIK : public std::enable_shared_from_this<HierarchicalIK>
     {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -68,7 +68,7 @@ namespace VirtualRobot
         JacobiProvider::InverseJacobiMethod method;
     };
 
-    typedef boost::shared_ptr<HierarchicalIK> HierarchicalIKPtr;
+    typedef std::shared_ptr<HierarchicalIK> HierarchicalIKPtr;
 
 } // namespace VirtualRobot
 

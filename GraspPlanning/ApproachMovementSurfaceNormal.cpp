@@ -10,6 +10,8 @@
 #include <VirtualRobot/Nodes/RobotNode.h>
 #include <VirtualRobot/Visualization/TriMeshModel.h>
 
+#include <Eigen/Geometry>
+
 
 using namespace std;
 using namespace VirtualRobot;

@@ -89,12 +89,12 @@ namespace VirtualRobot
             \param visuType The visualization type (Full or Collision model)
             \param sensors Add sensors models to the visualization.
             Example usage:
-             boost::shared_ptr<VirtualRobot::CoinVisualization> visualization = robot->getVisualization<CoinVisualization>();
+             std::shared_ptr<VirtualRobot::CoinVisualization> visualization = robot->getVisualization<CoinVisualization>();
              SoNode* visualisationNode = NULL;
              if (visualization)
                  visualisationNode = visualization->getCoinVisualization();
         */
-        template <typename T> boost::shared_ptr<T> getVisualization(SceneObject::VisualizationType visuType = SceneObject::Full, bool sensors = true);
+        template <typename T> std::shared_ptr<T> getVisualization(SceneObject::VisualizationType visuType = SceneObject::Full, bool sensors = true);
         /*!
             Shows the structure of the robot
         */
@@ -134,8 +134,8 @@ namespace VirtualRobot
         void setUpdateVisualization(bool enable) override;
         void setUpdateCollisionModel(bool enable) override;
 
-        boost::shared_ptr<Robot> shared_from_this() const;
-        //boost::shared_ptr<Robot> shared_from_this() const { return boost::static_pointer_cast<Robot>(SceneObject::shared_from_this()); }
+        std::shared_ptr<Robot> shared_from_this() const;
+        //std::shared_ptr<Robot> shared_from_this() const { return boost::static_pointer_cast<Robot>(SceneObject::shared_from_this()); }
 
         /*!
             get the complete setup of all robot nodes
@@ -365,9 +365,9 @@ namespace VirtualRobot
         virtual SensorPtr getSensor(const std::string& name);
 
         template<class SensorType>
-        boost::shared_ptr<SensorType> getSensor(const std::string& name)
+        std::shared_ptr<SensorType> getSensor(const std::string& name)
         {
-            return boost::dynamic_pointer_cast<SensorType>(getSensor(name));
+            return std::dynamic_pointer_cast<SensorType>(getSensor(name));
         }
 
         /*!
@@ -376,16 +376,16 @@ namespace VirtualRobot
         virtual std::vector<SensorPtr> getSensors();
 
         template<class SensorType>
-        std::vector<boost::shared_ptr<SensorType> > getSensors()
+        std::vector<std::shared_ptr<SensorType> > getSensors()
         {
-            std::vector<boost::shared_ptr<SensorType> > result;
+            std::vector<std::shared_ptr<SensorType> > result;
             std::vector<SensorPtr> sensors = getSensors();
             result.reserve(sensors.size());
             for (std::size_t i = 0; i < sensors.size(); ++i)
             {
                 if (dynamic_cast<SensorType*>(sensors.at(i).get()))
                 {
-                    result.push_back(boost::static_pointer_cast<SensorType>(sensors.at(i)));
+                    result.push_back(std::static_pointer_cast<SensorType>(sensors.at(i)));
                 }
             }
             return result;
@@ -429,7 +429,7 @@ namespace VirtualRobot
 
         bool updateVisualization;
 
-        mutable boost::recursive_mutex mutex;
+        mutable std::recursive_mutex mutex;
         bool use_mutex;
         bool propagatingJointValuesEnabled = true;
 
@@ -444,10 +444,10 @@ namespace VirtualRobot
      * A compile time error is thrown if a different class type is used as template argument.
      */
     template <typename T>
-    boost::shared_ptr<T> Robot::getVisualization(SceneObject::VisualizationType visuType, bool sensors)
+    std::shared_ptr<T> Robot::getVisualization(SceneObject::VisualizationType visuType, bool sensors)
     {
-        const bool IS_SUBCLASS_OF_VISUALIZATION = ::boost::is_base_of<Visualization, T>::value;
-        BOOST_MPL_ASSERT_MSG(IS_SUBCLASS_OF_VISUALIZATION, TEMPLATE_PARAMETER_FOR_VirtualRobot_getVisualization_MUST_BT_A_SUBCLASS_OF_VirtualRobot__Visualization, (T));
+        static_assert(::std::is_base_of_v<Visualization, T>,
+                "TEMPLATE_PARAMETER_FOR_VirtualRobot_getVisualization_MUST_BT_A_SUBCLASS_OF_VirtualRobot__Visualization");
         std::vector<RobotNodePtr> collectedRobotNodes;
         getRobotNodes(collectedRobotNodes);
         std::vector<VisualizationNodePtr> collectedVisualizationNodes;
@@ -467,7 +467,7 @@ namespace VirtualRobot
             }
         }
 
-        boost::shared_ptr<T> visualization(new T(collectedVisualizationNodes));
+        std::shared_ptr<T> visualization(new T(collectedVisualizationNodes));
         return visualization;
     }
 

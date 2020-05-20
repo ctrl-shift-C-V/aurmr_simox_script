@@ -39,9 +39,10 @@
 #include <Inventor/nodes/SoCamera.h>
 
 
-#include <string>
 #include <fstream>
+#include <string>
 #include <cmath>
+#include <mutex>
 
 namespace VirtualRobot
 {
@@ -457,15 +458,15 @@ namespace VirtualRobot
         // AbstractFactoryMethod
     public:
         static std::string getName();
-        static boost::shared_ptr<VisualizationFactory> createInstance(void*);
+        static std::shared_ptr<VisualizationFactory> createInstance(void*);
         typedef std::map<std::pair<size_t, std::string>, void*> TextureCacheMap;
     private:
         static SubClassRegistry registry;
-        static boost::mutex globalTextureCacheMutex;
+        static std::mutex globalTextureCacheMutex;
         static TextureCacheMap globalTextureCache;
     };
 
-    typedef boost::shared_ptr<CoinVisualizationFactory> CoinVisualizationFactoryPtr;
+    typedef std::shared_ptr<CoinVisualizationFactory> CoinVisualizationFactoryPtr;
 
 
 } // namespace VirtualRobot

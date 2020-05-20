@@ -12,6 +12,7 @@
 #include <VirtualRobot/XML/RobotIO.h>
 #include <VirtualRobot/Robot.h>
 #include <VirtualRobot/RobotNodeSet.h>
+
 #include <Eigen/Core>
 
 #include <rbdl/SpatialAlgebraOperators.h>
@@ -49,7 +50,7 @@ BOOST_AUTO_TEST_CASE(testRBDLTransformationOrientation)
                      jointB, RigidBodyDynamics::Body(), "bodyB");
 
     Eigen::Vector3d positionInBodyB = CalcBaseToBodyCoordinates(model, Eigen::Vector2d::Zero(), 1, Eigen::Vector3d(1,0,0));
-    std::cout << "rotation: position in bodyB\n" << positionInBodyB << endl;
+    std::cout << "rotation: position in bodyB\n" << positionInBodyB << std::endl;
 
 }
 
@@ -74,7 +75,7 @@ BOOST_AUTO_TEST_CASE(testRBDLTransformationTranslation)
                      jointB, RigidBodyDynamics::Body(), "bodyB");
 
     Eigen::Vector3d positionInBodyB = CalcBaseToBodyCoordinates(model, Eigen::Vector2d::Zero(), 1, Eigen::Vector3d(0,0,0));
-    std::cout << "translation: position in bodyB\n" << positionInBodyB << endl;
+    std::cout << "translation: position in bodyB\n" << positionInBodyB << std::endl;
 
 }
 
@@ -119,9 +120,9 @@ BOOST_AUTO_TEST_CASE(testRBDLConvertSimpleRobot)
     auto base = robot->getRobotNode("Base");
     auto j1 = robot->getRobotNode("Joint1");
     Eigen::Vector3f vec(1,0,0);
-    std::cout << "base to j1:\n" << MathTools::eigen4f2rpy(base->getTransformationTo(j1)) << endl;
+    std::cout << "base to j1:\n" << MathTools::eigen4f2rpy(base->getTransformationTo(j1)) << std::endl;
 
-    std::cout << "position\n" << vec << " in j1:\n" << j1->transformTo(base,vec) << endl;
+    std::cout << "position\n" << vec << " in j1:\n" << j1->transformTo(base,vec) << std::endl;
 
     // Check if Virtual Robot Result for gravity torque is the same as computated with RBDL
     Dynamics dynamics(rns, rns);
