@@ -1,15 +1,8 @@
 #pragma once
 
-#include <type_traits>
-#include <iostream>
-#include <typeinfo>
-
-#include <Eigen/Core>
-
-#include <VirtualRobot/math/Helpers.h>
-
 #include "json.hpp"
 
+#include <Eigen/Core>
 
 /**
  * Provide `to_json()` and `from_json()` overloads for `nlohmann::json`,
