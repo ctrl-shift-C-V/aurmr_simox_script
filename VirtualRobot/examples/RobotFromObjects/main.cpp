@@ -19,6 +19,7 @@ int main(int argc, char* argv[])
     const std::string robotName = "randomboxbot-" + std::to_string(gen());
     std::cout << "generating " << robotName << "\n";
     std::filesystem::create_directories(robotName);
+    std::filesystem::current_path(robotName);
 
     VirtualRobot::RobotPtr robot(new VirtualRobot::LocalRobot(robotName, robotType));
 
@@ -84,7 +85,7 @@ int main(int argc, char* argv[])
         allNodes.front());
 
     std::cout << "save robot\n";
-    VirtualRobot::RobotIO::saveXML(robot, robotName + ".xml", robotName, "models",
+    VirtualRobot::RobotIO::saveXML(robot, robotName + ".xml", "", "models",
                                    true, true, true, true);
     return 0;
 }
