@@ -41,8 +41,8 @@ int main(int argc, char* argv[])
         }
         auto model = VirtualRobot::TriMeshModel::MakeBox(d(gen), d(gen), d(gen));
         model.setColor({0, 255, 0, 0});
-        const auto cvisu = boost::make_shared<VirtualRobot::CoinVisualizationNode>(model);
-        auto rnCol = boost::make_shared<VirtualRobot::CollisionModel>(cvisu);
+        const auto cvisu = std::make_shared<VirtualRobot::CoinVisualizationNode>(model);
+        auto rnCol = std::make_shared<VirtualRobot::CollisionModel>(cvisu);
 
         auto  rnVisu = rnCol->getVisualization()->clone();
 
