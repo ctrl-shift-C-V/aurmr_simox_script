@@ -1,6 +1,8 @@
 #include "CollisionDetection/CollisionChecker.h"
 #include "BoundingBox.h"
 
+#include <iostream>
+
 namespace VirtualRobot
 {
 

@@ -7,6 +7,9 @@
 
 #include <Eigen/Geometry>
 
+#include <iostream>
+#include <list>
+
 using namespace VirtualRobot;
 
 Gravity::Gravity(VirtualRobot::RobotPtr robot, VirtualRobot::RobotNodeSetPtr rnsJoints, VirtualRobot::RobotNodeSetPtr rnsBodies) :

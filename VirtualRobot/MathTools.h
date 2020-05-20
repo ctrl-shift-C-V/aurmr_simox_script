@@ -24,15 +24,12 @@
 
 #include "VirtualRobot.h"
 
-#include <algorithm>
-#include <string>
-#include <list>
-#include <sstream>
-#include <iostream>
-#include <vector>
 #include <Eigen/Core>
 #include <Eigen/Geometry>
-#include <float.h>
+
+#include <string>
+#include <vector>
+#include <cfloat>
 
 namespace VirtualRobot
 {

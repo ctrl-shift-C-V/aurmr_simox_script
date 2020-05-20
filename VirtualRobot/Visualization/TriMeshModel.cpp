@@ -12,6 +12,7 @@
 #include<Eigen/Geometry>
 
 #include <algorithm>
+#include <iostream>
 #include <fstream>
 #include <iomanip>
 #include <set>
