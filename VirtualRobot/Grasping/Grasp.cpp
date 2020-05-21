@@ -3,6 +3,9 @@
 #include "../RobotConfig.h"
 #include "..//Robot.h"
 #include "../VirtualRobotException.h"
+
+#include <Eigen/Dense>
+
 #include <iomanip>
 
 namespace VirtualRobot

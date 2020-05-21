@@ -24,6 +24,8 @@
 #include <stdexcept>
 #include <sstream>
 
+#include <Eigen/Dense>
+
 #include "OrientationConstraint.h"
 
 #include <VirtualRobot/Robot.h>

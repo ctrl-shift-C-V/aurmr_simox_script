@@ -161,6 +161,7 @@ namespace VirtualRobot
     class WorkspaceDataArray;
     class ForceTorqueSensor;
     class ContactSensor;
+    class Sensor;
     class LocalRobot;
 
     typedef std::shared_ptr<CoMIK> CoMIKPtr;
@@ -211,6 +212,7 @@ namespace VirtualRobot
     typedef std::shared_ptr<WorkspaceGrid> WorkspaceGridPtr;
     typedef std::shared_ptr<ForceTorqueSensor> ForceTorqueSensorPtr;
     typedef std::shared_ptr<ContactSensor> ContactSensorPtr;
+    typedef std::shared_ptr<Sensor> SensorPtr;
     typedef std::shared_ptr<LocalRobot> LocalRobotPtr;
 
     /*

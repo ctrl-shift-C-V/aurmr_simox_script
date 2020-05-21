@@ -30,6 +30,9 @@
 #include "JacobiProvider.h"
 #include "IKSolver.h"
 
+#include <Eigen/Dense>
+#include <Eigen/Geometry>
+
 #include <string>
 #include <vector>
 

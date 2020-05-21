@@ -3,6 +3,7 @@
 #include "RobotConfig.h"
 #include "Trajectory.h"
 #include "VirtualRobotException.h"
+#include "Nodes/Sensor.h"
 #include "CollisionDetection/CollisionChecker.h"
 #include "CollisionDetection/CollisionModel.h"
 #include "EndEffector/EndEffector.h"

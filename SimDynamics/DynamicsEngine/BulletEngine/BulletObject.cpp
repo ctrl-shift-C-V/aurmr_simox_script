@@ -16,6 +16,8 @@
 #include <BulletCollision/CollisionShapes/btCylinderShape.h>
 #include <BulletCollision/CollisionShapes/btCompoundShape.h>
 
+#include <Eigen/Dense>
+
 //#define DEBUG_FIXED_OBJECTS
 //#define USE_BULLET_GENERIC_6DOF_CONSTRAINT
 

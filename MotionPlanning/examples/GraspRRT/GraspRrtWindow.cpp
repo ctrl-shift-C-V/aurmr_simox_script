@@ -17,6 +17,7 @@
 #include "MotionPlanning/PostProcessing/ShortcutProcessor.h"
 #include <MotionPlanning/Visualization/CoinVisualization/CoinRrtWorkspaceVisualization.h>
 #include <QFileDialog>
+#include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <ctime>
 #include <vector>

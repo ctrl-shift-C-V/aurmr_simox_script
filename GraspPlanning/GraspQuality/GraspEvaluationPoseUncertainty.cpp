@@ -1,8 +1,10 @@
-#include <Eigen/Geometry>
 #include "GraspEvaluationPoseUncertainty.h"
 #include <VirtualRobot/Random.h>
 #include <VirtualRobot/math/Helpers.h>
 #include <VirtualRobot/math/ClampedNormalDistribution.hpp>
+
+#include <Eigen/Dense>
+#include <Eigen/Geometry>
 
 #include <algorithm>
 #include <random>

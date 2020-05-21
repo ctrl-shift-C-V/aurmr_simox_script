@@ -3,6 +3,8 @@
 
 #include <boost/format.hpp>
 
+#include <Eigen/Dense>
+
 
 using namespace VirtualRobot;
 using namespace std;

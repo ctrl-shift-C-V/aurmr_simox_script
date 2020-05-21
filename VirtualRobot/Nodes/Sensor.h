@@ -24,15 +24,10 @@
 
 #include "../VirtualRobot.h"
 #include "../VirtualRobotException.h"
-#include "../VirtualRobot.h"
 
 #include "../SceneObject.h"
-#include "../Visualization/VisualizationNode.h"
 
 #include <Eigen/Core>
-#include <Eigen/Geometry>
-
-
 
 #include <string>
 #include <vector>

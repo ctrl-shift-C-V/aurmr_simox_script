@@ -23,7 +23,7 @@
 #pragma once
 
 #include "../VirtualRobot.h"
-
+#include "../VirtualRobotException.h"
 #include "../SceneObject.h"
 #include "../Transformation/DHParameter.h"
 #include "../Visualization/VisualizationNode.h"

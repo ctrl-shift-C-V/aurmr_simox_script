@@ -1,7 +1,7 @@
 #include <Eigen/Geometry>
 #include "JacobiProvider.h"
 
-
+#include <Eigen/Dense>
 
 #include <algorithm>
 

@@ -17,6 +17,8 @@
 
 #include <boost/math/special_functions/fpclassify.hpp>
 
+#include <Eigen/Dense>
+
 #include <unordered_set>
 
 //#define DEBUG_FIXED_OBJECTS

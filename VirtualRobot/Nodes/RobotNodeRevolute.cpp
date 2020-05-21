@@ -1,5 +1,6 @@
 
 #include "RobotNodeRevolute.h"
+#include "Nodes/Sensor.h"
 #include "../Robot.h"
 #include <cmath>
 #include <algorithm>

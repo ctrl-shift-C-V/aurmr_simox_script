@@ -25,6 +25,8 @@
 
 #include <VirtualRobot/MathTools.h>
 
+#include <Eigen/Dense>
+
 using namespace VirtualRobot;
 
 #define POSITION_COMPONENT      0
