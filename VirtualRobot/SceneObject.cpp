@@ -4,6 +4,7 @@
 #include "CollisionDetection/CollisionChecker.h"
 #include "Visualization/TriMeshModel.h"
 #include "Visualization/VisualizationFactory.h"
+#include "Visualization/VisualizationNode.h"
 #include "Visualization/Visualization.h"
 #include "VirtualRobotException.h"
 #include "Robot.h"

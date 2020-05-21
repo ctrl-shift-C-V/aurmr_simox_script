@@ -3,6 +3,8 @@
 #include "PositionSensorFactory.h"
 #include "../XML/BaseIO.h"
 
+#include <VirtualRobot/Visualization/VisualizationNode.h>
+
 namespace VirtualRobot
 {
 

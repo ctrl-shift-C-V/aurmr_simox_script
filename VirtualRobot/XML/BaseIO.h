@@ -26,6 +26,7 @@
 #include "../Units.h"
 #include "../RobotConfig.h"
 #include "../Nodes/RobotNode.h"
+#include "../Primitive.h"
 
 #include <string>
 #include <vector>

@@ -26,6 +26,7 @@
 #include "SceneObject.h"
 #include "Nodes/RobotNode.h"
 #include "Nodes/ConditionedLock.h"
+#include "BoundingBox.h"
 
 #include <type_traits>
 #include <string>

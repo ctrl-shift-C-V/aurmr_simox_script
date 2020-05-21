@@ -3,6 +3,7 @@
 #include "../Robot.h"
 #include "../VirtualRobotException.h"
 #include "../CollisionDetection/CollisionModel.h"
+#include "../Visualization/VisualizationNode.h"
 
 #include <cmath>
 #include <algorithm>

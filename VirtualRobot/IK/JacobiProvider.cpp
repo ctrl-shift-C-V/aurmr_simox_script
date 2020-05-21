@@ -1,6 +1,8 @@
 #include <Eigen/Geometry>
 #include "JacobiProvider.h"
 
+#include <VirtualRobot/MathTools.h>
+
 #include <Eigen/Dense>
 
 #include <algorithm>

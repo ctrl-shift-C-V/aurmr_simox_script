@@ -12,6 +12,7 @@
 #include <VirtualRobot/XML/RobotIO.h>
 #include <VirtualRobot/Robot.h>
 #include <VirtualRobot/RobotNodeSet.h>
+#include <VirtualRobot/MathTools.h>
 
 #include <Eigen/Core>
 

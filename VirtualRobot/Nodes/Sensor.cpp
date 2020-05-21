@@ -5,6 +5,7 @@
 #include "../XML/BaseIO.h"
 #include "../Visualization/TriMeshModel.h"
 #include "RobotNode.h"
+#include <VirtualRobot/Visualization/VisualizationNode.h>
 
 #include <Eigen/Core>
 

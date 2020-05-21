@@ -23,6 +23,8 @@
 
 #include "StackedIK.h"
 
+#include <VirtualRobot/MathTools.h>
+
 using namespace VirtualRobot;
 
 namespace VirtualRobot

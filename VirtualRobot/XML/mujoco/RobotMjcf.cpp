@@ -6,6 +6,7 @@
 
 #include <VirtualRobot/Nodes/RobotNodePrismatic.h>
 #include <VirtualRobot/Nodes/RobotNodeRevolute.h>
+#include <VirtualRobot/Visualization/VisualizationNode.h>
 
 
 #include "MeshConverter.h"

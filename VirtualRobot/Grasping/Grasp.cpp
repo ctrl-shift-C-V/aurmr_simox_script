@@ -3,6 +3,7 @@
 #include "../RobotConfig.h"
 #include "..//Robot.h"
 #include "../VirtualRobotException.h"
+#include <VirtualRobot/MathTools.h>
 
 #include <Eigen/Dense>
 

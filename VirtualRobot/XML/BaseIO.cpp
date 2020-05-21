@@ -13,6 +13,7 @@
 #include "../Nodes/RobotNodeFixedFactory.h"
 #include "../Transformation/DHParameter.h"
 #include "../Visualization/VisualizationFactory.h"
+#include "../Visualization/VisualizationNode.h"
 #include "rapidxml.hpp"
 
 #include <filesystem>

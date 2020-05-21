@@ -4,6 +4,7 @@
 #include "../Nodes/RobotNodePrismatic.h"
 #include "../VirtualRobotException.h"
 #include "../Robot.h"
+#include <VirtualRobot/MathTools.h>
 
 #include <Eigen/Geometry>
 

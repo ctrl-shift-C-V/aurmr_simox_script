@@ -12,6 +12,7 @@
 #include "../Nodes/RobotNodePrismatic.h"
 #include "../Transformation/DHParameter.h"
 #include "../Visualization/VisualizationFactory.h"
+#include "../Visualization/VisualizationNode.h"
 #include "../Visualization/TriMeshModel.h"
 #include "../RobotConfig.h"
 #include "../RuntimeEnvironment.h"

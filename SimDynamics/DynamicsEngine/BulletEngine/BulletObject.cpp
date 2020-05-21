@@ -7,6 +7,7 @@
 #include <VirtualRobot/Obstacle.h>
 #include <VirtualRobot/CollisionDetection/CollisionModel.h>
 #include <VirtualRobot/Visualization/TriMeshModel.h>
+#include <VirtualRobot/Visualization/VisualizationNode.h>
 #include <VirtualRobot/Primitive.h>
 
 

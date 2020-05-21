@@ -26,13 +26,13 @@
 #include "../VirtualRobotException.h"
 #include "../SceneObject.h"
 #include "../Transformation/DHParameter.h"
-#include "../Visualization/VisualizationNode.h"
 #include "Sensor.h"
 
 #include <Eigen/Core>
 
 #include <string>
 #include <vector>
+#include <map>
 
 
 namespace VirtualRobot

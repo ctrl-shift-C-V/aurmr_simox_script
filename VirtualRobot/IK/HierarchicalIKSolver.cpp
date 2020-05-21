@@ -1,4 +1,7 @@
 #include "HierarchicalIKSolver.h"
+
+#include <VirtualRobot/MathTools.h>
+
 //#define DEBUG
 
 HierarchicalIKSolver::HierarchicalIKSolver(RobotNodeSetPtr allRobotNodes) : HierarchicalIK(allRobotNodes)

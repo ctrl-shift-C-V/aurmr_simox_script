@@ -2,6 +2,8 @@
 #include "CameraSensor.h"
 #include "CameraSensorFactory.h"
 
+#include <VirtualRobot/Visualization/VisualizationNode.h>
+
 namespace VirtualRobot
 {
 

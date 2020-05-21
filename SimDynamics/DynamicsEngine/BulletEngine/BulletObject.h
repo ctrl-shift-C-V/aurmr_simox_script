@@ -24,6 +24,7 @@
 
 #include "../DynamicsObject.h"
 #include "SimoxMotionState.h"
+#include <VirtualRobot/Primitive.h>
 
 #include "btBulletDynamicsCommon.h"
 

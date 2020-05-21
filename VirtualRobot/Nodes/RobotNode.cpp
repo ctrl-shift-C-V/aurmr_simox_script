@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <filesystem>
 #include "../math/Helpers.h"
+#include "../Visualization/VisualizationNode.h"
 
 #include <Eigen/Core>
 

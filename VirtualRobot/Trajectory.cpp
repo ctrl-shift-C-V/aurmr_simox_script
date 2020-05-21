@@ -1,6 +1,7 @@
 #include "Trajectory.h"
 #include "Robot.h"
 #include "VirtualRobotException.h"
+#include <VirtualRobot/Visualization/VisualizationFactory.h>
 #include <iostream>
 #include <sstream>
 
