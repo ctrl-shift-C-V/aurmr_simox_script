@@ -8,6 +8,7 @@
 #include <urdf_parser/urdf_parser.h>
 
 #include <VirtualRobot/Visualization/CoinVisualization/CoinVisualizationFactory.h>
+#include <VirtualRobot/Visualization/VisualizationNode.h>
 #include <VirtualRobot/RobotFactory.h>
 #include <VirtualRobot/CollisionDetection/CollisionModel.h>
 #include <VirtualRobot/Nodes/RobotNodeFactory.h>
