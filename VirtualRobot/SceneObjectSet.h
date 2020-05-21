@@ -23,12 +23,11 @@
 #pragma once
 
 #include "VirtualRobot.h"
+#include <Eigen/Core>
+
 #include <string>
 #include <vector>
 #include <map>
-#include <set>
-#include <Eigen/Core>
-#include <Eigen/Geometry>
 
 namespace VirtualRobot
 {

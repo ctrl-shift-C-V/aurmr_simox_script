@@ -6,6 +6,8 @@
 #include "../RobotNodeSet.h"
 #include <rbdl/rbdl.h>
 
+#include <set>
+
 
 namespace VirtualRobot
 {

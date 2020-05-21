@@ -1,7 +1,5 @@
 #include "RobotMjcf.h"
 
-#include <boost/shared_ptr.hpp>
-
 #include <VirtualRobotChecks.h>
 
 #include <VirtualRobot/RobotNodeSet.h>

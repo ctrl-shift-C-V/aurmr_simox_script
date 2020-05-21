@@ -1,23 +1,9 @@
 #pragma once
 
-#include <Eigen/Dense>
-#include <Eigen/Geometry>
+
 #include "inventor.h"
 
-
 #include <VirtualRobot/VirtualRobot.h>
-#include <VirtualRobot/Robot.h>
-#include <VirtualRobot/VirtualRobotException.h>
-#include <VirtualRobot/Visualization/CoinVisualization/CoinVisualization.h>
-#include <VirtualRobot/RuntimeEnvironment.h>
-#include <VirtualRobot/Nodes/RobotNodeRevoluteFactory.h>
-#include <VirtualRobot/Nodes/RobotNodeFixedFactory.h>
-#include <VirtualRobot/Nodes/RobotNodePrismaticFactory.h>
-#include <VirtualRobot/Nodes/PositionSensor.h>
-#include <VirtualRobot/Visualization/TriMeshModel.h>
-
-
-
 
 namespace Collada
 {
