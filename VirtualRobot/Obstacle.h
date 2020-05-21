@@ -24,6 +24,7 @@
 
 #include "VirtualRobot.h"
 #include "CollisionDetection/CollisionModel.h"
+#include "Visualization/VisualizationFactory.h"
 #include "SceneObject.h"
 
 #include <string>

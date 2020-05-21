@@ -7,12 +7,14 @@
 #include "Visualization/Visualization.h"
 #include "VirtualRobotException.h"
 #include "Robot.h"
+#include "math/Helpers.h"
+
+#include <Eigen/Dense>
+
 #include <cmath>
 #include <algorithm>
 #include <filesystem>
-#include <Eigen/Dense>
-#include "math/Helpers.h"
-
+#include <iomanip>
 
 
 namespace VirtualRobot

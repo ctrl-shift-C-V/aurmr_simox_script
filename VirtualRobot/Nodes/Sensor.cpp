@@ -8,6 +8,8 @@
 
 #include <Eigen/Core>
 
+#include <iomanip>
+
 namespace VirtualRobot
 {
     using std::cout;

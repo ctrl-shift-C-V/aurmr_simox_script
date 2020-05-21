@@ -23,16 +23,11 @@
 #pragma once
 
 #include "VirtualRobot.h"
-#include "VirtualRobotException.h"
-#include "VirtualRobot.h"
-#include "Visualization/VisualizationNode.h"
 
 #include <Eigen/Core>
-#include <Eigen/Geometry>
 
 #include <type_traits>
 #include <string>
-#include <iomanip>
 #include <vector>
 
 

@@ -22,6 +22,7 @@
 #include <ctime>
 #include <vector>
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 
 #include "Inventor/actions/SoLineHighlightRenderAction.h"
