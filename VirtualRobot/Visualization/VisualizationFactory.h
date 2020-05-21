@@ -29,7 +29,6 @@
 #include "../Primitive.h"
 
 #include <Eigen/Core>
-#include <Eigen/Geometry>
 #include <string>
 
 namespace VirtualRobot

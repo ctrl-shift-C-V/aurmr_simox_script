@@ -7,6 +7,7 @@
 #include "Nodes/RobotNodePrismatic.h"
 #include "Nodes/RobotNodeFixed.h"
 #include "Nodes/RobotNodeFixedFactory.h"
+#include "CollisionDetection/CollisionModel.h"
 #include "EndEffector/EndEffector.h"
 #include "Visualization//VisualizationFactory.h"
 #include "VirtualRobotException.h"

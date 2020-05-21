@@ -7,8 +7,8 @@
 */
 
 #include "VirtualRobotImportExport.h"
+
 #include <string>
-#include <algorithm>
 
 namespace VirtualRobot
 {
@@ -28,7 +28,6 @@ namespace VirtualRobot
 
         Units(const std::string& unitName) : unitString(unitName)
         {
-            //std::transform(unitString.begin(), unitString.end(), unitString.begin(), ::tolower);
         }
 
         bool isRadian()

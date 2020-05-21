@@ -3,6 +3,7 @@
 #include "../RobotFactory.h"
 #include "../RobotNodeSet.h"
 #include "../VirtualRobotException.h"
+#include "../CollisionDetection/CollisionModel.h"
 #include "../EndEffector/EndEffector.h"
 #include "../EndEffector/EndEffectorActor.h"
 #include "../Nodes/RobotNodeFactory.h"

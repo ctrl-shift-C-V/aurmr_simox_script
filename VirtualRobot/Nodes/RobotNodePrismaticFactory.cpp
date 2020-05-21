@@ -7,6 +7,7 @@
 #include "RobotNodePrismaticFactory.h"
 #include "RobotNode.h"
 #include "RobotNodePrismatic.h"
+#include "../CollisionDetection/CollisionModel.h"
 
 
 namespace VirtualRobot

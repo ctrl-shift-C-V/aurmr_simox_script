@@ -5,7 +5,7 @@
 #include <VirtualRobot/Transformation/DHParameter.h>
 #include <VirtualRobot/XML/RobotIO.h>
 #include <VirtualRobot/RuntimeEnvironment.h>
-
+#include <VirtualRobot/RobotFactory.h>
 
 #include <string>
 #include <iostream>

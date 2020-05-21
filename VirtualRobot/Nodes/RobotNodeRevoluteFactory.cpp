@@ -7,6 +7,7 @@
 #include "RobotNodeRevoluteFactory.h"
 #include "RobotNode.h"
 #include "RobotNodeRevolute.h"
+#include "../CollisionDetection/CollisionModel.h"
 
 
 namespace VirtualRobot

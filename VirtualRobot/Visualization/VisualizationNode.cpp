@@ -14,6 +14,8 @@
 #include "VirtualRobot/VirtualRobotException.h"
 #include "VirtualRobot/XML/BaseIO.h"
 
+#include <fstream>
+
 namespace VirtualRobot
 {
     using std::cout;

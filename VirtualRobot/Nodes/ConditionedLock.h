@@ -29,8 +29,7 @@ public:
 
 typedef ConditionedLock<std::unique_lock<std::recursive_mutex> > ReadLock;
 typedef ConditionedLock<std::unique_lock<std::recursive_mutex> > WriteLock;
-//typedef ConditionedLock<boost::shared_lock<boost::shared_mutex> > ReadLock;
-//typedef ConditionedLock<boost::unique_lock<boost::shared_mutex> > WriteLock;
+
 typedef std::shared_ptr< ReadLock > ReadLockPtr;
 typedef std::shared_ptr< WriteLock > WriteLockPtr;
 

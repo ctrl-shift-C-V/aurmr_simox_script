@@ -24,9 +24,10 @@
 
 #include "../VirtualRobot.h"
 #include "VisualizationFactory.h"
-#include <map>
+
 #include <Eigen/Core>
-#include <Eigen/Geometry>
+
+#include <map>
 
 namespace VirtualRobot
 {

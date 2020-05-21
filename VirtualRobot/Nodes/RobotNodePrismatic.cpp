@@ -1,11 +1,13 @@
 
 #include "RobotNodePrismatic.h"
 #include "../Robot.h"
+#include "../VirtualRobotException.h"
+#include "../CollisionDetection/CollisionModel.h"
+
 #include <cmath>
 #include <algorithm>
 
 #include <Eigen/Geometry>
-#include "../VirtualRobotException.h"
 
 namespace VirtualRobot
 {

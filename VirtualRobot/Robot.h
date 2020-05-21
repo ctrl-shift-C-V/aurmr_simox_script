@@ -24,16 +24,13 @@
 
 #include "VirtualRobot.h"
 #include "SceneObject.h"
-#include "Nodes/Sensor.h"
 #include "Nodes/RobotNode.h"
-#include "Nodes/RobotNodeRevolute.h"
 #include "Nodes/ConditionedLock.h"
 
+#include <type_traits>
 #include <string>
-#include <map>
 #include <vector>
-
-#include <algorithm>
+#include <map>
 
 #include <Eigen/Core>
 
@@ -135,7 +132,6 @@ namespace VirtualRobot
         void setUpdateCollisionModel(bool enable) override;
 
         std::shared_ptr<Robot> shared_from_this() const;
-        //std::shared_ptr<Robot> shared_from_this() const { return boost::static_pointer_cast<Robot>(SceneObject::shared_from_this()); }
 
         /*!
             get the complete setup of all robot nodes
@@ -398,8 +394,6 @@ namespace VirtualRobot
 
         float getScaling();
         void setScaling(float scaling);
-        //float getRadianToMMfactor() const;
-        //void setRadianToMMfactor(float value);
 
         /**
          * @brief Inflates the collision models of all robot nodes of this robot. Useful for motion planning with a safety margin.

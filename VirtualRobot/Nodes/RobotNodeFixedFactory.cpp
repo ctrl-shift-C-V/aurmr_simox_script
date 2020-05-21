@@ -7,6 +7,7 @@
 #include "RobotNodeFixedFactory.h"
 #include "RobotNode.h"
 #include "RobotNodeFixed.h"
+#include "../CollisionDetection/CollisionModel.h"
 
 
 namespace VirtualRobot

@@ -12,6 +12,7 @@
 #include "../RobotConfig.h"
 #include "../SceneObjectSet.h"
 #include "../CollisionDetection/CollisionChecker.h"
+#include "../CollisionDetection/CollisionModel.h"
 #include "EndEffector.h"
 #include "../SceneObjectSet.h"
 

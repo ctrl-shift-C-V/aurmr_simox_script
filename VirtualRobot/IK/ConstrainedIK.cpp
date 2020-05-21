@@ -1,5 +1,7 @@
 #include "ConstrainedIK.h"
 
+#include "../RobotFactory.h"
+
 using namespace VirtualRobot;
 
 using std::cout;

@@ -1,16 +1,15 @@
 #include "SimoxURDFFactory.h"
 
-#include <assert.h>
 #include <filesystem>
 #include <iostream>
 #include <map>
-#include <stack>
 
 #include <urdf_model/model.h>
 #include <urdf_parser/urdf_parser.h>
 
 #include <VirtualRobot/Visualization/CoinVisualization/CoinVisualizationFactory.h>
 #include <VirtualRobot/RobotFactory.h>
+#include <VirtualRobot/CollisionDetection/CollisionModel.h>
 #include <VirtualRobot/Nodes/RobotNodeFactory.h>
 #include <VirtualRobot/Nodes/RobotNodeFixedFactory.h>
 #include <VirtualRobot/Nodes/RobotNodePrismaticFactory.h>

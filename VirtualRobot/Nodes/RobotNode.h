@@ -23,20 +23,13 @@
 #pragma once
 
 #include "../VirtualRobot.h"
-#include "../VirtualRobotException.h"
-#include "../VirtualRobot.h"
 
 #include "../SceneObject.h"
-#include "../RobotFactory.h"
-#include "../CollisionDetection/CollisionModel.h"
 #include "../Transformation/DHParameter.h"
 #include "../Visualization/VisualizationNode.h"
-#include "ConditionedLock.h"
 #include "Sensor.h"
 
 #include <Eigen/Core>
-#include <Eigen/Geometry>
-
 
 #include <string>
 #include <vector>

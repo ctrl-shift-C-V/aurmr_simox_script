@@ -5,9 +5,11 @@
 #include <VirtualRobot/Nodes/RobotNodeFixedFactory.h>
 #include <VirtualRobot/RuntimeEnvironment.h>
 #include <VirtualRobot/Robot.h>
+#include <VirtualRobot/CollisionDetection/CollisionModel.h>
 #include <VirtualRobot/Visualization/TriMeshModel.h>
 #include <VirtualRobot/Visualization/CoinVisualization/CoinVisualizationNode.h>
 #include <VirtualRobot/XML/RobotIO.h>
+#include <VirtualRobot/RobotFactory.h>
 
 int main(int argc, char* argv[])
 {

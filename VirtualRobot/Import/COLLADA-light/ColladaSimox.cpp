@@ -3,18 +3,17 @@
 #include <VirtualRobot/Nodes/RobotNodePrismatic.h>
 #include <VirtualRobot/Nodes/RobotNodeRevolute.h>
 #include <VirtualRobot/RobotNodeSet.h>
+#include <VirtualRobot/CollisionDetection/CollisionModel.h>
 #include <VirtualRobot/Visualization/CoinVisualization/CoinVisualizationNode.h>
+#include <VirtualRobot/RobotFactory.h>
 
 #include "inventor.h"
 #include "ColladaSimox.h"
-
-#include <boost/foreach.hpp>
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 
 using namespace std;
-//using namespace VirtualRobot;
 
 #define DBG_NODE(NAME) (this->name.compare(NAME)==0)
 
@@ -71,7 +70,7 @@ namespace Collada
         std::vector<VirtualRobot::RobotNodePtr> simoxRevoluteJoints;
         std::vector<VirtualRobot::RobotNodePtr> simoxPrismaticJoints;
 
-        BOOST_FOREACH(ColladaRobotNodePtr node, this->robotNodeSet)
+        for (ColladaRobotNodePtr node : this->robotNodeSet)
         {
             simoxRobotNodeSet.push_back(dynamic_pointer_cast<ColladaSimoxRobotNode>(node)->simoxRobotNode);
 
@@ -86,7 +85,7 @@ namespace Collada
             }
 
             vector<string> children;
-            BOOST_FOREACH(ColladaRobotNodePtr child, node->children)
+            for (ColladaRobotNodePtr child : node->children)
             children.push_back(child->name);
 
             childrenMap[dynamic_pointer_cast<ColladaSimoxRobotNode>(node)->simoxRobotNode] = children;
@@ -152,7 +151,7 @@ namespace Collada
         Eigen::Matrix4f preJointTransformation = Eigen::Matrix4f::Identity();
 
 
-        BOOST_FOREACH(pugi::xml_node node, this->preJoint)
+        for (pugi::xml_node node : this->preJoint)
         {
             preJointTransformation = preJointTransformation * getTransform(node, scaleFactor);
         }
@@ -163,7 +162,7 @@ namespace Collada
             cout << jointLimitLow << "," << jointLimitHigh << "," << acceleration << "," << deceleration << "," << velocity << "," << torque << endl;
             cout << this->joint_axis.name() << endl;
             preJointTransformation = Eigen::Matrix4f::Identity();
-            BOOST_FOREACH(pugi::xml_node node, this->preJoint)
+            for (pugi::xml_node node : this->preJoint)
             {
                 cout << getTransform(node) << endl;
                 preJointTransformation = preJointTransformation * getTransform(node, scaleFactor);
@@ -187,7 +186,7 @@ namespace Collada
             pugi::xml_node technique = rigidBodies[0].child("technique_common");
             float mass = boost::lexical_cast<float>(technique.child("mass").child_value());
             Eigen::Matrix4f massFrameTransformation = Eigen::Matrix4f::Identity();
-            BOOST_FOREACH(pugi::xpath_node trafo, technique.select_nodes(".//mass_frame/*"))
+            for (pugi::xpath_node trafo : technique.select_nodes(".//mass_frame/*"))
             {
                 massFrameTransformation = massFrameTransformation * getTransform(trafo.node(), 1000.0f);
             }
@@ -233,11 +232,11 @@ namespace Collada
         }
 
 #ifdef COLLADA_IMPORT_USE_SENSORS
-        BOOST_FOREACH(pugi::xml_node sensor, this->sensors)
+        for (pugi::xml_node sensor : this->sensors)
         {
             string sensorName = sensor.attribute("name").value();
             Eigen::Matrix4f sensorTransformation = Eigen::Matrix4f::Identity();
-            BOOST_FOREACH(pugi::xpath_node trafo, sensor.select_nodes(".//frame_origin/*"))
+            for (pugi::xpath_node trafo : sensor.select_nodes(".//frame_origin/*"))
             {
                 sensorTransformation = sensorTransformation * getTransform(trafo.node(), scaleFactor);
             }

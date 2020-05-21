@@ -23,16 +23,14 @@
 #pragma once
 
 #include "../VirtualRobot.h"
-#include "../Units.h"
-#include "../MathTools.h"
 #include "../Robot.h"
 #include "../Nodes/RobotNode.h"
+#include "../EndEffector/EndEffectorActor.h"
 #include "BaseIO.h"
 
 #include <string>
 #include <vector>
 #include <map>
-#include <fstream>
 
 
 

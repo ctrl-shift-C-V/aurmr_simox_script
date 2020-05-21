@@ -4,6 +4,7 @@
 #include "Trajectory.h"
 #include "VirtualRobotException.h"
 #include "CollisionDetection/CollisionChecker.h"
+#include "CollisionDetection/CollisionModel.h"
 #include "EndEffector/EndEffector.h"
 #include "math/Helpers.h"
 
