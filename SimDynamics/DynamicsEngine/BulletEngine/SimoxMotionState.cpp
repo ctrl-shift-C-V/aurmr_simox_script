@@ -68,7 +68,7 @@ namespace SimDynamics
         _transform = worldPose; // com position
 #ifdef _DEBUG
 
-        if (boost::math::isnan(_transform.getOrigin().x()) || boost::math::isnan(_transform.getOrigin().y()) || boost::math::isnan(_transform.getOrigin().z()))
+        if (std::isnan(_transform.getOrigin().x()) || std::isnan(_transform.getOrigin().y()) || std::isnan(_transform.getOrigin().z()))
         {
             VR_ERROR << "NAN transform!!!" << endl;
         }
@@ -143,7 +143,7 @@ namespace SimDynamics
                         float ja = float(bdr->getJointAngle(link.nodeJoint));
 #ifdef _DEBUG
 
-                        if (boost::math::isnan(ja))
+                        if (std::isnan(ja))
                         {
                             VR_ERROR << "NAN !!!" << endl;
                         }
