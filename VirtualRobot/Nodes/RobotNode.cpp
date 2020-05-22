@@ -156,7 +156,7 @@ namespace VirtualRobot
 
     void RobotNode::setJointValueNotInitialized(float q)
     {
-        VR_ASSERT_MESSAGE((!boost::math::isnan(q) && !boost::math::isinf(q)), "Not a valid number...");
+        VR_ASSERT_MESSAGE((!std::isnan(q) && !std::isinf(q)), "Not a valid number...");
 
         if (limitless)
         {
