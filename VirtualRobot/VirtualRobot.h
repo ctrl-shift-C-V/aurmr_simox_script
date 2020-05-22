@@ -243,6 +243,17 @@ namespace VirtualRobot
    }
 
 
+    /*!
+    Initialize the runtime envionment. This method calls VisualizationFactory::init().
+    */
+    void VIRTUAL_ROBOT_IMPORT_EXPORT init(int &argc, char* argv[], const std::string &appName);
+    void VIRTUAL_ROBOT_IMPORT_EXPORT init(const std::string &appName);
+
+    // init method is storing appName, since the c_string is passed by refrence to QT -> we must ensure that the string stays alive
+    VIRTUAL_ROBOT_IMPORT_EXPORT extern std::string globalAppName;
+
+} // namespace
+
 #define VR_INFO std::cout <<__FILE__ << ":" << __LINE__ << ": "
 #define VR_WARNING std::cerr <<__FILE__ << ":" << __LINE__ << " -Warning- "
 #define VR_ERROR std::cerr <<__FILE__ << ":" << __LINE__ << " - ERROR - "
@@ -254,27 +265,15 @@ namespace VirtualRobot
 #define VR_ASSERT_MESSAGE(a,b) do{}while(false)
 
 #else
-	/*!
-	This assert macro does nothing on RELEASE builds.
-	*/
-#define VR_ASSERT( a )  BOOST_ASSERT( a )
-	//THROW_VR_EXCEPTION_IF(!(a), "ASSERT failed (" << #a << ")" );
 
-	// we have to switch to boost 1.48 to allow messages (BOOST_ASSERT_MSG) ....
-#define VR_ASSERT_MESSAGE(a,b) BOOST_ASSERT(a)
-	//THROW_VR_EXCEPTION_IF(!(a), "ASSERT failed (" << #a << "): " << b );
+#include <boost/assert.hpp>
+
+/*!
+This assert macro does nothing on RELEASE builds.
+*/
+#define VR_ASSERT( a )  BOOST_ASSERT( a )
+
+#define VR_ASSERT_MESSAGE(a,b) BOOST_ASSERT_MSG(a, b)
 
 #endif
-
-
-    /*!
-    Initialize the runtime envionment. This method calls VisualizationFactory::init().
-    */
-    void VIRTUAL_ROBOT_IMPORT_EXPORT init(int &argc, char* argv[], const std::string &appName);
-    void VIRTUAL_ROBOT_IMPORT_EXPORT init(const std::string &appName);
-
-    // init method is storing appName, since the c_string is passed by refrence to QT -> we must ensure that the string stays alive
-    VIRTUAL_ROBOT_IMPORT_EXPORT extern std::string globalAppName;
-
-} // namespace
 
