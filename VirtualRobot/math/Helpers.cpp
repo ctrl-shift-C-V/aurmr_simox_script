@@ -19,6 +19,7 @@
  *             GNU Lesser General Public License
  */
 
+#include <SimoxUtility/eigen/EigenStdVector.h>
 #include "Helpers.h"
 #include "LinearInterpolatedOrientation.h"
 
