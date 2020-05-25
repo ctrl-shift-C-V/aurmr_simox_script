@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
     VirtualRobot::RuntimeEnvironment::processCommandLine(argc, argv);
     VirtualRobot::RuntimeEnvironment::print();
 
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
     // --robot "robots/iCub/iCub.xml"
     std::string filename("robots/ArmarIII/ArmarIII.xml");
     //std::string filename("C:/Projects/MMM/mmmtools/data/Model/Winter/mmm.xml");
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    cout << "Using robot at " << filename << endl;
+    std::cout << "Using robot at " << filename << std::endl;
 
     showRobotWindow rw(filename);
 

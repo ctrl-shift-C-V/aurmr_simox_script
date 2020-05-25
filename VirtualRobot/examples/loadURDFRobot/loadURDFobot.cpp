@@ -35,7 +35,7 @@ int main(int /*argc*/, char* /*argv*/[])
     RobotPtr r = f.loadFromFile(urdfFile);
 
     std::string outPath = std::filesystem::current_path().generic_string();
-    cout << "Saving converted file to " << outPath << "/urdf_output.xml..." << endl;
+    std::cout << "Saving converted file to " << outPath << "/urdf_output.xml..." << std::endl;
 
     RobotIO::saveXML(r, "urdf_output.xml", outPath);
 }

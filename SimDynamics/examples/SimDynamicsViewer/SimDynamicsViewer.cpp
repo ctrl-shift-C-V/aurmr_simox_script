@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
     VirtualRobot::RuntimeEnvironment::processCommandLine(argc, argv);
     VirtualRobot::RuntimeEnvironment::print();
 
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
     // --robot "robots/iCub/iCub.xml"
     //std::string filename("robots/iCub/iCub.xml");
     std::string filename("robots/ArmarIII/ArmarIII.xml");
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    cout << "Using robot at " << filename << endl;
+    std::cout << "Using robot at " << filename << std::endl;
 
     SimDynamicsWindow rw(filename);
 

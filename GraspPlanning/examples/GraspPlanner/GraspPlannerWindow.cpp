@@ -45,7 +45,7 @@ using namespace GraspStudio;
 GraspPlannerWindow::GraspPlannerWindow(std::string& robFile, std::string& eefName, std::string& preshape, std::string& objFile)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
 
     // init the random number generator
     this->robotFile = robFile;
@@ -322,7 +322,7 @@ void GraspPlannerWindow::loadObject(const string& objFile)
 
     //Eigen::Vector3f minS,maxS;
     //object->getCollisionModel()->getTriMeshModel()->getSize(minS,maxS);
-    //cout << "minS: \n" << minS << "\nMaxS:\n" << maxS << endl;
+    //cout << "minS: \n" << minS << "\nMaxS:\n" << maxS << std::endl;
     qualityMeasure.reset(new GraspStudio::GraspQualityMeasureWrenchSpace(object));
     //qualityMeasure->setVerbose(true);
     qualityMeasure->calculateObjectProperties();
@@ -347,7 +347,7 @@ void GraspPlannerWindow::loadRobot()
 
     if (!robot)
     {
-        VR_ERROR << " no robot at " << robotFile << endl;
+        VR_ERROR << " no robot at " << robotFile << std::endl;
         return;
     }
 
@@ -382,7 +382,7 @@ void GraspPlannerWindow::plan()
     eefCloned->setPropagatingJointValuesEnabled(UI.checkBoxPropagateJointValues->isChecked());
 
     int nr = planner->plan(nrGrasps, timeout);
-    VR_INFO << " Grasp planned:" << nr << endl;
+    VR_INFO << " Grasp planned:" << nr << std::endl;
     int start = static_cast<int>(grasps->getSize()) - nrGrasps - 1;
 
     if (start < 0)
@@ -525,14 +525,14 @@ void GraspPlannerWindow::save()
     }
     catch (VirtualRobotException& e)
     {
-        cout << " ERROR while saving object" << endl;
-        cout << e.what();
+        std::cout << " ERROR while saving object" << std::endl;
+        std::cout << e.what();
         return;
     }
 
     if (!ok)
     {
-        cout << " ERROR while saving object" << endl;
+        std::cout << " ERROR while saving object" << std::endl;
         return;
     }
 }
@@ -634,7 +634,7 @@ void GraspPlannerWindow::planObjectBatch()
                 for (auto bin : histogramFC)
                 {
                     fs  <<  ", " << static_cast<double>(bin) / graspSum;
-                    cout << i << ": " << bin << ", " << graspSum << ", " << static_cast<double>(bin) / graspSum << std::endl;
+                    std::cout << i << ": " << bin << ", " << graspSum << ", " << static_cast<double>(bin) / graspSum << std::endl;
                     i++;
                 }
                 for (auto bin : histogramFCWithCollisions)

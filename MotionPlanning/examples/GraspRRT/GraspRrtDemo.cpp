@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 {
     VirtualRobot::init(argc, argv, "GraspRrtDemo");
 
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     std::string filenameScene("/scenes/examples/GraspRrt/planning.xml");
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(filenameScene);
@@ -145,18 +145,18 @@ int main(int argc, char** argv)
     }
 
 
-    cout << "Using scene: " << filenameScene << endl;
-    cout << "Using start config: <" << startConfig << ">" << endl;
-    cout << "Using target object: <" << goalObject << ">" << endl;
-    cout << "Using environment collision model set: <" << colModel3 << ">" << endl;
-    cout << "Set 1:" << endl;
-    cout << "\t Using RobotNodeSet for planning: <" << rnsName << ">" << endl;
-    cout << "\t Using EEF for grasping: <" << eefName << ">" << endl;
-    cout << "\t Using robot collision model sets: <" << colModel1 << "> and <" << colModel2 << ">" << endl;
-    cout << "Set 2:" << endl;
-    cout << "\t Using RobotNodeSet for planning: <" << rnsNameB << ">" << endl;
-    cout << "\t Using EEF for grasping: <" << eefNameB << ">" << endl;
-    cout << "\t Using robot collision model sets: <" << colModel1B << "> and <" << colModel2B << ">" << endl;
+    std::cout << "Using scene: " << filenameScene << std::endl;
+    std::cout << "Using start config: <" << startConfig << ">" << std::endl;
+    std::cout << "Using target object: <" << goalObject << ">" << std::endl;
+    std::cout << "Using environment collision model set: <" << colModel3 << ">" << std::endl;
+    std::cout << "Set 1:" << std::endl;
+    std::cout << "\t Using RobotNodeSet for planning: <" << rnsName << ">" << std::endl;
+    std::cout << "\t Using EEF for grasping: <" << eefName << ">" << std::endl;
+    std::cout << "\t Using robot collision model sets: <" << colModel1 << "> and <" << colModel2 << ">" << std::endl;
+    std::cout << "Set 2:" << std::endl;
+    std::cout << "\t Using RobotNodeSet for planning: <" << rnsNameB << ">" << std::endl;
+    std::cout << "\t Using EEF for grasping: <" << eefNameB << ">" << std::endl;
+    std::cout << "\t Using robot collision model sets: <" << colModel1B << "> and <" << colModel2B << ">" << std::endl;
 
 
     GraspRrtWindow rw(filenameScene, startConfig, goalObject, rnsName, rnsNameB, eefName, eefNameB, colModel1, colModel1B, colModel2, colModel2B, colModel3);

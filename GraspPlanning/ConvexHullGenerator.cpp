@@ -220,7 +220,7 @@ namespace GraspStudio
         ConvexHull3D projectedHull;
         if (!CreateConvexHull(vProjectedPoints, projectedHull, false))
         {
-            cout << __FUNCTION__ << " Could not create hull of projected points, aborting..." << endl;
+            std::cout << __FUNCTION__ << " Could not create hull of projected points, aborting..." << std::endl;
             return false;
         }
         bool bRes = CreateIVModel(projectedHull, pStoreResult, false);
@@ -340,15 +340,15 @@ namespace GraspStudio
     {
         for (std::size_t i = 0; i < pointsInput.size(); i++)
         {
-            cout << "v" << i << ": " << pointsInput[i].p[0] << "," << pointsInput[i].p[1] << "," << pointsInput[i].p[2] << ","
-                 << pointsInput[i].n[0] << "," << pointsInput[i].n[1] << "," << pointsInput[i].n[2] << endl;
+            std::cout << "v" << i << ": " << pointsInput[i].p[0] << "," << pointsInput[i].p[1] << "," << pointsInput[i].p[2] << ","
+                 << pointsInput[i].n[0] << "," << pointsInput[i].n[1] << "," << pointsInput[i].n[2] << std::endl;
         }
     }
     void ConvexHullGenerator::PrintStatistics(VirtualRobot::MathTools::ConvexHull6DPtr convHull)
     {
         if (!convHull)
         {
-            GRASPSTUDIO_ERROR << " Null data to print" << endl;
+            GRASPSTUDIO_ERROR << " Null data to print" << std::endl;
             return;
         }
 
@@ -424,13 +424,13 @@ namespace GraspStudio
             }
         }
 
-        cout << "Conv Hull Bounds:" << endl;
-        cout << "\t\t x : " << minValue[0] << "," << maxValue[0] << endl;
-        cout << "\t\t y : " << minValue[1] << "," << maxValue[1] << endl;
-        cout << "\t\t z : " << minValue[2] << "," << maxValue[2] << endl;
-        cout << "\t\t nx: " << minValue[3] << "," << maxValue[3] << endl;
-        cout << "\t\t ny: " << minValue[4] << "," << maxValue[4] << endl;
-        cout << "\t\t nz: " << minValue[5] << "," << maxValue[5] << endl;
+        std::cout << "Conv Hull Bounds:" << std::endl;
+        std::cout << "\t\t x : " << minValue[0] << "," << maxValue[0] << std::endl;
+        std::cout << "\t\t y : " << minValue[1] << "," << maxValue[1] << std::endl;
+        std::cout << "\t\t z : " << minValue[2] << "," << maxValue[2] << std::endl;
+        std::cout << "\t\t nx: " << minValue[3] << "," << maxValue[3] << std::endl;
+        std::cout << "\t\t ny: " << minValue[4] << "," << maxValue[4] << std::endl;
+        std::cout << "\t\t nz: " << minValue[5] << "," << maxValue[5] << std::endl;
     }
 
     bool ConvexHullGenerator::checkVerticeOrientation(const Eigen::Vector3f& v1, const Eigen::Vector3f& v2, const Eigen::Vector3f& v3, const Eigen::Vector3f& n)

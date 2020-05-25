@@ -53,8 +53,8 @@ namespace GraspStudio
             GRASPSTUDIO_INFO << ": Searching " << nrGrasps << " grasps for EEF '" << approach->getEEF()->getName()
                              << "' and object '" << graspQuality->getObject()->getName() << "'.\n"
                              << "timeout set to " << timeOutMS << " ms.\n";
-            GRASPSTUDIO_INFO << ": Approach movements are generated with " << approach->getName() << endl;
-            GRASPSTUDIO_INFO << ": Grasps are evaluated with " << graspQuality->getName() << endl;
+            GRASPSTUDIO_INFO << ": Approach movements are generated with " << approach->getName() << std::endl;
+            GRASPSTUDIO_INFO << ": Grasps are evaluated with " << graspQuality->getName() << std::endl;
         }
 
         while (!timeout() && nGraspsCreated < nrGrasps)
@@ -81,7 +81,7 @@ namespace GraspStudio
             const auto dt = endt - startTime;
             const auto dtms = std::chrono::duration_cast<std::chrono::milliseconds>(dt);
             GRASPSTUDIO_INFO << ": created " << nGraspsCreated << " valid grasps in " << nLoop << " loops"
-                              << "\n took " << dtms.count() << " ms " << endl;
+                              << "\n took " << dtms.count() << " ms " << std::endl;
         }
 
         return nGraspsCreated;
@@ -153,7 +153,7 @@ namespace GraspStudio
 
             if (colChecker->checkCollision(eef->createSceneObjectSet(), obstacles))
             {
-                //                GRASPSTUDIO_INFO << ": Collision detected before closing fingers" << endl;
+                //                GRASPSTUDIO_INFO << ": Collision detected before closing fingers" << std::endl;
                 //return VirtualRobot::GraspPtr();
                 bRes = false;
             }
@@ -173,7 +173,7 @@ namespace GraspStudio
             {
                 if (verbose)
                 {
-                    VR_INFO << "Low number of contacts, retreating hand (might be useful for a small object)" << endl;
+                    VR_INFO << "Low number of contacts, retreating hand (might be useful for a small object)" << std::endl;
                 }
                 if (moveEEFAway(approach->getApproachDirGlobal(), 5.0f, 10))
                 {
@@ -190,7 +190,7 @@ namespace GraspStudio
 
                 if (colChecker->checkCollision(eef->createSceneObjectSet(), obstacles))
                 {
-                    //              GRASPSTUDIO_INFO << ": Collision detected after closing fingers" << endl;
+                    //              GRASPSTUDIO_INFO << ": Collision detected after closing fingers" << std::endl;
                     //return VirtualRobot::GraspPtr();
                     bRes = false;
                 }
@@ -240,7 +240,7 @@ namespace GraspStudio
         {
             if (verbose)
             {
-                GRASPSTUDIO_INFO << ": ignoring grasp hypothesis, low number of contacts" << endl;
+                GRASPSTUDIO_INFO << ": ignoring grasp hypothesis, low number of contacts" << std::endl;
             }
             // result not valid due to low number of contacts
             float ms = getTimeMS();
@@ -283,7 +283,7 @@ namespace GraspStudio
         // found valid grasp
         if (verbose)
         {
-            GRASPSTUDIO_INFO << ": Found grasp with " << contacts.size() << " contacts, score: " << score << endl;
+            GRASPSTUDIO_INFO << ": Found grasp with " << contacts.size() << " contacts, score: " << score << std::endl;
         }
 
         float ms = getTimeMS();

@@ -85,7 +85,7 @@ namespace Saba
 
             if (boundaryDist[i] == 0)
             {
-                SABA_WARNING << "Limits for joint " << robotJoints[i]->getName() << " not set correctly. Degenerated dimension (" << i << ") in C-Space." << endl;
+                SABA_WARNING << "Limits for joint " << robotJoints[i]->getName() << " not set correctly. Degenerated dimension (" << i << ") in C-Space." << std::endl;
             }
         }
 
@@ -98,7 +98,7 @@ namespace Saba
 
         checkForBorderlessDimensions(checkForBorderlessDims);
 
-//        SABA_INFO << " dimension: " << dimension << ", random Seed: " << randomSeed << endl;
+//        SABA_INFO << " dimension: " << dimension << ", random Seed: " << randomSeed << std::endl;
 
         // allocate configs
         maxNodes = maxConfigs;
@@ -175,7 +175,7 @@ namespace Saba
 
         if (bVerbose)
         {
-            SABA_INFO << "Checking " << s << " segments:" << endl;
+            SABA_INFO << "Checking " << s << " segments:" << std::endl;
         }
 
         for (unsigned int i = s - 1; i > 0; i--)
@@ -186,7 +186,7 @@ namespace Saba
 
             if (bVerbose && t2 - t1 > 0)
             {
-                cout << "i:" << i << "->t:" << t2 - t1 << " , ";
+                std::cout << "i:" << i << "->t:" << t2 - t1 << " , ";
             }
 
             if (!bColFree)
@@ -197,7 +197,7 @@ namespace Saba
 
         if (bVerbose)
         {
-            cout << endl;
+            std::cout << std::endl;
         }
 
         return true;
@@ -411,7 +411,7 @@ namespace Saba
         // SABA_ASSERT(config.rows() == dimension)
         SABA_ASSERT(nextConfig.rows() == dimension)
 
-        SABA_WARNING << "NYI..." << endl;
+        SABA_WARNING << "NYI..." << std::endl;
         // todo : oobb updates in VirtualRobot
         return 0.0f;
 
@@ -700,23 +700,23 @@ namespace Saba
     {
         if (config.rows() != dimension)
         {
-            SABA_ERROR << "Wrong dimensions..." << endl;
+            SABA_ERROR << "Wrong dimensions..." << std::endl;
         }
 
         streamsize pr = cout.precision(2);
-        cout << "<";
+        std::cout << "<";
 
         for (int i = 0; i < config.rows(); i++)
         {
-            cout << config[i];
+            std::cout << config[i];
 
             if (i != config.rows() - 1)
             {
-                cout << ",";
+                std::cout << ",";
             }
         }
 
-        cout << ">" << endl;
+        std::cout << ">" << std::endl;
         cout.precision(pr);
     }
 

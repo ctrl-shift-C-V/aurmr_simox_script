@@ -57,14 +57,14 @@ namespace GraspStudio
 
         if (printInfo)
         {
-            cout << "Compute Cone Points" << endl;
-            cout << "Point.p:" << endl;
-            cout << point.p << endl;
-            cout << "Point.n:" << endl;
-            cout << point.n << endl;
-            cout << "Point.force:" << endl;
-            cout << point.force << endl;
-            cout << "storeConePoints.size():" << storeConePoints.size() << endl;
+            std::cout << "Compute Cone Points" << std::endl;
+            std::cout << "Point.p:" << std::endl;
+            std::cout << point.p << std::endl;
+            std::cout << "Point.n:" << std::endl;
+            std::cout << point.n << std::endl;
+            std::cout << "Point.force:" << std::endl;
+            std::cout << point.force << std::endl;
+            std::cout << "storeConePoints.size():" << storeConePoints.size() << std::endl;
         }
 
         //Rotate generic friction cone to align with object normals
@@ -78,7 +78,7 @@ namespace GraspStudio
 
         if (printInfo)
         {
-            cout << "frictionConeSamples:" << frictionConeSamples << endl;
+            std::cout << "frictionConeSamples:" << frictionConeSamples << std::endl;
         }
 
         for (int i = 0; i < frictionConeSamples; i++)
@@ -93,13 +93,13 @@ namespace GraspStudio
 
             if (printInfo)
             {
-                cout << "Loop " << i << endl;
-                cout << "newConePoint.p:" << endl;
-                cout << newConePoint.p << endl;
-                cout << "newConePoint.n:" << endl;
-                cout << newConePoint.n << endl;
-                cout << "newConePoint.force:" << endl;
-                cout << newConePoint.force << endl;
+                std::cout << "Loop " << i << std::endl;
+                std::cout << "newConePoint.p:" << std::endl;
+                std::cout << newConePoint.p << std::endl;
+                std::cout << "newConePoint.n:" << std::endl;
+                std::cout << newConePoint.n << std::endl;
+                std::cout << "newConePoint.force:" << std::endl;
+                std::cout << newConePoint.force << std::endl;
             }
 
             storeConePoints.push_back(newConePoint);
@@ -112,14 +112,14 @@ namespace GraspStudio
 
         if (printInfo)
         {
-            cout << "Compute Cone Points" << endl;
-            cout << "Point.p:" << endl;
-            cout << point.p << endl;
-            cout << "Point.n:" << endl;
-            cout << point.n << endl;
-            cout << "Point.force:" << endl;
-            cout << point.force << endl;
-            cout << "storeConePoints.size():" << storeConePoints.size() << endl;
+            std::cout << "Compute Cone Points" << std::endl;
+            std::cout << "Point.p:" << std::endl;
+            std::cout << point.p << std::endl;
+            std::cout << "Point.n:" << std::endl;
+            std::cout << point.n << std::endl;
+            std::cout << "Point.force:" << std::endl;
+            std::cout << point.force << std::endl;
+            std::cout << "storeConePoints.size():" << storeConePoints.size() << std::endl;
         }
 
         //Rotate generic friction cone to align with object normals
@@ -133,7 +133,7 @@ namespace GraspStudio
 
         if (printInfo)
         {
-            cout << "frictionConeSamples:" << frictionConeSamples << endl;
+            std::cout << "frictionConeSamples:" << frictionConeSamples << std::endl;
         }
 
         for (int i = 0; i < frictionConeSamples; i++)
@@ -145,9 +145,9 @@ namespace GraspStudio
 
             if (printInfo)
             {
-                cout << "Loop " << i << endl;
-                cout << "newConePoint:" << endl;
-                cout << newConePoint << endl;
+                std::cout << "Loop " << i << std::endl;
+                std::cout << "newConePoint:" << std::endl;
+                std::cout << newConePoint << std::endl;
             }
 
             storeConePoints.push_back(newConePoint);

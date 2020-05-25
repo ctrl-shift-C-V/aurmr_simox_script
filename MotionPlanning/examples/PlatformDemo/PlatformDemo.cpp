@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 {
     VirtualRobot::init(argc, argv, "GraspRrtDemo");
 
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     std::string filenameScene("/scenes/examples/PlatformDemo/PlatformDemo.xml");
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(filenameScene);
@@ -73,10 +73,10 @@ int main(int argc, char** argv)
     }
 
 
-    cout << "Using scene: " << filenameScene << endl;
-    cout << "Using environment collision model set: <" << colModel2 << ">" << endl;
-    cout << "\t Using RobotNodeSet for planning: <" << rnsName << ">" << endl;
-    cout << "\t Using robot collision model set: <" << colModel1 << ">" << endl;
+    std::cout << "Using scene: " << filenameScene << std::endl;
+    std::cout << "Using environment collision model set: <" << colModel2 << ">" << std::endl;
+    std::cout << "\t Using RobotNodeSet for planning: <" << rnsName << ">" << std::endl;
+    std::cout << "\t Using robot collision model set: <" << colModel1 << ">" << std::endl;
 
     PlatformWindow rw(filenameScene, rnsName, colModel1, colModel2);
 

@@ -28,20 +28,20 @@ namespace VirtualRobot
     {
         if (printDecoration)
         {
-            cout << "**** Manipulation Object ****" << endl;
+            std::cout << "**** Manipulation Object ****" << std::endl;
         }
 
         Obstacle::print(false);
 
         for (size_t i = 0; i < graspSets.size(); i++)
         {
-            cout << "* Grasp set " << i << ":" << endl;
+            std::cout << "* Grasp set " << i << ":" << std::endl;
             graspSets[i]->print();
         }
 
         if (printDecoration)
         {
-            cout << endl;
+            std::cout << std::endl;
         }
     }
 
@@ -214,7 +214,7 @@ namespace VirtualRobot
 
         if (!result)
         {
-            VR_ERROR << "Cloning failed.." << endl;
+            VR_ERROR << "Cloning failed.." << std::endl;
             return result;
         }
 
@@ -246,7 +246,7 @@ namespace VirtualRobot
 
         if (!visualizationFactory)
         {
-            VR_ERROR << "Could not create factory for visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create factory for visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -256,7 +256,7 @@ namespace VirtualRobot
 
         if (!visu)
         {
-            VR_ERROR << "Could not create sphere visualization with visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create sphere visualization with visu type " << visualizationType << std::endl;
             return result;
         }
 

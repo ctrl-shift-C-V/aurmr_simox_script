@@ -123,7 +123,7 @@ namespace VirtualRobot
                 break;
 
             default:
-                VR_ERROR << "RobotNodeType nyi..." << endl;
+                VR_ERROR << "RobotNodeType nyi..." << std::endl;
 
         }
 
@@ -404,7 +404,7 @@ namespace VirtualRobot
 
         if (!res && verbose)
         {
-            VR_INFO << "Joint: " << getName() << ": joint value (" << jointValue << ") is out of joint boundaries (lo:" << jointLimitLo << ", hi: " << jointLimitHi << ")" << endl;
+            VR_INFO << "Joint: " << getName() << ": joint value (" << jointValue << ") is out of joint boundaries (lo:" << jointLimitLo << ", hi: " << jointLimitHi << ")" << std::endl;
         }
 
         return res;
@@ -420,56 +420,56 @@ namespace VirtualRobot
 
         if (printDecoration)
         {
-            cout << "******** RobotNode ********" << endl;
+            std::cout << "******** RobotNode ********" << std::endl;
         }
 
-        cout << "* Name: " << name << endl;
-        cout << "* Parent: ";
+        std::cout << "* Name: " << name << std::endl;
+        std::cout << "* Parent: ";
         SceneObjectPtr p = this->getParent();
 
         if (p)
         {
-            cout << p->getName() << endl;
+            std::cout << p->getName() << std::endl;
         }
         else
         {
-            cout << " -- " << endl;
+            std::cout << " -- " << std::endl;
         }
 
-        cout << "* Children: ";
+        std::cout << "* Children: ";
 
         if (this->getChildren().size() == 0)
         {
-            cout << " -- " << endl;
+            std::cout << " -- " << std::endl;
         }
 
         for (unsigned int i = 0; i < this->getChildren().size(); i++)
         {
-            cout << this->getChildren()[i]->getName() << ", ";
+            std::cout << this->getChildren()[i]->getName() << ", ";
         }
 
-        cout << endl;
+        std::cout << std::endl;
 
         physics.print();
 
-        cout << "* Limits: Lo: " << jointLimitLo << ", Hi: " << jointLimitHi << endl;
-        cout << "* Limitless: " << (limitless ? "true" : "false") << endl;
+        std::cout << "* Limits: Lo: " << jointLimitLo << ", Hi: " << jointLimitHi << std::endl;
+        std::cout << "* Limitless: " << (limitless ? "true" : "false") << std::endl;
         std::cout << "* max velocity " << maxVelocity  << " [m/s]" << std::endl;
         std::cout << "* max acceleration " << maxAcceleration  << " [m/s^2]" << std::endl;
         std::cout << "* max torque " << maxTorque  << " [Nm]" << std::endl;
-        cout << "* jointValue: " << this->getJointValue() << ", jointValueOffset: " << jointValueOffset << endl;
+        std::cout << "* jointValue: " << this->getJointValue() << ", jointValueOffset: " << jointValueOffset << std::endl;
 
         if (optionalDHParameter.isSet)
         {
-            cout << "* DH parameters: ";
-            cout << " a:" << optionalDHParameter.aMM() << ", d:" << optionalDHParameter.dMM() << ", alpha:" << optionalDHParameter.alphaRadian() << ", theta:" << optionalDHParameter.thetaRadian() << endl;
+            std::cout << "* DH parameters: ";
+            std::cout << " a:" << optionalDHParameter.aMM() << ", d:" << optionalDHParameter.dMM() << ", alpha:" << optionalDHParameter.alphaRadian() << ", theta:" << optionalDHParameter.thetaRadian() << std::endl;
         }
         else
         {
-            cout << "* DH parameters: not specified." << endl;
+            std::cout << "* DH parameters: not specified." << std::endl;
         }
 
-        cout << "* visualization model: " << endl;
+        std::cout << "* visualization model: " << std::endl;
 
         if (visualizationModel)
         {
@@ -477,10 +477,10 @@ namespace VirtualRobot
         }
         else
         {
-            cout << "  No visualization model" << endl;
+            std::cout << "  No visualization model" << std::endl;
         }
 
-        cout << "* collision model: " << endl;
+        std::cout << "* collision model: " << std::endl;
 
         if (collisionModel)
         {
@@ -488,30 +488,30 @@ namespace VirtualRobot
         }
         else
         {
-            cout << "  No collision model" << endl;
+            std::cout << "  No collision model" << std::endl;
         }
 
         if (initialized)
         {
-            cout << "* initialized: true" << endl;
+            std::cout << "* initialized: true" << std::endl;
         }
         else
         {
-            cout << "* initialized: false" << endl;
+            std::cout << "* initialized: false" << std::endl;
         }
 
         {
             // scope1
             std::ostringstream sos;
             sos << std::setiosflags(std::ios::fixed);
-            sos << "* localTransformation:" << endl << localTransformation << endl;
-            sos << "* globalPose:" << endl << getGlobalPose() << endl;
-            cout << sos.str();
+            sos << "* localTransformation:" << endl << localTransformation << std::endl;
+            sos << "* globalPose:" << endl << getGlobalPose() << std::endl;
+            std::cout << sos.str();
         } // scope1
 
         if (printDecoration)
         {
-            cout << "******** End RobotNode ********" << endl;
+            std::cout << "******** End RobotNode ********" << std::endl;
         }
 
         if (printChildren)
@@ -555,7 +555,7 @@ namespace VirtualRobot
 
         if (!result)
         {
-            VR_ERROR << "Cloning failed.." << endl;
+            VR_ERROR << "Cloning failed.." << std::endl;
             return result;
         }
 
@@ -724,7 +724,7 @@ namespace VirtualRobot
 
             if (!visualizationFactory)
             {
-                VR_WARNING << "No visualization factory for name " << visualizationType << endl;
+                VR_WARNING << "No visualization factory for name " << visualizationType << std::endl;
                 return;
             }
 
@@ -793,7 +793,7 @@ namespace VirtualRobot
 
             if (!visualizationFactory)
             {
-                VR_WARNING << "No visualization factory for name " << visualizationType << endl;
+                VR_WARNING << "No visualization factory for name " << visualizationType << std::endl;
                 return;
             }
 
@@ -918,7 +918,7 @@ namespace VirtualRobot
             }
             else
             {
-                VR_WARNING << "INTERNAL ERROR: getParent==robot but getRoot!=this ?! " << endl;
+                VR_WARNING << "INTERNAL ERROR: getParent==robot but getRoot!=this ?! " << std::endl;
             }
         }
 
@@ -1042,13 +1042,13 @@ namespace VirtualRobot
     std::string RobotNode::toXML(const std::string& basePath, const std::string& modelPathRelative /*= "models"*/, bool storeSensors)
     {
         std::stringstream ss;
-        ss << "\t<RobotNode name='" << name << "'>" << endl;
+        ss << "\t<RobotNode name='" << name << "'>" << std::endl;
 
         if (!localTransformation.isIdentity())
         {
-            ss << "\t\t<Transform>" << endl;
+            ss << "\t\t<Transform>" << std::endl;
             ss << BaseIO::toXML(localTransformation, "\t\t\t");
-            ss << "\t\t</Transform>" << endl;
+            ss << "\t\t</Transform>" << std::endl;
         }
 
         ss << _toXML(modelPathRelative);
@@ -1099,11 +1099,11 @@ namespace VirtualRobot
 
             if (crn)
             {
-                ss << "\t\t<Child name='" << children[i]->getName() << "'/>" << endl;
+                ss << "\t\t<Child name='" << children[i]->getName() << "'/>" << std::endl;
             }
         }
 
-        ss << "\t</RobotNode>" << endl << endl;
+        ss << "\t</RobotNode>" << endl << std::endl;
         return ss.str();
     }
 

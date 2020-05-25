@@ -883,40 +883,40 @@ namespace VirtualRobot
 
     void TriMeshModel::print()
     {
-        cout << "TriMeshModel\nNr of Faces:" << faces.size() << "\nNr of vertices:" << vertices.size() << endl;
+        std::cout << "TriMeshModel\nNr of Faces:" << faces.size() << "\nNr of vertices:" << vertices.size() << std::endl;
         boundingBox.print();
     }
 
 
     void TriMeshModel::printNormals()
     {
-        cout << "TriMeshModel Normals:" << endl;
+        std::cout << "TriMeshModel Normals:" << std::endl;
         std::streamsize pr = cout.precision(2);
         for (auto& face : faces)
         {
-            cout << "<" << face.normal(0) << "," << face.normal(1) << "," << face.normal(2) << ">,";
+            std::cout << "<" << face.normal(0) << "," << face.normal(1) << "," << face.normal(2) << ">,";
         }
         cout.precision(pr);
     }
 
     void TriMeshModel::printVertices()
     {
-        cout << "TriMeshModel Vertices:" << endl;
+        std::cout << "TriMeshModel Vertices:" << std::endl;
         std::streamsize pr = cout.precision(2);
         for (size_t i = 0; i < vertices.size(); i++)
         {
-            cout << vertices[i].transpose() << endl;
+            std::cout << vertices[i].transpose() << std::endl;
         }
         cout.precision(pr);
     }
 
     void TriMeshModel::printFaces()
     {
-        cout << "TriMeshModel Faces (vertex indices):" << endl;
+        std::cout << "TriMeshModel Faces (vertex indices):" << std::endl;
         std::streamsize pr = cout.precision(2);
         for (auto& face : faces)
         {
-            cout << face.id1 << "," << face.id2 << "," << face.id3 << endl;
+            std::cout << face.id1 << "," << face.id2 << "," << face.id3 << std::endl;
         }
         cout.precision(pr);
     }

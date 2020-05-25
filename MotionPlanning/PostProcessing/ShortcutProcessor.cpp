@@ -23,7 +23,7 @@ namespace Saba
     {
         if (!path || !cspace)
         {
-            SABA_ERROR << "NULL data" << endl;
+            SABA_ERROR << "NULL data" << std::endl;
             return 0;
         }
 
@@ -84,7 +84,7 @@ namespace Saba
             std::cout << "-- erased intermediate positions, distPath startIndex to (startIndex+1): " << distPathtest << std::endl;
         }
 
-        /*cout << "all2:" << endl;
+        /*cout << "all2:" << std::endl;
         optimizedPath->print();*/
 
         Eigen::VectorXf s = optimizedPath->getPoint(startIndex);
@@ -97,16 +97,16 @@ namespace Saba
         if (intermediatePath->getNrOfPoints() > 2)
         {
             newP = intermediatePath->getNrOfPoints() - 2;
-            /*cout << "before:" << endl;
+            /*cout << "before:" << std::endl;
             optimizedPath->print();
-            cout << "interm path:" << endl;
+            std::cout << "interm path:" << std::endl;
             intermediatePath->print();*/
             intermediatePath->erasePosition(intermediatePath->getNrOfPoints() - 1);
             intermediatePath->erasePosition(0);
-            /*cout << "interm path without start end:" << endl;
+            /*cout << "interm path without start end:" << std::endl;
             intermediatePath->print();*/
             optimizedPath->insertTrajectory(startIndex + 1, intermediatePath);
-            /*cout << "after:" << endl;
+            /*cout << "after:" << std::endl;
             optimizedPath->print(); */
         }
 
@@ -310,7 +310,7 @@ namespace Saba
         {
             if (verbose)
             {
-                cout << "Path is not shorter..." << endl;
+                std::cout << "Path is not shorter..." << std::endl;
             }
 
             return false;

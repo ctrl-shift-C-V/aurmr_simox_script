@@ -38305,7 +38305,7 @@ VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(c
 
     if (nPoints < 4)
     {
-        cout << __FUNCTION__ << "Error: Need at least 4 points (nr of points registered: " << nPoints << ")" << endl;
+        std::cout << __FUNCTION__ << "Error: Need at least 4 points (nr of points registered: " << nPoints << ")" << std::endl;
         return result;
     }
 
@@ -38339,7 +38339,7 @@ VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(c
     sprintf(flags, "qhull s Qt FA Pp");  // QJ is faster than Qt (but the results seem to be less accurate, see www.qhull.org documentation)
 #endif
 
-    //cout << "QHULL input: nVertices: " << pointsInput.size() << endl;
+    //cout << "QHULL input: nVertices: " << pointsInput.size() << std::endl;
     ConvertPoints(pointsInput, points);
     /*for (i=numpoints; i--; )
     rows[i]= points+dim*i;
@@ -38360,19 +38360,19 @@ VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(c
         //int convexNumFaces2 = qh num_facets;
         /*int convexNumVert2 =*/ simox_QHqh_setsize(qh, simox_QHqh_facetvertices(qh, facet_list, nullptr, false));
         /*
-        cout << "Numfacets1:" << convexNumFaces << endl;
-        cout << "Numvertices1:" << convexNumVert << endl;
-        cout << "Numfacets2:" << convexNumFaces2 << endl;
-        cout << "Numvertices2:" << convexNumVert2 << endl;*/
+        std::cout << "Numfacets1:" << convexNumFaces << std::endl;
+        std::cout << "Numvertices1:" << convexNumVert << std::endl;
+        std::cout << "Numfacets2:" << convexNumFaces2 << std::endl;
+        std::cout << "Numvertices2:" << convexNumVert2 << std::endl;*/
         /* 'qht->facet_list' contains the convex hull */
         Eigen::Vector3f v[3];
         int nIds[3];
         TriangleFace f;
 
         int nFacets = 0;
-        //cout << "Volume: " << qht-> totvol << endl;
+        //cout << "Volume: " << qht-> totvol << std::endl;
         simox_QHqh_getarea(qh, qh->facet_list);
-        //cout << "Volume: " << qht-> totvol << endl;
+        //cout << "Volume: " << qht-> totvol << std::endl;
         result->volume = qh-> totvol;
 
 
@@ -38412,13 +38412,13 @@ VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(c
 
             int c = 0;
 #ifdef CONVEXHULL_DEBUG_OUTPUT
-            cout << "FACET " << nFacets << ":" << endl;
+            std::cout << "FACET " << nFacets << ":" << std::endl;
 #endif
 
             FOREACHvertex_(facet->vertices)
             {
 #ifdef CONVEXHULL_DEBUG_OUTPUT
-                cout << vertex->point[0] << "," << vertex->point[1] << "," << vertex->point[2] << endl;
+                std::cout << vertex->point[0] << "," << vertex->point[1] << "," << vertex->point[2] << std::endl;
 #endif
 
                 if (c < 3)
@@ -38432,7 +38432,7 @@ VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(c
                 }
                 else
                 {
-                    cout << __FUNCTION__ << ": Error, facet with more than 3 vertices not supported ... face nr:" << nFacets << endl;
+                    std::cout << __FUNCTION__ << ": Error, facet with more than 3 vertices not supported ... face nr:" << nFacets << std::endl;
                 }
             }
             f.id1 = nIds[0];
@@ -38441,7 +38441,7 @@ VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(c
             f.normal[0] = facet->normal[0];
             f.normal[1] = facet->normal[1];
             f.normal[2] = facet->normal[2];
-            //cout << "Normal: " << f.m_Normal.x << "," << f.m_Normal.y << "," << f.m_Normal.z << endl;
+            //cout << "Normal: " << f.m_Normal.x << "," << f.m_Normal.y << "," << f.m_Normal.z << std::endl;
 
             double dist = simox_QHqh_distnorm(3, pCenter, facet->normal, &(facet->offset));
 
@@ -38456,8 +38456,8 @@ VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(c
         }
         result->maxDistFacetCenter = maxDist;
         /*
-        cout << "QHULL result: nVertices: " << storeResult.vertices.size() << endl;
-        cout << "QHULL result: nFactes: " << nFacets << endl;
+        std::cout << "QHULL result: nVertices: " << storeResult.vertices.size() << std::endl;
+        std::cout << "QHULL result: nFactes: " << nFacets << std::endl;
         */
     }
 
@@ -38472,7 +38472,7 @@ VirtualRobot::MathTools::ConvexHull3DPtr ConvexHullGenerator::CreateConvexHull(c
     //clock_t endT = clock();
     //long timeMS = (long)(((float)(endT - startT) / (float)CLOCKS_PER_SEC) * 1000.0);
 
-    //cout << __FUNCTION__ << ": Created convex hull in " << timeMS << " ms" << endl;
+    //cout << __FUNCTION__ << ": Created convex hull in " << timeMS << " ms" << std::endl;
     return result;
 }
 
@@ -38486,7 +38486,7 @@ VirtualRobot::MathTools::ConvexHull6DPtr ConvexHullGenerator::CreateConvexHull(s
 
     if (nPoints < 4)
     {
-        cout << __FUNCTION__ << "Error: Need at least 4 points (nr of points registered: " << nPoints << ")" << endl;
+        std::cout << __FUNCTION__ << "Error: Need at least 4 points (nr of points registered: " << nPoints << ")" << std::endl;
 
 
         return result;
@@ -38525,7 +38525,7 @@ VirtualRobot::MathTools::ConvexHull6DPtr ConvexHullGenerator::CreateConvexHull(s
     sprintf(flags, "qhull QJ FA Pp");  // QJ is faster than Qt (but the results seem to be less accurate, see www.qhull.org documentation)
 #endif
 
-    //cout << "QHULL input: nVertices: " << pointsInput.size() << endl;
+    //cout << "QHULL input: nVertices: " << pointsInput.size() << std::endl;
     //printVertices(pointsInput);
     ConvertPoints(pointsInput, points);
     simox_QHqhT simox_QHqh_qh;                /* Qhull's data structure.  First argument of most calls */
@@ -38605,8 +38605,8 @@ VirtualRobot::MathTools::ConvexHull6DPtr ConvexHullGenerator::CreateConvexHull(s
 
             if (printInfo)
             {
-                cout << "FACET " << nFacets << ":" << endl;
-                cout << "Offset:" << facet->offset << endl;
+                std::cout << "FACET " << nFacets << ":" << std::endl;
+                std::cout << "Offset:" << facet->offset << std::endl;
             }
 
 #endif
@@ -38617,7 +38617,7 @@ VirtualRobot::MathTools::ConvexHull6DPtr ConvexHullGenerator::CreateConvexHull(s
 
                 if (printInfo)
                 {
-                    cout << vertex->point[0] << "," << vertex->point[1] << "," << vertex->point[2] << "," << vertex->point[3] << "," << vertex->point[4] << "," << vertex->point[5] << endl;
+                    std::cout << vertex->point[0] << "," << vertex->point[1] << "," << vertex->point[2] << "," << vertex->point[3] << "," << vertex->point[4] << "," << vertex->point[5] << std::endl;
                 }
 
 #endif
@@ -38636,7 +38636,7 @@ VirtualRobot::MathTools::ConvexHull6DPtr ConvexHullGenerator::CreateConvexHull(s
                 }
                 else
                 {
-                    cout << __FUNCTION__ << ": Error, facet with more than 6 vertices not supported ... face nr:" << nFacets << endl;
+                    std::cout << __FUNCTION__ << ": Error, facet with more than 6 vertices not supported ... face nr:" << nFacets << std::endl;
                 }
             }
             f.id[0] = nIds[0];
@@ -38667,21 +38667,21 @@ VirtualRobot::MathTools::ConvexHull6DPtr ConvexHullGenerator::CreateConvexHull(s
 
                 if (facet->center)
                 {
-                    cout << "Center:" << facet->center[0] << "," << facet->center[1] << "," << facet->center[2] << "," << facet->center[3] << "," << facet->center[4] << "," << facet->center[5] << endl;
+                    std::cout << "Center:" << facet->center[0] << "," << facet->center[1] << "," << facet->center[2] << "," << facet->center[3] << "," << facet->center[4] << "," << facet->center[5] << std::endl;
                 }
 
-                cout << "distPlaneZero: " << f.distPlaneZero << ", distNormZero:" << f.distNormZero << ", QHULL_OFFSET:" << facet->offset << endl;
-                //cout << "Normal: " << f.normal.x << "," << f.normal.y << "," << f.normal.z << "," << f.normal.nx << "," << f.normal.ny << "," << f.normal.nz << endl;
+                std::cout << "distPlaneZero: " << f.distPlaneZero << ", distNormZero:" << f.distNormZero << ", QHULL_OFFSET:" << facet->offset << std::endl;
+                //cout << "Normal: " << f.normal.x << "," << f.normal.y << "," << f.normal.z << "," << f.normal.nx << "," << f.normal.ny << "," << f.normal.nz << std::endl;
             }
 
 #endif
             result->faces.push_back(f);
             nFacets++;
         }
-        /*cout << "QHULL result: created Vertices: " << storeResult.vertices.size() << endl;
-        cout << "QHULL result: created Faces: " << nFacets << endl;
-        cout << "QHULL result: nVertices: " << convexNumVert2 << endl;
-        cout << "QHULL result: nFactes: " << convexNumFaces2 << endl;*/
+        /*cout << "QHULL result: created Vertices: " << storeResult.vertices.size() << std::endl;
+        std::cout << "QHULL result: created Faces: " << nFacets << std::endl;
+        std::cout << "QHULL result: nVertices: " << convexNumVert2 << std::endl;
+        std::cout << "QHULL result: nFactes: " << convexNumFaces2 << std::endl;*/
     }
 
     simox_QHqh_freeqhull(qh, !simox_QHqh_ALL);
@@ -38694,7 +38694,7 @@ VirtualRobot::MathTools::ConvexHull6DPtr ConvexHullGenerator::CreateConvexHull(s
     //clock_t endT = clock();
     //long timeMS = (long)(((float)(endT - startT) / (float)CLOCKS_PER_SEC) * 1000.0);
 
-    //cout << __FUNCTION__ << ": Created 6D convex hull in " << timeMS << " ms" << endl;
+    //cout << __FUNCTION__ << ": Created 6D convex hull in " << timeMS << " ms" << std::endl;
 
     return result;
 }

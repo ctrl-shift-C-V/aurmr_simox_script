@@ -31,7 +31,7 @@ float TIMER_MS = 30.0f;
 ReachabilityMapWindow::ReachabilityMapWindow(std::string& sRobotFile, std::string& reachFile, std::string& objFile, std::string& eef)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
 
     robotFile = sRobotFile;
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(robotFile);
@@ -312,7 +312,7 @@ void ReachabilityMapWindow::buildReachVisu()
 
     WorkspaceRepresentation::WorkspaceCut2DPtr cutData = reachSpace->createCut(pose,reachSpace->getDiscretizeParameterTranslation(), false);
     int maxCoeff = cutData->entries.maxCoeff();
-    VR_INFO << "Max coeff:" << maxCoeff << endl;
+    VR_INFO << "Max coeff:" << maxCoeff << std::endl;
 
     SoNode *visualisationNode = CoinVisualizationFactory::getCoinVisualization(cutData, VirtualRobot::ColorMap(VirtualRobot::ColorMap::eHot), Eigen::Vector3f::UnitZ(), maxCoeff);
 
@@ -536,7 +536,7 @@ void ReachabilityMapWindow::selectEEF(int nr)
         return;
     }
 
-    cout << "Selecting EEF nr " << nr << endl;
+    std::cout << "Selecting EEF nr " << nr << std::endl;
 
     std::vector<EndEffectorPtr> eefs = robot->getEndEffectors();
     std::string tcp = "<not set>";
@@ -586,7 +586,7 @@ void ReachabilityMapWindow::selectEEF(std::string& eef)
 void ReachabilityMapWindow::loadRobot()
 {
     robotVisuSep->removeAllChildren();
-    cout << "Loading robot from " << robotFile << endl;
+    std::cout << "Loading robot from " << robotFile << std::endl;
 
     try
     {
@@ -594,14 +594,14 @@ void ReachabilityMapWindow::loadRobot()
     }
     catch (VirtualRobotException& e)
     {
-        cout << " ERROR while creating robot" << endl;
-        cout << e.what();
+        std::cout << " ERROR while creating robot" << std::endl;
+        std::cout << e.what();
         return;
     }
 
     if (!robot)
     {
-        cout << " ERROR while creating robot" << endl;
+        std::cout << " ERROR while creating robot" << std::endl;
         return;
     }
 
@@ -653,7 +653,7 @@ void ReachabilityMapWindow::loadReachFile(std::string filename)
         }
         catch (...)
         {
-            VR_ERROR << "Coulkd not load reachability file..." << endl;
+            VR_ERROR << "Coulkd not load reachability file..." << std::endl;
         }
     }
 
@@ -661,13 +661,13 @@ void ReachabilityMapWindow::loadReachFile(std::string filename)
     reachSpace->print();
     /*if (reachSpace->getNodeSet())
     {
-        cout << "Using RNS: " << reachSpace->getNodeSet()->getName() << endl;
+        std::cout << "Using RNS: " << reachSpace->getNodeSet()->getName() << std::endl;
         for (size_t i=0;i<robotNodeSets.size();i++)
         {
-            cout << "checking " << robotNodeSets[i]->getName() << endl;
+            std::cout << "checking " << robotNodeSets[i]->getName() << std::endl;
             if (robotNodeSets[i] == reachSpace->getNodeSet())
             {
-                cout << "Found RNS.." << endl;
+                std::cout << "Found RNS.." << std::endl;
                 //selectRNS(i);
             }
         }
@@ -693,7 +693,7 @@ void ReachabilityMapWindow::setupEnvironment()
 
     if (!RuntimeEnvironment::getDataFileAbsolute(objectFile))
     {
-        VR_ERROR << "No path to " << objectFile << endl;
+        VR_ERROR << "No path to " << objectFile << std::endl;
         return;
     }
 
@@ -703,7 +703,7 @@ void ReachabilityMapWindow::setupEnvironment()
     }
     catch(const VirtualRobotException &e)
     {
-        VR_ERROR << "Could not load " << objectFile << endl;
+        VR_ERROR << "Could not load " << objectFile << std::endl;
         return;
     }
 
@@ -734,7 +734,7 @@ void ReachabilityMapWindow::loadObjectFile(std::string filename)
     }
     catch(const VirtualRobotException &e)
     {
-        VR_ERROR << "Could not load " << filename << endl;
+        VR_ERROR << "Could not load " << filename << std::endl;
         return;
     }
 }

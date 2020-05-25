@@ -25,7 +25,7 @@ namespace Saba
     {
         //for(unsigned int i = 0; i < dimension; i++)
         //  pStoreConfig[i] = MathHelpers::getNormalRandom(mean[i], variance[i]);
-        cout << "todo" << endl;
+        std::cout << "todo" << std::endl;
 
     }
 
@@ -33,7 +33,7 @@ namespace Saba
     {
         //for(unsigned int i = 0; i < dimension; i++)
         //  pStoreConfig[i] = MathHelpers::getNormalRandom(mean[i], variance);
-        cout << "todo" << endl;
+        std::cout << "todo" << std::endl;
 
     }
 
@@ -46,12 +46,12 @@ namespace Saba
             m_pMetricWeights = new float[dimension];
             memcpy(m_pMetricWeights,pWeights,sizeof(float)*dimension);
         }*/
-        cout << "todo" << endl;
+        std::cout << "todo" << std::endl;
     }
 
     void Sampler::disableMetricWeights()
     {
-        cout << "todo" << endl;
+        std::cout << "todo" << std::endl;
     }
 
 }

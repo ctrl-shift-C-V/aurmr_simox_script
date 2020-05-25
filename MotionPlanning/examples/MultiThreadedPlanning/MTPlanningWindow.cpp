@@ -85,7 +85,7 @@ void MTPlanningWindow::timerCBPlanning(void* data, SoSensor* /*sensor*/)
         double runtime = (double)(mtWindow->endTime - mtWindow->startTime) / CLOCKS_PER_SEC;
         sText = "Runtime: " + QString::number(runtime) + "s";
         mtWindow->UI.labelRuntime->setText(sText);
-        cout << "Runtime = " << runtime << endl;
+        std::cout << "Runtime = " << runtime << std::endl;
         runtimeDisplayed = true;
     }
 }
@@ -108,10 +108,10 @@ void MTPlanningWindow::timerCBOptimize(void* data, SoSensor* /*sensor*/)
     {
         mtWindow->optiEndTime = clock();
         double runtime = (double)(mtWindow->optiEndTime - mtWindow->optiStartTime) / CLOCKS_PER_SEC;
-        cout << "Runtime:" << runtime << endl;
+        std::cout << "Runtime:" << runtime << std::endl;
         sText = "Optimizing Time: " + QString::number(runtime) + "s";
         mtWindow->UI.labelOptiTime->setText(sText);
-        cout << "Optimizing Time = " << runtime << endl;
+        std::cout << "Optimizing Time = " << runtime << std::endl;
         optiTimeDisplayed = true;
     }
 }
@@ -256,8 +256,8 @@ void MTPlanningWindow::stopOptimize()
     QString sText;
     sText = "Plan Time: " + QString::number(runtime) + "s";
     sQRuntimeLabel->setText(sText);
-    cout << "The total plantime is " << runtime << " ." << endl;
-    cout << "The number of the plannings is " << i << " ." << endl;
+    std::cout << "The total plantime is " << runtime << " ." << std::endl;
+    std::cout << "The number of the plannings is " << i << " ." << std::endl;
 }
 
 void MTPlanningWindow::optimizeSolution()
@@ -274,6 +274,6 @@ void MTPlanningWindow::optimizeSolution()
     QString sText;
     sText = "optimizing Time: " + QString::number(runtime) + "s";
     sQOptimizeTimeLabel->setText(sText);
-    cout << "The total optimization time is " << runtime << " ." << endl;
-    cout << "The number of the optimizations is " << i << " ." << endl;
+    std::cout << "The total optimization time is " << runtime << " ." << std::endl;
+    std::cout << "The number of the optimizations is " << i << " ." << std::endl;
 }*/

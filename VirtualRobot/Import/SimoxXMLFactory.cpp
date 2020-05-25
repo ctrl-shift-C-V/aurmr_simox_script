@@ -27,14 +27,14 @@ namespace VirtualRobot
         }
         catch (VirtualRobotException& e)
         {
-            VR_ERROR << " ERROR while loading robot from file:" << filename << endl;
+            VR_ERROR << " ERROR while loading robot from file:" << filename << std::endl;
             VR_ERROR << e.what();
             return robot;
         }
 
         if (!robot)
         {
-            VR_ERROR << " ERROR while loading robot from file:" << filename << endl;
+            VR_ERROR << " ERROR while loading robot from file:" << filename << std::endl;
         }
 
         return robot;

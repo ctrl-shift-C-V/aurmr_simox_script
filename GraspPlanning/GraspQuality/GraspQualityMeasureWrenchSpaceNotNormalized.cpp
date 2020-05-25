@@ -77,7 +77,7 @@ namespace GraspStudio
 
         if (verbose && printAll)
         {
-            cout << "GWS contact points:" << endl;
+            std::cout << "GWS contact points:" << std::endl;
         }
 
         for (objPointsIter = contactPointsM.begin(); objPointsIter != contactPointsM.end(); objPointsIter++)
@@ -97,7 +97,7 @@ namespace GraspStudio
 
         if (verbose && printAll)
         {
-            GRASPSTUDIO_INFO << " CENTER of GWS: " << endl;
+            GRASPSTUDIO_INFO << " CENTER of GWS: " << std::endl;
             MathTools::print(convexHullCenterGWS);
         }
 
@@ -110,7 +110,7 @@ namespace GraspStudio
 
         if (verbose && printAll)
         {
-            cout << "Convex hull points for wrench calculation:" << endl;
+            std::cout << "Convex hull points for wrench calculation:" << std::endl;
             printContacts(points);
         }
 
@@ -119,7 +119,7 @@ namespace GraspStudio
 
         if (verbose && printAll)
         {
-            cout << "Wrench points:" << endl;
+            std::cout << "Wrench points:" << std::endl;
             printContacts(wrenchPoints);
         }
 
@@ -182,7 +182,7 @@ namespace GraspStudio
 
         while (iter != points.end())
         {
-            cout << "# ";
+            std::cout << "# ";
             MathTools::print((*iter));
             iter++;
         }
@@ -192,7 +192,7 @@ namespace GraspStudio
     {
         if (!hull)
         {
-            GRASPSTUDIO_ERROR << "NULL data?!" << endl;
+            GRASPSTUDIO_ERROR << "NULL data?!" << std::endl;
             return VirtualRobot::MathTools::ContactPoint();
         }
 
@@ -203,7 +203,7 @@ namespace GraspStudio
 
         if (hull->vertices.size() == 0)
         {
-            cout << __FUNCTION__ << ": error, no vertices..." << endl;
+            std::cout << __FUNCTION__ << ": error, no vertices..." << std::endl;
             return resultCenter;
         }
 
@@ -303,7 +303,7 @@ namespace GraspStudio
 
         if (nWrongFacets > 0)
         {
-            cout << __FUNCTION__ << " Warning: offset of " << nWrongFacets << " facets >0 (# of facets:" << ch->faces.size() << ")" << endl;
+            std::cout << __FUNCTION__ << " Warning: offset of " << nWrongFacets << " facets >0 (# of facets:" << ch->faces.size() << ")" << std::endl;
         }
 
         return fRes;
@@ -315,7 +315,7 @@ namespace GraspStudio
 
         if (!convexHullGWS || convexHullGWS->vertices.size() == 0)
         {
-            cout << __FUNCTION__ << "No vertices in Grasp Wrench Space?! Maybe I was not initialized correctly..." << endl;
+            std::cout << __FUNCTION__ << "No vertices in Grasp Wrench Space?! Maybe I was not initialized correctly..." << std::endl;
             return 0.0;
         }
         return convexHullGWS->volume;
@@ -329,7 +329,7 @@ namespace GraspStudio
 
         if (!convexHullGWS || convexHullGWS->vertices.size() == 0)
         {
-            cout << __FUNCTION__ << "No vertices in Grasp Wrench Space?! Maybe I was not initialized correctly..." << endl;
+            std::cout << __FUNCTION__ << "No vertices in Grasp Wrench Space?! Maybe I was not initialized correctly..." << std::endl;
             return 0.0;
         }
 
@@ -339,10 +339,10 @@ namespace GraspStudio
 
         if (verbose)
         {
-            GRASPSTUDIO_INFO << endl;
-            cout << ": GWS volume    : " << convexHullGWS->volume << endl;
-            cout << ": GWS min Offset: " << fResOffsetGWS << endl;
-            cout << ": GraspQuality  : " << graspQuality << endl;
+            GRASPSTUDIO_INFO << std::endl;
+            std::cout << ": GWS volume    : " << convexHullGWS->volume << std::endl;
+            std::cout << ": GWS min Offset: " << fResOffsetGWS << std::endl;
+            std::cout << ": GraspQuality  : " << graspQuality << std::endl;
         }
 
         return true;

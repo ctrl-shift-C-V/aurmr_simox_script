@@ -40,7 +40,7 @@ float TIMER_MS = 30.0f;
 GraspQualityWindow::GraspQualityWindow(std::string& robFile, std::string& objFile)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
 
     this->robotFile = robFile;
     this->objectFile = objFile;
@@ -259,14 +259,14 @@ void GraspQualityWindow::evalRobustness()
     int r = rand() % evalPoses.size();
     Eigen::Matrix4f p = evalPoses.at(r);
     GraspStudio::GraspEvaluationPoseUncertainty::PoseEvalResult re = eval->evaluatePose(eef, object, p, qualityMeasure);
-    cout << "FC: " << re.forceClosure << endl;
-    cout << "init col: " << re.initialCollision << endl;
-    cout << "QUAL: " << re.quality << endl;
+    std::cout << "FC: " << re.forceClosure << std::endl;
+    std::cout << "init col: " << re.initialCollision << std::endl;
+    std::cout << "QUAL: " << re.quality << std::endl;
     */
     GraspStudio::GraspEvaluationPoseUncertainty::PoseEvalResults re = eval->evaluatePoses(eef, object, evalPoses, qualityMeasure);
     if (eef && grasp)
     {
-        VR_INFO << "#### Robustness for eef " << eef->getName() << ", grasp " << grasp->getName() << endl;
+        VR_INFO << "#### Robustness for eef " << eef->getName() << ", grasp " << grasp->getName() << std::endl;
     }
     re.print();
 }
@@ -288,7 +288,7 @@ void GraspQualityWindow::evalRobustnessAll()
             c.init(varMM, varDeg);
             GraspStudio::GraspEvaluationPoseUncertaintyPtr eval(new GraspStudio::GraspEvaluationPoseUncertainty(c));
 
-            VR_INFO << "Setting object pose to grasp " << grasp->getName() << endl;
+            VR_INFO << "Setting object pose to grasp " << grasp->getName() << std::endl;
             Eigen::Matrix4f pos =  eef->getTcp()->getGlobalPose();
             pos = grasp->getObjectTargetPoseGlobal(pos);
             object->setGlobalPose(pos);
@@ -297,14 +297,14 @@ void GraspQualityWindow::evalRobustnessAll()
             eef->openActors();
             contacts = eef->closeActors(object);
 
-            VR_INFO << contacts.size() << endl;
+            VR_INFO << contacts.size() << std::endl;
             if (contacts.size() == 0)
             {
                 continue;
             }
             std::vector<Eigen::Matrix4f> evalPoses = eval->generatePoses(object->getGlobalPose(), contacts, numSamples);
 
-            VR_INFO << evalPoses.size() << endl;
+            VR_INFO << evalPoses.size() << std::endl;
             if (evalPoses.size() == 0)
             {
                 continue;
@@ -313,7 +313,7 @@ void GraspQualityWindow::evalRobustnessAll()
             GraspStudio::GraspEvaluationPoseUncertainty::PoseEvalResults re = eval->evaluatePoses(eef, object, evalPoses, qualityMeasure);
             if (eef && grasp)
             {
-                VR_INFO << "#### Robustness for eef " << eef->getName() << ", grasp " << grasp->getName() << endl;
+                VR_INFO << "#### Robustness for eef " << eef->getName() << ", grasp " << grasp->getName() << std::endl;
             }
             re.print();
 
@@ -343,13 +343,13 @@ void GraspQualityWindow::loadObject()
         }
         catch (...)
         {
-            VR_ERROR << "Could not load file " << objectFile << endl;
+            VR_ERROR << "Could not load file " << objectFile << std::endl;
         }
     }
 
     if (!object)
     {
-        VR_INFO << "Building standard box" << endl;
+        VR_INFO << "Building standard box" << std::endl;
         ObstaclePtr o = Obstacle::createBox(50.0f, 50.0f, 10.0f);
         object = ManipulationObject::createFromMesh(o->getVisualization()->getTriMeshModel());
     }
@@ -370,7 +370,7 @@ void GraspQualityWindow::loadRobot()
 
     if (!robot)
     {
-        VR_ERROR << " no robot at " << robotFile << endl;
+        VR_ERROR << " no robot at " << robotFile << std::endl;
         return;
     }
 
@@ -396,7 +396,7 @@ void GraspQualityWindow::objectToGrasp()
 {
     if (object && grasp && eef->getTcp())
     {
-        VR_INFO << "Setting object pose to grasp " << grasp->getName() << endl;
+        VR_INFO << "Setting object pose to grasp " << grasp->getName() << std::endl;
         Eigen::Matrix4f pos =  eef->getTcp()->getGlobalPose();
         pos = grasp->getObjectTargetPoseGlobal(pos);
         object->setGlobalPose(pos);
@@ -413,17 +413,17 @@ void GraspQualityWindow::graspQuality()
         float volume = qualityMeasure->getVolumeGraspMeasure();
         float epsilon = qualityMeasure->getGraspQuality();
         bool fc = qualityMeasure->isGraspForceClosure();
-        cout << "Grasp Quality (epsilon measure):" << epsilon << endl;
-        cout << "v measure:" << volume << endl;
-        cout << "Force closure:";
+        std::cout << "Grasp Quality (epsilon measure):" << epsilon << std::endl;
+        std::cout << "v measure:" << volume << std::endl;
+        std::cout << "Force closure:";
 
         if (fc)
         {
-            cout << "yes" << endl;
+            std::cout << "yes" << std::endl;
         }
         else
         {
-            cout << "no" << endl;
+            std::cout << "no" << std::endl;
         }
 
     }
@@ -475,11 +475,11 @@ void GraspQualityWindow::setGraspComboBox()
 
     if (!grasps || grasps->getSize() == 0)
     {
-        VR_INFO << "No grasps found for eef " << eef->getName() << endl;
+        VR_INFO << "No grasps found for eef " << eef->getName() << std::endl;
         return;
     }
 
-    VR_INFO << "Found " << grasps->getSize() << " grasps for eef " << eef->getName() << endl;
+    VR_INFO << "Found " << grasps->getSize() << " grasps for eef " << eef->getName() << std::endl;
 
     for (size_t i = 0; i < grasps->getSize(); i++)
     {
@@ -539,15 +539,15 @@ void GraspQualityWindow::updateObject(float x[6])
 {
     if (object)
     {
-        //cout << "getGlobalPose robot:" << endl << robotEEF->getGlobalPose() << endl;
-        //cout << "getGlobalPose TCP:" << endl <<  robotEEF_EEF->getTcp()->getGlobalPose() << endl;
+        //cout << "getGlobalPose robot:" << endl << robotEEF->getGlobalPose() << std::endl;
+        //cout << "getGlobalPose TCP:" << endl <<  robotEEF_EEF->getTcp()->getGlobalPose() << std::endl;
         Eigen::Matrix4f m;
         MathTools::posrpy2eigen4f(x, m);
 
         m = object->getGlobalPose() * m;
         object->setGlobalPose(m);
-        cout << "object " << endl;
-        cout << m << endl;
+        std::cout << "object " << std::endl;
+        std::cout << m << std::endl;
 
     }
 
@@ -721,22 +721,22 @@ void GraspQualityWindow::showGWS()
     // convex hull
     VirtualRobot::MathTools::ConvexHull6DPtr ch1 = GraspStudio::ConvexHullGenerator::CreateConvexHull(wrenchP);
     float minO = GraspStudio::GraspQualityMeasureWrenchSpace::minOffset(ch1);
-    cout << "minOffset:" << minO << endl;
+    std::cout << "minOffset:" << minO << std::endl;
     std::vector<MathTools::TriangleFace6D>::iterator faceIter;
-    cout << "Distances to Origin:" << endl;
+    std::cout << "Distances to Origin:" << std::endl;
 
     for (faceIter = ch1->faces.begin(); faceIter != ch1->faces.end(); faceIter++)
     {
-        cout << faceIter->distPlaneZero << ", ";
+        std::cout << faceIter->distPlaneZero << ", ";
 
         if (faceIter->distPlaneZero > 1e-4)
         {
-            cout << "<-- not force closure " << endl;
+            std::cout << "<-- not force closure " << std::endl;
         }
 
     }
 
-    cout << endl;
+    std::cout << std::endl;
     // ch visu
     GraspStudio::CoinConvexHullVisualizationPtr visu(new GraspStudio::CoinConvexHullVisualization(ch1, false));
     SoSeparator* chV = visu->getCoinVisualization();

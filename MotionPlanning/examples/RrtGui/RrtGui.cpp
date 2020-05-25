@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 {
     VirtualRobot::init(argc, argv, "RRT Demo Gui");
 
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     std::string filenameScene("scenes/examples/RrtGui/planning.xml");
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(filenameScene);
@@ -99,12 +99,12 @@ int main(int argc, char* argv[])
     }
 
 
-    cout << "Using scene: " << filenameScene << endl;
-    cout << "Using start config: " << startConfig << endl;
-    cout << "Using goal config: " << goalConfig << endl;
-    cout << "Using RobotNodeSet for planning: " << rnsName << endl;
-    cout << "Using robot collision model sets: " << colModel1 << " and " << colModel2 << endl;
-    cout << "Using environment collision model set: " << colModel3 << endl;
+    std::cout << "Using scene: " << filenameScene << std::endl;
+    std::cout << "Using start config: " << startConfig << std::endl;
+    std::cout << "Using goal config: " << goalConfig << std::endl;
+    std::cout << "Using RobotNodeSet for planning: " << rnsName << std::endl;
+    std::cout << "Using robot collision model sets: " << colModel1 << " and " << colModel2 << std::endl;
+    std::cout << "Using environment collision model set: " << colModel3 << std::endl;
 
 
     RrtGuiWindow rw(filenameScene, startConfig, goalConfig, rnsName, colModel1, colModel2, colModel3);

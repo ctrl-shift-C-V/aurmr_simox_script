@@ -75,7 +75,7 @@ namespace VirtualRobot
 
         if (!visualizationFactory)
         {
-            VR_ERROR << "Could not create factory for visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create factory for visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -90,7 +90,7 @@ namespace VirtualRobot
 
         if (!visu)
         {
-            VR_ERROR << "Could not create box visualization with visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create box visualization with visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -128,7 +128,7 @@ namespace VirtualRobot
 
         if (!visualizationFactory)
         {
-            VR_ERROR << "Could not create factory for visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create factory for visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -141,7 +141,7 @@ namespace VirtualRobot
         */
         if (!visu)
         {
-            VR_ERROR << "Could not create sphere visualization with visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create sphere visualization with visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -180,7 +180,7 @@ namespace VirtualRobot
 
         if (!visualizationFactory)
         {
-            VR_ERROR << "Could not create factory for visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create factory for visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -193,7 +193,7 @@ namespace VirtualRobot
         */
         if (!visu)
         {
-            VR_ERROR << "Could not create cylinder visualization with visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create cylinder visualization with visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -234,7 +234,7 @@ namespace VirtualRobot
 
         if (!visualizationFactory)
         {
-            VR_ERROR << "Could not create factory for visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create factory for visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -244,7 +244,7 @@ namespace VirtualRobot
 
         if (!visu)
         {
-            VR_ERROR << "Could not create sphere visualization with visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create sphere visualization with visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -268,15 +268,15 @@ namespace VirtualRobot
     {
         if (printDecoration)
         {
-            cout << "**** Obstacle ****" << endl;
+            std::cout << "**** Obstacle ****" << std::endl;
         }
 
         SceneObject::print(false);
-        cout << " * id: " << id << endl;
+        std::cout << " * id: " << id << std::endl;
 
         if (printDecoration)
         {
-            cout << endl;
+            std::cout << std::endl;
         }
     }
 
@@ -300,7 +300,7 @@ namespace VirtualRobot
 
         if (!result)
         {
-            VR_ERROR << "Cloning failed.." << endl;
+            VR_ERROR << "Cloning failed.." << std::endl;
             return result;
         }
 

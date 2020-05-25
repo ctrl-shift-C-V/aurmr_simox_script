@@ -25,14 +25,14 @@ namespace VirtualRobot
 
     float PoseQualityMeasurement::getPoseQuality()
     {
-        VR_WARNING << "Please use derived classes..." << endl;
+        VR_WARNING << "Please use derived classes..." << std::endl;
         return 0.0f;
     }
 
     float PoseQualityMeasurement::getPoseQuality(const Eigen::VectorXf& /*direction*/)
     {
         // VR_ASSERT(direction.rows() == 3 || direction.rows() == 6);
-        VR_WARNING << "Please use derived classes..." << endl;
+        VR_WARNING << "Please use derived classes..." << std::endl;
         return 0.0f;
     }
 

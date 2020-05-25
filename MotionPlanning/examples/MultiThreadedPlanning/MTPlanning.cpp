@@ -19,16 +19,16 @@ int main(int argc, char** argv)
 {
     SoDB::init();
     SoQt::init(argc, argv, "MT");
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     if (!CollisionChecker::IsSupported_Multithreading_MultipleColCheckers())
     {
-        cout << " The collision detection library that is linked to simox does not support multi threading. Aborting...." << endl;
+        std::cout << " The collision detection library that is linked to simox does not support multi threading. Aborting...." << std::endl;
         return -1;
     }
 
 #ifdef WIN32
-    cout << "Visual Studio users: Be sure to start this example with <ctrl>+F5 (RELEASE mode) for full performance (otherwise only 1 thread will be used)" << endl;
+    std::cout << "Visual Studio users: Be sure to start this example with <ctrl>+F5 (RELEASE mode) for full performance (otherwise only 1 thread will be used)" << std::endl;
 #endif
 
     try
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
         ;
     }
 
-    cout << " --- END --- " << endl;
+    std::cout << " --- END --- " << std::endl;
 
     return 0;
 }

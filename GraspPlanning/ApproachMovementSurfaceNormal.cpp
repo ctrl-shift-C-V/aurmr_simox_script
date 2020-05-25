@@ -85,7 +85,7 @@ namespace GraspStudio
 
         if (!getPositionOnObject(position, approachDir))
         {
-            GRASPSTUDIO_ERROR << "no position on object?!" << endl;
+            GRASPSTUDIO_ERROR << "no position on object?!" << std::endl;
             return pose;
         }
 
@@ -158,7 +158,7 @@ namespace GraspStudio
 
             if (loop > 1000)
             {
-                VR_ERROR << "INTERNAL ERROR, aborting..." << endl;
+                VR_ERROR << "INTERNAL ERROR, aborting..." << std::endl;
                 return false;
             }
 

@@ -106,13 +106,13 @@ namespace VirtualRobot
         {
             if (unit.isLength())
             {
-                VR_WARNING << "No 'lo' attribute in <Limits> tag. Assuming -1000 [mm]." << endl;
+                VR_WARNING << "No 'lo' attribute in <Limits> tag. Assuming -1000 [mm]." << std::endl;
                 jointLimitLo = -1000.0f;
                 unit = Units("mm");
             }
             else
             {
-                VR_WARNING << "No 'lo' attribute in <Limits> tag. Assuming -180 [deg]." << endl;
+                VR_WARNING << "No 'lo' attribute in <Limits> tag. Assuming -180 [deg]." << std::endl;
                 jointLimitLo = float(-M_PI);
                 unit = Units("rad");
             }
@@ -126,13 +126,13 @@ namespace VirtualRobot
         {
             if (unit.isLength())
             {
-                VR_WARNING << "No 'hi' attribute in <Limits> tag. Assuming 1000 [mm]." << endl;
+                VR_WARNING << "No 'hi' attribute in <Limits> tag. Assuming 1000 [mm]." << std::endl;
                 jointLimitLo = 1000.0f;
                 unit = Units("mm");
             }
             else
             {
-                VR_WARNING << "No 'hi' attribute in <Limits> tag. Assuming 180 [deg]." << endl;
+                VR_WARNING << "No 'hi' attribute in <Limits> tag. Assuming 180 [deg]." << std::endl;
                 jointLimitHi = float(M_PI);
                 unit = Units("rad");
             }
@@ -161,7 +161,7 @@ namespace VirtualRobot
             if (limitless && unit.isAngle() && (unit.toDegree(jointLimitHi) - unit.toDegree(jointLimitLo) != 360))
             {
                 VR_WARNING << "Limitless Joint: Angular distance between 'lo' and 'hi' attributes should equal 2*pi [rad] or 360 [deg]." << endl
-                           << "Setting 'lo' to -pi and 'hi' to pi [rad]..." << endl;
+                           << "Setting 'lo' to -pi and 'hi' to pi [rad]..." << std::endl;
                 jointLimitLo = float(-M_PI);
                 jointLimitHi = float(M_PI);
             }
@@ -173,7 +173,7 @@ namespace VirtualRobot
     {
         if (!rn || !sensorXMLNode)
         {
-            VR_ERROR << "NULL DATA ?!" << endl;
+            VR_ERROR << "NULL DATA ?!" << std::endl;
             return false;
         }
 
@@ -188,7 +188,7 @@ namespace VirtualRobot
         }
         else
         {
-            VR_WARNING << "No 'type' attribute for <Sensor> tag. Skipping Sensor definition of RobotNode " << rn->getName() << "!" << endl;
+            VR_WARNING << "No 'type' attribute for <Sensor> tag. Skipping Sensor definition of RobotNode " << rn->getName() << "!" << std::endl;
             return false;
         }
 
@@ -203,7 +203,7 @@ namespace VirtualRobot
         }
         else
         {
-            VR_WARNING << "No Factory found for sensor of type " << sensorType << ". Skipping Sensor definition of RobotNode " << rn->getName() << "!" << endl;
+            VR_WARNING << "No Factory found for sensor of type " << sensorType << ". Skipping Sensor definition of RobotNode " << rn->getName() << "!" << std::endl;
             return false;
         }
 
@@ -258,7 +258,7 @@ namespace VirtualRobot
         }
         else
         {
-            VR_WARNING << "No 'type' attribute for <Joint> tag. Assuming fixed joint for RobotNode " << robotNodeName << "!" << endl;
+            VR_WARNING << "No 'type' attribute for <Joint> tag. Assuming fixed joint for RobotNode " << robotNodeName << "!" << std::endl;
             jointType = RobotNodeFixedFactory::getName();
         }
 
@@ -506,7 +506,7 @@ namespace VirtualRobot
         {
             if (scaleVisu)
             {
-                VR_WARNING << "Ignoring ScaleVisualization in Revolute joint." << endl;
+                VR_WARNING << "Ignoring ScaleVisualization in Revolute joint." << std::endl;
                 scaleVisu = false;
             }
 
@@ -519,7 +519,7 @@ namespace VirtualRobot
             else
             {
                 // silently setting axis to (0,0,1)
-                //VR_WARNING << "Joint '" << robotNodeName << "' without 'axis' tag. Setting rotation axis to (0,0,1)." << endl;
+                //VR_WARNING << "Joint '" << robotNodeName << "' without 'axis' tag. Setting rotation axis to (0,0,1)." << std::endl;
                 axis << 0, 0, 1.0f;
                 //THROW_VR_EXCEPTION("joint '" << robotNodeName << "' wrongly defined, expecting 'axis' tag." << endl);
             }
@@ -626,7 +626,7 @@ namespace VirtualRobot
             ss << robo->getType() << "_Node_" << robotNodeCounter;
             robotNodeName = ss.str();
             robotNodeCounter++;
-            VR_WARNING << "RobotNode definition expects attribute 'name'. Setting name to " << robotNodeName << endl;
+            VR_WARNING << "RobotNode definition expects attribute 'name'. Setting name to " << robotNodeName << std::endl;
         }
 
 
@@ -797,7 +797,7 @@ namespace VirtualRobot
                 }
                 else
                 {
-                    VR_WARNING << "VisualizationFactory of type '" << visuFileType << "' not present. Ignoring Visualization data." << endl;
+                    VR_WARNING << "VisualizationFactory of type '" << visuFileType << "' not present. Ignoring Visualization data." << std::endl;
                 }
             }
         }
@@ -835,7 +835,7 @@ namespace VirtualRobot
                 std::filesystem::path filenameBasePath(basePath);
 
                 std::filesystem::path filenameNewComplete = filenameBasePath / filenameNew;
-                VR_INFO << "Searching robot: " << filenameNewComplete.string() << endl;
+                VR_INFO << "Searching robot: " << filenameNewComplete.string() << std::endl;
 
                 try
                 {
@@ -1150,7 +1150,7 @@ namespace VirtualRobot
             }
             else
             {
-                VR_WARNING << "Ignoring unknown attribute in EEF <" << endeffectorName << "> definition:" << attributeName << endl;
+                VR_WARNING << "Ignoring unknown attribute in EEF <" << endeffectorName << "> definition:" << attributeName << std::endl;
             }
 
             attr = attr->next_attribute();
@@ -1179,7 +1179,7 @@ namespace VirtualRobot
                 }
                 else
                 {
-                    VR_ERROR << "There should only be one <static> tag inside <endeffector> tags" << endl;
+                    VR_ERROR << "There should only be one <static> tag inside <endeffector> tags" << std::endl;
                 }
             }
             else if ("preshape" == nodeName)
@@ -1430,7 +1430,7 @@ namespace VirtualRobot
 
         if (!RuntimeEnvironment::getDataFileAbsolute(fullFile))
         {
-            VR_ERROR << "Could not open XML file:" << xmlFile << endl;
+            VR_ERROR << "Could not open XML file:" << xmlFile << std::endl;
             return RobotPtr();
         }
 
@@ -1439,7 +1439,7 @@ namespace VirtualRobot
 
         if (!in.is_open())
         {
-            VR_ERROR << "Could not open XML file:" << fullFile << endl;
+            VR_ERROR << "Could not open XML file:" << fullFile << std::endl;
             return RobotPtr();
         }
 
@@ -1456,7 +1456,7 @@ namespace VirtualRobot
 
         if (!res)
         {
-            VR_ERROR << "Error while parsing file " << fullFile << endl;
+            VR_ERROR << "Error while parsing file " << fullFile << std::endl;
         }
 
         res->applyJointValues();
@@ -1478,7 +1478,7 @@ namespace VirtualRobot
 
         if (std::filesystem::exists(modelDirComplete) && !std::filesystem::is_directory(modelDirComplete))
         {
-            VR_ERROR << "Could not create model directory (existing & !dir)  " << pModelDir.string() << endl;
+            VR_ERROR << "Could not create model directory (existing & !dir)  " << pModelDir.string() << std::endl;
             return false;
         }
 
@@ -1486,7 +1486,7 @@ namespace VirtualRobot
         {
             if (!std::filesystem::create_directories(modelDirComplete))
             {
-                VR_ERROR << "Could not create model dir  " << modelDirComplete.string() << endl;
+                VR_ERROR << "Could not create model dir  " << modelDirComplete.string() << std::endl;
                 return false;
             }
         }
@@ -1495,7 +1495,7 @@ namespace VirtualRobot
 
         if (!f)
         {
-            VR_ERROR << "Could not create file " << fnComplete.string() << endl;
+            VR_ERROR << "Could not create file " << fnComplete.string() << std::endl;
             return false;
         }
 

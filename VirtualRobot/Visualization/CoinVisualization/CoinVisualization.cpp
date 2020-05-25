@@ -106,7 +106,7 @@ namespace VirtualRobot
     {
         if (which >= visualizationNodes.size())
         {
-            VR_WARNING << "Could not find visualizationNode..." << endl;
+            VR_WARNING << "Could not find visualizationNode..." << std::endl;
             return false;
         }
 
@@ -142,7 +142,7 @@ namespace VirtualRobot
 
         if (!isVisualizationNodeRegistered(visualizationNode))
         {
-            VR_WARNING << "Could not find visualizationNode..." << endl;
+            VR_WARNING << "Could not find visualizationNode..." << std::endl;
             return false;
         }
 

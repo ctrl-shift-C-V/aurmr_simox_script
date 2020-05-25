@@ -70,7 +70,7 @@ namespace SimDynamics
 
         if (std::isnan(_transform.getOrigin().x()) || std::isnan(_transform.getOrigin().y()) || std::isnan(_transform.getOrigin().z()))
         {
-            VR_ERROR << "NAN transform!!!" << endl;
+            VR_ERROR << "NAN transform!!!" << std::endl;
         }
 
 #endif
@@ -145,7 +145,7 @@ namespace SimDynamics
 
                         if (std::isnan(ja))
                         {
-                            VR_ERROR << "NAN !!!" << endl;
+                            VR_ERROR << "NAN !!!" << std::endl;
                         }
 
 #endif
@@ -161,14 +161,14 @@ namespace SimDynamics
 
                 if (rn->getName() == "Shoulder 1 L")
                 {
-                    cout << "Shoulder 1 L:" << ja << ", speed:" << bdr->getJointSpeed(rn) << endl;
+                    std::cout << "Shoulder 1 L:" << ja << ", speed:" << bdr->getJointSpeed(rn) << std::endl;
                 }
 
 #endif
             } /*else
 
         {
-            VR_WARNING << "Could not determine dynamic robot?!" << endl;
+            VR_WARNING << "Could not determine dynamic robot?!" << std::endl;
         }*/
         }
         else

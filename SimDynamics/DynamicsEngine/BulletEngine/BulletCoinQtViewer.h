@@ -208,12 +208,12 @@ namespace SimDynamics
         */
         virtual void customSelection(SoPath* path)
         {
-            std::cout << "Selecting node " <<  path->getTail()->getTypeId().getName().getString() << endl;
+            std::cout << "Selecting node " <<  path->getTail()->getTypeId().getName().getString() << std::endl;
         }
 
         virtual void customDeselection(SoPath* path)
         {
-            std::cout << "Deselecting node " <<  path->getTail()->getTypeId().getName().getString() << endl;
+            std::cout << "Deselecting node " <<  path->getTail()->getTypeId().getName().getString() << std::endl;
         }
 
         //! Redraw

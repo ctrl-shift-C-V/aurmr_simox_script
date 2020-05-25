@@ -39,15 +39,15 @@ namespace Saba
             switch (rrtMode)
             {
                 case eExtend:
-                    cout << "-- ModeA: RRT-EXTEND" << endl;
+                    std::cout << "-- ModeA: RRT-EXTEND" << std::endl;
                     break;
 
                 case eConnect:
-                    cout << "-- ModeA: RRT-CONNECT" << endl;
+                    std::cout << "-- ModeA: RRT-CONNECT" << std::endl;
                     break;
 
                 case eConnectCompletePath:
-                    cout << "-- ModeA: RRT-CONNECT (only complete paths)" << endl;
+                    std::cout << "-- ModeA: RRT-CONNECT (only complete paths)" << std::endl;
                     break;
 
                 default:
@@ -57,15 +57,15 @@ namespace Saba
             switch (rrtMode2)
             {
                 case eExtend:
-                    cout << "-- ModeB: RRT-EXTEND" << endl;
+                    std::cout << "-- ModeB: RRT-EXTEND" << std::endl;
                     break;
 
                 case eConnect:
-                    cout << "-- ModeB: RRT-CONNECT" << endl;
+                    std::cout << "-- ModeB: RRT-CONNECT" << std::endl;
                     break;
 
                 case eConnectCompletePath:
-                    cout << "-- ModeB: RRT-CONNECT (only complete paths)" << endl;
+                    std::cout << "-- ModeB: RRT-CONNECT (only complete paths)" << std::endl;
                     break;
 
                 default:
@@ -204,7 +204,7 @@ namespace Saba
 
                     if (!goalNode)
                     {
-                        SABA_ERROR << " no node for ID: " << lastIDB << endl;
+                        SABA_ERROR << " no node for ID: " << lastIDB << std::endl;
                         stopSearch = true;
                     }
                     else
@@ -417,15 +417,15 @@ namespace Saba
         switch (rrtMode2)
         {
             case eExtend:
-                cout << "-- Mode2: RRT-EXTEND" << endl;
+                std::cout << "-- Mode2: RRT-EXTEND" << std::endl;
                 break;
 
             case eConnect:
-                cout << "-- Mode2: RRT-CONNECT" << endl;
+                std::cout << "-- Mode2: RRT-CONNECT" << std::endl;
                 break;
 
             case eConnectCompletePath:
-                cout << "-- Mode2: RRT-CONNECT (only complete paths)" << endl;
+                std::cout << "-- Mode2: RRT-CONNECT (only complete paths)" << std::endl;
                 break;
 
             default:

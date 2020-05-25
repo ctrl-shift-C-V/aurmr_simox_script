@@ -101,13 +101,13 @@ namespace GraspStudio
         Eigen::Vector3f centerPos = getMean(contacts);
         if (centerPos.hasNaN())
         {
-            VR_ERROR << "No contacts" << endl;
+            VR_ERROR << "No contacts" << std::endl;
             return std::vector<Eigen::Matrix4f>();
         }
 
         if (_config.verbose)
         {
-            cout << "using contact center pose:\n" << centerPos << endl;
+            std::cout << "using contact center pose:\n" << centerPos << std::endl;
         }
 
         return generatePoses(objectGP, math::Helpers::Pose(centerPos));
@@ -183,13 +183,13 @@ namespace GraspStudio
         Eigen::Vector3f centerPose = getMean(contacts);
         if (centerPose.hasNaN())
         {
-            VR_ERROR << "No contacts" << endl;
+            VR_ERROR << "No contacts" << std::endl;
             return std::vector<Eigen::Matrix4f>();
         }
 
         if (_config.verbose)
         {
-            cout << "using contact center pose:\n" << centerPose << endl;
+            std::cout << "using contact center pose:\n" << centerPose << std::endl;
         }
 
         return generatePoses(objectGP, math::Helpers::Pose(centerPose), numPoses);
@@ -209,7 +209,7 @@ namespace GraspStudio
 
         if (!eef || !qm)
         {
-            VR_ERROR << "Missing parameters" << endl;
+            VR_ERROR << "Missing parameters" << std::endl;
             return result;
         }
 
@@ -252,13 +252,13 @@ namespace GraspStudio
 
         if (!eef || !qm)
         {
-            VR_ERROR << "Missing parameters" << endl;
+            VR_ERROR << "Missing parameters" << std::endl;
             return {};
         }
 
         if (!eef->getRobot())
         {
-            VR_WARNING << "missing eef->robot" << endl;
+            VR_WARNING << "missing eef->robot" << std::endl;
             return {};
         }
 
@@ -328,12 +328,12 @@ namespace GraspStudio
 
         if (!grasp || !eef || !object || !qm)
         {
-            VR_WARNING << "missing parameters" << endl;
+            VR_WARNING << "missing parameters" << std::endl;
             return res;
         }
         if (!eef->getRobot())
         {
-            VR_WARNING << "missing eef->robot" << endl;
+            VR_WARNING << "missing eef->robot" << std::endl;
             return res;
         }
 
@@ -392,7 +392,7 @@ namespace GraspStudio
         Eigen::Vector3f mean = mean.Zero();
         if (contacts.empty())
         {
-            VR_ERROR << "No contacts" << endl;
+            VR_ERROR << "No contacts" << std::endl;
             return Eigen::Vector3f::Constant(std::nanf(""));
         }
 
@@ -400,7 +400,7 @@ namespace GraspStudio
         {
             if (_config.verbose)
             {
-                cout << "contact point:" << i << ": \n" << contacts[i].contactPointObstacleGlobal << endl;
+                std::cout << "contact point:" << i << ": \n" << contacts[i].contactPointObstacleGlobal << std::endl;
             }
             mean += contacts[i].contactPointObstacleGlobal;
         }
@@ -422,9 +422,9 @@ namespace GraspStudio
 
     std::ostream& operator<<(std::ostream& os, const GraspEvaluationPoseUncertainty::PoseEvalResults& rhs)
     {
-        os << "Robustness analysis" << endl;
-        os << "Num Poses Tested: \t" << rhs.numPosesTested << endl;
-        os << "Num Poses Valid:  \t" << rhs.numValidPoses << endl;
+        os << "Robustness analysis" << std::endl;
+        os << "Num Poses Tested: \t" << rhs.numPosesTested << std::endl;
+        os << "Num Poses Valid:  \t" << rhs.numValidPoses << std::endl;
 
         float colPercent = 0.0f;
         if (rhs.numPosesTested > 0)
@@ -432,11 +432,11 @@ namespace GraspStudio
             colPercent = float(rhs.numColPoses) / float(rhs.numPosesTested) * 100.0f;
         }
 
-        os << "Num Poses initially in collision:\t" << rhs.numColPoses << " (" << colPercent << "%)" << endl;
-        os << "Avg Quality (only col freeposes):\t" << rhs.avgQuality << endl;
-        os << "FC rate (only col free poses):   \t" << rhs.forceClosureRate * 100.0f << "%" << endl;
-        os << "Avg Quality (all poses):         \t" << rhs.avgQualityCol << endl;
-        os << "FC rate (all poses):             \t" << rhs.forceClosureRateCol * 100.0f << "%" << endl;
+        os << "Num Poses initially in collision:\t" << rhs.numColPoses << " (" << colPercent << "%)" << std::endl;
+        os << "Avg Quality (only col freeposes):\t" << rhs.avgQuality << std::endl;
+        os << "FC rate (only col free poses):   \t" << rhs.forceClosureRate * 100.0f << "%" << std::endl;
+        os << "Avg Quality (all poses):         \t" << rhs.avgQualityCol << std::endl;
+        os << "FC rate (all poses):             \t" << rhs.forceClosureRateCol * 100.0f << "%" << std::endl;
 
         return os;
     }

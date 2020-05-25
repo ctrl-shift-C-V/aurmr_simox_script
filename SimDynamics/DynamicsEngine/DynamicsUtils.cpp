@@ -149,7 +149,7 @@ namespace SimDynamics
 
     void VelocityMotorController::setCurrentVelocity(double vel)
     {
-//        std::cout << "Velocity of " << name << " is now " << vel << endl;
+//        std::cout << "Velocity of " << name << " is now " << vel << std::endl;
         velocity = vel;
     }
 

@@ -34,7 +34,7 @@ namespace VirtualRobot
         {
             if (m->getCollisionChecker() != colChecker)
             {
-                VR_WARNING << "CollisionModel of SceneObjectSet '" << m->getName() << "' is linked to a different instance of collision checker than this CollisionManager..." << endl;
+                VR_WARNING << "CollisionModel of SceneObjectSet '" << m->getName() << "' is linked to a different instance of collision checker than this CollisionManager..." << std::endl;
             }
             auto tmpColModels = colModels; // colModels is changed in the next loop, so we need a copy
             for (const auto& colModel : tmpColModels)
@@ -81,7 +81,7 @@ namespace VirtualRobot
     {
         if (!m || !colChecker)
         {
-            VR_WARNING << " NULL data..." << endl;
+            VR_WARNING << " NULL data..." << std::endl;
             return false;
         }
 
@@ -109,7 +109,7 @@ namespace VirtualRobot
 
         if (!m || !colChecker)
         {
-            VR_WARNING << " NULL data..." << endl;
+            VR_WARNING << " NULL data..." << std::endl;
             return 0.0f;
         }
 

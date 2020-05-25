@@ -45,7 +45,7 @@ PlatformWindow::PlatformWindow(const std::string& sceneFile,
                                const std::string& colModelEnv)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
 
     this->sceneFile = sceneFile;
 
@@ -208,7 +208,7 @@ void PlatformWindow::loadScene()
 
     if (!scene)
     {
-        VR_ERROR << " no scene ..." << endl;
+        VR_ERROR << " no scene ..." << std::endl;
         return;
     }
 
@@ -216,7 +216,7 @@ void PlatformWindow::loadScene()
 
     if (robots.size() != 1)
     {
-        VR_ERROR << "Need exactly 1 robot" << endl;
+        VR_ERROR << "Need exactly 1 robot" << std::endl;
         return;
     }
 
@@ -227,7 +227,7 @@ void PlatformWindow::loadScene()
 
     if (obstacles.size() < 1)
     {
-        VR_ERROR << "Need at least 1 Obstacle (target object)" << endl;
+        VR_ERROR << "Need at least 1 Obstacle (target object)" << std::endl;
         return;
     }
 
@@ -454,7 +454,7 @@ void PlatformWindow::showOptizerForces(Saba::ElasticBandProcessorPtr postProcess
 
 void PlatformWindow::optimizeSolution(postProcessingMethod postProcessing, int nrSteps)
 {
-    VR_INFO << " Smoothing solution with " << nrSteps << " steps " << endl;
+    VR_INFO << " Smoothing solution with " << nrSteps << " steps " << std::endl;
     forcesSep->removeAllChildren();
     if (nrSteps<=0)
         return;
@@ -469,7 +469,7 @@ void PlatformWindow::optimizeSolution(postProcessingMethod postProcessing, int n
         case eElasticBands:
         {
             RobotNodePtr n = colModelRob->getNode(0);
-            VR_INFO << "using elsatic band processor with node " << n->getName() << endl;
+            VR_INFO << "using elsatic band processor with node " << n->getName() << std::endl;
             Saba::ElasticBandProcessorPtr postProcessing(new Saba::ElasticBandProcessor(solutionOptimized, cspace, n, colModelEnv, false));
             // specific to armar3:
             Eigen::VectorXf w(3);
@@ -481,9 +481,9 @@ void PlatformWindow::optimizeSolution(postProcessingMethod postProcessing, int n
             break;
         }
         default:
-            VR_INFO << "post processing method nyi" << endl;
+            VR_INFO << "post processing method nyi" << std::endl;
     }
-    VR_INFO << " Smoothing done" << endl;
+    VR_INFO << " Smoothing done" << std::endl;
 }
 
 void PlatformWindow::plan()
@@ -528,7 +528,7 @@ void PlatformWindow::plan()
 
     if (planOK)
     {
-        VR_INFO << " Planning succeeded " << endl;
+        VR_INFO << " Planning succeeded " << std::endl;
         solution = rrt->getSolution();
         solutionOptimized = solution->clone();
 
@@ -544,7 +544,7 @@ void PlatformWindow::plan()
     }
     else
     {
-        VR_INFO << " Planning failed" << endl;
+        VR_INFO << " Planning failed" << std::endl;
     }
 
     sliderSolution(1000);

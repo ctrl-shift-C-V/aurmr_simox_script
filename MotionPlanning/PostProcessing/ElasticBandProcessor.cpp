@@ -27,7 +27,7 @@ using namespace VirtualRobot;
 
         rns = path->getCSpace()->getRobotNodeSet();
         VR_ASSERT(rns && rns->getSize()>0);
-        VR_INFO << "using rns " << rns->getName() << endl;
+        VR_INFO << "using rns " << rns->getName() << std::endl;
 
         stopOptimization = false;
         colChecker = node->getRobot()->getCollisionChecker();
@@ -93,11 +93,11 @@ using namespace VirtualRobot;
 
         if (verbose)
         {
-            VR_INFO << "Obstacle dist:" << d << endl;
+            VR_INFO << "Obstacle dist:" << d << std::endl;
         }
         if (d==0)
         {
-            VR_ERROR << "Collision..." << endl;
+            VR_ERROR << "Collision..." << std::endl;
             return false;
         }
 
@@ -185,32 +185,32 @@ using namespace VirtualRobot;
 
            if (!getObstacleForce(fObstacle))
            {
-               VR_WARNING << "Could not get obstacle force " << i << endl;
+               VR_WARNING << "Could not get obstacle force " << i << std::endl;
                continue;
            }
            if (verbose)
-               VR_INFO << "obstacle workspace force: " << fObstacle.transpose() << endl;
+               VR_INFO << "obstacle workspace force: " << fObstacle.transpose() << std::endl;
            if (!getCSpaceForce(fObstacle, fcObstacle, factorCSpaceObstacleForce, maxCSpaceObstacleForce))
            {
-               VR_WARNING << "Could not get obstacle cspace force " << i << endl;
+               VR_WARNING << "Could not get obstacle cspace force " << i << std::endl;
                continue;
            }
            if (verbose)
-               VR_INFO << "obstacle c-space force: " << fcObstacle.transpose() << endl;
+               VR_INFO << "obstacle c-space force: " << fcObstacle.transpose() << std::endl;
 
            getNeighborCForce(before, act, next, fcNeighbor);
            if (verbose)
            {
                Eigen::Vector3f fn;
                getWSpaceForce(fcNeighbor, fn);
-               VR_INFO << "neighbor workspace force: " << fn.transpose() << endl;
-               VR_INFO << "neighbor c-space force: " << fcNeighbor.transpose() << endl;
+               VR_INFO << "neighbor workspace force: " << fn.transpose() << std::endl;
+               VR_INFO << "neighbor c-space force: " << fcNeighbor.transpose() << std::endl;
            }
            fc = fcObstacle + fcNeighbor;
 
            fc = fc.cwiseProduct(weights);
            if (verbose)
-               VR_INFO << "resulting c-space force: " << fc.transpose() << endl;
+               VR_INFO << "resulting c-space force: " << fc.transpose() << std::endl;
 
            optimizedPath->getPointRef(i) += fc;
         }
@@ -261,7 +261,7 @@ using namespace VirtualRobot;
         Eigen::VectorXf fcExt;
         if (!optimizedPath || optimizedPath->getNrOfPoints()<=i)
         {
-            VR_WARNING << "no path or wrong index" << endl;
+            VR_WARNING << "no path or wrong index" << std::endl;
             internalForce.setZero();
             externalForce.setZero();
             return;
@@ -284,7 +284,7 @@ using namespace VirtualRobot;
 
         if (!getObstacleForce(externalForce))
         {
-           VR_WARNING << "Could not get obstacle force" << endl;
+           VR_WARNING << "Could not get obstacle force" << std::endl;
         }
 
         // we need to apply factors and max -> transform to cspace and back to wspace
@@ -294,7 +294,7 @@ using namespace VirtualRobot;
         getNeighborCForce(before, act, next, fcNeighbor);
         if (!getWSpaceForce(fcNeighbor, internalForce))
         {
-           VR_WARNING << "Could not get internal cspace force " << endl;
+           VR_WARNING << "Could not get internal cspace force " << std::endl;
         }
     }
 
@@ -310,17 +310,17 @@ using namespace VirtualRobot;
         {
             if (!elasticBandLoop())
             {
-                VR_ERROR << "Error in loop, aborting..." << endl;
+                VR_ERROR << "Error in loop, aborting..." << std::endl;
                 break;
             }
             if (!checkRemoveNodes())
             {
-                VR_ERROR << "Error in remove, aborting..." << endl;
+                VR_ERROR << "Error in remove, aborting..." << std::endl;
                 break;
             }
             if (!checkNewNodes())
             {
-                VR_ERROR << "Error in add, aborting..." << endl;
+                VR_ERROR << "Error in add, aborting..." << std::endl;
                 break;
             }
         }

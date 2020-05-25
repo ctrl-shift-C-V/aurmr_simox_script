@@ -220,7 +220,7 @@ namespace VirtualRobot
         // process data-path entries
         if (vm.count("data-path"))
         {
-            //VR_INFO << "Data paths are: " << endl;
+            //VR_INFO << "Data paths are: " << std::endl;
             std::vector<std::string> dp = vm["data-path"].as< std::vector< std::string > >();
 
             for (const auto& i : dp)
@@ -240,7 +240,7 @@ namespace VirtualRobot
 
                 if (dp.size() > 1)
                 {
-                    VR_WARNING << "More than one parameter for key '" << key << "'. Using only first one..." << endl;
+                    VR_WARNING << "More than one parameter for key '" << key << "'. Using only first one..." << std::endl;
                 }
 
                 if (dp.size() > 0)
@@ -329,7 +329,7 @@ namespace VirtualRobot
 
         if (!quiet)
         {
-            VR_ERROR << "Trying to add non-existing data path: " << path << endl;
+            VR_ERROR << "Trying to add non-existing data path: " << path << std::endl;
         }
 
         return false;
@@ -362,12 +362,12 @@ namespace VirtualRobot
             init();
         }
 
-        cout << " *********** Simox RuntimeEnvironment ************* " << endl;
-        cout << "Data paths:"  << endl;
+        std::cout << " *********** Simox RuntimeEnvironment ************* " << std::endl;
+        std::cout << "Data paths:"  << std::endl;
 
         for (const auto& dataPath : dataPaths)
         {
-            cout << " * " << dataPath << endl;
+            std::cout << " * " << dataPath << std::endl;
         }
 
         const std::size_t descriptionOffset = std::max(
@@ -379,13 +379,13 @@ namespace VirtualRobot
         {
             if (items.size() > 0)
             {
-                cout << "Known " << name << ":" << endl;
+                std::cout << "Known " << name << ":" << std::endl;
 
                 for (const auto& item : items)
                 {
-                    cout << " * " << item.first
+                    std::cout << " * " << item.first
                          << padding(item.first.size(), descriptionOffset)
-                         << item.second << endl;
+                         << item.second << std::endl;
                 }
             }
         };
@@ -396,29 +396,29 @@ namespace VirtualRobot
 
         if (keyValues.size() > 0)
         {
-            cout << "Parsed options:"  << endl;
+            std::cout << "Parsed options:"  << std::endl;
             for (const auto& item : keyValues)
             {
-                cout << " * " << item.first << ": " << item.second << endl;
+                std::cout << " * " << item.first << ": " << item.second << std::endl;
             }
         }
 
         if (flags.size() > 0)
         {
-            cout << "Parsed flags:"  << endl;
+            std::cout << "Parsed flags:"  << std::endl;
             for (const auto& flag : flags)
             {
-                cout << " * " << flag << endl;
+                std::cout << " * " << flag << std::endl;
             }
         }
 
         if (unrecognizedOptions.size() > 0)
         {
-            cout << "Unrecognized options:" << endl;
+            std::cout << "Unrecognized options:" << std::endl;
 
             for (const auto& unrecognizedOption : unrecognizedOptions)
             {
-                cout << " * <" << unrecognizedOption << ">" << endl;
+                std::cout << " * <" << unrecognizedOption << ">" << std::endl;
             }
         }
     }
@@ -473,7 +473,7 @@ namespace VirtualRobot
 
         if (string[0] != '(' || string[string.length() - 1] != ')')
         {
-            VR_WARNING << "Expecting string to start and end with brackets (): " << string << endl;
+            VR_WARNING << "Expecting string to start and end with brackets (): " << string << std::endl;
             return false;
         }
 
@@ -485,7 +485,7 @@ namespace VirtualRobot
 
         if (stringSplit.size() != 3)
         {
-            VR_WARNING << "Expecting values of string to be separated with a ',': " << string << endl;
+            VR_WARNING << "Expecting values of string to be separated with a ',': " << string << std::endl;
             return false;
         }
 
@@ -506,7 +506,7 @@ namespace VirtualRobot
             }
             if (error || boost::math::isinf(a) || boost::math::isinf(-a) || boost::math::isnan(a))
             {
-                VR_WARNING << "Could not convert '" << string << "' to a number." << endl;
+                VR_WARNING << "Could not convert '" << string << "' to a number." << std::endl;
                 return false;
             }
             result(i) = a;
@@ -538,7 +538,7 @@ namespace VirtualRobot
 
         if (!RuntimeEnvironment::getDataFileAbsolute(s))
         {
-            VR_WARNING << "Could not determine path to file " << standardFilename << endl;
+            VR_WARNING << "Could not determine path to file " << standardFilename << std::endl;
             return standardFilename;
         }
 

@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     std::string filename("robots/ArmarIII/ArmarIII.xml");
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(filename);
     VirtualRobot::RuntimeEnvironment::processCommandLine(argc, argv);
-    cout << "Using robot at " << filename << std::endl;
+    std::cout << "Using robot at " << filename << std::endl;
     RobotPtr rob;
 
     try
@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
     }
     catch (VirtualRobotException& e)
     {
-        cout << "Error: " << e.what() << std::endl;
+        std::cout << "Error: " << e.what() << std::endl;
         return -1;
     }
 
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
         std::vector<float> gravityVR;
         g.computeGravityTorque(gravityVR);
 
-//        cout << "joint torques from inverse dynamics: " << endl << invDyn << endl;
+//        std::cout << "joint torques from inverse dynamics: " << endl << invDyn << std::endl;
         std::cout << "joint space inertia matrix: " << std::endl << dynamics.getInertiaMatrix(q) << std::endl;
         std::cout << "joint space gravitational matrix:" << std::endl << dynamics.getGravityMatrix(q) << std::endl;
         std::cout << "joint space VR gravity :" << std::endl;
@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
         }
         std::cout << "joint space coriolis matrix:" << std::endl << dynamics.getCoriolisMatrix(q, qdot) << std::endl;
         std::cout << "joint space accelerations from forward dynamics:" << std::endl << dynamics.getForwardDynamics(q, qdot, tau) << std::endl;
-//        cout << "Identifier for Elbow R:" << endl << dynamics.getIdentifier("Elbow R") << endl;
+//        std::cout << "Identifier for Elbow R:" << endl << dynamics.getIdentifier("Elbow R") << std::endl;
 
     }
     else

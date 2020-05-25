@@ -26,8 +26,8 @@ int main(int argc, char* argv[])
     std::map<RobotNodePtr, std::vector<std::string> > childrenMap;
     bool resInit = RobotFactory::initializeRobot(robot, robotNodes, childrenMap, node1);
 
-    cout << "resInit:" << resInit << endl;
-    cout << "First robot:" << endl;
+    std::cout << "resInit:" << resInit << std::endl;
+    std::cout << "First robot:" << std::endl;
     robot->print();
 
     VirtualRobot::RuntimeEnvironment::considerKey("robot");
@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    cout << "Using robot at " << filename << endl;
+    std::cout << "Using robot at " << filename << std::endl;
     RobotPtr rob;
 
     try
@@ -56,11 +56,11 @@ int main(int argc, char* argv[])
     }
     catch (VirtualRobotException& e)
     {
-        cout << "Error: " << e.what() << endl;
+        std::cout << "Error: " << e.what() << std::endl;
         return -1;
     }
 
-    cout << "Second robot (XML):" << endl;
+    std::cout << "Second robot (XML):" << std::endl;
 
     if (rob)
     {
@@ -68,6 +68,6 @@ int main(int argc, char* argv[])
     }
     else
     {
-        cout << " ERROR while creating robot" << endl;
+        std::cout << " ERROR while creating robot" << std::endl;
     }
 }

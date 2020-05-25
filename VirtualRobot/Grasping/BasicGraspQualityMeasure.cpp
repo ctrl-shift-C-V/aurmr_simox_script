@@ -90,7 +90,7 @@ namespace VirtualRobot
 
         if (verbose)
         {
-            VR_INFO << ": Nr of contact points:" << this->contactPoints.size() << endl;
+            VR_INFO << ": Nr of contact points:" << this->contactPoints.size() << std::endl;
         }
     }
 
@@ -130,7 +130,7 @@ namespace VirtualRobot
 
         if (verbose)
         {
-            VR_INFO << ": Nr of contact points:" << this->contactPoints.size() << endl;
+            VR_INFO << ": Nr of contact points:" << this->contactPoints.size() << std::endl;
         }
     }
 

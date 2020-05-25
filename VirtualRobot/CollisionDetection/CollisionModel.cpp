@@ -32,7 +32,7 @@ namespace VirtualRobot
 
         if (!this->colChecker)
         {
-            VR_WARNING << "no col checker..." << endl;
+            VR_WARNING << "no col checker..." << std::endl;
         }
 
         updateVisualization = true;
@@ -64,13 +64,13 @@ namespace VirtualRobot
 
         if (!this->colChecker)
         {
-            VR_WARNING << "no col checker..." << endl;
+            VR_WARNING << "no col checker..." << std::endl;
         }
 
         updateVisualization = true;
         if (!collisionModel)
         {
-            VR_WARNING << "internal collision model is NULL for " << name << endl;
+            VR_WARNING << "internal collision model is NULL for " << name << std::endl;
         }
         collisionModelImplementation = std::dynamic_pointer_cast<InternalCollisionModel>(collisionModel->clone(false));
         VR_ASSERT(collisionModelImplementation->getPQPModel());

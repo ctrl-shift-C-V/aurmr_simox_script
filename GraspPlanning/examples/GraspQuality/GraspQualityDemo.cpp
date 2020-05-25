@@ -17,7 +17,7 @@ using namespace VirtualRobot;
 int main(int argc, char* argv[])
 {
     VirtualRobot::init(argc, argv, "Grasp Quality Demo");
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     std::string robot("robots/ArmarIII/ArmarIII.xml");
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(robot);
@@ -45,8 +45,8 @@ int main(int argc, char* argv[])
     }
 
 
-    cout << "Using robot from " << robot << endl;
-    cout << "Using object from " << object << endl;
+    std::cout << "Using robot from " << robot << std::endl;
+    std::cout << "Using object from " << object << std::endl;
 
     GraspQualityWindow rw(robot, object);
 
