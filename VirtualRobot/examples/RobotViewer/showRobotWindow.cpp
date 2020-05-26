@@ -959,7 +959,7 @@ void showRobotWindow::updatRobotInfo()
     useColModel = UI.checkBoxColModel->checkState() == Qt::Checked;
     SceneObject::VisualizationType colModel = (UI.checkBoxColModel->isChecked()) ? SceneObject::Collision : SceneObject::Full;
 
-    boost::shared_ptr<VirtualRobot::CoinVisualization> visualization = r2->getVisualization<CoinVisualization>(colModel);
+    VirtualRobot::CoinVisualizationPtr visualization = r2->getVisualization<CoinVisualization>(colModel);
     SoNode* visualisationNode = NULL;
 
     if (visualization)

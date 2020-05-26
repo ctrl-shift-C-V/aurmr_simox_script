@@ -605,7 +605,7 @@ void IKRRTWindow::reachVisu()
         }
 
         /*
-            boost::shared_ptr<VirtualRobot::CoinVisualization> visualization = reachSpace->getVisualization<CoinVisualization>();
+            VirtualRobot::CoinVisualizationPtr visualization = reachSpace->getVisualization<CoinVisualization>();
             SoNode* visualisationNode = NULL;
             if (visualization)
                 visualisationNode = visualization->getCoinVisualization();
