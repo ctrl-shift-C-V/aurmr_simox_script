@@ -1,19 +1,15 @@
 #pragma once
 
-
 // STD/STL
 #include <type_traits>
 
 // Eigen
 #include <Eigen/Core>
 
-
 namespace simox::meta
 {
-
     template<class T>
     struct is_eigen_array : std::false_type {};
-
 
     template <class ScalarType, int Rows, int Cols>
     struct is_eigen_array<Eigen::Array<ScalarType, Rows, Cols>> : std::true_type
