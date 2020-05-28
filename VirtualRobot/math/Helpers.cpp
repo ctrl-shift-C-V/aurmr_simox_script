@@ -304,6 +304,10 @@ namespace math
         Position(p) += offset;
         return p;
     }
+    Eigen::Matrix4f math::Helpers::TranslatePose(const Eigen::Matrix4f &pose, float x, float y, float z)
+    {
+        return TranslatePose(pose, Eigen::Vector3f(x, y, z));
+    }
 
     Eigen::Matrix4f Helpers::TranslateAndRotatePose(const Eigen::Matrix4f& pose, const Eigen::Vector3f& offset, const Eigen::Matrix3f& rotation)
     {
@@ -503,4 +507,7 @@ namespace math
         }
         return poses;
     }
+
+
+
 }
