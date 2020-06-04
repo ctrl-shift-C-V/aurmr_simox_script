@@ -220,6 +220,8 @@ SET(INCLUDES
     shapes/OrientedBoxBase.h
     shapes/OrientedBox.h
     shapes/XYConstrainedOrientedBox.h
+
+    backport/span/gcc_header.h
 )
 
 simox_generate_subdir_headers(
