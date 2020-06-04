@@ -145,8 +145,8 @@ namespace VirtualRobot
 
         RobotNode::print(false, false);
 
-        cout << "* jointTranslationDirection: " << jointTranslationDirection[0] << ", " << jointTranslationDirection[1] << "," << jointTranslationDirection[2] << endl;
-        cout << "* VisuScaling: ";
+        std::cout << "* jointTranslationDirection: " << jointTranslationDirection[0] << ", " << jointTranslationDirection[1] << "," << jointTranslationDirection[2] << std::endl;
+        std::cout << "* VisuScaling: ";
 
         if (visuScaling)
         {
@@ -267,22 +267,22 @@ namespace VirtualRobot
     std::string RobotNodePrismatic::_toXML(const std::string& /*modelPath*/)
     {
         std::stringstream ss;
-        ss << "\t\t<Joint type='prismatic'>" << endl;
-        ss << "\t\t\t<translationdirection x='" << jointTranslationDirection[0] << "' y='" << jointTranslationDirection[1] << "' z='" << jointTranslationDirection[2] << "'/>" << endl;
-        ss << "\t\t\t<limits lo='" << jointLimitLo << "' hi='" << jointLimitHi << "' units='mm'/>" << endl;
-        ss << "\t\t\t<MaxAcceleration value='" << maxAcceleration << "'/>" << endl;
-        ss << "\t\t\t<MaxVelocity value='" << maxVelocity << "'/>" << endl;
-        ss << "\t\t\t<MaxTorque value='" << maxTorque << "'/>" << endl;
+        ss << "\t\t<Joint type='prismatic'>" << std::endl;
+        ss << "\t\t\t<translationdirection x='" << jointTranslationDirection[0] << "' y='" << jointTranslationDirection[1] << "' z='" << jointTranslationDirection[2] << "'/>" << std::endl;
+        ss << "\t\t\t<limits lo='" << jointLimitLo << "' hi='" << jointLimitHi << "' units='mm'/>" << std::endl;
+        ss << "\t\t\t<MaxAcceleration value='" << maxAcceleration << "'/>" << std::endl;
+        ss << "\t\t\t<MaxVelocity value='" << maxVelocity << "'/>" << std::endl;
+        ss << "\t\t\t<MaxTorque value='" << maxTorque << "'/>" << std::endl;
 
         std::map< std::string, float >::iterator propIt = propagatedJointValues.begin();
 
         while (propIt != propagatedJointValues.end())
         {
-            ss << "\t\t\t<PropagateJointValue name='" << propIt->first << "' factor='" << propIt->second << "'/>" << endl;
+            ss << "\t\t\t<PropagateJointValue name='" << propIt->first << "' factor='" << propIt->second << "'/>" << std::endl;
             propIt++;
         }
 
-        ss << "\t\t</Joint>" << endl;
+        ss << "\t\t</Joint>" << std::endl;
         return ss.str();
     }
 

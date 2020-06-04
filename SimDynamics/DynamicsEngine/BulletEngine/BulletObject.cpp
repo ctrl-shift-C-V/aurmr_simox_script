@@ -46,7 +46,7 @@ namespace SimDynamics
         CollisionModelPtr colModel = o->getCollisionModel();
         if (!colModel)
         {
-            VR_WARNING << "Building empty collision shape for object " << o->getName() << endl;
+            VR_WARNING << "Building empty collision shape for object " << o->getName() << std::endl;
             collisionShape.reset(new btEmptyShape());
         }
         else
@@ -59,7 +59,7 @@ namespace SimDynamics
 
                 if (primitives.size() > 0)
                 {
-                    //cout << "Object:" << o->getName() << endl;
+                    //cout << "Object:" << o->getName() << std::endl;
                     //o->print();
 
                     btCompoundShape* compoundShape = new btCompoundShape(true);
@@ -69,7 +69,7 @@ namespace SimDynamics
                     Eigen::Matrix4f localComTransform;
                     localComTransform.setIdentity();
                     localComTransform.block(0, 3, 3, 1) = -o->getCoMLocal();
-                    //cout << "localComTransform:\n" << localComTransform << endl;
+                    //cout << "localComTransform:\n" << localComTransform << std::endl;
 
                     currentTransform = localComTransform;
 
@@ -77,8 +77,8 @@ namespace SimDynamics
                     {
                         currentTransform *= (*it)->transform;
                         //currentTransform = localComTransform * (*it)->transform;
-                        //cout << "primitive: (*it)->transform:\n" << (*it)->transform << endl;
-                        //cout << "primitive: currentTransform:\n" << currentTransform << endl;
+                        //cout << "primitive: (*it)->transform:\n" << (*it)->transform << std::endl;
+                        //cout << "primitive: currentTransform:\n" << currentTransform << std::endl;
 
                         compoundShape->addChildShape(BulletEngine::getPoseBullet(currentTransform), getShapeFromPrimitive(*it));
                     }
@@ -126,12 +126,12 @@ namespace SimDynamics
             //type = eKinematic;
             if (colModel)
             {
-                VR_WARNING << "Object:" << o->getName() << ": mass == 0 -> SimulationType must not be eDynamic! Setting mass to 1" << endl;
+                VR_WARNING << "Object:" << o->getName() << ": mass == 0 -> SimulationType must not be eDynamic! Setting mass to 1" << std::endl;
             }
         }
 
 #ifdef DEBUG_FIXED_OBJECTS
-        cout << "TEST" << endl;
+        std::cout << "TEST" << std::endl;
         mass = 0;
         localInertia.setValue(0.0f, 0.0f, 0.0f);
 #else
@@ -166,7 +166,7 @@ namespace SimDynamics
         rigidBody->setUserPointer((void*)(this));
 #if 0
         rigidBody->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
-        cout << "TEST3" << endl;
+        std::cout << "TEST3" << std::endl;
 #endif
 
         setPoseIntern(o->getGlobalPose());

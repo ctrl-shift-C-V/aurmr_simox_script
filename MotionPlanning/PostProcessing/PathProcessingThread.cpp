@@ -93,7 +93,7 @@ namespace Saba
     {
         if (!threadStarted)
         {
-            VR_WARNING << "Thread should be in started mode?!" << endl;
+            VR_WARNING << "Thread should be in started mode?!" << std::endl;
         }
 
         VR_ASSERT(pathProcessor);

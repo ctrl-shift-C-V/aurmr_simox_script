@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
     VirtualRobot::RuntimeEnvironment::processCommandLine(argc, argv);
     VirtualRobot::RuntimeEnvironment::print();
 
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     std::string filename("robots/ArmarIII/ArmarIII.xml");
     std::string cam1Name("EyeLeftCamera");
@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
     }
 
 
-    cout << "Using robot:" << filename << ", cam1:" << cam1Name << ", cam2:" << cam2Name << endl;
+    std::cout << "Using robot:" << filename << ", cam1:" << cam1Name << ", cam2:" << cam2Name << std::endl;
 
     showCamWindow rw(filename, cam1Name, cam2Name);
 

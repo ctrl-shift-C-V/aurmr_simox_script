@@ -17,7 +17,7 @@ float TIMER_MS = 30.0f;
 JacobiWindow::JacobiWindow(std::string& sRobotFilename)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
     //this->setCaption(QString("ShowRobot - KIT - Humanoids Group"));
     //resize(1100, 768);
 
@@ -342,7 +342,7 @@ void JacobiWindow::updateKCBox()
 
 void JacobiWindow::selectKC(int nr)
 {
-    cout << "Selecting kinematic chain nr " << nr << endl;
+    std::cout << "Selecting kinematic chain nr " << nr << std::endl;
 
     if (nr < 0 || nr >= (int)kinChains.size())
     {
@@ -438,7 +438,7 @@ void JacobiWindow::jacobiTest()
         return;
     }
 
-    cout << "---- TEST JACOBI ----" << endl;
+    std::cout << "---- TEST JACOBI ----" << std::endl;
     DifferentialIKPtr j(new DifferentialIK(kc));
 
     Eigen::Matrix4f targetPose = box->getGlobalPose();
@@ -447,7 +447,7 @@ void JacobiWindow::jacobiTest()
     j->computeSteps(0.2f, 0, 50);
     exViewer->render();
 
-    cout << "---- END TEST JACOBI ----" << endl;
+    std::cout << "---- END TEST JACOBI ----" << std::endl;
 }
 
 void JacobiWindow::jacobiTest2()
@@ -457,7 +457,7 @@ void JacobiWindow::jacobiTest2()
         return;
     }
 
-    cout << "---- TEST JACOBI ----" << endl;
+    std::cout << "---- TEST JACOBI ----" << std::endl;
     //std::vector<RobotNodePtr> n;
     //n.push_back(tcp);
     //n.push_back(elbow);
@@ -472,7 +472,7 @@ void JacobiWindow::jacobiTest2()
     j->computeSteps(0.2f, 0, 40);
     exViewer->render();
 
-    cout << "---- END TEST JACOBI ----" << endl;
+    std::cout << "---- END TEST JACOBI ----" << std::endl;
 }
 
 void JacobiWindow::jacobiTestBi()
@@ -482,7 +482,7 @@ void JacobiWindow::jacobiTestBi()
         return;
     }
 
-    cout << "---- TEST JACOBI ----" << endl;
+    std::cout << "---- TEST JACOBI ----" << std::endl;
     //std::vector<RobotNodePtr> n;
     //n.push_back(tcp);
     //n.push_back(tcp2);
@@ -517,7 +517,7 @@ void JacobiWindow::jacobiTestBi()
     j->computeSteps(0.2f, 0, 50);
     exViewer->render();
 
-    cout << "---- END TEST JACOBI ----" << endl;
+    std::cout << "---- END TEST JACOBI ----" << std::endl;
 }
 
 void JacobiWindow::box2TCP()
@@ -548,14 +548,14 @@ void JacobiWindow::box2TCP()
 
 void JacobiWindow::sliderPressed()
 {
-    cout << "GG ";
+    std::cout << "GG ";
 }
 
 void JacobiWindow::loadRobot()
 {
     std::cout << "JacobiWindow: Loading robot" << std::endl;
     robotSep->removeAllChildren();
-    cout << "Loading Robot from " << robotFilename << endl;
+    std::cout << "Loading Robot from " << robotFilename << std::endl;
 
     try
     {
@@ -563,14 +563,14 @@ void JacobiWindow::loadRobot()
     }
     catch (VirtualRobotException& e)
     {
-        cout << " ERROR while creating robot" << endl;
-        cout << e.what();
+        std::cout << " ERROR while creating robot" << std::endl;
+        std::cout << e.what();
         return;
     }
 
     if (!robot)
     {
-        cout << " ERROR while creating robot" << endl;
+        std::cout << " ERROR while creating robot" << std::endl;
         return;
     }
 

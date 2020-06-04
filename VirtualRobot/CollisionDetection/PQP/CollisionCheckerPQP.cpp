@@ -494,18 +494,18 @@ namespace VirtualRobot
     #if 0
         if (flag_collision)
         {
-            cout << "ccd result: fResDist:" << fResDist << endl;
-            cout << "ccd result: numCA:" << numCA << endl;
-            cout << "ccd result: time_of_contact:" << time_of_contact << endl;
-            cout << "ccd result: flag_collision:" << flag_collision << endl;
-            cout << "ccd result: number_of_iteration:" << number_of_iteration << endl;
-            cout << "ccd result: trans0:" << trans0.Translation().X() << "," << trans0.Translation().Y() << "," << trans0.Translation().Z() << endl;
-            cout << "ccd result: trans1:" << trans1.Translation().X() << "," << trans1.Translation().Y() << "," << trans1.Translation().Z() << endl;
-            cout << "ccd result: ccdResult:" << ccdResult << endl;
+            std::cout << "ccd result: fResDist:" << fResDist << std::endl;
+            std::cout << "ccd result: numCA:" << numCA << std::endl;
+            std::cout << "ccd result: time_of_contact:" << time_of_contact << std::endl;
+            std::cout << "ccd result: flag_collision:" << flag_collision << std::endl;
+            std::cout << "ccd result: number_of_iteration:" << number_of_iteration << std::endl;
+            std::cout << "ccd result: trans0:" << trans0.Translation().X() << "," << trans0.Translation().Y() << "," << trans0.Translation().Z() << std::endl;
+            std::cout << "ccd result: trans1:" << trans1.Translation().X() << "," << trans1.Translation().Y() << "," << trans1.Translation().Z() << std::endl;
+            std::cout << "ccd result: ccdResult:" << ccdResult << std::endl;
 
         } else
         {
-            cout << ".";
+            std::cout << ".";
         }
     #endif
         fStoreTOC = (float)time_of_contact;

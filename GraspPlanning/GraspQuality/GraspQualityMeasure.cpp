@@ -43,7 +43,7 @@ namespace GraspStudio
 
         if (verbose)
         {
-            GRASPSTUDIO_INFO << ": object COM: << " << centerOfModel[0] << "," << centerOfModel[1] << "," << centerOfModel[2] << endl;
+            GRASPSTUDIO_INFO << ": object COM: << " << centerOfModel[0] << "," << centerOfModel[1] << "," << centerOfModel[2] << std::endl;
         }
 
         int nFaces = (int)model->faces.size();
@@ -81,7 +81,7 @@ namespace GraspStudio
 
         if (verbose)
         {
-            GRASPSTUDIO_INFO << ": Nr of sample object points:" << sampledObjectPoints.size() << endl;
+            GRASPSTUDIO_INFO << ": Nr of sample object points:" << sampledObjectPoints.size() << std::endl;
         }
 
         return (sampledObjectPoints.size() > 0);

@@ -27,7 +27,7 @@ using namespace VirtualRobot;
 int main(int argc, char* argv[])
 {
     VirtualRobot::init(argc, argv, "GraspEditor");
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     std::string filename1("objects/plate.xml");
     std::string filename2("robots/ArmarIII/ArmarIII.xml");

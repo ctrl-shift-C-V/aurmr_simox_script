@@ -122,7 +122,7 @@ namespace Collada
     {
         if (this->parent)
         {
-            cout << "Parent of " << this->name << " is " << this->parent->name << endl;
+            std::cout << "Parent of " << this->name << " is " << this->parent->name << std::endl;
             std::dynamic_pointer_cast<InventorRobotNode>(this->parent)->visualization->addChild(this->visualization);
         }
         else
@@ -209,7 +209,7 @@ namespace Collada
 
 #ifdef TIMER_DEBUG
         boost::timer::auto_cpu_timer timer(1, string("Inventor (") + string(geometry.attribute("id").value()) + string("):  %t sec CPU, %w sec real\n"));
-        cout << "Faces: " ;
+        std::cout << "Faces: " ;
 #endif
 
         // Temporarily skip complicated models
@@ -217,7 +217,7 @@ namespace Collada
 
         if (nPolylist > 5)
         {
-            cout << "More than five (" << nPolylist << ") seperated meshes .. skipping (" << geometry.attribute("id").value() << ")\n";
+            std::cout << "More than five (" << nPolylist << ") seperated meshes .. skipping (" << geometry.attribute("id").value() << ")\n";
             //                return;
         }
 
@@ -251,7 +251,7 @@ namespace Collada
             std::vector<int> p = getVector<int>(polylist.node().child_value("p"));
             std::vector<int> vcount = getVector<int>(polylist.node().child_value("vcount"));
 #ifdef TIMER_DEBUG
-            cout << vcount.size() << ", " << flush;
+            std::cout << vcount.size() << ", " << flush;
 #endif
             pugi::xml_node vertexInputNode = polylist.node().select_single_node(".//input[@semantic='VERTEX']").node();
 
@@ -290,7 +290,7 @@ namespace Collada
 
         }
 #ifdef TIMER_DEBUG
-        cout << endl;
+        std::cout << std::endl;
 #endif
     }
 

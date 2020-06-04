@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 {
     VirtualRobot::init(argc, argv, "Reachability Map Demo");
 
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     std::string filenameReach;
     std::string eef;
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
     VirtualRobot::RuntimeEnvironment::processCommandLine(argc, argv);
     VirtualRobot::RuntimeEnvironment::print();
 
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     if (VirtualRobot::RuntimeEnvironment::hasValue("robot"))
     {
@@ -87,10 +87,10 @@ int main(int argc, char* argv[])
         eef = VirtualRobot::RuntimeEnvironment::getValue("eef");
     }
 
-    cout << "Using robot at " << filenameRob << endl;
-    cout << "Using eef " << eef << endl;
-    cout << "Using manipulation object at " << fileObj << endl;
-    cout << "Using reachability file from " << filenameReach << endl;
+    std::cout << "Using robot at " << filenameRob << std::endl;
+    std::cout << "Using eef " << eef << std::endl;
+    std::cout << "Using manipulation object at " << fileObj << std::endl;
+    std::cout << "Using reachability file from " << filenameReach << std::endl;
 
     ReachabilityMapWindow rw(filenameRob, filenameReach, fileObj, eef);
 

@@ -95,7 +95,7 @@ namespace VirtualRobot
             }
 
 #ifdef VoxelTreeNDElement_DEBUG_OUTPUT
-            cout << "[" << level << "]";
+            std::cout << "[" << level << "]";
 #endif
 
             if (leaf || level >= (tree->getMaxLevels() - 1))
@@ -104,7 +104,7 @@ namespace VirtualRobot
                 delete entry;
                 entry = new T(e);
 #ifdef VoxelTreeNDElement_DEBUG_OUTPUT
-                cout << ":" << e;
+                std::cout << ":" << e;
 #endif
                 return true;
             }
@@ -475,7 +475,7 @@ namespace VirtualRobot
             }
 
 #ifdef VoxelTreeNDElement_DEBUG_OUTPUT
-            cout << "->" << indx << "->";
+            std::cout << "->" << indx << "->";
 #endif
 
             if (children[indx])

@@ -43,7 +43,7 @@ namespace VirtualRobot
 
         if (!urdf_model)
         {
-            VR_ERROR << "Error opening urdf file " << filename << endl;
+            VR_ERROR << "Error opening urdf file " << filename << std::endl;
         }
         else
         {
@@ -178,7 +178,7 @@ namespace VirtualRobot
                 result = f;
                 if (!VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(result))
                 {
-                    VR_ERROR << "Could not determine absolute path of " << result << endl;
+                    VR_ERROR << "Could not determine absolute path of " << result << std::endl;
                 }
             }
         }
@@ -248,7 +248,7 @@ namespace VirtualRobot
             break;
 
             default:
-                VR_WARNING << "urdf::Geometry type nyi..." << endl;
+                VR_WARNING << "urdf::Geometry type nyi..." << std::endl;
         }
 
         if (res)

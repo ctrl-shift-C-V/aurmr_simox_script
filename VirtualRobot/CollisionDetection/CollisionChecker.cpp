@@ -251,7 +251,7 @@ namespace VirtualRobot
 
         if (colModels.size() == 0)
         {
-            VR_WARNING << "no internal data..." << endl;
+            VR_WARNING << "no internal data..." << std::endl;
             return -1.0f;
         }
 
@@ -308,7 +308,7 @@ namespace VirtualRobot
 
         if (model1.size() == 0)
         {
-            VR_WARNING << "no internal data..." << endl;
+            VR_WARNING << "no internal data..." << std::endl;
             return false;
         }
 
@@ -339,12 +339,12 @@ namespace VirtualRobot
 
         if (vColModels1.size() == 0)
         {
-            VR_WARNING << "no internal data for " << model1->getName() << endl;
+            VR_WARNING << "no internal data for " << model1->getName() << std::endl;
             return false;
         }
         if ( vColModels2.size() == 0)
         {
-            VR_WARNING << "no internal data for " << model2->getName() << endl;
+            VR_WARNING << "no internal data for " << model2->getName() << std::endl;
             return false;
         }
 
@@ -414,7 +414,7 @@ namespace VirtualRobot
 
         if (vColModels.size() == 0)
         {
-            VR_WARNING << "no internal data..." << endl;
+            VR_WARNING << "no internal data..." << std::endl;
             return false;
         }
 
@@ -480,7 +480,7 @@ namespace VirtualRobot
 
         if (vColModels1.size() == 0)
         {
-            VR_WARNING << "no internal data for " << modelSet->getName() << endl;
+            VR_WARNING << "no internal data for " << modelSet->getName() << std::endl;
             return false;
         }
 
@@ -516,12 +516,12 @@ namespace VirtualRobot
         }
         if (model1->getCollisionChecker() != model2->getCollisionChecker() || model1->getCollisionChecker()!=shared_from_this())
         {
-            VR_WARNING << "Could not go on, collision models are linked to different Collision Checker instances." << endl;
+            VR_WARNING << "Could not go on, collision models are linked to different Collision Checker instances." << std::endl;
             return false;
         }
         if (!isInitialized())
         {
-            VR_WARNING << "not initialized." << endl;
+            VR_WARNING << "not initialized." << std::endl;
             return false;
         }
         return collisionCheckerImplementation->getAllCollisonTriangles(model1,model2,storePairs);

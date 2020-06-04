@@ -130,7 +130,7 @@ int main(int argc, char* argv[])
     VirtualRobot::RuntimeEnvironment::processCommandLine(argc, argv);
     VirtualRobot::RuntimeEnvironment::print();
 
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
 
     //std::string robFile("robots/examples/SimpleRobot/Joint5.xml");
@@ -150,7 +150,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    cout << "Using robot at " << robFile << endl;
+    std::cout << "Using robot at " << robFile << std::endl;
 
 
 
@@ -209,7 +209,7 @@ int main(int argc, char* argv[])
     //viewer.enableContraintsDebugDrawing();
 
 #if 0
-    cout << "TEST7" << endl;
+    std::cout << "TEST7" << std::endl;
     ObstaclePtr o = Obstacle::createBox(10, 10, 1500);
     DynamicsObjectPtr do1 = DynamicsWorld::GetWorld()->CreateDynamicsObject(o, DynamicsObject::eStatic);
     ObstaclePtr o2 = Obstacle::createBox(10, 10, 1000);
@@ -229,11 +229,11 @@ int main(int argc, char* argv[])
         e->disableCollision(do2.get(),dos[i].get());
         if (e->checkCollisionEnabled(do1.get(),dos[i].get()))
         {
-            cout << "OOPS" << endl;
+            std::cout << "OOPS" << std::endl;
         }
         if (e->checkCollisionEnabled(do2.get(),dos[i].get()))
         {
-            cout << "OOPS" << endl;
+            std::cout << "OOPS" << std::endl;
         }
     }*/
     e->addObject(do1);

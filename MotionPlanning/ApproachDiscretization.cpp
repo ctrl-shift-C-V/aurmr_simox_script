@@ -20,7 +20,7 @@ namespace Saba
         //buildIVModel();
         //clock_t tEnd = clock();
         //long diffClock = (long)(((float)(tEnd - tStart) / (float)CLOCKS_PER_SEC) * 1000.0);
-        //cout << __FUNCTION__ << " Created Sphere in " << diffClock << "ms with " << sphere.m_Vertices.size() << " vertices and " << sphere.faces.size() << " faces "<< endl;
+        //cout << __FUNCTION__ << " Created Sphere in " << diffClock << "ms with " << sphere.m_Vertices.size() << " vertices and " << sphere.faces.size() << " faces "<< std::endl;
     }
 
     ApproachDiscretization::~ApproachDiscretization()
@@ -104,7 +104,7 @@ namespace Saba
             }
         }
 
-        cout << __FUNCTION__ << " No face found ?!" << endl;
+        std::cout << __FUNCTION__ << " No face found ?!" << std::endl;
         return -1;
     }
 
@@ -112,7 +112,7 @@ namespace Saba
     {
         if (faceId < 0 || faceId > (int)sphere.faces.size())
         {
-            cout << __FUNCTION__ << "wrong face ID :" << faceId << endl;
+            std::cout << __FUNCTION__ << "wrong face ID :" << faceId << std::endl;
             return;
         }
 
@@ -122,7 +122,7 @@ namespace Saba
 
             if (iter == faceIdToCSpaceNodesMapping[faceId].cspaceNodes.end())
             {
-                cout << __FUNCTION__ << " Warning: Node " << node->ID << " is not mapped to face with id " << faceId << endl;
+                std::cout << __FUNCTION__ << " Warning: Node " << node->ID << " is not mapped to face with id " << faceId << std::endl;
             }
             else
             {
@@ -131,7 +131,7 @@ namespace Saba
         }
         else
         {
-            cout << __FUNCTION__ << " Warning: Node " << node->ID << " is not mapped to face with id " << faceId << endl;
+            std::cout << __FUNCTION__ << " Warning: Node " << node->ID << " is not mapped to face with id " << faceId << std::endl;
         }
     }
 
@@ -139,7 +139,7 @@ namespace Saba
     {
         if (!node)
         {
-            cout << __FUNCTION__ << "NULL data..." << endl;
+            std::cout << __FUNCTION__ << "NULL data..." << std::endl;
             return;
         }
 
@@ -151,7 +151,7 @@ namespace Saba
     {
         if (faceId < 0 || faceId > (int)sphere.faces.size())
         {
-            cout << __FUNCTION__ << "wrong face ID :" << faceId << endl;
+            std::cout << __FUNCTION__ << "wrong face ID :" << faceId << std::endl;
             return;
         }
 
@@ -161,7 +161,7 @@ namespace Saba
 
             if (iter != faceIdToCSpaceNodesMapping[faceId].cspaceNodes.end())
             {
-                cout << __FUNCTION__ << " Warning: Node " << node->ID << " is already mapped to face with id " << faceId << endl;
+                std::cout << __FUNCTION__ << " Warning: Node " << node->ID << " is already mapped to face with id " << faceId << std::endl;
             }
             else
             {
@@ -180,7 +180,7 @@ namespace Saba
     {
         if (!node)
         {
-            cout << __FUNCTION__ << "NULL data..." << endl;
+            std::cout << __FUNCTION__ << "NULL data..." << std::endl;
             return;
         }
 

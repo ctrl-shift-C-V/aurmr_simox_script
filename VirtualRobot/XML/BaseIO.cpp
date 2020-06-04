@@ -123,7 +123,7 @@ namespace VirtualRobot
 
         if (!matrixXMLNode)
         {
-            VR_ERROR << "NULL matrix transform node?!" << endl;
+            VR_ERROR << "NULL matrix transform node?!" << std::endl;
             return m;
         }
 
@@ -275,7 +275,7 @@ namespace VirtualRobot
 
                 if (!hasUnitsAttribute(node))
                 {
-                    VR_ERROR << "No units attribute at <" << tagName << ">" << endl;
+                    VR_ERROR << "No units attribute at <" << tagName << ">" << std::endl;
                 }
 
                 Units u = getUnitsAttribute(node, Units::eAngle);
@@ -342,7 +342,7 @@ namespace VirtualRobot
             }
             else
             {
-                VR_ERROR << "Ignoring unknown tag " << nodeName << endl;
+                VR_ERROR << "Ignoring unknown tag " << nodeName << std::endl;
             }
 
             node = node->next_sibling();
@@ -974,7 +974,7 @@ namespace VirtualRobot
                         }
                         else
                         {
-                            VR_WARNING << "No visualization present..." << endl;
+                            VR_WARNING << "No visualization present..." << std::endl;
                         }
                     }
                     else
@@ -994,7 +994,7 @@ namespace VirtualRobot
                         }
                         else
                         {
-                            VR_WARNING << "VisualizationFactory of type '" << visuFileType << "' not present. Ignoring Visualization data in Robot Node <" << tagName << ">" << endl;
+                            VR_WARNING << "VisualizationFactory of type '" << visuFileType << "' not present. Ignoring Visualization data in Robot Node <" << tagName << ">" << std::endl;
                         }
                     }
                     else
@@ -1010,7 +1010,7 @@ namespace VirtualRobot
                     }
                     else
                     {
-                        VR_WARNING << "VisualizationFactory of type '" << visuFileType << "' not present. Ignoring Visualization data in Robot Node <" << tagName << ">" << endl;
+                        VR_WARNING << "VisualizationFactory of type '" << visuFileType << "' not present. Ignoring Visualization data in Robot Node <" << tagName << ">" << std::endl;
                     }
 
                 }
@@ -1065,12 +1065,12 @@ namespace VirtualRobot
                     }
                     else if (auto factory = VisualizationFactory::fromName("inventor", NULL))
                     {
-                        VR_WARNING << "VisualizationFactory of type '" << collisionFileType << "' not present. Trying factory for 'inventor' " << endl;
+                        VR_WARNING << "VisualizationFactory of type '" << collisionFileType << "' not present. Trying factory for 'inventor' " << std::endl;
                         visualizationNode = factory->createUnitedVisualization(visuNodes);
                     }
                     else
                     {
-                        VR_WARNING << "VisualizationFactory of type '" << collisionFileType << "' not present. Ignoring Visualization data in Robot Node <" << tagName << ">" << endl;
+                        VR_WARNING << "VisualizationFactory of type '" << collisionFileType << "' not present. Ignoring Visualization data in Robot Node <" << tagName << ">" << std::endl;
                     }
                 }
             }
@@ -1121,7 +1121,7 @@ namespace VirtualRobot
                 }
                 else
                 {
-                    VR_WARNING << "No visualization present..." << endl;
+                    VR_WARNING << "No visualization present..." << std::endl;
                 }
             }
             else
@@ -1157,24 +1157,24 @@ namespace VirtualRobot
                     }
                     else
                     {
-                        VR_WARNING << "Ignoring data from " << visuFileXMLNode->value() << ": visualization type does not match to data from before." << endl;
+                        VR_WARNING << "Ignoring data from " << visuFileXMLNode->value() << ": visualization type does not match to data from before." << std::endl;
                     }
                 }
                 else if (auto factory = VisualizationFactory::fromName("inventor", NULL))
                 {
-                    VR_WARNING << "VisualizationFactory of type '" << fileType << "' not present. Trying factory for 'inventor' " << endl;
+                    VR_WARNING << "VisualizationFactory of type '" << fileType << "' not present. Trying factory for 'inventor' " << std::endl;
                     if (tmpFileType == fileType)
                     {
                         result.push_back(factory->getVisualizationFromFile(visuFile, bbox));
                     }
                     else
                     {
-                        VR_WARNING << "Ignoring data from " << visuFileXMLNode->value() << ": visualization type does not match to data from before." << endl;
+                        VR_WARNING << "Ignoring data from " << visuFileXMLNode->value() << ": visualization type does not match to data from before." << std::endl;
                     }
                 }
                 else
                 {
-                    VR_WARNING << "VisualizationFactory of type '" << fileType << "' not present. Ignoring Visualization data from " << visuFileXMLNode->value() << endl;
+                    VR_WARNING << "VisualizationFactory of type '" << fileType << "' not present. Ignoring Visualization data from " << visuFileXMLNode->value() << std::endl;
                 }
             }
 
@@ -1280,7 +1280,7 @@ namespace VirtualRobot
 
             if (!hasUnitsAttribute(massXMLNode))
             {
-                VR_ERROR << "No units attribute at <" << nodeName << ">" << endl;
+                VR_ERROR << "No units attribute at <" << nodeName << ">" << std::endl;
             }
 
             Units unit = getUnitsAttribute(massXMLNode, Units::eWeight);
@@ -1298,7 +1298,7 @@ namespace VirtualRobot
         }
         else
         {
-            VR_WARNING << "Expecting mass tag for physics node in <" << nodeName << ">." << endl;
+            VR_WARNING << "Expecting mass tag for physics node in <" << nodeName << ">." << std::endl;
             physics.massKg = 0.0f;
         }
 
@@ -1514,7 +1514,7 @@ namespace VirtualRobot
                 return absFileName;
             }
 
-            VR_ERROR << "Could not determine valid filename from " << fileName << endl;
+            VR_ERROR << "Could not determine valid filename from " << fileName << std::endl;
         }
 
         return fileName;
@@ -1541,7 +1541,7 @@ namespace VirtualRobot
 
                 if (!hasUnitsAttribute(node))
                 {
-                    VR_ERROR << "No units attribute at <" << storeConfigName << ">" << endl;
+                    VR_ERROR << "No units attribute at <" << storeConfigName << ">" << std::endl;
                 }
 
                 /*if (getUnitsAttribute(node, Units::eAngle).isDegree())
@@ -1640,7 +1640,7 @@ namespace VirtualRobot
             ss << robo->getType() << "_RobotNodeSet_" << robotNodeSetCounter;
             nodeSetName = ss.str();
             robotNodeSetCounter++;
-            VR_WARNING << "RobotNodeSet definition expects attribute 'name'. Setting name to " << nodeSetName << endl;
+            VR_WARNING << "RobotNodeSet definition expects attribute 'name'. Setting name to " << nodeSetName << std::endl;
         }
 
         if (rootNodeName.empty())
@@ -1749,7 +1749,7 @@ namespace VirtualRobot
         if (trajName.empty())
         {
             trajName = "Trajectory";
-            VR_WARNING << "Trajectory definition expects attribute 'RobotNodeSet'. Setting to " << trajName << endl;
+            VR_WARNING << "Trajectory definition expects attribute 'RobotNodeSet'. Setting to " << trajName << std::endl;
         }
 
         RobotPtr r;
@@ -1770,7 +1770,7 @@ namespace VirtualRobot
         assert(dim >= 0);
         if (static_cast<unsigned int>(dim) != rns->getSize())
         {
-            VR_WARNING << " Invalid dim attribute (" << dim << "). Setting dimension to " << rns->getSize() << endl;
+            VR_WARNING << " Invalid dim attribute (" << dim << "). Setting dimension to " << rns->getSize() << std::endl;
             dim = rns->getSize();
         }
 
@@ -1787,7 +1787,7 @@ namespace VirtualRobot
 
                 if (!processFloatValueTags(node, dim, p))
                 {
-                    VR_ERROR << "Error in processing configuration. Skipping entry" << endl;
+                    VR_ERROR << "Error in processing configuration. Skipping entry" << std::endl;
                 }
                 else
                 {
@@ -1833,7 +1833,7 @@ namespace VirtualRobot
     std::string BaseIO::toXML(const Eigen::Matrix4f& m, std::string ident /*= "\t"*/)
     {
         std::stringstream ss;
-        ss << ident << "<Matrix4x4 units='mm'>" << endl;
+        ss << ident << "<Matrix4x4 units='mm'>" << std::endl;
 
         for (int r = 1; r <= 4; r++)
         {
@@ -1844,10 +1844,10 @@ namespace VirtualRobot
                 ss << "c" << i << "='" << m(r - 1, i - 1) << "' ";
             }
 
-            ss << "/>" << endl;
+            ss << "/>" << std::endl;
         }
 
-        ss << ident << "</Matrix4x4>" << endl;
+        ss << ident << "</Matrix4x4>" << std::endl;
         return ss.str();
     }
 

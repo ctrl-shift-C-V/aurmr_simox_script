@@ -36,7 +36,7 @@ namespace SimDynamics
         }
         if (sceneObject->getSimulationType() == VirtualRobot::SceneObject::Physics::eStatic)
         {
-            VR_ERROR << "Could not move static object, use kinematic instead, aborting..." << endl;
+            VR_ERROR << "Could not move static object, use kinematic instead, aborting..." << std::endl;
             return;
         }
         try

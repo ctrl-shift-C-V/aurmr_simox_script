@@ -261,7 +261,7 @@ void ConstrainedIKWindow::computeTSRError()
 
 void ConstrainedIKWindow::selectKC(int nr)
 {
-    cout << "Selecting kinematic chain nr " << nr << endl;
+    std::cout << "Selecting kinematic chain nr " << nr << std::endl;
 
     if (nr < 0 || nr >= (int)kinChains.size())
     {
@@ -370,10 +370,10 @@ void ConstrainedIKWindow::solve()
 
     std::vector<RobotNodePtr> nodes = kc->getAllRobotNodes();
 
-    std::cout << "Joint values: " << endl;
+    std::cout << "Joint values: " << std::endl;
     for (auto &node : nodes)
     {
-        std::cout << node->getName() << ": " << node->getJointValue() << endl;
+        std::cout << node->getName() << ": " << node->getJointValue() << std::endl;
     }
 
     if(UI.poseGroup->isChecked())
@@ -674,7 +674,7 @@ void ConstrainedIKWindow::loadRobot()
 {
     std::cout << "ConstrainedIKWindow: Loading robot" << std::endl;
     robotSep->removeAllChildren();
-    cout << "Loading Robot from " << robotFilename << endl;
+    std::cout << "Loading Robot from " << robotFilename << std::endl;
 
     try
     {
@@ -682,14 +682,14 @@ void ConstrainedIKWindow::loadRobot()
     }
     catch (VirtualRobotException& e)
     {
-        cout << " ERROR while creating robot" << endl;
-        cout << e.what();
+        std::cout << " ERROR while creating robot" << std::endl;
+        std::cout << e.what();
         return;
     }
 
     if (!robot)
     {
-        cout << " ERROR while creating robot" << endl;
+        std::cout << " ERROR while creating robot" << std::endl;
         return;
     }
 

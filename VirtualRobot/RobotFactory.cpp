@@ -107,7 +107,7 @@ namespace VirtualRobot
         {
             if (!robotNode->getParent() && robotNode != rootNode)
             {
-                VR_ERROR << "RobotNode " << robotNode->getName() << " is not connected to kinematic structure..." << endl;
+                VR_ERROR << "RobotNode " << robotNode->getName() << " is not connected to kinematic structure..." << std::endl;
             }
         }
 
@@ -136,7 +136,7 @@ namespace VirtualRobot
 
         if (!newRoot)
         {
-            VR_ERROR << "No node " << newRootName << endl;
+            VR_ERROR << "No node " << newRootName << std::endl;
         }
 
         RobotFactory::robotStructureDef newStructure;
@@ -231,19 +231,19 @@ namespace VirtualRobot
 
         if (!robot->hasRobotNode(startNode))
         {
-            VR_ERROR << "No node with name " << startNode << endl;
+            VR_ERROR << "No node with name " << startNode << std::endl;
             return RobotPtr();
         }
 
         if (!robot->hasRobotNode(endNode))
         {
-            VR_ERROR << "No node with name " << endNode << endl;
+            VR_ERROR << "No node with name " << endNode << std::endl;
             return RobotPtr();
         }
 
         if (!robot->getRobotNode(startNode)->hasChild(endNode, true))
         {
-            VR_ERROR << "No node " << endNode << " is not a child of " << startNode << endl;
+            VR_ERROR << "No node " << endNode << " is not a child of " << startNode << std::endl;
             return RobotPtr();
         }
 
@@ -260,7 +260,7 @@ namespace VirtualRobot
 
         if (!rn)
         {
-            VR_ERROR << "No node " << endNode << " is not a child of " << startNode << endl;
+            VR_ERROR << "No node " << endNode << " is not a child of " << startNode << std::endl;
             return RobotPtr();
         }
 
@@ -299,7 +299,7 @@ namespace VirtualRobot
 
         if (robot->hasRobotNode(name))
         {
-            VR_WARNING << "RN with name " << name << " already present" << endl;
+            VR_WARNING << "RN with name " << name << " already present" << std::endl;
             return false;
         }
 
@@ -348,7 +348,7 @@ namespace VirtualRobot
 
         if (!robot->hasRobotNode(newStructure.rootName))
         {
-            VR_ERROR << "No root with name " << newStructure.rootName << endl;
+            VR_ERROR << "No root with name " << newStructure.rootName << std::endl;
             return RobotPtr();
         }
 
@@ -377,7 +377,7 @@ namespace VirtualRobot
         {
             if (!robot->hasRobotNode(i.name))
             {
-                VR_ERROR << "Error in parentChildMapping, no node with name " << i.name << endl;
+                VR_ERROR << "Error in parentChildMapping, no node with name " << i.name << std::endl;
                 return RobotPtr();
             }
 
@@ -398,7 +398,7 @@ namespace VirtualRobot
 
                 if (!robot->hasRobotNode(nodeName))
                 {
-                    VR_ERROR << "Error in parentChildMapping, no child node with name " << nodeName << endl;
+                    VR_ERROR << "Error in parentChildMapping, no child node with name " << nodeName << std::endl;
                     return RobotPtr();
                 }
 
@@ -894,7 +894,7 @@ namespace VirtualRobot
             }
             else
             {
-                cout << "end";
+                std::cout << "end";
             }
 
             RobotNodePtr newNodeFixed = accumulateTransformations(result, nodes[i], newNode, secondNode, currentTrafo);
@@ -1007,7 +1007,7 @@ namespace VirtualRobot
                     }
                     else
                     {
-                        VR_INFO << "Skipping node " << i->getName() << endl;
+                        VR_INFO << "Skipping node " << i->getName() << std::endl;
                     }
                 }
             }

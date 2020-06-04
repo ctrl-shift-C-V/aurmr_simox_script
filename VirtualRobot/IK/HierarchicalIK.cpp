@@ -33,7 +33,7 @@ namespace VirtualRobot
 
         if (verbose)
         {
-            VR_INFO << "Compute Step" << endl;
+            VR_INFO << "Compute Step" << std::endl;
         }
 
         int ndof = jacDefs[0]->getRobotNodeSet()->getSize();
@@ -51,7 +51,7 @@ namespace VirtualRobot
 
             if (verbose)
             {
-                VR_INFO << "Jacoby " << i << ":\n" << j << endl;
+                VR_INFO << "Jacoby " << i << ":\n" << j << std::endl;
             }
 
             j = jacDefs[i]->computePseudoInverseJacobianMatrixD(j);// jacDefs[i].tcp);
@@ -61,7 +61,7 @@ namespace VirtualRobot
 
             if (verbose)
             {
-                VR_INFO << "Inv Jacoby " << i << ":\n" << j << endl;
+                VR_INFO << "Inv Jacoby " << i << ":\n" << j << std::endl;
             }
 
             if (jacobies[i].cols() != ndof)
@@ -87,7 +87,7 @@ namespace VirtualRobot
 
         if (verbose)
         {
-            VR_INFO << "result_i 0:\n" << result_i << endl;
+            VR_INFO << "result_i 0:\n" << result_i << std::endl;
         }
 
         Eigen::VectorXd result_i_min1;
@@ -119,7 +119,7 @@ namespace VirtualRobot
 
             if (verbose)
             {
-                VR_INFO << "JA_i_min1 " << i << ":\n" << endl << JA_i_min1 << endl;
+                VR_INFO << "JA_i_min1 " << i << ":\n" << endl << JA_i_min1 << std::endl;
             }
 
             switch (method)
@@ -141,21 +141,21 @@ namespace VirtualRobot
             //JAinv_i_min1 = MathTools::getPseudoInverse(JA_i_min1, pinvtoler);
             if (verbose)
             {
-                VR_INFO << "JAinv_i_min1 " << i << ":\n" << endl << JAinv_i_min1 << endl;
+                VR_INFO << "JAinv_i_min1 " << i << ":\n" << endl << JAinv_i_min1 << std::endl;
             }
 
             PA_i_min1 = id_ndof - JAinv_i_min1 * JA_i_min1;
 
             if (verbose)
             {
-                VR_INFO << "PA_i_min1 " << i << ":\n" << endl << PA_i_min1 << endl;
+                VR_INFO << "PA_i_min1 " << i << ":\n" << endl << PA_i_min1 << std::endl;
             }
 
             Eigen::MatrixXd J_tilde_i = J_i * PA_i_min1;
 
             if (verbose)
             {
-                VR_INFO << "J_tilde_i " << i << ":\n" << endl << J_tilde_i << endl;
+                VR_INFO << "J_tilde_i " << i << ":\n" << endl << J_tilde_i << std::endl;
             }
 
             Eigen::MatrixXd Jinv_tilde_i;
@@ -179,19 +179,19 @@ namespace VirtualRobot
 
             if (verbose)
             {
-                VR_INFO << "Jinv_tilde_i " << i << ":\n" << endl << Jinv_tilde_i << endl;
+                VR_INFO << "Jinv_tilde_i " << i << ":\n" << endl << Jinv_tilde_i << std::endl;
             }
 
             if (verbose)
             {
-                VR_INFO << "jacDefs[i]->getError() " << i << ":\n" << endl << errors[i].transpose() << endl;
+                VR_INFO << "jacDefs[i]->getError() " << i << ":\n" << endl << errors[i].transpose() << std::endl;
             }
 
             result_i = result_i_min1 + Jinv_tilde_i * (errors[i] * stepSize - J_i * result_i_min1);
 
             if (verbose)
             {
-                VR_INFO << "result_i " << i << ":\n" << result_i << endl;
+                VR_INFO << "result_i " << i << ":\n" << result_i << std::endl;
             }
 
             accRowCount += J_i.rows();

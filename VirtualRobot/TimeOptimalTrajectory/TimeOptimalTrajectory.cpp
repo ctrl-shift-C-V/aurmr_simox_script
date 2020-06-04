@@ -95,16 +95,16 @@ namespace VirtualRobot
             double maxVelocity = getAccelerationMaxPathVelocity(s);
             if(maxVelocity == numeric_limits<double>::infinity())
                 maxVelocity = 10.0;
-            file1 << s << "  " << maxVelocity << "  " << getVelocityMaxPathVelocity(s) << endl;
+            file1 << s << "  " << maxVelocity << "  " << getVelocityMaxPathVelocity(s) << std::endl;
         }
         file1.close();
 
         ofstream file2("trajectory.txt");
         for(const auto & it : trajectory) {
-            file2 << it.pathPos << "  " << it.pathVel << endl;
+            file2 << it.pathPos << "  " << it.pathVel << std::endl;
         }
         for(const auto & it : endTrajectory) {
-            file2 << it.pathPos << "  " << it.pathVel << endl;
+            file2 << it.pathPos << "  " << it.pathVel << std::endl;
         }
         file2.close();
     }
@@ -255,7 +255,7 @@ namespace VirtualRobot
             }
             else if(pathVel < 0.0) {
                 valid = false;
-                cout << "error" << endl;
+                std::cout << "error" << std::endl;
                 return true;
             }
 
@@ -334,7 +334,7 @@ namespace VirtualRobot
 
                 if(pathVel < 0.0) {
                     valid = false;
-                    cout << "Error while integrating backward: Negative path velocity" << endl;
+                    std::cout << "Error while integrating backward: Negative path velocity" << std::endl;
                     endTrajectory = trajectory;
                     return;
                 }
@@ -357,7 +357,7 @@ namespace VirtualRobot
         }
 
         valid = false;
-        cout << "Error while integrating backward: Did not hit start trajectory" << endl;
+        std::cout << "Error while integrating backward: Did not hit start trajectory" << std::endl;
         endTrajectory = trajectory;
     }
 

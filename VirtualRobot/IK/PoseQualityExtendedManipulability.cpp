@@ -51,7 +51,7 @@ namespace VirtualRobot
 
         if (!getDetailedAnalysis(jac, rns, currentManipData, considerFirstSV))
         {
-            VR_ERROR << "ERROR" << endl;
+            VR_ERROR << "ERROR" << std::endl;
             return 0;
         }
 
@@ -70,7 +70,7 @@ namespace VirtualRobot
             break;
 
             default:
-                VR_ERROR << "NYI..." << endl;
+                VR_ERROR << "NYI..." << std::endl;
         }
 
         return 0;
@@ -100,7 +100,7 @@ namespace VirtualRobot
 
         if (boost::math::isinf(w) || boost::math::isinf(-w) || boost::math::isnan(w))
         {
-            cout << "nan" << endl;
+            std::cout << "nan" << std::endl;
         }
 
 
@@ -133,9 +133,9 @@ namespace VirtualRobot
 
         if (verbose)
         {
-            cout << "PEN LO:";
+            std::cout << "PEN LO:";
             VirtualRobot::MathTools::print(penLo);
-            cout << "PEN HI:";
+            std::cout << "PEN HI:";
             VirtualRobot::MathTools::print(penHi);
         }
     }
@@ -171,10 +171,10 @@ namespace VirtualRobot
 
         if (verbose)
         {
-            cout << "++++++++++++++++++++++++++++++" << endl;
-            cout << "+++++++++++++++++++ d:" << d << endl;
-            cout << "+++++++++++++++++++ p1:" << p1 << endl;
-            cout << "++++++++++++++++++++++++++++++" << endl;
+            std::cout << "++++++++++++++++++++++++++++++" << std::endl;
+            std::cout << "+++++++++++++++++++ d:" << d << std::endl;
+            std::cout << "+++++++++++++++++++ p1:" << p1 << std::endl;
+            std::cout << "++++++++++++++++++++++++++++++" << std::endl;
         }
 
         Eigen::VectorXf v2(6);
@@ -190,7 +190,7 @@ namespace VirtualRobot
 
         if (verbose)
         {
-            cout << "PEN OBST (gradient)1:";
+            std::cout << "PEN OBST (gradient)1:";
             VirtualRobot::MathTools::print(penObst);
         }
 
@@ -199,7 +199,7 @@ namespace VirtualRobot
         if (verbose)
         {
 
-            cout << "PEN OBST (gradient)2:";
+            std::cout << "PEN OBST (gradient)2:";
             VirtualRobot::MathTools::print(penObst);
         }
 
@@ -207,7 +207,7 @@ namespace VirtualRobot
 
         if (verbose)
         {
-            cout << "PEN OBST (gradient):";
+            std::cout << "PEN OBST (gradient):";
             VirtualRobot::MathTools::print(penObst);
         }
 
@@ -219,7 +219,7 @@ namespace VirtualRobot
 
         if (verbose)
         {
-            cout << "PEN OBST (pen factor):";
+            std::cout << "PEN OBST (pen factor):";
             VirtualRobot::MathTools::print(penObst);
         }
 
@@ -246,14 +246,14 @@ namespace VirtualRobot
         if (verbose)
         {
 
-            cout << "PEN OBST (penObstLo):\n" << penObstLo << endl;
-            cout << "PEN OBST (penObstHi):\n" << penObstHi << endl;
+            std::cout << "PEN OBST (penObstLo):\n" << penObstLo << std::endl;
+            std::cout << "PEN OBST (penObstHi):\n" << penObstHi << std::endl;
         }
 
         if (verbose)
         {
 
-            cout << "ObstVect: d=" << obstVect.norm() << ", v=";
+            std::cout << "ObstVect: d=" << obstVect.norm() << ", v=";
             MathTools::print(obstVect);
         }
     }
@@ -365,9 +365,9 @@ namespace VirtualRobot
 
         if (printInfo)
         {
-            cout << "Sing Values:\n" << sv << endl;
-            cout << "U:\n" << U << endl;
-            cout << "Sing Vectors (scaled according to SingValues:\n" << singVectors << endl;
+            std::cout << "Sing Values:\n" << sv << std::endl;
+            std::cout << "U:\n" << U << std::endl;
+            std::cout << "Sing Vectors (scaled according to SingValues:\n" << singVectors << std::endl;
         }
 
         return true;
@@ -405,8 +405,8 @@ namespace VirtualRobot
         //bool verbose = false;
         if (verbose)
         {
-            cout << "considerFirstSV=" << considerFirstSV << endl;
-            cout << "JAC:\n" << endl;
+            std::cout << "considerFirstSV=" << considerFirstSV << std::endl;
+            std::cout << "JAC:\n" << std::endl;
             MathTools::printMat(storeData.jac);
         }
 
@@ -431,7 +431,7 @@ namespace VirtualRobot
 
             if (verbose && i < 4)
             {
-                cout << "JAC PEN:" << i << endl;
+                std::cout << "JAC PEN:" << i << std::endl;
                 MathTools::printMat(storeData.jacPen[i]);
             }
 
@@ -474,7 +474,7 @@ namespace VirtualRobot
                 result_v = tmpRes;
             }
 
-            //cout << "## k:" << k << " -> tmpRes: " << tmpRes << ", result:" << result << endl;
+            //cout << "## k:" << k << " -> tmpRes: " << tmpRes << ", result:" << result << std::endl;
 
             // cond numb
             if (sv.rows() >= 2)
@@ -520,8 +520,8 @@ namespace VirtualRobot
 
                     if (verbose)
                     {
-                        cout << "## k:" << k << " -> minSV: " << minSV_loc << ", maxSV:" << maxSV_loc << endl;
-                        cout << "## pen jac:\n" << endl;
+                        std::cout << "## k:" << k << " -> minSV: " << minSV_loc << ", maxSV:" << maxSV_loc << std::endl;
+                        std::cout << "## pen jac:\n" << std::endl;
                         MathTools::printMat(storeData.jacPen[k]);
                     }
                 }
@@ -817,8 +817,8 @@ namespace VirtualRobot
 
                 if (verbose)
                 {
-                    cout << "##  -> minSV: " << minSV_loc << ", maxSV:" << maxSV_loc << endl;
-                    cout << "## pen jac:\n" << jacPen << endl;
+                    std::cout << "##  -> minSV: " << minSV_loc << ", maxSV:" << maxSV_loc << std::endl;
+                    std::cout << "## pen jac:\n" << jacPen << std::endl;
                 }
             }
         }

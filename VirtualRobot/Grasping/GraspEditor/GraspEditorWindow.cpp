@@ -42,7 +42,7 @@ namespace VirtualRobot
                                          bool embeddedGraspEditor)
         : QMainWindow(nullptr), UI(new Ui::MainWindowGraspEditor)
     {
-        VR_INFO << " start " << endl;
+        VR_INFO << " start " << std::endl;
 
         // Indicates whether this program is started inside another extern program
         this->embeddedGraspEditor = embeddedGraspEditor;
@@ -83,10 +83,10 @@ namespace VirtualRobot
         SphereApproximatorPtr sa(new SphereApproximator());
         SphereApproximator::SphereApproximation app;
         sa->generateGraph(app, SphereApproximator::eIcosahedron, 3, 200.0f);
-        cout << "nr faces:" << app.faces.size() << ", vert:" << app.vertices.size() << endl;
+        std::cout << "nr faces:" << app.faces.size() << ", vert:" << app.vertices.size() << std::endl;
 
         TriMeshModelPtr tri = sa->generateTriMesh(app);
-        cout << "2 nr faces:" << tri->faces.size() << ", vert:" << tri->vertices.size() << endl;
+        std::cout << "2 nr faces:" << tri->faces.size() << ", vert:" << tri->vertices.size() << std::endl;
         SoNode* m = CoinVisualizationFactory::getCoinVisualization(tri, true);
         sceneSep->addChild(m);
 
@@ -414,21 +414,21 @@ namespace VirtualRobot
         }
         catch (VirtualRobotException& e)
         {
-            cout << " ERROR while saving object" << endl;
-            cout << e.what();
+            std::cout << " ERROR while saving object" << std::endl;
+            std::cout << e.what();
             return;
         }
 
         if (!ok)
         {
-            cout << " ERROR while saving object" << endl;
+            std::cout << " ERROR while saving object" << std::endl;
             return;
         }
         else
         {
             if (embeddedGraspEditor)
             {
-                cout << "Changes successful saved to " << objectFile << endl;
+                std::cout << "Changes successful saved to " << objectFile << std::endl;
                 QMessageBox msgBox;
                 msgBox.setText(QString::fromStdString("Changes successful saved to " + objectFile));
                 msgBox.setIcon(QMessageBox::Information);
@@ -442,7 +442,7 @@ namespace VirtualRobot
     void GraspEditorWindow::loadRobot()
     {
         robotSep->removeAllChildren();
-        cout << "Loading Robot from " << robotFile << endl;
+        std::cout << "Loading Robot from " << robotFile << std::endl;
 
         try
         {
@@ -450,14 +450,14 @@ namespace VirtualRobot
         }
         catch (VirtualRobotException& e)
         {
-            cout << " ERROR while creating robot" << endl;
-            cout << e.what();
+            std::cout << " ERROR while creating robot" << std::endl;
+            std::cout << e.what();
             return;
         }
 
         if (!robot)
         {
-            cout << " ERROR while creating robot" << endl;
+            std::cout << " ERROR while creating robot" << std::endl;
             return;
         }
 
@@ -564,7 +564,7 @@ namespace VirtualRobot
     void GraspEditorWindow::loadObject()
     {
         objectSep->removeAllChildren();
-        cout << "Loading Object from " << objectFile << endl;
+        std::cout << "Loading Object from " << objectFile << std::endl;
 
         try
         {
@@ -572,8 +572,8 @@ namespace VirtualRobot
         }
         catch (VirtualRobotException& e)
         {
-            cout << " ERROR while creating object" << endl;
-            cout << e.what();
+            std::cout << " ERROR while creating object" << std::endl;
+            std::cout << e.what();
 
             if (embeddedGraspEditor)
             {
@@ -591,7 +591,7 @@ namespace VirtualRobot
 
         if (!object)
         {
-            cout << " ERROR while creating object" << endl;
+            std::cout << " ERROR while creating object" << std::endl;
             return;
         }
 
@@ -697,13 +697,13 @@ namespace VirtualRobot
     {
         if (robotEEF)
         {
-            //cout << "getGlobalPose robot:" << endl << robotEEF->getGlobalPose() << endl;
-            //cout << "getGlobalPose TCP:" << endl <<  robotEEF_EEF->getTcp()->getGlobalPose() << endl;
+            //cout << "getGlobalPose robot:" << endl << robotEEF->getGlobalPose() << std::endl;
+            //cout << "getGlobalPose TCP:" << endl <<  robotEEF_EEF->getTcp()->getGlobalPose() << std::endl;
             Eigen::Matrix4f m;
             MathTools::posrpy2eigen4f(x, m);
             RobotNodePtr tcp = robotEEF_EEF->getTcp();
             m = tcp->getGlobalPose() * m;
-            //cout << "pose:" << endl << m << endl;
+            //cout << "pose:" << endl << m << std::endl;
             setCurrentGrasp(m);
         }
 

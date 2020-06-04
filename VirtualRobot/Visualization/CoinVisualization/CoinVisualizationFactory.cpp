@@ -243,7 +243,7 @@ namespace VirtualRobot
             {
                 if (scaleX != 1.0f || scaleY != 1.0f || scaleZ != 1.0f)
                 {
-                    VR_WARNING << "Scaling not yet supported for Coin3D files" << endl;
+                    VR_WARNING << "Scaling not yet supported for Coin3D files" << std::endl;
                 }
 
                 return getVisualizationFromCoin3DFile(filename, boundingBox);
@@ -286,7 +286,7 @@ namespace VirtualRobot
 
         if (!readOK)
         {
-            VR_ERROR << "Could not read file with assimp: " << filename << endl;
+            VR_ERROR << "Could not read file with assimp: " << filename << std::endl;
             return visualizationNode;
         }
 
@@ -303,7 +303,7 @@ namespace VirtualRobot
 
         if (scaleX != 1.0f || scaleY != 1.0f || scaleZ != 1.0f)
         {
-            VR_WARNING << "Scaling not yet supported" << endl;
+            VR_WARNING << "Scaling not yet supported" << std::endl;
         }
 
         // passing an empty string to SoInput and trying to open it aborts the program
@@ -422,7 +422,7 @@ namespace VirtualRobot
 
         //boxAction.getXfBoundingBox().getBounds(minX, minY, minZ, maxX, maxY, maxZ);
         boxAction.getBoundingBox().getBounds(minX, minY, minZ, maxX, maxY, maxZ);
-        cout << "x: " << minX << "," << maxX << " ; Y: " << minY << "," << maxY << " ; Z: " << minZ << "," << maxZ << endl;
+        std::cout << "x: " << minX << "," << maxX << " ; Y: " << minY << "," << maxY << " ; Z: " << minZ << "," << maxZ << std::endl;
 
 
         SoCube* cu = new SoCube();
@@ -1800,17 +1800,17 @@ namespace VirtualRobot
 
                 if (fabs(normal1.norm() - 1.0f) > 1.1)
                 {
-                    VR_ERROR << "Wrong normal, norm:" << normal1.norm() << endl;
+                    VR_ERROR << "Wrong normal, norm:" << normal1.norm() << std::endl;
                 }
 
                 if (fabs(normal2.norm() - 1.0f) > 1.1)
                 {
-                    VR_ERROR << "Wrong normal, norm:" << normal2.norm() << endl;
+                    VR_ERROR << "Wrong normal, norm:" << normal2.norm() << std::endl;
                 }
 
                 if (fabs(normal3.norm() - 1.0f) > 1.1)
                 {
-                    VR_ERROR << "Wrong normal, norm:" << normal3.norm() << endl;
+                    VR_ERROR << "Wrong normal, norm:" << normal3.norm() << std::endl;
                 }
 
                 SoMatrixTransform* mt1 = new SoMatrixTransform;
@@ -2078,7 +2078,7 @@ namespace VirtualRobot
 
             if (!tcp)
             {
-                VR_ERROR << " No tcp in eef " << eef->getName() << endl;
+                VR_ERROR << " No tcp in eef " << eef->getName() << std::endl;
                 ok = false;
             }
         }
@@ -3408,7 +3408,7 @@ namespace VirtualRobot
 
         if (d.maxCoeff() > 1.0f)
         {
-            VR_ERROR << "Maximal coefficient must not be >1!" << endl;
+            VR_ERROR << "Maximal coefficient must not be >1!" << std::endl;
         }
 
         SoDrawStyle* ds = new SoDrawStyle;
@@ -3527,7 +3527,7 @@ namespace VirtualRobot
 
         if (d.maxCoeff() > 1.0f)
         {
-            VR_ERROR << "Maximal coefficient must not be >1!" << endl;
+            VR_ERROR << "Maximal coefficient must not be >1!" << std::endl;
         }
 
         SoDrawStyle* ds = new SoDrawStyle;
@@ -3636,7 +3636,7 @@ namespace VirtualRobot
     {
         if (!camNode)
         {
-            VR_ERROR << "No cam node to render..." << endl;
+            VR_ERROR << "No cam node to render..." << std::endl;
             return false;
         }
 
@@ -3702,7 +3702,7 @@ namespace VirtualRobot
         root->addChild(camInMeters);
 
         root->addChild(scene);
-        //VR_INFO << "*** preRender took " << (SbTime::getTimeOfDay() - t1).getValue() * 1000 << " ms" << endl;
+        //VR_INFO << "*** preRender took " << (SbTime::getTimeOfDay() - t1).getValue() * 1000 << " ms" << std::endl;
 
         SbTime t = SbTime::getTimeOfDay(); // for profiling
         bool ok = renderer->render(root) == TRUE ? true : false;
@@ -3711,7 +3711,7 @@ namespace VirtualRobot
         float msec = (SbTime::getTimeOfDay() - t).getValue() * 1000;
         if (msec > 300)
         {
-            VR_WARNING << "************ offscreen rendering took " << msec << " ms" << endl;
+            VR_WARNING << "************ offscreen rendering took " << msec << " ms" << std::endl;
         }
 
         root->unref();
@@ -3722,7 +3722,7 @@ namespace VirtualRobot
         {
             if (!renderErrorPrinted)
             {
-                VR_ERROR << "Rendering not successful! This error is printed only once." << endl;
+                VR_ERROR << "Rendering not successful! This error is printed only once." << std::endl;
                 renderErrorPrinted = true;
             }
 
@@ -3735,7 +3735,7 @@ namespace VirtualRobot
         float msec2 = (SbTime::getTimeOfDay() - t2a).getValue() * 1000;
         if (msec2 > 300)
         {
-            VR_WARNING << "************ getBuffer took " << msec2 << " ms" << endl;
+            VR_WARNING << "************ getBuffer took " << msec2 << " ms" << std::endl;
         }
         return true;
     }
@@ -3803,7 +3803,7 @@ namespace VirtualRobot
         //check input
         if (!camNode)
         {
-            VR_ERROR << "No cam node to render..." << endl;
+            VR_ERROR << "No cam node to render..." << std::endl;
             return false;
         }
         return renderOffscreenRgbDepthPointcloud(
@@ -3824,17 +3824,17 @@ namespace VirtualRobot
     {
         if (!offscreenRenderer)
         {
-            VR_ERROR << "No renderer..." << endl;
+            VR_ERROR << "No renderer..." << std::endl;
             return false;
         }
         if (!scene)
         {
-            VR_ERROR << "No scene to render..." << endl;
+            VR_ERROR << "No scene to render..." << std::endl;
             return false;
         }
         if (width <= 0 || height <= 0)
         {
-            VR_ERROR << "Invalid image dimensions..." << endl;
+            VR_ERROR << "Invalid image dimensions..." << std::endl;
             return false;
         }
         //setup
@@ -3893,7 +3893,7 @@ namespace VirtualRobot
         {
             if (!renderErrorPrinted)
             {
-                VR_ERROR << "Rendering not successful! This error is printed only once." << endl;
+                VR_ERROR << "Rendering not successful! This error is printed only once." << std::endl;
                 renderErrorPrinted = true;
             }
             return false;
@@ -4043,7 +4043,7 @@ namespace VirtualRobot
 
             if (visualizations[i]->getType() != getName())
             {
-                VR_ERROR << "Skipping Visualization " << i << ": Is type " << visualizations[i]->getType() << ", but factory is of type " << getName() << endl;
+                VR_ERROR << "Skipping Visualization " << i << ": Is type " << visualizations[i]->getType() << ", but factory is of type " << getName() << std::endl;
                 continue;
             }
 
@@ -4060,7 +4060,7 @@ namespace VirtualRobot
             }
             else
             {
-                VR_WARNING << "Invalid type casting to CoinVisualizationNode?!" << endl;
+                VR_WARNING << "Invalid type casting to CoinVisualizationNode?!" << std::endl;
             }
         }
 
@@ -4305,7 +4305,7 @@ namespace VirtualRobot
 
         if (o->getType() != getName())
         {
-            VR_ERROR << "Skipping Visualization type " << o->getType() << ", but factory is of type " << getName() << endl;
+            VR_ERROR << "Skipping Visualization type " << o->getType() << ", but factory is of type " << getName() << std::endl;
             return;
         }
 
@@ -4330,7 +4330,7 @@ namespace VirtualRobot
         }
         else
         {
-            VR_WARNING << "Invalid type casting to CoinVisualizationNode?!" << endl;
+            VR_WARNING << "Invalid type casting to CoinVisualizationNode?!" << std::endl;
         }
     }
 

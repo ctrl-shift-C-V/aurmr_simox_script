@@ -47,7 +47,7 @@ namespace Saba
 
         if (newRobot->getRootNode()->getCollisionChecker() != newColChecker)
         {
-            SABA_ERROR << ": Collision Checker instances do not match..." << endl;
+            SABA_ERROR << ": Collision Checker instances do not match..." << std::endl;
             return CSpaceSampledPtr();
         }
 

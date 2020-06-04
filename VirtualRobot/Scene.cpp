@@ -345,7 +345,7 @@ namespace VirtualRobot
             }
         }
 
-        VR_WARNING << "No robot with name " << name << " registered in scene " << this->name << endl;
+        VR_WARNING << "No robot with name " << name << " registered in scene " << this->name << std::endl;
         return RobotPtr();
     }
 
@@ -359,7 +359,7 @@ namespace VirtualRobot
             }
         }
 
-        VR_WARNING << "No obstacle with name " << name << " registered in scene " << this->name << endl;
+        VR_WARNING << "No obstacle with name " << name << " registered in scene " << this->name << std::endl;
         return ObstaclePtr();
     }
 
@@ -373,7 +373,7 @@ namespace VirtualRobot
             }
         }
 
-        VR_WARNING << "No Trajectory with name " << name << " registered in scene " << this->name << endl;
+        VR_WARNING << "No Trajectory with name " << name << " registered in scene " << this->name << std::endl;
         return TrajectoryPtr();
     }
 
@@ -387,7 +387,7 @@ namespace VirtualRobot
             }
         }
 
-        VR_WARNING << "No ManipulationObject with name " << name << " registered in scene " << this->name << endl;
+        VR_WARNING << "No ManipulationObject with name " << name << " registered in scene " << this->name << std::endl;
         return ManipulationObjectPtr();
     }
 
@@ -501,7 +501,7 @@ namespace VirtualRobot
             }
         }
 
-        VR_WARNING << "No robot with name " << robotName << " registered in scene " << this->name << endl;
+        VR_WARNING << "No robot with name " << robotName << " registered in scene " << this->name << std::endl;
         return RobotConfigPtr();
     }
 
@@ -518,7 +518,7 @@ namespace VirtualRobot
             }
         }
 
-        VR_WARNING << "No robotConfig with name " << name << " registered for robot " << robot->getName() << " in scene " << this->name << endl;
+        VR_WARNING << "No robotConfig with name " << name << " registered for robot " << robot->getName() << " in scene " << this->name << std::endl;
         return RobotConfigPtr();
     }
 
@@ -583,7 +583,7 @@ namespace VirtualRobot
 
         if (!r)
         {
-            VR_ERROR << " no robot with name " << robot << endl;
+            VR_ERROR << " no robot with name " << robot << std::endl;
             return RobotNodeSetPtr();
         }
 

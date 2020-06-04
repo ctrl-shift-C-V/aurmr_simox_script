@@ -184,7 +184,7 @@ namespace VirtualRobot
         return result;
     }
 
-    bool ColladaIO::addGeometry(boost::shared_ptr<VirtualRobot::TriMeshModel> triMesh, Eigen::Matrix4f& preModelTrafo, ColladaParser::SceneGraph::GeometryType& geom, float scaling)
+    bool ColladaIO::addGeometry(VirtualRobot::TriMeshModelPtr triMesh, Eigen::Matrix4f& preModelTrafo, ColladaParser::SceneGraph::GeometryType& geom, float scaling)
     {
         bool perVertexNormals = false;
 
@@ -425,7 +425,7 @@ namespace VirtualRobot
 
 
     //TODO: This fails when several meshes are connected to the same node!!
-    bool ColladaIO::addSceneGraph(boost::shared_ptr<VirtualRobot::TriMeshModel> triMesh,  boost::shared_ptr<ColladaParser::SceneGraph> sceneGraph, const Eigen::Matrix4f& modelTrafo, float scaling)
+    bool ColladaIO::addSceneGraph(VirtualRobot::TriMeshModelPtr triMesh,  boost::shared_ptr<ColladaParser::SceneGraph> sceneGraph, const Eigen::Matrix4f& modelTrafo, float scaling)
     {
         if (!triMesh || !sceneGraph)
         {
@@ -449,9 +449,9 @@ namespace VirtualRobot
         return true;
     }
 
-    boost::shared_ptr<VirtualRobot::TriMeshModel> ColladaIO::getMesh(boost::shared_ptr<ColladaParser::NodeData> colladaNode, const Eigen::Matrix4f& modelTrafo, float scaling)
+    VirtualRobot::TriMeshModelPtr ColladaIO::getMesh(boost::shared_ptr<ColladaParser::NodeData> colladaNode, const Eigen::Matrix4f& modelTrafo, float scaling)
     {
-        boost::shared_ptr<VirtualRobot::TriMeshModel> triMeshPtr;
+        VirtualRobot::TriMeshModelPtr triMeshPtr;
 
         if (colladaNode->sceneGraph && (colladaNode->sceneGraph->geometries.size() > 0 || colladaNode->sceneGraph->children.size() > 0))
         {

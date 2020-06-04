@@ -29,7 +29,7 @@ bool useColModel = false;
 int main(int argc, char* argv[])
 {
     VirtualRobot::init(argc, argv, "Generic IK Demo");
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
 
     VirtualRobot::RuntimeEnvironment::considerKey("robot");
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    cout << "Using robot at " << filename << endl;
+    std::cout << "Using robot at " << filename << std::endl;
 
     GenericIKWindow rw(filename);
 

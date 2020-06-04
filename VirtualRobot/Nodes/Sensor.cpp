@@ -60,23 +60,23 @@ namespace VirtualRobot
     {
         if (printDecoration)
         {
-            cout << "******** Sensor ********" << endl;
+            std::cout << "******** Sensor ********" << std::endl;
         }
 
-        cout << "* Name: " << name << endl;
-        cout << "* Parent: ";
+        std::cout << "* Name: " << name << std::endl;
+        std::cout << "* Parent: ";
         SceneObjectPtr p = this->getParent();
 
         if (p)
         {
-            cout << p->getName() << endl;
+            std::cout << p->getName() << std::endl;
         }
         else
         {
-            cout << " -- " << endl;
+            std::cout << " -- " << std::endl;
         }
 
-        cout << "* visualization model: " << endl;
+        std::cout << "* visualization model: " << std::endl;
 
         if (visualizationModel)
         {
@@ -84,30 +84,30 @@ namespace VirtualRobot
         }
         else
         {
-            cout << "  No visualization model" << endl;
+            std::cout << "  No visualization model" << std::endl;
         }
 
         if (initialized)
         {
-            cout << "* initialized: true" << endl;
+            std::cout << "* initialized: true" << std::endl;
         }
         else
         {
-            cout << "* initialized: false" << endl;
+            std::cout << "* initialized: false" << std::endl;
         }
 
         {
             // scope1
             std::ostringstream sos;
             sos << std::setiosflags(std::ios::fixed);
-            sos << "* RobotNode to sensor transformation:" << endl << rnTransformation << endl;
-            sos << "* globalPose:" << endl << getGlobalPose() << endl;
-            cout << sos.str();
+            sos << "* RobotNode to sensor transformation:" << endl << rnTransformation << std::endl;
+            sos << "* globalPose:" << endl << getGlobalPose() << std::endl;
+            std::cout << sos.str();
         } // scope1
 
         if (printDecoration)
         {
-            cout << "******** End Sensor ********" << endl;
+            std::cout << "******** End Sensor ********" << std::endl;
         }
 
         if (printChildren)
@@ -142,7 +142,7 @@ namespace VirtualRobot
 
         if (!result)
         {
-            VR_ERROR << "Cloning failed.." << endl;
+            VR_ERROR << "Cloning failed.." << std::endl;
             return result;
         }
 
@@ -197,18 +197,18 @@ namespace VirtualRobot
             pre += t;
         }
 
-        ss << pre << "<Sensor name='" << name << "'>" << endl;
+        ss << pre << "<Sensor name='" << name << "'>" << std::endl;
         std::string pre2 = pre + t;
-        ss << pre << "<Transform>" << endl;
+        ss << pre << "<Transform>" << std::endl;
         ss << BaseIO::toXML(rnTransformation, pre2);
-        ss << pre << "</Transform>" << endl;
+        ss << pre << "</Transform>" << std::endl;
 
         if (visualizationModel && visualizationModel->getTriMeshModel() && visualizationModel->getTriMeshModel()->faces.size() > 0)
         {
             ss << visualizationModel->toXML(modelPath, tabs + 1);
         }
 
-        ss << pre << "</Sensor>" << endl;
+        ss << pre << "</Sensor>" << std::endl;
         return ss.str();
     }
 

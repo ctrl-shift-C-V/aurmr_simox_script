@@ -24,8 +24,11 @@ namespace simox::meta
         using eigen_t = Eigen::Matrix<ScalarType, Rows, Cols>;
     };
 
-
     template<class T>
     static constexpr bool is_eigen_matrix_v = is_eigen_matrix<T>::value;
 
+    template<class T>
+    static constexpr bool is_floating_point_eigen_matrix_v =
+        is_eigen_matrix_v<T>&&
+        std::is_floating_point_v<typename is_eigen_matrix<T>::scalar_t>;
 }

@@ -39,7 +39,7 @@ namespace VirtualRobot
             THROW_VR_EXCEPTION("ERROR negative grid size");
         }
 
-        VR_INFO << ": creating grid with " << gridSizeX << "x" << gridSizeY << " = " << gridSizeX* gridSizeY << " entries" << endl;
+        VR_INFO << ": creating grid with " << gridSizeX << "x" << gridSizeY << " = " << gridSizeX* gridSizeY << " entries" << std::endl;
         data = new int[gridSizeX * gridSizeY];
         graspLink = new std::vector<GraspPtr>[gridSizeX * gridSizeY];
         memset(data, 0, sizeof(int)*gridSizeX * gridSizeY);
@@ -70,7 +70,7 @@ namespace VirtualRobot
 
         if (nPosX < 0 || nPosY < 0 || nPosX >= gridSizeX || nPosY >= gridSizeY)
         {
-            //cout << __PRETTY_FUNCTION__ << " internal error: " << fX << "," << fY << endl;
+            //cout << __PRETTY_FUNCTION__ << " internal error: " << fX << "," << fY << std::endl;
             return 0;
         }
 
@@ -89,7 +89,7 @@ namespace VirtualRobot
 
         if (nPosX < 0 || nPosY < 0 || nPosX >= gridSizeX || nPosY >= gridSizeY)
         {
-            //cout << __PRETTY_FUNCTION__ << " internal error: " << fX << "," << fY << endl;
+            //cout << __PRETTY_FUNCTION__ << " internal error: " << fX << "," << fY << std::endl;
             return false;
         }
 
@@ -120,7 +120,7 @@ namespace VirtualRobot
 
         if (nPosX < 0 || nPosY < 0 || nPosX >= gridSizeX || nPosY >= gridSizeY)
         {
-            //cout << __PRETTY_FUNCTION__ << " internal error: " << fX << "," << fY << endl;
+            //cout << __PRETTY_FUNCTION__ << " internal error: " << fX << "," << fY << std::endl;
             return false;
         }
 
@@ -138,7 +138,7 @@ namespace VirtualRobot
 
         if (cellX < 0 || cellY < 0 || cellX >= gridSizeX || cellY >= gridSizeY)
         {
-            //cout << __PRETTY_FUNCTION__ << " internal error: " << nX << "," << nY << endl;
+            //cout << __PRETTY_FUNCTION__ << " internal error: " << nX << "," << nY << std::endl;
             return 0;
         }
 
@@ -154,7 +154,7 @@ namespace VirtualRobot
 
         if (cellX < 0 || cellY < 0 || cellX >= gridSizeX || cellY >= gridSizeY)
         {
-            //cout << __PRETTY_FUNCTION__ << " internal error: " << nX << "," << nY << endl;
+            //cout << __PRETTY_FUNCTION__ << " internal error: " << nX << "," << nY << std::endl;
             return false;
         }
 
@@ -182,7 +182,7 @@ namespace VirtualRobot
 
         if (cellX < 0 || cellY < 0 || cellX >= gridSizeX || cellY >= gridSizeY)
         {
-            //cout << __PRETTY_FUNCTION__ << " internal error: " << nX << "," << nY << endl;
+            //cout << __PRETTY_FUNCTION__ << " internal error: " << nX << "," << nY << std::endl;
             return false;
         }
 
@@ -212,7 +212,7 @@ namespace VirtualRobot
 
         if (cellX < 0 || cellY < 0 || cellX >= gridSizeX || cellY >= gridSizeY)
         {
-            //cout << __PRETTY_FUNCTION__ << " internal error: " << nPosX << "," << nPosY << endl;
+            //cout << __PRETTY_FUNCTION__ << " internal error: " << nPosX << "," << nPosY << std::endl;
             return;
         }
 
@@ -247,7 +247,7 @@ namespace VirtualRobot
 
         if (nPosX < 0 || nPosY < 0 || nPosX >= gridSizeX || nPosY >= gridSizeY)
         {
-            //cout << __PRETTY_FUNCTION__ << " internal error: " << fX << "," << fY << endl;
+            //cout << __PRETTY_FUNCTION__ << " internal error: " << fX << "," << fY << std::endl;
             return;
         }
 
@@ -511,14 +511,14 @@ namespace VirtualRobot
         float totalMinY = std::numeric_limits<float>::max();
         for(auto& grid : grids)
         {
-//            VR_INFO << "min: " << grid->getMin() << " max: " << grid->getMax() << endl;
+//            VR_INFO << "min: " << grid->getMin() << " max: " << grid->getMax() << std::endl;
             totalMinX = std::min(grid->getMin()(0), totalMinX);
             totalMinY = std::min(grid->getMin()(1), totalMinY);
             totalMaxX = std::max(grid->getMax()(0), totalMaxX);
             totalMaxY = std::max(grid->getMax()(1), totalMaxY);
         }
         WorkspaceGridPtr resultGrid(new WorkspaceGrid(totalMinX, totalMaxX, totalMinY, totalMaxY, grids.at(0)->getDiscretizeSize()));
-//        VR_INFO << "minx : " << totalMinX << " maxX: " << totalMaxX << " step size: " << resultGrid->getDiscretizeSize() << endl;
+//        VR_INFO << "minx : " << totalMinX << " maxX: " << totalMaxX << " step size: " << resultGrid->getDiscretizeSize() << std::endl;
 //        int sameValueCount =  0;
 //        int totalValueCount = 0;
         for(float x = totalMinX; x < totalMaxX; x += resultGrid->getDiscretizeSize())
@@ -541,7 +541,7 @@ namespace VirtualRobot
                 resultGrid->setEntry(x, y, min, grasp);
             }
         }
-//        VR_INFO << "Same value percentage: " << (100.f * sameValueCount/totalValueCount) << endl;
+//        VR_INFO << "Same value percentage: " << (100.f * sameValueCount/totalValueCount) << std::endl;
         return resultGrid;
 
     }

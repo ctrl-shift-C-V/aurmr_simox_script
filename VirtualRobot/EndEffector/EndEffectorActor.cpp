@@ -431,16 +431,16 @@ namespace VirtualRobot
 
     void EndEffectorActor::print()
     {
-        cout << " ****" << endl;
-        cout << " ** Name:" << name << endl;
+        std::cout << " ****" << std::endl;
+        std::cout << " ** Name:" << name << std::endl;
 
         for (auto& actor : actors)
         {
-            cout << " *** RobotNode: " << actor.robotNode->getName() << ", Direction/Speed:" << actor.directionAndSpeed << endl;
+            std::cout << " *** RobotNode: " << actor.robotNode->getName() << ", Direction/Speed:" << actor.directionAndSpeed << std::endl;
             //actors[i].robotNode->print();
         }
 
-        cout << " ****" << endl;
+        std::cout << " ****" << std::endl;
     }
 
     bool EndEffectorActor::hasNode(RobotNodePtr node)
@@ -543,7 +543,7 @@ namespace VirtualRobot
 
         std::string tt = pre + t;
         std::string ttt = tt + t;
-        ss << pre << "<Actor name='" << name << "'>" << endl;
+        ss << pre << "<Actor name='" << name << "'>" << std::endl;
 
         for (auto& actor : actors)
         {
@@ -571,10 +571,10 @@ namespace VirtualRobot
                 }
             }
 
-            ss << "Direction='" << actor.directionAndSpeed << "'/>" << endl;
+            ss << "Direction='" << actor.directionAndSpeed << "'/>" << std::endl;
         }
 
-        ss << pre << "</Actor>" << endl;
+        ss << pre << "</Actor>" << std::endl;
         return ss.str();
     }
 

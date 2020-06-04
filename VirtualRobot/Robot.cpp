@@ -70,7 +70,7 @@ namespace VirtualRobot
         //robotNodeMap.clear();
         if (!node)
         {
-            VR_WARNING << "NULL root node..." << endl;
+            VR_WARNING << "NULL root node..." << std::endl;
         }
         else
         {
@@ -86,7 +86,7 @@ namespace VirtualRobot
 
                 if (!this->hasRobotNode(name))
                 {
-                    VR_WARNING << "Robot node with name <" << name << "> was not registered, adding it to RobotNodeMap" << endl;
+                    VR_WARNING << "Robot node with name <" << name << "> was not registered, adding it to RobotNodeMap" << std::endl;
                     registerRobotNode(allNode);
                 }
             }
@@ -102,7 +102,7 @@ namespace VirtualRobot
     {
         if (robotNodeMap.find(robotNodeName) == robotNodeMap.end())
         {
-            VR_WARNING << "No robot node with name <" << robotNodeName << "> defined." << endl;
+            VR_WARNING << "No robot node with name <" << robotNodeName << "> defined." << std::endl;
             return RobotNodePtr();
         }
 
@@ -188,7 +188,7 @@ namespace VirtualRobot
 
         if (robotNodeSetMap.find(nodeSetName) != robotNodeSetMap.end())
         {
-            VR_WARNING << "There are (at least) two robot node sets with name <" << nodeSetName << "> defined, the second one overwrites first definition!" << endl;
+            VR_WARNING << "There are (at least) two robot node sets with name <" << nodeSetName << "> defined, the second one overwrites first definition!" << std::endl;
             // overwrite
         }
 
@@ -307,7 +307,7 @@ namespace VirtualRobot
     {
         if (endEffectorMap.find(endEffectorName) == endEffectorMap.end())
         {
-            VR_WARNING << "No endeffector node with name <" << endEffectorName << "> defined." << endl;
+            VR_WARNING << "No endeffector node with name <" << endEffectorName << "> defined." << std::endl;
             return EndEffectorPtr();
         }
 
@@ -367,47 +367,47 @@ namespace VirtualRobot
 
     void Robot::print(bool /*printChildren*/, bool /*printDecoration*/) const
     {
-        cout << "******** Robot ********" << endl;
-        cout << "* Name: " << name << endl;
-        cout << "* Type: " << type << endl;
+        std::cout << "******** Robot ********" << std::endl;
+        std::cout << "* Name: " << name << std::endl;
+        std::cout << "* Type: " << type << std::endl;
 
         if (this->getRootNode())
         {
-            cout << "* Root Node: " << this->getRootNode()->getName() << endl;
+            std::cout << "* Root Node: " << this->getRootNode()->getName() << std::endl;
         }
         else
         {
-            cout << "* Root Node: not set" << endl;
+            std::cout << "* Root Node: not set" << std::endl;
         }
 
-        cout << endl;
+        std::cout << std::endl;
 
         if (this->getRootNode())
         {
             this->getRootNode()->print(true, true);
         }
 
-        cout << endl;
+        std::cout << std::endl;
 
         std::vector<RobotNodeSetPtr> robotNodeSets = this->getRobotNodeSets();
 
         if (robotNodeSets.size() > 0)
         {
-            cout << "* RobotNodeSets:" << endl;
+            std::cout << "* RobotNodeSets:" << std::endl;
 
             std::vector<RobotNodeSetPtr>::iterator iter = robotNodeSets.begin();
 
             while (iter != robotNodeSets.end())
             {
-                cout << "----------------------------------" << endl;
+                std::cout << "----------------------------------" << std::endl;
                 (*iter)->print();
                 iter++;
             }
 
-            cout << endl;
+            std::cout << std::endl;
         }
 
-        cout << "******** Robot ********" << endl;
+        std::cout << "******** Robot ********" << std::endl;
     }
 
 
@@ -528,7 +528,7 @@ namespace VirtualRobot
         auto it = robotNodeSetMap.find(nodeSetName);
         if (it == robotNodeSetMap.end())
         {
-            VR_WARNING << "No robot node set with name <" << nodeSetName << "> defined." << endl;
+            VR_WARNING << "No robot node set with name <" << nodeSetName << "> defined." << std::endl;
             return RobotNodeSetPtr();
         }
 
@@ -1001,7 +1001,7 @@ namespace VirtualRobot
             RobotNodePtr rn = getRobotNode(it->first);
             if (!rn)
             {
-                VR_WARNING << "No joint with name " << it->first << endl;
+                VR_WARNING << "No joint with name " << it->first << std::endl;
             }
             else
             {
@@ -1136,17 +1136,17 @@ namespace VirtualRobot
     std::string Robot::toXML(const std::string& basePath,  const std::string& modelPath /*= "models"*/, bool storeEEF, bool storeRNS, bool storeSensors)
     {
         std::stringstream ss;
-        ss << "<?xml version='1.0' encoding='UTF-8'?>" << endl << endl;
-        //ss << "<Robot Type='" << this->type << "' RootNode='" << this->getRootNode()->getName() << "' RadianToMMfactor='" << this->radianToMMfactor << "'>" << endl << endl;
-        ss << "<Robot Type='" << this->type << "' RootNode='" << this->getRootNode()->getName() << "'>" << endl << endl;
+        ss << "<?xml version='1.0' encoding='UTF-8'?>" << endl << std::endl;
+        //ss << "<Robot Type='" << this->type << "' RootNode='" << this->getRootNode()->getName() << "' RadianToMMfactor='" << this->radianToMMfactor << "'>" << endl << std::endl;
+        ss << "<Robot Type='" << this->type << "' RootNode='" << this->getRootNode()->getName() << "'>" << endl << std::endl;
         std::vector<RobotNodePtr> nodes = getRobotNodes();
 
         for (auto& node : nodes)
         {
-            ss << node->toXML(basePath, modelPath, storeSensors) << endl;
+            ss << node->toXML(basePath, modelPath, storeSensors) << std::endl;
         }
 
-        ss << endl;
+        ss << std::endl;
 
         if (storeRNS)
         {
@@ -1155,12 +1155,12 @@ namespace VirtualRobot
 
             for (auto& rn : rns)
             {
-                ss << rn->toXML(1) << endl;
+                ss << rn->toXML(1) << std::endl;
             }
 
             if (rns.size() > 0)
             {
-                ss << endl;
+                ss << std::endl;
             }
         }
 
@@ -1170,16 +1170,16 @@ namespace VirtualRobot
 
             for (auto& eef : eefs)
             {
-                ss << eef->toXML(1) << endl;
+                ss << eef->toXML(1) << std::endl;
             }
 
             if (eefs.size() > 0)
             {
-                ss << endl;
+                ss << std::endl;
             }
         }
 
-        ss << "</Robot>" << endl;
+        ss << "</Robot>" << std::endl;
 
         return ss.str();
     }

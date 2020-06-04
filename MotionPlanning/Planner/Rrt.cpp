@@ -22,13 +22,13 @@ namespace Saba
 
         if (probabilityExtendToGoal <= 0)
         {
-            SABA_ERROR << " probabilityExtendToGoal is wrong: " << probabilityExtendToGoal << endl;
+            SABA_ERROR << " probabilityExtendToGoal is wrong: " << probabilityExtendToGoal << std::endl;
             probabilityExtendToGoal = 0.1f;
         }
 
         if (probabilityExtendToGoal >= 1.0f)
         {
-            SABA_ERROR << " probabilityExtendToGoal is wrong: " << probabilityExtendToGoal << endl;
+            SABA_ERROR << " probabilityExtendToGoal is wrong: " << probabilityExtendToGoal << std::endl;
             probabilityExtendToGoal = 0.9f;
         }
 
@@ -56,15 +56,15 @@ namespace Saba
             switch (rrtMode)
             {
                 case eExtend:
-                    cout << "-- Mode: RRT-EXTEND" << endl;
+                    std::cout << "-- Mode: RRT-EXTEND" << std::endl;
                     break;
 
                 case eConnect:
-                    cout << "-- Mode: RRT-CONNECT" << endl;
+                    std::cout << "-- Mode: RRT-CONNECT" << std::endl;
                     break;
 
                 case eConnectCompletePath:
-                    cout << "-- Mode: RRT-CONNECT (only complete paths)" << endl;
+                    std::cout << "-- Mode: RRT-CONNECT (only complete paths)" << std::endl;
                     break;
 
                 default:
@@ -136,14 +136,14 @@ namespace Saba
 
                     if (!goalNode)
                     {
-                        SABA_ERROR << " no node for ID: " << lastAddedID << endl;
+                        SABA_ERROR << " no node for ID: " << lastAddedID << std::endl;
                         stopSearch = true;
                     }
                     else
                     {
                         if (!goalConfig.isApprox(goalNode->configuration))
                         {
-                            SABA_WARNING << "GoalConfig: (" << goalConfig << ") != goalNode (" << goalNode->configuration << ")" << endl;
+                            SABA_WARNING << "GoalConfig: (" << goalConfig << ") != goalNode (" << goalNode->configuration << ")" << std::endl;
                         }
 
                         //SABA_ASSERT(goalConfig.isApprox(goalNode->configuration));
@@ -376,15 +376,15 @@ namespace Saba
         switch (rrtMode)
         {
             case eExtend:
-                cout << "-- Mode: RRT-EXTEND" << endl;
+                std::cout << "-- Mode: RRT-EXTEND" << std::endl;
                 break;
 
             case eConnect:
-                cout << "-- Mode: RRT-CONNECT" << endl;
+                std::cout << "-- Mode: RRT-CONNECT" << std::endl;
                 break;
 
             case eConnectCompletePath:
-                cout << "-- Mode: RRT-CONNECT (only complete paths)" << endl;
+                std::cout << "-- Mode: RRT-CONNECT (only complete paths)" << std::endl;
                 break;
 
             default:
@@ -407,7 +407,7 @@ namespace Saba
 
         if (tree->getNrOfNodes() > 0)
         {
-            SABA_WARNING << "Removing all nodes from tree..." << endl;
+            SABA_WARNING << "Removing all nodes from tree..." << std::endl;
             tree->reset();
         }
 

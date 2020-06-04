@@ -38,7 +38,7 @@ namespace VirtualRobot
         {
             THROW_VR_EXCEPTION("RobotNodeSetPtr for the joints is zero pointer");
         }
-        VERBOSE_OUT << "joint values:\n" << rns->getJointValuesEigen() << endl;
+        VERBOSE_OUT << "joint values:\n" << rns->getJointValuesEigen() << std::endl;
         gravity = RigidBodyDynamics::Math::Vector3d(0, 0, -9.81);
         model = std::shared_ptr<RigidBodyDynamics::Model>(new RigidBodyDynamics::Model());
 
@@ -132,14 +132,14 @@ namespace VirtualRobot
     void Dynamics::print()
     {
         std::string result = RigidBodyDynamics::Utils::GetModelHierarchy(*model.get());
-        cout << "RBDL hierarchy of RNS:" << rns->getName() << endl;
-        cout << result;
+        std::cout << "RBDL hierarchy of RNS:" << rns->getName() << std::endl;
+        std::cout << result;
         result = RigidBodyDynamics::Utils::GetNamedBodyOriginsOverview(*model.get());
-        cout << "RBDL origins of RNS:" << rns->getName() << endl;
-        cout << result;
+        std::cout << "RBDL origins of RNS:" << rns->getName() << std::endl;
+        std::cout << result;
         result = RigidBodyDynamics::Utils::GetModelDOFOverview(*model.get());
-        cout << "RBDL DoF of RNS:" << rns->getName() << endl;
-        cout << result;
+        std::cout << "RBDL DoF of RNS:" << rns->getName() << std::endl;
+        std::cout << result;
     }
 
     std::tuple<Eigen::Matrix3d, Eigen::Vector3d, double> Dynamics::computeCombinedPhysics(const std::set<RobotNodePtr>& nodes,
@@ -299,7 +299,7 @@ namespace VirtualRobot
 
             if (Dynamics::rns->hasRobotNode(node) && (node->isRotationalJoint() || node->isTranslationalJoint()))
             {
-                VR_ERROR << "Skipping joint " << node->getName() << ": multiple joints in row without masses inbetween..." << endl;
+                VR_ERROR << "Skipping joint " << node->getName() << ": multiple joints in row without masses inbetween..." << std::endl;
             }
         }
 
@@ -327,7 +327,7 @@ namespace VirtualRobot
             RigidBodyDynamics::Math::Matrix3d spatial_rotation = accumulatedTransformPreJoint.block(0, 0, 3, 3).cast<double>();
             RigidBodyDynamics::Math::Vector3d spatial_translation = accumulatedTransformPreJoint.col(3).head(3).cast<double>() / 1000.0;
             RigidBodyDynamics::Math::SpatialTransform spatial_transform = RigidBodyDynamics::Math::SpatialTransform(spatial_rotation, spatial_translation);
-            VERBOSE_OUT << "****** spatial_translation: " << spatial_translation.transpose() << endl;
+            VERBOSE_OUT << "****** spatial_translation: " << spatial_translation.transpose() << std::endl;
 
             // joint
             RigidBodyDynamics::Joint joint = RigidBodyDynamics::Joint(RigidBodyDynamics::JointTypeFixed);
@@ -341,7 +341,7 @@ namespace VirtualRobot
 
                 joint = RigidBodyDynamics::Joint(joint_type, joint_axis);
 
-                VR_INFO << "Adding Rotational RigidBodyDynamics::Joint" << endl;
+                VR_INFO << "Adding Rotational RigidBodyDynamics::Joint" << std::endl;
             }
             else if (jointNode && jointNode->isTranslationalJoint())
             {
@@ -351,7 +351,7 @@ namespace VirtualRobot
 
                 joint = RigidBodyDynamics::Joint(joint_type, joint_axis);
 
-                VR_INFO << "Adding Translational RigidBodyDynamics::Joint" << endl;
+                VR_INFO << "Adding Translational RigidBodyDynamics::Joint" << std::endl;
             }
 
             std::string nodeName;
@@ -368,25 +368,25 @@ namespace VirtualRobot
             nodeID = model->AddBody(parentID, spatial_transform, joint, body, nodeName);
             this->identifierMap[nodeName] = nodeID;
 
-            VERBOSE_OUT << "New body:" << node->getName() << ", " << nodeID << " :" << endl; // Debugging Info
-            VERBOSE_OUT << "** SPATIAL TRAFO: " << endl << spatial_transform.toMatrix() << endl;
-            VERBOSE_OUT << "** MASS: " << body.mMass << endl;
-            VERBOSE_OUT << "** COM: " << body.mCenterOfMass.transpose() << endl;
-            VERBOSE_OUT << "** INERTIA: " << endl << body.mInertia << endl;
-            VERBOSE_OUT << "** mIsVirtual: " << body.mIsVirtual << endl;
+            VERBOSE_OUT << "New body:" << node->getName() << ", " << nodeID << " :" << std::endl; // Debugging Info
+            VERBOSE_OUT << "** SPATIAL TRAFO: " << endl << spatial_transform.toMatrix() << std::endl;
+            VERBOSE_OUT << "** MASS: " << body.mMass << std::endl;
+            VERBOSE_OUT << "** COM: " << body.mCenterOfMass.transpose() << std::endl;
+            VERBOSE_OUT << "** INERTIA: " << endl << body.mInertia << std::endl;
+            VERBOSE_OUT << "** mIsVirtual: " << body.mIsVirtual << std::endl;
 
             if (jointNode)
             {
-                VERBOSE_OUT << "** RigidBodyDynamics::Joint: " << jointNode->getName() << endl;
+                VERBOSE_OUT << "** RigidBodyDynamics::Joint: " << jointNode->getName() << std::endl;
             }
             else
             {
-                VERBOSE_OUT << "** RigidBodyDynamics::Joint: none" << endl;
+                VERBOSE_OUT << "** RigidBodyDynamics::Joint: none" << std::endl;
             }
 
             if (joint.mJointAxes)
             {
-                VERBOSE_OUT << "** JOINT AXES " << endl << *(joint.mJointAxes) << endl;
+                VERBOSE_OUT << "** JOINT AXES " << endl << *(joint.mJointAxes) << std::endl;
             }
 
             // reset pre and post trafos and jointNode
@@ -415,7 +415,7 @@ namespace VirtualRobot
                 toRBDLRecursive(model, childRobotNode, accumulatedTransformPreJoint, accumulatedTransformPostJoint, jointNode, nodeID);
                 //} else
                 //{
-                //    VR_INFO << "skipping RN " << childRobotNode->getName() << " since it is not part of RNS" << endl;
+                //    VR_INFO << "skipping RN " << childRobotNode->getName() << " since it is not part of RNS" << std::endl;
                 //}
             }
         }
@@ -426,7 +426,7 @@ namespace VirtualRobot
 
     void Dynamics::toRBDL(std::shared_ptr<RigidBodyDynamics::Model> model, RobotNodePtr node, RobotNodeSetPtr nodeSet, RobotNodePtr parentNode, int parentID)
     {
-        VERBOSE_OUT << "#######ADDING NODE " << node->getName() << endl;
+        VERBOSE_OUT << "#######ADDING NODE " << node->getName() << std::endl;
         RobotNodePtr physicsFromChild;
         int nodeID = parentID;
         // need to define body, joint and spatial transform
@@ -434,7 +434,7 @@ namespace VirtualRobot
         auto relevantChildNodes = getChildrenWithMass(node, nodeSet);
         for (auto node : relevantChildNodes)
         {
-            VERBOSE_OUT << "Additional child: " << node->getName() << " - " << node->getMass() << " kg" << endl;
+            VERBOSE_OUT << "Additional child: " << node->getName() << " - " << node->getMass() << " kg" << std::endl;
         }
         auto combinedBody = computeCombinedBody(relevantChildNodes, node);
 
@@ -457,7 +457,7 @@ namespace VirtualRobot
         RigidBodyDynamics::Math::Matrix3d spatial_rotation = trafo.block(0, 0, 3, 3);
         RigidBodyDynamics::Math::Vector3d spatial_translation = trafo.col(3).head(3) / 1000;
 
-        VERBOSE_OUT << "****** spatial_translation: " << spatial_translation.transpose() << endl;
+        VERBOSE_OUT << "****** spatial_translation: " << spatial_translation.transpose() << std::endl;
 
         RigidBodyDynamics::Math::SpatialTransform spatial_transform = RigidBodyDynamics::Math::SpatialTransform(spatial_rotation.transpose(), spatial_translation);
 
@@ -472,7 +472,7 @@ namespace VirtualRobot
 
             joint = RigidBodyDynamics::Joint(joint_type, joint_axis);
 
-            VERBOSE_OUT << "Rotational RigidBodyDynamics::Joint added:" << endl;
+            VERBOSE_OUT << "Rotational RigidBodyDynamics::Joint added:" << std::endl;
         }
         else if (node->isTranslationalJoint())
         {
@@ -482,7 +482,7 @@ namespace VirtualRobot
 
             joint = RigidBodyDynamics::Joint(joint_type, joint_axis);
 
-            VERBOSE_OUT << "translational RigidBodyDynamics::Joint added" << endl;
+            VERBOSE_OUT << "translational RigidBodyDynamics::Joint added" << std::endl;
         }
 
         if (joint.mJointType != RigidBodyDynamics::JointTypeFixed)
@@ -491,12 +491,12 @@ namespace VirtualRobot
             this->identifierMap[node->getName()] = nodeID;
             Eigen::VectorXd QDDot = Eigen::VectorXd::Zero(identifierMap.size());
 
-            VERBOSE_OUT << "New body:" << node->getName() << ", " << nodeID << " :" << endl; // Debugging Info
-            VERBOSE_OUT << "** SPATIAL TRAFO: " << endl << spatial_transform.r << endl << spatial_transform.E << endl;
-            VERBOSE_OUT << "** MASS: " << body.mMass << endl;
-            VERBOSE_OUT << "** COM: " << body.mCenterOfMass.transpose() << endl;
-            VERBOSE_OUT << "** INERTIA: " << endl << body.mInertia << endl;
-            VERBOSE_OUT << "** mIsVirtual: " << body.mIsVirtual << endl;
+            VERBOSE_OUT << "New body:" << node->getName() << ", " << nodeID << " :" << std::endl; // Debugging Info
+            VERBOSE_OUT << "** SPATIAL TRAFO: " << endl << spatial_transform.r << endl << spatial_transform.E << std::endl;
+            VERBOSE_OUT << "** MASS: " << body.mMass << std::endl;
+            VERBOSE_OUT << "** COM: " << body.mCenterOfMass.transpose() << std::endl;
+            VERBOSE_OUT << "** INERTIA: " << endl << body.mInertia << std::endl;
+            VERBOSE_OUT << "** mIsVirtual: " << body.mIsVirtual << std::endl;
             Eigen::Vector3d bodyPosition = RigidBodyDynamics::CalcBodyToBaseCoordinates(*model, Eigen::VectorXd::Zero(identifierMap.size()), nodeID, Eigen::Vector3d::Zero(), true);
             Eigen::Vector3f positionInVirtualRobot = node->getGlobalPosition();//rns->getKinematicRoot()->transformTo(node, zeroVec);
             auto diff = (positionInVirtualRobot - bodyPosition.cast<float>() * 1000).norm();
@@ -505,11 +505,11 @@ namespace VirtualRobot
                 VR_ERROR << "forward kinematics between virtual robot and rbdl differ: " << diff << " mm";
                 throw VirtualRobotException("forward kinematics between virtual robot and rbdl differ!");
             }
-            //        VERBOSE_OUT << "** position:\n" << bodyPosition << "\nposition in virtual robot:\n" << positionInVirtualRobot << endl << endl;
+            //        VERBOSE_OUT << "** position:\n" << bodyPosition << "\nposition in virtual robot:\n" << positionInVirtualRobot << endl << std::endl;
 
             if (joint.mJointAxes)
             {
-                VERBOSE_OUT << "** JOINT AXES " << endl << *(joint.mJointAxes) << endl;
+                VERBOSE_OUT << "** JOINT AXES " << endl << *(joint.mJointAxes) << std::endl;
             }
         }
 

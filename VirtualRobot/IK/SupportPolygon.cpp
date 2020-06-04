@@ -108,7 +108,7 @@ namespace VirtualRobot
 
         if (!MathTools::isInside(com2D, ch))
         {
-            //cout << "CoM outside of support polygon" << endl;
+            //cout << "CoM outside of support polygon" << std::endl;
             return 0.0f;
         }
 
@@ -146,10 +146,10 @@ namespace VirtualRobot
             //(ptOnLine-com2D).squaredNorm();
             if (d < minDistCoM)
             {
-                /*cout << "minDistCom:" << sqrtf(d) << ", com2D:" << com2D(0) << "," << com2D(1) << endl;
-                cout << "minDistCom:" << sqrtf(d) << ", pt1:" << pt1(0) << "," << pt1(1) << endl;
-                cout << "minDistCom:" << sqrtf(d) << ", pt2:" << pt2(0) << "," << pt2(1) << endl;
-                cout << "minDistCom:" << sqrtf(d) << ", ptOnLine:" << ptOnLine(0) << "," << ptOnLine(1) << endl;*/
+                /*cout << "minDistCom:" << sqrtf(d) << ", com2D:" << com2D(0) << "," << com2D(1) << std::endl;
+                std::cout << "minDistCom:" << sqrtf(d) << ", pt1:" << pt1(0) << "," << pt1(1) << std::endl;
+                std::cout << "minDistCom:" << sqrtf(d) << ", pt2:" << pt2(0) << "," << pt2(1) << std::endl;
+                std::cout << "minDistCom:" << sqrtf(d) << ", ptOnLine:" << ptOnLine(0) << "," << ptOnLine(1) << std::endl;*/
                 minDistCoM = d;
             }
         }
@@ -157,8 +157,8 @@ namespace VirtualRobot
         minDistCenter = sqrtf(minDistCenter);
         minDistCoM = sqrtf(minDistCoM);
 
-        //cout << "Dist center -> border:" << minDistCenter << endl;
-        //cout << "Dist com -> border:" << minDistCoM << endl;
+        //cout << "Dist center -> border:" << minDistCenter << std::endl;
+        //cout << "Dist com -> border:" << minDistCoM << std::endl;
         float res = 0.0f;
 
         if (fabs(minDistCenter) > 1e-8)
@@ -166,7 +166,7 @@ namespace VirtualRobot
             res = minDistCoM / minDistCenter;
         }
 
-        //cout << "Stability Value:" << res << endl;
+        //cout << "Stability Value:" << res << std::endl;
         if (res > 1.0f)
         {
             res = 1.0f;

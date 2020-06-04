@@ -884,17 +884,17 @@ namespace VirtualRobot
 
         for (size_t i = 0; i < v.size(); i++)
         {
-            cout << v[i];
+            std::cout << v[i];
 
             if (i != v.size() - 1)
             {
-                cout << ",";
+                std::cout << ",";
             }
         }
 
         if (endline)
         {
-            cout << endl;
+            std::cout << std::endl;
         }
 
         std::cout << std::resetiosflags(std::ios::fixed);
@@ -908,17 +908,17 @@ namespace VirtualRobot
 
         for (int i = 0; i < v.rows(); i++)
         {
-            cout << v(i);
+            std::cout << v(i);
 
             if (i != v.rows() - 1)
             {
-                cout << ",";
+                std::cout << ",";
             }
         }
 
         if (endline)
         {
-            cout << endl;
+            std::cout << std::endl;
         }
 
         std::cout << std::resetiosflags(std::ios::fixed);
@@ -934,20 +934,20 @@ namespace VirtualRobot
         {
             for (int j = 0; j < m.cols(); j++)
             {
-                cout << m(i, j);
+                std::cout << m(i, j);
 
                 if (j != m.cols() - 1)
                 {
-                    cout << ",";
+                    std::cout << ",";
                 }
             }
 
-            cout << endl;
+            std::cout << std::endl;
         }
 
         if (endline)
         {
-            cout << endl;
+            std::cout << std::endl;
         }
 
         std::cout << std::resetiosflags(std::ios::fixed);
@@ -1074,11 +1074,11 @@ namespace VirtualRobot
 
                 if (!randomLinearlyIndependentVector(tmpBasisV, newBasisVector))
                 {
-                    VR_ERROR << "Could not find linearly independent basis vector?! " << endl;
+                    VR_ERROR << "Could not find linearly independent basis vector?! " << std::endl;
 
                     for (size_t i = 0; i < dim; i++)
                     {
-                        cout << "vec " << i << ":\n" << basis[i] << endl;
+                        std::cout << "vec " << i << ":\n" << basis[i] << std::endl;
                     }
 
                     return false;
@@ -1127,10 +1127,10 @@ namespace VirtualRobot
                 Eigen::VectorXf newBasisVector;
                 if (!randomLinearlyIndependentVector(tmpBasis,newBasisVector))
                 {
-                    VR_ERROR << "Could not find linearly independent basis vector?! " << endl;
+                    VR_ERROR << "Could not find linearly independent basis vector?! " << std::endl;
                     for (int i=0;i<dim;i++)
                     {
-                        cout << "vec " << i << ":\n" << basis[i] << endl;
+                        std::cout << "vec " << i << ":\n" << basis[i] << std::endl;
                     }
                     return false;
                 }
@@ -1234,7 +1234,7 @@ namespace VirtualRobot
 
             if (loop > 100)
             {
-                VR_ERROR << "Could not determine independent vector, aborting after 100 tries" << endl;
+                VR_ERROR << "Could not determine independent vector, aborting after 100 tries" << std::endl;
                 return false;
             }
         }
@@ -1897,7 +1897,7 @@ namespace VirtualRobot
 
         if (!ch || ch->vertices.size() == 0)
         {
-            VR_WARNING << "Null data..." << endl;
+            VR_WARNING << "Null data..." << std::endl;
             return c;
         }
 
@@ -1944,7 +1944,7 @@ namespace VirtualRobot
         double a0 = 2*acos((double)q.w / s1);
         double b0 = 2*acos((double)q.x / s2);
         if (std::abs(a0-b0) > 1e-8)
-            std::cout << "0: " << a0 << "!=" << b0 << endl;
+            std::cout << "0: " << a0 << "!=" << b0 << std::endl;
         res(0) = a0;
 
         s1 = sin((double)res(0) * 0.5);
@@ -1953,13 +1953,13 @@ namespace VirtualRobot
 
         if (std::abs(a-b) > 1e-8)
         {
-            std::cout << "1: " << a << "!=" << b << endl;
+            std::cout << "1: " << a << "!=" << b << std::endl;
             Eigen::Vector3f test1;
             test1 << (float)res(0) , float(a) , float(res(2));
             Quaternion q1 = hopf2quat(test1);
             if (std::abs(q1.w-q.w)<1e-6 && std::abs(q1.x-q.x)<1e-6 && std::abs(q1.y-q.y)<1e-6 && std::abs(q1.z-q.z)<1e-6)
             {
-                cout << "TEST 1 ok" << endl;
+                std::cout << "TEST 1 ok" << std::endl;
                 res(1) = a;
             } else
             {
@@ -1967,10 +1967,10 @@ namespace VirtualRobot
                 Quaternion q2 = hopf2quat(test1);
                 if (std::abs(q2.w-q.w)<1e-6 && std::abs(q2.x-q.x)<1e-6 && std::abs(q2.y-q.y)<1e-6 && std::abs(q2.z-q.z)<1e-6)
                 {
-                    cout << "TEST 2 ok" << endl;
+                    std::cout << "TEST 2 ok" << std::endl;
                     res(1) = b;
                 }
-                            cout << "TEST 1-4 failed!!!" << endl;
+                            std::cout << "TEST 1-4 failed!!!" << std::endl;
                         res(1) = a;
 
 

@@ -57,7 +57,7 @@ namespace SimDynamics
             }
             else
             {
-                VR_WARNING << "Dynamics world is already initialized..." << endl;
+                VR_WARNING << "Dynamics world is already initialized..." << std::endl;
             }
         }
 

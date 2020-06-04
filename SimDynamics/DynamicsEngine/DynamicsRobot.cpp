@@ -127,7 +127,7 @@ namespace SimDynamics
 
         if (node->getName() == "Elbow R")
         {
-            cout << "##### +++++ New Node target:" << node->getName() << ", jointValue:" << jointValue << endl;
+            std::cout << "##### +++++ New Node target:" << node->getName() << ", jointValue:" << jointValue << std::endl;
         }
 
 #endif

@@ -105,7 +105,7 @@ namespace SimDynamics
             {
                 if (robot->getRobot() == r->getRobot())
                 {
-                    VR_ERROR << "Only one DynamicsWrapper per robot allowed. Robot " << r->getName() << endl;
+                    VR_ERROR << "Only one DynamicsWrapper per robot allowed. Robot " << r->getName() << std::endl;
                     return false;
                 }
             }
@@ -137,7 +137,7 @@ namespace SimDynamics
 
         if (!r)
         {
-            VR_ERROR << "No robot with name " << robotName << endl;
+            VR_ERROR << "No robot with name " << robotName << std::endl;
             return false;
         }
 
@@ -167,7 +167,7 @@ namespace SimDynamics
 
         if (!r)
         {
-            VR_ERROR << "No robot with name " << robotName << endl;
+            VR_ERROR << "No robot with name " << robotName << std::endl;
             return false;
         }
 

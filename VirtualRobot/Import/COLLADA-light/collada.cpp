@@ -188,7 +188,7 @@ namespace Collada
                     robotNode->parent = parents.back();
                 }
 
-                //BOOST_FOREACH(pugi::xml_node n, stack[depth()]) cout << "Ignored: " << n.name() << endl;
+                //BOOST_FOREACH(pugi::xml_node n, stack[depth()]) std::cout << "Ignored: " << n.name() << std::endl;
 
                 parents.push_back(robotNode);
             }
@@ -236,12 +236,12 @@ namespace Collada
         if (!result)
         {
 
-            cout << "Could not load:" <<  result.description() << endl;
+            std::cout << "Could not load:" <<  result.description() << std::endl;
         }
 
 
         std::cout << "Version: " << doc.child("COLLADA").attribute("version").as_float() << std::endl;
-        std::cout << "Scene: " << doc.child("COLLADA").child("scene").child("instance_kinematics_scene").attribute("url").as_string() << endl;
+        std::cout << "Scene: " << doc.child("COLLADA").child("scene").child("instance_kinematics_scene").attribute("url").as_string() << std::endl;
 
         pugi::xml_node collada = doc.child("COLLADA");
         pugi::xml_node scene = collada.child("scene");
@@ -249,7 +249,7 @@ namespace Collada
 
 
         // There is probably ean error here ...  the // before scene should not be required
-        //  cout << "url:" << collada.select_nodes("scene/instance_kinematics_scene/@url").begin()->node().value() << "KS: " << kinematics_scene.name() << endl;
+        //  std::cout << "url:" << collada.select_nodes("scene/instance_kinematics_scene/@url").begin()->node().value() << "KS: " << kinematics_scene.name() << std::endl;
 
         pugi::xml_node kinematics_scene = scene.select_single_node("//library_kinematics_scenes/kinematics_scene[@id=substring(//scene/instance_kinematics_scene/@url,2)]").node();
 
@@ -339,18 +339,18 @@ namespace Collada
                 }
 
                 robotNode->name = robotNode->joint_axis.parent().attribute("name").value();
-                //cout << "Name: " << robotNode->name << endl;
+                //cout << "Name: " << robotNode->name << std::endl;
 
                 robotNode->motion_info = jointMap[robotNode->joint_axis].first;
                 robotNode->kinematics_info = jointMap[robotNode->joint_axis].second;
-                //cout << robotNode->kinematics_info.child("limits").child("min").child_value("float") << endl;
+                //cout << robotNode->kinematics_info.child("limits").child("min").child_value("float") << std::endl;
 
                 robotNodeSet.push_back(robotNode);
 
                 std::string visualizationTarget = bind.node().attribute("target").value();
                 visualizationMap[resolveSIDREF(collada, visualizationTarget, IN_VISUAL_SCENES)] = robotNode;
-                //cout << "Vizualization: " << visualizationTarget << "," << resolveSIDREF(collada,visualizationTarget,IN_VISUAL_SCENES).name() << endl;
-                //cout << robotNode->joint_axis.parent().name() << endl;
+                //cout << "Vizualization: " << visualizationTarget << "," << resolveSIDREF(collada,visualizationTarget,IN_VISUAL_SCENES).name() << std::endl;
+                //cout << robotNode->joint_axis.parent().name() << std::endl;
                 structureMap[robotNode->joint_axis.parent()] = robotNode;
             }
             {
@@ -370,7 +370,7 @@ namespace Collada
         // Now optain the kinematic structure
         BOOST_FOREACH(pugi::xml_node model, kinematicsModels)
         {
-            cout << model.name() << endl;
+            std::cout << model.name() << std::endl;
             ModelWalker modelWalker(structureMap);
 #ifdef COLLADA_IMPORT_USE_SENSORS
             modelWalker.setSensorMap(sensorMap);

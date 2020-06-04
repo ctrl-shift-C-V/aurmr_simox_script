@@ -99,6 +99,6 @@ protected:
     bool physicsCoMEnabled;
     bool physicsInertiaEnabled;
 
-    boost::shared_ptr<VirtualRobot::CoinVisualization> visualization;
+    VirtualRobot::CoinVisualizationPtr visualization;
 };
 

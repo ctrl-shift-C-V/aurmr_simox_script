@@ -74,7 +74,7 @@ void startRRTVisualization()
     // create robot
     std::string filename("robots/examples/RrtDemo/Joint3.xml");
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(filename);
-    cout << "Loading 3DOF robot from " << filename << endl;
+    std::cout << "Loading 3DOF robot from " << filename << std::endl;
     RobotPtr robot = RobotIO::loadRobot(filename);
 
     if (!robot)
@@ -154,12 +154,12 @@ void startRRTVisualization()
     }
 
     planningTime /= (float)loops;
-    cout << "Avg planning time: " << planningTime << endl;
-    cout << "failed:" << failed << endl;
+    std::cout << "Avg planning time: " << planningTime << std::endl;
+    std::cout << "failed:" << failed << std::endl;
 
     if (!ok)
     {
-        cout << "planning failed..." << endl;
+        std::cout << "planning failed..." << std::endl;
         return;
     }
 
@@ -212,7 +212,7 @@ int main(int /*argc*/, char** /*argv*/)
 {
     SoDB::init();
     win = SoQt::init("RRT Demo", "RRT Demo");
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     try
     {
@@ -231,7 +231,7 @@ int main(int /*argc*/, char** /*argv*/)
         ;
     }
 
-    cout << " --- END --- " << endl;
+    std::cout << " --- END --- " << std::endl;
 
     return 0;
 }

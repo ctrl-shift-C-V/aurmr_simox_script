@@ -188,7 +188,7 @@ namespace SimDynamics
 
             if (!btObject)
             {
-                VR_ERROR << "Skipping non-BULLET object " << (*i)->getName() << "!" << endl;
+                VR_ERROR << "Skipping non-BULLET object " << (*i)->getName() << "!" << std::endl;
                 continue;
             }
             auto friction = btObject->getSceneObject()->getPhysics().friction;
@@ -209,7 +209,7 @@ namespace SimDynamics
 
         if (!btObject)
         {
-            VR_ERROR << "Could only handle BULLET objects?! <" << o->getName() << ">" << endl;
+            VR_ERROR << "Could only handle BULLET objects?! <" << o->getName() << ">" << std::endl;
             return false;
         }
 
@@ -261,7 +261,7 @@ namespace SimDynamics
 
         if (!btObject)
         {
-            VR_ERROR << "Could only handle BULLET objects?! <" << o->getName() << ">" << endl;
+            VR_ERROR << "Could only handle BULLET objects?! <" << o->getName() << ">" << std::endl;
             return false;
         }
 
@@ -440,7 +440,7 @@ namespace SimDynamics
 
         if (!btRobot)
         {
-            VR_ERROR << "Could only handle BULLET objects?! <" << r->getName() << ">" << endl;
+            VR_ERROR << "Could only handle BULLET objects?! <" << r->getName() << ">" << std::endl;
             return false;
         }
 
@@ -504,7 +504,7 @@ namespace SimDynamics
 
         if (!btRobot)
         {
-            VR_ERROR << "Could only handle BULLET objects?! <" << r->getName() << ">" << endl;
+            VR_ERROR << "Could only handle BULLET objects?! <" << r->getName() << ">" << std::endl;
             return false;
         }
 
@@ -529,7 +529,7 @@ namespace SimDynamics
     {
         MutexLockPtr lock = getScopedLock();
 #ifdef DEBUG_FIXED_OBJECTS
-        cout << "TEST2" << endl;
+        std::cout << "TEST2" << std::endl;
 #else
         dynamicsWorld->addConstraint(l.joint.get(), true);
 #endif
@@ -545,47 +545,47 @@ namespace SimDynamics
     void BulletEngine::print()
     {
         MutexLockPtr lock = getScopedLock();
-        cout << "------------------ Bullet Engine ------------------" << endl;
+        std::cout << "------------------ Bullet Engine ------------------" << std::endl;
 
         for (size_t i = 0; i < objects.size(); i++)
         {
-            cout << "++ Object " << i << ":" << objects[i]->getName() << endl;
+            std::cout << "++ Object " << i << ":" << objects[i]->getName() << std::endl;
             Eigen::Matrix4f m = objects[i]->getSceneObject()->getGlobalPose();
-            cout << "   pos (simox)  " << m(0, 3) << "," << m(1, 3) << "," << m(2, 3) << endl;
+            std::cout << "   pos (simox)  " << m(0, 3) << "," << m(1, 3) << "," << m(2, 3) << std::endl;
             BulletObjectPtr bo = std::dynamic_pointer_cast<BulletObject>(objects[i]);
             std::shared_ptr<btRigidBody> rb = bo->getRigidBody();
             btVector3 v = rb->getWorldTransform().getOrigin();
-            cout << "   pos (bullet) " << v[0] << "," << v[1]  << "," << v[2]  << endl;
+            std::cout << "   pos (bullet) " << v[0] << "," << v[1]  << "," << v[2]  << std::endl;
             btVector3 va = rb->getAngularVelocity();
             btVector3 vl = rb->getLinearVelocity();
-            cout << "   ang vel (bullet) " << va[0] << "," << va[1]  << "," << va[2]  << endl;
-            cout << "   lin vel (bullet) " << vl[0] << "," << vl[1]  << "," << vl[2]  << endl;
+            std::cout << "   ang vel (bullet) " << va[0] << "," << va[1]  << "," << va[2]  << std::endl;
+            std::cout << "   lin vel (bullet) " << vl[0] << "," << vl[1]  << "," << vl[2]  << std::endl;
         }
 
         for (size_t i = 0; i < robots.size(); i++)
         {
-            cout << "++ Robot " << i << ":" << objects[i]->getName() << endl;
+            std::cout << "++ Robot " << i << ":" << objects[i]->getName() << std::endl;
             BulletRobotPtr br = std::dynamic_pointer_cast<BulletRobot>(robots[i]);
             std::vector<BulletRobot::LinkInfo> links = br->getLinks();
 
             for (size_t j = 0; j < links.size(); j++)
             {
-                cout << "++++ Link " << j << ":" << links[j].nodeJoint->getName();
-                cout << "++++ - ColModelA " << j << ":" << links[j].nodeA->getName();
-                cout << "++++ - ColModelB " << j << ":" << links[j].nodeB->getName();
+                std::cout << "++++ Link " << j << ":" << links[j].nodeJoint->getName();
+                std::cout << "++++ - ColModelA " << j << ":" << links[j].nodeA->getName();
+                std::cout << "++++ - ColModelB " << j << ":" << links[j].nodeB->getName();
 
-                cout << "     enabled:" << links[j].joint->isEnabled() << endl;
+                std::cout << "     enabled:" << links[j].joint->isEnabled() << std::endl;
                 std::shared_ptr<btHingeConstraint> hinge = std::dynamic_pointer_cast<btHingeConstraint>(links[j].joint);
 
                 if (hinge)
                 {
-                    cout << "     hinge motor enabled:" << hinge->getEnableAngularMotor() << endl;
-                    cout << "     hinge angle :" << hinge->getHingeAngle() << endl;
-                    cout << "     hinge max motor impulse :" << hinge->getMaxMotorImpulse() << endl;
+                    std::cout << "     hinge motor enabled:" << hinge->getEnableAngularMotor() << std::endl;
+                    std::cout << "     hinge angle :" << hinge->getHingeAngle() << std::endl;
+                    std::cout << "     hinge max motor impulse :" << hinge->getMaxMotorImpulse() << std::endl;
 #ifdef SIMOX_USES_OLD_BULLET
-                    cout << "     hinge motor target vel :" << hinge->getMotorTargetVelosity() << endl;
+                    std::cout << "     hinge motor target vel :" << hinge->getMotorTargetVelosity() << std::endl;
 #else
-                    cout << "     hinge motor target vel :" << hinge->getMotorTargetVelocity() << endl;
+                    std::cout << "     hinge motor target vel :" << hinge->getMotorTargetVelocity() << std::endl;
 #endif
                 }
 
@@ -595,17 +595,17 @@ namespace SimDynamics
                 {
                     btRotationalLimitMotor* m = dof->getRotationalLimitMotor(2);
                     VR_ASSERT(m);
-                    cout << "     generic_6DOF_joint: axis 5 (z)" << endl;
-                    cout << "     generic_6DOF_joint motor enabled:" << m->m_enableMotor << endl;
-                    cout << "     generic_6DOF_joint angle :" << m->m_currentPosition << endl;
-                    cout << "     generic_6DOF_joint max motor force :" << m->m_maxMotorForce << endl;
-                    cout << "     higeneric_6DOF_jointnge motor target vel :" << m->m_targetVelocity << endl;
+                    std::cout << "     generic_6DOF_joint: axis 5 (z)" << std::endl;
+                    std::cout << "     generic_6DOF_joint motor enabled:" << m->m_enableMotor << std::endl;
+                    std::cout << "     generic_6DOF_joint angle :" << m->m_currentPosition << std::endl;
+                    std::cout << "     generic_6DOF_joint max motor force :" << m->m_maxMotorForce << std::endl;
+                    std::cout << "     higeneric_6DOF_jointnge motor target vel :" << m->m_targetVelocity << std::endl;
                 }
 
             }
         }
 
-        cout << "------------------ Bullet Engine ------------------" << endl;
+        std::cout << "------------------ Bullet Engine ------------------" << std::endl;
     }
 
 
@@ -692,20 +692,20 @@ namespace SimDynamics
 
         if (!br)
         {
-            VR_ERROR << "no bullet robot" << endl;
+            VR_ERROR << "no bullet robot" << std::endl;
             return false;
         }
 
         if (object->getSimType() != VirtualRobot::SceneObject::Physics::eDynamic)
         {
-            VR_WARNING << "Sim type of object " << object->getName() << "!=eDynamic. Is this intended?" << endl;
+            VR_WARNING << "Sim type of object " << object->getName() << "!=eDynamic. Is this intended?" << std::endl;
         }
 
         BulletRobot::LinkInfoPtr link = br->attachObjectLink(nodeName, object);
 
         if (!link)
         {
-            VR_ERROR << "Failed to create bullet robot link" << endl;
+            VR_ERROR << "Failed to create bullet robot link" << std::endl;
             return false;
         }
 
@@ -726,7 +726,7 @@ namespace SimDynamics
 
         if (!br)
         {
-            VR_ERROR << "no bullet robot" << endl;
+            VR_ERROR << "no bullet robot" << std::endl;
             return false;
         }
 
@@ -734,7 +734,7 @@ namespace SimDynamics
 
         if (!bo)
         {
-            VR_ERROR << "no bullet object" << endl;
+            VR_ERROR << "no bullet object" << std::endl;
             return false;
         }
 
@@ -749,7 +749,7 @@ namespace SimDynamics
 
         if (!res)
         {
-            VR_ERROR << "Failed to detach object" << endl;
+            VR_ERROR << "Failed to detach object" << std::endl;
             return false;
         }
 
@@ -772,7 +772,7 @@ void SimDynamics::BulletEngine::updateAction(btCollisionWorld* /*collisionWorld*
         callback.first(callback.second, deltaTimeStep);
     }
     std::chrono::duration<double> diff = (std::chrono::system_clock::now() - start);
-    //    cout << "duration: " << diff.count() << endl;
+    //    std::cout << "duration: " << diff.count() << std::endl;
 }
 
 void SimDynamics::BulletEngine::debugDraw(btIDebugDraw* /*debugDrawer*/)

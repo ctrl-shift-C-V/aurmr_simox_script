@@ -73,7 +73,7 @@ namespace SimDynamics
         BulletCoinQtViewer* bulletViewer = static_cast<BulletCoinQtViewer*>(userdata);
         VR_ASSERT(bulletViewer);
 
-        VR_INFO << "Selected object" << endl;
+        VR_INFO << "Selected object" << std::endl;
 
         bulletViewer->customSelection(path);
 
@@ -84,7 +84,7 @@ namespace SimDynamics
         BulletCoinQtViewer* bulletViewer = static_cast<BulletCoinQtViewer*>(userdata);
         VR_ASSERT(bulletViewer);
 
-        VR_INFO << "Deselected object" << endl;
+        VR_INFO << "Deselected object" << std::endl;
 
         bulletViewer->customDeselection(path);
 
@@ -183,7 +183,7 @@ namespace SimDynamics
             // Commented out: This is now handled by Bullet (bulletMaxSubSteps * bulletTimeStepMsec is the maximal duration of a frame)
             /* double minFPS = 1000000.f/40.f;  // Don't use 60 Hz (cannot be reached due to Vsync)
             if (ms > minFPS) {
-                VR_INFO << "Slow frame (" << ms << "us elapsed)! Limiting elapsed time (losing realtime capabilities for this frame)." << endl;
+                VR_INFO << "Slow frame (" << ms << "us elapsed)! Limiting elapsed time (losing realtime capabilities for this frame)." << std::endl;
                 ms = minFPS;
             } */
             if (!simModeFixedTimeStep)
@@ -192,7 +192,7 @@ namespace SimDynamics
                 {
                     if (!warned_norealtime)
                     {
-                        VR_INFO << "Elapsed time (" << (ms / 1000.0f) << "ms) too long: Simulation is not running in realtime." << endl;
+                        VR_INFO << "Elapsed time (" << (ms / 1000.0f) << "ms) too long: Simulation is not running in realtime." << std::endl;
                         warned_norealtime = true;
                     }
                 }
@@ -215,7 +215,7 @@ namespace SimDynamics
                 }
             }
 
-            // VR_INFO << "stepSimulation(" << dt1 << ", " << bulletMaxSubSteps << ", " << (bulletTimeStepMsec / 1000.0f) << ")" << endl;
+            // VR_INFO << "stepSimulation(" << dt1 << ", " << bulletMaxSubSteps << ", " << (bulletTimeStepMsec / 1000.0f) << ")" << std::endl;
 
             //optional but useful: debug drawing
             //m_dynamicsWorld->debugDrawWorld();

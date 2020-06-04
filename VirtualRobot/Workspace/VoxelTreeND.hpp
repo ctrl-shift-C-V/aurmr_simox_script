@@ -58,7 +58,7 @@ namespace VirtualRobot
         unsigned char *e = v.getEntry(pos);
         // check if entry is set
         if (e)
-            cout << "Entry is set:" << *e << endl;
+            std::cout << "Entry is set:" << *e << std::endl;
 
     */
     template <typename T, unsigned int N>
@@ -345,7 +345,7 @@ namespace VirtualRobot
                     bzip2->read((void*)(&(d.level)),dataSize,n);
                     if (n!=dataSize)
                     {
-                        VR_ERROR << "Invalid number of bytes?!" << endl;
+                        VR_ERROR << "Invalid number of bytes?!" << std::endl;
                         bzip2->close();
                         file.close();
                         delete tree;
@@ -356,7 +356,7 @@ namespace VirtualRobot
                     bzip2->read((void*)(&(d.pos[0])),dataSize,n);
                     if (n!=dataSize)
                     {
-                        VR_ERROR << "Invalid number of bytes?!" << endl;
+                        VR_ERROR << "Invalid number of bytes?!" << std::endl;
                         bzip2->close();
                         file.close();
                         delete tree;
@@ -367,7 +367,7 @@ namespace VirtualRobot
                     bzip2->read((void*)(&(d.extends[0])),dataSize,n);
                     if (n!=dataSize)
                     {
-                        VR_ERROR << "Invalid number of bytes?!" << endl;
+                        VR_ERROR << "Invalid number of bytes?!" << std::endl;
                         bzip2->close();
                         file.close();
                         delete tree;
@@ -687,7 +687,7 @@ namespace VirtualRobot
             VoxelTreeNDElement<T, N>* getNextElement()
             {
 #ifdef VoxelTreeND_DEBUG_OUTPUT
-                cout << "current stack:" << endl;
+                std::cout << "current stack:" << std::endl;
                 printStack();
 #endif
 
@@ -748,7 +748,7 @@ namespace VirtualRobot
                 }
 
 #ifdef VoxelTreeND_DEBUG_OUTPUT
-                cout << "new stack:" << endl;
+                std::cout << "new stack:" << std::endl;
                 printStack();
 #endif
                 return currentElement;

@@ -162,23 +162,23 @@ namespace Collada
 
         if (DBG_NODE("RRKnee_Joint"))
         {
-            cout << "Node: " << this->name;
-            cout << jointLimitLow << "," << jointLimitHigh << "," << acceleration << "," << deceleration << "," << velocity << "," << torque << endl;
-            cout << this->joint_axis.name() << endl;
+            std::cout << "Node: " << this->name;
+            std::cout << jointLimitLow << "," << jointLimitHigh << "," << acceleration << "," << deceleration << "," << velocity << "," << torque << std::endl;
+            std::cout << this->joint_axis.name() << std::endl;
             preJointTransformation = Eigen::Matrix4f::Identity();
             for (pugi::xml_node node : this->preJoint)
             {
-                cout << getTransform(node) << endl;
+                std::cout << getTransform(node) << std::endl;
                 preJointTransformation = preJointTransformation * getTransform(node, scaleFactor);
             }
-            cout << preJointTransformation << endl;
+            std::cout << preJointTransformation << std::endl;
         }
 
         /* Compute bounding box for debug reasons */
         //this->visualizeBoundingBox();
 
         VirtualRobot::VisualizationNodePtr visualizationNode(new VirtualRobot::CoinVisualizationNode(this->visualization));
-        //cout << "node " << this->name << "#Faces" << visualizationNode->getNumFaces() << endl;
+        //cout << "node " << this->name << "#Faces" << visualizationNode->getNumFaces() << std::endl;
         VirtualRobot::CollisionModelPtr collisionModel; //(new VirtualRobot::CollisionModel(visualizationNode));
 
         // Check for rigid body dynamics and collision models.
@@ -200,7 +200,7 @@ namespace Collada
 
             VirtualRobot::VisualizationNodePtr collisionNode(new VirtualRobot::CoinVisualizationNode(this->collisionModel));
             collisionModel.reset(new VirtualRobot::CollisionModel(collisionNode));
-            //            cout << "Physics : " << name << endl << massFrameTransformation << endl << scaleFactor << massFrameTransformation.block<3,3>(0,0)*inertia << endl << mass << endl << com << endl;
+            //            std::cout << "Physics : " << name << endl << massFrameTransformation << endl << scaleFactor << massFrameTransformation.block<3,3>(0,0)*inertia << endl << mass << endl << com << std::endl;
 
             physics.comLocation = VirtualRobot::SceneObject::Physics::eCustom;
             physics.localCoM = com;
@@ -209,7 +209,7 @@ namespace Collada
 
             if (this->name.compare("RRKnee_joint") == 0)
             {
-                cout << "Physics RRKnee_Joint: " << massFrameTransformation << endl << scaleFactor << massFrameTransformation.block<3, 3>(0, 0)*inertia << endl << mass << endl << com << endl;
+                std::cout << "Physics RRKnee_Joint: " << massFrameTransformation << endl << scaleFactor << massFrameTransformation.block<3, 3>(0, 0)*inertia << endl << mass << endl << com << std::endl;
 
             }
         }
@@ -232,7 +232,7 @@ namespace Collada
 
         if (!this->simoxRobotNode)
         {
-            cout << "Node " << this->name << " not Created" << endl;
+            std::cout << "Node " << this->name << " not Created" << std::endl;
         }
 
 #ifdef COLLADA_IMPORT_USE_SENSORS

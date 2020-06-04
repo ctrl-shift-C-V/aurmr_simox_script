@@ -53,7 +53,7 @@ namespace SimDynamics
 
                 if (!hasLink(node))
                 {
-                    VR_WARNING << "Ignoring FT sensor " << ftSensor->getName() << ". Must be linked to a joint" << endl;
+                    VR_WARNING << "Ignoring FT sensor " << ftSensor->getName() << ". Must be linked to a joint" << std::endl;
                 }
                 else
                 {
@@ -113,7 +113,7 @@ namespace SimDynamics
                         }
                         else
                         {
-                            VR_WARNING << "No body between " << parent->getName() << " and " << joint->getName() << ", skipping " << parent->getName() << endl;
+                            VR_WARNING << "No body between " << parent->getName() << " and " << joint->getName() << ", skipping " << parent->getName() << std::endl;
                         }
                         /*else
                         {
@@ -187,7 +187,7 @@ namespace SimDynamics
 
             if (!rn2)
             {
-                VR_ERROR << "Error while processing robot node <" << rn->getName() << ">: Ignored collision model <" << i << "> is not part of robot..." << endl;
+                VR_ERROR << "Error while processing robot node <" << rn->getName() << ">: Ignored collision model <" << i << "> is not part of robot..." << std::endl;
             }
             else
             {
@@ -349,7 +349,7 @@ namespace SimDynamics
 
         if (joint->getJointValue() != 0.0f)
         {
-            VR_WARNING << joint->getName() << ": joint values != 0 may produce a wrong setup, setting joint value to zero" << endl;
+            VR_WARNING << joint->getName() << ": joint values != 0 may produce a wrong setup, setting joint value to zero" << std::endl;
             joint->setJointValue(0);
         }
 
@@ -423,7 +423,7 @@ namespace SimDynamics
         }
         else
         {
-            VR_WARNING << "Creating fixed joint between " << bodyA->getName() << " and " << bodyB->getName() << ". This might result in some artefacts (e.g. no strict ridgid connection)" << endl;
+            VR_WARNING << "Creating fixed joint between " << bodyA->getName() << " and " << bodyB->getName() << ". This might result in some artefacts (e.g. no strict ridgid connection)" << std::endl;
             // create fixed joint
             jointbt = createFixedJoint(btBody1, btBody2, anchor_inNode1, anchor_inNode2);
         }
@@ -510,7 +510,7 @@ namespace SimDynamics
     void BulletRobot::actuateJoints(double dt)
     {
         MutexLockPtr lock = getScopedLock();
-        //cout << "=== === BulletRobot: actuateJoints() 1 === " << this << endl;
+        //cout << "=== === BulletRobot: actuateJoints() 1 === " << this << std::endl;
 
         auto  it = actuationTargets.begin();
 
@@ -519,7 +519,7 @@ namespace SimDynamics
 
         for (; it != actuationTargets.end(); it++)
         {
-            //cout << "it:" << it->first << ", name: " << it->first->getName() << endl;
+            //cout << "it:" << it->first << ", name: " << it->first->getName() << std::endl;
             VelocityMotorController& controller = actuationControllers[it->first];
 
             if (!it->second.node->isRotationalJoint() && !it->second.node->isTranslationalJoint())
@@ -645,7 +645,7 @@ namespace SimDynamics
                 }
                 /*if (it->second.node->getName() == "ArmL6_Elb2")
                 {
-                    cout << "ELBOW - pos act:" << posActual << ",\t posTarget: " << posTarget << ",\t delta: " << deltaPos << ",\t , vel target:" << velocityTarget << ",\t pid vel:" << targetVelocity << endl;
+                    std::cout << "ELBOW - pos act:" << posActual << ",\t posTarget: " << posTarget << ",\t delta: " << deltaPos << ",\t , vel target:" << velocityTarget << ",\t pid vel:" << targetVelocity << std::endl;
                 }*/
 
                 btScalar maxImpulse = bulletMaxMotorImulse;
@@ -653,7 +653,7 @@ namespace SimDynamics
                 if (it->second.node->getMaxTorque() > 0)
                 {
                     maxImpulse = it->second.node->getMaxTorque() * btScalar(dt) * BulletObject::ScaleFactor  * BulletObject::ScaleFactor * BulletObject::ScaleFactor;
-                    //cout << "node:" << it->second.node->getName() << ", max impulse: " << maxImpulse << ", dt:" << dt << ", maxImp:" << it->second.node->getMaxTorque() << endl;
+                    //cout << "node:" << it->second.node->getName() << ", max impulse: " << maxImpulse << ", dt:" << dt << ", maxImp:" << it->second.node->getMaxTorque() << std::endl;
                 }
                 if (fabs(targetVelocity) > 0.00001)
                 {
@@ -675,7 +675,7 @@ namespace SimDynamics
             }
         }
 
-        //cout << endl;
+        //cout << std::endl;
         setPoseNonActuatedRobotNodes();
     }
 
@@ -796,7 +796,7 @@ namespace SimDynamics
             }
         }
 
-        VR_WARNING << "No link with nodes: " << object1->getName() << " and " << object2->getName() << endl;
+        VR_WARNING << "No link with nodes: " << object1->getName() << " and " << object2->getName() << std::endl;
         return LinkInfo();
     }
 
@@ -845,13 +845,13 @@ namespace SimDynamics
 
         if (!robot || !robot->hasRobotNode(nodeName))
         {
-            VR_ERROR << "no node with name " << nodeName << endl;
+            VR_ERROR << "no node with name " << nodeName << std::endl;
             return result;
         }
 
         if (!object)
         {
-            VR_ERROR << "no object " << endl;
+            VR_ERROR << "no object " << std::endl;
             return result;
         }
 
@@ -859,7 +859,7 @@ namespace SimDynamics
 
         if (!bo)
         {
-            VR_ERROR << "no bullet object " << endl;
+            VR_ERROR << "no bullet object " << std::endl;
             return result;
         }
 
@@ -882,7 +882,7 @@ namespace SimDynamics
 
             if (!drn)
             {
-                VR_ERROR << "No dynamics object..." << endl;
+                VR_ERROR << "No dynamics object..." << std::endl;
                 return result;
             }
         }
@@ -891,7 +891,7 @@ namespace SimDynamics
 
         if (!bo)
         {
-            VR_ERROR << "no bullet robot object " << endl;
+            VR_ERROR << "no bullet robot object " << std::endl;
             return result;
         }
 
@@ -941,7 +941,7 @@ namespace SimDynamics
 
         links.push_back(*result);
 
-        VR_INFO << "Attached object " << object->getName() << " to node " << nodeName << endl;
+        VR_INFO << "Attached object " << object->getName() << " to node " << nodeName << std::endl;
         return result;
     }
 
@@ -951,13 +951,13 @@ namespace SimDynamics
 
         if (!robot)
         {
-            VR_ERROR << "no robot " << endl;
+            VR_ERROR << "no robot " << std::endl;
             return false;
         }
 
         if (!object)
         {
-            VR_ERROR << "no object " << endl;
+            VR_ERROR << "no object " << std::endl;
             return false;
         }
 
@@ -965,7 +965,7 @@ namespace SimDynamics
 
         if (!bo)
         {
-            VR_ERROR << "no bullet object " << endl;
+            VR_ERROR << "no bullet object " << std::endl;
             return false;
         }
 
@@ -974,7 +974,7 @@ namespace SimDynamics
 
         if (ls.size() == 0)
         {
-            VR_ERROR << "No link with object " << object->getName() << endl;
+            VR_ERROR << "No link with object " << object->getName() << std::endl;
             return true; // not a failure, object is not attached
         }
 
@@ -983,7 +983,7 @@ namespace SimDynamics
             res = res & removeLink(l);
         }
 
-        VR_INFO << "Detached object " << object->getName() << " from robot " << robot->getName() << endl;
+        VR_INFO << "Detached object " << object->getName() << " from robot " << robot->getName() << std::endl;
         return res;
     }
 
@@ -1011,7 +1011,7 @@ namespace SimDynamics
         {
             if (!hasLink(node))
             {
-                VR_ERROR << "No link for node " << node->getName() << endl;
+                VR_ERROR << "No link for node " << node->getName() << std::endl;
                 return;
             }
 
@@ -1021,11 +1021,11 @@ namespace SimDynamics
         {
             if (node->isTranslationalJoint() && ignoreTranslationalJoints)
             {
-                VR_WARNING << "Translational joints ignored. (ignoring node " << node->getName() << ")." << endl;
+                VR_WARNING << "Translational joints ignored. (ignoring node " << node->getName() << ")." << std::endl;
             }
             else
             {
-                VR_ERROR << "Only Revolute and translational joints implemented so far (ignoring node " << node->getName() << ")." << endl;
+                VR_ERROR << "Only Revolute and translational joints implemented so far (ignoring node " << node->getName() << ")." << std::endl;
             }
         }
     }
@@ -1037,7 +1037,7 @@ namespace SimDynamics
 
         if (!hasLink(node))
         {
-            VR_ERROR << "No link for node " << node->getName() << endl;
+            VR_ERROR << "No link for node " << node->getName() << std::endl;
             return;
         }
 
@@ -1049,7 +1049,7 @@ namespace SimDynamics
         }
         else
         {
-            VR_ERROR << "Only Revolute and Prismatic joints implemented so far (node: " << node->getName() << ")..." << endl;
+            VR_ERROR << "Only Revolute and Prismatic joints implemented so far (node: " << node->getName() << ")..." << std::endl;
         }
     }
 
@@ -1060,7 +1060,7 @@ namespace SimDynamics
 
         if (!hasLink(rn))
         {
-            //VR_ERROR << "No link with node " << rn->getName() << endl;
+            //VR_ERROR << "No link with node " << rn->getName() << std::endl;
             return 0.0f;
         }
 
@@ -1093,7 +1093,7 @@ namespace SimDynamics
 
         if (!hasLink(rn))
         {
-            //VR_ERROR << "No link with node " << rn->getName() << endl;
+            //VR_ERROR << "No link with node " << rn->getName() << std::endl;
             return 0.0f;
         }
 
@@ -1124,7 +1124,7 @@ namespace SimDynamics
 
         if (!hasLink(rn))
         {
-            //VR_ERROR << "No link with node " << rn->getName() << endl;
+            //VR_ERROR << "No link with node " << rn->getName() << std::endl;
             return 0.0f;
         }
 
@@ -1156,7 +1156,7 @@ namespace SimDynamics
         }
         else
         {
-            VR_WARNING << "Only translational and rotational joints implemented." << endl;
+            VR_WARNING << "Only translational and rotational joints implemented." << std::endl;
             return 0.0;
         }
     }
@@ -1176,7 +1176,7 @@ namespace SimDynamics
 
         if (!hasLink(rn))
         {
-            //VR_ERROR << "No link with node " << rn->getName() << endl;
+            //VR_ERROR << "No link with node " << rn->getName() << std::endl;
             return result;
         }
 
@@ -1189,7 +1189,7 @@ namespace SimDynamics
         }
         else
         {
-            VR_WARNING << "Only translational and rotational joints implemented." << endl;
+            VR_WARNING << "Only translational and rotational joints implemented." << std::endl;
         }
 
         return result;
@@ -1202,7 +1202,7 @@ namespace SimDynamics
 
         if (!hasLink(rn))
         {
-            //VR_ERROR << "No link with node " << rn->getName() << endl;
+            //VR_ERROR << "No link with node " << rn->getName() << std::endl;
             return 0.0;
         }
 
@@ -1219,7 +1219,7 @@ namespace SimDynamics
         }
         else
         {
-            VR_WARNING << "Only translational and rotational joints implemented." << endl;
+            VR_WARNING << "Only translational and rotational joints implemented." << std::endl;
         }
         return 0.0;
     }
@@ -1233,7 +1233,7 @@ namespace SimDynamics
 
         if (!hasLink(rn))
         {
-            //VR_ERROR << "No link with node " << rn->getName() << endl;
+            //VR_ERROR << "No link with node " << rn->getName() << std::endl;
             return result;
         }
 
@@ -1246,7 +1246,7 @@ namespace SimDynamics
         }
         else
         {
-            VR_WARNING << "Only translational and rotational joints implemented." << endl;
+            VR_WARNING << "Only translational and rotational joints implemented." << std::endl;
         }
 
         return result;
@@ -1259,7 +1259,7 @@ namespace SimDynamics
 
         if (!bo)
         {
-            VR_ERROR << "Could not cast object..." << endl;
+            VR_ERROR << "Could not cast object..." << std::endl;
             return Eigen::Matrix4f::Identity();
         }
 
@@ -1299,11 +1299,11 @@ namespace SimDynamics
 
             if (boost::math::isnan(vel(0)) || boost::math::isnan(vel(1)) || boost::math::isnan(vel(2)))
             {
-                VR_ERROR << "NAN result: getLinearVelocity:" << bo->getName() << ", i:" << i << endl;
+                VR_ERROR << "NAN result: getLinearVelocity:" << bo->getName() << ", i:" << i << std::endl;
                 node->print();
-                VR_ERROR << "BULLETOBJECT com:" << bo->getCom() << endl;
-                VR_ERROR << "BULLETOBJECT: ang vel:" << bo->getAngularVelocity() << endl;
-                VR_ERROR << "BULLETOBJECT:" << bo->getRigidBody()->getWorldTransform().getOrigin() << endl;
+                VR_ERROR << "BULLETOBJECT com:" << bo->getCom() << std::endl;
+                VR_ERROR << "BULLETOBJECT: ang vel:" << bo->getAngularVelocity() << std::endl;
+                VR_ERROR << "BULLETOBJECT:" << bo->getRigidBody()->getWorldTransform().getOrigin() << std::endl;
 
 
             }
@@ -1314,7 +1314,7 @@ namespace SimDynamics
 
         if (fabs(totalMass) < 1e-5)
         {
-            VR_ERROR << "Little mass: " << totalMass << ". Could not compute com velocity..." << endl;
+            VR_ERROR << "Little mass: " << totalMass << ". Could not compute com velocity..." << std::endl;
         }
         else
         {
@@ -1448,7 +1448,7 @@ namespace SimDynamics
             // just a sanity check
             if (lastSize ==  notActuatedNodes.size())
             {
-                VR_ERROR << "Internal error?!" << endl;
+                VR_ERROR << "Internal error?!" << std::endl;
                 return;
             }
             else

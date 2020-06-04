@@ -115,7 +115,7 @@ namespace Saba
 
         if (!TCPNode)
         {
-            VR_ERROR << "No node with name " << TCPName << " available in robot.." << endl;
+            VR_ERROR << "No node with name " << TCPName << " available in robot.." << std::endl;
         }
     }
 

@@ -313,35 +313,35 @@ namespace VirtualRobot
 
     void EndEffector::print()
     {
-        cout << " **** EndEffector ****" << endl;
+        std::cout << " **** EndEffector ****" << std::endl;
 
-        cout << " * Name: " << name << endl;
-        cout << " * Base Node: ";
+        std::cout << " * Name: " << name << std::endl;
+        std::cout << " * Base Node: ";
 
         if (baseNode)
         {
-            cout << baseNode->getName() << endl;
+            std::cout << baseNode->getName() << std::endl;
         }
         else
         {
-            cout << "<not set>" << endl;
+            std::cout << "<not set>" << std::endl;
         }
 
-        cout << " * Static RobotNodes:" << endl;
+        std::cout << " * Static RobotNodes:" << std::endl;
 
         for (auto& i : statics)
         {
-            cout << " ** " << i->getName() << endl;
+            std::cout << " ** " << i->getName() << std::endl;
         }
 
-        cout << " * Actors:" << endl;
+        std::cout << " * Actors:" << std::endl;
 
         for (auto& actor : actors)
         {
             actor->print();
         }
 
-        cout << endl;
+        std::cout << std::endl;
     }
 
     VirtualRobot::RobotNodePtr EndEffector::getTcp()
@@ -650,14 +650,14 @@ namespace VirtualRobot
             ss << "gcp='" << gcpNode->getName() << "' ";
         }
 
-        ss << ">" << endl;
+        ss << ">" << std::endl;
 
         // Preshapes
         std::map< std::string, RobotConfigPtr >::iterator itPre = preshapes.begin();
 
         while (itPre != preshapes.end())
         {
-            ss << tt << "<Preshape name='" << itPre->first << "'>" << endl;
+            ss << tt << "<Preshape name='" << itPre->first << "'>" << std::endl;
             std::map < std::string, float > jv = itPre->second->getRobotNodeJointValueMap();
 
             std::map< std::string, float >::const_iterator i = jv.begin();
@@ -668,21 +668,21 @@ namespace VirtualRobot
                 i++;
             }
 
-            ss << tt << "</Preshape>" << endl;
+            ss << tt << "</Preshape>" << std::endl;
             itPre++;
         }
 
         // Static
         if (statics.size() > 0)
         {
-            ss << tt << "<Static>" << endl;
+            ss << tt << "<Static>" << std::endl;
 
             for (auto& i : statics)
             {
-                ss << ttt << "<Node name='" << i->getName() << "'/>" << endl;
+                ss << ttt << "<Node name='" << i->getName() << "'/>" << std::endl;
             }
 
-            ss << tt << "</Static>" << endl;
+            ss << tt << "</Static>" << std::endl;
         }
 
         // Actors
@@ -691,7 +691,7 @@ namespace VirtualRobot
             ss << actor->toXML(ident + 1);
         }
 
-        ss << pre << "</EndEffector>" << endl;
+        ss << pre << "</EndEffector>" << std::endl;
 
         return ss.str();
     }
@@ -714,7 +714,7 @@ namespace VirtualRobot
             int id1, id2;
             Eigen::Vector3f p1, p2;
             float dist = this->getCollisionChecker()->calculateDistance(n->getCollisionModel(), obstacle->getCollisionModel(), p1, p2, &id1, &id2);
-            //VR_INFO << n->getName() << " - DIST: " << dist << endl;
+            //VR_INFO << n->getName() << " - DIST: " << dist << std::endl;
             if (dist <= maxDistance)
             {
                 EndEffector::ContactInfo ci;

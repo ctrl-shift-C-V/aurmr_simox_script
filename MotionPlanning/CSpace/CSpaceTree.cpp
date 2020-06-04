@@ -93,7 +93,7 @@ namespace Saba
 
         if (!getNode(idStart) || !getNode(idStart))
         {
-            SABA_ERROR << "CSpaceTree::getPathDist: start or goal id not correct..." << endl;
+            SABA_ERROR << "CSpaceTree::getPathDist: start or goal id not correct..." << std::endl;
             return -1.0f;
         }
 
@@ -278,7 +278,7 @@ namespace Saba
 
             if (it == nodes.end())
             {
-                cout << "CSpaceTree::removeNode: node not in node vector ??? " << endl;
+                std::cout << "CSpaceTree::removeNode: node not in node vector ??? " << std::endl;
                 return;
             }
         }
@@ -302,7 +302,7 @@ namespace Saba
 
         if (nodes.size() == 0 || !cspace)
         {
-            SABA_WARNING << "no nodes in tree..." << endl;
+            SABA_WARNING << "no nodes in tree..." << std::endl;
             return 0;
         }
 

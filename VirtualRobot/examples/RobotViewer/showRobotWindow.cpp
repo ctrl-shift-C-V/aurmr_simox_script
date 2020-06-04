@@ -29,7 +29,7 @@ float TIMER_MS = 30.0f;
 showRobotWindow::showRobotWindow(std::string& sRobotFilename)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
     //this->setCaption(QString("ShowRobot - KIT - Humanoids Group"));
     //resize(1100, 768);
 
@@ -85,9 +85,9 @@ void CShowRobotWindow::saveScreenshot()
     QImage i = w->grabFrameBuffer();
     bool bRes = i.save(framefile.getString(), "PNG");
     if (bRes)
-        cout << "wrote image " << counter << endl;
+        std::cout << "wrote image " << counter << std::endl;
     else
-        cout << "failed writing image " << counter << endl;
+        std::cout << "failed writing image " << counter << std::endl;
 
 }*/
 
@@ -331,18 +331,18 @@ void showRobotWindow::exportVRML()
 
     Eigen::Matrix4f m1 = robot->getRobotNode(t1)->getGlobalPose();
     Eigen::Matrix4f m2 = robot->getRobotNode(t2)->getGlobalPose();
-    cout << "global pose " << t1 <<":" << endl << m1 << endl;
-    cout << "global pose " << t2 <<":" << endl << m2 << endl;
+    std::cout << "global pose " << t1 <<":" << endl << m1 << std::endl;
+    std::cout << "global pose " << t2 <<":" << endl << m2 << std::endl;
 
     Eigen::Matrix4f parentM1 = robot->getRobotNode(t1)->getParent()->getGlobalPose();
     Eigen::Matrix4f parentM2 = robot->getRobotNode(t2)->getParent()->getGlobalPose();
-    cout << "global pose parent " << t1 <<":" << endl << parentM1 << endl;
-    cout << "global pose parent " << t2 <<":" << endl << parentM2 << endl;
+    std::cout << "global pose parent " << t1 <<":" << endl << parentM1 << std::endl;
+    std::cout << "global pose parent " << t2 <<":" << endl << parentM2 << std::endl;
 
     Eigen::Matrix4f localM1 = robot->getRobotNode(t1)->getLocalTransformation();
     Eigen::Matrix4f localM2 = robot->getRobotNode(t2)->getLocalTransformation();
-    cout << "local trafo " << t1 <<":" << endl << localM1 << endl;
-    cout << "local trafo " << t2 <<":" << endl << localM2 << endl;
+    std::cout << "local trafo " << t1 <<":" << endl << localM1 << std::endl;
+    std::cout << "local trafo " << t2 <<":" << endl << localM2 << std::endl;
 
 
 
@@ -357,11 +357,11 @@ void showRobotWindow::exportVRML()
 
     m1 = parentM1 * localM1 /*getLocalTransformation()*/ * tmpRotMat1;
     m2 = parentM2 * localM2 /*getLocalTransformation()*/ * tmpRotMat2;
-    cout << "rot mat " << t1 <<":" << endl << tmpRotMat1 << endl;
-    cout << "rot mat " << t2 <<":" << endl << tmpRotMat2 << endl;
+    std::cout << "rot mat " << t1 <<":" << endl << tmpRotMat1 << std::endl;
+    std::cout << "rot mat " << t2 <<":" << endl << tmpRotMat2 << std::endl;
 
-    cout << "gp custom " << t1 <<":" << endl << m1 << endl;
-    cout << "gp custom " << t2 <<":" << endl << m2 << endl;
+    std::cout << "gp custom " << t1 <<":" << endl << m1 << std::endl;
+    std::cout << "gp custom " << t2 <<":" << endl << m2 << std::endl;
 
 
 
@@ -379,9 +379,9 @@ void showRobotWindow::exportVRML()
     Eigen::Matrix4f gpr1 = robot->getRobotNode(knee1)->getGlobalPose();
     Eigen::Matrix4f gpr2 = robot->getRobotNode(knee2)->getGlobalPose();
 
-    cout << "gp  " << knee1 <<":" << endl << gpr1 << endl;
-    cout << "gp  " << knee2 <<":" << endl << gpr2 << endl;
-    cout << "gp knee1->knee2 :" << endl << robot->getRobotNode(knee1)->toLocalCoordinateSystem(robot->getRobotNode(knee2)->getGlobalPose()) << endl;
+    std::cout << "gp  " << knee1 <<":" << endl << gpr1 << std::endl;
+    std::cout << "gp  " << knee2 <<":" << endl << gpr2 << std::endl;
+    std::cout << "gp knee1->knee2 :" << endl << robot->getRobotNode(knee1)->toLocalCoordinateSystem(robot->getRobotNode(knee2)->getGlobalPose()) << std::endl;
 
 
 
@@ -394,7 +394,7 @@ void showRobotWindow::exportVRML()
     RobotNodePtr tcp1 = robot->getRobotNode(n2);
 
     m1 = start1->toLocalCoordinateSystem(tcp1->getGlobalPose());
-    cout << "trafo (" << n1 << " -> " << n2 << "):" << endl << m1 << endl;
+    std::cout << "trafo (" << n1 << " -> " << n2 << "):" << endl << m1 << std::endl;
 
 
     return;
@@ -407,7 +407,7 @@ void showRobotWindow::exportVRML()
     RobotNodePtr tcp1 = robot->getRobotNode("Wrist 1 L");
 
     Eigen::Matrix4f m1 = start1->toLocalCoordinateSystem(tcp1->getGlobalPose());
-    cout << "OLD trafo (FW):" << endl << m1 << endl;
+    std::cout << "OLD trafo (FW):" << endl << m1 << std::endl;
 
     /*
     RobotFactory::robotStructureDef newStructure;
@@ -465,7 +465,7 @@ void showRobotWindow::exportVRML()
     RobotNodePtr tcp2 = robot->getRobotNode("Wrist 1 L");
 
     Eigen::Matrix4f m2 = start2->toLocalCoordinateSystem(tcp2->getGlobalPose());
-    cout << "NEW trafo (INV):" << endl << m2 << endl;
+    std::cout << "NEW trafo (INV):" << endl << m2 << std::endl;
 
     return;
 
@@ -485,7 +485,7 @@ void showRobotWindow::exportVRML()
 
         // Use currently selected node as origin
         robot->setGlobalPoseForRobotNode(robot->getRobotNode(UI.comboBoxJoint->currentText().toStdString()), Eigen::Matrix4f::Identity());
-        VR_INFO << "Using selected node " << UI.comboBoxJoint->currentText().toStdString() << " as origin for exported model." << endl;
+        VR_INFO << "Using selected node " << UI.comboBoxJoint->currentText().toStdString() << " as origin for exported model." << std::endl;
 
         visualization = robot->getVisualization<CoinVisualization>(colModel);
         visualization->exportToVRML2(s);
@@ -568,7 +568,7 @@ void showRobotWindow::updateRNSBox()
 void showRobotWindow::selectRNS(int nr)
 {
     currentRobotNodeSet.reset();
-    cout << "Selecting RNS nr " << nr << endl;
+    std::cout << "Selecting RNS nr " << nr << std::endl;
 
     if (nr <= 0)
     {
@@ -587,7 +587,7 @@ void showRobotWindow::selectRNS(int nr)
         currentRobotNodeSet = robotNodeSets[nr];
         currentRobotNodes = currentRobotNodeSet->getAllRobotNodes();
         std::cout << "COM:" << currentRobotNodeSet->getCoM();
-        /*cout << "HIGHLIGHTING rns " << currentRobotNodeSet->getName() << endl;
+        /*cout << "HIGHLIGHTING rns " << currentRobotNodeSet->getName() << std::endl;
         if (visualization)
         {
 
@@ -610,7 +610,7 @@ void showRobotWindow::selectJoint(int nr)
     }
 
     currentRobotNode.reset();
-    cout << "Selecting Joint nr " << nr << endl;
+    std::cout << "Selecting Joint nr " << nr << std::endl;
 
     if (nr < 0 || nr >= (int)currentRobotNodes.size())
     {
@@ -650,7 +650,7 @@ void showRobotWindow::selectJoint(int nr)
         UI.checkBoxShowCoordSystem->setCheckState(Qt::Unchecked);
     }
 
-    cout << "HIGHLIGHTING node " << currentRobotNodes[nr]->getName() << endl;
+    std::cout << "HIGHLIGHTING node " << currentRobotNodes[nr]->getName() << std::endl;
 
     if (visualization)
     {
@@ -680,9 +680,9 @@ void showRobotWindow::jointValueChanged(int pos)
 
     if (rnl && rnr)
     {
-        cout << "LEFT:" << endl;
+        std::cout << "LEFT:" << std::endl;
         MathTools::printMat(rnl->getGlobalPose());
-        cout << "RIGHT:" << endl;
+        std::cout << "RIGHT:" << std::endl;
         MathTools::printMat(rnr->getGlobalPose());
     }
 
@@ -770,7 +770,7 @@ void showRobotWindow::testPerformance(RobotPtr robot, RobotNodeSetPtr rns)
     }
     clock_t end = clock();
     float timeMS = (float)(end - start) / (float)CLOCKS_PER_SEC * 1000.0f;
-    VR_INFO << "Time (visu on, thread on): " << timeMS / (float)loops << endl;
+    VR_INFO << "Time (visu on, thread on): " << timeMS / (float)loops << std::endl;
 
     start = clock();
     robot->setupVisualization(false, false);
@@ -791,7 +791,7 @@ void showRobotWindow::testPerformance(RobotPtr robot, RobotNodeSetPtr rns)
     }
     end = clock();
     timeMS = (float)(end - start) / (float)CLOCKS_PER_SEC * 1000.0f;
-    VR_INFO << "Time (visu off, thread on): " << timeMS / (float)loops << endl;
+    VR_INFO << "Time (visu off, thread on): " << timeMS / (float)loops << std::endl;
 
     start = clock();
     robot->setupVisualization(true, false);
@@ -809,7 +809,7 @@ void showRobotWindow::testPerformance(RobotPtr robot, RobotNodeSetPtr rns)
     }
     end = clock();
     timeMS = (float)(end - start) / (float)CLOCKS_PER_SEC * 1000.0f;
-    VR_INFO << "Time (visu on, thread off): " << timeMS / (float)loops << endl;
+    VR_INFO << "Time (visu on, thread off): " << timeMS / (float)loops << std::endl;
 
 
     start = clock();
@@ -828,14 +828,14 @@ void showRobotWindow::testPerformance(RobotPtr robot, RobotNodeSetPtr rns)
     }
     end = clock();
     timeMS = (float)(end - start) / (float)CLOCKS_PER_SEC * 1000.0f;
-    VR_INFO << "Time (visu off, thread off): " << timeMS / (float)loops << endl;
+    VR_INFO << "Time (visu off, thread off): " << timeMS / (float)loops << std::endl;
 
 }
 
 void showRobotWindow::loadRobot()
 {
     robotSep->removeAllChildren();
-    cout << "Loading Robot from " << m_sRobotFilename << endl;
+    std::cout << "Loading Robot from " << m_sRobotFilename << std::endl;
     currentEEF.reset();
     currentRobotNode.reset();
     currentRobotNodes.clear();
@@ -850,7 +850,7 @@ void showRobotWindow::loadRobot()
 
         if (!importer)
         {
-            cout << " ERROR while grabbing importer" << endl;
+            std::cout << " ERROR while grabbing importer" << std::endl;
             return;
         }
 
@@ -860,14 +860,14 @@ void showRobotWindow::loadRobot()
     }
     catch (VirtualRobotException& e)
     {
-        cout << " ERROR while creating robot" << endl;
-        cout << e.what();
+        std::cout << " ERROR while creating robot" << std::endl;
+        std::cout << e.what();
         return;
     }
 
     if (!robot)
     {
-        cout << " ERROR while creating robot" << endl;
+        std::cout << " ERROR while creating robot" << std::endl;
         return;
     }
 
@@ -890,7 +890,7 @@ void showRobotWindow::loadRobot()
         l.push_back("Wrist 2 R");
         robot = RobotFactory::cloneUniteSubsets(robot, "RobotWithUnitedHands", l);
     }
-    VR_INFO << "=========== PERFORMANCE orig ============" << endl;
+    VR_INFO << "=========== PERFORMANCE orig ============" << std::endl;
     testPerformance(robot, robot->getRobotNodeSet("Joints_Revolute"));
     if (robot->hasRobotNode("LWy_joint") && robot->hasRobotNode("RWy_joint"))
     {
@@ -899,7 +899,7 @@ void showRobotWindow::loadRobot()
         l.push_back("RWy_joint");
         robot = RobotFactory::cloneUniteSubsets(robot, "RobotWithUnitedHands", l);
     }
-    VR_INFO << "=========== PERFORMANCE clone ============" << endl;
+    VR_INFO << "=========== PERFORMANCE clone ============" << std::endl;
     testPerformance(robot, robot->getRobotNodeSet("Joints_Revolute"));// ("BPy_joint"));
 #endif
 
@@ -959,7 +959,7 @@ void showRobotWindow::updatRobotInfo()
     useColModel = UI.checkBoxColModel->checkState() == Qt::Checked;
     SceneObject::VisualizationType colModel = (UI.checkBoxColModel->isChecked()) ? SceneObject::Collision : SceneObject::Full;
 
-    boost::shared_ptr<VirtualRobot::CoinVisualization> visualization = r2->getVisualization<CoinVisualization>(colModel);
+    VirtualRobot::CoinVisualizationPtr visualization = r2->getVisualization<CoinVisualization>(colModel);
     SoNode* visualisationNode = NULL;
 
     if (visualization)
@@ -1048,9 +1048,9 @@ void showRobotWindow::openHand()
         clock_t endT = clock();
 
         float diffClock = (float)(((float)(endT - startT) / (float)CLOCKS_PER_SEC) * 1000.0f);
-        cout << "RobotNodes:" << rn.size() << endl;
-        cout << "Joints:" << rnJoints.size() << endl;
-        cout << "loops:" << loops << ". time (ms):" << diffClock << ". Per loop:" << diffClock / (float)loops << endl;
+        std::cout << "RobotNodes:" << rn.size() << std::endl;
+        std::cout << "Joints:" << rnJoints.size() << std::endl;
+        std::cout << "loops:" << loops << ". time (ms):" << diffClock << ". Per loop:" << diffClock / (float)loops << std::endl;
     }
 
 #endif
@@ -1063,7 +1063,7 @@ void showRobotWindow::openHand()
 
 void showRobotWindow::selectEEF(int nr)
 {
-    cout << "Selecting EEF nr " << nr << endl;
+    std::cout << "Selecting EEF nr " << nr << std::endl;
 
      UI.comboBoxEndEffectorPS->clear();
      currentEEF.reset();
@@ -1084,7 +1084,7 @@ void showRobotWindow::selectEEF(int nr)
 
 void showRobotWindow::selectPreshape(int nr)
 {
-    cout << "Selecting EEF preshape nr " << nr << endl;
+    std::cout << "Selecting EEF preshape nr " << nr << std::endl;
 
     if (!currentEEF || nr==0)
         return;

@@ -21,7 +21,7 @@ float TIMER_MS = 30.0f;
 GenericIKWindow::GenericIKWindow(std::string& sRobotFilename)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
     //this->setCaption(QString("ShowRobot - KIT - Humanoids Group"));
     //resize(1100, 768);
 
@@ -258,7 +258,7 @@ void GenericIKWindow::updateKCBox()
 
 void GenericIKWindow::selectKC(int nr)
 {
-    cout << "Selecting kinematic chain nr " << nr << endl;
+    std::cout << "Selecting kinematic chain nr " << nr << std::endl;
 
     if (nr < 0 || nr >= (int)kinChains.size())
     {
@@ -351,7 +351,7 @@ void GenericIKWindow::solve()
         return;
     }
 
-    cout << "---- Solve IK ----" << endl;
+    std::cout << "---- Solve IK ----" << std::endl;
 
     IKSolver::CartesianSelection s = IKSolver::All;
 
@@ -370,7 +370,7 @@ void GenericIKWindow::solve()
     {
         // setup gaze IK
         float v = (kc->getNode(kc->getSize() - 1)->getParent()->getGlobalPose().block(0, 3, 3, 1) - targetPose.block(0, 3, 3, 1)).norm();
-        cout << "Setting initial value of translation joint to :" << v << endl;
+        std::cout << "Setting initial value of translation joint to :" << v << std::endl;
         ikSolver->setupTranslationalJoint(kc->getNode(kc->getSize() - 1), v);
         kc->getNode(kc->getSize() - 1)->setJointValue(v);
     }*/
@@ -378,18 +378,18 @@ void GenericIKWindow::solve()
 
     if (UI.comboBoxIKMethod->currentIndex() == 0)
     {
-        cout << "Solving with Gaze IK" << endl;
+        std::cout << "Solving with Gaze IK" << std::endl;
         ikGazeSolver->solve(targetPose.block(0, 3, 3, 1));
     }
     else if(UI.comboBoxIKMethod->currentIndex() == 1)
     {
-        cout << "Solving with Differential IK" << endl;
+        std::cout << "Solving with Differential IK" << std::endl;
         ikSolver->solve(targetPose, s, 50);
     }
     else
     {
 #ifdef USE_NLOPT
-        cout << "Solving with Constrained IK" << endl;
+        std::cout << "Solving with Constrained IK" << std::endl;
         ConstrainedOptimizationIK solver(robot, kc);
 
         PoseConstraintPtr pc(new PoseConstraint(robot, kc, tcp, targetPose, s));
@@ -398,7 +398,7 @@ void GenericIKWindow::solve()
         solver.initialize();
         solver.solve();
 #else
-        cout << "Constrained IK not available (requires NLopt)" << endl;
+        std::cout << "Constrained IK not available (requires NLopt)" << std::endl;
 #endif
     }
 
@@ -425,12 +425,12 @@ void GenericIKWindow::solve()
     qd3 += " deg";
     UI.labelOri->setText(qd3);
 
-    cout << "Joint values:" << endl;
+    std::cout << "Joint values:" << std::endl;
     std::vector<RobotNodePtr> nodes = kc->getAllRobotNodes();
 
     for (auto & node : nodes)
     {
-        cout << node->getJointValue() << endl;
+        std::cout << node->getJointValue() << std::endl;
     }
 
     /*
@@ -440,7 +440,7 @@ void GenericIKWindow::solve()
     */
     exViewer->render();
 
-    cout << "---- END Solve IK ----" << endl;
+    std::cout << "---- END Solve IK ----" << std::endl;
 }
 
 void GenericIKWindow::box2TCP()
@@ -464,7 +464,7 @@ void GenericIKWindow::loadRobot()
 {
     std::cout << "GenericIKWindow: Loading robot" << std::endl;
     robotSep->removeAllChildren();
-    cout << "Loading Robot from " << robotFilename << endl;
+    std::cout << "Loading Robot from " << robotFilename << std::endl;
 
     try
     {
@@ -472,14 +472,14 @@ void GenericIKWindow::loadRobot()
     }
     catch (VirtualRobotException& e)
     {
-        cout << " ERROR while creating robot" << endl;
-        cout << e.what();
+        std::cout << " ERROR while creating robot" << std::endl;
+        std::cout << e.what();
         return;
     }
 
     if (!robot)
     {
-        cout << " ERROR while creating robot" << endl;
+        std::cout << " ERROR while creating robot" << std::endl;
         return;
     }
 
