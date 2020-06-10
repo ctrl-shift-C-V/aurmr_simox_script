@@ -25,7 +25,9 @@ if(NOT "$ENV{CMAKE_UNITY_BUILD_BATCH_SIZE}" STREQUAL "")
 endif()
 
 IF(NOT CMAKE_BUILD_TYPE)
-    SET_PROPERTY(CACHE CMAKE_BUILD_TYPE PROPERTY STRING "RelWithDebInfo")
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING
+        "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+        FORCE)
 endif()
 
 #we want Release and RelWithDebInfo to use the same optimization level
