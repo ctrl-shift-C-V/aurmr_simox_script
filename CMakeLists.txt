@@ -76,7 +76,7 @@ if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0)
     add_compile_options(-Wno-error=unused-but-set-variable)
     add_compile_options(-Wno-error=unused-variable)
     add_compile_options(-Wno-error=unused-parameter)
-    add_compile_options(-Wno-error=deprecated)
+    add_compile_options(-Wno-error=deprecated-declarations)
 endif()
 
 #######################################################################################
@@ -89,12 +89,13 @@ OPTION(Simox_USE_OPENSCENEGRAPH_VISUALIZATION "Use OpenSceneGraph for visualizat
 OPTION(Simox_COLLISION_CHECKER_PQP "Build and use the PQP Collision Detection library (located in ExternalDependencies)" ON)
 #######################################################################################
 MESSAGE(STATUS "******************** Configuring Simox ************************")
+set (Simox_BUILD_VirtualRobot TRUE CACHE BOOL "Build Virtual Robot library")
 set (Simox_BUILD_Saba TRUE CACHE BOOL "Build Motion Planning library")
 set (Simox_BUILD_GraspStudio TRUE CACHE BOOL "Build Grasp Planning library")
 set (Simox_BUILD_SimDynamics TRUE CACHE BOOL "Build Dynamic Simulation")
 
 MESSAGE (STATUS "** SIMOX BUILD SimoxUtility: TRUE (can't be turned off)")
-MESSAGE (STATUS "** SIMOX BUILD VirtualRobot: TRUE (can't be turned off)")
+MESSAGE (STATUS "** SIMOX BUILD VirtualRobot: ${Simox_BUILD_VirtualRobot}")
 MESSAGE (STATUS "** SIMOX BUILD Saba        : ${Simox_BUILD_Saba}")
 MESSAGE (STATUS "** SIMOX BUILD GraspStudio : ${Simox_BUILD_GraspStudio}")
 MESSAGE (STATUS "** SIMOX BUILD SimDynamics : ${Simox_BUILD_SimDynamics}")
@@ -194,13 +195,15 @@ endif()
 
 #######################################################################################
 add_subdirectory(SimoxUtility)
-add_subdirectory(VirtualRobot)
-
+list (APPEND SIMOX_EXPORT_TARGET_LIST SimoxUtility)
+list (APPEND Simox_LIBRARIES          SimoxUtility)
 
 #######################################################################################
-list (APPEND SIMOX_EXPORT_TARGET_LIST SimoxUtility VirtualRobot)
-list (APPEND Simox_LIBRARIES          SimoxUtility VirtualRobot)
-
+if (Simox_BUILD_VirtualRobot)
+    add_subdirectory(VirtualRobot)
+    list(APPEND SIMOX_EXPORT_TARGET_LIST VirtualRobot)
+    list(APPEND Simox_LIBRARIES VirtualRobot)
+endif()
 
 #######################################################################################
 if (Simox_BUILD_Saba)
