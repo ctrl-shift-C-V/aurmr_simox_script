@@ -18,6 +18,14 @@ std::string to_lower(const std::string& str)
     return res;
 }
 
+std::string to_upper(const std::string& str)
+{
+    std::string res = str;
+    std::transform(res.begin(), res.end(), res.begin(), toupper);
+    return res;
+}
+
+
 void trim(std::string& str, const std::locale& locale) {
     boost::trim(str, locale);
 }
@@ -74,6 +82,26 @@ std::string join(const std::vector<std::string> vec, const std::string& delimite
         if (index != vec.size()) ss << delimiter;
     }
     return ss.str();
+}
+
+std::string replace_all(const std::string& input, const std::string& search, const std::string& replace)
+{
+    return boost::algorithm::replace_all_copy(input, search, replace);
+}
+
+std::string replace_first(const std::string& input, const std::string& search, const std::string& replace)
+{
+    return boost::algorithm::replace_first_copy(input, search, replace);
+}
+
+bool starts_with(const std::string& input, const std::string& search)
+{
+    return boost::starts_with(input, search);
+}
+
+bool ends_with(const std::string& input, const std::string& search)
+{
+    return boost::ends_with(input, search);
 }
 
 }

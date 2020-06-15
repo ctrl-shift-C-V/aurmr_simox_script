@@ -30,6 +30,8 @@ namespace simox::alg {
 
     std::string to_lower(const std::string& str);
 
+    std::string to_upper(const std::string& str);
+
     void trim(std::string& str, const std::locale& locale = DEFAULT_LOCALE);
 
     std::string trim_copy(const std::string& str, const std::locale& locale = DEFAULT_LOCALE);
@@ -47,4 +49,12 @@ namespace simox::alg {
 
     std::string join(const std::vector<std::string> vec, const std::string& delimiter = " ", bool trimElements = false,
                      bool ignoreEmptyElements = false, const std::locale& locale = DEFAULT_LOCALE);
+
+    std::string replace_first(std::string const& input, std::string const& search, std::string const& replace);
+
+    std::string replace_all(std::string const& input, std::string const& search, std::string const& replace);
+
+    bool starts_with(std::string const& input, std::string const& search);
+
+    bool ends_with(std::string const& input, std::string const& search);
 }
