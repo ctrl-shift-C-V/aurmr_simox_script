@@ -60,8 +60,11 @@ namespace VirtualRobot
          */
         RobotNodeSetPtr clone(RobotPtr newRobot, const RobotNodePtr newKinematicRoot = RobotNodePtr());
 
-        bool hasRobotNode(RobotNodePtr robotNode) const;
+        bool hasRobotNode(const RobotNodePtr& robotNode) const;
         bool hasRobotNode(const std::string& nodeName) const;
+
+        int getRobotNodeIndex(const RobotNodePtr& robotNode) const;
+        int getRobotNodeIndex(const std::string& nodeName) const;
 
         /*!
             Returns all nodes.
