@@ -50,6 +50,8 @@ MESSAGE (STATUS "\n***** CONFIGURING Simox project SimoxUtility *****")
 SET(SOURCES
     SimoxUtility.cpp
 
+    algorithm/string/string_tools.cpp
+
     color/cmaps/colormaps.cpp
     color/cmaps/Named.cpp
     color/Color.cpp
@@ -89,6 +91,9 @@ SET(INCLUDES
     algorithm/for_each_if.h
     algorithm/apply.hpp
     algorithm/get_map_keys_values.h
+    algorithm/string/string_tools.h
+    algorithm/string/string_conversion.h
+    algorithm/string/string_conversion_eigen.h
 
     color/cmaps/colormaps.h
     color/cmaps/Named.h
@@ -96,6 +101,7 @@ SET(INCLUDES
     color/Color.h
     color/ColorMap.h
     color/GlasbeyLUT.h
+    color/KellyLUT.h
     color/hsv.h
     color/interpolation.h
     color/json.h
@@ -106,6 +112,7 @@ SET(INCLUDES
 
     error/SimoxError.h
 
+    filesystem/make_relative.h
     filesystem/list_directory.h
     filesystem/remove_trailing_separator.h
 
@@ -215,6 +222,11 @@ SET(INCLUDES
     meta/EnumNames.hpp
     meta/enum/adapt_enum.h
     meta/enum/EnumNames.hpp
+
+    xml/rapidxml/rapidxml.hpp
+    xml/rapidxml/rapidxml_print.hpp
+    xml/rapidxml/RapidXMLWrapper.h
+    xml/rapidxml/RapidXMLForwardDecl.h
 
     shapes/AxisAlignedBoundingBox.h
     shapes/OrientedBoxBase.h
