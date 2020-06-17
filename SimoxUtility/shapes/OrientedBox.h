@@ -119,7 +119,7 @@ namespace simox
             }
             this->_t.template block<3, 1>(0, 3) = corner;
         }
-        
+
         OrientedBox(const base& b) : base(b) {}
         template<class T>
         OrientedBox<T> cast() const
@@ -143,7 +143,7 @@ namespace simox
                 t * this->axis_z() * this->dimension(2)
             };
         }
-        
+
         template<class T>
         OrientedBox<T> transformed(const rotation_t& t) const
         {
@@ -160,12 +160,16 @@ namespace simox
                 this->rotation(t) * this->axis_z() * this->dimension(2)
             };
         }
-        
+
         template<class T>
         OrientedBox<T>  transformed(const transform_t& t) const
         {
             return transformed(t).template cast<T>();
         }
     };
+
+    using OrientedBoxf = OrientedBox<float>;
+    using OrientedBoxd = OrientedBox<double>;
+
 }
 
