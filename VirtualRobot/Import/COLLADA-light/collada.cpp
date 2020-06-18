@@ -73,8 +73,7 @@ using namespace std;
 namespace Collada
 {
 
-    template<>
-    std::vector<int> getVector(std::string text)
+    std::vector<int> getIntVector(std::string text)
     {
         std::vector<std::string> splitted;
         boost::algorithm::trim(text);
@@ -88,8 +87,7 @@ namespace Collada
         return result;
     }
 
-    template<>
-    std::vector<float> getVector(std::string text)
+    std::vector<float> getFloatVector(std::string text)
     {
         std::vector<std::string> splitted;
         boost::algorithm::trim(text);

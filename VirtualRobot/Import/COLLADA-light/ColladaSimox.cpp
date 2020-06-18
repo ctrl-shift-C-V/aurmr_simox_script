@@ -27,7 +27,7 @@ namespace Collada
     Eigen::Matrix4f getTransform(pugi::xml_node node, float scaleFactor = 1.0)
     {
         Eigen::Transform<float, 3, Eigen::Affine> t;
-        std::vector<float> v = Collada::getVector<float>(node.child_value());
+        std::vector<float> v = Collada::getFloatVector(node.child_value());
 
         if (std::string("rotate").compare(node.name()) == 0)
         {
@@ -50,7 +50,7 @@ namespace Collada
 
     Eigen::Vector3f getVector3f(pugi::xml_node node)
     {
-        vector<float> v = getVector<float>(node.child_value());
+        vector<float> v = getFloatVector(node.child_value());
         return Eigen::Vector3f(v[0], v[1], v[2]);
     }
 
