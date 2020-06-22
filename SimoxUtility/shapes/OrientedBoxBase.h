@@ -301,6 +301,27 @@ namespace simox
         {
             return corner_max().template cast<T>();
         }
+
+        vector_t corner(std::uint8_t c) const
+        {
+            if (c >= 8)
+            {
+                throw std::invalid_argument{"corner has to be in [0, 7]"};
+            }
+            const Eigen::Vector3f b
+            {
+                (c % 2) ? 0 : _d(0),
+                ((c / 2) % 2) ? 0 : _d(1),
+                ((c / 4) % 2) ? 0 : _d(2)
+            };
+            return from_box_frame(b);
+        }
+        template<class T>
+        vector_casted<T> corner(std::uint8_t c) const
+        {
+            return corner(c).template cast<T>();
+        }
+
     protected:
         transform_t _t{transform_t::Identity()};
         vector_t _d{vector_t::Zero()};
