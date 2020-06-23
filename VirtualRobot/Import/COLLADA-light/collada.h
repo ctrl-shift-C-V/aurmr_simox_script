@@ -100,8 +100,8 @@ namespace Collada
     pugi::xml_node resolveSIDREF(pugi::xml_node node, std::string sidref, std::string root = "/*[1]");
 
     /// Obtains a vector by casting each of the strings values (separated by spaces)
-    template<typename T, typename std::enable_if<std::is_arithmetic<T>::value>::type* = nullptr>
-    std::vector<T> getVector(std::string text);
+    std::vector<float> getFloatVector(std::string text);
+    std::vector<int> getIntVector(std::string text);
 
     template<typename T>
     struct TraversalStack

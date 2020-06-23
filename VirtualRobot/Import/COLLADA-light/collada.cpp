@@ -73,8 +73,7 @@ using namespace std;
 namespace Collada
 {
 
-    /*template<>
-    std::vector<int> getVector(std::string text)
+    std::vector<int> getIntVector(std::string text)
     {
         std::vector<std::string> splitted;
         boost::algorithm::trim(text);
@@ -86,18 +85,17 @@ namespace Collada
         }
 
         return result;
-    }*/
+    }
 
-    template<typename T, typename std::enable_if<std::is_arithmetic<T>::value>::type* = nullptr>
-    std::vector<T> getVector(std::string text)
+    std::vector<float> getFloatVector(std::string text)
     {
         std::vector<std::string> splitted;
         boost::algorithm::trim(text);
-        std::vector<T> result;
+        std::vector<float> result;
         boost::algorithm::split(splitted, text, boost::algorithm::is_space());
         for (std::string const& number : splitted)
         {
-            result.push_back(boost::lexical_cast<T>(number));
+            result.push_back(boost::lexical_cast<float>(number));
         }
 
         return result;

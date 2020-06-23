@@ -42,21 +42,21 @@ namespace Collada
         {
             SoRotation* transform = new SoRotation;
             root->addChild(transform);
-            std::vector<float> v = getVector<float>(node.child_value());
+            std::vector<float> v = getFloatVector(node.child_value());
             transform->rotation.setValue(SbVec3f(v[0], v[1], v[2]), v[3]);
         }
         else if (std::string("translate").compare(node.name()) == 0)
         {
             SoTranslation* transform = new SoTranslation;
             root->addChild(transform);
-            std::vector<float> v = getVector<float>(node.child_value());
+            std::vector<float> v = getFloatVector(node.child_value());
             transform->translation.setValue(v[0], v[1], v[2]);
         }
         else if (std::string("matrix").compare(node.name()) == 0)
         {
             SoMatrixTransform* transform = new SoMatrixTransform;
             root->addChild(transform);
-            std::vector<float> v = getVector<float>(node.child_value());
+            std::vector<float> v = getFloatVector(node.child_value());
             transform->matrix.setValue(SbMatrix(
                                            v[0],    v[4],    v[8],   v[12],
                                            v[1],    v[5],    v[9],   v[13],
@@ -146,7 +146,7 @@ namespace Collada
         /* SoPendulum seems broken :(
         SoPendulum *pendulum = new SoPendulum;
         this->preJointTransformation->addChild(pendulum);
-        vector<float> v = getVector<float>(this->joint_axis.child_value("axis"));
+        vector<float> v = getFloatVector(this->joint_axis.child_value("axis"));
         pendulum->rotation0.setValue(SbVec3f(0,0,1),0);
         pendulum->rotation1.setValue(SbVec3f(1,0,0),3.14);
         //pendulum->rotation.setValue(SbVec3f(1,0,0),0);
@@ -188,12 +188,12 @@ namespace Collada
             if(shader_phong && !shader_lambert)
             {
                 pugi::xml_node diffuse = shader_phong.child("diffuse").child("color");
-                diffuse_color = getVector<float>(diffuse.child_value());
+                diffuse_color = getFloatVector(diffuse.child_value());
             }
             else if (!shader_phong && shader_lambert)
             {
                 pugi::xml_node diffuse = shader_lambert.child("diffuse").child("color");
-                diffuse_color = getVector<float>(diffuse.child_value());
+                diffuse_color = getFloatVector(diffuse.child_value());
             }
             colormap[symbol] = diffuse_color;
         }
@@ -248,8 +248,8 @@ namespace Collada
             //faceSet->coordIndex.setValues(0,p2.size(),&p2[0]);
 
 
-            std::vector<int> p = getVector<int>(polylist.node().child_value("p"));
-            std::vector<int> vcount = getVector<int>(polylist.node().child_value("vcount"));
+            std::vector<int> p = getIntVector(polylist.node().child_value("p"));
+            std::vector<int> vcount = getIntVector(polylist.node().child_value("vcount"));
 #ifdef TIMER_DEBUG
             std::cout << vcount.size() << ", " << flush;
 #endif
@@ -263,7 +263,7 @@ namespace Collada
 
             pugi::xml_node vertices = resolveURL(vertexInputNode);
             pugi::xml_node source = resolveURL(vertices.child("input"));
-            std::vector<float> floats = getVector<float>(source.child_value("float_array"));
+            std::vector<float> floats = getFloatVector(source.child_value("float_array"));
             coordinates->point.setValues(0, floats.size() / 3, (const float(*)[3]) &floats[0]);
 
             /* Explanation:

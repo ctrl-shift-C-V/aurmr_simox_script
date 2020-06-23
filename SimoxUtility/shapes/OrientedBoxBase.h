@@ -45,12 +45,12 @@ namespace simox
     public:
         static constexpr float_t eps = static_cast<float_t>(1e8);
         static constexpr float_t pi  = static_cast<float_t>(M_PI);
-        
+
     public:
         OrientedBoxBase(const transform_t& t, const vector_t& d) :
             _t{t}, _d{d}
         {}
-        
+
         OrientedBoxBase() = default;
         OrientedBoxBase(OrientedBoxBase&&) = default;
         OrientedBoxBase(const OrientedBoxBase&) = default;
@@ -138,7 +138,7 @@ namespace simox
         {
             return translation().template cast<T>();
         }
-        
+
         auto rotation() const
         {
             return rotation(_t);
@@ -148,17 +148,17 @@ namespace simox
         {
             return rotation().template cast<T>();
         }
-        
+
         auto axis(int i) const
         {
             return _t.template block<3, 1>(0, i);
-        }        
+        }
         template<class T>
         vector_casted<T> axis(int i) const
         {
             return axis(i).template cast<T>();
         }
-        
+
         auto axis_x() const
         {
             return axis(0);
@@ -188,17 +188,17 @@ namespace simox
         {
             return axis_z().template cast<T>();
         }
-        
+
         vector_t extend(int i) const
         {
             return axis(i) * dimension(i);
-        }        
+        }
         template<class T>
         vector_casted<T> extend(int i) const
         {
             return extend(i).template cast<T>();
         }
-        
+
         float_t volume() const
         {
             return _d(0) * _d(1) * _d(2);
@@ -301,6 +301,27 @@ namespace simox
         {
             return corner_max().template cast<T>();
         }
+
+        vector_t corner(std::uint8_t c) const
+        {
+            if (c >= 8)
+            {
+                throw std::invalid_argument{"corner has to be in [0, 7]"};
+            }
+            const Eigen::Vector3f b
+            {
+                (c % 2) ? 0 : _d(0),
+                ((c / 2) % 2) ? 0 : _d(1),
+                ((c / 4) % 2) ? 0 : _d(2)
+            };
+            return from_box_frame(b);
+        }
+        template<class T>
+        vector_casted<T> corner(std::uint8_t c) const
+        {
+            return corner(c).template cast<T>();
+        }
+
     protected:
         transform_t _t{transform_t::Identity()};
         vector_t _d{vector_t::Zero()};
