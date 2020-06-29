@@ -116,6 +116,7 @@ namespace Collada
 
         for (ColladaRobotNodePtr const& node : this->robotNodeSet)
         {
+            (void) node;
             //dynamic_pointer_cast<ColladaSimoxRobotNode>(node)->simoxRobotNode->setJointValue(node->value);
         }
     }
