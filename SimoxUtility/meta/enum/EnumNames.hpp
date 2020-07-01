@@ -96,6 +96,16 @@ namespace simox::meta
             }
             return values;
         }
+        template<template<class...> class Temp = std::vector>
+        Temp<NameT> names() const
+        {
+            Temp<EnumT> values;
+            for (const auto& it : _names.right)
+            {
+                values.emplace_back(it.first);
+            }
+            return values;
+        }
 
         template <typename E, typename N>
         friend std::ostream& operator<<(std::ostream& os, const EnumNames<E, N>& rhs);
