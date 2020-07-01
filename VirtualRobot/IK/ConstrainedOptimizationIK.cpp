@@ -59,8 +59,17 @@ bool ConstrainedOptimizationIK::initialize()
 
     for(int i = 0; i < size; i++)
     {
-        low[i] = nodeSet->getNode(i)->getJointLimitLo();
-        high[i] = nodeSet->getNode(i)->getJointLimitHi();
+        if(nodeSet->getNode(i)->isLimitless())
+        {
+            // see https://nlopt.readthedocs.io/en/latest/NLopt_Reference/#bound-constraints
+            low.at(i) = -HUGE_VAL;
+            high.at(i) = +HUGE_VAL;
+        }
+        else
+        {
+            low.at(i) = nodeSet->getNode(i)->getJointLimitLo();
+            high.at(i) = nodeSet->getNode(i)->getJointLimitHi();
+        }
     }
 
     optimizer->set_lower_bounds(low);
