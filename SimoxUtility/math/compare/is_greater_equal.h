@@ -6,6 +6,13 @@ namespace simox::math
 {
     template<class L, class R>
     constexpr
+    std::enable_if_t < !simox::meta::are_arithmetic_v<L, R>, bool >
+    is_greater_equal(const L& l, const R& r)
+    {
+        return l >= r;
+    }
+    template<class L, class R>
+    constexpr
     std::enable_if_t <simox::meta::are_arithmetic_v<L, R>, bool>
     is_greater_equal(L l, R r)
     {
