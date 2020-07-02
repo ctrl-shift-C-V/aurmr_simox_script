@@ -16,15 +16,24 @@
 
 BOOST_AUTO_TEST_CASE(test_normal_orth)
 {
+    std::vector<int> vec;
     using namespace simox::math;
 
     std::cout << "is_equal\n";
     BOOST_CHECK(!is_equal(-1, 5u));
+    BOOST_CHECK(!is_equal(-1, -5));
     BOOST_CHECK(!is_equal(5u, -1));
+    BOOST_CHECK(!is_equal(5u, 1u));
     BOOST_CHECK(is_equal(5u, 5u));
     BOOST_CHECK(is_equal(-1, -1));
+    BOOST_CHECK(is_equal(1u, 1u));
     BOOST_CHECK(is_equal(-1.f, -1));
     BOOST_CHECK(is_equal(-1, -1.));
+    BOOST_CHECK(is_equal(0, 0));
+    BOOST_CHECK(is_equal(0, 0u));
+    BOOST_CHECK(is_equal(0l, 0u));
+    BOOST_CHECK(is_equal(0, 0ul));
+    BOOST_CHECK(is_equal(0, vec.size()));
 
     std::cout << "is_greater\n";
     BOOST_CHECK(!is_greater(-1, 5u));
@@ -33,12 +42,20 @@ BOOST_AUTO_TEST_CASE(test_normal_orth)
     BOOST_CHECK(!is_greater(-1, -1));
     BOOST_CHECK(!is_greater(-1.f, -1));
     BOOST_CHECK(!is_greater(-1, -1.));
+    BOOST_CHECK(is_greater(vec.size(), -1.));
+    BOOST_CHECK(is_greater(5u, vec.size()));
 
     std::cout << "is_greater_equal\n";
     BOOST_CHECK(!is_greater_equal(-1, 5u));
+    BOOST_CHECK(!is_greater_equal(-5, -1));
+    BOOST_CHECK(!is_greater_equal(1u, 5u));
     BOOST_CHECK(is_greater_equal(5u, -1));
     BOOST_CHECK(is_greater_equal(5u, 5u));
     BOOST_CHECK(is_greater_equal(-1, -1));
+    BOOST_CHECK(is_greater_equal(vec.size(), -1));
+    BOOST_CHECK(is_greater_equal(5u, vec.size()));
+    BOOST_CHECK(is_greater_equal(0, vec.size()));
+
 
     std::cout << "is_inequal\n";
     BOOST_CHECK(is_inequal(-1, 5u));
