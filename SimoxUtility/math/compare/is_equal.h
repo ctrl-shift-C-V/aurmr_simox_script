@@ -45,7 +45,7 @@ namespace simox::math
             // l>=0, r>=0
             //if same size use unsigned type, otherwise the bigger one
             using big_t = std::conditional_t < (sizeof(L) > sizeof(R)), L, R >;
-            return static_cast<big_t>(l) < static_cast<big_t>(r);
+            return static_cast<big_t>(l) == static_cast<big_t>(r);
         }
         else
         {
