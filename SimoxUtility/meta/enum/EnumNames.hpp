@@ -89,7 +89,7 @@ namespace simox::meta
         /// Get the enum names.
         std::set<NameT> names() const
         {
-            std::set<EnumT> values;
+            std::set<NameT> values;
             for (const auto& it : _names.right)
             {
                 values.insert(it.first);
@@ -99,7 +99,7 @@ namespace simox::meta
         template<template<class...> class Temp = std::vector>
         Temp<NameT> names() const
         {
-            Temp<EnumT> values;
+            Temp<NameT> values;
             for (const auto& it : _names.right)
             {
                 values.emplace_back(it.first);
