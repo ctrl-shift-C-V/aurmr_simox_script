@@ -4,14 +4,19 @@
 #include "../Visualization/TriMeshModel.h"
 #include "../Visualization/VisualizationNode.h"
 #include "../XML/BaseIO.h"
+
+#include <boost/assert.hpp>
+
+#include <filesystem>
 #include <algorithm>
 
 
 
 namespace VirtualRobot
 {
+    using std::endl;
 
-    CollisionModel::CollisionModel(VisualizationNodePtr visu, const std::string& name, CollisionCheckerPtr colChecker, int id, float margin)
+    CollisionModel::CollisionModel(const VisualizationNodePtr& visu, const std::string& name, CollisionCheckerPtr colChecker, int id, float margin)
     {
         globalPose = Eigen::Matrix4f::Identity();
         this->id = id;
@@ -27,14 +32,22 @@ namespace VirtualRobot
 
         if (!this->colChecker)
         {
-            VR_WARNING << "no col checker..." << endl;
+            VR_WARNING << "no col checker..." << std::endl;
         }
 
         updateVisualization = true;
         setVisualization(visu);
     }
 
-    CollisionModel::CollisionModel(VisualizationNodePtr visu, const std::string& name, CollisionCheckerPtr colChecker, int id, InternalCollisionModelPtr collisionModel)
+    CollisionModel::CollisionModel(const TriMeshModelPtr& mesh) :
+        CollisionModel(std::make_shared<VisualizationNode>(mesh))
+    {}
+
+    CollisionModel::CollisionModel(const TriMeshModel& mesh) :
+        CollisionModel(std::make_shared<VisualizationNode>(mesh))
+    {}
+
+    CollisionModel::CollisionModel(const VisualizationNodePtr& visu, const std::string& name, CollisionCheckerPtr colChecker, int id, InternalCollisionModelPtr collisionModel)
     {
         margin = 0.0;
         globalPose = Eigen::Matrix4f::Identity();
@@ -51,15 +64,15 @@ namespace VirtualRobot
 
         if (!this->colChecker)
         {
-            VR_WARNING << "no col checker..." << endl;
+            VR_WARNING << "no col checker..." << std::endl;
         }
 
         updateVisualization = true;
         if (!collisionModel)
         {
-            VR_WARNING << "internal collision model is NULL for " << name << endl;
+            VR_WARNING << "internal collision model is NULL for " << name << std::endl;
         }
-        collisionModelImplementation = boost::dynamic_pointer_cast<InternalCollisionModel>(collisionModel->clone(false));
+        collisionModelImplementation = std::dynamic_pointer_cast<InternalCollisionModel>(collisionModel->clone(false));
         VR_ASSERT(collisionModelImplementation->getPQPModel());
         setVisualization(visu);
     }

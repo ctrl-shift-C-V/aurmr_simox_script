@@ -3,6 +3,8 @@
 #include "PositionSensorFactory.h"
 #include "../XML/BaseIO.h"
 
+#include <VirtualRobot/Visualization/VisualizationNode.h>
+
 namespace VirtualRobot
 {
 
@@ -25,7 +27,7 @@ namespace VirtualRobot
     {
         if (printDecoration)
         {
-            cout << "******** PositionSensor ********" << endl;
+            std::cout << "******** PositionSensor ********" << std::endl;
         }
 
         Sensor::print(printChildren, false);
@@ -53,19 +55,19 @@ namespace VirtualRobot
             pre += t;
         }
 
-        ss << pre << "<Sensor type='" << PositionSensorFactory::getName() << "' name='" << name << "'>" << endl;
+        ss << pre << "<Sensor type='" << PositionSensorFactory::getName() << "' name='" << name << "'>" << std::endl;
         std::string pre2 = pre + t;
         std::string pre3 = pre2 + t;
-        ss << pre2 << "<Transform>" << endl;
+        ss << pre2 << "<Transform>" << std::endl;
         ss << BaseIO::toXML(rnTransformation, pre3);
-        ss << pre2 << "</Transform>" << endl;
+        ss << pre2 << "</Transform>" << std::endl;
 
         if (visualizationModel)
         {
             ss << visualizationModel->toXML(modelPath, tabs + 1);
         }
 
-        ss << pre << "</Sensor>" << endl;
+        ss << pre << "</Sensor>" << std::endl;
         return ss.str();
     }
 

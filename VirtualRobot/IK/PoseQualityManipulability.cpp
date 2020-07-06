@@ -28,21 +28,21 @@ namespace VirtualRobot
     {
         if (verbose)
         {
-            cout << "*** PoseQualityManipulability::getSingularVectorCartesian()\n";
+            std::cout << "*** PoseQualityManipulability::getSingularVectorCartesian()\n";
         }
 
         Eigen::MatrixXf jac = jacobian->getJacobianMatrix(rns->getTCP());
-        //cout << "JAC\n:" << jac << endl;
+        //cout << "JAC\n:" << jac << std::endl;
         // penalize rotation
         jac.block(3, 0, 3, jac.cols()) *= penalizeRotationFactor;
-        //cout << "scaled JAC\n:" << jac << endl;
+        //cout << "scaled JAC\n:" << jac << std::endl;
         Eigen::JacobiSVD<Eigen::MatrixXf> svd(jac, Eigen::ComputeThinU | Eigen::ComputeThinV);
         Eigen::MatrixXf U = svd.matrixU();
         Eigen::VectorXf sv = svd.singularValues();
 
         if (verbose)
         {
-            cout << "U:\n" << U << endl;
+            std::cout << "U:\n" << U << std::endl;
         }
 
         if (sv.rows() == 0)
@@ -52,14 +52,14 @@ namespace VirtualRobot
 
         if (verbose)
         {
-            cout << "sv:\n" << sv << endl;
+            std::cout << "sv:\n" << sv << std::endl;
         }
 
         float maxEV = sv(0);
 
         if (verbose)
         {
-            cout << "maxEV:" << maxEV << endl;
+            std::cout << "maxEV:" << maxEV << std::endl;
         }
 
         /*for (int i=0;i<sv.rows();i++)
@@ -70,7 +70,7 @@ namespace VirtualRobot
         }*/
         if (verbose)
         {
-            cout << "result:\n" << U << endl;
+            std::cout << "result:\n" << U << std::endl;
         }
 
         return U;
@@ -168,7 +168,7 @@ namespace VirtualRobot
             }
 
             default:
-                VR_ERROR << "Manipulability type not implemented..." << endl;
+                VR_ERROR << "Manipulability type not implemented..." << std::endl;
         }
 
         if (penJointLimits)
@@ -225,7 +225,7 @@ namespace VirtualRobot
 
         float result = 1.0f - exp(-penJointLimits_k * p);
         if (verbose)
-            cout << "Pen factor:" << result << endl;
+            std::cout << "Pen factor:" << result << std::endl;
         return result;
     }
 

@@ -25,7 +25,6 @@
 #include "../VirtualRobot.h"
 
 #include "RobotNode.h"
-#include "../RobotFactory.h"
 
 #include <Eigen/Core>
 

@@ -29,7 +29,7 @@
 
 namespace VirtualRobot
 {
-    class VIRTUAL_ROBOT_IMPORT_EXPORT PositionConstraint : public Constraint, public boost::enable_shared_from_this<PositionConstraint>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT PositionConstraint : public Constraint, public std::enable_shared_from_this<PositionConstraint>
     {
     public:
         PositionConstraint(const RobotPtr& robot, const RobotNodeSetPtr& nodeSet, const SceneObjectPtr& eef, const Eigen::Vector3f& target,
@@ -52,7 +52,7 @@ namespace VirtualRobot
         float tolerance;
     };
 
-    typedef boost::shared_ptr<PositionConstraint> PositionConstraintPtr;
+    typedef std::shared_ptr<PositionConstraint> PositionConstraintPtr;
 }
 
 

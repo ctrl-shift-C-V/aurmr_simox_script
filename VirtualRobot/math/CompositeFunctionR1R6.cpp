@@ -24,6 +24,8 @@
 #include "Line.h"
 #include "LinearInterpolatedOrientation.h"
 
+#include <Eigen/Geometry>
+
 
 namespace math
 {
@@ -86,7 +88,7 @@ namespace math
     CompositeFunctionR1R6Ptr CompositeFunctionR1R6::CreateLine(const Eigen::Vector3f& startPos, const Eigen::Vector3f& endPos, const Eigen::Quaternionf& ori, float startT, float endT)
     {
         LinePtr line(new Line(startPos, endPos - startPos));
-        boost::shared_ptr<ConstantOrientation> constOri(new ConstantOrientation(ori));
+        std::shared_ptr<ConstantOrientation> constOri(new ConstantOrientation(ori));
 
         CompositeFunctionR1R6Ptr func(new CompositeFunctionR1R6(line, constOri, startT, endT));
         return func;

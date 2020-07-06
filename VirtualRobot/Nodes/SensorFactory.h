@@ -71,7 +71,7 @@ namespace VirtualRobot
         }
     };
 
-    typedef boost::shared_ptr<SensorFactory> SensorFactoryPtr;
+    typedef std::shared_ptr<SensorFactory> SensorFactoryPtr;
 
 } // namespace VirtualRobot
 

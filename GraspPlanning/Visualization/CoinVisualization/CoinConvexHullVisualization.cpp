@@ -235,7 +235,7 @@ namespace GraspStudio
 
         if (!projectedHull)
         {
-            GRASPSTUDIO_ERROR << " Could not create hull of projected points, aborting..." << endl;
+            GRASPSTUDIO_ERROR << " Could not create hull of projected points, aborting..." << std::endl;
             return result;
         }
 
@@ -243,7 +243,7 @@ namespace GraspStudio
 
         if (!hullV)
         {
-            GRASPSTUDIO_ERROR << " Could not create visualization of projected points, aborting..." << endl;
+            GRASPSTUDIO_ERROR << " Could not create visualization of projected points, aborting..." << std::endl;
             return result;
         }
 

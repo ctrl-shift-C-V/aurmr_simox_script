@@ -1,7 +1,8 @@
 #pragma once
 
 #include <VirtualRobot/VirtualRobot.h>
-#include <Eigen/Geometry>
+
+#include <Eigen/Core>
 
 
 namespace VirtualRobot
@@ -60,7 +61,7 @@ namespace VirtualRobot
             std::string toXMLString(int tabs = 0) override;
         };
 
-        typedef boost::shared_ptr<Primitive> PrimitivePtr;
+        typedef std::shared_ptr<Primitive> PrimitivePtr;
 
     } //namespace Primitive
 } //namespace VirtualRobot

@@ -29,7 +29,7 @@ namespace VirtualRobot
 {
 
     class PositionSensor;
-    typedef boost::shared_ptr<PositionSensor> PositionSensorPtr;
+    typedef std::shared_ptr<PositionSensor> PositionSensorPtr;
 
 
     /*!
@@ -77,7 +77,7 @@ namespace VirtualRobot
 
     };
 
-    typedef boost::shared_ptr<PositionSensor> PositionSensorPtr;
+    typedef std::shared_ptr<PositionSensor> PositionSensorPtr;
 
 } // namespace VirtualRobot
 

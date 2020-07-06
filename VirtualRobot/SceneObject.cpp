@@ -4,19 +4,24 @@
 #include "CollisionDetection/CollisionChecker.h"
 #include "Visualization/TriMeshModel.h"
 #include "Visualization/VisualizationFactory.h"
+#include "Visualization/VisualizationNode.h"
 #include "Visualization/Visualization.h"
 #include "VirtualRobotException.h"
 #include "Robot.h"
-#include <cmath>
-#include <algorithm>
-#include <Eigen/Dense>
 #include "math/Helpers.h"
 
+#include <Eigen/Dense>
+
+#include <cmath>
+#include <algorithm>
+#include <filesystem>
+#include <iomanip>
 
 
 namespace VirtualRobot
 {
-
+    using std::cout;
+    using std::endl;
 
     SceneObject::SceneObject(const std::string& name, VisualizationNodePtr visualization /*= VisualizationNodePtr()*/, CollisionModelPtr collisionModel /*= CollisionModelPtr()*/, const Physics& p /*= Physics()*/, CollisionCheckerPtr colChecker /*= CollisionCheckerPtr()*/)
     {
@@ -106,7 +111,7 @@ namespace VirtualRobot
 
         if (p)
         {
-            VR_ERROR << "Could not set pose of <" << name << ">. The object is attached to <" << p->getName() << ">" << endl;
+            VR_ERROR << "Could not set pose of <" << name << ">. The object is attached to <" << p->getName() << ">" << std::endl;
             return;
         }
 
@@ -196,7 +201,7 @@ namespace VirtualRobot
             }
             else
             {
-                //VR_WARNING << "<" << name << "> No collision model present ..." << endl;
+                //VR_WARNING << "<" << name << "> No collision model present ..." << std::endl;
                 return VisualizationNodePtr();
             }
         }
@@ -223,7 +228,7 @@ namespace VirtualRobot
 
         if (!visualizationFactory)
         {
-            VR_WARNING << "VisualizationFactory of type '" << visualizationType << "' not present. Could not create visualization data in Robot Node <" << name << ">" << endl;
+            VR_WARNING << "VisualizationFactory of type '" << visualizationType << "' not present. Could not create visualization data in Robot Node <" << name << ">" << std::endl;
             return false;
         }
 
@@ -262,7 +267,7 @@ namespace VirtualRobot
 
             if (!visualizationFactory)
             {
-                VR_ERROR << " Could not determine a valid VisualizationFactory!!" << endl;
+                VR_ERROR << " Could not determine a valid VisualizationFactory!!" << std::endl;
                 return;
             }
 
@@ -335,7 +340,7 @@ namespace VirtualRobot
 
             VisualizationNodePtr comModelClone = comModel->clone();
             Eigen::Vector3f l = getCoMLocal();
-            //cout << "COM:" << l << endl;
+            //cout << "COM:" << l << std::endl;
             Eigen::Matrix4f m = Eigen::Matrix4f::Identity();
             m.block(0, 3, 3, 1) = l;
 
@@ -355,21 +360,21 @@ namespace VirtualRobot
         if (enableInertial && visualizationFactory)
         {
             // create inertia visu
-            //cout << "INERTIA MATRIX:" << endl << physics.intertiaMatrix << endl;
+            //cout << "INERTIA MATRIX:" << endl << physics.intertiaMatrix << std::endl;
             Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> eigensolver(physics.inertiaMatrix);
 
             if (eigensolver.info() == Eigen::Success)
             {
-                /*cout << "The eigenvalues of A are:\n" << eigensolver.eigenvalues() << endl;
-                cout << "Here's a matrix whose columns are eigenvectors of A \n"
+                /*cout << "The eigenvalues of A are:\n" << eigensolver.eigenvalues() << std::endl;
+                std::cout << "Here's a matrix whose columns are eigenvectors of A \n"
                     << "corresponding to these eigenvalues:\n"
-                    << eigensolver.eigenvectors() << endl;*/
+                    << eigensolver.eigenvectors() << std::endl;*/
                 //Eigen::Vector3f v1 = eigensolver.eigenvectors().block(0, 0, 3, 1);
                 //Eigen::Vector3f v2 = eigensolver.eigenvectors().block(0, 1, 3, 1);
                 //Eigen::Vector3f v3 = eigensolver.eigenvectors().block(0, 2, 3, 1);
-                /*cout << "v1:" << v1 << endl;
-                cout << "v2:" << v2 << endl;
-                cout << "v3:" << v3 << endl;*/
+                /*cout << "v1:" << v1 << std::endl;
+                std::cout << "v2:" << v2 << std::endl;
+                std::cout << "v3:" << v3 << std::endl;*/
 
                 float xl = static_cast<float>(eigensolver.eigenvalues().rows() > 0 ?
                                               eigensolver.eigenvalues()(0) : 1e-6);
@@ -450,7 +455,7 @@ namespace VirtualRobot
                 VisualizationNodePtr inertiaVisu = visualizationFactory->createEllipse(xl, yl, zl, true, axesSize, axesSize * 2.0f);
 
                 Eigen::Vector3f l = getCoMLocal();
-                //cout << "COM:" << l << endl;
+                //cout << "COM:" << l << std::endl;
                 Eigen::Matrix4f m = Eigen::Matrix4f::Identity();
                 m.block(0, 3, 3, 1) = l;
                 m.block(0, 0, 3, 3) = eigensolver.eigenvectors().block(0, 0, 3, 3); // rotate according to EV
@@ -470,7 +475,7 @@ namespace VirtualRobot
             }
             else
             {
-                VR_INFO << " Could not determine eigenvectors of inertia matrix" << endl;
+                VR_INFO << " Could not determine eigenvectors of inertia matrix" << std::endl;
             }
         }
     }
@@ -694,7 +699,7 @@ namespace VirtualRobot
         {
             /*if (!visualizationModel && !collisionModel)
             {
-                VR_WARNING << getName() << ": Physics tag CoM is set to eVisuBBoxCenter, but no visualization model is loaded, setting CoM to local position (0/0/0)" << endl;
+                VR_WARNING << getName() << ": Physics tag CoM is set to eVisuBBoxCenter, but no visualization model is loaded, setting CoM to local position (0/0/0)" << std::endl;
             } else*/
             if (visualizationModel || collisionModel)
             {
@@ -715,7 +720,7 @@ namespace VirtualRobot
 
                 if (!tm)
                 {
-                    VR_WARNING << "Could not create trimeshmodel for CoM computation, setting CoM to local position (0/0/0)" << endl;
+                    VR_WARNING << "Could not create trimeshmodel for CoM computation, setting CoM to local position (0/0/0)" << std::endl;
                 }
                 else
                 {
@@ -799,15 +804,15 @@ namespace VirtualRobot
     {
         if (printDecoration)
         {
-            cout << "**** SceneObject ****" << endl;
+            std::cout << "**** SceneObject ****" << std::endl;
         }
 
-        cout << " * Name: " << name << endl;
-        cout << " * GlobalPose: " << endl << globalPose << endl;
+        std::cout << " * Name: " << name << std::endl;
+        std::cout << " * GlobalPose: " << endl << globalPose << std::endl;
 
         physics.print();
 
-        cout << " * Visualization:" << endl;
+        std::cout << " * Visualization:" << std::endl;
 
         if (visualizationModel)
         {
@@ -815,21 +820,21 @@ namespace VirtualRobot
         }
         else
         {
-            cout << "<not set>" << endl;
+            std::cout << "<not set>" << std::endl;
         }
 
-        cout << " * Update visualization status: ";
+        std::cout << " * Update visualization status: ";
 
         if (updateVisualization)
         {
-            cout << "enabled" << endl;
+            std::cout << "enabled" << std::endl;
         }
         else
         {
-            cout << "disabled" << endl;
+            std::cout << "disabled" << std::endl;
         }
 
-        cout << " * Collision Model:" << endl;
+        std::cout << " * Collision Model:" << std::endl;
 
         if (collisionModel)
         {
@@ -837,35 +842,35 @@ namespace VirtualRobot
         }
         else
         {
-            cout << "<not set>" << endl;
+            std::cout << "<not set>" << std::endl;
         }
 
-        cout << " * Update collision model status: ";
+        std::cout << " * Update collision model status: ";
 
         if (updateCollisionModel)
         {
-            cout << "enabled" << endl;
+            std::cout << "enabled" << std::endl;
         }
         else
         {
-            cout << "disabled" << endl;
+            std::cout << "disabled" << std::endl;
         }
 
         std::vector<SceneObjectPtr> children = this->getChildren();
 
         if (children.size() > 0)
         {
-            cout << " * Children:" << endl;
+            std::cout << " * Children:" << std::endl;
 
             for (size_t i = 0; i < children.size(); i++)
             {
-                cout << " ** " << children[i]->getName();
+                std::cout << " ** " << children[i]->getName();
             }
         }
 
         if (printDecoration)
         {
-            cout << endl;
+            std::cout << std::endl;
         }
 
         if (printChildren)
@@ -901,7 +906,7 @@ namespace VirtualRobot
 
             if (!visualizationFactory)
             {
-                VR_ERROR << " Could not determine a valid VisualizationFactory!!" << endl;
+                VR_ERROR << " Could not determine a valid VisualizationFactory!!" << std::endl;
                 return;
             }
 
@@ -973,7 +978,7 @@ namespace VirtualRobot
 
         if (!result)
         {
-            VR_ERROR << "Cloning failed.." << endl;
+            VR_ERROR << "Cloning failed.." << std::endl;
             return result;
         }
 
@@ -1074,7 +1079,7 @@ namespace VirtualRobot
     {
         if (physics.massKg <= 0 && s == SceneObject::Physics::eDynamic)
         {
-            VR_WARNING << "Setting simulation type to dynamic, but mass==0, object might be handled as static object by physics engine." << endl;
+            VR_WARNING << "Setting simulation type to dynamic, but mass==0, object might be handled as static object by physics engine." << std::endl;
         }
         physics.simType = s;
     }
@@ -1135,7 +1140,7 @@ namespace VirtualRobot
 
         if (!hasChild(child))
         {
-            VR_WARNING << " Trying to detach a not attached object: " << getName() << "->" << child->getName() << endl;
+            VR_WARNING << " Trying to detach a not attached object: " << getName() << "->" << child->getName() << std::endl;
             return;
         }
 
@@ -1149,25 +1154,25 @@ namespace VirtualRobot
 
         if (this == child.get())
         {
-            VR_WARNING << "Trying to attach object to it self object! name: " << getName() << endl;
+            VR_WARNING << "Trying to attach object to it self object! name: " << getName() << std::endl;
             return false;
         }
 
         if (hasChild(child))
         {
-            VR_WARNING << " Trying to attach already attached object: " << getName() << "->" << child->getName() << endl;
+            VR_WARNING << " Trying to attach already attached object: " << getName() << "->" << child->getName() << std::endl;
             return true; // no error
         }
 
         if (child->hasParent())
         {
-            VR_WARNING << " Trying to attach object that has already a parent: " << getName() << "->" << child->getName() << ", child's parent:" << child->getParent()->getName() << endl;
+            VR_WARNING << " Trying to attach object that has already a parent: " << getName() << "->" << child->getName() << ", child's parent:" << child->getParent()->getName() << std::endl;
             return false;
         }
 
         if (hasChild(child->getName()))
         {
-            VR_ERROR << " Trying to attach object with name: " << child->getName() << " to " << getName() << ", but a child with same name is already present!" << endl;
+            VR_ERROR << " Trying to attach object with name: " << child->getName() << " to " << getName() << ", but a child with same name is already present!" << std::endl;
             return false;
         }
 
@@ -1346,7 +1351,7 @@ namespace VirtualRobot
 
     void SceneObject::Physics::print() const
     {
-        std::cout << " ** Simulation Type: " << getString(simType) << endl;
+        std::cout << " ** Simulation Type: " << getString(simType) << std::endl;
         std::cout << " ** Mass: ";
 
         if (massKg <= 0)
@@ -1358,7 +1363,7 @@ namespace VirtualRobot
             std::cout << massKg << " [kg]" << std::endl;
         }
 
-        cout << " ** local CoM [mm] ";
+        std::cout << " ** local CoM [mm] ";
 
         if (comLocation == SceneObject::Physics::eVisuBBoxCenter)
         {

@@ -105,8 +105,8 @@ protected:
     GraspStudio::ApproachMovementSurfaceNormalPtr approach;
     GraspStudio::GenericGraspPlannerPtr planner;
 
-    boost::shared_ptr<VirtualRobot::CoinVisualization> visualizationRobot;
-    boost::shared_ptr<VirtualRobot::CoinVisualization> visualizationObject;
+    std::shared_ptr<VirtualRobot::CoinVisualization> visualizationRobot;
+    std::shared_ptr<VirtualRobot::CoinVisualization> visualizationObject;
 private slots:
     void on_pushButtonLoadObject_clicked();
 };

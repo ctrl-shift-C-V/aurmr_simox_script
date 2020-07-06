@@ -7,6 +7,7 @@
 #include "RobotNodeFixedFactory.h"
 #include "RobotNode.h"
 #include "RobotNodeFixed.h"
+#include "../CollisionDetection/CollisionModel.h"
 
 
 namespace VirtualRobot
@@ -62,9 +63,9 @@ namespace VirtualRobot
     /**
      * \return new instance of RobotNodeFixedFactory.
      */
-    boost::shared_ptr<RobotNodeFactory> RobotNodeFixedFactory::createInstance(void*)
+    std::shared_ptr<RobotNodeFactory> RobotNodeFixedFactory::createInstance(void*)
     {
-        boost::shared_ptr<RobotNodeFixedFactory> fixedNodeFactory(new RobotNodeFixedFactory());
+        std::shared_ptr<RobotNodeFixedFactory> fixedNodeFactory(new RobotNodeFixedFactory());
         return fixedNodeFactory;
     }
 

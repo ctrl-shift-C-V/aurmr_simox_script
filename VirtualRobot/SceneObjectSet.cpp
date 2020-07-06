@@ -10,6 +10,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     //----------------------------------------------------------------------
     // class SceneObjectSet constructor
@@ -53,20 +55,20 @@ namespace VirtualRobot
     {
         if (!sceneObject)
         {
-            VR_WARNING << "NULL data, in: " << name << endl;
+            VR_WARNING << "NULL data, in: " << name << std::endl;
             return false;
         }
 
         if (colChecker != sceneObject->getCollisionChecker())
         {
-            VR_WARNING << " col model belongs to different instance of collision checker, in: '" << name << "'" << endl;
+            VR_WARNING << " col model belongs to different instance of collision checker, in: '" << name << "'" << std::endl;
             return false;
         }
 
         for (const auto& i : sceneObjects)
             if (i == sceneObject)
             {
-                VR_WARNING << "col model already added, in: " << name << endl;
+                VR_WARNING << "col model already added, in: " << name << std::endl;
                 return false;
             }
 
@@ -80,13 +82,13 @@ namespace VirtualRobot
     {
         if (!sceneObjectSet)
         {
-            VR_WARNING << "NULL data, in: " << getName().c_str() << endl;
+            VR_WARNING << "NULL data, in: " << getName().c_str() << std::endl;
             return false;
         }
 
         if (colChecker != sceneObjectSet->getCollisionChecker())
         {
-            VR_WARNING << "col model set belongs to different instance of collision checker, in: " << getName().c_str() << endl;
+            VR_WARNING << "col model set belongs to different instance of collision checker, in: " << getName().c_str() << std::endl;
             return false;
         }
 
@@ -107,7 +109,7 @@ namespace VirtualRobot
     {
         if (!robotNodeSet)
         {
-            VR_WARNING << "NULL data, in: " << getName().c_str() << endl;
+            VR_WARNING << "NULL data, in: " << getName().c_str() << std::endl;
             return false;
         }
 
@@ -119,13 +121,13 @@ namespace VirtualRobot
     {
         for (auto& robotNode : robotNodes)
         {
-            SceneObjectPtr cm = boost::dynamic_pointer_cast<SceneObject>(robotNode);
+            SceneObjectPtr cm = std::dynamic_pointer_cast<SceneObject>(robotNode);
 
             if (cm)
             {
                 if (colChecker != cm->getCollisionChecker())
                 {
-                    VR_WARNING << "col model of " << robotNode->getName() << " belongs to different instance of collision checker, in: " << getName().c_str() << endl;
+                    VR_WARNING << "col model of " << robotNode->getName() << " belongs to different instance of collision checker, in: " << getName().c_str() << std::endl;
                 }
                 else
                 {
@@ -152,7 +154,7 @@ namespace VirtualRobot
     {
         for (auto& mobj : mos)
         {
-            SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(mobj);
+            SceneObjectPtr so = std::dynamic_pointer_cast<SceneObject>(mobj);
             addSceneObject(so);
         }
     }
@@ -178,7 +180,7 @@ namespace VirtualRobot
 
         if (!found)
         {
-            VR_WARNING << " col model not added, in: " << name << endl;
+            VR_WARNING << " col model not added, in: " << name << std::endl;
             return false;
         }
 

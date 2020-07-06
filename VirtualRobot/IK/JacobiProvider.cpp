@@ -1,7 +1,9 @@
 #include <Eigen/Geometry>
 #include "JacobiProvider.h"
 
+#include <VirtualRobot/MathTools.h>
 
+#include <Eigen/Dense>
 
 #include <algorithm>
 
@@ -9,6 +11,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     JacobiProvider::JacobiProvider(RobotNodeSetPtr rns, InverseJacobiMethod invJacMethod) :
         name("JacobiProvvider"), rns(rns), inverseMethod(invJacMethod)
@@ -46,7 +50,7 @@ namespace VirtualRobot
         clock_t endT = clock();
         float diffClock1 = (float)(((float)(startT2 - startT) / (float)CLOCKS_PER_SEC) * 1000.0f);
         float diffClock2 = (float)(((float)(endT - startT2) / (float)CLOCKS_PER_SEC) * 1000.0f);
-        cout << "getPseudoInverseJacobianMatrix time1:" << diffClock1 << ", time2: " << diffClock2 << endl;
+        std::cout << "getPseudoInverseJacobianMatrix time1:" << diffClock1 << ", time2: " << diffClock2 << std::endl;
 #endif
         return res;
     }
@@ -65,7 +69,7 @@ namespace VirtualRobot
         clock_t endT = clock();
         float diffClock1 = (float)(((float)(startT2 - startT) / (float)CLOCKS_PER_SEC) * 1000.0f);
         float diffClock2 = (float)(((float)(endT - startT2) / (float)CLOCKS_PER_SEC) * 1000.0f);
-        cout << "getPseudoInverseJacobianMatrix time1:" << diffClock1 << ", time2: " << diffClock2 << endl;
+        std::cout << "getPseudoInverseJacobianMatrix time1:" << diffClock1 << ", time2: " << diffClock2 << std::endl;
 #endif
         return res;
     }
@@ -230,7 +234,7 @@ namespace VirtualRobot
         clock_t endT = clock();
         float diffClock = (float)(((float)(endT - startT) / (float)CLOCKS_PER_SEC) * 1000.0f);
         //if (diffClock>10.0f)
-        cout << "Inverse Jacobi time:" << diffClock << endl;
+        std::cout << "Inverse Jacobi time:" << diffClock << std::endl;
 #endif
     }
 
@@ -324,7 +328,7 @@ namespace VirtualRobot
         clock_t endT = clock();
         float diffClock = (float)(((float)(endT - startT) / (float)CLOCKS_PER_SEC) * 1000.0f);
         //if (diffClock>10.0f)
-        cout << "Inverse Jacobi time:" << diffClock << endl;
+        std::cout << "Inverse Jacobi time:" << diffClock << std::endl;
 #endif
     }
 
@@ -372,9 +376,9 @@ namespace VirtualRobot
 
     void JacobiProvider::print()
     {
-        cout << "IK solver:" << name << endl;
-        cout << "==========================" << endl;
-        cout << "RNS:" << rns->getName() << " with " << rns->getSize() << " joints" << endl;
+        std::cout << "IK solver:" << name << std::endl;
+        std::cout << "==========================" << std::endl;
+        std::cout << "RNS:" << rns->getName() << " with " << rns->getSize() << " joints" << std::endl;
     }
 
     bool JacobiProvider::isInitialized()

@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE(testGazeIK)
     const std::string nodeTransName = "VirtualCentralGaze";
     VirtualRobot::RobotNodeSetPtr rns = rob->getRobotNodeSet(rnsName);
     VirtualRobot::RobotNodePtr node = rob->getRobotNode(nodeTransName);
-    VirtualRobot::RobotNodePrismaticPtr nodeTrans = boost::dynamic_pointer_cast<VirtualRobot::RobotNodePrismatic>(node);
+    VirtualRobot::RobotNodePrismaticPtr nodeTrans = std::dynamic_pointer_cast<VirtualRobot::RobotNodePrismatic>(node);
 
     BOOST_REQUIRE(rns);
     BOOST_REQUIRE(nodeTrans);

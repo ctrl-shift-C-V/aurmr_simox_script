@@ -39,9 +39,10 @@
 #include <Inventor/nodes/SoCamera.h>
 
 
-#include <string>
 #include <fstream>
+#include <string>
 #include <cmath>
+#include <mutex>
 
 namespace VirtualRobot
 {
@@ -161,6 +162,8 @@ namespace VirtualRobot
                                           SoMaterial* matAxisY = NULL,
                                           SoMaterial* matAxisZ = NULL
                                          );
+
+        static SoSeparator* CreateCylindroid(float axisLengthX, float axisLengthY, float height, SoMaterial* matBody = nullptr);
 
         static SoSeparator* Create2DMap(const Eigen::MatrixXf& d, float extendCellX, float extendCellY, const VirtualRobot::ColorMap cm = VirtualRobot::ColorMap(VirtualRobot::ColorMap::eHot), bool drawZeroCells = false, bool drawLines = true);
         static SoSeparator* Create2DHeightMap(const Eigen::MatrixXf& d, float extendCellX, float extendCellY, float heightZ, const VirtualRobot::ColorMap cm = VirtualRobot::ColorMap(VirtualRobot::ColorMap::eHot), bool drawZeroCells = false, bool drawLines = true);
@@ -455,15 +458,15 @@ namespace VirtualRobot
         // AbstractFactoryMethod
     public:
         static std::string getName();
-        static boost::shared_ptr<VisualizationFactory> createInstance(void*);
+        static std::shared_ptr<VisualizationFactory> createInstance(void*);
         typedef std::map<std::pair<size_t, std::string>, void*> TextureCacheMap;
     private:
         static SubClassRegistry registry;
-        static boost::mutex globalTextureCacheMutex;
+        static std::mutex globalTextureCacheMutex;
         static TextureCacheMap globalTextureCache;
     };
 
-    typedef boost::shared_ptr<CoinVisualizationFactory> CoinVisualizationFactoryPtr;
+    typedef std::shared_ptr<CoinVisualizationFactory> CoinVisualizationFactoryPtr;
 
 
 } // namespace VirtualRobot

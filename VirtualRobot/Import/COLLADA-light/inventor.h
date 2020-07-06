@@ -1,6 +1,7 @@
 #pragma once
 
 #include "collada.h"
+
 #include <Inventor/nodes/SoSeparator.h>
 
 namespace Collada

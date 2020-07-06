@@ -84,7 +84,7 @@ namespace SimDynamics
         void log(btScalar dt);
     };
 
-    typedef boost::shared_ptr<BulletRobotLogger> BulletRobotLoggerPtr;
+    typedef std::shared_ptr<BulletRobotLogger> BulletRobotLoggerPtr;
 
 }
 

@@ -19,12 +19,15 @@
  *             GNU Lesser General Public License
  */
 
+#include <SimoxUtility/eigen/EigenStdVector.h>
 #include "Helpers.h"
 #include "LinearInterpolatedOrientation.h"
 
-#include <stdexcept>
-
 #include <SimoxUtility/math/pose.h>
+
+#include <Eigen/Geometry>
+
+#include <stdexcept>
 
 
 namespace math

@@ -8,18 +8,49 @@
 #include "../VirtualRobot.h"
 #include "../DataStructures/nanoflann.hpp"
 #include "../DataStructures/KdTreePointCloud.h"
+
 #include<Eigen/Geometry>
 
 #include <algorithm>
+#include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <set>
 
 
 namespace VirtualRobot
 {
-
+    using std::cout;
+    using std::endl;
 
     TriMeshModel::TriMeshModel() = default;
+
+    TriMeshModel TriMeshModel::MakeBox(float a, float b, float c)
+    {
+        TriMeshModel m;
+        m.addVertex(0, 0, 0);
+        m.addVertex(0, b, 0);
+        m.addVertex(a, b, 0);
+        m.addVertex(a, 0, 0);
+
+        m.addVertex(0, 0, c);
+        m.addVertex(0, b, c);
+        m.addVertex(a, b, c);
+        m.addVertex(a, 0, c);
+
+        auto addF = [&](auto v0, auto v1, auto v2, auto v3)
+        {
+            m.addFace(v1, v0, v2);
+            m.addFace(v2, v0, v3);
+        };
+        addF(0, 1, 2, 3);
+        addF(3, 2, 6, 7);
+        addF(1, 5, 6, 2);
+        addF(4, 0, 3, 7);
+        addF(7, 6, 5, 4);
+        addF(4, 5, 1, 0);
+        return m;
+    }
 
     TriMeshModel::TriMeshModel(const std::vector<triangle>& triangles)
     {
@@ -94,7 +125,7 @@ namespace VirtualRobot
         face.normal = normal;
         if (face.normal.hasNaN())
         {
-            VR_ERROR << "*** NANNNNNNNNNNNNNNNNNNNNN" << endl;
+            VR_ERROR << "*** NANNNNNNNNNNNNNNNNNNNNN" << std::endl;
         }
 
         this->addFace(face);
@@ -182,7 +213,7 @@ namespace VirtualRobot
     {
         if (std::isnan(vertex[0]) || std::isnan(vertex[1]) || std::isnan(vertex[2]))
         {
-            VR_ERROR << "NAN vertex added!!!" << endl;
+            VR_ERROR << "NAN vertex added!!!" << std::endl;
             return -1;
         }
         vertices.push_back(vertex);
@@ -852,40 +883,40 @@ namespace VirtualRobot
 
     void TriMeshModel::print()
     {
-        cout << "TriMeshModel\nNr of Faces:" << faces.size() << "\nNr of vertices:" << vertices.size() << endl;
+        std::cout << "TriMeshModel\nNr of Faces:" << faces.size() << "\nNr of vertices:" << vertices.size() << std::endl;
         boundingBox.print();
     }
 
 
     void TriMeshModel::printNormals()
     {
-        cout << "TriMeshModel Normals:" << endl;
+        std::cout << "TriMeshModel Normals:" << std::endl;
         std::streamsize pr = cout.precision(2);
         for (auto& face : faces)
         {
-            cout << "<" << face.normal(0) << "," << face.normal(1) << "," << face.normal(2) << ">,";
+            std::cout << "<" << face.normal(0) << "," << face.normal(1) << "," << face.normal(2) << ">,";
         }
         cout.precision(pr);
     }
 
     void TriMeshModel::printVertices()
     {
-        cout << "TriMeshModel Vertices:" << endl;
+        std::cout << "TriMeshModel Vertices:" << std::endl;
         std::streamsize pr = cout.precision(2);
         for (size_t i = 0; i < vertices.size(); i++)
         {
-            cout << vertices[i].transpose() << endl;
+            std::cout << vertices[i].transpose() << std::endl;
         }
         cout.precision(pr);
     }
 
     void TriMeshModel::printFaces()
     {
-        cout << "TriMeshModel Faces (vertex indices):" << endl;
+        std::cout << "TriMeshModel Faces (vertex indices):" << std::endl;
         std::streamsize pr = cout.precision(2);
         for (auto& face : faces)
         {
-            cout << face.id1 << "," << face.id2 << "," << face.id3 << endl;
+            std::cout << face.id1 << "," << face.id2 << "," << face.id3 << std::endl;
         }
         cout.precision(pr);
     }

@@ -31,7 +31,7 @@ using namespace SimDynamics;
 SimDynamicsWindow::SimDynamicsWindow(std::string& sRobotFilename)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
     //this->setCaption(QString("ShowRobot - KIT - Humanoids Group"));
     //resize(1100, 768);
 
@@ -312,7 +312,7 @@ void SimDynamicsWindow::updateJoints()
 {
     if (!robot)
     {
-        cout << " ERROR while creating list of nodes" << endl;
+        std::cout << " ERROR while creating list of nodes" << std::endl;
         return;
     }
 
@@ -342,7 +342,7 @@ void SimDynamicsWindow::updateJoints()
 
 bool SimDynamicsWindow::loadRobot(std::string robotFilename)
 {
-    cout << "Loading Robot from " << robotFilename << endl;
+    std::cout << "Loading Robot from " << robotFilename << std::endl;
 
     try
     {
@@ -350,14 +350,14 @@ bool SimDynamicsWindow::loadRobot(std::string robotFilename)
     }
     catch (VirtualRobotException& e)
     {
-        cout << " ERROR while creating robot" << endl;
-        cout << e.what();
+        std::cout << " ERROR while creating robot" << std::endl;
+        std::cout << e.what();
         return false;
     }
 
     if (!robot)
     {
-        cout << " ERROR while creating robot" << endl;
+        std::cout << " ERROR while creating robot" << std::endl;
         return false;
     }
 
@@ -379,8 +379,8 @@ bool SimDynamicsWindow::loadRobot(std::string robotFilename)
     }
     catch (VirtualRobotException& e)
     {
-        cout << " ERROR while building dynamic robot" << endl;
-        cout << e.what();
+        std::cout << " ERROR while building dynamic robot" << std::endl;
+        std::cout << e.what();
         return false;
     }
 
@@ -450,18 +450,18 @@ void SimDynamicsWindow::updateJointInfo()
     }
 
     SimDynamics::DynamicsObjectPtr dynRN = dynamicsRobot->getDynamicsRobotNode(rn);
-    SimDynamics::BulletObjectPtr bulletRN = boost::dynamic_pointer_cast<SimDynamics::BulletObject>(dynRN);
+    SimDynamics::BulletObjectPtr bulletRN = std::dynamic_pointer_cast<SimDynamics::BulletObject>(dynRN);
 
     if (bulletRN)
     {
-        //      cout << "FORCE: " << bulletRN->getRigidBody()->getTotalForce()[0] << ", " << bulletRN->getRigidBody()->getTotalForce()[1] << ", " << bulletRN->getRigidBody()->getTotalForce()[2] << endl;
-        //      cout << "TORQUE: " << bulletRN->getRigidBody()->getTotalTorque()[0] << ", " << bulletRN->getRigidBody()->getTotalTorque()[1] << ", " << bulletRN->getRigidBody()->getTotalTorque()[2] << endl;
-        //      cout << "getLinearVelocity: " << bulletRN->getRigidBody()->getLinearVelocity()[0] << ", " << bulletRN->getRigidBody()->getLinearVelocity()[1] << ", " << bulletRN->getRigidBody()->getLinearVelocity()[2] << endl;
-        //      cout << "getAngularVelocity: " << bulletRN->getRigidBody()->getAngularVelocity()[0] << ", " << bulletRN->getRigidBody()->getAngularVelocity()[1] << ", " << bulletRN->getRigidBody()->getAngularVelocity()[2] << endl;
+        //      std::cout << "FORCE: " << bulletRN->getRigidBody()->getTotalForce()[0] << ", " << bulletRN->getRigidBody()->getTotalForce()[1] << ", " << bulletRN->getRigidBody()->getTotalForce()[2] << std::endl;
+        //      std::cout << "TORQUE: " << bulletRN->getRigidBody()->getTotalTorque()[0] << ", " << bulletRN->getRigidBody()->getTotalTorque()[1] << ", " << bulletRN->getRigidBody()->getTotalTorque()[2] << std::endl;
+        //      std::cout << "getLinearVelocity: " << bulletRN->getRigidBody()->getLinearVelocity()[0] << ", " << bulletRN->getRigidBody()->getLinearVelocity()[1] << ", " << bulletRN->getRigidBody()->getLinearVelocity()[2] << std::endl;
+        //      std::cout << "getAngularVelocity: " << bulletRN->getRigidBody()->getAngularVelocity()[0] << ", " << bulletRN->getRigidBody()->getAngularVelocity()[1] << ", " << bulletRN->getRigidBody()->getAngularVelocity()[2] << std::endl;
 
     }
 
-    BulletRobotPtr bulletRobot = boost::dynamic_pointer_cast<SimDynamics::BulletRobot>(dynamicsRobot);
+    BulletRobotPtr bulletRobot = std::dynamic_pointer_cast<SimDynamics::BulletRobot>(dynamicsRobot);
 
     if (rn && bulletRobot && bulletRobot->hasLink(rn))
     {
@@ -496,9 +496,9 @@ void SimDynamicsWindow::updateJointInfo()
 
         UI.label_ForceTorqueB->setText(QString::fromStdString(streamFTB.str()));
 
-        //      cout << "ForceTorqueA:" << endl;
+        //      std::cout << "ForceTorqueA:" << std::endl;
         //      MathTools::print(ftA);
-        //      cout << "ForceTorqueB:" << endl;
+        //      std::cout << "ForceTorqueB:" << std::endl;
         //      MathTools::print(ftB);
 
         forceSep->removeAllChildren();
@@ -515,10 +515,10 @@ void SimDynamicsWindow::updateJointInfo()
         SoSeparator* arrowForceA = CoinVisualizationFactory::CreateArrow(n, l, w, VisualizationFactory::Color::Red());
 
         /*
-        cout << "FORCE_A: " << linkInfo.dynNode1->getRigidBody()->getTotalForce()[0] << "," << linkInfo.dynNode1->getRigidBody()->getTotalForce()[1] << "," << linkInfo.dynNode1->getRigidBody()->getTotalForce()[2] << endl;
-        cout << "TORQUEA: " << linkInfo.dynNode1->getRigidBody()->getTotalTorque()[0] << "," << linkInfo.dynNode1->getRigidBody()->getTotalTorque()[1] << "," << linkInfo.dynNode1->getRigidBody()->getTotalTorque()[2] << endl;
-        cout << "FORCE_B: " << linkInfo.dynNode2->getRigidBody()->getTotalForce()[0] << "," << linkInfo.dynNode2->getRigidBody()->getTotalForce()[1] << "," << linkInfo.dynNode2->getRigidBody()->getTotalForce()[2] << endl;
-        cout << "TORQUEB: " << linkInfo.dynNode2->getRigidBody()->getTotalTorque()[0] << "," << linkInfo.dynNode2->getRigidBody()->getTotalTorque()[1] << "," << linkInfo.dynNode2->getRigidBody()->getTotalTorque()[2] << endl;
+        std::cout << "FORCE_A: " << linkInfo.dynNode1->getRigidBody()->getTotalForce()[0] << "," << linkInfo.dynNode1->getRigidBody()->getTotalForce()[1] << "," << linkInfo.dynNode1->getRigidBody()->getTotalForce()[2] << std::endl;
+        std::cout << "TORQUEA: " << linkInfo.dynNode1->getRigidBody()->getTotalTorque()[0] << "," << linkInfo.dynNode1->getRigidBody()->getTotalTorque()[1] << "," << linkInfo.dynNode1->getRigidBody()->getTotalTorque()[2] << std::endl;
+        std::cout << "FORCE_B: " << linkInfo.dynNode2->getRigidBody()->getTotalForce()[0] << "," << linkInfo.dynNode2->getRigidBody()->getTotalForce()[1] << "," << linkInfo.dynNode2->getRigidBody()->getTotalForce()[2] << std::endl;
+        std::cout << "TORQUEB: " << linkInfo.dynNode2->getRigidBody()->getTotalTorque()[0] << "," << linkInfo.dynNode2->getRigidBody()->getTotalTorque()[1] << "," << linkInfo.dynNode2->getRigidBody()->getTotalTorque()[2] << std::endl;
         */
 
         // show as nodeA local coords system
@@ -545,7 +545,7 @@ void SimDynamicsWindow::updateJointInfo()
         //Eigen::Vector3f TBGlobal =  ftB.tail(3) ;
 
         Eigen::VectorXf torqueJointGlobal  = bulletRobot->getJointForceTorqueGlobal(linkInfo);//= TBGlobal  - (comBGlobal-jointGlobal).cross(FBGlobal) * 0.001;
-        //        cout << "torqueJointGlobal: " << torqueJointGlobal << endl;
+        //        std::cout << "torqueJointGlobal: " << torqueJointGlobal << std::endl;
         std::stringstream streamFTJoint;
         streamFTJoint.precision(1);
         streamFTJoint << "ForceTorqueJoint: " << std::fixed;
@@ -589,10 +589,10 @@ void SimDynamicsWindow::updateJointInfo()
                 else
                 {
                     btJointFeedback* feedback = linkInfo.joint->getJointFeedback();
-                    cout << "feedback->m_appliedForceBodyA: " << feedback->m_appliedForceBodyA[0] << "," << feedback->m_appliedForceBodyA[1] << "," << feedback->m_appliedForceBodyA[2] << endl;
-                    cout << "feedback->m_appliedForceBodyB: " << feedback->m_appliedForceBodyB[0] << "," << feedback->m_appliedForceBodyB[1] << "," << feedback->m_appliedForceBodyB[2] << endl;
-                    cout << "feedback->m_appliedTorqueBodyA: " << feedback->m_appliedTorqueBodyA[0] << "," << feedback->m_appliedTorqueBodyA[1] << "," << feedback->m_appliedTorqueBodyA[2] << endl;
-                    cout << "feedback->m_appliedTorqueBodyB: " << feedback->m_appliedTorqueBodyB[0] << "," << feedback->m_appliedTorqueBodyB[1] << "," << feedback->m_appliedTorqueBodyB[2] << endl;
+                    std::cout << "feedback->m_appliedForceBodyA: " << feedback->m_appliedForceBodyA[0] << "," << feedback->m_appliedForceBodyA[1] << "," << feedback->m_appliedForceBodyA[2] << std::endl;
+                    std::cout << "feedback->m_appliedForceBodyB: " << feedback->m_appliedForceBodyB[0] << "," << feedback->m_appliedForceBodyB[1] << "," << feedback->m_appliedForceBodyB[2] << std::endl;
+                    std::cout << "feedback->m_appliedTorqueBodyA: " << feedback->m_appliedTorqueBodyA[0] << "," << feedback->m_appliedTorqueBodyA[1] << "," << feedback->m_appliedTorqueBodyA[2] << std::endl;
+                    std::cout << "feedback->m_appliedTorqueBodyB: " << feedback->m_appliedTorqueBodyB[0] << "," << feedback->m_appliedTorqueBodyB[1] << "," << feedback->m_appliedTorqueBodyB[2] << std::endl;
 
                 }
                 */
@@ -740,7 +740,7 @@ void SimDynamicsWindow::updateJointInfo()
     // print some joint info
     if (viewer->engineRunning())
     {
-        cout << info << endl;
+        std::cout << info << std::endl;
     }
 
 #endif
@@ -834,7 +834,7 @@ void SimDynamicsWindow::updateContactVisu()
 
     for (auto & i : c)
     {
-        cout << "Contact: " << i.objectAName << " + " << i.objectBName << endl;
+        std::cout << "Contact: " << i.objectAName << " + " << i.objectBName << std::endl;
         SoSeparator* normal = new SoSeparator;
         SoMatrixTransform* m = new SoMatrixTransform;
         SbMatrix ma;
@@ -996,7 +996,7 @@ void SimDynamicsWindow::addObject()
 
             if (counter > 100)
             {
-                cout << "Error, could not find valid pose" << endl;
+                std::cout << "Error, could not find valid pose" << std::endl;
                 return;
             }
         }

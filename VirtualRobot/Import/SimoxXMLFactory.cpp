@@ -7,6 +7,7 @@
 
 namespace VirtualRobot
 {
+    using std::endl;
 
     SimoxXMLFactory::SimoxXMLFactory()
     = default;
@@ -26,14 +27,14 @@ namespace VirtualRobot
         }
         catch (VirtualRobotException& e)
         {
-            VR_ERROR << " ERROR while loading robot from file:" << filename << endl;
+            VR_ERROR << " ERROR while loading robot from file:" << filename << std::endl;
             VR_ERROR << e.what();
             return robot;
         }
 
         if (!robot)
         {
-            VR_ERROR << " ERROR while loading robot from file:" << filename << endl;
+            VR_ERROR << " ERROR while loading robot from file:" << filename << std::endl;
         }
 
         return robot;
@@ -57,9 +58,9 @@ namespace VirtualRobot
     /**
      * \return new instance of SimoxXMLFactory.
      */
-    boost::shared_ptr<RobotImporterFactory> SimoxXMLFactory::createInstance(void*)
+    std::shared_ptr<RobotImporterFactory> SimoxXMLFactory::createInstance(void*)
     {
-        boost::shared_ptr<SimoxXMLFactory> xmlFactory(new SimoxXMLFactory());
+        std::shared_ptr<SimoxXMLFactory> xmlFactory(new SimoxXMLFactory());
         return xmlFactory;
     }
 

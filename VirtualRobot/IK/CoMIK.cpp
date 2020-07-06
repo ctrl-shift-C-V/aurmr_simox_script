@@ -4,11 +4,17 @@
 #include "../Nodes/RobotNodePrismatic.h"
 #include "../VirtualRobotException.h"
 #include "../Robot.h"
+#include <VirtualRobot/MathTools.h>
+
+#include <Eigen/Geometry>
 
 #include <cfloat>
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
+
     CoMIK::CoMIK(RobotNodeSetPtr rnsJoints, RobotNodeSetPtr rnsBodies, RobotNodePtr coordSystem, int dimensions)
         : JacobiProvider(rnsJoints), coordSystem(coordSystem)
     {
@@ -34,7 +40,7 @@ namespace VirtualRobot
 
         if (rnsBodies->getMass() == 0)
         {
-            VR_ERROR << "The RNS does not contain any bodies or masses are not specified (mass==0)" << endl;
+            VR_ERROR << "The RNS does not contain any bodies or masses are not specified (mass==0)" << std::endl;
         }
     }
 
@@ -67,8 +73,8 @@ namespace VirtualRobot
                 if (dof->isRotationalJoint())
                 {
                     // get axis
-                    boost::shared_ptr<RobotNodeRevolute> revolute
-                        = boost::dynamic_pointer_cast<RobotNodeRevolute>(dof);
+                    std::shared_ptr<RobotNodeRevolute> revolute
+                        = std::dynamic_pointer_cast<RobotNodeRevolute>(dof);
                     THROW_VR_EXCEPTION_IF(!revolute, "Internal error: expecting revolute joint");
                     // todo: find a better way of handling different joint types
                     Eigen::Vector3f axis = revolute->getJointRotationAxis(coordSystem);
@@ -89,8 +95,8 @@ namespace VirtualRobot
                 else if (dof->isTranslationalJoint())
                 {
                     // -> prismatic joint
-                    boost::shared_ptr<RobotNodePrismatic> prismatic
-                        = boost::dynamic_pointer_cast<RobotNodePrismatic>(dof);
+                    std::shared_ptr<RobotNodePrismatic> prismatic
+                        = std::dynamic_pointer_cast<RobotNodePrismatic>(dof);
                     THROW_VR_EXCEPTION_IF(!prismatic, "Internal error: expecting prismatic joint");
                     // todo: find a better way of handling different joint types
                     Eigen::Vector3f axis = prismatic->getJointTranslationDirection(coordSystem);
@@ -109,7 +115,7 @@ namespace VirtualRobot
         }
         else if (target.rows() == 1)
         {
-            VR_INFO << "One dimensional CoMs not supported." << endl;
+            VR_INFO << "One dimensional CoMs not supported." << std::endl;
         }
 
         return position;
@@ -199,7 +205,7 @@ namespace VirtualRobot
             // Check for singularities
             if (!isValid(dTheta))
             {
-                VR_INFO << "Singular Jacobian" << endl;
+                VR_INFO << "Singular Jacobian" << std::endl;
                 return false;
             }
 
@@ -214,7 +220,7 @@ namespace VirtualRobot
             // check tolerances
             if (checkTolerances())
             {
-                VR_INFO << "Tolerances ok, loop:" << step << endl;
+                VR_INFO << "Tolerances ok, loop:" << step << std::endl;
                 return true;
             }
 
@@ -222,13 +228,13 @@ namespace VirtualRobot
 
             if (dTheta.norm() < minumChange)
             {
-                VR_INFO << "Could not improve result any more (dTheta.norm()=" << d << "), loop:" << step << endl;
+                VR_INFO << "Could not improve result any more (dTheta.norm()=" << d << "), loop:" << step << std::endl;
                 return false;
             }
 
             if (checkImprovement && d > lastDist)
             {
-                VR_INFO << "Could not improve result any more (dTheta.norm()=" << d << ", last loop's norm:" << lastDist << "), loop:" << step << endl;
+                VR_INFO << "Could not improve result any more (dTheta.norm()=" << d << ", last loop's norm:" << lastDist << "), loop:" << step << std::endl;
                 return false;
             }
 
@@ -237,8 +243,8 @@ namespace VirtualRobot
         }
 
 #ifndef NO_FAILURE_OUTPUT
-        //VR_INFO << "IK failed, loop:" << step << endl;
-        //VR_INFO << "error:" << (target - rns->getCoM().head(target.rows())).norm() << endl;
+        //VR_INFO << "IK failed, loop:" << step << std::endl;
+        //VR_INFO << "error:" << (target - rns->getCoM().head(target.rows())).norm() << std::endl;
 #endif
         return false;
     }
@@ -254,18 +260,18 @@ namespace VirtualRobot
 
         if (coordSystem)
         {
-            cout << "Coordsystem: " << coordSystem->getName() << endl;
+            std::cout << "Coordsystem: " << coordSystem->getName() << std::endl;
         }
         else
         {
-            cout << "Coordsystem: global" << endl;
+            std::cout << "Coordsystem: global" << std::endl;
         }
 
-        cout << "Target:" << endl << this->target.transpose() << endl;
-        cout << "Tolerances pos: " << this->tolerance << endl;
-        cout << "RNS bodies:" << rnsBodies->getName() << endl;
-        cout << "CoM:" << rnsBodies->getCoM().head(target.rows()).transpose() << endl;
-        cout << "Error:" << endl << getError().transpose() << endl;
+        std::cout << "Target:" << endl << this->target.transpose() << std::endl;
+        std::cout << "Tolerances pos: " << this->tolerance << std::endl;
+        std::cout << "RNS bodies:" << rnsBodies->getName() << std::endl;
+        std::cout << "CoM:" << rnsBodies->getCoM().head(target.rows()).transpose() << std::endl;
+        std::cout << "Error:" << endl << getError().transpose() << std::endl;
 
     }
 }

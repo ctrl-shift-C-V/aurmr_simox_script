@@ -8,6 +8,9 @@
 
 #include <VirtualRobot/VirtualRobotTest.h>
 #include <VirtualRobot/math/Helpers.h>
+
+#include <Eigen/Geometry>
+
 #include <string>
 #include <stdio.h>
 #include <random>

@@ -29,7 +29,7 @@ namespace VirtualRobot
 {
 
     class ForceTorqueSensor;
-    typedef boost::shared_ptr<ForceTorqueSensor> ForceTorqueSensorPtr;
+    typedef std::shared_ptr<ForceTorqueSensor> ForceTorqueSensorPtr;
 
 
     /*!
@@ -88,7 +88,7 @@ namespace VirtualRobot
         Eigen::VectorXf forceTorqueValues;
     };
 
-    typedef boost::shared_ptr<ForceTorqueSensor> ForceTorqueSensorPtr;
+    typedef std::shared_ptr<ForceTorqueSensor> ForceTorqueSensorPtr;
 
 } // namespace VirtualRobot
 

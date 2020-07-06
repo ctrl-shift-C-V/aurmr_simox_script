@@ -91,20 +91,20 @@ namespace VirtualRobot
 
             if (verbose)
             {
-                VR_INFO << "Creating Voxelized tree data structure. " << endl;
-                VR_INFO << "Extends (min/max/size):" << endl;
+                VR_INFO << "Creating Voxelized tree data structure. " << std::endl;
+                VR_INFO << "Extends (min/max/size):" << std::endl;
                 std::streamsize pr = std::cout.precision(2);
 
                 for (int i = 0; i < 6; i++)
                 {
-                    cout << std::fixed << minExtend[i] << "," << maxExtend[i] << " -> " << size[i] << endl;
+                    std::cout << std::fixed << minExtend[i] << "," << maxExtend[i] << " -> " << size[i] << std::endl;
                 }
 
                 std::cout << std::resetiosflags(std::ios::fixed);
                 std::cout.precision(pr);
-                VR_INFO << "discretizationTransl:" << discretizationTransl << ". Max translation levels:" << steps << endl;
-                VR_INFO << "discretizationRot:" << discretizationRot << ". Max rotation levels:" << steps2 << endl;
-                VR_INFO << "--> Max Levels:" << maxLevels << endl;
+                VR_INFO << "discretizationTransl:" << discretizationTransl << ". Max translation levels:" << steps << std::endl;
+                VR_INFO << "discretizationRot:" << discretizationRot << ". Max rotation levels:" << steps2 << std::endl;
+                VR_INFO << "--> Max Levels:" << maxLevels << std::endl;
             }
 
             THROW_VR_EXCEPTION_IF(steps <= 0, "Invalid parameters...");

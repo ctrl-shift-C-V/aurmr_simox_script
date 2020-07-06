@@ -49,7 +49,7 @@ namespace SimDynamics
         // AbstractFactoryMethod
     public:
         static std::string getName();
-        static boost::shared_ptr<DynamicsEngineFactory> createInstance(void*);
+        static std::shared_ptr<DynamicsEngineFactory> createInstance(void*);
     private:
         static SubClassRegistry registry;
     };

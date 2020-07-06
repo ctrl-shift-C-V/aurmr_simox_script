@@ -12,6 +12,7 @@
 #include <Eigen/Geometry>
 
 #include <SimoxUtility/json/eigen_conversion.h>
+#include <SimoxUtility/math/pose/pose.h>
 
 
 namespace Eigen
@@ -54,7 +55,7 @@ BOOST_AUTO_TEST_CASE(test_Matrix4f_non_transform)
 
 BOOST_AUTO_TEST_CASE(test_Matrix4f_transform)
 {
-    Eigen::Matrix4f in = math::Helpers::Pose(Eigen::Vector3f { 3, 2, 3 },
+    Eigen::Matrix4f in = simox::math::pose(Eigen::Vector3f { 3, 2, 3 },
                                       Eigen::AngleAxisf( 1.2f, Eigen::Vector3f(1,2,3).normalized()));
     Eigen::Matrix4f out = out.Zero();
 
@@ -129,7 +130,7 @@ BOOST_AUTO_TEST_CASE(test_Matrix4f_transform_from_pos_ori)
 {
     Eigen::Vector3f pos(0, -1, 2.5);
     Eigen::Quaternionf ori(Eigen::AngleAxisf(static_cast<float>(M_PI_2), Eigen::Vector3f::UnitY()));
-    Eigen::Matrix4f in = math::Helpers::Pose(pos, ori);
+    Eigen::Matrix4f in = simox::math::pose(pos, ori);
     Eigen::Matrix4f out = out.Zero();
 
     // ori = Eigen::Quaternion

@@ -67,7 +67,7 @@ namespace VirtualRobot
             {
                 if (loadMode == RobotIO::eFull)
                 {
-                    THROW_VR_EXCEPTION_IF(visuProcessed, "Two visualization tags defined in Sensor '" << sensorName << "'." << endl);
+                    THROW_VR_EXCEPTION_IF(visuProcessed, "Two visualization tags defined in Sensor '" << sensorName << "'." << std::endl);
                     visualizationNode = BaseIO::processVisualizationTag(nodeXML, sensorName, basePath, useAsColModel);
                     visuProcessed = true;
                 }// else silently ignore tag
@@ -78,7 +78,7 @@ namespace VirtualRobot
             }
             else
             {
-                THROW_VR_EXCEPTION("XML definition <" << nodeName << "> not supported in Sensor <" << sensorName << ">." << endl);
+                THROW_VR_EXCEPTION("XML definition <" << nodeName << "> not supported in Sensor <" << sensorName << ">." << std::endl);
             }
 
             nodeXML = nodeXML->next_sibling();
@@ -110,9 +110,9 @@ namespace VirtualRobot
     /**
      * \return new instance of PositionSensorFactory.
      */
-    boost::shared_ptr<SensorFactory> PositionSensorFactory::createInstance(void*)
+    std::shared_ptr<SensorFactory> PositionSensorFactory::createInstance(void*)
     {
-        boost::shared_ptr<PositionSensorFactory> psFactory(new PositionSensorFactory());
+        std::shared_ptr<PositionSensorFactory> psFactory(new PositionSensorFactory());
         return psFactory;
     }
 

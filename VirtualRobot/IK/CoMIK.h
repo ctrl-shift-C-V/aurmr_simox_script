@@ -34,7 +34,7 @@ namespace VirtualRobot
 {
     class VIRTUAL_ROBOT_IMPORT_EXPORT CoMIK :
         public JacobiProvider,
-        public boost::enable_shared_from_this<CoMIK>
+        public std::enable_shared_from_this<CoMIK>
     {
     public:
         /*!
@@ -83,7 +83,7 @@ namespace VirtualRobot
     };
 
 
-    typedef boost::shared_ptr<CoMIK> CoMIKPtr;
+    typedef std::shared_ptr<CoMIK> CoMIKPtr;
 
 }
 

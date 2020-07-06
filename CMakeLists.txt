@@ -1,21 +1,33 @@
 cmake_minimum_required(VERSION 3.10)
-
+MESSAGE (STATUS "cmake version: ${CMAKE_VERSION}")
 #######################################################################################
 PROJECT(Simox LANGUAGES CXX VERSION 2.3.74.0)
 MESSAGE (STATUS "** Simox version: ${Simox_VERSION}")
 INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
 SET(Simox_BOOST_VERSION 1.65.1)
+# If OS is Ubuntu 20, use another Boost version.
+execute_process(COMMAND lsb_release -cs
+    OUTPUT_VARIABLE RELEASE_CODENAME
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+if (RELEASE_CODENAME STREQUAL focal)
+    message(STATUS "Detected Ubuntu 20, using Boost 1.71.0")
+    SET(Simox_BOOST_VERSION 1.71.0)
+endif()
 #######################################################################################
 #global config
 # Set up build type
 
-if(${CMAKE_VERSION} VERSION_GREATER 3.16)
+if(NOT "$ENV{CMAKE_UNITY_BUILD_BATCH_SIZE}" STREQUAL "")
+    message(STATUS "CMAKE_UNITY_BUILD_BATCH_SIZE -> $ENV{CMAKE_UNITY_BUILD_BATCH_SIZE}")
     set(CMAKE_UNITY_BUILD ON)
-    set(CMAKE_UNITY_BUILD_BATCH_SIZE 0)
+    set(CMAKE_UNITY_BUILD_BATCH_SIZE $ENV{CMAKE_UNITY_BUILD_BATCH_SIZE})
 endif()
 
 IF(NOT CMAKE_BUILD_TYPE)
-    SET_PROPERTY(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING
+        "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+        FORCE)
 endif()
 
 #we want Release and RelWithDebInfo to use the same optimization level
@@ -64,6 +76,7 @@ if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0)
     add_compile_options(-Wno-error=unused-but-set-variable)
     add_compile_options(-Wno-error=unused-variable)
     add_compile_options(-Wno-error=unused-parameter)
+    add_compile_options(-Wno-error=deprecated-declarations)
 endif()
 
 #######################################################################################
@@ -76,12 +89,13 @@ OPTION(Simox_USE_OPENSCENEGRAPH_VISUALIZATION "Use OpenSceneGraph for visualizat
 OPTION(Simox_COLLISION_CHECKER_PQP "Build and use the PQP Collision Detection library (located in ExternalDependencies)" ON)
 #######################################################################################
 MESSAGE(STATUS "******************** Configuring Simox ************************")
+set (Simox_BUILD_VirtualRobot TRUE CACHE BOOL "Build Virtual Robot library")
 set (Simox_BUILD_Saba TRUE CACHE BOOL "Build Motion Planning library")
 set (Simox_BUILD_GraspStudio TRUE CACHE BOOL "Build Grasp Planning library")
 set (Simox_BUILD_SimDynamics TRUE CACHE BOOL "Build Dynamic Simulation")
 
 MESSAGE (STATUS "** SIMOX BUILD SimoxUtility: TRUE (can't be turned off)")
-MESSAGE (STATUS "** SIMOX BUILD VirtualRobot: TRUE (can't be turned off)")
+MESSAGE (STATUS "** SIMOX BUILD VirtualRobot: ${Simox_BUILD_VirtualRobot}")
 MESSAGE (STATUS "** SIMOX BUILD Saba        : ${Simox_BUILD_Saba}")
 MESSAGE (STATUS "** SIMOX BUILD GraspStudio : ${Simox_BUILD_GraspStudio}")
 MESSAGE (STATUS "** SIMOX BUILD SimDynamics : ${Simox_BUILD_SimDynamics}")
@@ -181,13 +195,15 @@ endif()
 
 #######################################################################################
 add_subdirectory(SimoxUtility)
-add_subdirectory(VirtualRobot)
-
+list (APPEND SIMOX_EXPORT_TARGET_LIST SimoxUtility)
+list (APPEND Simox_LIBRARIES          SimoxUtility)
 
 #######################################################################################
-list (APPEND SIMOX_EXPORT_TARGET_LIST SimoxUtility VirtualRobot)
-list (APPEND Simox_LIBRARIES          SimoxUtility VirtualRobot)
-
+if (Simox_BUILD_VirtualRobot)
+    add_subdirectory(VirtualRobot)
+    list(APPEND SIMOX_EXPORT_TARGET_LIST VirtualRobot)
+    list(APPEND Simox_LIBRARIES VirtualRobot)
+endif()
 
 #######################################################################################
 if (Simox_BUILD_Saba)

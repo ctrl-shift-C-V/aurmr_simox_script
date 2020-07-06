@@ -22,6 +22,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     WorkspaceRepresentation::WorkspaceRepresentation(RobotPtr robot)
     {
@@ -112,12 +114,12 @@ namespace VirtualRobot
         }
         catch(const std::exception &e)
         {
-            VR_ERROR << "Error:" << e.what() << endl << "Could not assign " << size << " bytes of memory. Reduce size of WorkspaceRepresentation data..." << endl;
+            VR_ERROR << "Error:" << e.what() << endl << "Could not assign " << size << " bytes of memory. Reduce size of WorkspaceRepresentation data..." << std::endl;
             throw;
         }
         catch (...)
         {
-            VR_ERROR << "Could not assign " << size << " bytes of memory. Reduce size of WorkspaceRepresentation data..." << endl;
+            VR_ERROR << "Could not assign " << size << " bytes of memory. Reduce size of WorkspaceRepresentation data..." << std::endl;
             throw;
         }
 
@@ -206,7 +208,7 @@ namespace VirtualRobot
             // first check if the current version is used
             if (version[0] != versionMajor || version[1] != versionMinor)
             {
-                cout << "File version: " << version[0] << "." << version[1] << endl;
+                std::cout << "File version: " << version[0] << "." << version[1] << std::endl;
                 // now check if an older version is used
                 THROW_VR_EXCEPTION_IF(
                     (version[0] > 2) ||
@@ -276,7 +278,7 @@ namespace VirtualRobot
                 FileIO::readString(tmpString, file);
                 if (tmpString.empty() || !robot->hasRobotNode(tmpString))
                 {
-                    VR_WARNING << "Base ndoe not gifven/known:" << tmpString << endl;
+                    VR_WARNING << "Base ndoe not gifven/known:" << tmpString << std::endl;
                 }
                 else
                 {
@@ -334,7 +336,7 @@ namespace VirtualRobot
             {
                 if (!customLoad(file))
                 {
-                    VR_ERROR << "Custom loading failed?!" << endl;
+                    VR_ERROR << "Custom loading failed?!" << std::endl;
                 }
             }
 
@@ -428,7 +430,7 @@ namespace VirtualRobot
 
                                 if (!readOK || (n != dataSize && n != 0))
                                 {
-                                    VR_ERROR << "Invalid number of bytes?!" << endl;
+                                    VR_ERROR << "Invalid number of bytes?!" << std::endl;
                                     bzip2->close();
                                     file.close();
                                     return;
@@ -492,7 +494,7 @@ namespace VirtualRobot
         }
         catch (VirtualRobotException& e)
         {
-            VR_ERROR << e.what() << endl;
+            VR_ERROR << e.what() << std::endl;
             file.close();
             throw;
         }
@@ -600,7 +602,7 @@ namespace VirtualRobot
 
             if (!customSave(file))
             {
-                VR_ERROR << "Custom saving failed?!" << endl;
+                VR_ERROR << "Custom saving failed?!" << std::endl;
             }
 
             // Data
@@ -608,7 +610,7 @@ namespace VirtualRobot
 
             if (!data->save(file))
             {
-                VR_ERROR << "Unable to store data!" << endl;
+                VR_ERROR << "Unable to store data!" << std::endl;
                 return;
             }
 
@@ -616,7 +618,7 @@ namespace VirtualRobot
         }
         catch (VirtualRobotException& e)
         {
-            cout << "exception: " << e.what() << endl;
+            std::cout << "exception: " << e.what() << std::endl;
             file.close();
             throw;
         }
@@ -968,134 +970,134 @@ namespace VirtualRobot
 
     void WorkspaceRepresentation::print()
     {
-        cout << "-----------------------------------------------------------" << endl;
-        cout << type << " - Status:" << endl;
+        std::cout << "-----------------------------------------------------------" << std::endl;
+        std::cout << type << " - Status:" << std::endl;
 
         if (data)
         {
             if (nodeSet)
             {
-                cout << "Kinematic Chain / RobotNodeSet: " << nodeSet->getName() << endl;
+                std::cout << "Kinematic Chain / RobotNodeSet: " << nodeSet->getName() << std::endl;
             }
 
-            cout << "Base Joint: ";
+            std::cout << "Base Joint: ";
 
             if (baseNode)
             {
-                cout << baseNode->getName() << endl;
+                std::cout << baseNode->getName() << std::endl;
             }
             else
             {
-                cout << "<GLOBAL POSE>" << endl;
+                std::cout << "<GLOBAL POSE>" << std::endl;
             }
 
-            cout << "TCP Joint: ";
+            std::cout << "TCP Joint: ";
 
             if (tcpNode)
             {
-                cout << tcpNode->getName() << endl;
+                std::cout << tcpNode->getName() << std::endl;
             }
             else
             {
-                cout << "<not set>" << endl;
+                std::cout << "<not set>" << std::endl;
             }
 
-            cout << "Orientation representation: ";
+            std::cout << "Orientation representation: ";
 
             switch (orientationType)
             {
                 case RPY:
-                    cout << "RPY" << endl;
+                    std::cout << "RPY" << std::endl;
                     break;
 
                 case EulerXYZ:
-                    cout << "EulerXYZ-Intrinsic" << endl;
+                    std::cout << "EulerXYZ-Intrinsic" << std::endl;
                     break;
 
                 case EulerXYZExtrinsic:
-                    cout << "EulerXYZ-Extrinsic" << endl;
+                    std::cout << "EulerXYZ-Extrinsic" << std::endl;
                     break;
 
                 case Hopf:
-                    cout << "Hopf" << endl;
+                    std::cout << "Hopf" << std::endl;
                     break;
 
                 default:
-                    cout << "NYI" << endl;
+                    std::cout << "NYI" << std::endl;
             }
 
-            cout << "CollisionModel static: ";
+            std::cout << "CollisionModel static: ";
 
             if (staticCollisionModel)
             {
-                cout << staticCollisionModel->getName() << endl;
+                std::cout << staticCollisionModel->getName() << std::endl;
             }
             else
             {
-                cout << "<not set>" << endl;
+                std::cout << "<not set>" << std::endl;
             }
 
-            cout << "CollisionModel dynamic: ";
+            std::cout << "CollisionModel dynamic: ";
 
             if (dynamicCollisionModel)
             {
-                cout << dynamicCollisionModel->getName() << endl;
+                std::cout << dynamicCollisionModel->getName() << std::endl;
             }
             else
             {
-                cout << "<not set>" << endl;
+                std::cout << "<not set>" << std::endl;
             }
 
-            cout << "Used " << buildUpLoops << " loops for building the random configs " << endl;
-            cout << "Discretization step sizes: Translation: " << discretizeStepTranslation << " - Rotation: " << discretizeStepRotation << endl;
-            cout << type << " data extends: " << numVoxels[0] << "x" << numVoxels[1] << "x" << numVoxels[2] << "x" << numVoxels[3] << "x" << numVoxels[4] << "x" << numVoxels[5] << endl;
+            std::cout << "Used " << buildUpLoops << " loops for building the random configs " << std::endl;
+            std::cout << "Discretization step sizes: Translation: " << discretizeStepTranslation << " - Rotation: " << discretizeStepRotation << std::endl;
+            std::cout << type << " data extends: " << numVoxels[0] << "x" << numVoxels[1] << "x" << numVoxels[2] << "x" << numVoxels[3] << "x" << numVoxels[4] << "x" << numVoxels[5] << std::endl;
             long long nv = (long long)numVoxels[0] * (long long)numVoxels[1] * (long long)numVoxels[2] * (long long)numVoxels[3] * (long long)numVoxels[4] * (long long)numVoxels[5];
-            cout << "Filled " << data->getVoxelFilledCount() << " of " << nv << " voxels" << endl;
-            cout << "Collisions: " << collisionConfigs << endl;
-            cout << "Maximum entry in a voxel: " << (int)data->getMaxEntry() << endl;
-            cout << type << " workspace extend (as defined on construction):" << endl;
-            cout << "Min boundary (local): ";
+            std::cout << "Filled " << data->getVoxelFilledCount() << " of " << nv << " voxels" << std::endl;
+            std::cout << "Collisions: " << collisionConfigs << std::endl;
+            std::cout << "Maximum entry in a voxel: " << (int)data->getMaxEntry() << std::endl;
+            std::cout << type << " workspace extend (as defined on construction):" << std::endl;
+            std::cout << "Min boundary (local): ";
 
             for (float minBound : minBounds)
             {
-                cout << minBound << ",";
+                std::cout << minBound << ",";
             }
 
-            cout << endl;
-            cout << "Max boundary (local): ";
+            std::cout << std::endl;
+            std::cout << "Max boundary (local): ";
 
             for (float maxBound : maxBounds)
             {
-                cout << maxBound << ",";
+                std::cout << maxBound << ",";
             }
 
-            cout << endl;
-            cout << "6D values achieved during buildup:" << endl;
-            cout << "Minimum 6D values: ";
+            std::cout << std::endl;
+            std::cout << "6D values achieved during buildup:" << std::endl;
+            std::cout << "Minimum 6D values: ";
 
             for (float achievedMinValue : achievedMinValues)
             {
-                cout << achievedMinValue << ",";
+                std::cout << achievedMinValue << ",";
             }
 
-            cout << endl;
-            cout << "Maximum 6D values: ";
+            std::cout << std::endl;
+            std::cout << "Maximum 6D values: ";
 
             for (float achievedMaxValue : achievedMaxValues)
             {
-                cout << achievedMaxValue << ",";
+                std::cout << achievedMaxValue << ",";
             }
 
-            cout << endl;
+            std::cout << std::endl;
             customPrint();
         }
         else
         {
-            cout << type << " not created yet..." << endl;
+            std::cout << type << " not created yet..." << std::endl;
         }
 
-        cout << "-----------------------------------------------------------" << endl;
-        cout << endl;
+        std::cout << "-----------------------------------------------------------" << std::endl;
+        std::cout << std::endl;
     }
 
     void WorkspaceRepresentation::reset()
@@ -1209,7 +1211,7 @@ namespace VirtualRobot
     {
         if (!data)
         {
-            VR_ERROR << "NULL DATA" << endl;
+            VR_ERROR << "NULL DATA" << std::endl;
             return 0;
         }
 
@@ -1368,7 +1370,7 @@ namespace VirtualRobot
             i++;
         }
 
-        VR_ERROR << "Could not find a valid pose?!" << endl;
+        VR_ERROR << "Could not find a valid pose?!" << std::endl;
         return m;
     }
 
@@ -1520,7 +1522,7 @@ namespace VirtualRobot
     {
         if (!robot || !nodeSet || !nodeSet->isKinematicChain())
         {
-            VR_WARNING << "invalid data" << endl;
+            VR_WARNING << "invalid data" << std::endl;
             return false;
         }
 
@@ -1531,13 +1533,13 @@ namespace VirtualRobot
 
         if (!robot->hasRobotNode(tcpNode))
         {
-            VR_ERROR << "robot does not know tcp:" << tcpNode->getName() << endl;
+            VR_ERROR << "robot does not know tcp:" << tcpNode->getName() << std::endl;
             return false;
         }
 
         if (baseNode && !robot->hasRobotNode(baseNode))
         {
-            VR_ERROR << "robot does not know baseNode:" << baseNode->getName() << endl;
+            VR_ERROR << "robot does not know baseNode:" << baseNode->getName() << std::endl;
             return false;
         }
 
@@ -1882,21 +1884,21 @@ namespace VirtualRobot
         if (getVoxelFromPose(x, v))
         {
 #if 0
-            cout << "pose:";
+            std::cout << "pose:";
 
             for (int i = 0; i < 6; i++)
             {
-                cout << x[i] << ",";
+                std::cout << x[i] << ",";
             }
 
-            cout << "Voxel:";
+            std::cout << "Voxel:";
 
             for (int i = 0; i < 6; i++)
             {
-                cout << v[i] << ",";
+                std::cout << v[i] << ",";
             }
 
-            cout << endl;
+            std::cout << std::endl;
 #endif
             data->setDatumCheckNeighbors(v, e, neighborVoxels);
         }

@@ -1,11 +1,14 @@
 #include "Trajectory.h"
 #include "Robot.h"
 #include "VirtualRobotException.h"
+#include <VirtualRobot/Visualization/VisualizationFactory.h>
 #include <iostream>
 #include <sstream>
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     Trajectory::Trajectory(RobotNodeSetPtr rns, const std::string& name)
         : rns(rns), name(name)
@@ -204,7 +207,7 @@ namespace VirtualRobot
     {
         if (!trajectoryToInsert)
         {
-            VR_ERROR << "null data" << endl;
+            VR_ERROR << "null data" << std::endl;
             return;
         }
 
@@ -421,7 +424,7 @@ namespace VirtualRobot
     void Trajectory::print() const
     {
         std::string s = toXML(0);
-        VR_INFO << s << endl;
+        VR_INFO << s << std::endl;
     }
 
     std::string Trajectory::getName() const
@@ -449,7 +452,7 @@ namespace VirtualRobot
 
         if (!visualizationFactory)
         {
-            VR_ERROR << "Could not create factory for visu type " << visualizationFactoryName << endl;
+            VR_ERROR << "Could not create factory for visu type " << visualizationFactoryName << std::endl;
             return VisualizationNodePtr();
         }
 

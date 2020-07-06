@@ -1,5 +1,6 @@
 
 #include "RobotNodeRevolute.h"
+#include "Nodes/Sensor.h"
 #include "../Robot.h"
 #include <cmath>
 #include <algorithm>
@@ -9,7 +10,8 @@
 
 namespace VirtualRobot
 {
-
+    using std::cout;
+    using std::endl;
 
     RobotNodeRevolute::RobotNodeRevolute(RobotWeakPtr rob,
                                          const std::string& name,
@@ -100,23 +102,24 @@ namespace VirtualRobot
 
         if (printDecoration)
         {
-            cout << "******** RobotNodeRevolute ********" << endl;
+            std::cout << "******** RobotNodeRevolute ********" << std::endl;
         }
 
         RobotNode::print(false, false);
 
-        cout << "* JointRotationAxis: " << jointRotationAxis[0] << ", " << jointRotationAxis[1] << ", " << jointRotationAxis[2] << endl;
+        std::cout << "* JointRotationAxis: " << jointRotationAxis[0] << ", " << jointRotationAxis[1] << ", " << jointRotationAxis[2] << std::endl;
 
         if (printDecoration)
         {
-            cout << "******** End RobotNodeRevolute ********" << endl;
+            std::cout << "******** End RobotNodeRevolute ********" << std::endl;
         }
 
         std::vector< SceneObjectPtr > children = this->getChildren();
 
         if (printChildren)
         {
-            std::for_each(children.begin(), children.end(), boost::bind(&SceneObject::print, _1, true, true));
+            std::for_each(children.begin(), children.end(), std::bind(&SceneObject::print,
+                                                                      std::placeholders::_1, true, true));
         }
     }
 
@@ -215,21 +218,21 @@ namespace VirtualRobot
     std::string RobotNodeRevolute::_toXML(const std::string& /*modelPath*/)
     {
         std::stringstream ss;
-        ss << "\t\t<Joint type='revolute'>" << endl;
-        ss << "\t\t\t<axis x='" << jointRotationAxis[0] << "' y='" << jointRotationAxis[1] << "' z='" << jointRotationAxis[2] << "'/>" << endl;
-        ss << "\t\t\t<limits lo='" << jointLimitLo << "' hi='" << jointLimitHi << "' units='radian'/>" << endl;
-        ss << "\t\t\t<MaxAcceleration value='" << maxAcceleration << "'/>" << endl;
-        ss << "\t\t\t<MaxVelocity value='" << maxVelocity << "'/>" << endl;
-        ss << "\t\t\t<MaxTorque value='" << maxTorque << "'/>" << endl;
+        ss << "\t\t<Joint type='revolute'>" << std::endl;
+        ss << "\t\t\t<axis x='" << jointRotationAxis[0] << "' y='" << jointRotationAxis[1] << "' z='" << jointRotationAxis[2] << "'/>" << std::endl;
+        ss << "\t\t\t<limits lo='" << jointLimitLo << "' hi='" << jointLimitHi << "' units='radian'/>" << std::endl;
+        ss << "\t\t\t<MaxAcceleration value='" << maxAcceleration << "'/>" << std::endl;
+        ss << "\t\t\t<MaxVelocity value='" << maxVelocity << "'/>" << std::endl;
+        ss << "\t\t\t<MaxTorque value='" << maxTorque << "'/>" << std::endl;
         std::map< std::string, float >::iterator propIt = propagatedJointValues.begin();
 
         while (propIt != propagatedJointValues.end())
         {
-            ss << "\t\t\t<PropagateJointValue name='" << propIt->first << "' factor='" << propIt->second << "'/>" << endl;
+            ss << "\t\t\t<PropagateJointValue name='" << propIt->first << "' factor='" << propIt->second << "'/>" << std::endl;
             propIt++;
         }
 
-        ss << "\t\t</Joint>" << endl;
+        ss << "\t\t</Joint>" << std::endl;
         return ss.str();
     }
 
@@ -243,11 +246,11 @@ namespace VirtualRobot
 
             while (propIt != propagatedJointValues.end())
             {
-                ss << "\t\t\t<PropagateJointValue name='" << propIt->first << "' factor='" << propIt->second << "'/>" << endl;
+                ss << "\t\t\t<PropagateJointValue name='" << propIt->first << "' factor='" << propIt->second << "'/>" << std::endl;
                 propIt++;
             }
 
-            ss << "\t\t</Joint>" << endl;
+            ss << "\t\t</Joint>" << std::endl;
 
             return ss.str();
         }

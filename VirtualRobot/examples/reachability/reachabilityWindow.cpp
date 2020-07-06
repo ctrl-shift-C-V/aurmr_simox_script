@@ -33,7 +33,7 @@ float TIMER_MS = 30.0f;
 reachabilityWindow::reachabilityWindow(std::string& sRobotFile, std::string& reachFile, Eigen::Vector3f& axisTCP)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
 
     this->axisTCP = axisTCP;
     robotFile = sRobotFile;
@@ -85,7 +85,7 @@ void reachabilityWindow::setupUI()
 
     // setup
     m_pExViewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-    m_pExViewer->setAccumulationBuffer(true);
+    m_pExViewer->setAccumulationBuffer(false);
 
     m_pExViewer->setAntialiasing(true, 4);
 
@@ -125,7 +125,7 @@ void reachabilityWindow::setupUI()
     UI.sliderCutMaxAngle->setEnabled(false);
     UI.checkBoxReachabilityCut->setEnabled(false);
 
-    m_pExViewer->setAccumulationBuffer(true);
+    m_pExViewer->setAccumulationBuffer(false);
     m_pExViewer->setAntialiasing(true, 4);
 
 }
@@ -220,7 +220,7 @@ void reachabilityWindow::reachVisu()
 
 
             WorkspaceRepresentation::WorkspaceCut2DPtr cutData = reachSpace->createCut(pos,reachSpace->getDiscretizeParameterTranslation(), true);
-            VR_INFO << "Slider pos: " << pos  << ", maxEntry:" << reachSpace->getMaxSummedAngleReachablity() << ", cut maxCoeff:" << cutData->entries.maxCoeff() << endl;
+            VR_INFO << "Slider pos: " << pos  << ", maxEntry:" << reachSpace->getMaxSummedAngleReachablity() << ", cut maxCoeff:" << cutData->entries.maxCoeff() << std::endl;
             SoNode *reachvisu2 = CoinVisualizationFactory::getCoinVisualization(cutData, VirtualRobot::ColorMap(VirtualRobot::ColorMap::eHot), Eigen::Vector3f::UnitZ(), reachSpace->getMaxSummedAngleReachablity(), minAngle, maxAngle);
             visualisationNode->addChild(reachvisu2);
 
@@ -313,7 +313,7 @@ void reachabilityWindow::updateRNSBox()
 void reachabilityWindow::selectRNS(int nr)
 {
     currentRobotNodeSet.reset();
-    cout << "Selecting RNS nr " << nr << endl;
+    std::cout << "Selecting RNS nr " << nr << std::endl;
     std::string tcp = "<not set>";
 
     if (nr < 0 || nr >= (int)robotNodeSets.size())
@@ -372,7 +372,7 @@ void reachabilityWindow::jointValueChanged(int pos)
 void reachabilityWindow::selectJoint(int nr)
 {
     currentRobotNode.reset();
-    cout << "Selecting Joint nr " << nr << endl;
+    std::cout << "Selecting Joint nr " << nr << std::endl;
 
     if (nr < 0 || nr >= (int)allRobotNodes.size())
     {
@@ -432,7 +432,7 @@ void reachabilityWindow::selectRobot()
 void reachabilityWindow::loadRobot()
 {
     robotVisuSep->removeAllChildren();
-    cout << "Loading Scene from " << robotFile << endl;
+    std::cout << "Loading Scene from " << robotFile << std::endl;
 
     try
     {
@@ -440,14 +440,14 @@ void reachabilityWindow::loadRobot()
     }
     catch (VirtualRobotException& e)
     {
-        cout << " ERROR while creating robot" << endl;
-        cout << e.what();
+        std::cout << " ERROR while creating robot" << std::endl;
+        std::cout << e.what();
         return;
     }
 
     if (!robot)
     {
-        cout << " ERROR while creating robot" << endl;
+        std::cout << " ERROR while creating robot" << std::endl;
         return;
     }
 
@@ -461,12 +461,12 @@ void reachabilityWindow::loadRobot()
     {
         if (i->isKinematicChain())
         {
-            VR_INFO << " RNS <" << i->getName() << "> is a valid kinematic chain" << endl;
+            VR_INFO << " RNS <" << i->getName() << "> is a valid kinematic chain" << std::endl;
             robotNodeSets.push_back(i);
         }
         else
         {
-            VR_INFO << " RNS <" << i->getName() << "> is not a valid kinematic chain" << endl;
+            VR_INFO << " RNS <" << i->getName() << "> is not a valid kinematic chain" << std::endl;
         }
     }
 
@@ -488,7 +488,7 @@ void reachabilityWindow::extendReach()
 
     if (!reachSpace)
     {
-        cout << " Please load/create reachability data first..." << endl;
+        std::cout << " Please load/create reachability data first..." << std::endl;
         return;
     }
 
@@ -592,7 +592,7 @@ void reachabilityWindow::createReach()
         if (measure != "Reachability")
         {
             reachSpace.reset(new Manipulability(robot));
-            ManipulabilityPtr manipSpace = boost::dynamic_pointer_cast<Manipulability>(reachSpace);
+            ManipulabilityPtr manipSpace = std::dynamic_pointer_cast<Manipulability>(reachSpace);
             manipSpace->setMaxManipulability(UICreate.doubleSpinBoxMaxManip->value());
         }
 
@@ -600,7 +600,7 @@ void reachabilityWindow::createReach()
 
         if (measure == "Ext. Manipulability")
         {
-            ManipulabilityPtr man = boost::dynamic_pointer_cast<Manipulability>(reachSpace);
+            ManipulabilityPtr man = std::dynamic_pointer_cast<Manipulability>(reachSpace);
             PoseQualityExtendedManipulabilityPtr manMeasure(new PoseQualityExtendedManipulability(currentRobotNodeSet));
             man->setManipulabilityMeasure(manMeasure);
             if (UICreate.checkBoxColDetecion->isChecked() && UICreate.checkBoxSelfDistance->isChecked())
@@ -628,9 +628,9 @@ void reachabilityWindow::fillHoles()
         return;
     }
 
-    cout << "filling holes of reachability space" << endl;
+    std::cout << "filling holes of reachability space" << std::endl;
     int res = reachSpace->fillHoles();
-    cout << "Filled " << res << " voxels" << endl;
+    std::cout << "Filled " << res << " voxels" << std::endl;
     reachSpace->print();
 }
 
@@ -641,7 +641,7 @@ void reachabilityWindow::binarize()
         return;
     }
 
-    cout << "Binarizing reachability space" << endl;
+    std::cout << "Binarizing reachability space" << std::endl;
     reachSpace->binarize();
     reachSpace->print();
 }
@@ -654,13 +654,13 @@ void reachabilityWindow::computeVolume()
     VirtualRobot::WorkspaceRepresentation::VolumeInfo vi;
     vi = reachSpace->computeVolumeInformation();
 
-    cout << "Reachability Volume Information:" << endl;
-    cout << "Nr 3d Voxels:" << vi.voxelCount3D << endl;
-    cout << "Nr filled 3d Voxels:" << vi.filledVoxelCount3D << endl;
-    cout << "Nr border 3d Voxels:" << vi.borderVoxelCount3D << endl;
-    cout << "Volume per 3d Voxel:" << vi.volumeVoxel3D << " m^3" << endl;
-    cout << "Volume of all filled 3d Voxels:" << vi.volumeFilledVoxels3D << " m^3" << endl;
-    cout << "Volume of filledVoxels - borderVoxels*0.5:" << vi.volume3D << " m^3" << endl;
+    std::cout << "Reachability Volume Information:" << std::endl;
+    std::cout << "Nr 3d Voxels:" << vi.voxelCount3D << std::endl;
+    std::cout << "Nr filled 3d Voxels:" << vi.filledVoxelCount3D << std::endl;
+    std::cout << "Nr border 3d Voxels:" << vi.borderVoxelCount3D << std::endl;
+    std::cout << "Volume per 3d Voxel:" << vi.volumeVoxel3D << " m^3" << std::endl;
+    std::cout << "Volume of all filled 3d Voxels:" << vi.volumeFilledVoxels3D << " m^3" << std::endl;
+    std::cout << "Volume of filledVoxels - borderVoxels*0.5:" << vi.volume3D << " m^3" << std::endl;
 }
 
 void reachabilityWindow::saveReach()
@@ -721,7 +721,7 @@ void reachabilityWindow::loadReachFile(std::string filename)
 
     if (!loadOK)
     {
-        VR_ERROR << "Could not load reach/manip file" << endl;
+        VR_ERROR << "Could not load reach/manip file" << std::endl;
         reachSpace.reset();
         return;
     }
@@ -730,15 +730,15 @@ void reachabilityWindow::loadReachFile(std::string filename)
 
     if (reachSpace->getNodeSet())
     {
-        cout << "Using RNS: " << reachSpace->getNodeSet()->getName() << endl;
+        std::cout << "Using RNS: " << reachSpace->getNodeSet()->getName() << std::endl;
 
         for (size_t i = 0; i < robotNodeSets.size(); i++)
         {
-            cout << "checking " << robotNodeSets[i]->getName() << endl;
+            std::cout << "checking " << robotNodeSets[i]->getName() << std::endl;
 
             if (robotNodeSets[i] == reachSpace->getNodeSet())
             {
-                cout << "Found RNS.." << endl;
+                std::cout << "Found RNS.." << std::endl;
                 UI.comboBoxRNS->setCurrentIndex(i);
                 selectRNS(i);
             }
@@ -792,7 +792,7 @@ void reachabilityWindow::updateQualityInfo()
     float poseManip = 1.0f;
     if (reachSpace)
     {
-        ManipulabilityPtr p = boost::dynamic_pointer_cast<Manipulability>(reachSpace);
+        ManipulabilityPtr p = std::dynamic_pointer_cast<Manipulability>(reachSpace);
         if (p)
         {
             reachManip = p->getManipulabilityAtPose(p->getTCP()->getGlobalPose());

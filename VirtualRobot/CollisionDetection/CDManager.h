@@ -77,9 +77,9 @@ namespace VirtualRobot
         void addCollisionModelPair(SceneObjectPtr m1, SceneObjectPtr m2);
         template<class SetT>
         typename std::enable_if<std::is_base_of<SceneObjectSet, SetT>::value>::type
-        addCollisionModelPair(const boost::shared_ptr<SetT>& m1, const boost::shared_ptr<SetT>& m2)
+        addCollisionModelPair(const std::shared_ptr<SetT>& m1, const std::shared_ptr<SetT>& m2)
         {
-            addCollisionModelPair(boost::dynamic_pointer_cast<SceneObjectSet>(m1), boost::dynamic_pointer_cast<SceneObjectSet>(m2));
+            addCollisionModelPair(std::dynamic_pointer_cast<SceneObjectSet>(m1), std::dynamic_pointer_cast<SceneObjectSet>(m2));
         }
 
         /*!

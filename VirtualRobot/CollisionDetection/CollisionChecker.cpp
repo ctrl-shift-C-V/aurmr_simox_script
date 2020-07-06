@@ -23,17 +23,18 @@
 
 namespace VirtualRobot
 {
+    using std::endl;
 
     namespace
     {
-        boost::mutex mutex;
+        std::mutex mutex;
     }
 
     CollisionCheckerPtr CollisionChecker::globalCollisionChecker;
 
     CollisionChecker::Cleanup::~Cleanup()
     {
-        boost::lock_guard<boost::mutex> lock(mutex);
+        std::scoped_lock lock(mutex);
         CollisionChecker::globalCollisionChecker.reset();
     }
 
@@ -44,7 +45,7 @@ namespace VirtualRobot
 
         if (true)
         {
-            boost::lock_guard<boost::mutex> lock(mutex);
+            std::scoped_lock lock(mutex);
 
             if (!globalCollisionChecker)
             {
@@ -96,7 +97,7 @@ namespace VirtualRobot
     float CollisionChecker::calculateDistance(SceneObjectPtr model1, SceneObjectSetPtr model2)
     {
         VR_ASSERT(model1 && model2);
-        RobotPtr r = boost::dynamic_pointer_cast<Robot>(model1);
+        RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
 
         if (r)
         {
@@ -112,8 +113,8 @@ namespace VirtualRobot
     float CollisionChecker::calculateDistance(SceneObjectPtr model1, SceneObjectPtr model2)
     {
         VR_ASSERT(model1 && model2);
-        RobotPtr r = boost::dynamic_pointer_cast<Robot>(model1);
-        RobotPtr r2 = boost::dynamic_pointer_cast<Robot>(model2);
+        RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
+        RobotPtr r2 = std::dynamic_pointer_cast<Robot>(model2);
 
         if (r && r2)
         {
@@ -141,7 +142,7 @@ namespace VirtualRobot
     float CollisionChecker::calculateDistance(SceneObjectPtr model1, SceneObjectSetPtr model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
     {
         VR_ASSERT(model1 && model2);
-        RobotPtr r = boost::dynamic_pointer_cast<Robot>(model1);
+        RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
 
         if (r)
         {
@@ -157,8 +158,8 @@ namespace VirtualRobot
     float CollisionChecker::calculateDistance(SceneObjectPtr model1, SceneObjectPtr model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
     {
         VR_ASSERT(model1 && model2);
-        RobotPtr r = boost::dynamic_pointer_cast<Robot>(model1);
-        RobotPtr r2 = boost::dynamic_pointer_cast<Robot>(model2);
+        RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
+        RobotPtr r2 = std::dynamic_pointer_cast<Robot>(model2);
 
         if (r && r2)
         {
@@ -194,7 +195,7 @@ namespace VirtualRobot
 
         if (colModels1.size() == 0 || colModels2.size() == 0)
         {
-            VR_WARNING << "no internal data..." << endl;
+            VR_WARNING << "no internal data..." << std::endl;
             return -1.0f;
         }
 
@@ -250,7 +251,7 @@ namespace VirtualRobot
 
         if (colModels.size() == 0)
         {
-            VR_WARNING << "no internal data..." << endl;
+            VR_WARNING << "no internal data..." << std::endl;
             return -1.0f;
         }
 
@@ -307,7 +308,7 @@ namespace VirtualRobot
 
         if (model1.size() == 0)
         {
-            VR_WARNING << "no internal data..." << endl;
+            VR_WARNING << "no internal data..." << std::endl;
             return false;
         }
 
@@ -338,12 +339,12 @@ namespace VirtualRobot
 
         if (vColModels1.size() == 0)
         {
-            VR_WARNING << "no internal data for " << model1->getName() << endl;
+            VR_WARNING << "no internal data for " << model1->getName() << std::endl;
             return false;
         }
         if ( vColModels2.size() == 0)
         {
-            VR_WARNING << "no internal data for " << model2->getName() << endl;
+            VR_WARNING << "no internal data for " << model2->getName() << std::endl;
             return false;
         }
 
@@ -372,7 +373,7 @@ namespace VirtualRobot
     bool CollisionChecker::checkCollision(SceneObjectPtr model1, SceneObjectSetPtr model2)
     {
         VR_ASSERT(model1 && model2);
-        RobotPtr r = boost::dynamic_pointer_cast<Robot>(model1);
+        RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
 
         if (r)
         {
@@ -413,7 +414,7 @@ namespace VirtualRobot
 
         if (vColModels.size() == 0)
         {
-            VR_WARNING << "no internal data..." << endl;
+            VR_WARNING << "no internal data..." << std::endl;
             return false;
         }
 
@@ -435,8 +436,8 @@ namespace VirtualRobot
     bool CollisionChecker::checkCollision(SceneObjectPtr model1, SceneObjectPtr model2)
     {
         VR_ASSERT(model1 && model2);
-        RobotPtr r = boost::dynamic_pointer_cast<Robot>(model1);
-        RobotPtr r2 = boost::dynamic_pointer_cast<Robot>(model2);
+        RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
+        RobotPtr r2 = std::dynamic_pointer_cast<Robot>(model2);
 
         if (r && r2)
         {
@@ -479,7 +480,7 @@ namespace VirtualRobot
 
         if (vColModels1.size() == 0)
         {
-            VR_WARNING << "no internal data for " << modelSet->getName() << endl;
+            VR_WARNING << "no internal data for " << modelSet->getName() << std::endl;
             return false;
         }
 
@@ -496,10 +497,11 @@ namespace VirtualRobot
 
     bool CollisionChecker::checkCollision(CollisionModelPtr model1, CollisionModelPtr model2)
     {
-        VR_ASSERT(model1 && model2);
+        THROW_VR_EXCEPTION_IF(!model1, "model1 is null");
+        THROW_VR_EXCEPTION_IF(!model2, "model2 is null");
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == model2->getCollisionChecker(), "Collision models are linked to different Collision Checker instances");
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == shared_from_this(), "Collision models are linked to different Collision Checker instances");
-        VR_ASSERT(isInitialized());
+        THROW_VR_EXCEPTION_IF(!isInitialized(), "checker not initialized");
 
         return collisionCheckerImplementation->checkCollision(model1, model2);//, storeContact);
     }
@@ -514,12 +516,12 @@ namespace VirtualRobot
         }
         if (model1->getCollisionChecker() != model2->getCollisionChecker() || model1->getCollisionChecker()!=shared_from_this())
         {
-            VR_WARNING << "Could not go on, collision models are linked to different Collision Checker instances." << endl;
+            VR_WARNING << "Could not go on, collision models are linked to different Collision Checker instances." << std::endl;
             return false;
         }
         if (!isInitialized())
         {
-            VR_WARNING << "not initialized." << endl;
+            VR_WARNING << "not initialized." << std::endl;
             return false;
         }
         return collisionCheckerImplementation->getAllCollisonTriangles(model1,model2,storePairs);

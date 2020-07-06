@@ -10,7 +10,9 @@
 
 #include <VirtualRobot/Random.h>
 
+#include <boost/math/special_functions/fpclassify.hpp>
 
+#include <Eigen/Dense>
 #include <Eigen/Geometry>
 
 #define MIN_TO_ZERO (1e-6f)
@@ -18,6 +20,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     /*
     void MathTools::Quat2RPY(float *PosQuat, float *storeResult)
@@ -880,17 +884,17 @@ namespace VirtualRobot
 
         for (size_t i = 0; i < v.size(); i++)
         {
-            cout << v[i];
+            std::cout << v[i];
 
             if (i != v.size() - 1)
             {
-                cout << ",";
+                std::cout << ",";
             }
         }
 
         if (endline)
         {
-            cout << endl;
+            std::cout << std::endl;
         }
 
         std::cout << std::resetiosflags(std::ios::fixed);
@@ -904,17 +908,17 @@ namespace VirtualRobot
 
         for (int i = 0; i < v.rows(); i++)
         {
-            cout << v(i);
+            std::cout << v(i);
 
             if (i != v.rows() - 1)
             {
-                cout << ",";
+                std::cout << ",";
             }
         }
 
         if (endline)
         {
-            cout << endl;
+            std::cout << std::endl;
         }
 
         std::cout << std::resetiosflags(std::ios::fixed);
@@ -930,20 +934,20 @@ namespace VirtualRobot
         {
             for (int j = 0; j < m.cols(); j++)
             {
-                cout << m(i, j);
+                std::cout << m(i, j);
 
                 if (j != m.cols() - 1)
                 {
-                    cout << ",";
+                    std::cout << ",";
                 }
             }
 
-            cout << endl;
+            std::cout << std::endl;
         }
 
         if (endline)
         {
-            cout << endl;
+            std::cout << std::endl;
         }
 
         std::cout << std::resetiosflags(std::ios::fixed);
@@ -1070,11 +1074,11 @@ namespace VirtualRobot
 
                 if (!randomLinearlyIndependentVector(tmpBasisV, newBasisVector))
                 {
-                    VR_ERROR << "Could not find linearly independent basis vector?! " << endl;
+                    VR_ERROR << "Could not find linearly independent basis vector?! " << std::endl;
 
                     for (size_t i = 0; i < dim; i++)
                     {
-                        cout << "vec " << i << ":\n" << basis[i] << endl;
+                        std::cout << "vec " << i << ":\n" << basis[i] << std::endl;
                     }
 
                     return false;
@@ -1123,10 +1127,10 @@ namespace VirtualRobot
                 Eigen::VectorXf newBasisVector;
                 if (!randomLinearlyIndependentVector(tmpBasis,newBasisVector))
                 {
-                    VR_ERROR << "Could not find linearly independent basis vector?! " << endl;
+                    VR_ERROR << "Could not find linearly independent basis vector?! " << std::endl;
                     for (int i=0;i<dim;i++)
                     {
-                        cout << "vec " << i << ":\n" << basis[i] << endl;
+                        std::cout << "vec " << i << ":\n" << basis[i] << std::endl;
                     }
                     return false;
                 }
@@ -1230,7 +1234,7 @@ namespace VirtualRobot
 
             if (loop > 100)
             {
-                VR_ERROR << "Could not determine independent vector, aborting after 100 tries" << endl;
+                VR_ERROR << "Could not determine independent vector, aborting after 100 tries" << std::endl;
                 return false;
             }
         }
@@ -1893,7 +1897,7 @@ namespace VirtualRobot
 
         if (!ch || ch->vertices.size() == 0)
         {
-            VR_WARNING << "Null data..." << endl;
+            VR_WARNING << "Null data..." << std::endl;
             return c;
         }
 
@@ -1940,7 +1944,7 @@ namespace VirtualRobot
         double a0 = 2*acos((double)q.w / s1);
         double b0 = 2*acos((double)q.x / s2);
         if (std::abs(a0-b0) > 1e-8)
-            std::cout << "0: " << a0 << "!=" << b0 << endl;
+            std::cout << "0: " << a0 << "!=" << b0 << std::endl;
         res(0) = a0;
 
         s1 = sin((double)res(0) * 0.5);
@@ -1949,13 +1953,13 @@ namespace VirtualRobot
 
         if (std::abs(a-b) > 1e-8)
         {
-            std::cout << "1: " << a << "!=" << b << endl;
+            std::cout << "1: " << a << "!=" << b << std::endl;
             Eigen::Vector3f test1;
             test1 << (float)res(0) , float(a) , float(res(2));
             Quaternion q1 = hopf2quat(test1);
             if (std::abs(q1.w-q.w)<1e-6 && std::abs(q1.x-q.x)<1e-6 && std::abs(q1.y-q.y)<1e-6 && std::abs(q1.z-q.z)<1e-6)
             {
-                cout << "TEST 1 ok" << endl;
+                std::cout << "TEST 1 ok" << std::endl;
                 res(1) = a;
             } else
             {
@@ -1963,10 +1967,10 @@ namespace VirtualRobot
                 Quaternion q2 = hopf2quat(test1);
                 if (std::abs(q2.w-q.w)<1e-6 && std::abs(q2.x-q.x)<1e-6 && std::abs(q2.y-q.y)<1e-6 && std::abs(q2.z-q.z)<1e-6)
                 {
-                    cout << "TEST 2 ok" << endl;
+                    std::cout << "TEST 2 ok" << std::endl;
                     res(1) = b;
                 }
-                            cout << "TEST 1-4 failed!!!" << endl;
+                            std::cout << "TEST 1-4 failed!!!" << std::endl;
                         res(1) = a;
 
 
@@ -2142,6 +2146,117 @@ namespace VirtualRobot
         // (where sin(alpha) * |ab| = distance of b to |ac|)
         float area = 0.5f * sin_alpha * abNorm * acNorm;
         return area;
+    }
+
+    MathTools::OOBB::OOBB()
+    {
+        minBB.setZero();
+        maxBB.setZero();
+        pose.setIdentity();
+    }
+
+    MathTools::OOBB::OOBB(const Eigen::Vector3f& minLocal, const Eigen::Vector3f& maxLocal, const Eigen::Matrix4f& globalPose)
+    {
+        minBB = minLocal;
+        maxBB = maxLocal;
+        pose = globalPose;
+    }
+
+    std::vector<Eigen::Vector3f> MathTools::OOBB::getOOBBPoints() const
+    {
+        Eigen::Vector3f result[8];
+        std::vector<Eigen::Vector3f> result3;
+        result[0] << minBB(0), minBB(1), minBB(2);
+        result[1] << maxBB(0), minBB(1), minBB(2);
+        result[2] << minBB(0), maxBB(1), minBB(2);
+        result[3] << maxBB(0), maxBB(1), minBB(2);
+        result[4] << minBB(0), minBB(1), maxBB(2);
+        result[5] << maxBB(0), minBB(1), maxBB(2);
+        result[6] << minBB(0), maxBB(1), maxBB(2);
+        result[7] << maxBB(0), maxBB(1), maxBB(2);
+        Eigen::Matrix4f m;
+        m.setIdentity();
+
+        for (int i = 0; i < 8; i++)
+        {
+            m.block(0, 3, 3, 1) = result[i];
+            m = pose * m;
+            result3.push_back(m.block(0, 3, 3, 1));
+        }
+
+        return result3;
+    }
+
+    std::vector<MathTools::Segment> MathTools::OOBB::getSegments() const
+    {
+        std::vector<Eigen::Vector3f> oobbPoint = getOOBBPoints();
+        std::vector<Segment> result;
+
+        result.push_back(Segment(oobbPoint[0], oobbPoint[1]));
+        result.push_back(Segment(oobbPoint[0], oobbPoint[2]));
+        result.push_back(Segment(oobbPoint[2], oobbPoint[3]));
+        result.push_back(Segment(oobbPoint[1], oobbPoint[3]));
+
+        result.push_back(Segment(oobbPoint[4], oobbPoint[5]));
+        result.push_back(Segment(oobbPoint[4], oobbPoint[6]));
+        result.push_back(Segment(oobbPoint[5], oobbPoint[7]));
+        result.push_back(Segment(oobbPoint[6], oobbPoint[7]));
+
+        result.push_back(Segment(oobbPoint[2], oobbPoint[6]));
+        result.push_back(Segment(oobbPoint[0], oobbPoint[4]));
+        result.push_back(Segment(oobbPoint[1], oobbPoint[5]));
+        result.push_back(Segment(oobbPoint[3], oobbPoint[7]));
+
+        return result;
+    }
+
+    void MathTools::OOBB::changeCoordSystem(const Eigen::Matrix4f& newGlobalPose)
+    {
+        Eigen::Vector3f result[8];
+        std::vector<Eigen::Vector3f> result3;
+        result[0] << minBB(0), minBB(1), minBB(2);
+        result[1] << maxBB(0), minBB(1), minBB(2);
+        result[2] << minBB(0), maxBB(1), minBB(2);
+        result[3] << maxBB(0), maxBB(1), minBB(2);
+        result[4] << minBB(0), minBB(1), maxBB(2);
+        result[5] << maxBB(0), minBB(1), maxBB(2);
+        result[6] << minBB(0), maxBB(1), maxBB(2);
+        result[7] << maxBB(0), maxBB(1), maxBB(2);
+        Eigen::Matrix4f m;
+
+        for (std::size_t i = 0; i < 8; i++)
+        {
+            m.setIdentity();
+            m.block(0, 3, 3, 1) = result[i];
+            // to global
+            m = pose * m;
+            // to new coord system (local in new coord system)
+            m = newGlobalPose.inverse() * m;
+
+            result3.push_back(m.block(0, 3, 3, 1));
+        }
+
+        // now find min max values
+        minBB << FLT_MAX, FLT_MAX, FLT_MAX;
+        maxBB << -FLT_MAX, -FLT_MAX, -FLT_MAX;
+
+        for (std::uint8_t i = 0; i < 8; i++)
+        {
+            for (std::uint8_t j = 0; j < 3; j++)
+            {
+                if (result3[i](j) < minBB(j))
+                {
+                    minBB(j) = result3[i](j);
+                }
+
+                if (result3[i](j) > maxBB(j))
+                {
+                    maxBB(j) = result3[i](j);
+                }
+            }
+        }
+
+        pose = newGlobalPose;
     }
 
 

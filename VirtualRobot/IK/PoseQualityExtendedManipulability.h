@@ -186,7 +186,7 @@ namespace VirtualRobot
         std::vector<RobotNodePtr> joints;
     };
 
-    typedef boost::shared_ptr<PoseQualityExtendedManipulability> PoseQualityExtendedManipulabilityPtr;
+    typedef std::shared_ptr<PoseQualityExtendedManipulability> PoseQualityExtendedManipulabilityPtr;
 
 }
 

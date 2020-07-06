@@ -12,6 +12,8 @@
 #include <cfloat>
 #include <ctime>
 
+#include <Eigen/Geometry>
+
 using namespace std;
 
 namespace Saba
@@ -123,7 +125,7 @@ namespace Saba
 
         if (!startNode)
         {
-            VR_ERROR << ": not initialized correctly..." << endl;
+            VR_ERROR << ": not initialized correctly..." << std::endl;
             return false;
         }
 
@@ -179,11 +181,11 @@ namespace Saba
                     break;
 
                 case eGraspablePoseReached:
-                    cout << endl << __FUNCTION__ << " -- FOUND A GRASPABLE POSITION (but score is not high enough) -- " << endl;
+                    std::cout << endl << __FUNCTION__ << " -- FOUND A GRASPABLE POSITION (but score is not high enough) -- " << std::endl;
 
                     if (grasps.size() <= 0)
                     {
-                        cout << __FUNCTION__ << ": Error, no grasp results stored..." << endl;
+                        std::cout << __FUNCTION__ << ": Error, no grasp results stored..." << std::endl;
                     }
                     else
                     {
@@ -194,11 +196,11 @@ namespace Saba
                     break;
 
                 case eGoalReached:
-                    cout << endl << __FUNCTION__ << " -- FOUND GOAL PATH (CONNECTION TO GRASPING POSITION VIA INV JACOBIAN) -- " << endl;
+                    std::cout << endl << __FUNCTION__ << " -- FOUND GOAL PATH (CONNECTION TO GRASPING POSITION VIA INV JACOBIAN) -- " << std::endl;
 
                     if (grasps.size() <= 0)
                     {
-                        cout << __FUNCTION__ << ": Error, no grasp results stored..." << endl;
+                        std::cout << __FUNCTION__ << ": Error, no grasp results stored..." << std::endl;
                         stopSearch = true;
 
                     }
@@ -355,30 +357,30 @@ namespace Saba
 
     void GraspRrt::printPerformanceResults()
     {
-        cout << endl << "=================== RESULTS ===================" << endl;
+        std::cout << endl << "=================== RESULTS ===================" << std::endl;
         std::cout << "Needed " << performanceMeasure.setupTimeMS << " ms for setup." << std::endl;
         std::cout << "Needed " << performanceMeasure.planningTimeMS << " ms for the complete planning process." << std::endl;
 
         std::cout << "Needed " << performanceMeasure.rrtTimeMS << " ms for building up the RRT." << std::endl;
         std::cout << "Needed " << performanceMeasure.moveTowardGraspPosesTimeMS << " ms for moving toward the grasp goals." << std::endl;
         std::cout << "Needed " << performanceMeasure.scoreGraspTimeMS << " ms for scoring the grasps." << std::endl;
-        cout << "  Nr of grasp tries: " << performanceMeasure.numberOfMovementsTowardGraspPose << endl;
+        std::cout << "  Nr of grasp tries: " << performanceMeasure.numberOfMovementsTowardGraspPose << std::endl;
 
         if (performanceMeasure.numberOfMovementsTowardGraspPose > 0)
         {
-            cout << "  Avg Time for moving to grasping test position (without checking the grasp score):" << performanceMeasure.moveTowardGraspPosesTimeMS / (float)performanceMeasure.numberOfMovementsTowardGraspPose << " ms " << endl;
+            std::cout << "  Avg Time for moving to grasping test position (without checking the grasp score):" << performanceMeasure.moveTowardGraspPosesTimeMS / (float)performanceMeasure.numberOfMovementsTowardGraspPose << " ms " << std::endl;
         }
 
-        cout << "  Nr of grasp scorings: " << performanceMeasure.numberOfGraspScorings << endl;
+        std::cout << "  Nr of grasp scorings: " << performanceMeasure.numberOfGraspScorings << std::endl;
 
         if (performanceMeasure.numberOfGraspScorings > 0)
         {
-            cout << "  Avg Time for scoring a grasp:" << performanceMeasure.scoreGraspTimeMS / (float)performanceMeasure.numberOfGraspScorings << " ms " << endl;
+            std::cout << "  Avg Time for scoring a grasp:" << performanceMeasure.scoreGraspTimeMS / (float)performanceMeasure.numberOfGraspScorings << " ms " << std::endl;
         }
 
         std::cout << "Created " << tree->getNrOfNodes() << " nodes." << std::endl;
         std::cout << "Collision Checks: " << colChecksOverall << std::endl;
-        cout << "=================== RESULTS ===================" << endl << endl;
+        std::cout << "=================== RESULTS ===================" << endl << std::endl;
     }
 
     bool GraspRrt::setStart(const Eigen::VectorXf& startVec)
@@ -390,7 +392,7 @@ namespace Saba
 
         if (!Rrt::setStart(startVec) || !startNode)
         {
-            SABA_ERROR << " error initializing start node..." << endl;
+            SABA_ERROR << " error initializing start node..." << std::endl;
             return false;
         }
 
@@ -399,15 +401,15 @@ namespace Saba
 
         if (verbose)
         {
-            cout << "GraspRrt::setStart" << endl;
-            cout << "startVec:";
+            std::cout << "GraspRrt::setStart" << std::endl;
+            std::cout << "startVec:";
 
             for (unsigned int i = 0; i < dimension; i++)
             {
-                cout << startNode->configuration[i] << ",";
+                std::cout << startNode->configuration[i] << ",";
             }
 
-            cout <<  endl;
+            std::cout <<  std::endl;
         }
 
         return true;
@@ -457,13 +459,13 @@ namespace Saba
 
         if (l < 1e-8)
         {
-            cout << __FUNCTION__ << ":WARNING: length to target is small ... aborting " << endl;
+            std::cout << __FUNCTION__ << ":WARNING: length to target is small ... aborting " << std::endl;
             return false;
         }
 
         vecTarget_local.normalize();
         float fAngle = VirtualRobot::MathTools::getAngle(vecTarget_local, vecZ_local);
-        //cout << "Angle : " << fAngle << endl;
+        //cout << "Angle : " << fAngle << std::endl;
 
         // c) rotation axis (is orthogonal on vecZ_local and vecTarget_local)
         Eigen::Vector3f rotAxis_local;
@@ -497,7 +499,7 @@ namespace Saba
 
         if (!nnNode)
         {
-            cout << __FUNCTION__ << ": No good ranked node found..." << endl;
+            std::cout << __FUNCTION__ << ": No good ranked node found..." << std::endl;
             return eTrapped;
         }
 
@@ -511,8 +513,8 @@ namespace Saba
 
         //MathTools::Eigen::Matrix4f2PosQuat(goalPose,m_pTmpPose);
 
-        //cout << "GoalGrasp:" << grasp->GetName() << endl;
-        //cout << "pos:" << m_pTmpPose[0] << "," << m_pTmpPose[1] << "," << m_pTmpPose[2] << endl;
+        //cout << "GoalGrasp:" << grasp->GetName() << std::endl;
+        //cout << "pos:" << m_pTmpPose[0] << "," << m_pTmpPose[1] << "," << m_pTmpPose[2] << std::endl;
         GraspRrt::MoveArmResult res = moveTowardsGoal(nnNode, goalPose, 300);
         clock_t timeEnd = clock();
         float fMoveTime = ((float)(timeEnd - timeStart) / (float)CLOCKS_PER_SEC) * 1000.0f;
@@ -521,7 +523,7 @@ namespace Saba
 
         if (verbose)
         {
-            cout << __FUNCTION__ << " - Time for Connect To Grasp Position:" << fMoveTime << endl;
+            std::cout << __FUNCTION__ << " - Time for Connect To Grasp Position:" << fMoveTime << std::endl;
         }
 
         return res;
@@ -604,19 +606,19 @@ namespace Saba
 
                     if (fGraspScore >= graspQualityMinScore)
                     {
-                        cout << __FUNCTION__ << ": found valid grasp (score:" << fGraspScore << ")" << endl;
+                        std::cout << __FUNCTION__ << ": found valid grasp (score:" << fGraspScore << ")" << std::endl;
                         return eGoalReached;
                     }
                     else if (fGraspScore > 0.0f)
                     {
-                        cout << __FUNCTION__ << ": found valid grasp (score:" << fGraspScore << ")" << endl;
+                        std::cout << __FUNCTION__ << ": found valid grasp (score:" << fGraspScore << ")" << std::endl;
                         return eGraspablePoseReached;
                     }
                     else
                     {
                         if (verbose)
                         {
-                            cout << __FUNCTION__ << ": aborting moveArmToGraspPos, Collision but no graspable config " << endl;
+                            std::cout << __FUNCTION__ << ": aborting moveArmToGraspPos, Collision but no graspable config " << std::endl;
                         }
 
                         return eCollision_Environment;
@@ -633,7 +635,7 @@ namespace Saba
                     {
                         if (verbose)
                         {
-                            cout << __FUNCTION__ << ": aborting moveArmToGraspPos, checkPath fails, todo: check GRASP of last valid config.. " << endl;
+                            std::cout << __FUNCTION__ << ": aborting moveArmToGraspPos, checkPath fails, todo: check GRASP of last valid config.. " << std::endl;
                         }
 
                         return eCollision_Environment;
@@ -644,7 +646,7 @@ namespace Saba
 
                     if (!r)
                     {
-                        cout << __FUNCTION__ << ": aborting moveArmToGraspPos, appendPath failed?! " << endl;
+                        std::cout << __FUNCTION__ << ": aborting moveArmToGraspPos, appendPath failed?! " << std::endl;
                         return eError;
                     }
 
@@ -664,7 +666,7 @@ namespace Saba
                     {
                         if (verbose)
                         {
-                            cout << __FUNCTION__ << ": Stop no dist improvement: last: " << lastDist << ", dist: " << dist << endl;
+                            std::cout << __FUNCTION__ << ": Stop no dist improvement: last: " << lastDist << ", dist: " << dist << std::endl;
                         }
 
                         return eTrapped;
@@ -676,14 +678,14 @@ namespace Saba
                 case eJointBoundaryViolation:
                     if (verbose)
                     {
-                        cout << __FUNCTION__ << " Stopping: Joint limits reached " << endl;
+                        std::cout << __FUNCTION__ << " Stopping: Joint limits reached " << std::endl;
                     }
 
                     return eTrapped;
                     break;
 
                 default:
-                    cout << __FUNCTION__ << ": result nyi " << res << endl;
+                    std::cout << __FUNCTION__ << ": result nyi " << res << std::endl;
                     break;
             }
 
@@ -691,7 +693,7 @@ namespace Saba
             {
                 if (verbose)
                 {
-                    cout << __FUNCTION__ << " grasp goal position reached, dist: " << dist << endl;
+                    std::cout << __FUNCTION__ << " grasp goal position reached, dist: " << dist << std::endl;
                 }
 
                 // check grasp score of last valid config
@@ -699,19 +701,19 @@ namespace Saba
 
                 if (fGraspScore >= graspQualityMinScore)
                 {
-                    cout << __FUNCTION__ << ": found valid grasp (score:" << fGraspScore << ")" << endl;
+                    std::cout << __FUNCTION__ << ": found valid grasp (score:" << fGraspScore << ")" << std::endl;
                     return eGoalReached;
                 }
                 else if (fGraspScore > 0.0f)
                 {
-                    cout << __FUNCTION__ << ": found valid grasp (score:" << fGraspScore << ")" << endl;
+                    std::cout << __FUNCTION__ << ": found valid grasp (score:" << fGraspScore << ")" << std::endl;
                     return eGraspablePoseReached;
                 }
                 else
                 {
                     if (verbose)
                     {
-                        cout << __FUNCTION__ << ": aborting moveArmToGraspPos, goal pos reached but zero grasp score " << endl;
+                        std::cout << __FUNCTION__ << ": aborting moveArmToGraspPos, goal pos reached but zero grasp score " << std::endl;
                     }
 
                     return eTrapped;
@@ -721,7 +723,7 @@ namespace Saba
 
         if (verbose)
         {
-            cout << __FUNCTION__ << " max lops reached, dist: " << dist << endl;
+            std::cout << __FUNCTION__ << " max lops reached, dist: " << dist << std::endl;
         }
 
         return eTrapped;
@@ -734,8 +736,8 @@ namespace Saba
         float angle;
         //MathHelpers::quat2AxisAngle(&(pPosQuat[3]),axis,&angle);
         VirtualRobot::MathTools::eigen4f2axisangle(p, axis, angle);
-        //cout << "Delta in Workspace: pos:" << deltaX << "," << deltaY << "," << deltaZ << " Dist: " << distPos << endl;
-        //cout << "Delta in Workspace: ori:" << angle << endl;
+        //cout << "Delta in Workspace: pos:" << deltaX << "," << deltaY << "," << deltaZ << " Dist: " << distPos << std::endl;
+        //cout << "Delta in Workspace: ori:" << angle << std::endl;
         float distOri = fabs(angle);
 
         float factorPos = 1.0f;
@@ -783,21 +785,21 @@ namespace Saba
         deltaPose.block(0, 3, 3, 1) = goalPose.block(0, 3, 3, 1) - currentPose.block(0, 3, 3, 1);
 
         /*
-        cout << "Current pose:" << endl;
-        cout << currentPose << endl;;
-        cout << "goal pose:" << endl;
-        cout << goalPose << endl;;
-        cout << "delta pose:" << endl;
-        cout << deltaPose << endl;;
+        std::cout << "Current pose:" << std::endl;
+        std::cout << currentPose << std::endl;;
+        std::cout << "goal pose:" << std::endl;
+        std::cout << goalPose << std::endl;;
+        std::cout << "delta pose:" << std::endl;
+        std::cout << deltaPose << std::endl;;
         */
 
         limitWorkspaceStep(deltaPose);
         //MathTools::PosQuat2PosRPY(pDeltaPosQuat_Global,pDeltaPosRPY_Global);
 
         /*
-        cout << "delta pose (limit):" << endl;
-        cout << deltaPose << endl;;
-        cout << "---------------" << endl;
+        std::cout << "delta pose (limit):" << std::endl;
+        std::cout << deltaPose << std::endl;;
+        std::cout << "---------------" << std::endl;
         */
 
         return moveArmDiffKin(deltaPose, storeCSpaceConf);
@@ -924,15 +926,15 @@ namespace Saba
         {
             if (verbose)
             {
-                cout << __FUNCTION__ << ": Low number of contacts -> Zero Grasp Score " << endl;
-                cout << "Fingers: " ;
+                std::cout << __FUNCTION__ << ": Low number of contacts -> Zero Grasp Score " << std::endl;
+                std::cout << "Fingers: " ;
 
                 for (auto & contact : contacts)
                 {
-                    cout << contact.actor->getName() << ", ";
+                    std::cout << contact.actor->getName() << ", ";
                 }
 
-                cout << endl;
+                std::cout << std::endl;
             }
 
             clock_t timeEnd = clock();
@@ -954,9 +956,9 @@ namespace Saba
         fScore = graspQualityMeasure->getGraspQuality();
 
         bool isFC = graspQualityMeasure->isValid();
-        cout << __FUNCTION__ << ": Grasp Measure Score:" << fScore << endl;
-        cout << __FUNCTION__ << ": IsGraspForceClosure/isValid:" << isFC << endl;
-        cout << __FUNCTION__ << ": Nr of Contacts Score:" << fScoreContacts << endl;
+        std::cout << __FUNCTION__ << ": Grasp Measure Score:" << fScore << std::endl;
+        std::cout << __FUNCTION__ << ": IsGraspForceClosure/isValid:" << isFC << std::endl;
+        std::cout << __FUNCTION__ << ": Nr of Contacts Score:" << fScoreContacts << std::endl;
 
         if (!isFC)
         {
@@ -1001,7 +1003,7 @@ namespace Saba
         SbVec3f VecCOM;
         SoSeparator* pObjSep = m_pManipulationObject->GetIVModel();
         m_pManipulationObject->getCenterOfMass(VecCOM);
-        cout << "Center of Mass " << VecCOM[0] << "," << VecCOM[1] << "," << VecCOM[2] << endl;
+        std::cout << "Center of Mass " << VecCOM[0] << "," << VecCOM[1] << "," << VecCOM[2] << std::endl;
         SoGetBoundingBoxAction *objectBBAction = new SoGetBoundingBoxAction(SbViewportRegion(0, 0));
         SbBox3f objectBB;
         if (pObjSep==NULL)
@@ -1024,11 +1026,11 @@ namespace Saba
 
     void GraspRrt::printGraspInfo(GraspInfo& GrInfo)
     {
-        cout << "Grasp Info:" << endl;
-        cout << "   Distance to object: " << GrInfo.distanceToObject << endl;
-        cout << "   Grasp score: " << GrInfo.graspScore << endl;
-        cout << "   RRT Node ID: " << GrInfo.rrtNodeId << endl;
-        cout << "   Contacts stored: " << GrInfo.contacts.size() << endl;
+        std::cout << "Grasp Info:" << std::endl;
+        std::cout << "   Distance to object: " << GrInfo.distanceToObject << std::endl;
+        std::cout << "   Grasp score: " << GrInfo.graspScore << std::endl;
+        std::cout << "   RRT Node ID: " << GrInfo.rrtNodeId << std::endl;
+        std::cout << "   Contacts stored: " << GrInfo.contacts.size() << std::endl;
     }
 
 
@@ -1060,7 +1062,7 @@ namespace Saba
             std::cout << "   RNS: " << rns->getName() << std::endl;
         }
 
-        cout << "   Cart Step Size: " << cartSamplingPosStepSize << ", Orientational step size: " << cartSamplingPosStepSize << endl;
+        std::cout << "   Cart Step Size: " << cartSamplingPosStepSize << ", Orientational step size: " << cartSamplingPosStepSize << std::endl;
         Rrt::printConfig(true);
 
         if (!printOnlyParams)
@@ -1087,7 +1089,7 @@ namespace Saba
 
         if (nIndex < 0 || nIndex >= (int)grasps.size())
         {
-            cout << __FUNCTION__ << ": index out of range: " << nIndex << endl;
+            std::cout << __FUNCTION__ << ": index out of range: " << nIndex << std::endl;
             graspInfoMutex.unlock();
             return false;
         }

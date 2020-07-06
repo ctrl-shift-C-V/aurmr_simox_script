@@ -27,6 +27,9 @@
 
 using namespace VirtualRobot;
 
+using std::cout;
+using std::endl;
+
 BalanceConstraintOptimizationFunction::BalanceConstraintOptimizationFunction(const SupportPolygonPtr &supportPolygon) :
     supportPolygon(supportPolygon)
 {
@@ -162,7 +165,7 @@ void BalanceConstraint::initialize(const RobotPtr& robot, const RobotNodeSetPtr&
     supportPolygon.reset(new SupportPolygon(contactNodes));
     differnentiableStability.reset(new BalanceConstraintOptimizationFunction(supportPolygon));
 
-    VR_INFO << "COM height:" << height << endl;
+    VR_INFO << "COM height:" << height << std::endl;
     int dim = 2;
 
     if (considerCoMHeight)
@@ -202,7 +205,7 @@ void BalanceConstraint::updateSupportPolygon()
         goal.head(2) = supportPolygonCenter;
         goal(2) = height;
         comIK->setGoal(goal, tolerance);
-        //VR_INFO << "CoM Height of Inversed Robot set to:" << goal(2) << endl;
+        //VR_INFO << "CoM Height of Inversed Robot set to:" << goal(2) << std::endl;
     }
     else
     {

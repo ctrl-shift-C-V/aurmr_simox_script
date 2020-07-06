@@ -22,13 +22,18 @@
 */
 #pragma once
 
-#include "MathTools.h"
+#include <VirtualRobot/VirtualRobotImportExport.h>
 
 #include <Eigen/Core>
 #include <vector>
 
 namespace VirtualRobot
 {
+    namespace MathTools
+    {
+        struct Plane;
+    }
+
     class CollisionChecker;
     /*!
         An axis oriented bounding box.

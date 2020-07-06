@@ -2,6 +2,8 @@
 #include "CameraSensor.h"
 #include "CameraSensorFactory.h"
 
+#include <VirtualRobot/Visualization/VisualizationNode.h>
+
 namespace VirtualRobot
 {
 
@@ -24,7 +26,7 @@ namespace VirtualRobot
     {
         if (printDecoration)
         {
-            cout << "******** CameraSensor ********" << endl;
+            std::cout << "******** CameraSensor ********" << std::endl;
         }
 
         Sensor::print(printChildren, false);
@@ -52,18 +54,18 @@ namespace VirtualRobot
             pre += t;
         }
 
-        ss << pre << "<Sensor type='" << CameraSensorFactory::getName() << "' name='" << name << "'>" << endl;
+        ss << pre << "<Sensor type='" << CameraSensorFactory::getName() << "' name='" << name << "'>" << std::endl;
         std::string pre2 = pre + t;
-        ss << pre << "<Transform>" << endl;
+        ss << pre << "<Transform>" << std::endl;
         ss << BaseIO::toXML(rnTransformation, pre2);
-        ss << pre << "</Transform>" << endl;
+        ss << pre << "</Transform>" << std::endl;
 
         if (visualizationModel)
         {
             ss << visualizationModel->toXML(modelPath, tabs + 1);
         }
 
-        ss << pre << "</Sensor>" << endl;
+        ss << pre << "</Sensor>" << std::endl;
         return ss.str();
     }
 

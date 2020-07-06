@@ -1,14 +1,19 @@
 
 #include "RobotNodePrismatic.h"
 #include "../Robot.h"
+#include "../VirtualRobotException.h"
+#include "../CollisionDetection/CollisionModel.h"
+#include "../Visualization/VisualizationNode.h"
+
 #include <cmath>
 #include <algorithm>
 
 #include <Eigen/Geometry>
-#include "../VirtualRobotException.h"
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     RobotNodePrismatic::RobotNodePrismatic(RobotWeakPtr rob,
                                            const std::string& name,
@@ -135,26 +140,26 @@ namespace VirtualRobot
 
         if (printDecoration)
         {
-            cout << "******** RobotNodePrismatic ********" << endl;
+            std::cout << "******** RobotNodePrismatic ********" << std::endl;
         }
 
         RobotNode::print(false, false);
 
-        cout << "* jointTranslationDirection: " << jointTranslationDirection[0] << ", " << jointTranslationDirection[1] << "," << jointTranslationDirection[2] << endl;
-        cout << "* VisuScaling: ";
+        std::cout << "* jointTranslationDirection: " << jointTranslationDirection[0] << ", " << jointTranslationDirection[1] << "," << jointTranslationDirection[2] << std::endl;
+        std::cout << "* VisuScaling: ";
 
         if (visuScaling)
         {
-            cout << visuScaleFactor[0] << ", " << visuScaleFactor[1] << "," << visuScaleFactor[2] << endl;
+            std::cout << visuScaleFactor[0] << ", " << visuScaleFactor[1] << "," << visuScaleFactor[2] << std::endl;
         }
         else
         {
-            cout << "disabled" << endl;
+            std::cout << "disabled" << std::endl;
         }
 
         if (printDecoration)
         {
-            cout << "******** End RobotNodePrismatic ********" << endl;
+            std::cout << "******** End RobotNodePrismatic ********" << std::endl;
         }
 
 
@@ -162,13 +167,14 @@ namespace VirtualRobot
 
         if (printChildren)
         {
-            std::for_each(children.begin(), children.end(), boost::bind(&SceneObject::print, _1, true, true));
+            std::for_each(children.begin(), children.end(), std::bind(&SceneObject::print,
+                                                                      std::placeholders::_1, true, true));
         }
     }
 
     RobotNodePtr RobotNodePrismatic::_clone(const RobotPtr newRobot, const VisualizationNodePtr visualizationModel, const CollisionModelPtr collisionModel, CollisionCheckerPtr colChecker, float scaling)
     {
-        boost::shared_ptr<RobotNodePrismatic> result;
+        std::shared_ptr<RobotNodePrismatic> result;
         ReadLockPtr lock = getRobot()->getReadLock();
         Physics p = physics.scale(scaling);
 
@@ -261,22 +267,22 @@ namespace VirtualRobot
     std::string RobotNodePrismatic::_toXML(const std::string& /*modelPath*/)
     {
         std::stringstream ss;
-        ss << "\t\t<Joint type='prismatic'>" << endl;
-        ss << "\t\t\t<translationdirection x='" << jointTranslationDirection[0] << "' y='" << jointTranslationDirection[1] << "' z='" << jointTranslationDirection[2] << "'/>" << endl;
-        ss << "\t\t\t<limits lo='" << jointLimitLo << "' hi='" << jointLimitHi << "' units='mm'/>" << endl;
-        ss << "\t\t\t<MaxAcceleration value='" << maxAcceleration << "'/>" << endl;
-        ss << "\t\t\t<MaxVelocity value='" << maxVelocity << "'/>" << endl;
-        ss << "\t\t\t<MaxTorque value='" << maxTorque << "'/>" << endl;
+        ss << "\t\t<Joint type='prismatic'>" << std::endl;
+        ss << "\t\t\t<translationdirection x='" << jointTranslationDirection[0] << "' y='" << jointTranslationDirection[1] << "' z='" << jointTranslationDirection[2] << "'/>" << std::endl;
+        ss << "\t\t\t<limits lo='" << jointLimitLo << "' hi='" << jointLimitHi << "' units='mm'/>" << std::endl;
+        ss << "\t\t\t<MaxAcceleration value='" << maxAcceleration << "'/>" << std::endl;
+        ss << "\t\t\t<MaxVelocity value='" << maxVelocity << "'/>" << std::endl;
+        ss << "\t\t\t<MaxTorque value='" << maxTorque << "'/>" << std::endl;
 
         std::map< std::string, float >::iterator propIt = propagatedJointValues.begin();
 
         while (propIt != propagatedJointValues.end())
         {
-            ss << "\t\t\t<PropagateJointValue name='" << propIt->first << "' factor='" << propIt->second << "'/>" << endl;
+            ss << "\t\t\t<PropagateJointValue name='" << propIt->first << "' factor='" << propIt->second << "'/>" << std::endl;
             propIt++;
         }
 
-        ss << "\t\t</Joint>" << endl;
+        ss << "\t\t</Joint>" << std::endl;
         return ss.str();
     }
 

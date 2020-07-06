@@ -25,6 +25,8 @@
 
 #include <VirtualRobot/Robot.h>
 
+#include <Eigen/Dense>
+
 #include <iostream>
 
 using namespace VirtualRobot;

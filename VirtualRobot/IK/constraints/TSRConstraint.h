@@ -28,7 +28,7 @@
 
 namespace VirtualRobot
 {
-    class VIRTUAL_ROBOT_IMPORT_EXPORT TSRConstraint : public Constraint, public boost::enable_shared_from_this<TSRConstraint>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT TSRConstraint : public Constraint, public std::enable_shared_from_this<TSRConstraint>
     {
     public:
         TSRConstraint(const RobotPtr& robot, const RobotNodeSetPtr& nodeSet, const RobotNodePtr& eef,
@@ -74,6 +74,6 @@ namespace VirtualRobot
         Eigen::VectorXf scalingVec;
     };
 
-    typedef boost::shared_ptr<TSRConstraint> TSRConstraintPtr;
+    typedef std::shared_ptr<TSRConstraint> TSRConstraintPtr;
 }
 

@@ -44,7 +44,7 @@ namespace VirtualRobot
 #else
     typedef CollisionModelDummy InternalCollisionModel;
 #endif
-    typedef boost::shared_ptr< InternalCollisionModel > InternalCollisionModelPtr;
+    typedef std::shared_ptr< InternalCollisionModel > InternalCollisionModelPtr;
     class CollisionChecker;
 
     /*!
@@ -64,7 +64,11 @@ namespace VirtualRobot
             \param colChecker If not specified, the global singleton instance is used. Only useful, when parallel collision checks should be performed.
             \param id A user id.
         */
-        CollisionModel(const VisualizationNodePtr visu, const std::string& name = "", CollisionCheckerPtr colChecker = CollisionCheckerPtr(), int id = 666, float margin = 0.0f);
+        CollisionModel(const VisualizationNodePtr& visu, const std::string& name = "", CollisionCheckerPtr colChecker = CollisionCheckerPtr(), int id = 666, float margin = 0.0f);
+
+        CollisionModel(const TriMeshModelPtr& mesh);
+
+        CollisionModel(const TriMeshModel& mesh);
         /*!Standard Destructor
         */
         virtual ~CollisionModel();
@@ -104,12 +108,12 @@ namespace VirtualRobot
         }
 
 #if defined(VR_COLLISION_DETECTION_PQP)
-        const boost::shared_ptr< CollisionModelPQP >& getCollisionModelImplementation()
+        const std::shared_ptr< CollisionModelPQP >& getCollisionModelImplementation()
         {
             return collisionModelImplementation;
         }
 #else
-        const boost::shared_ptr< CollisionModelDummy >& getCollisionModelImplementation()
+        const std::shared_ptr< CollisionModelDummy >& getCollisionModelImplementation()
         {
             return collisionModelImplementation;
         }
@@ -179,7 +183,7 @@ namespace VirtualRobot
 
     protected:
         // internal constructor needed for flat copy of internal collision model
-        CollisionModel(VisualizationNodePtr visu, const std::string& name, CollisionCheckerPtr colChecker, int id, InternalCollisionModelPtr collisionModel);
+        CollisionModel(const VisualizationNodePtr& visu, const std::string& name, CollisionCheckerPtr colChecker, int id, InternalCollisionModelPtr collisionModel);
 
         //! delete all data
         void destroyData();
@@ -202,9 +206,9 @@ namespace VirtualRobot
 
 
 #if defined(VR_COLLISION_DETECTION_PQP)
-        boost::shared_ptr< CollisionModelPQP > collisionModelImplementation;
+        std::shared_ptr< CollisionModelPQP > collisionModelImplementation;
 #else
-        boost::shared_ptr< CollisionModelDummy > collisionModelImplementation;
+        std::shared_ptr< CollisionModelDummy > collisionModelImplementation;
 #endif
     };
 

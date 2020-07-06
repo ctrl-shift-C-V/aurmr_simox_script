@@ -8,6 +8,8 @@
 #include "Visualization.h"
 #include "VisualizationNode.h"
 
+#include <iostream>
+
 namespace VirtualRobot
 {
 

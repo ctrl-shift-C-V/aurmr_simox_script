@@ -95,7 +95,7 @@ namespace VirtualRobot
             }
 
 #ifdef VoxelTreeNDElement_DEBUG_OUTPUT
-            cout << "[" << level << "]";
+            std::cout << "[" << level << "]";
 #endif
 
             if (leaf || level >= (tree->getMaxLevels() - 1))
@@ -104,7 +104,7 @@ namespace VirtualRobot
                 delete entry;
                 entry = new T(e);
 #ifdef VoxelTreeNDElement_DEBUG_OUTPUT
-                cout << ":" << e;
+                std::cout << ":" << e;
 #endif
                 return true;
             }
@@ -391,7 +391,7 @@ namespace VirtualRobot
                 }
                 else
                 {
-                    VR_ERROR << "Undefined entry ?!" << endl;
+                    VR_ERROR << "Undefined entry ?!" << std::endl;
                     return false;
                 }
             }
@@ -435,7 +435,7 @@ namespace VirtualRobot
 
                         if (it == idElementMapping.end())
                         {
-                            VR_ERROR << "Could not find Element with id " << data.children[i] << endl;
+                            VR_ERROR << "Could not find Element with id " << data.children[i] << std::endl;
                             return false;
                         }
                         else
@@ -463,19 +463,19 @@ namespace VirtualRobot
 
             if (indx < 0)
             {
-                VR_ERROR << "Node do not cover this pos:" << endl;
+                VR_ERROR << "Node do not cover this pos:" << std::endl;
 
                 for (unsigned int i = 0; i < N; i++)
                 {
-                    cout << p[i] << ",";
+                    std::cout << p[i] << ",";
                 }
 
-                cout << endl;
+                std::cout << std::endl;
                 return NULL;
             }
 
 #ifdef VoxelTreeNDElement_DEBUG_OUTPUT
-            cout << "->" << indx << "->";
+            std::cout << "->" << indx << "->";
 #endif
 
             if (children[indx])
@@ -510,20 +510,20 @@ namespace VirtualRobot
         {
             if (!covers(p))
             {
-                VR_ERROR << "Node do not cover this pos" << endl;
+                VR_ERROR << "Node do not cover this pos" << std::endl;
 
                 for (unsigned int i = 0; i < N; i++)
                 {
-                    cout << p[i] << ",";
+                    std::cout << p[i] << ",";
                 }
 
-                cout << endl;
+                std::cout << std::endl;
                 return -1;
             }
 
             if (leaf)
             {
-                VR_ERROR << "Node is already a leaf node?!" << endl;
+                VR_ERROR << "Node is already a leaf node?!" << std::endl;
                 return -1;
             }
 
@@ -608,7 +608,7 @@ namespace VirtualRobot
             //this->maxLevels = maxLevels;
             if (level >= tree->getMaxLevels())
             {
-                VR_ERROR << "Exceeding maxLevels?!" << endl;
+                VR_ERROR << "Exceeding maxLevels?!" << std::endl;
             }
 
             if (!leaf)

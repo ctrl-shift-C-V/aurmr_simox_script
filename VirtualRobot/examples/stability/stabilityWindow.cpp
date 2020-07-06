@@ -39,7 +39,7 @@ float TIMER_MS = 30.0f;
 stabilityWindow::stabilityWindow(std::string& sRobotFile)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
 
     robotFile = sRobotFile;
     useColModel = false;
@@ -83,7 +83,7 @@ void stabilityWindow::setupUI()
 
     // setup
     m_pExViewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-    m_pExViewer->setAccumulationBuffer(true);
+    m_pExViewer->setAccumulationBuffer(false);
 
     m_pExViewer->setAntialiasing(true, 4);
 
@@ -375,12 +375,12 @@ void stabilityWindow::updateRNSBox()
     {
         //if (allRNS[i]->isKinematicChain())
         //{
-        //VR_INFO << " RNS <" << allRNS[i]->getName() << "> is a valid kinematic chain" << endl;
+        //VR_INFO << " RNS <" << allRNS[i]->getName() << "> is a valid kinematic chain" << std::endl;
         robotNodeSets.push_back(i);
         UI.comboBoxRNS->addItem(QString(i->getName().c_str()));
         /*} else
         {
-            VR_INFO << " RNS <" << allRNS[i]->getName() << "> is not a valid kinematic chain" << endl;
+            VR_INFO << " RNS <" << allRNS[i]->getName() << "> is not a valid kinematic chain" << std::endl;
         }*/
     }
 
@@ -397,7 +397,7 @@ void stabilityWindow::updateRNSBox()
 void stabilityWindow::selectRNS(int nr)
 {
     currentRobotNodeSet.reset();
-    cout << "Selecting RNS nr " << nr << endl;
+    std::cout << "Selecting RNS nr " << nr << std::endl;
 
     if (nr <= 0)
     {
@@ -491,7 +491,7 @@ void stabilityWindow::jointValueChanged(int pos)
 void stabilityWindow::selectJoint(int nr)
 {
     currentRobotNode.reset();
-    cout << "Selecting Joint nr " << nr << endl;
+    std::cout << "Selecting Joint nr " << nr << std::endl;
 
     if (nr < 0 || nr >= (int)currentRobotNodes.size())
     {
@@ -532,7 +532,7 @@ void stabilityWindow::selectRobot()
 void stabilityWindow::loadRobot()
 {
     robotVisuSep->removeAllChildren();
-    cout << "Loading Scene from " << robotFile << endl;
+    std::cout << "Loading Scene from " << robotFile << std::endl;
 
     try
     {
@@ -540,14 +540,14 @@ void stabilityWindow::loadRobot()
     }
     catch (VirtualRobotException& e)
     {
-        cout << " ERROR while creating robot" << endl;
-        cout << e.what();
+        std::cout << " ERROR while creating robot" << std::endl;
+        std::cout << e.what();
         return;
     }
 
     if (!robot)
     {
-        cout << " ERROR while creating robot" << endl;
+        std::cout << " ERROR while creating robot" << std::endl;
         return;
     }
 

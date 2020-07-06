@@ -113,12 +113,12 @@ namespace SimDynamics
         virtual void setGlobalPose(const Eigen::Matrix4f& gp);
 
         //! If set, all actions are protected with this mutex
-        virtual void setMutex(boost::shared_ptr <boost::recursive_mutex> engineMutexPtr);
+        virtual void setMutex(std::shared_ptr <std::recursive_mutex> engineMutexPtr);
 
         //! can be used to access the internal controllers
         std::map<VirtualRobot::RobotNodePtr, VelocityMotorController>& getControllers();
 
-        typedef boost::shared_ptr< boost::recursive_mutex::scoped_lock > MutexLockPtr;
+        typedef std::shared_ptr< std::scoped_lock<std::recursive_mutex> > MutexLockPtr;
         /*!
             This lock can be used to protect data access. It locks the mutex until deletion.
             If no mutex was specified, an empty lock will be returned which does not protect the engine calls (this is the standard behavior).
@@ -183,10 +183,10 @@ namespace SimDynamics
         float PID_i = 0.f;
         float PID_d = 0.f;
 
-        boost::shared_ptr <boost::recursive_mutex> engineMutexPtr;
+        std::shared_ptr <std::recursive_mutex> engineMutexPtr;
     };
 
-    typedef boost::shared_ptr<DynamicsRobot> DynamicsRobotPtr;
+    typedef std::shared_ptr<DynamicsRobot> DynamicsRobotPtr;
 
 } // namespace SimDynamics
 

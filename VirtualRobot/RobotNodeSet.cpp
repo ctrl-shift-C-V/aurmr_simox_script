@@ -6,10 +6,14 @@
 #include "VirtualRobotException.h"
 #include "CollisionDetection/CollisionChecker.h"
 
+#include <boost/mem_fn.hpp>
+
 #include <algorithm>
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     RobotNodeSet::RobotNodeSet(const std::string& name,
                                RobotWeakPtr r,
@@ -41,14 +45,14 @@ namespace VirtualRobot
             {
                 VR_WARNING << "RobotNodeSet " << name << " initialized with invalid kinematic root '"
                            << oldRootName << "': Falling back to robot root node '"
-                           <<  this->kinematicRoot->getName() << "'" << endl;
+                           <<  this->kinematicRoot->getName() << "'" << std::endl;
             }
             else
             {
                 std::stringstream str;
                 str << "RobotNodeSet " << name << " initialized with invalid kinematic root '"
                     << oldRootName  << "': Can't fall back to robot root node (it is null)";
-                VR_ERROR << str.str() << endl;
+                VR_ERROR << str.str() << std::endl;
                 throw std::invalid_argument{str.str()};
             }
         }
@@ -62,13 +66,13 @@ namespace VirtualRobot
         // now, the objects are stored in the parent's (SceneObjectSet) data structure, so that the methods of SceneObjectSet do work
         for (const auto& robotNode : robotNodes)
         {
-            SceneObjectPtr cm = boost::dynamic_pointer_cast<SceneObject>(robotNode);
+            SceneObjectPtr cm = std::dynamic_pointer_cast<SceneObject>(robotNode);
 
             if (cm)
             {
                 if (colChecker != cm->getCollisionChecker())
                 {
-                    VR_WARNING << "col model of " << robotNode->getName() << " belongs to different instance of collision checker, in: " << getName().c_str() << endl;
+                    VR_WARNING << "col model of " << robotNode->getName() << " belongs to different instance of collision checker, in: " << getName().c_str() << std::endl;
                 }
                 else
                 {
@@ -91,7 +95,7 @@ namespace VirtualRobot
 
         if (robotNodeNames.empty())
         {
-            VR_WARNING << " No robot nodes in set '" << name << "'..." << endl;
+            VR_WARNING << " No robot nodes in set '" << name << "'..." << std::endl;
         }
         else
         {
@@ -151,7 +155,7 @@ namespace VirtualRobot
 
         if (robotNodes.empty() || !robotNodes[0])
         {
-            VR_WARNING << " No robot nodes in set '" << name << "'..." << endl;
+            VR_WARNING << " No robot nodes in set '" << name << "'..." << std::endl;
         }
         else
         {
@@ -314,40 +318,40 @@ namespace VirtualRobot
 
     void RobotNodeSet::print() const
     {
-        cout << "  Robot Node Set <" << name << ">" << endl;
-        cout << "  Root node: ";
+        std::cout << "  Robot Node Set <" << name << ">" << std::endl;
+        std::cout << "  Root node: ";
 
         if (kinematicRoot)
         {
-            cout << kinematicRoot->getName() << endl;
+            std::cout << kinematicRoot->getName() << std::endl;
         }
         else
         {
-            cout << "<not set>" << endl;
+            std::cout << "<not set>" << std::endl;
         }
 
-        cout << "  TCP node: ";
+        std::cout << "  TCP node: ";
 
         if (tcp)
         {
-            cout << tcp->getName() << endl;
+            std::cout << tcp->getName() << std::endl;
         }
         else
         {
-            cout << "<not set>" << endl;
+            std::cout << "<not set>" << std::endl;
         }
 
         for (unsigned int i = 0; i < robotNodes.size(); i++)
         {
-            cout << "  Node " << i << ": ";
+            std::cout << "  Node " << i << ": ";
 
             if (robotNodes[i])
             {
-                cout << robotNodes[i]->getName() << endl;
+                std::cout << robotNodes[i]->getName() << std::endl;
             }
             else
             {
-                cout << "<not set>" << endl;
+                std::cout << "<not set>" << std::endl;
             }
         }
     }
@@ -716,7 +720,7 @@ namespace VirtualRobot
 
         if (!res && verbose)
         {
-            VR_INFO << "RobotNodeSet: " << getName() << ": joint limits are violated" << endl;
+            VR_INFO << "RobotNodeSet: " << getName() << ": joint limits are violated" << std::endl;
         }
 
         return res;

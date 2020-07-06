@@ -7,6 +7,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     WorkspaceDataArray::WorkspaceDataArray(unsigned int size1, unsigned int size2, unsigned int size3,
                                            unsigned int size4, unsigned int size5, unsigned int size6, bool adjustOnOverflow)
@@ -26,7 +28,7 @@ namespace VirtualRobot
 
         if (sizeRot > UINT_MAX || sizeTr > UINT_MAX)
         {
-            VR_ERROR << "Could not assign " << sizeRot << " bytes of memory (>UINT_MAX). Reduce size of reachability space..." << endl;
+            VR_ERROR << "Could not assign " << sizeRot << " bytes of memory (>UINT_MAX). Reduce size of reachability space..." << std::endl;
         }
 
         try
@@ -46,12 +48,12 @@ namespace VirtualRobot
         }
         catch (const std::exception& e)
         {
-            VR_ERROR << "Exception: " << e.what() << endl << "Could not assign " << sizeRot << " bytes of memory. Reduce size of reachability space..." << endl;
+            VR_ERROR << "Exception: " << e.what() << endl << "Could not assign " << sizeRot << " bytes of memory. Reduce size of reachability space..." << std::endl;
             throw;
         }
         catch (...)
         {
-            VR_ERROR << "Could not assign " << sizeRot << " bytes of memory. Reduce size of reachability space..." << endl;
+            VR_ERROR << "Could not assign " << sizeRot << " bytes of memory. Reduce size of reachability space..." << std::endl;
             throw;
         }
 
@@ -79,7 +81,7 @@ namespace VirtualRobot
 
         if (sizeRot > UINT_MAX || sizeTr > UINT_MAX)
         {
-            VR_ERROR << "Could not assign " << sizeRot << " bytes of memory (>UINT_MAX). Reduce size of reachability space..." << endl;
+            VR_ERROR << "Could not assign " << sizeRot << " bytes of memory (>UINT_MAX). Reduce size of reachability space..." << std::endl;
         }
 
         try
@@ -109,12 +111,12 @@ namespace VirtualRobot
         }
         catch (const std::exception& e)
         {
-            VR_ERROR << "Exception: " << e.what() << endl << "Could not assign " << sizeRot << " bytes of memory. Reduce size of reachability space..." << endl;
+            VR_ERROR << "Exception: " << e.what() << endl << "Could not assign " << sizeRot << " bytes of memory. Reduce size of reachability space..." << std::endl;
             throw;
         }
         catch (...)
         {
-            VR_ERROR << "Could not assign " << sizeRot << " bytes of memory. Reduce size of reachability space..." << endl;
+            VR_ERROR << "Could not assign " << sizeRot << " bytes of memory. Reduce size of reachability space..." << std::endl;
             throw;
         }
 
@@ -560,7 +562,7 @@ namespace VirtualRobot
 
                     if (!bzip2->write(dataBlock, blockSize))
                     {
-                        VR_ERROR << "Error writing to file.." << endl;
+                        VR_ERROR << "Error writing to file.." << std::endl;
                         bzip2->close();
                         file.close();
                         return false;

@@ -9,6 +9,8 @@
 #include <random>
 #include <chrono>
 
+#include <Eigen/Geometry>
+
 #include <VirtualRobot/VirtualRobotTest.h>
 #include <VirtualRobot/CollisionDetection/PQP/PQP++/OBB_Disjoint.h>
 #include <VirtualRobot/MathTools.h>

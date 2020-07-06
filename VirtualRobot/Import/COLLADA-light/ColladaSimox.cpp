@@ -1,18 +1,23 @@
 
+#include "ColladaSimox.h"
+
 #include <VirtualRobot/VirtualRobotException.h>
 #include <VirtualRobot/Nodes/RobotNodePrismatic.h>
 #include <VirtualRobot/Nodes/RobotNodeRevolute.h>
 #include <VirtualRobot/RobotNodeSet.h>
+#include <VirtualRobot/CollisionDetection/CollisionModel.h>
 #include <VirtualRobot/Visualization/CoinVisualization/CoinVisualizationNode.h>
-
-#include "inventor.h"
-#include "ColladaSimox.h"
+#include <VirtualRobot/Robot.h>
+#include <VirtualRobot/RobotFactory.h>
+#include <VirtualRobot/Nodes/RobotNodeFixedFactory.h>
+#include <VirtualRobot/Nodes/RobotNodeRevoluteFactory.h>
+#include <VirtualRobot/Nodes/RobotNodePrismaticFactory.h>
+#include <VirtualRobot/Nodes/PositionSensor.h>
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 
 using namespace std;
-//using namespace VirtualRobot;
 
 #define DBG_NODE(NAME) (this->name.compare(NAME)==0)
 
@@ -22,7 +27,7 @@ namespace Collada
     Eigen::Matrix4f getTransform(pugi::xml_node node, float scaleFactor = 1.0)
     {
         Eigen::Transform<float, 3, Eigen::Affine> t;
-        std::vector<float> v = Collada::getVector<float>(node.child_value());
+        std::vector<float> v = Collada::getFloatVector(node.child_value());
 
         if (std::string("rotate").compare(node.name()) == 0)
         {
@@ -45,7 +50,7 @@ namespace Collada
 
     Eigen::Vector3f getVector3f(pugi::xml_node node)
     {
-        vector<float> v = getVector<float>(node.child_value());
+        vector<float> v = getFloatVector(node.child_value());
         return Eigen::Vector3f(v[0], v[1], v[2]);
     }
 
@@ -69,7 +74,7 @@ namespace Collada
         std::vector<VirtualRobot::RobotNodePtr> simoxRevoluteJoints;
         std::vector<VirtualRobot::RobotNodePtr> simoxPrismaticJoints;
 
-        BOOST_FOREACH(ColladaRobotNodePtr node, this->robotNodeSet)
+        for (ColladaRobotNodePtr node : this->robotNodeSet)
         {
             simoxRobotNodeSet.push_back(dynamic_pointer_cast<ColladaSimoxRobotNode>(node)->simoxRobotNode);
 
@@ -84,7 +89,7 @@ namespace Collada
             }
 
             vector<string> children;
-            BOOST_FOREACH(ColladaRobotNodePtr child, node->children)
+            for (ColladaRobotNodePtr child : node->children)
             children.push_back(child->name);
 
             childrenMap[dynamic_pointer_cast<ColladaSimoxRobotNode>(node)->simoxRobotNode] = children;
@@ -109,8 +114,9 @@ namespace Collada
         }
 
 
-        BOOST_FOREACH(ColladaRobotNodePtr node, this->robotNodeSet)
+        for (ColladaRobotNodePtr const& node : this->robotNodeSet)
         {
+            (void) node;
             //dynamic_pointer_cast<ColladaSimoxRobotNode>(node)->simoxRobotNode->setJointValue(node->value);
         }
     }
@@ -139,41 +145,41 @@ namespace Collada
     {
         VirtualRobot::RobotNodeFactoryPtr revoluteNodeFactory = VirtualRobot::RobotNodeFactory::fromName(VirtualRobot::RobotNodeRevoluteFactory::getName(), NULL);
         VirtualRobot::RobotNodeFactoryPtr prismaticNodeFactory = VirtualRobot::RobotNodeFactory::fromName(VirtualRobot::RobotNodePrismaticFactory::getName(), NULL);
-        float jointLimitLow = boost::lexical_cast<float>(this->kinematics_info.select_single_node("limits/min/float").node().child_value());
-        float jointLimitHigh = boost::lexical_cast<float>(this->kinematics_info.select_single_node("limits/max/float").node().child_value());
-        float acceleration = boost::lexical_cast<float>(this->motion_info.select_single_node("acceleration/float").node().child_value());
-        float torque = boost::lexical_cast<float>(this->motion_info.select_single_node("jerk/float").node().child_value());
-        float velocity = boost::lexical_cast<float>(this->motion_info.select_single_node("speed/float").node().child_value());
-        float deceleration = boost::lexical_cast<float>(this->motion_info.select_single_node("deceleration/float").node().child_value());
+        float jointLimitLow = std::stof(this->kinematics_info.select_single_node("limits/min/float").node().child_value());
+        float jointLimitHigh = std::stof(this->kinematics_info.select_single_node("limits/max/float").node().child_value());
+        float acceleration = std::stof(this->motion_info.select_single_node("acceleration/float").node().child_value());
+        float torque = std::stof(this->motion_info.select_single_node("jerk/float").node().child_value());
+        float velocity = std::stof(this->motion_info.select_single_node("speed/float").node().child_value());
+        float deceleration = std::stof(this->motion_info.select_single_node("deceleration/float").node().child_value());
         Eigen::Vector3f axis = getVector3f(this->joint_axis.child("axis"));
         float jointOffset = 0.0;
         Eigen::Matrix4f preJointTransformation = Eigen::Matrix4f::Identity();
 
 
-        BOOST_FOREACH(pugi::xml_node node, this->preJoint)
+        for (pugi::xml_node node : this->preJoint)
         {
             preJointTransformation = preJointTransformation * getTransform(node, scaleFactor);
         }
 
         if (DBG_NODE("RRKnee_Joint"))
         {
-            cout << "Node: " << this->name;
-            cout << jointLimitLow << "," << jointLimitHigh << "," << acceleration << "," << deceleration << "," << velocity << "," << torque << endl;
-            cout << this->joint_axis.name() << endl;
+            std::cout << "Node: " << this->name;
+            std::cout << jointLimitLow << "," << jointLimitHigh << "," << acceleration << "," << deceleration << "," << velocity << "," << torque << std::endl;
+            std::cout << this->joint_axis.name() << std::endl;
             preJointTransformation = Eigen::Matrix4f::Identity();
-            BOOST_FOREACH(pugi::xml_node node, this->preJoint)
+            for (pugi::xml_node node : this->preJoint)
             {
-                cout << getTransform(node) << endl;
+                std::cout << getTransform(node) << std::endl;
                 preJointTransformation = preJointTransformation * getTransform(node, scaleFactor);
             }
-            cout << preJointTransformation << endl;
+            std::cout << preJointTransformation << std::endl;
         }
 
         /* Compute bounding box for debug reasons */
         //this->visualizeBoundingBox();
 
         VirtualRobot::VisualizationNodePtr visualizationNode(new VirtualRobot::CoinVisualizationNode(this->visualization));
-        //cout << "node " << this->name << "#Faces" << visualizationNode->getNumFaces() << endl;
+        //cout << "node " << this->name << "#Faces" << visualizationNode->getNumFaces() << std::endl;
         VirtualRobot::CollisionModelPtr collisionModel; //(new VirtualRobot::CollisionModel(visualizationNode));
 
         // Check for rigid body dynamics and collision models.
@@ -183,9 +189,9 @@ namespace Collada
         {
             //assert(rigidBodies.size()==1);
             pugi::xml_node technique = rigidBodies[0].child("technique_common");
-            float mass = boost::lexical_cast<float>(technique.child("mass").child_value());
+            float mass = std::stof(technique.child("mass").child_value());
             Eigen::Matrix4f massFrameTransformation = Eigen::Matrix4f::Identity();
-            BOOST_FOREACH(pugi::xpath_node trafo, technique.select_nodes(".//mass_frame/*"))
+            for (pugi::xpath_node trafo : technique.select_nodes(".//mass_frame/*"))
             {
                 massFrameTransformation = massFrameTransformation * getTransform(trafo.node(), 1000.0f);
             }
@@ -195,7 +201,7 @@ namespace Collada
 
             VirtualRobot::VisualizationNodePtr collisionNode(new VirtualRobot::CoinVisualizationNode(this->collisionModel));
             collisionModel.reset(new VirtualRobot::CollisionModel(collisionNode));
-            //            cout << "Physics : " << name << endl << massFrameTransformation << endl << scaleFactor << massFrameTransformation.block<3,3>(0,0)*inertia << endl << mass << endl << com << endl;
+            //            std::cout << "Physics : " << name << endl << massFrameTransformation << endl << scaleFactor << massFrameTransformation.block<3,3>(0,0)*inertia << endl << mass << endl << com << std::endl;
 
             physics.comLocation = VirtualRobot::SceneObject::Physics::eCustom;
             physics.localCoM = com;
@@ -204,7 +210,7 @@ namespace Collada
 
             if (this->name.compare("RRKnee_joint") == 0)
             {
-                cout << "Physics RRKnee_Joint: " << massFrameTransformation << endl << scaleFactor << massFrameTransformation.block<3, 3>(0, 0)*inertia << endl << mass << endl << com << endl;
+                std::cout << "Physics RRKnee_Joint: " << massFrameTransformation << endl << scaleFactor << massFrameTransformation.block<3, 3>(0, 0)*inertia << endl << mass << endl << com << std::endl;
 
             }
         }
@@ -227,15 +233,15 @@ namespace Collada
 
         if (!this->simoxRobotNode)
         {
-            cout << "Node " << this->name << " not Created" << endl;
+            std::cout << "Node " << this->name << " not Created" << std::endl;
         }
 
 #ifdef COLLADA_IMPORT_USE_SENSORS
-        BOOST_FOREACH(pugi::xml_node sensor, this->sensors)
+        for (pugi::xml_node sensor : this->sensors)
         {
             string sensorName = sensor.attribute("name").value();
             Eigen::Matrix4f sensorTransformation = Eigen::Matrix4f::Identity();
-            BOOST_FOREACH(pugi::xpath_node trafo, sensor.select_nodes(".//frame_origin/*"))
+            for (pugi::xpath_node trafo : sensor.select_nodes(".//frame_origin/*"))
             {
                 sensorTransformation = sensorTransformation * getTransform(trafo.node(), scaleFactor);
             }

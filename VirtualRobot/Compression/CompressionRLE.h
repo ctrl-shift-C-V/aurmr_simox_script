@@ -26,7 +26,7 @@
 
 #include "../VirtualRobot.h"
 
-
+#include <mutex>
 
 namespace VirtualRobot
 {
@@ -58,7 +58,7 @@ namespace VirtualRobot
         static void _RLE_WriteRep(unsigned char* out, unsigned int* outpos, unsigned char marker, unsigned char symbol, unsigned int count);
         static void _RLE_WriteNonRep(unsigned char* out, unsigned int* outpos, unsigned char marker, unsigned char symbol);
 
-        static boost::mutex mutex;
+        static std::mutex mutex;
     };
 
 } // namespace VirtualRobot

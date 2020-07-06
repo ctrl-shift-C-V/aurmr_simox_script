@@ -131,7 +131,7 @@ namespace GraspStudio
 
         if (verbose)
         {
-            VR_INFO << "Processing object with " << tm->faces.size() << " triangles" << endl;
+            VR_INFO << "Processing object with " << tm->faces.size() << " triangles" << std::endl;
         }
 
         // first create new object

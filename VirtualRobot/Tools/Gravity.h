@@ -25,6 +25,9 @@
 
 #include "../VirtualRobot.h"
 
+#include <string>
+#include <map>
+
 namespace VirtualRobot
 {
     class Gravity
@@ -45,8 +48,8 @@ namespace VirtualRobot
         std::map<std::string, float> getMasses();
     protected:
         struct GravityData;
-        typedef boost::shared_ptr<GravityData> GravityDataPtr;
-        struct GravityData : boost::enable_shared_from_this<GravityData>
+        typedef std::shared_ptr<GravityData> GravityDataPtr;
+        struct GravityData : std::enable_shared_from_this<GravityData>
         {
             GravityData();
             static GravityDataPtr create(SceneObjectPtr node, const std::vector<VirtualRobot::RobotNodePtr> &joints, const std::vector<VirtualRobot::RobotNodePtr> &bodies, std::vector<GravityDataPtr> &dataVec);
@@ -74,7 +77,7 @@ namespace VirtualRobot
         std::vector<VirtualRobot::RobotNodePtr> nodesBodies;
     };
 
-    typedef boost::shared_ptr<Gravity> GravityPtr;
+    typedef std::shared_ptr<Gravity> GravityPtr;
 
 
 }

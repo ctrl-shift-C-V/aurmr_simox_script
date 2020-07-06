@@ -9,6 +9,9 @@
 #include <VirtualRobot/VirtualRobotTest.h>
 #include <VirtualRobot/MathTools.h>
 #include <VirtualRobot/VirtualRobotException.h>
+
+#include <Eigen/Geometry>
+
 #include <string>
 
 #define M_PIf (static_cast<float>(M_PI))

@@ -35,7 +35,7 @@ namespace math
         Array3D(int size) :
             size(size)
         {
-            data = boost::shared_ptr<std::vector<T>>(new std::vector<T>);
+            data = std::shared_ptr<std::vector<T>>(new std::vector<T>);
             data->resize(size*size*size);
         }
 
@@ -68,8 +68,7 @@ namespace math
         }
 
     private:
-        boost::shared_ptr<std::vector<T>> data;
-        //std::vector<T> data;
+        std::shared_ptr<std::vector<T>> data;
         int size;
     };
 }

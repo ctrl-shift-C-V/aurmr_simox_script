@@ -5,6 +5,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     ForceTorqueSensor::ForceTorqueSensor(RobotNodeWeakPtr robotNode,
                                          const std::string& name,
@@ -52,7 +54,7 @@ namespace VirtualRobot
     {
         if (printDecoration)
         {
-            cout << "******** ForceTorqueSensor ********" << endl;
+            std::cout << "******** ForceTorqueSensor ********" << std::endl;
         }
 
         Sensor::print(printChildren, false);
@@ -81,14 +83,14 @@ namespace VirtualRobot
             pre += t;
         }
 
-        ss << pre << "<Sensor type='" << ForceTorqueSensorFactory::getName() << "' name='" << name << "'>" << endl;
+        ss << pre << "<Sensor type='" << ForceTorqueSensorFactory::getName() << "' name='" << name << "'>" << std::endl;
         std::string pre2 = pre + t;
-        ss << pre << "<Transform>" << endl;
+        ss << pre << "<Transform>" << std::endl;
         ss << BaseIO::toXML(rnTransformation, pre2);
-        ss << pre << "</Transform>" << endl;
+        ss << pre << "</Transform>" << std::endl;
 
 
-        ss << pre << "</Sensor>" << endl;
+        ss << pre << "</Sensor>" << std::endl;
         return ss.str();
     }
 

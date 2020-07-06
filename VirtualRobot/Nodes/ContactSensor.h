@@ -28,7 +28,7 @@ namespace VirtualRobot
 {
 
     class ContactSensor;
-    typedef boost::shared_ptr<ContactSensor> ContactSensorPtr;
+    typedef std::shared_ptr<ContactSensor> ContactSensorPtr;
 
     /*!
      *  This ia a contact sensor that reports all contact points with other objects.

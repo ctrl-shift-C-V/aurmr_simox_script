@@ -37,9 +37,9 @@ namespace VirtualRobot
         static Eigen::Matrix4f getTransformation(std::vector<float>& trafo, float scaling);
         static Eigen::Matrix4f getTransformation(std::vector<std::vector<float> >& trafos, float scaling);
         static Eigen::Vector3f getAxis(boost::shared_ptr<ColladaParser::NodeData> colladaNode);
-        static boost::shared_ptr<VirtualRobot::TriMeshModel> getMesh(boost::shared_ptr<ColladaParser::NodeData> colladaNode, const Eigen::Matrix4f& modelTrafo, float scaling);
-        static bool addSceneGraph(boost::shared_ptr<VirtualRobot::TriMeshModel> triMesh, boost::shared_ptr<ColladaParser::SceneGraph> sceneGraph, const Eigen::Matrix4f& modelTrafo, float scaling);
-        static bool addGeometry(boost::shared_ptr<VirtualRobot::TriMeshModel> triMesh, Eigen::Matrix4f& preModelTrafo, ColladaParser::SceneGraph::GeometryType& geom, float scaling);
+        static VirtualRobot::TriMeshModelPtr getMesh(boost::shared_ptr<ColladaParser::NodeData> colladaNode, const Eigen::Matrix4f& modelTrafo, float scaling);
+        static bool addSceneGraph(VirtualRobot::TriMeshModelPtr triMesh, boost::shared_ptr<ColladaParser::SceneGraph> sceneGraph, const Eigen::Matrix4f& modelTrafo, float scaling);
+        static bool addGeometry(VirtualRobot::TriMeshModelPtr triMesh, Eigen::Matrix4f& preModelTrafo, ColladaParser::SceneGraph::GeometryType& geom, float scaling);
     };
 
 }

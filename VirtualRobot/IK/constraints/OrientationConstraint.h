@@ -29,7 +29,7 @@
 
 namespace VirtualRobot
 {
-    class VIRTUAL_ROBOT_IMPORT_EXPORT OrientationConstraint : public Constraint, public boost::enable_shared_from_this<OrientationConstraint>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT OrientationConstraint : public Constraint, public std::enable_shared_from_this<OrientationConstraint>
     {
     public:
         OrientationConstraint(const RobotPtr& robot, const RobotNodeSetPtr& nodeSet, const SceneObjectPtr& eef, const Eigen::Matrix3f& target,
@@ -51,7 +51,7 @@ namespace VirtualRobot
 
     };
 
-    typedef boost::shared_ptr<OrientationConstraint> OrientationConstraintPtr;
+    typedef std::shared_ptr<OrientationConstraint> OrientationConstraintPtr;
 }
 
 

@@ -197,7 +197,7 @@ void MTPlanningScenery::buildScene()
     sceneSep->addChild(obstSep);
 
     int ob = 2000;
-    cout << "Randomly placing " << ob << " obstacles..." << endl;
+    std::cout << "Randomly placing " << ob << " obstacles..." << std::endl;
 
     for (int i = 0; i < ob; i++)
     {
@@ -212,7 +212,7 @@ void MTPlanningScenery::buildScene()
         m.block(0, 3, 3, 1) = p;
         o->setGlobalPose(m);
         environment->addSceneObject(o);
-        boost::shared_ptr<CoinVisualization> visualization = o->getVisualization<CoinVisualization>();
+        std::shared_ptr<CoinVisualization> visualization = o->getVisualization<CoinVisualization>();
         SoNode* visualisationNode = nullptr;
 
         if (visualization)
@@ -261,7 +261,7 @@ void MTPlanningScenery::buildPlanningThread(bool bMultiCollisionCheckers, int id
 {
     if (!environmentUnited)
     {
-        cout << "Build Environment first!..." << endl;
+        std::cout << "Build Environment first!..." << std::endl;
         return;
     }
 
@@ -270,22 +270,22 @@ void MTPlanningScenery::buildPlanningThread(bool bMultiCollisionCheckers, int id
         return;
     }
 
-    cout << " Build planning thread ";
+    std::cout << " Build planning thread ";
 
     if (bMultiCollisionCheckers)
     {
-        cout << "with own instance of collision checker" << endl;
+        std::cout << "with own instance of collision checker" << std::endl;
     }
     else
     {
-        cout << "with collision checker singleton" << endl;
+        std::cout << "with collision checker singleton" << std::endl;
     }
 
     this->loadRobotMTPlanning(bMultiCollisionCheckers);
 
     if (this->robots.empty())
     {
-        cout << "Could not load a robot!..." << endl;
+        std::cout << "Could not load a robot!..." << std::endl;
         return;
     }
 
@@ -293,7 +293,7 @@ void MTPlanningScenery::buildPlanningThread(bool bMultiCollisionCheckers, int id
     RobotNodeSetPtr kinChain = pRobot->getRobotNodeSet(kinChainName);
 
     CDManagerPtr pCcm(new VirtualRobot::CDManager(pRobot->getCollisionChecker()));
-    cout << "Set CSpace for " << robots.size() << ".th robot." << endl;
+    std::cout << "Set CSpace for " << robots.size() << ".th robot." << std::endl;
     pCcm->addCollisionModel(pRobot->getRobotNodeSet(colModel));
     ObstaclePtr pEnv = environmentUnited;
 
@@ -329,7 +329,7 @@ void MTPlanningScenery::buildPlanningThread(bool bMultiCollisionCheckers, int id
         start[0] = x;
         start[1] = y;
         start[2] = z;
-        cout << "START: " << x << "," << y << "," << z << endl;
+        std::cout << "START: " << x << "," << y << "," << z << std::endl;
         pRobot->setJointValues(kinChain, start);
     }
     while (pCcm->isInCollision());
@@ -342,7 +342,7 @@ void MTPlanningScenery::buildPlanningThread(bool bMultiCollisionCheckers, int id
         goal[0] = x;
         goal[1] = y;
         goal[2] = z;
-        cout << "GOAL: " << x << "," << y << "," << z << endl;
+        std::cout << "GOAL: " << x << "," << y << "," << z << std::endl;
         pRobot->setJointValues(kinChain, goal);
     }
     while (pCcm->isInCollision());
@@ -449,7 +449,7 @@ PathProcessingThreadPtr MTPlanningScenery::buildOptimizeThread(CSpaceSampledPtr 
 
 void MTPlanningScenery::stopPlanning()
 {
-    cout << "Stopping " << planningThreads.size() << " planning threads..." << endl;
+    std::cout << "Stopping " << planningThreads.size() << " planning threads..." << std::endl;
 
     for (auto & planningThread : planningThreads)
     {
@@ -461,7 +461,7 @@ void MTPlanningScenery::stopPlanning()
         robot->setUpdateVisualization(true);
     }
 
-    cout << "... done" << endl;
+    std::cout << "... done" << std::endl;
     plannersStarted = false;
 }
 
@@ -470,11 +470,11 @@ void MTPlanningScenery::stopOptimizing()
 {
     if (!optimizeStarted)
     {
-        cout << "Start the optimizing first!..." << endl;
+        std::cout << "Start the optimizing first!..." << std::endl;
         return;
     }
 
-    cout << "Stopping " << optimizeThreads.size() << " optimizing threads..." << endl;
+    std::cout << "Stopping " << optimizeThreads.size() << " optimizing threads..." << std::endl;
 
     for (auto & optimizeThread : optimizeThreads)
     {
@@ -486,7 +486,7 @@ void MTPlanningScenery::stopOptimizing()
         robot->setUpdateVisualization(true);
     }
 
-    cout << "...done" << endl;
+    std::cout << "...done" << std::endl;
     optimizeStarted = false;
 }
 
@@ -495,11 +495,11 @@ void MTPlanningScenery::startPlanning()
 {
     if (plannersStarted)
     {
-        cout << "already started!..." << endl;
+        std::cout << "already started!..." << std::endl;
         return;
     }
 
-    cout << "Starting " << planningThreads.size() << " planning threads..." << endl;
+    std::cout << "Starting " << planningThreads.size() << " planning threads..." << std::endl;
 
     for (auto & robot : robots)
     {
@@ -511,7 +511,7 @@ void MTPlanningScenery::startPlanning()
         planningThread->start();
     }
 
-    cout << "... done" << endl;
+    std::cout << "... done" << std::endl;
 
     // give thread some time to startup
     //boost::this_thread::sleep(boost::posix_time::milliseconds(750));
@@ -525,13 +525,13 @@ void MTPlanningScenery::startOptimizing()
 {
     if (!plannersStarted)
     {
-        cout << "Plan the solutions first!..." << endl;
+        std::cout << "Plan the solutions first!..." << std::endl;
         return;
     }
 
     if (CSpaces.empty() || solutions.empty())
     {
-        cout << "Build planning threads first!..." << endl;
+        std::cout << "Build planning threads first!..." << std::endl;
         return;
     }
 
@@ -541,7 +541,7 @@ void MTPlanningScenery::startOptimizing()
         {
             if (planningThread->isRunning())
             {
-                cout << "Planning is not finish!..." << endl;
+                std::cout << "Planning is not finish!..." << std::endl;
                 return;
             }
         }
@@ -549,7 +549,7 @@ void MTPlanningScenery::startOptimizing()
 
     if (optimizeStarted)
     {
-        cout << "Path processors already started..." << endl;
+        std::cout << "Path processors already started..." << std::endl;
         return;
     }
 
@@ -578,8 +578,8 @@ void MTPlanningScenery::startOptimizing()
         }
     }
 
-    cout << "... done" << endl;
-    cout << "Starting " << j << " path processing threads..." << endl;
+    std::cout << "... done" << std::endl;
+    std::cout << "Starting " << j << " path processing threads..." << std::endl;
     optimizeStarted = true;
 }
 
@@ -602,7 +602,7 @@ void MTPlanningScenery::loadRobotMTPlanning(bool bMultiCollisionCheckers)
 
         if (!pRobot)
         {
-            cout << "Error parsing file " << robotFilename << ". Aborting" << endl;
+            std::cout << "Error parsing file " << robotFilename << ". Aborting" << std::endl;
             return;
         }
 
@@ -610,12 +610,12 @@ void MTPlanningScenery::loadRobotMTPlanning(bool bMultiCollisionCheckers)
 
         if (!kinChain)
         {
-            cout << "No rns " << kinChainName << ". Aborting" << endl;
+            std::cout << "No rns " << kinChainName << ". Aborting" << std::endl;
             return;
         }
 
         // get robot
-        cout << "Successfully read " << robotFilename << std::endl;
+        std::cout << "Successfully read " << robotFilename << std::endl;
     }
     else
     {
@@ -624,7 +624,7 @@ void MTPlanningScenery::loadRobotMTPlanning(bool bMultiCollisionCheckers)
 
     if (!pRobot)
     {
-        cout << "error while parsing xml file: no pRobot.." << std::endl;
+        std::cout << "error while parsing xml file: no pRobot.." << std::endl;
         return;
     }
 
@@ -637,7 +637,7 @@ void MTPlanningScenery::loadRobotMTPlanning(bool bMultiCollisionCheckers)
 
     if ((int)robots.size() == 1)
     {
-        boost::shared_ptr<CoinVisualization> visualization = robots[0]->getVisualization<CoinVisualization>(robotModelVisuColModel ? SceneObject::Full : SceneObject::Collision);
+        std::shared_ptr<CoinVisualization> visualization = robots[0]->getVisualization<CoinVisualization>(robotModelVisuColModel ? SceneObject::Full : SceneObject::Collision);
         //SoNode* visualisationNode = NULL;
         robotSep = new SoSeparator();
 
@@ -654,9 +654,9 @@ void MTPlanningScenery::loadRobotMTPlanning(bool bMultiCollisionCheckers)
     int trFull = pRobot->getNumFaces(false);
     int trCol = pRobot->getNumFaces(true);
 
-    cout << "Loaded/Cloned robot with " << trFull << "/" << trCol << " number of triangles." << endl;
+    std::cout << "Loaded/Cloned robot with " << trFull << "/" << trCol << " number of triangles." << std::endl;
     //reset();
-    cout << "Loaded/Cloned " << (int)robots.size() << " robots..." << endl;
+    std::cout << "Loaded/Cloned " << (int)robots.size() << " robots..." << std::endl;
 }
 
 
@@ -762,7 +762,7 @@ void MTPlanningScenery::setRobotModelShape(bool collisionModel)
     //sceneSep->removeChild(robotSep);
     if (robots.size() > 0)
     {
-        boost::shared_ptr<CoinVisualization> visualization = robots[0]->getVisualization<CoinVisualization>(robotModelVisuColModel ? SceneObject::Full : SceneObject::Collision);
+        std::shared_ptr<CoinVisualization> visualization = robots[0]->getVisualization<CoinVisualization>(robotModelVisuColModel ? SceneObject::Full : SceneObject::Collision);
         //SoNode* visualisationNode = NULL;
         robotSep = new SoSeparator();
 
@@ -794,7 +794,7 @@ void MTPlanningScenery::checkPlanningThreads()
                 if (sol)
                 {
                     solutions[i] = sol->clone();
-                    cout << "fetching solution " << i << endl;
+                    std::cout << "fetching solution " << i << std::endl;
                     CoinRrtWorkspaceVisualizationPtr visu(new CoinRrtWorkspaceVisualization(robots[i], CSpaces[i], TCPName));
                     visu->addCSpacePath(solutions[i]);
                     visu->addTree(planners[i]->getTree());
@@ -803,7 +803,7 @@ void MTPlanningScenery::checkPlanningThreads()
                 }
                 else
                 {
-                    cout << "no solution in thread " << i << endl;
+                    std::cout << "no solution in thread " << i << std::endl;
                 }
             }
         }
@@ -828,7 +828,7 @@ void MTPlanningScenery::checkOptimizeThreads()
             {
                 if (!optiSolutions[i])
                 {
-                    cout << "fetching solution " << i << endl;
+                    std::cout << "fetching solution " << i << std::endl;
                     sceneSep->removeChild(visualisations[i]);
                     optiSolutions[i] = pOptiSol->clone();
                     CoinRrtWorkspaceVisualizationPtr visu(new CoinRrtWorkspaceVisualization(robots[i], CSpaces[i], TCPName));
@@ -839,8 +839,8 @@ void MTPlanningScenery::checkOptimizeThreads()
             }
             else
             {
-                cout << "No optimized solution in thread " << i << endl;
-                cout << "show the original solution" << endl;
+                std::cout << "No optimized solution in thread " << i << std::endl;
+                std::cout << "show the original solution" << std::endl;
             }
         }
     }
@@ -905,7 +905,7 @@ int MTPlanningScenery::getThreads()
     //xmlParser.forceBoundingBox(true);
     if (!xmlParser.parse(robotFilename.c_str()))
     {
-        cout << "Error parsing file " << robotFilename << ". Aborting" << endl;
+        std::cout << "Error parsing file " << robotFilename << ". Aborting" << std::endl;
         return;
     }
 
@@ -913,10 +913,10 @@ int MTPlanningScenery::getThreads()
     robot = xmlParser.GetRobot();
     if (robot == NULL)
     {
-      cout << "error while parsing xml file: no pRobot.." << std::endl;
+      std::cout << "error while parsing xml file: no pRobot.." << std::endl;
       return;
     }
-    cout << "Successfully read " << robotFilename << std::endl;
+    std::cout << "Successfully read " << robotFilename << std::endl;
 
     robotSep = new SoSeparator();
     robot->GetVisualisationGraph(robotSep, robotModelVisuColModel);
@@ -927,7 +927,7 @@ int MTPlanningScenery::getThreads()
     int trFull = robot->GetNumberOfTriangles(false);
     int trCol = robot->GetNumberOfTriangles(true);
 
-    cout << "Loaded robot with " << trFull << "/" << trCol << " number of triangles." << endl;
+    std::cout << "Loaded robot with " << trFull << "/" << trCol << " number of triangles." << std::endl;
     //reset();
 }
 
@@ -936,12 +936,12 @@ void MTPlanningScenery::plan(int index)
 {
     if(robot == NULL)
     {
-        cout << "Load a robot first!..." << endl;
+        std::cout << "Load a robot first!..." << std::endl;
         return;
     }
     if(environment == NULL)
     {
-        cout << "Create the Environment first!..." << endl;
+        std::cout << "Create the Environment first!..." << std::endl;
         return;
     }
 
@@ -1002,7 +1002,7 @@ void MTPlanningScenery::plan(int index)
     bool res = pBiPlanner->Plan();
     if(res)
     {
-        cout << "successfully!..." << endl;
+        std::cout << "successfully!..." << std::endl;
         solutionsForSeq.push_back(pBiPlanner->GetSolution());
         visualizationsForSeq.push_back(NULL);
         showSolution(solutionsForSeq[g_iSolutionIndex], g_iSolutionIndex);
@@ -1010,7 +1010,7 @@ void MTPlanningScenery::plan(int index)
     }
     else
     {
-        cout << "MTPlanningScenery::plan::Plan failed..." << endl;
+        std::cout << "MTPlanningScenery::plan::Plan failed..." << std::endl;
     }
     g_iSolutionIndex++;
 }
@@ -1020,7 +1020,7 @@ void MTPlanningScenery::optimizeSolution(int solutionIndex)
 {
     if((CSpace1 == NULL) || (solutionsForSeq[solutionIndex] == NULL))
     {
-        cout << "MTPlanningScenery::optimizeSolution::Plan a solution first!..." << endl;
+        std::cout << "MTPlanningScenery::optimizeSolution::Plan a solution first!..." << std::endl;
         return;
     }
 
@@ -1031,12 +1031,12 @@ void MTPlanningScenery::optimizeSolution(int solutionIndex)
     {
         showSolution(optiSolutionsForSeq[solutionIndex], solutionIndex);
         int iEndSize = optiSolutionsForSeq[solutionIndex]->GetPathSize();
-        cout << "MTPlanningScenery::optimizeSolution::New Size: " << iEndSize << " Nodes." << endl;
-        cout << "MTPlanningScenery::optimizeSolution::Kicked " << (iBeforeSize - iEndSize) << " Nodes." << endl;
+        std::cout << "MTPlanningScenery::optimizeSolution::New Size: " << iEndSize << " Nodes." << std::endl;
+        std::cout << "MTPlanningScenery::optimizeSolution::Kicked " << (iBeforeSize - iEndSize) << " Nodes." << std::endl;
     }
     else
     {
-        cout << "MTPlanningScenery::optimizeSolution::Optimize failed..." << endl;
+        std::cout << "MTPlanningScenery::optimizeSolution::Optimize failed..." << std::endl;
     }
 }
 
@@ -1044,7 +1044,7 @@ void MTPlanningScenery::showSolution(CRrtSolution *solToShow, int solutionIndex)
 {
     if(solToShow == NULL)
     {
-        cout << "MTPlanningScenery::showSolution::No solution!..." << endl;
+        std::cout << "MTPlanningScenery::showSolution::No solution!..." << std::endl;
         return;
     }
 

@@ -1,15 +1,16 @@
 #include "SimoxURDFFactory.h"
 
-#include <assert.h>
+#include <filesystem>
 #include <iostream>
 #include <map>
-#include <stack>
 
 #include <urdf_model/model.h>
 #include <urdf_parser/urdf_parser.h>
 
 #include <VirtualRobot/Visualization/CoinVisualization/CoinVisualizationFactory.h>
+#include <VirtualRobot/Visualization/VisualizationNode.h>
 #include <VirtualRobot/RobotFactory.h>
+#include <VirtualRobot/CollisionDetection/CollisionModel.h>
 #include <VirtualRobot/Nodes/RobotNodeFactory.h>
 #include <VirtualRobot/Nodes/RobotNodeFixedFactory.h>
 #include <VirtualRobot/Nodes/RobotNodePrismaticFactory.h>
@@ -42,7 +43,7 @@ namespace VirtualRobot
 
         if (!urdf_model)
         {
-            VR_ERROR << "Error opening urdf file " << filename << endl;
+            VR_ERROR << "Error opening urdf file " << filename << std::endl;
         }
         else
         {
@@ -82,9 +83,9 @@ namespace VirtualRobot
     /**
      * \return new instance of SimoxURDFFactory.
      */
-    boost::shared_ptr<RobotImporterFactory> SimoxURDFFactory::createInstance(void*)
+    std::shared_ptr<RobotImporterFactory> SimoxURDFFactory::createInstance(void*)
     {
-        boost::shared_ptr<SimoxURDFFactory> URDFFactory(new SimoxURDFFactory());
+        std::shared_ptr<SimoxURDFFactory> URDFFactory(new SimoxURDFFactory());
         return URDFFactory;
     }
 
@@ -177,7 +178,7 @@ namespace VirtualRobot
                 result = f;
                 if (!VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(result))
                 {
-                    VR_ERROR << "Could not determine absolute path of " << result << endl;
+                    VR_ERROR << "Could not determine absolute path of " << result << std::endl;
                 }
             }
         }
@@ -206,7 +207,7 @@ namespace VirtualRobot
 
         const float scale = 1000.0f; // mm
         VirtualRobot::VisualizationNodePtr res;
-        boost::shared_ptr<VisualizationFactory> factory = CoinVisualizationFactory::createInstance(NULL);
+        std::shared_ptr<VisualizationFactory> factory = CoinVisualizationFactory::createInstance(NULL);
 
         if (!g)
         {
@@ -217,14 +218,14 @@ namespace VirtualRobot
         {
             case urdf::Geometry::BOX:
             {
-                std::shared_ptr<urdf::Box> b = boost::dynamic_pointer_cast<urdf::Box>(g);
+                std::shared_ptr<urdf::Box> b = std::dynamic_pointer_cast<urdf::Box>(g);
                 res = factory->createBox(b->dim.x * scale, b->dim.y * scale, b->dim.z * scale);
             }
             break;
 
             case urdf::Geometry::SPHERE:
             {
-                std::shared_ptr<urdf::Sphere> s = boost::dynamic_pointer_cast<urdf::Sphere>(g);
+                std::shared_ptr<urdf::Sphere> s = std::dynamic_pointer_cast<urdf::Sphere>(g);
                 res = factory->createSphere(s->radius * scale);
             }
             break;
@@ -232,7 +233,7 @@ namespace VirtualRobot
 
             case urdf::Geometry::CYLINDER:
             {
-                std::shared_ptr<urdf::Cylinder> c = boost::dynamic_pointer_cast<urdf::Cylinder>(g);
+                std::shared_ptr<urdf::Cylinder> c = std::dynamic_pointer_cast<urdf::Cylinder>(g);
                 res = factory->createCylinder(c->radius * scale, c->length * scale);
 
             }
@@ -240,14 +241,14 @@ namespace VirtualRobot
 
             case urdf::Geometry::MESH:
             {
-                std::shared_ptr<urdf::Mesh> m = boost::dynamic_pointer_cast<urdf::Mesh>(g);
+                std::shared_ptr<urdf::Mesh> m = std::dynamic_pointer_cast<urdf::Mesh>(g);
                 std::string filename = getFilename(m->filename, basePath);
                 res = factory->getVisualizationFromFile(filename, false, m->scale.x, m->scale.y, m->scale.z);
             }
             break;
 
             default:
-                VR_WARNING << "urdf::Geometry type nyi..." << endl;
+                VR_WARNING << "urdf::Geometry type nyi..." << std::endl;
         }
 
         if (res)
@@ -267,7 +268,7 @@ namespace VirtualRobot
     VisualizationNodePtr SimoxURDFFactory::convertVisuArray(std::vector<std::shared_ptr<urdf::Collision> > visu_array, const string& basePath)
     {
         VirtualRobot::VisualizationNodePtr res;
-        boost::shared_ptr<VisualizationFactory> factory = CoinVisualizationFactory::createInstance(NULL);
+        std::shared_ptr<VisualizationFactory> factory = CoinVisualizationFactory::createInstance(NULL);
 
         if (visu_array.size() == 0)
         {
@@ -290,7 +291,7 @@ namespace VirtualRobot
     VisualizationNodePtr SimoxURDFFactory::convertVisuArray(std::vector<std::shared_ptr<urdf::Visual> > visu_array, const string& basePath)
     {
         VirtualRobot::VisualizationNodePtr res;
-        boost::shared_ptr<VisualizationFactory> factory = CoinVisualizationFactory::createInstance(NULL);
+        std::shared_ptr<VisualizationFactory> factory = CoinVisualizationFactory::createInstance(NULL);
 
         if (visu_array.size() == 0)
         {

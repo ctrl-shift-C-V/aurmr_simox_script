@@ -7,6 +7,7 @@
 #include <VirtualRobot/Obstacle.h>
 #include <VirtualRobot/CollisionDetection/CollisionModel.h>
 #include <VirtualRobot/Visualization/TriMeshModel.h>
+#include <VirtualRobot/Visualization/VisualizationNode.h>
 #include <VirtualRobot/Primitive.h>
 
 
@@ -15,6 +16,8 @@
 #include <BulletCollision/CollisionShapes/btSphereShape.h>
 #include <BulletCollision/CollisionShapes/btCylinderShape.h>
 #include <BulletCollision/CollisionShapes/btCompoundShape.h>
+
+#include <Eigen/Dense>
 
 //#define DEBUG_FIXED_OBJECTS
 //#define USE_BULLET_GENERIC_6DOF_CONSTRAINT
@@ -43,7 +46,7 @@ namespace SimDynamics
         CollisionModelPtr colModel = o->getCollisionModel();
         if (!colModel)
         {
-            VR_WARNING << "Building empty collision shape for object " << o->getName() << endl;
+            VR_WARNING << "Building empty collision shape for object " << o->getName() << std::endl;
             collisionShape.reset(new btEmptyShape());
         }
         else
@@ -56,7 +59,7 @@ namespace SimDynamics
 
                 if (primitives.size() > 0)
                 {
-                    //cout << "Object:" << o->getName() << endl;
+                    //cout << "Object:" << o->getName() << std::endl;
                     //o->print();
 
                     btCompoundShape* compoundShape = new btCompoundShape(true);
@@ -66,7 +69,7 @@ namespace SimDynamics
                     Eigen::Matrix4f localComTransform;
                     localComTransform.setIdentity();
                     localComTransform.block(0, 3, 3, 1) = -o->getCoMLocal();
-                    //cout << "localComTransform:\n" << localComTransform << endl;
+                    //cout << "localComTransform:\n" << localComTransform << std::endl;
 
                     currentTransform = localComTransform;
 
@@ -74,8 +77,8 @@ namespace SimDynamics
                     {
                         currentTransform *= (*it)->transform;
                         //currentTransform = localComTransform * (*it)->transform;
-                        //cout << "primitive: (*it)->transform:\n" << (*it)->transform << endl;
-                        //cout << "primitive: currentTransform:\n" << currentTransform << endl;
+                        //cout << "primitive: (*it)->transform:\n" << (*it)->transform << std::endl;
+                        //cout << "primitive: currentTransform:\n" << currentTransform << std::endl;
 
                         compoundShape->addChildShape(BulletEngine::getPoseBullet(currentTransform), getShapeFromPrimitive(*it));
                     }
@@ -123,12 +126,12 @@ namespace SimDynamics
             //type = eKinematic;
             if (colModel)
             {
-                VR_WARNING << "Object:" << o->getName() << ": mass == 0 -> SimulationType must not be eDynamic! Setting mass to 1" << endl;
+                VR_WARNING << "Object:" << o->getName() << ": mass == 0 -> SimulationType must not be eDynamic! Setting mass to 1" << std::endl;
             }
         }
 
 #ifdef DEBUG_FIXED_OBJECTS
-        cout << "TEST" << endl;
+        std::cout << "TEST" << std::endl;
         mass = 0;
         localInertia.setValue(0.0f, 0.0f, 0.0f);
 #else
@@ -163,7 +166,7 @@ namespace SimDynamics
         rigidBody->setUserPointer((void*)(this));
 #if 0
         rigidBody->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
-        cout << "TEST3" << endl;
+        std::cout << "TEST3" << std::endl;
 #endif
 
         setPoseIntern(o->getGlobalPose());
@@ -182,20 +185,20 @@ namespace SimDynamics
 
         if (primitive->type == Primitive::Box::TYPE)
         {
-            Primitive::Box* box = boost::dynamic_pointer_cast<Primitive::Box>(primitive).get();
+            Primitive::Box* box = std::dynamic_pointer_cast<Primitive::Box>(primitive).get();
             // w/h/d have to be halved
             btBoxShape* boxShape = new btBoxShape(btVector3(box->width / 2000.f * ScaleFactor, box->height / 2000.f * ScaleFactor, box->depth / 2000.f * ScaleFactor));
             result = boxShape;
         }
         else if (primitive->type == Primitive::Sphere::TYPE)
         {
-            Primitive::Sphere* sphere = boost::dynamic_pointer_cast<Primitive::Sphere>(primitive).get();
+            Primitive::Sphere* sphere = std::dynamic_pointer_cast<Primitive::Sphere>(primitive).get();
             btSphereShape* sphereShape = new btSphereShape(btScalar(sphere->radius / 1000.0  * ScaleFactor));
             result = sphereShape;
         }
         else if (primitive->type == Primitive::Cylinder::TYPE)
         {
-            Primitive::Cylinder* cyl = boost::dynamic_pointer_cast<Primitive::Cylinder>(primitive).get();
+            Primitive::Cylinder* cyl = std::dynamic_pointer_cast<Primitive::Cylinder>(primitive).get();
             btCylinderShape* cylShape = new btCylinderShape(btVector3(cyl->radius / 1000.0  * ScaleFactor, cyl->height / 1000.0  * ScaleFactor, cyl->radius / 1000.0  * ScaleFactor));
             result = cylShape;
         }
@@ -257,10 +260,10 @@ namespace SimDynamics
         else
         {
             // build convex hull
-            boost::shared_ptr<btConvexShape> btConvexShape(new btConvexTriangleMeshShape(btTrimesh.get()));
+            std::shared_ptr<btConvexShape> btConvexShape(new btConvexTriangleMeshShape(btTrimesh.get()));
             btConvexShape->setMargin(btMargin);
 
-            boost::shared_ptr<btShapeHull> btHull(new btShapeHull(btConvexShape.get()));
+            std::shared_ptr<btShapeHull> btHull(new btShapeHull(btConvexShape.get()));
             btHull->buildHull(btMargin);
             btConvexHullShape* btConvex = new btConvexHullShape();
             btConvex->setLocalScaling(btVector3(1, 1, 1));
@@ -278,7 +281,7 @@ namespace SimDynamics
         }
     }
 
-    boost::shared_ptr<btRigidBody> BulletObject::getRigidBody()
+    std::shared_ptr<btRigidBody> BulletObject::getRigidBody()
     {
         return rigidBody;
     }
@@ -301,7 +304,7 @@ namespace SimDynamics
         this->rigidBody->setWorldTransform(BulletEngine::getPoseBullet(poseGlobal));
 
         // notify motionState of non-robot nodes
-        if(!boost::dynamic_pointer_cast<VirtualRobot::RobotNode>(sceneObject))
+        if(!std::dynamic_pointer_cast<VirtualRobot::RobotNode>(sceneObject))
         {
             motionState->setGlobalPose(pose);
         }

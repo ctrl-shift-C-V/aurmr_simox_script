@@ -45,7 +45,7 @@ void endlessExtend(std::string robotFile, std::string reachFile, int steps, unsi
     {
         threads = QThread::idealThreadCount() < 1 ? 1 : static_cast<unsigned int>(QThread::idealThreadCount());
     }
-    VR_INFO << "Extending workspace information, saving each " << steps << " steps." << endl;
+    VR_INFO << "Extending workspace information, saving each " << steps << " steps." << std::endl;
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(robotFile);
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(reachFile);
 
@@ -58,14 +58,14 @@ void endlessExtend(std::string robotFile, std::string reachFile, int steps, unsi
     }
     catch (VirtualRobotException& e)
     {
-        cout << " ERROR while creating robot" << endl;
-        cout << e.what();
+        std::cout << " ERROR while creating robot" << std::endl;
+        std::cout << e.what();
         return;
     }
 
     if (!robot)
     {
-        cout << " ERROR while creating robot" << endl;
+        std::cout << " ERROR while creating robot" << std::endl;
         return;
     }
 
@@ -103,7 +103,7 @@ void endlessExtend(std::string robotFile, std::string reachFile, int steps, unsi
 
     if (!loadOK)
     {
-        VR_ERROR << "Could not load reach/manip file" << endl;
+        VR_ERROR << "Could not load reach/manip file" << std::endl;
         reachSpace.reset();
         return;
     }
@@ -148,8 +148,8 @@ int main(int argc, char* argv[])
 {
     VirtualRobot::init(argc, argv, "Reachability Demo");
 
-    cout << " --- START --- " << endl;
-    cout << "Hint: use '--extendReach true' to start a refinement of the reachability data. This is an endless mode which creates intermediate data files and that can be running e.g. over night." << std::endl;
+    std::cout << " --- START --- " << std::endl;
+    std::cout << "Hint: use '--extendReach true' to start a refinement of the reachability data. This is an endless mode which creates intermediate data files and that can be running e.g. over night." << std::endl;
 
     std::string filenameReach;
 #if defined(ICUB)
@@ -184,7 +184,7 @@ int main(int argc, char* argv[])
     VirtualRobot::RuntimeEnvironment::processCommandLine(argc, argv);
     VirtualRobot::RuntimeEnvironment::print();
 
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     filenameRob = VirtualRobot::RuntimeEnvironment::checkValidFileParameter("robot", filenameRob);
 
@@ -196,12 +196,12 @@ int main(int argc, char* argv[])
 
         if (!VirtualRobot::RuntimeEnvironment::toVector3f(axisStr, axisTCP))
         {
-            cout << "Wrong axis definition:" << axisStr << endl;
+            std::cout << "Wrong axis definition:" << axisStr << std::endl;
         }
     }
 
-    cout << "Using robot at " << filenameRob << endl;
-    cout << "Using reachability file from " << filenameReach << endl;
+    std::cout << "Using robot at " << filenameRob << std::endl;
+    std::cout << "Using reachability file from " << filenameReach << std::endl;
 
     if (VirtualRobot::RuntimeEnvironment::hasValue("extendReach"))
     {

@@ -11,7 +11,7 @@
 
 namespace VirtualRobot
 {
-
+    using std::endl;
 
     SceneIO::SceneIO()
         = default;
@@ -394,7 +394,7 @@ namespace VirtualRobot
     {
         if (!s)
         {
-            VR_ERROR << "NULL data..." << endl;
+            VR_ERROR << "NULL data..." << std::endl;
             return false;
         }
 

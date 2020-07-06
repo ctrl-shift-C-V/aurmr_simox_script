@@ -24,16 +24,13 @@
 
 #include "../VirtualRobot.h"
 #include "../Units.h"
-#include "../MathTools.h"
-#include "../Robot.h"
 #include "../RobotConfig.h"
 #include "../Nodes/RobotNode.h"
-#include "../EndEffector/EndEffectorActor.h"
+#include "../Primitive.h"
 
 #include <string>
 #include <vector>
 #include <map>
-#include <fstream>
 
 
 
@@ -109,7 +106,7 @@ namespace VirtualRobot
         virtual ~BaseIO();
 
 
-        static boost::mutex mutex;
+        static std::mutex mutex;
     };
 
 }

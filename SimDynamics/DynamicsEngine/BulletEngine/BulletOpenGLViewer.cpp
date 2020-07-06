@@ -10,7 +10,7 @@ namespace SimDynamics
         SIMDYNAMICS_ASSERT(world);
         m_sundirection = btVector3(1, 1, -2) * BulletObject::ScaleFactor * 1000 ;
 
-        bulletEngine = boost::dynamic_pointer_cast<BulletEngine>(world->getEngine());
+        bulletEngine = std::dynamic_pointer_cast<BulletEngine>(world->getEngine());
 
         SIMDYNAMICS_ASSERT(bulletEngine);
 
@@ -47,7 +47,7 @@ namespace SimDynamics
         if (m_dynamicsWorld)
         {
             btScalar dt1 = 0.015;//btScalar(ms / 1000000.0f);
-//            std::cout << "dt1: " << dt1  << " internal: " << (1./140.f) << endl;
+//            std::cout << "dt1: " << dt1  << " internal: " << (1./140.f) << std::endl;
             m_dynamicsWorld->stepSimulation(dt1, 100, 1./140.f);
 
             //optional but useful: debug drawing

@@ -47,8 +47,8 @@ namespace math
               Eigen::Vector3f P[8];
       };
 
-      typedef boost::shared_ptr<Array3D<GridCell>> Array3DGridCellPtr;
-      typedef boost::shared_ptr<std::queue<Index3>> FringePtr;
+      typedef std::shared_ptr<Array3D<GridCell>> Array3DGridCellPtr;
+      typedef std::shared_ptr<std::queue<Index3>> FringePtr;
 
       int _size;
       GridCacheFloat3Ptr Gdata;

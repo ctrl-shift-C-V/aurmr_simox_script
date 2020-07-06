@@ -6,6 +6,8 @@
 #include "../RobotNodeSet.h"
 #include <rbdl/rbdl.h>
 
+#include <set>
+
 
 namespace VirtualRobot
 {
@@ -61,12 +63,12 @@ namespace VirtualRobot
         bool getVerbose() const;
         void setVerbose(bool value);
 
-        boost::shared_ptr<RigidBodyDynamics::Model> getModel() const;
+        std::shared_ptr<RigidBodyDynamics::Model> getModel() const;
 
     protected:
         RobotNodeSetPtr rns;
         RobotNodeSetPtr rnsBodies;
-        boost::shared_ptr<RigidBodyDynamics::Model> model;
+        std::shared_ptr<RigidBodyDynamics::Model> model;
         Eigen::Vector3d gravity;
         std::map<std::string,  int> identifierMap;
         bool verbose = false;
@@ -75,11 +77,11 @@ namespace VirtualRobot
         RobotNodePtr checkForConnectedMass(RobotNodePtr node);
         std::set<RobotNodePtr> getChildrenWithMass(const RobotNodePtr& node, const RobotNodeSetPtr &nodeSet) const;
     private:
-        void toRBDL(boost::shared_ptr<RigidBodyDynamics::Model> model, RobotNodePtr node, RobotNodeSetPtr nodeSet, RobotNodePtr parentNode = RobotNodePtr(),  int parentID = 0);
-        void toRBDLRecursive(boost::shared_ptr<RigidBodyDynamics::Model> model, RobotNodePtr currentNode, Eigen::Matrix4f accumulatedTransformPreJoint, Eigen::Matrix4f accumulatedTransformPostJoint, RobotNodePtr jointNode = RobotNodePtr(), int parentID = 0);
+        void toRBDL(std::shared_ptr<RigidBodyDynamics::Model> model, RobotNodePtr node, RobotNodeSetPtr nodeSet, RobotNodePtr parentNode = RobotNodePtr(),  int parentID = 0);
+        void toRBDLRecursive(std::shared_ptr<RigidBodyDynamics::Model> model, RobotNodePtr currentNode, Eigen::Matrix4f accumulatedTransformPreJoint, Eigen::Matrix4f accumulatedTransformPostJoint, RobotNodePtr jointNode = RobotNodePtr(), int parentID = 0);
 
     };
 
-    typedef boost::shared_ptr<Dynamics> DynamicsPtr;
+    typedef std::shared_ptr<Dynamics> DynamicsPtr;
 }
 

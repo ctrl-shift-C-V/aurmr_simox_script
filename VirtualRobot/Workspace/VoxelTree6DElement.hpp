@@ -24,6 +24,7 @@
 
 #include "../VirtualRobot.h"
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -58,7 +59,7 @@ namespace VirtualRobot
 
             if (level >= maxLevels)
             {
-                VR_ERROR << "Exceeding maxLevels?!" << endl;
+                VR_ERROR << "Exceeding maxLevels?!" << std::endl;
             }
         };
 
@@ -172,7 +173,7 @@ namespace VirtualRobot
 
             if (indx < 0)
             {
-                VR_ERROR << "Node do not cover this pos" << endl;
+                VR_ERROR << "Node do not cover this pos" << std::endl;
                 return NULL;
             }
 
@@ -208,13 +209,13 @@ namespace VirtualRobot
         {
             if (!covers(p))
             {
-                VR_ERROR << "Node do not cover this pos" << endl;
+                VR_ERROR << "Node do not cover this pos" << std::endl;
                 return -1;
             }
 
             if (leaf)
             {
-                VR_ERROR << "Node is already a leaf node?!" << endl;
+                VR_ERROR << "Node is already a leaf node?!" << std::endl;
                 return -1;
             }
 
@@ -239,7 +240,7 @@ namespace VirtualRobot
             // test, remove this
             if (res < 0 || res >= 64)
             {
-                VR_ERROR << "INTERNAL ERROR?!" << endl;
+                VR_ERROR << "INTERNAL ERROR?!" << std::endl;
                 return -1;
             }
 

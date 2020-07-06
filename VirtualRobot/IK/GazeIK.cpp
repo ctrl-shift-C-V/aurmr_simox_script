@@ -4,6 +4,8 @@
 #include <VirtualRobot/RobotNodeSet.h>
 #include <VirtualRobot/Random.h>
 
+#include <boost/math/special_functions/fpclassify.hpp>
+
 #include <algorithm>
 #include <cfloat>
 
@@ -100,7 +102,7 @@ namespace VirtualRobot
 
         if (verbose)
         {
-            VR_INFO << "ikGaze delta:\n" << deltaGaze.head(3) << endl;
+            VR_INFO << "ikGaze delta:\n" << deltaGaze.head(3) << std::endl;
         }
 
         jacobies.push_back(ikGaze);
@@ -130,7 +132,7 @@ namespace VirtualRobot
         // initialize the virtualGazeJoint with a guess
         float v = (goal - virtualTranslationJoint->getParent()->getGlobalPose().block(0, 3, 3, 1)).norm();
         virtualTranslationJoint->setJointValue(v);
-        //VR_INFO << "virtualTranslationJoint jv:" << v << endl;
+        //VR_INFO << "virtualTranslationJoint jv:" << v << std::endl;
 
 
         // first run: start with current joint angles
@@ -139,7 +141,7 @@ namespace VirtualRobot
             return true;
         }
 
-        VR_INFO << "No solution from current configuration, trying with random seeded configuration" << endl;
+        VR_INFO << "No solution from current configuration, trying with random seeded configuration" << std::endl;
 
         float posDist = getCurrentError(goal);
         jvBest = rns->getJointValues();
@@ -148,20 +150,20 @@ namespace VirtualRobot
         // if here we failed
         for (int i = 1; i < maxLoops; i++)
         {
-            //VR_INFO << "loop " << i << endl;
+            //VR_INFO << "loop " << i << std::endl;
             // set rotational joints randomly
             setJointsRandom(goal, randomTriesToGetBestConfig);
 
             // update translational joint with initial guess
             float v = (goal - virtualTranslationJoint->getParent()->getGlobalPose().block(0, 3, 3, 1)).norm();
             virtualTranslationJoint->setJointValue(v);
-            //VR_INFO << "virtualTranslationJoint jv:" << v << endl;
+            //VR_INFO << "virtualTranslationJoint jv:" << v << std::endl;
 
 
             // check if there is a gradient to the solution
             if (trySolve(goal, stepSize))
             {
-                //VR_INFO << "Solution found " << endl;
+                //VR_INFO << "Solution found " << std::endl;
                 return true;
             }
 
@@ -169,13 +171,13 @@ namespace VirtualRobot
 
             if (posDist < bestDist)
             {
-                //VR_INFO << "New best solution, dist:" << posDist << endl;
+                //VR_INFO << "New best solution, dist:" << posDist << std::endl;
                 jvBest = rns->getJointValues();
                 bestDist = posDist;
             }
         }
 
-        VR_INFO << "Setting joint values ot best achieved config, dist to target:" << bestDist << endl;
+        VR_INFO << "Setting joint values ot best achieved config, dist to target:" << bestDist << std::endl;
         rns->setJointValues(jvBest);
 
         return false;
@@ -200,7 +202,7 @@ namespace VirtualRobot
 
             if (posDist < bestDist)
             {
-                //VR_INFO << "joints random, best dist:" << posDist << endl;
+                //VR_INFO << "joints random, best dist:" << posDist << std::endl;
                 bestDist = posDist;
                 jvBest = rns->getJointValues();
             }
@@ -264,7 +266,7 @@ namespace VirtualRobot
 
             if (verbose)
             {
-                VR_INFO << "applyJLA step " << step << ", theta:" << dTheta.transpose() << endl;
+                VR_INFO << "applyJLA step " << step << ", theta:" << dTheta.transpose() << std::endl;
             }
 
 
@@ -276,7 +278,7 @@ namespace VirtualRobot
                 if (boost::math::isnan(jv[i]) || boost::math::isinf(jv[i]))
                 {
                     rns->setJointValues(jvBest);
-                    VR_WARNING << "Aborting, invalid joint value (nan)" << endl;
+                    VR_WARNING << "Aborting, invalid joint value (nan)" << std::endl;
                     return;
                 }
             }
@@ -296,7 +298,7 @@ namespace VirtualRobot
             {
                 if (verbose)
                 {
-                    VR_INFO << "Could not improve result any more with joint limit avoidance tasks (dTheta.norm()=" << d << "), loop:" << step << endl;
+                    VR_INFO << "Could not improve result any more with joint limit avoidance tasks (dTheta.norm()=" << d << "), loop:" << step << std::endl;
                 }
 
                 return;
@@ -326,7 +328,7 @@ namespace VirtualRobot
 
             if (verbose)
             {
-                VR_INFO << "step " << step << ", theta:" << dTheta.transpose() << endl;
+                VR_INFO << "step " << step << ", theta:" << dTheta.transpose() << std::endl;
             }
 
             for (unsigned int i = 0; i < nodes.size(); i++)
@@ -336,7 +338,7 @@ namespace VirtualRobot
                 // sanity check
                 if (boost::math::isnan(jv[i]) || boost::math::isinf(jv[i]))
                 {
-                    VR_WARNING << "Aborting, invalid joint value (nan)" << endl;
+                    VR_WARNING << "Aborting, invalid joint value (nan)" << std::endl;
                     return false;
                 }
             }
@@ -348,7 +350,7 @@ namespace VirtualRobot
             {
                 if (verbose)
                 {
-                    VR_INFO << "Tolerances ok, loop:" << step << endl;
+                    VR_INFO << "Tolerances ok, loop:" << step << std::endl;
                 }
 
                 // try to improve pose by applying some joint limit avoidance steps
@@ -360,7 +362,7 @@ namespace VirtualRobot
             if (checkImprovement && posDist>lastDist)
             {
                 if (verbose)
-                    VR_INFO << "Could not improve result any more (current position error=" << posDist << ", last loop's error:" << lastDist << "), loop:" << step << endl;
+                    VR_INFO << "Could not improve result any more (current position error=" << posDist << ", last loop's error:" << lastDist << "), loop:" << step << std::endl;
                 robot->setJointValues(rns,jvBest);
                 return false;
             }*/
@@ -371,7 +373,7 @@ namespace VirtualRobot
             {
                 if (verbose)
                 {
-                    VR_INFO << "Could not improve result any more (dTheta.norm()=" << d << "), loop:" << step << endl;
+                    VR_INFO << "Could not improve result any more (dTheta.norm()=" << d << "), loop:" << step << std::endl;
                 }
 
                 return false;
@@ -390,8 +392,8 @@ namespace VirtualRobot
 
         if (verbose)
         {
-            VR_INFO << "IK failed, loop:" << step << endl;
-            VR_INFO << "pos error:" << getCurrentError(goal) << endl;
+            VR_INFO << "IK failed, loop:" << step << std::endl;
+            VR_INFO << "pos error:" << getCurrentError(goal) << std::endl;
         }
 
         robot->setJointValues(rns, jvBest);

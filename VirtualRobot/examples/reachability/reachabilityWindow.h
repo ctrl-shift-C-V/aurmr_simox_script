@@ -118,6 +118,6 @@ protected:
     bool useColModel;
     //bool structureEnabled;
 
-    boost::shared_ptr<VirtualRobot::CoinVisualization> visualization;
+    std::shared_ptr<VirtualRobot::CoinVisualization> visualization;
 };
 

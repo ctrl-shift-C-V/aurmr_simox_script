@@ -21,6 +21,7 @@
 
 namespace VirtualRobot
 {
+    using std::endl;
 
     AdvancedIKSolver::AdvancedIKSolver(RobotNodeSetPtr rns) :
         IKSolver(), rns(rns)
@@ -46,7 +47,7 @@ namespace VirtualRobot
 
     void AdvancedIKSolver::collisionDetection(ObstaclePtr avoidCollisionsWith)
     {
-        SceneObjectPtr so = boost::dynamic_pointer_cast<SceneObject>(avoidCollisionsWith);
+        SceneObjectPtr so = std::dynamic_pointer_cast<SceneObject>(avoidCollisionsWith);
         collisionDetection(so);
     }
 
@@ -111,7 +112,7 @@ namespace VirtualRobot
             {
                 if (eef)
                 {
-                    VR_ERROR << " Two end effectors with tcp " << rns->getTCP()->getName() << " defined in robot " << robot->getName() << ". taking the first one?!" << endl;
+                    VR_ERROR << " Two end effectors with tcp " << rns->getTCP()->getName() << " defined in robot " << robot->getName() << ". taking the first one?!" << std::endl;
                 }
                 else
                 {
@@ -122,7 +123,7 @@ namespace VirtualRobot
 
         if (!eef)
         {
-            VR_ERROR << " No end effector with tcp " << rns->getTCP()->getName() << " defined in robot " << robot->getName() << ". Aborting..." << endl;
+            VR_ERROR << " No end effector with tcp " << rns->getTCP()->getName() << " defined in robot " << robot->getName() << ". Aborting..." << std::endl;
             return GraspPtr();
         }
 
@@ -130,7 +131,7 @@ namespace VirtualRobot
 
         if (!gs || gs->getSize() == 0)
         {
-            VR_ERROR << " No grasps defined for eef " << eef->getName() << " defined in object " << object->getName() << ". Aborting..." << endl;
+            VR_ERROR << " No grasps defined for eef " << eef->getName() << " defined in object " << object->getName() << ". Aborting..." << std::endl;
             return GraspPtr();
         }
 
@@ -236,12 +237,12 @@ namespace VirtualRobot
         {
             if (reachabilitySpace->getTCP() != tcp)
             {
-                VR_ERROR << "Reachability representation has different tcp RobotNode (" << reachabilitySpace->getTCP()->getName() << ") than IK solver (" << tcp->getName() << ") ?! " << endl << "Reachability results may not be valid!" << endl;
+                VR_ERROR << "Reachability representation has different tcp RobotNode (" << reachabilitySpace->getTCP()->getName() << ") than IK solver (" << tcp->getName() << ") ?! " << endl << "Reachability results may not be valid!" << std::endl;
             }
 
             if (reachabilitySpace->getNodeSet() != rns)
             {
-                VR_ERROR << "Reachability representation is defined for a different RobotNodeSet (" << reachabilitySpace->getNodeSet()->getName() << ") than IK solver uses (" << rns->getName() << ") ?! " << endl << "Reachability results may not be valid!" << endl;
+                VR_ERROR << "Reachability representation is defined for a different RobotNodeSet (" << reachabilitySpace->getNodeSet()->getName() << ") than IK solver uses (" << rns->getName() << ") ?! " << endl << "Reachability results may not be valid!" << std::endl;
             }
         }
     }

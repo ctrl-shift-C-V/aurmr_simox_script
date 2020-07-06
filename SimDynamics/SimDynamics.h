@@ -74,7 +74,7 @@ namespace SimDynamics
 
     class DynamicsWorld;
 
-    typedef boost::shared_ptr<DynamicsWorld> DynamicsWorldPtr;
+    typedef std::shared_ptr<DynamicsWorld> DynamicsWorldPtr;
 
 
 #define SIMDYNAMICS_INFO VR_INFO

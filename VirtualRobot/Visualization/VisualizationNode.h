@@ -24,9 +24,10 @@
 
 #include "../VirtualRobot.h"
 #include "VisualizationFactory.h"
-#include <map>
+
 #include <Eigen/Core>
-#include <Eigen/Geometry>
+
+#include <map>
 
 namespace VirtualRobot
 {
@@ -44,6 +45,7 @@ namespace VirtualRobot
         Constructor
         */
         VisualizationNode(const TriMeshModelPtr& triMeshModel = nullptr);
+        VisualizationNode(const TriMeshModel& triMeshModel);
 
         /*!
         */

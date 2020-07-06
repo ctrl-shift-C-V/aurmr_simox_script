@@ -33,7 +33,7 @@ float TIMER_MS = 30.0f;
 showCamWindow::showCamWindow(std::string& sRobotFilename, std::string& cam1Name, std::string& cam2Name)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
     //this->setCaption(QString("ShowRobot - KIT - Humanoids Group"));
     //resize(1100, 768);
     cam2Renderer = nullptr;
@@ -129,7 +129,7 @@ void showCamWindow::setupUI()
 
     // setup
     viewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-    viewer->setAccumulationBuffer(true);
+    viewer->setAccumulationBuffer(false);
 
     viewer->setAntialiasing(true, 4);
 
@@ -284,7 +284,7 @@ void showCamWindow::updateRNSBox()
 void showCamWindow::selectRNS(int nr)
 {
     currentRobotNodeSet.reset();
-    cout << "Selecting RNS nr " << nr << endl;
+    std::cout << "Selecting RNS nr " << nr << std::endl;
 
     if (nr <= 0)
     {
@@ -302,7 +302,7 @@ void showCamWindow::selectRNS(int nr)
 
         currentRobotNodeSet = robotNodeSets[nr];
         currentRobotNodes = currentRobotNodeSet->getAllRobotNodes();
-        /*cout << "HIGHLIGHTING rns " << currentRobotNodeSet->getName() << endl;
+        /*cout << "HIGHLIGHTING rns " << currentRobotNodeSet->getName() << std::endl;
         if (visualization)
         {
 
@@ -324,7 +324,7 @@ void showCamWindow::selectJoint(int nr)
     }
 
     currentRobotNode.reset();
-    cout << "Selecting Joint nr " << nr << endl;
+    std::cout << "Selecting Joint nr " << nr << std::endl;
 
     if (nr < 0 || nr >= (int)currentRobotNodes.size())
     {
@@ -355,7 +355,7 @@ void showCamWindow::selectJoint(int nr)
         UI.horizontalSliderPos->setEnabled(false);
     }
 
-    cout << "HIGHLIGHTING node " << currentRobotNodes[nr]->getName() << endl;
+    std::cout << "HIGHLIGHTING node " << currentRobotNodes[nr]->getName() << std::endl;
 
     if (visualization)
     {
@@ -399,7 +399,7 @@ void showCamWindow::selectRobot()
 void showCamWindow::loadRobot()
 {
     robotSep->removeAllChildren();
-    cout << "Loading Robot from " << m_sRobotFilename << endl;
+    std::cout << "Loading Robot from " << m_sRobotFilename << std::endl;
     currentRobotNode.reset();
     currentRobotNodes.clear();
     currentRobotNodeSet.reset();
@@ -413,7 +413,7 @@ void showCamWindow::loadRobot()
 
         if (!importer)
         {
-            cout << " ERROR while grabbing importer" << endl;
+            std::cout << " ERROR while grabbing importer" << std::endl;
             return;
         }
 
@@ -423,14 +423,14 @@ void showCamWindow::loadRobot()
     }
     catch (VirtualRobotException& e)
     {
-        cout << " ERROR while creating robot" << endl;
-        cout << e.what();
+        std::cout << " ERROR while creating robot" << std::endl;
+        std::cout << e.what();
         return;
     }
 
     if (!robot)
     {
-        cout << " ERROR while creating robot" << endl;
+        std::cout << " ERROR while creating robot" << std::endl;
         return;
     }
 

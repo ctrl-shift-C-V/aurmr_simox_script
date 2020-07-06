@@ -303,7 +303,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     gDemoApplication->reshape(sWidth, sHeight);
 
     //RedirectIOToConsole();
-    //cout << "Test output to cout" << endl;
+    //cout << "Test output to cout" << std::endl;
     // program main loop
     while (!quit)
     {

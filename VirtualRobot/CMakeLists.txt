@@ -217,6 +217,7 @@ SET(SOURCES
     IK/PoseQualityExtendedManipulability.cpp
     IK/PoseQualityManipulability.cpp
     IK/PoseQualityMeasurement.cpp
+    IK/RobotPoseDifferentialIK.cpp
     IK/StackedIK.cpp
     IK/SupportPolygon.cpp
     IK/constraints/BalanceConstraint.cpp
@@ -418,6 +419,7 @@ SET(INCLUDES
     IK/PoseQualityExtendedManipulability.h
     IK/PoseQualityManipulability.h
     IK/PoseQualityMeasurement.h
+    IK/RobotPoseDifferentialIK.h
     IK/StackedIK.h
     IK/SupportPolygon.h
     IK/constraints/BalanceConstraint.h

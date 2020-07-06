@@ -56,7 +56,7 @@ namespace VirtualRobot
     };
 
 
-    typedef boost::shared_ptr<RobotNodeActuator> RobotNodeActuatorPtr;
+    typedef std::shared_ptr<RobotNodeActuator> RobotNodeActuatorPtr;
 
 } // namespace VirtualRobot
 

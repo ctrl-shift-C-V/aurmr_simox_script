@@ -26,7 +26,7 @@ namespace Saba
 
     void PlanningThread::start()
     {
-        boost::lock_guard<boost::mutex> lock(mutex);
+        std::scoped_lock lock(mutex);
 
         if (threadStarted)
         {
@@ -38,7 +38,10 @@ namespace Saba
         threadStarted = true;
         plannerFinished = false;
 
-        planningThread = boost::thread(&PlanningThread::workingMethod, this);
+        planningThread = std::thread([this]()
+        {
+            this->workingMethod();
+        });
     }
 
     void PlanningThread::interrupt(bool waitUntilStopped)
@@ -72,7 +75,7 @@ namespace Saba
 
     bool PlanningThread::isRunning()
     {
-        boost::lock_guard<boost::mutex> lock(mutex);
+        std::scoped_lock lock(mutex);
         return threadStarted;
     }
 
@@ -85,7 +88,7 @@ namespace Saba
     {
         if (!threadStarted)
         {
-            VR_WARNING << "Thread should be in started mode?!" << endl;
+            VR_WARNING << "Thread should be in started mode?!" << std::endl;
         }
 
         VR_ASSERT(planner);

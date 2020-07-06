@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(testPositionSensor)
     BOOST_REQUIRE(rn);
     BOOST_REQUIRE(rn->hasSensor("sensor1"));
 
-    VirtualRobot::PositionSensorPtr ps = boost::dynamic_pointer_cast<VirtualRobot::PositionSensor>(rn->getSensor("sensor1"));
+    VirtualRobot::PositionSensorPtr ps = std::dynamic_pointer_cast<VirtualRobot::PositionSensor>(rn->getSensor("sensor1"));
     BOOST_REQUIRE(ps);
 
     Eigen::Matrix4f p = ps->getGlobalPose();

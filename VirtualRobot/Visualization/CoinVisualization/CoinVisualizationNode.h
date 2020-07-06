@@ -43,7 +43,8 @@ namespace VirtualRobot
     {
         friend class CoinVisualizationFactory;
     public:
-        CoinVisualizationNode(TriMeshModelPtr tri);
+        CoinVisualizationNode(const TriMeshModelPtr &tri);
+        CoinVisualizationNode(const TriMeshModel& tri);
         CoinVisualizationNode(SoNode* visualizationNode, float margin = 0.0f);
         ~CoinVisualizationNode() override;
         TriMeshModelPtr getTriMeshModel() override;
@@ -121,7 +122,7 @@ namespace VirtualRobot
                                        const SoPrimitiveVertex* v3);
     };
 
-    typedef boost::shared_ptr<CoinVisualizationNode> CoinVisualizationNodePtr;
+    typedef std::shared_ptr<CoinVisualizationNode> CoinVisualizationNodePtr;
 
 } // namespace VirtualRobot
 

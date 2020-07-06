@@ -103,7 +103,7 @@ protected:
     bool physicsCoMEnabled;
     bool physicsInertiaEnabled;
 
-    boost::shared_ptr<VirtualRobot::CoinVisualization> visualization;
+    std::shared_ptr<VirtualRobot::CoinVisualization> visualization;
 
     void testPerformance(VirtualRobot::RobotPtr robot, VirtualRobot::RobotNodeSetPtr rns);
 };

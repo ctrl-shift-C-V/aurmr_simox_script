@@ -81,22 +81,22 @@ namespace VirtualRobot
 
     void FeetPosture::print()
     {
-        cout << "FeetPosture:" << endl;
-        cout << "* Left leg:" << leftLeg->getName() << endl;
-        cout << "* Left leg collision model:" << leftLegCol->getName() << endl;
-        cout << "* Left Foot/TCP:" << leftTCP->getName() << endl;
-        cout << "* Right leg:" << rightLeg->getName() << endl;
-        cout << "* Right leg collision model:" << rightLegCol->getName() << endl;
-        cout << "* Right Foot/TCP:" << rightTCP->getName() << endl;
-        cout << "* Base Node: " << baseNode->getName() << endl;
+        std::cout << "FeetPosture:" << std::endl;
+        std::cout << "* Left leg:" << leftLeg->getName() << std::endl;
+        std::cout << "* Left leg collision model:" << leftLegCol->getName() << std::endl;
+        std::cout << "* Left Foot/TCP:" << leftTCP->getName() << std::endl;
+        std::cout << "* Right leg:" << rightLeg->getName() << std::endl;
+        std::cout << "* Right leg collision model:" << rightLegCol->getName() << std::endl;
+        std::cout << "* Right Foot/TCP:" << rightTCP->getName() << std::endl;
+        std::cout << "* Base Node: " << baseNode->getName() << std::endl;
 
         if (left2Right)
         {
-            cout << "* RNS Left->Right foot: " << left2Right->getName() << endl;
+            std::cout << "* RNS Left->Right foot: " << left2Right->getName() << std::endl;
         }
         else
         {
-            cout << "* RNS Left->Right foot: <not set>" << endl;
+            std::cout << "* RNS Left->Right foot: <not set>" << std::endl;
         }
     }
 

@@ -28,7 +28,7 @@ float TIMER_MS = 30.0f;
 showSceneWindow::showSceneWindow(std::string& sSceneFile)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
 
     sceneFile = sSceneFile;
     sceneSep = new SoSeparator;
@@ -62,7 +62,7 @@ void showSceneWindow::setupUI()
 
     // setup
     viewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-    viewer->setAccumulationBuffer(true);
+    viewer->setAccumulationBuffer(false);
     viewer->setAntialiasing(true, 4);
 
     viewer->setGLRenderAction(new SoLineHighlightRenderAction);
@@ -267,7 +267,7 @@ void showSceneWindow::loadScene()
     currentObject.reset();
     currentRobot.reset();
     currentTrajectory.reset();
-    cout << "Loading Scene from " << sceneFile << endl;
+    std::cout << "Loading Scene from " << sceneFile << std::endl;
 
     scene.reset();
 
@@ -277,7 +277,7 @@ void showSceneWindow::loadScene()
     }
     catch (VirtualRobotException& e)
     {
-        cout << "Could not find valid scene in file " << sceneFile << endl;
+        std::cout << "Could not find valid scene in file " << sceneFile << std::endl;
     }
 
     if (!scene)
@@ -291,7 +291,7 @@ void showSceneWindow::loadScene()
 
             if (mo)
             {
-                VR_INFO << "Loaded Manipulation object:" << endl;
+                VR_INFO << "Loaded Manipulation object:" << std::endl;
                 mo->print();
                 scene.reset(new Scene(mo->getName()));
                 scene->registerManipulationObject(mo);
@@ -299,7 +299,7 @@ void showSceneWindow::loadScene()
         }
         catch (VirtualRobotException& e)
         {
-            cout << "Could not find valid manipulation object in file " << sceneFile << endl;
+            std::cout << "Could not find valid manipulation object in file " << sceneFile << std::endl;
         }
     }
 
@@ -313,7 +313,7 @@ void showSceneWindow::loadScene()
 
             if (mo)
             {
-                VR_INFO << "Loaded obstacle:" << endl;
+                VR_INFO << "Loaded obstacle:" << std::endl;
                 mo->print();
                 scene.reset(new Scene(mo->getName()));
                 scene->registerObstacle(mo);
@@ -321,41 +321,41 @@ void showSceneWindow::loadScene()
         }
         catch (VirtualRobotException& e)
         {
-            cout << "Could not find valid obstacle in file " << sceneFile << endl;
+            std::cout << "Could not find valid obstacle in file " << sceneFile << std::endl;
         }
     }
 
     if (!scene)
     {
-        cout << " ERROR while creating scene" << endl;
+        std::cout << " ERROR while creating scene" << std::endl;
         return;
     }
 
 
     /*std::vector<VirtualRobot::ManipulationObjectPtr> mo;
     mo = scene->getManipulationObjects();
-    cout << "Printing " << mo.size() << " objects" << endl;
+    std::cout << "Printing " << mo.size() << " objects" << std::endl;
     for (size_t i=0;i<mo.size();i++)
     {
         mo[i]->print();
         mo[i]->showCoordinateSystem(true);
         Eigen::Vector3f c = mo[i]->getCoMGlobal();
-        cout << "com global: \n" << c << endl;
+        std::cout << "com global: \n" << c << std::endl;
         c = mo[i]->getCoMLocal();
-        cout << "com local: \n" << c << endl;
+        std::cout << "com local: \n" << c << std::endl;
         //mo[i]->showBoundingBox(true);
     }*/
     /*std::vector<VirtualRobot::ObstaclePtr> o;
     o = scene->getObstacles();
-    cout << "Printing " << o.size() << " obstacles" << endl;
+    std::cout << "Printing " << o.size() << " obstacles" << std::endl;
     for (size_t i=0;i<o.size();i++)
     {
         o[i]->print();
         o[i]->showCoordinateSystem(true);
         Eigen::Vector3f c = o[i]->getCoMGlobal();
-        cout << "com global: \n" << c << endl;
+        std::cout << "com global: \n" << c << std::endl;
         c = o[i]->getCoMLocal();
-        cout << "com local: \n" << c << endl;
+        std::cout << "com local: \n" << c << std::endl;
         //mo[i]->showBoundingBox(true);
     }*/
 
@@ -506,7 +506,7 @@ void showSceneWindow::selectObject(int nr)
     if (scene->hasManipulationObject(ob))
     {
         VirtualRobot::ManipulationObjectPtr mo = scene->getManipulationObject(ob);
-        currentObject = boost::dynamic_pointer_cast<SceneObject>(mo);
+        currentObject = std::dynamic_pointer_cast<SceneObject>(mo);
     }
 
     updateGrasps();
@@ -590,7 +590,7 @@ void showSceneWindow::updateGrasps()
     UI.comboBoxGrasp->clear();
     QString t("-");
     UI.comboBoxGrasp->addItem(t);
-    VirtualRobot::ManipulationObjectPtr mo = boost::dynamic_pointer_cast<ManipulationObject>(currentObject);
+    VirtualRobot::ManipulationObjectPtr mo = std::dynamic_pointer_cast<ManipulationObject>(currentObject);
 
     if (mo && currentEEF)
     {

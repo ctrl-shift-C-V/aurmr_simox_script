@@ -25,7 +25,6 @@
 #include "../VirtualRobot.h"
 
 #include "RobotNode.h"
-#include "../RobotFactory.h"
 
 #include <Eigen/Core>
 
@@ -134,7 +133,7 @@ namespace VirtualRobot
 
     };
 
-    typedef boost::shared_ptr<RobotNodePrismatic> RobotNodePrismaticPtr;
+    typedef std::shared_ptr<RobotNodePrismatic> RobotNodePrismaticPtr;
 
 } // namespace VirtualRobot
 

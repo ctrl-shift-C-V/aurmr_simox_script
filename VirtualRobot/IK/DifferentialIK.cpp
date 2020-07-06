@@ -7,6 +7,9 @@
 #include "../VirtualRobotException.h"
 #include "../CollisionDetection/CollisionChecker.h"
 
+#include <boost/math/special_functions/fpclassify.hpp>
+
+#include <Eigen/Geometry>
 
 #include <algorithm>
 #include <cfloat>
@@ -15,6 +18,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     DifferentialIK::DifferentialIK(RobotNodeSetPtr _rns, RobotNodePtr _coordSystem, JacobiProvider::InverseJacobiMethod invJacMethod, float invParam) :
         JacobiProvider(_rns, invJacMethod), invParam(invParam), coordSystem(_coordSystem), nRows(0)
@@ -62,21 +67,21 @@ namespace VirtualRobot
         this->tolerancePosition[tcp] = tolerancePosition;
         this->toleranceRotation[tcp] = toleranceRotation;
 
-        RobotNodePtr tcpRN = boost::dynamic_pointer_cast<RobotNode>(tcp);
+        RobotNodePtr tcpRN = std::dynamic_pointer_cast<RobotNode>(tcp);
 
         if (!tcpRN)
         {
             if (!tcp->getParent())
             {
-                VR_ERROR << "tcp not linked to a parent!!!" << endl;
+                VR_ERROR << "tcp not linked to a parent!!!" << std::endl;
                 return;
             }
 
-            tcpRN = boost::dynamic_pointer_cast<RobotNode>(tcp->getParent());
+            tcpRN = std::dynamic_pointer_cast<RobotNode>(tcp->getParent());
 
             if (!tcpRN)
             {
-                VR_ERROR << "tcp not linked to robotNode!!!" << endl;
+                VR_ERROR << "tcp not linked to robotNode!!!" << std::endl;
                 return;
             }
         }
@@ -153,7 +158,7 @@ namespace VirtualRobot
             }
             else
             {
-                VR_ERROR << "Internal error?!" << endl;    // Error
+                VR_ERROR << "Internal error?!" << std::endl;    // Error
             }
         }
     }
@@ -228,7 +233,7 @@ namespace VirtualRobot
             }
             else
             {
-                VR_ERROR << "Internal error?!" << endl;    // Error
+                VR_ERROR << "Internal error?!" << std::endl;    // Error
             }
         }
     }
@@ -329,22 +334,22 @@ namespace VirtualRobot
 
         //  THROW_VR_EXCEPTION_IF(!tcp,boost::format("No tcp defined in node set \"%1%\" of robot %2% (DifferentialIK::%3% )") % this->rns->getName() % this->rns->getRobot()->getName() % BOOST_CURRENT_FUNCTION);
 
-        RobotNodePtr tcpRN = boost::dynamic_pointer_cast<RobotNode>(tcp);
+        RobotNodePtr tcpRN = std::dynamic_pointer_cast<RobotNode>(tcp);
 
         if (!tcpRN)
         {
             if (!tcp->getParent())
             {
-                VR_ERROR << "tcp not linked to a parent!!!" << endl;
+                VR_ERROR << "tcp not linked to a parent!!!" << std::endl;
                 jac.setZero();
                 return;
             }
 
-            tcpRN = boost::dynamic_pointer_cast<RobotNode>(tcp->getParent());
+            tcpRN = std::dynamic_pointer_cast<RobotNode>(tcp->getParent());
 
             if (!tcpRN)
             {
-                VR_ERROR << "tcp not linked to robotNode!!!" << endl;
+                VR_ERROR << "tcp not linked to robotNode!!!" << std::endl;
                 jac.setZero();
                 return;
             }
@@ -382,8 +387,8 @@ namespace VirtualRobot
                 if (dof->isRotationalJoint())
                 {
                     // get axis
-                    boost::shared_ptr<RobotNodeRevolute> revolute
-                        = boost::dynamic_pointer_cast<RobotNodeRevolute>(dof);
+                    std::shared_ptr<RobotNodeRevolute> revolute
+                        = std::dynamic_pointer_cast<RobotNodeRevolute>(dof);
                     THROW_VR_EXCEPTION_IF(!revolute, "Internal error: expecting revolute joint");
                     // todo: find a better way of handling different joint types
                     axis = revolute->getJointRotationAxis(coordSystem);
@@ -408,8 +413,8 @@ namespace VirtualRobot
                             toTCP /= 1000.0f;
                         }
 
-                        //cout << "toTCP: " << tcp->getName() << endl;
-                        //cout << toTCP << endl;
+                        //cout << "toTCP: " << tcp->getName() << std::endl;
+                        //cout << toTCP << std::endl;
                         tmpUpdateJacobianPosition.block(0, i, 3, 1) = axis.cross(toTCP);
                     }
 
@@ -422,8 +427,8 @@ namespace VirtualRobot
                 else if (dof->isTranslationalJoint())
                 {
                     // -> prismatic joint
-                    boost::shared_ptr<RobotNodePrismatic> prismatic
-                        = boost::dynamic_pointer_cast<RobotNodePrismatic>(dof);
+                    std::shared_ptr<RobotNodePrismatic> prismatic
+                        = std::dynamic_pointer_cast<RobotNodePrismatic>(dof);
                     THROW_VR_EXCEPTION_IF(!prismatic, "Internal error: expecting prismatic joint");
                     // todo: find a better way of handling different joint types
                     axis = prismatic->getJointTranslationDirection(coordSystem);
@@ -446,7 +451,7 @@ namespace VirtualRobot
 
             if (diffClock > 0.0f)
             {
-                cout << "Jacobi Loop " << i << ": RobotNode: " << dof->getName() << ", time:" << diffClock << endl;
+                std::cout << "Jacobi Loop " << i << ": RobotNode: " << dof->getName() << ", time:" << diffClock << std::endl;
             }
 
 #endif
@@ -484,8 +489,8 @@ namespace VirtualRobot
             jac.block(index, 0, 3, nDoF) = tmpUpdateJacobianOrientation;
         }
 
-        //cout << "partial JACOBIAN: (row 1-3)" << endl;
-        //cout << result.block(0,0,3,3) << endl;
+        //cout << "partial JACOBIAN: (row 1-3)" << std::endl;
+        //cout << result.block(0,0,3,3) << std::endl;
 
 #ifdef CHECK_PERFORMANCE
         clock_t endT = clock();
@@ -493,7 +498,7 @@ namespace VirtualRobot
 
         if (diffClock > 1.0f)
         {
-            cout << "Jacobirest time:" << diffClock << endl;
+            std::cout << "Jacobirest time:" << diffClock << std::endl;
         }
 
 #endif
@@ -531,7 +536,7 @@ namespace VirtualRobot
         clock_t endT = clock();
         float diffClock1 = (float)(((float)(startT2 - startT) / (float)CLOCKS_PER_SEC) * 1000.0f);
         float diffClock2 = (float)(((float)(endT - startT2) / (float)CLOCKS_PER_SEC) * 1000.0f);
-        cout << "getPseudoInverseJacobianMatrix time1:" << diffClock1 << ", time2: " << diffClock2 << endl;
+        std::cout << "getPseudoInverseJacobianMatrix time1:" << diffClock1 << ", time2: " << diffClock2 << std::endl;
 #endif
         return res;
     }
@@ -598,48 +603,48 @@ namespace VirtualRobot
 
         if (coordSystem)
         {
-            cout << "Coordsystem: " << coordSystem->getName() << endl;
+            std::cout << "Coordsystem: " << coordSystem->getName() << std::endl;
         }
         else
         {
-            cout << "Coordsystem: global" << endl;
+            std::cout << "Coordsystem: global" << std::endl;
         }
 
-        cout << "TCPs:" << endl;
+        std::cout << "TCPs:" << std::endl;
 
         for (auto tcp : tcp_set)
         {
-            RobotNodePtr tcpRN = boost::dynamic_pointer_cast<RobotNode>(tcp);
+            RobotNodePtr tcpRN = std::dynamic_pointer_cast<RobotNode>(tcp);
 
             if (!tcpRN)
             {
                 continue;
             }
 
-            cout << "* " << tcpRN->getName() << endl;
-            cout << "** Target: " << endl << this->targets[tcp] << endl;
-            cout << "** Error: " << getDeltaToGoal(tcp).transpose() << endl;
-            cout << "** mode:";
+            std::cout << "* " << tcpRN->getName() << std::endl;
+            std::cout << "** Target: " << endl << this->targets[tcp] << std::endl;
+            std::cout << "** Error: " << getDeltaToGoal(tcp).transpose() << std::endl;
+            std::cout << "** mode:";
 
             if (this->modes[tcp] == IKSolver::All)
             {
-                cout << "all" << endl;
+                std::cout << "all" << std::endl;
             }
             else if (this->modes[tcp] == IKSolver::Position)
             {
-                cout << "position" << endl;
+                std::cout << "position" << std::endl;
             }
             else if (this->modes[tcp] == IKSolver::Orientation)
             {
-                cout << "orientation" << endl;
+                std::cout << "orientation" << std::endl;
             }
             else
             {
-                cout << "unknown" << endl;
+                std::cout << "unknown" << std::endl;
             }
 
-            cout << "** tolerances pos: " << this->tolerancePosition[tcp] << ", rot:" << this->toleranceRotation[tcp] << endl;
-            cout << "** Nodes:";
+            std::cout << "** tolerances pos: " << this->tolerancePosition[tcp] << ", rot:" << this->toleranceRotation[tcp] << std::endl;
+            std::cout << "** Nodes:";
 
             // Iterate over all degrees of freedom
             for (size_t i = 0; i < nDoF; i++)
@@ -649,11 +654,11 @@ namespace VirtualRobot
                 //check if the tcp is affected by this DOF
                 if (find(parents[tcpRN].begin(), parents[tcpRN].end(), dof) != parents[tcpRN].end())
                 {
-                    cout << dof->getName() << ",";
+                    std::cout << dof->getName() << ",";
                 }
             }
 
-            cout << endl;
+            std::cout << std::endl;
         }
     }
 
@@ -755,10 +760,10 @@ namespace VirtualRobot
         }*/
         if (verbose)
         {
-            VR_INFO << "ERROR (TASK):" << endl << currentError << endl;
-            VR_INFO << "JACOBIAN:" << endl << currentJacobian << endl;
-            VR_INFO << "PSEUDOINVERSE JACOBIAN:" << endl << currentInvJacobian << endl;
-            VR_INFO << "THETA (JOINT):" << endl << tmpComputeStepTheta << endl;
+            VR_INFO << "ERROR (TASK):" << endl << currentError << std::endl;
+            VR_INFO << "JACOBIAN:" << endl << currentJacobian << std::endl;
+            VR_INFO << "PSEUDOINVERSE JACOBIAN:" << endl << currentInvJacobian << std::endl;
+            VR_INFO << "THETA (JOINT):" << endl << tmpComputeStepTheta << std::endl;
         }
 
         return tmpComputeStepTheta;
@@ -845,7 +850,7 @@ namespace VirtualRobot
 
             if (verbose)
             {
-                VR_INFO << "TCP " << tcp->getName() << ", errPos:" << currentErrorPos << ", errRot:" << currentErrorRot << ", maxErrPos:" << maxErrorPos << ", maxErrorRot:" << maxErrorRot << endl;
+                VR_INFO << "TCP " << tcp->getName() << ", errPos:" << currentErrorPos << ", errRot:" << currentErrorRot << ", maxErrPos:" << maxErrorPos << ", maxErrorRot:" << maxErrorRot << std::endl;
             }
 
             if (currentErrorPos > maxErrorPos  || currentErrorRot > maxErrorRot)
@@ -887,7 +892,7 @@ namespace VirtualRobot
 
                 if (boost::math::isnan(jv[i]) || boost::math::isinf(jv[i]))
                 {
-                    VR_WARNING << "Aborting, invalid joint value (nan)" << endl;
+                    VR_WARNING << "Aborting, invalid joint value (nan)" << std::endl;
                     return false;
                 }
             }
@@ -899,7 +904,7 @@ namespace VirtualRobot
             {
                 if (verbose)
                 {
-                    VR_INFO << "Tolerances ok, loop:" << step << endl;
+                    VR_INFO << "Tolerances ok, loop:" << step << std::endl;
                 }
 
                 return true;
@@ -911,7 +916,7 @@ namespace VirtualRobot
             {
                 if (verbose)
                 {
-                    VR_INFO << "Could not improve result any more (dTheta.norm()=" << d << "), loop:" << step << endl;
+                    VR_INFO << "Could not improve result any more (dTheta.norm()=" << d << "), loop:" << step << std::endl;
                 }
 
                 robot->setJointValues(rns, jvBest);
@@ -924,7 +929,7 @@ namespace VirtualRobot
             {
                 if (verbose)
                 {
-                    VR_INFO << "Could not improve result any more (current position error=" << posDist << ", last loop's error:" << lastDist << "), loop:" << step << endl;
+                    VR_INFO << "Could not improve result any more (current position error=" << posDist << ", last loop's error:" << lastDist << "), loop:" << step << std::endl;
                 }
 
                 robot->setJointValues(rns, jvBest);
@@ -938,9 +943,9 @@ namespace VirtualRobot
 
         if (verbose)
         {
-            VR_INFO << "IK failed, loop:" << step << endl;
-            VR_INFO << "pos error:" << getErrorPosition() << endl;
-            VR_INFO << "rot error:" << getErrorRotation() << endl;
+            VR_INFO << "IK failed, loop:" << step << std::endl;
+            VR_INFO << "pos error:" << getErrorPosition() << std::endl;
+            VR_INFO << "rot error:" << getErrorRotation() << std::endl;
         }
 
         robot->setJointValues(rns, jvBest);

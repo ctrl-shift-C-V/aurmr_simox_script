@@ -30,7 +30,7 @@
 
 namespace VirtualRobot
 {
-    class VIRTUAL_ROBOT_IMPORT_EXPORT ConstrainedIK : public boost::enable_shared_from_this<ConstrainedIK>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT ConstrainedIK : public std::enable_shared_from_this<ConstrainedIK>
     {
     public:
         enum SeedType
@@ -90,6 +90,6 @@ namespace VirtualRobot
         float raiseEpsilon;
     };
 
-    typedef boost::shared_ptr<ConstrainedIK> ConstrainedIKPtr;
+    typedef std::shared_ptr<ConstrainedIK> ConstrainedIKPtr;
 }
 

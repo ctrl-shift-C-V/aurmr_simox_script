@@ -29,7 +29,6 @@
 #include "../Primitive.h"
 
 #include <Eigen/Core>
-#include <Eigen/Geometry>
 #include <string>
 
 namespace VirtualRobot
@@ -232,7 +231,7 @@ namespace VirtualRobot
         virtual void cleanup() {}
 
     };
-    typedef boost::shared_ptr<VisualizationFactory::Color> ColorPtr;
+    typedef std::shared_ptr<VisualizationFactory::Color> ColorPtr;
 
 } // namespace VirtualRobot
 

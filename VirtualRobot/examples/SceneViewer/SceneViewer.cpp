@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 {
     VirtualRobot::init(argc, argv, "Simox Scene Viewer");
 
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
     std::string filename("scenes/examples/SceneViewer/scene1.xml");
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(filename);
     VirtualRobot::RuntimeEnvironment::considerKey("scene");

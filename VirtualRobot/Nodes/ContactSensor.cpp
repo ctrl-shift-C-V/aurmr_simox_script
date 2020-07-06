@@ -21,7 +21,7 @@ namespace VirtualRobot
     {
         if (printDecoration)
         {
-            cout << "******** ContactSensor ********" << endl;
+            std::cout << "******** ContactSensor ********" << std::endl;
         }
 
         Sensor::print(printChildren, false);
@@ -45,7 +45,7 @@ namespace VirtualRobot
             pre += t;
         }
 
-        ss << pre << "<Sensor type='" << ContactSensorFactory::getName() << "'/>" << endl;
+        ss << pre << "<Sensor type='" << ContactSensorFactory::getName() << "'/>" << std::endl;
         std::string pre2 = pre + t;
 
         return ss.str();

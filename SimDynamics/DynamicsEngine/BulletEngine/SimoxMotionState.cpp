@@ -27,7 +27,7 @@ namespace SimDynamics
         _graphicsTransfrom.setIdentity();
         _comOffset.setIdentity();
         Eigen::Vector3f com = sceneObject->getCoMLocal();
-        RobotNodePtr rn = boost::dynamic_pointer_cast<RobotNode>(sceneObject);
+        RobotNodePtr rn = std::dynamic_pointer_cast<RobotNode>(sceneObject);
 
         if (rn)
         {
@@ -68,9 +68,9 @@ namespace SimDynamics
         _transform = worldPose; // com position
 #ifdef _DEBUG
 
-        if (boost::math::isnan(_transform.getOrigin().x()) || boost::math::isnan(_transform.getOrigin().y()) || boost::math::isnan(_transform.getOrigin().z()))
+        if (std::isnan(_transform.getOrigin().x()) || std::isnan(_transform.getOrigin().y()) || std::isnan(_transform.getOrigin().z()))
         {
-            VR_ERROR << "NAN transform!!!" << endl;
+            VR_ERROR << "NAN transform!!!" << std::endl;
         }
 
 #endif
@@ -128,7 +128,7 @@ namespace SimDynamics
             RobotNodePtr rn = robotNodeActuator->getRobotNode();
             DynamicsWorldPtr w = DynamicsWorld::GetWorld();
             DynamicsRobotPtr dr = w->getEngine()->getRobot(rn->getRobot());
-            BulletRobotPtr bdr = boost::dynamic_pointer_cast<BulletRobot>(dr);
+            BulletRobotPtr bdr = std::dynamic_pointer_cast<BulletRobot>(dr);
 
             if (bdr)
             {
@@ -143,9 +143,9 @@ namespace SimDynamics
                         float ja = float(bdr->getJointAngle(link.nodeJoint));
 #ifdef _DEBUG
 
-                        if (boost::math::isnan(ja))
+                        if (std::isnan(ja))
                         {
-                            VR_ERROR << "NAN !!!" << endl;
+                            VR_ERROR << "NAN !!!" << std::endl;
                         }
 
 #endif
@@ -161,14 +161,14 @@ namespace SimDynamics
 
                 if (rn->getName() == "Shoulder 1 L")
                 {
-                    cout << "Shoulder 1 L:" << ja << ", speed:" << bdr->getJointSpeed(rn) << endl;
+                    std::cout << "Shoulder 1 L:" << ja << ", speed:" << bdr->getJointSpeed(rn) << std::endl;
                 }
 
 #endif
             } /*else
 
         {
-            VR_WARNING << "Could not determine dynamic robot?!" << endl;
+            VR_WARNING << "Could not determine dynamic robot?!" << std::endl;
         }*/
         }
         else

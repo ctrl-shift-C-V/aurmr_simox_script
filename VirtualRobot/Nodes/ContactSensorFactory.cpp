@@ -63,7 +63,7 @@ namespace VirtualRobot
         {
             std::string nodeName = BaseIO::getLowerCase(nodeXML->name());
             {
-                THROW_VR_EXCEPTION("XML definition <" << nodeName << "> not supported in Sensor <" << sensorName << ">." << endl);
+                THROW_VR_EXCEPTION("XML definition <" << nodeName << "> not supported in Sensor <" << sensorName << ">." << std::endl);
             }
 
             nodeXML = nodeXML->next_sibling();
@@ -93,9 +93,9 @@ namespace VirtualRobot
     /**
      * \return new instance of ContactSensorFactory.
      */
-    boost::shared_ptr<SensorFactory> ContactSensorFactory::createInstance(void*)
+    std::shared_ptr<SensorFactory> ContactSensorFactory::createInstance(void*)
     {
-        boost::shared_ptr<ContactSensorFactory> psFactory(new ContactSensorFactory());
+        std::shared_ptr<ContactSensorFactory> psFactory(new ContactSensorFactory());
         return psFactory;
     }
 

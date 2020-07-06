@@ -25,7 +25,6 @@
 #include "../VirtualRobot.h"
 
 #include "RobotNode.h"
-#include "../RobotFactory.h"
 
 #include <Eigen/Core>
 
@@ -140,7 +139,7 @@ namespace VirtualRobot
         Eigen::Matrix4f tmpRotMat;
     };
 
-    typedef boost::shared_ptr<RobotNodeRevolute> RobotNodeRevolutePtr;
+    typedef std::shared_ptr<RobotNodeRevolute> RobotNodeRevolutePtr;
 
 } // namespace VirtualRobot
 

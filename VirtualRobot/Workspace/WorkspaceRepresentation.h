@@ -50,7 +50,7 @@ namespace VirtualRobot
             When the torso moves, the data representation also changes it's position according to the position of the shoulder.
     */
 
-    class VIRTUAL_ROBOT_IMPORT_EXPORT WorkspaceRepresentation : public boost::enable_shared_from_this<WorkspaceRepresentation>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT WorkspaceRepresentation : public std::enable_shared_from_this<WorkspaceRepresentation>
     {
     public:
         friend class CoinVisualizationFactory;
@@ -296,7 +296,7 @@ namespace VirtualRobot
             float minBounds[2]; // in global coord system
             float maxBounds[2]; // in global coord system
         };
-        typedef boost::shared_ptr<WorkspaceCut2D> WorkspaceCut2DPtr;
+        typedef std::shared_ptr<WorkspaceCut2D> WorkspaceCut2DPtr;
 
         struct WorkspaceCut2DTransformation
         {
@@ -305,7 +305,7 @@ namespace VirtualRobot
             Eigen::Matrix4f transformation;
         };
 
-        typedef boost::shared_ptr<WorkspaceCut2DTransformation> WorkspaceCut2DTransformationPtr;
+        typedef std::shared_ptr<WorkspaceCut2DTransformation> WorkspaceCut2DTransformationPtr;
 
         /*!
             Create a horizontal cut through this workspace data. Therefore, the z component and the orientation of the reference pose (in global coordinate system) is used.

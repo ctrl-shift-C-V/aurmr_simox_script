@@ -3,11 +3,16 @@
 #include "../RobotConfig.h"
 #include "..//Robot.h"
 #include "../VirtualRobotException.h"
+#include <VirtualRobot/MathTools.h>
+
+#include <Eigen/Dense>
+
 #include <iomanip>
 
 namespace VirtualRobot
 {
-
+    using std::cout;
+    using std::endl;
 
     Grasp::Grasp(const std::string& name, const std::string& robotType, const std::string& eef,
                  const Eigen::Matrix4f& poseInTCPCoordSystem, const std::string& creation,
@@ -23,26 +28,26 @@ namespace VirtualRobot
     {
         if (printDecoration)
         {
-            cout << "**** Grasp ****" << endl;
-            cout << " * Robot type: " << robotType << endl;
-            cout << " * End Effector: " << eef << endl;
-            cout << " * EEF Preshape: " << preshape << endl;
+            std::cout << "**** Grasp ****" << std::endl;
+            std::cout << " * Robot type: " << robotType << std::endl;
+            std::cout << " * End Effector: " << eef << std::endl;
+            std::cout << " * EEF Preshape: " << preshape << std::endl;
         }
 
-        cout << " * Name: " << name << endl;
-        cout << " * Creation Method: " << creation << endl;
-        cout << " * Quality: " << quality << endl;
+        std::cout << " * Name: " << name << std::endl;
+        std::cout << " * Creation Method: " << creation << std::endl;
+        std::cout << " * Quality: " << quality << std::endl;
         {
             // scope
             std::ostringstream sos;
             sos << std::setiosflags(std::ios::fixed);
-            sos << " * Pose in EEF-TCP coordinate system:" << endl << poseTcp << endl;
-            cout << sos.str() << endl;
+            sos << " * Pose in EEF-TCP coordinate system:" << endl << poseTcp << std::endl;
+            std::cout << sos.str() << std::endl;
         } // scope
 
         if (printDecoration)
         {
-            cout << endl;
+            std::cout << std::endl;
         }
     }
 
@@ -64,7 +69,7 @@ namespace VirtualRobot
 
         if (!eefPtr)
         {
-            VR_ERROR << "No EndEffector with name " << eef << " stored in robot " << robot->getName() << endl;
+            VR_ERROR << "No EndEffector with name " << eef << " stored in robot " << robot->getName() << std::endl;
             return Eigen::Matrix4f::Identity();
         }
 
@@ -72,7 +77,7 @@ namespace VirtualRobot
 
         if (!tcpNode)
         {
-            VR_ERROR << "No tcp with name " << eefPtr->getTcpName() << " in EndEffector " << eef << " in robot " << robot->getName() << endl;
+            VR_ERROR << "No tcp with name " << eefPtr->getTcpName() << " in EndEffector " << eef << " in robot " << robot->getName() << std::endl;
             return Eigen::Matrix4f::Identity();
         }
 
@@ -148,6 +153,11 @@ namespace VirtualRobot
     {
         Eigen::Matrix4f result = objectPose * poseTcp.inverse();
         return result;
+    }
+
+    Eigen::Matrix4f Grasp::getTcpPoseRobotRoot(const Eigen::Matrix4f& objectPose, const RobotPtr& robot) const
+    {
+        return robot->getGlobalPose().inverse() * getTcpPoseGlobal(objectPose);
     }
 
     Eigen::Matrix4f Grasp::getObjectTargetPoseGlobal(const Eigen::Matrix4f& graspingPose) const

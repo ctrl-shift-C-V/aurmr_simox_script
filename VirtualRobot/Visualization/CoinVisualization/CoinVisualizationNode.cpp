@@ -31,8 +31,14 @@
 
 namespace VirtualRobot
 {
-    CoinVisualizationNode::CoinVisualizationNode(TriMeshModelPtr tri):
+    using std::cout;
+    using std::endl;
+    CoinVisualizationNode::CoinVisualizationNode(const TriMeshModelPtr& tri):
         CoinVisualizationNode(CoinVisualizationFactory::getCoinVisualization(tri))
+    {}
+
+    CoinVisualizationNode::CoinVisualizationNode(const TriMeshModel& tri) :
+        CoinVisualizationNode(std::make_shared<TriMeshModel>(tri))
     {}
     /**
      * Store a reference to \p visualizationNode in the member
@@ -55,7 +61,7 @@ namespace VirtualRobot
 
         if (!visualization)
         {
-            cout << "dummy node created" << endl;
+            std::cout << "dummy node created" << std::endl;
             visualization = new SoSeparator(); // create dummy node
         }
 
@@ -185,7 +191,7 @@ namespace VirtualRobot
         TriMeshModel* triangleMeshModel  = static_cast<TriMeshModel*>(data);
         if (!triangleMeshModel)
         {
-            VR_INFO << ": Internal error, NULL data" << endl;
+            VR_INFO << ": Internal error, NULL data" << std::endl;
             return;
         }
 
@@ -246,7 +252,7 @@ namespace VirtualRobot
 
     void CoinVisualizationNode::print()
     {
-        cout << "  CoinVisualization: ";
+        std::cout << "  CoinVisualization: ";
 
         if (!triMeshModel)
         {
@@ -260,20 +266,20 @@ namespace VirtualRobot
 
             if (triMeshModel->faces.size() > 0)
             {
-                cout << triMeshModel->faces.size() << " triangles" << endl;// Extend: " << ma[0]-mi[0] << ", " << ma[1] - mi[1] << ", " << ma[2] - mi[2] << endl;
+                std::cout << triMeshModel->faces.size() << " triangles" << std::endl;// Extend: " << ma[0]-mi[0] << ", " << ma[1] - mi[1] << ", " << ma[2] - mi[2] << std::endl;
                 triMeshModel->getSize(mi, ma);
-                cout << "    Min point: (" << mi[0] << "," << mi[1] << "," << mi[2] << ")" << endl;
-                cout << "    Max point: (" << ma[0] << "," << ma[1] << "," << ma[2] << ")" << endl;
+                std::cout << "    Min point: (" << mi[0] << "," << mi[1] << "," << mi[2] << ")" << std::endl;
+                std::cout << "    Max point: (" << ma[0] << "," << ma[1] << "," << ma[2] << ")" << std::endl;
             }
             else
             {
-                cout << "No model" << endl;
+                std::cout << "No model" << std::endl;
             }
 
         }
         else
         {
-            cout << "No model" << endl;
+            std::cout << "No model" << std::endl;
         }
     }
 
@@ -281,7 +287,7 @@ namespace VirtualRobot
     {
         VisualizationNode::attachVisualization(name, v);
 
-        boost::shared_ptr<CoinVisualizationNode> coinVisualizationNode = boost::dynamic_pointer_cast<CoinVisualizationNode>(v);
+        std::shared_ptr<CoinVisualizationNode> coinVisualizationNode = std::dynamic_pointer_cast<CoinVisualizationNode>(v);
 
         if (coinVisualizationNode && coinVisualizationNode->getCoinVisualization())
         {
@@ -444,18 +450,18 @@ namespace VirtualRobot
         {
             if (!std::filesystem::create_directories(completePath))
             {
-                VR_ERROR << "Could not create model dir  " << completePath.string() << endl;
+                VR_ERROR << "Could not create model dir  " << completePath.string() << std::endl;
                 return false;
             }
         }
 
-        std::filesystem::path completeFile = std::filesystem::operator/(completePath, fn);
+        std::filesystem::path completeFile = completePath / fn;
 
         SoOutput* so = new SoOutput();
 
         if (!so->openFile(completeFile.string().c_str()))
         {
-            VR_ERROR << "Could not open file " << completeFile.string() << " for writing." << endl;
+            VR_ERROR << "Could not open file " << completeFile.string() << " for writing." << std::endl;
         }
 
         std::filesystem::path extension = completeFile.extension();

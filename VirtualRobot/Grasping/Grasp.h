@@ -75,6 +75,11 @@ namespace VirtualRobot
         Eigen::Matrix4f getTcpPoseGlobal(const Eigen::Matrix4f& objectPose) const;
 
         /*!
+            Get the pose (relative to the robot root) that has to be achieved by the tcp in order to apply the grasp on the object at position objectPose.
+        */
+        Eigen::Matrix4f getTcpPoseRobotRoot(const Eigen::Matrix4f& objectPose, const RobotPtr& robot) const;
+
+        /*!
             The returned pose is the object pose that have to be set in order to apply a grasp at pose graspingPose.
         */
         Eigen::Matrix4f getObjectTargetPoseGlobal(const Eigen::Matrix4f& graspingPose) const;

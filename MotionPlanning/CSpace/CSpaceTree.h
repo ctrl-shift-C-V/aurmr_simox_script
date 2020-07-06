@@ -25,6 +25,7 @@
 #include "../Saba.h"
 #include <iostream>
 #include <vector>
+#include <mutex>
 #include <map>
 
 namespace Saba
@@ -181,7 +182,7 @@ namespace Saba
 
         std::map<unsigned int, CSpaceNodePtr > idNodeMapping; // mapping id<->node
 
-        boost::mutex mutex;
+        std::mutex mutex;
     };
 
 } // namespace Saba

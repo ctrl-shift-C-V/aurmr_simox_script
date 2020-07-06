@@ -34,7 +34,7 @@ namespace SimDynamics
 
         SIMDYNAMICS_ASSERT(world);
 
-        bulletEngine = boost::dynamic_pointer_cast<BulletEngine>(world->getEngine());
+        bulletEngine = std::dynamic_pointer_cast<BulletEngine>(world->getEngine());
 
         SIMDYNAMICS_ASSERT(bulletEngine);
 
@@ -73,7 +73,7 @@ namespace SimDynamics
         BulletCoinQtViewer* bulletViewer = static_cast<BulletCoinQtViewer*>(userdata);
         VR_ASSERT(bulletViewer);
 
-        VR_INFO << "Selected object" << endl;
+        VR_INFO << "Selected object" << std::endl;
 
         bulletViewer->customSelection(path);
 
@@ -84,7 +84,7 @@ namespace SimDynamics
         BulletCoinQtViewer* bulletViewer = static_cast<BulletCoinQtViewer*>(userdata);
         VR_ASSERT(bulletViewer);
 
-        VR_INFO << "Deselected object" << endl;
+        VR_INFO << "Deselected object" << std::endl;
 
         bulletViewer->customDeselection(path);
 
@@ -112,7 +112,7 @@ namespace SimDynamics
 
         // setup
         viewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-        viewer->setAccumulationBuffer(true);
+        viewer->setAccumulationBuffer(false);
 
         //viewer->setAntialiasing(true, 4);
 
@@ -183,7 +183,7 @@ namespace SimDynamics
             // Commented out: This is now handled by Bullet (bulletMaxSubSteps * bulletTimeStepMsec is the maximal duration of a frame)
             /* double minFPS = 1000000.f/40.f;  // Don't use 60 Hz (cannot be reached due to Vsync)
             if (ms > minFPS) {
-                VR_INFO << "Slow frame (" << ms << "us elapsed)! Limiting elapsed time (losing realtime capabilities for this frame)." << endl;
+                VR_INFO << "Slow frame (" << ms << "us elapsed)! Limiting elapsed time (losing realtime capabilities for this frame)." << std::endl;
                 ms = minFPS;
             } */
             if (!simModeFixedTimeStep)
@@ -192,7 +192,7 @@ namespace SimDynamics
                 {
                     if (!warned_norealtime)
                     {
-                        VR_INFO << "Elapsed time (" << (ms / 1000.0f) << "ms) too long: Simulation is not running in realtime." << endl;
+                        VR_INFO << "Elapsed time (" << (ms / 1000.0f) << "ms) too long: Simulation is not running in realtime." << std::endl;
                         warned_norealtime = true;
                     }
                 }
@@ -215,7 +215,7 @@ namespace SimDynamics
                 }
             }
 
-            // VR_INFO << "stepSimulation(" << dt1 << ", " << bulletMaxSubSteps << ", " << (bulletTimeStepMsec / 1000.0f) << ")" << endl;
+            // VR_INFO << "stepSimulation(" << dt1 << ", " << bulletMaxSubSteps << ", " << (bulletTimeStepMsec / 1000.0f) << ")" << std::endl;
 
             //optional but useful: debug drawing
             //m_dynamicsWorld->debugDrawWorld();
@@ -243,7 +243,7 @@ namespace SimDynamics
         //VR_ASSERT(so);
         removeVisualization(robot);
 
-        boost::shared_ptr<VirtualRobot::CoinVisualization> visualization = robot->getVisualization<CoinVisualization>(visuType);
+        std::shared_ptr<VirtualRobot::CoinVisualization> visualization = robot->getVisualization<CoinVisualization>(visuType);
         SoNode* n = visualization->getCoinVisualization();
 
         if (n)
@@ -336,9 +336,9 @@ namespace SimDynamics
         }
 
         SoSeparator* n = new SoSeparator();
-        BOOST_FOREACH(VisualizationNodePtr visualizationNode, collectedVisualizationNodes)
+        for (VisualizationNodePtr const& visualizationNode : collectedVisualizationNodes)
         {
-            boost::shared_ptr<CoinVisualizationNode> coinVisualizationNode = boost::dynamic_pointer_cast<CoinVisualizationNode>(visualizationNode);
+            std::shared_ptr<CoinVisualizationNode> coinVisualizationNode = std::dynamic_pointer_cast<CoinVisualizationNode>(visualizationNode);
 
             if (coinVisualizationNode && coinVisualizationNode->getCoinVisualization())
             {
@@ -482,18 +482,18 @@ namespace SimDynamics
         }
     }
 
-    void BulletCoinQtViewer::setMutex(boost::shared_ptr<boost::recursive_mutex> engineMutexPtr)
+    void BulletCoinQtViewer::setMutex(std::shared_ptr<std::recursive_mutex> engineMutexPtr)
     {
         this->engineMutexPtr = engineMutexPtr;
     }
 
     BulletCoinQtViewer::MutexLockPtr BulletCoinQtViewer::getScopedLock()
     {
-        boost::shared_ptr< boost::recursive_mutex::scoped_lock > scoped_lock;
+        std::shared_ptr< std::scoped_lock<std::recursive_mutex> > scoped_lock;
 
         if (engineMutexPtr)
         {
-            scoped_lock.reset(new boost::recursive_mutex::scoped_lock(*engineMutexPtr));
+            scoped_lock.reset(new std::scoped_lock<std::recursive_mutex>(*engineMutexPtr));
         }
 
         return scoped_lock;

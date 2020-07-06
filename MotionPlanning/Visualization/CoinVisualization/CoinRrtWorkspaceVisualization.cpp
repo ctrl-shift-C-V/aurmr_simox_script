@@ -83,7 +83,7 @@ namespace Saba
 
         if (path->getDimension() != robotNodeSet->getSize())
         {
-            VR_ERROR << " Dimensions do not match: " << path->getDimension() << "!=" << robotNodeSet->getSize() << endl;
+            VR_ERROR << " Dimensions do not match: " << path->getDimension() << "!=" << robotNodeSet->getSize() << std::endl;
             return false;
         }
 
@@ -197,7 +197,7 @@ namespace Saba
 
         if (tree->getDimension() != robotNodeSet->getSize())
         {
-            VR_ERROR << " Dimensions do not match: " << tree->getDimension() << "!=" << robotNodeSet->getSize() << endl;
+            VR_ERROR << " Dimensions do not match: " << tree->getDimension() << "!=" << robotNodeSet->getSize() << std::endl;
             return false;
         }
 
@@ -360,7 +360,7 @@ namespace Saba
     {
         if (c.rows() != robotNodeSet->getSize())
         {
-            VR_ERROR << " Dimensions do not match: " << c.rows() << "!=" << robotNodeSet->getSize() << endl;
+            VR_ERROR << " Dimensions do not match: " << c.rows() << "!=" << robotNodeSet->getSize() << std::endl;
             return false;
         }
 

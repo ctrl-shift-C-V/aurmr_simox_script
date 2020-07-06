@@ -9,6 +9,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     // obstacle models start with 20000
     int Obstacle::idCounter = 20000;
@@ -40,14 +42,14 @@ namespace VirtualRobot
     }
 
     Obstacle::Obstacle(const std::string& name, const TriMeshModelPtr& trimesh, const std::string& filename)
-        : Obstacle(TagTrimeshCtor{}, name, boost::make_shared<CoinVisualizationNode>(trimesh))
+        : Obstacle(TagTrimeshCtor{}, name, std::make_shared<CoinVisualizationNode>(trimesh))
     {
         getVisualization()->setFilename(filename, false);
         getCollisionModel()->getVisualization()->setFilename(filename, false);
     }
 
     Obstacle::Obstacle(TagTrimeshCtor, const std::string& name, const VisualizationNodePtr& vis)
-        : Obstacle(name, vis, boost::make_shared<CollisionModel>(vis))
+        : Obstacle(name, vis, std::make_shared<CollisionModel>(vis))
     {}
 
     Obstacle::~Obstacle() = default;
@@ -73,7 +75,7 @@ namespace VirtualRobot
 
         if (!visualizationFactory)
         {
-            VR_ERROR << "Could not create factory for visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create factory for visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -88,7 +90,7 @@ namespace VirtualRobot
 
         if (!visu)
         {
-            VR_ERROR << "Could not create box visualization with visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create box visualization with visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -126,7 +128,7 @@ namespace VirtualRobot
 
         if (!visualizationFactory)
         {
-            VR_ERROR << "Could not create factory for visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create factory for visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -139,7 +141,7 @@ namespace VirtualRobot
         */
         if (!visu)
         {
-            VR_ERROR << "Could not create sphere visualization with visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create sphere visualization with visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -178,7 +180,7 @@ namespace VirtualRobot
 
         if (!visualizationFactory)
         {
-            VR_ERROR << "Could not create factory for visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create factory for visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -191,7 +193,7 @@ namespace VirtualRobot
         */
         if (!visu)
         {
-            VR_ERROR << "Could not create cylinder visualization with visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create cylinder visualization with visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -232,7 +234,7 @@ namespace VirtualRobot
 
         if (!visualizationFactory)
         {
-            VR_ERROR << "Could not create factory for visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create factory for visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -242,7 +244,7 @@ namespace VirtualRobot
 
         if (!visu)
         {
-            VR_ERROR << "Could not create sphere visualization with visu type " << visualizationType << endl;
+            VR_ERROR << "Could not create sphere visualization with visu type " << visualizationType << std::endl;
             return result;
         }
 
@@ -266,15 +268,15 @@ namespace VirtualRobot
     {
         if (printDecoration)
         {
-            cout << "**** Obstacle ****" << endl;
+            std::cout << "**** Obstacle ****" << std::endl;
         }
 
         SceneObject::print(false);
-        cout << " * id: " << id << endl;
+        std::cout << " * id: " << id << std::endl;
 
         if (printDecoration)
         {
-            cout << endl;
+            std::cout << std::endl;
         }
     }
 
@@ -298,7 +300,7 @@ namespace VirtualRobot
 
         if (!result)
         {
-            VR_ERROR << "Cloning failed.." << endl;
+            VR_ERROR << "Cloning failed.." << std::endl;
             return result;
         }
 

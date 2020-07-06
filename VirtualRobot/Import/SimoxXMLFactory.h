@@ -44,7 +44,7 @@ namespace VirtualRobot
         // AbstractFactoryMethod
     public:
         static std::string getName();
-        static boost::shared_ptr<RobotImporterFactory> createInstance(void*);
+        static std::shared_ptr<RobotImporterFactory> createInstance(void*);
     private:
         static SubClassRegistry registry;
 

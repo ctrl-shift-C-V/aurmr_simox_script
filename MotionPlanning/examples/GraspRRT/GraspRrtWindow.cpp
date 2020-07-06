@@ -17,6 +17,7 @@
 #include "MotionPlanning/PostProcessing/ShortcutProcessor.h"
 #include <MotionPlanning/Visualization/CoinVisualization/CoinRrtWorkspaceVisualization.h>
 #include <QFileDialog>
+#include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <ctime>
 #include <vector>
@@ -42,7 +43,7 @@ GraspRrtWindow::GraspRrtWindow(const std::string& sceneFile, const std::string& 
                                const std::string& colModelEnv)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
 
     this->sceneFile = sceneFile;
 
@@ -139,7 +140,7 @@ void GraspRrtWindow::setupUI()
 
     // setup
     viewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-    viewer->setAccumulationBuffer(true);
+    viewer->setAccumulationBuffer(false);
 
     viewer->setAntialiasing(true, 4);
 
@@ -282,7 +283,7 @@ void GraspRrtWindow::loadScene()
 
     if (!scene)
     {
-        VR_ERROR << " no scene ..." << endl;
+        VR_ERROR << " no scene ..." << std::endl;
         return;
     }
 
@@ -290,7 +291,7 @@ void GraspRrtWindow::loadScene()
 
     if (robots.size() != 1)
     {
-        VR_ERROR << "Need exactly 1 robot" << endl;
+        VR_ERROR << "Need exactly 1 robot" << std::endl;
         return;
     }
 
@@ -303,7 +304,7 @@ void GraspRrtWindow::loadScene()
 
     if (configs.size() < 1)
     {
-        VR_ERROR << "Need at least 1 Robot Configurations" << endl;
+        VR_ERROR << "Need at least 1 Robot Configurations" << std::endl;
         return;
     }
 
@@ -324,7 +325,7 @@ void GraspRrtWindow::loadScene()
 
     if (obstacles.size() < 1)
     {
-        VR_ERROR << "Need at least 1 Obstacle (target object)" << endl;
+        VR_ERROR << "Need at least 1 Obstacle (target object)" << std::endl;
         return;
     }
 
@@ -357,7 +358,7 @@ void GraspRrtWindow::loadScene()
     //setup eefs
     if (!robot->hasEndEffector(planSetA.eef))
     {
-        VR_ERROR << "EEF with name " << planSetA.eef << " not known?!" << endl;
+        VR_ERROR << "EEF with name " << planSetA.eef << " not known?!" << std::endl;
         return;
     }
 
@@ -411,7 +412,7 @@ void GraspRrtWindow::selectStart(const std::string& conf)
         }
     }
 
-    VR_ERROR << "No configuration with name <" << conf << "> found..." << endl;
+    VR_ERROR << "No configuration with name <" << conf << "> found..." << std::endl;
 }
 
 void GraspRrtWindow::selectTargetObject(const std::string& conf)
@@ -426,7 +427,7 @@ void GraspRrtWindow::selectTargetObject(const std::string& conf)
         }
     }
 
-    VR_ERROR << "No obstacle with name <" << conf << "> found..." << endl;
+    VR_ERROR << "No obstacle with name <" << conf << "> found..." << std::endl;
 }
 
 void GraspRrtWindow::selectRNS(const std::string& rns)
@@ -448,7 +449,7 @@ void GraspRrtWindow::selectRNS(const std::string& rns)
         }
     }
 
-    VR_ERROR << "No rns with name <" << rns << "> found..." << endl;
+    VR_ERROR << "No rns with name <" << rns << "> found..." << std::endl;
 }
 
 void GraspRrtWindow::selectEEF(const std::string& eefName)
@@ -472,7 +473,7 @@ void GraspRrtWindow::selectEEF(const std::string& eefName)
     }
     else
     {
-        VR_ERROR << "No eef with name <" << eefName << "> found..." << endl;
+        VR_ERROR << "No eef with name <" << eefName << "> found..." << std::endl;
         return;
     }
 
@@ -486,7 +487,7 @@ void GraspRrtWindow::selectEEF(const std::string& eefName)
             return;
         }
     }
-    VR_ERROR << "No eef with name <" << eefName << "> found..." << endl;*/
+    VR_ERROR << "No eef with name <" << eefName << "> found..." << std::endl;*/
 }
 
 void GraspRrtWindow::selectColModelRobA(const std::string& colModel)
@@ -508,7 +509,7 @@ void GraspRrtWindow::selectColModelRobA(const std::string& colModel)
         }
     }
 
-    VR_ERROR << "No col model set with name <" << colModel << "> found..." << endl;
+    VR_ERROR << "No col model set with name <" << colModel << "> found..." << std::endl;
 }
 void GraspRrtWindow::selectColModelRobB(const std::string& colModel)
 {
@@ -529,7 +530,7 @@ void GraspRrtWindow::selectColModelRobB(const std::string& colModel)
         }
     }
 
-    VR_ERROR << "No col model set with name <" << colModel << "> found..." << endl;
+    VR_ERROR << "No col model set with name <" << colModel << "> found..." << std::endl;
 }
 void GraspRrtWindow::selectColModelEnv(const std::string& colModel)
 {
@@ -550,7 +551,7 @@ void GraspRrtWindow::selectColModelEnv(const std::string& colModel)
         }
     }
 
-    VR_ERROR << "No scene object set with name <" << colModel << "> found..." << endl;
+    VR_ERROR << "No scene object set with name <" << colModel << "> found..." << std::endl;
 }
 
 void GraspRrtWindow::selectStart(int nr)
@@ -696,7 +697,7 @@ void GraspRrtWindow::buildRRTVisu()
         return;
     }
 
-    boost::shared_ptr<Saba::CoinRrtWorkspaceVisualization> w(new Saba::CoinRrtWorkspaceVisualization(robot, cspace, eef->getGCP()->getName()));
+    std::shared_ptr<Saba::CoinRrtWorkspaceVisualization> w(new Saba::CoinRrtWorkspaceVisualization(robot, cspace, eef->getGCP()->getName()));
 
     if (UI.checkBoxShowRRT->isChecked())
     {
@@ -801,15 +802,15 @@ void GraspRrtWindow::testGraspPose()
     p1(0,3) = 50;
     p2(0,3) = 200;
     Eigen::Matrix4f deltaPose = p1.inverse() * p2;
-    cout << deltaPose << endl;
+    std::cout << deltaPose << std::endl;
 
     deltaPose = p2 * p1.inverse();
-    cout << deltaPose << endl;
+    std::cout << deltaPose << std::endl;
 
     p2 = deltaPose * p1;
-    cout << p2 << endl;
+    std::cout << p2 << std::endl;
     p2 = p1 * deltaPose;
-    cout << p2 << endl;*/
+    std::cout << p2 << std::endl;*/
 }
 
 void GraspRrtWindow::plan()
@@ -854,7 +855,7 @@ void GraspRrtWindow::plan()
 
     if (planOK)
     {
-        VR_INFO << " Planning succeeded " << endl;
+        VR_INFO << " Planning succeeded " << std::endl;
         solution = graspRrt->getSolution();
         Saba::ShortcutProcessorPtr postProcessing(new Saba::ShortcutProcessor(solution, cspace, false));
         solutionOptimized = postProcessing->optimize(100);
@@ -865,14 +866,14 @@ void GraspRrtWindow::plan()
 
         for (size_t i = 0; i < vStoreGraspInfo.size(); i++)
         {
-            cout << "processing grasp " << i << endl;
+            std::cout << "processing grasp " << i << std::endl;
             VirtualRobot::GraspPtr g(new VirtualRobot::Grasp("GraspRrt Grasp", robot->getType(), eef->getName(), vStoreGraspInfo[i].handToObjectTransform, "GraspRrt", vStoreGraspInfo[i].graspScore));
             grasps.push_back(g);
         }
     }
     else
     {
-        VR_INFO << " Planning failed" << endl;
+        VR_INFO << " Planning failed" << std::endl;
     }
 
     sliderSolution(1000);

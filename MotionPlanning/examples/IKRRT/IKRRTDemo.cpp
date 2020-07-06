@@ -29,7 +29,7 @@ using namespace VirtualRobot;
 int main(int argc, char* argv[])
 {
     VirtualRobot::init(argc, argv, "IK-RRT Demo");
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
 #ifdef ARMAR
     std::string filenameScene("scenes/examples/IKRRT/planningHotSpot.xml");
@@ -102,11 +102,11 @@ int main(int argc, char* argv[])
     }
 
 
-    cout << "Using scene at " << filenameScene << endl;
-    cout << "Using reachability at " << filenameReach << endl;
-    cout << "Using end effector " << eef << endl;
-    cout << "Using col model (kin chain) " << colModel << endl;
-    cout << "Using col model (static robot)" << colModelRob << endl;
+    std::cout << "Using scene at " << filenameScene << std::endl;
+    std::cout << "Using reachability at " << filenameReach << std::endl;
+    std::cout << "Using end effector " << eef << std::endl;
+    std::cout << "Using col model (kin chain) " << colModel << std::endl;
+    std::cout << "Using col model (static robot)" << colModelRob << std::endl;
 
     IKRRTWindow rw(filenameScene, filenameReach, kinChain, eef, colModel, colModelRob);
 

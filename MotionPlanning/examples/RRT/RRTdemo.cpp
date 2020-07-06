@@ -52,7 +52,7 @@ void show(SoNode* n)
     sensor_mgr->insertTimerSensor(timer);
     */
     viewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-    viewer->setAccumulationBuffer(true);
+    viewer->setAccumulationBuffer(false);
     viewer->setAntialiasing(true, 4);
     viewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
     viewer->setFeedbackVisibility(true);
@@ -74,7 +74,7 @@ void startRRTVisualization()
     // create robot
     std::string filename("robots/examples/RrtDemo/Joint3.xml");
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(filename);
-    cout << "Loading 3DOF robot from " << filename << endl;
+    std::cout << "Loading 3DOF robot from " << filename << std::endl;
     RobotPtr robot = RobotIO::loadRobot(filename);
 
     if (!robot)
@@ -154,12 +154,12 @@ void startRRTVisualization()
     }
 
     planningTime /= (float)loops;
-    cout << "Avg planning time: " << planningTime << endl;
-    cout << "failed:" << failed << endl;
+    std::cout << "Avg planning time: " << planningTime << std::endl;
+    std::cout << "failed:" << failed << std::endl;
 
     if (!ok)
     {
-        cout << "planning failed..." << endl;
+        std::cout << "planning failed..." << std::endl;
         return;
     }
 
@@ -174,7 +174,7 @@ void startRRTVisualization()
     SoSeparator* sep = new SoSeparator();
     SceneObject::VisualizationType colModel = SceneObject::Full;
 
-    boost::shared_ptr<CoinVisualization> visualization = robot->getVisualization<CoinVisualization>(colModel);
+    std::shared_ptr<CoinVisualization> visualization = robot->getVisualization<CoinVisualization>(colModel);
     SoNode* visualisationNode = nullptr;
 
     if (visualization)
@@ -188,12 +188,12 @@ void startRRTVisualization()
     VisualizationNodePtr visuObstacle = o->getVisualization();
     std::vector<VisualizationNodePtr> visus;
     visus.push_back(visuObstacle);
-    boost::shared_ptr<CoinVisualization> visualizationO(new CoinVisualization(visus));
+    std::shared_ptr<CoinVisualization> visualizationO(new CoinVisualization(visus));
     SoNode* obstacleSoNode = visualizationO->getCoinVisualization();
     sep->addChild(obstacleSoNode);
 
     // show rrt visu
-    boost::shared_ptr<CoinRrtWorkspaceVisualization> w(new CoinRrtWorkspaceVisualization(robot, cspace, "EndPoint"));
+    std::shared_ptr<CoinRrtWorkspaceVisualization> w(new CoinRrtWorkspaceVisualization(robot, cspace, "EndPoint"));
     w->addTree(tree);
 #ifdef USE_BIRRT
     CSpaceTreePtr tree2 = rrt->getTree2();
@@ -212,7 +212,7 @@ int main(int /*argc*/, char** /*argv*/)
 {
     SoDB::init();
     win = SoQt::init("RRT Demo", "RRT Demo");
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
 
     try
     {
@@ -231,7 +231,7 @@ int main(int /*argc*/, char** /*argv*/)
         ;
     }
 
-    cout << " --- END --- " << endl;
+    std::cout << " --- END --- " << std::endl;
 
     return 0;
 }

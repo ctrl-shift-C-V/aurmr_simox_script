@@ -1,5 +1,9 @@
 #include "eigen_conversion.h"
 
+#include <SimoxUtility/math/pose/pose.h>
+
+#include <Eigen/Geometry>
+
 
 namespace Eigen
 {
@@ -36,7 +40,7 @@ namespace Eigen
                 ori = j_ori.get<Eigen::Matrix3f>();
             }
 
-            matrix = math::Helpers::Pose(j.at("pos").get<Eigen::Vector3f>(), ori);
+            matrix = simox::math::pose(j.at("pos").get<Eigen::Vector3f>(), ori);
         }
         else
         {

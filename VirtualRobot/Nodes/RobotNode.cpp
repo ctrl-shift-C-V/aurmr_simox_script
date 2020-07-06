@@ -4,6 +4,7 @@
 #include "../VirtualRobotException.h"
 #include "../Robot.h"
 #include "../RobotNodeSet.h"
+#include "../CollisionDetection/CollisionModel.h"
 #include "../Visualization/VisualizationFactory.h"
 #include "../Visualization/Visualization.h"
 #include "../Visualization/TriMeshModel.h"
@@ -12,12 +13,16 @@
 #include <iomanip>
 #include <boost/optional/optional_io.hpp>
 #include <algorithm>
+#include <filesystem>
 #include "../math/Helpers.h"
+#include "../Visualization/VisualizationNode.h"
 
 #include <Eigen/Core>
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     RobotNode::RobotNode(RobotWeakPtr rob,
                          const std::string& name,
@@ -66,9 +71,9 @@ namespace VirtualRobot
         THROW_VR_EXCEPTION_IF(!rob, "Could not init RobotNode without robot");
 
         // robot
-        if (!rob->hasRobotNode(boost::static_pointer_cast<RobotNode>(shared_from_this())))
+        if (!rob->hasRobotNode(std::static_pointer_cast<RobotNode>(shared_from_this())))
         {
-            rob->registerRobotNode(boost::static_pointer_cast<RobotNode>(shared_from_this()));
+            rob->registerRobotNode(std::static_pointer_cast<RobotNode>(shared_from_this()));
         }
 
         // update visualization of coordinate systems
@@ -118,7 +123,7 @@ namespace VirtualRobot
                 break;
 
             default:
-                VR_ERROR << "RobotNodeType nyi..." << endl;
+                VR_ERROR << "RobotNodeType nyi..." << std::endl;
 
         }
 
@@ -151,7 +156,7 @@ namespace VirtualRobot
 
     void RobotNode::setJointValueNotInitialized(float q)
     {
-        VR_ASSERT_MESSAGE((!boost::math::isnan(q) && !boost::math::isinf(q)), "Not a valid number...");
+        VR_ASSERT_MESSAGE((!std::isnan(q) && !std::isinf(q)), "Not a valid number...");
 
         if (limitless)
         {
@@ -182,7 +187,7 @@ namespace VirtualRobot
     void RobotNode::setJointValueNoUpdate(float q)
     {
         VR_ASSERT_MESSAGE(initialized, "Not initialized");
-        VR_ASSERT_MESSAGE((!boost::math::isnan(q) && !boost::math::isinf(q)), "Not a valid number...");
+        VR_ASSERT_MESSAGE((!std::isnan(q) && !std::isinf(q)), "Not a valid number...");
 
         if (limitless)
         {
@@ -311,7 +316,7 @@ namespace VirtualRobot
 
     void RobotNode::copyPoseFrom(const SceneObjectPtr& sceneobj)
     {
-        RobotNodePtr other = boost::dynamic_pointer_cast<RobotNode>(sceneobj);
+        RobotNodePtr other = std::dynamic_pointer_cast<RobotNode>(sceneobj);
         THROW_VR_EXCEPTION_IF(!other, "The given SceneObject is no RobotNode");
         copyPoseFrom(other);
     }
@@ -348,13 +353,13 @@ namespace VirtualRobot
 
     void RobotNode::collectAllRobotNodes(std::vector< RobotNodePtr >& storeNodes)
     {
-        storeNodes.push_back(boost::static_pointer_cast<RobotNode>(shared_from_this()));
+        storeNodes.push_back(std::static_pointer_cast<RobotNode>(shared_from_this()));
 
         std::vector< SceneObjectPtr > children = this->getChildren();
 
         for (size_t i = 0; i < children.size(); i++)
         {
-            RobotNodePtr n = boost::dynamic_pointer_cast<RobotNode>(children[i]);
+            RobotNodePtr n = std::dynamic_pointer_cast<RobotNode>(children[i]);
 
             if (n)
             {
@@ -399,7 +404,7 @@ namespace VirtualRobot
 
         if (!res && verbose)
         {
-            VR_INFO << "Joint: " << getName() << ": joint value (" << jointValue << ") is out of joint boundaries (lo:" << jointLimitLo << ", hi: " << jointLimitHi << ")" << endl;
+            VR_INFO << "Joint: " << getName() << ": joint value (" << jointValue << ") is out of joint boundaries (lo:" << jointLimitLo << ", hi: " << jointLimitHi << ")" << std::endl;
         }
 
         return res;
@@ -415,56 +420,56 @@ namespace VirtualRobot
 
         if (printDecoration)
         {
-            cout << "******** RobotNode ********" << endl;
+            std::cout << "******** RobotNode ********" << std::endl;
         }
 
-        cout << "* Name: " << name << endl;
-        cout << "* Parent: ";
+        std::cout << "* Name: " << name << std::endl;
+        std::cout << "* Parent: ";
         SceneObjectPtr p = this->getParent();
 
         if (p)
         {
-            cout << p->getName() << endl;
+            std::cout << p->getName() << std::endl;
         }
         else
         {
-            cout << " -- " << endl;
+            std::cout << " -- " << std::endl;
         }
 
-        cout << "* Children: ";
+        std::cout << "* Children: ";
 
         if (this->getChildren().size() == 0)
         {
-            cout << " -- " << endl;
+            std::cout << " -- " << std::endl;
         }
 
         for (unsigned int i = 0; i < this->getChildren().size(); i++)
         {
-            cout << this->getChildren()[i]->getName() << ", ";
+            std::cout << this->getChildren()[i]->getName() << ", ";
         }
 
-        cout << endl;
+        std::cout << std::endl;
 
         physics.print();
 
-        cout << "* Limits: Lo: " << jointLimitLo << ", Hi: " << jointLimitHi << endl;
-        cout << "* Limitless: " << (limitless ? "true" : "false") << endl;
+        std::cout << "* Limits: Lo: " << jointLimitLo << ", Hi: " << jointLimitHi << std::endl;
+        std::cout << "* Limitless: " << (limitless ? "true" : "false") << std::endl;
         std::cout << "* max velocity " << maxVelocity  << " [m/s]" << std::endl;
         std::cout << "* max acceleration " << maxAcceleration  << " [m/s^2]" << std::endl;
         std::cout << "* max torque " << maxTorque  << " [Nm]" << std::endl;
-        cout << "* jointValue: " << this->getJointValue() << ", jointValueOffset: " << jointValueOffset << endl;
+        std::cout << "* jointValue: " << this->getJointValue() << ", jointValueOffset: " << jointValueOffset << std::endl;
 
         if (optionalDHParameter.isSet)
         {
-            cout << "* DH parameters: ";
-            cout << " a:" << optionalDHParameter.aMM() << ", d:" << optionalDHParameter.dMM() << ", alpha:" << optionalDHParameter.alphaRadian() << ", theta:" << optionalDHParameter.thetaRadian() << endl;
+            std::cout << "* DH parameters: ";
+            std::cout << " a:" << optionalDHParameter.aMM() << ", d:" << optionalDHParameter.dMM() << ", alpha:" << optionalDHParameter.alphaRadian() << ", theta:" << optionalDHParameter.thetaRadian() << std::endl;
         }
         else
         {
-            cout << "* DH parameters: not specified." << endl;
+            std::cout << "* DH parameters: not specified." << std::endl;
         }
 
-        cout << "* visualization model: " << endl;
+        std::cout << "* visualization model: " << std::endl;
 
         if (visualizationModel)
         {
@@ -472,10 +477,10 @@ namespace VirtualRobot
         }
         else
         {
-            cout << "  No visualization model" << endl;
+            std::cout << "  No visualization model" << std::endl;
         }
 
-        cout << "* collision model: " << endl;
+        std::cout << "* collision model: " << std::endl;
 
         if (collisionModel)
         {
@@ -483,30 +488,30 @@ namespace VirtualRobot
         }
         else
         {
-            cout << "  No collision model" << endl;
+            std::cout << "  No collision model" << std::endl;
         }
 
         if (initialized)
         {
-            cout << "* initialized: true" << endl;
+            std::cout << "* initialized: true" << std::endl;
         }
         else
         {
-            cout << "* initialized: false" << endl;
+            std::cout << "* initialized: false" << std::endl;
         }
 
         {
             // scope1
             std::ostringstream sos;
             sos << std::setiosflags(std::ios::fixed);
-            sos << "* localTransformation:" << endl << localTransformation << endl;
-            sos << "* globalPose:" << endl << getGlobalPose() << endl;
-            cout << sos.str();
+            sos << "* localTransformation:" << endl << localTransformation << std::endl;
+            sos << "* globalPose:" << endl << getGlobalPose() << std::endl;
+            std::cout << sos.str();
         } // scope1
 
         if (printDecoration)
         {
-            cout << "******** End RobotNode ********" << endl;
+            std::cout << "******** End RobotNode ********" << std::endl;
         }
 
         if (printChildren)
@@ -550,7 +555,7 @@ namespace VirtualRobot
 
         if (!result)
         {
-            VR_ERROR << "Cloning failed.." << endl;
+            VR_ERROR << "Cloning failed.." << std::endl;
             return result;
         }
 
@@ -560,7 +565,7 @@ namespace VirtualRobot
 
             for (size_t i = 0; i < children.size(); i++)
             {
-                RobotNodePtr n = boost::dynamic_pointer_cast<RobotNode>(children[i]);
+                RobotNodePtr n = std::dynamic_pointer_cast<RobotNode>(children[i]);
 
                 if (n)
                 {
@@ -573,7 +578,7 @@ namespace VirtualRobot
                 }
                 else
                 {
-                    SensorPtr s =  boost::dynamic_pointer_cast<Sensor>(children[i]);
+                    SensorPtr s =  std::dynamic_pointer_cast<Sensor>(children[i]);
 
                     if (s)
                     {
@@ -719,7 +724,7 @@ namespace VirtualRobot
 
             if (!visualizationFactory)
             {
-                VR_WARNING << "No visualization factory for name " << visualizationType << endl;
+                VR_WARNING << "No visualization factory for name " << visualizationType << std::endl;
                 return;
             }
 
@@ -758,7 +763,7 @@ namespace VirtualRobot
         std::string attachName2("RobotNodeStructureJoint");
         std::string attachName3("RobotNodeStructurePost");
         SceneObjectPtr par = getParent();
-        RobotNodePtr parRN = boost::dynamic_pointer_cast<RobotNode>(par);
+        RobotNodePtr parRN = std::dynamic_pointer_cast<RobotNode>(par);
 
         // need to add "pre" visualization to parent node!
         if (parRN && parRN->getVisualization())
@@ -788,7 +793,7 @@ namespace VirtualRobot
 
             if (!visualizationFactory)
             {
-                VR_WARNING << "No visualization factory for name " << visualizationType << endl;
+                VR_WARNING << "No visualization factory for name " << visualizationType << std::endl;
                 return;
             }
 
@@ -848,7 +853,7 @@ namespace VirtualRobot
 
         for (unsigned int i = 0; i < rn.size(); i++)
         {
-            if (rn[i]->hasChild(boost::static_pointer_cast<SceneObject>(shared_from_this()), true))
+            if (rn[i]->hasChild(std::static_pointer_cast<SceneObject>(shared_from_this()), true))
             {
                 result.push_back(rn[i]);
             }
@@ -906,14 +911,14 @@ namespace VirtualRobot
 
         if (!parent || parent == rob)
         {
-            if (rob && rob->getRootNode() == boost::static_pointer_cast<RobotNode>(shared_from_this()))
+            if (rob && rob->getRootNode() == std::static_pointer_cast<RobotNode>(shared_from_this()))
             {
                 Eigen::Matrix4f gpPre = globalPose * getLocalTransformation().inverse();
                 rob->setGlobalPose(gpPre, false);
             }
             else
             {
-                VR_WARNING << "INTERNAL ERROR: getParent==robot but getRoot!=this ?! " << endl;
+                VR_WARNING << "INTERNAL ERROR: getParent==robot but getRoot!=this ?! " << std::endl;
             }
         }
 
@@ -1037,13 +1042,13 @@ namespace VirtualRobot
     std::string RobotNode::toXML(const std::string& basePath, const std::string& modelPathRelative /*= "models"*/, bool storeSensors)
     {
         std::stringstream ss;
-        ss << "\t<RobotNode name='" << name << "'>" << endl;
+        ss << "\t<RobotNode name='" << name << "'>" << std::endl;
 
         if (!localTransformation.isIdentity())
         {
-            ss << "\t\t<Transform>" << endl;
+            ss << "\t\t<Transform>" << std::endl;
             ss << BaseIO::toXML(localTransformation, "\t\t\t");
-            ss << "\t\t</Transform>" << endl;
+            ss << "\t\t</Transform>" << std::endl;
         }
 
         ss << _toXML(modelPathRelative);
@@ -1060,9 +1065,9 @@ namespace VirtualRobot
             std::string visuFile = getFilenameReplacementVisuModel();
 
             std::filesystem::path pModel(modelPathRelative);
-            std::filesystem::path modelDirComplete = std::filesystem::operator/(pBase, pModel);
+            std::filesystem::path modelDirComplete = pBase / pModel;
             std::filesystem::path fn(visuFile);
-            std::filesystem::path modelFileComplete = std::filesystem::operator/(modelDirComplete, fn);
+            std::filesystem::path modelFileComplete = modelDirComplete / fn;
 
             ss << visualizationModel->toXML(pBase.string(), modelFileComplete.string(), 2);
         }
@@ -1071,9 +1076,9 @@ namespace VirtualRobot
         {
             std::string colFile = getFilenameReplacementColModel();
             std::filesystem::path pModel(modelPathRelative);
-            std::filesystem::path modelDirComplete = std::filesystem::operator/(pBase, pModel);
+            std::filesystem::path modelDirComplete = pBase / pModel;
             std::filesystem::path fn(colFile);
-            std::filesystem::path modelFileComplete = std::filesystem::operator/(modelDirComplete, fn);
+            std::filesystem::path modelFileComplete = modelDirComplete / fn;
             ss << collisionModel->toXML(pBase.string(), modelFileComplete.string(), 2);
         }
 
@@ -1090,15 +1095,15 @@ namespace VirtualRobot
         for (size_t i = 0; i < children.size(); i++)
         {
             // check if child is a RobotNode
-            RobotNodePtr crn = boost::dynamic_pointer_cast<RobotNode>(children[i]);
+            RobotNodePtr crn = std::dynamic_pointer_cast<RobotNode>(children[i]);
 
             if (crn)
             {
-                ss << "\t\t<Child name='" << children[i]->getName() << "'/>" << endl;
+                ss << "\t\t<Child name='" << children[i]->getName() << "'/>" << std::endl;
             }
         }
 
-        ss << "\t</RobotNode>" << endl << endl;
+        ss << "\t</RobotNode>" << endl << std::endl;
         return ss.str();
     }
 

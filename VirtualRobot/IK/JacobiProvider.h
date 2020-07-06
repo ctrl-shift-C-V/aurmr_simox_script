@@ -34,7 +34,7 @@ namespace VirtualRobot
 {
 
 
-    class VIRTUAL_ROBOT_IMPORT_EXPORT JacobiProvider : public boost::enable_shared_from_this<JacobiProvider>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT JacobiProvider : public std::enable_shared_from_this<JacobiProvider>
     {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -120,6 +120,6 @@ namespace VirtualRobot
 
     };
 
-    typedef boost::shared_ptr<JacobiProvider> JacobiProviderPtr;
+    typedef std::shared_ptr<JacobiProvider> JacobiProviderPtr;
 } // namespace VirtualRobot
 

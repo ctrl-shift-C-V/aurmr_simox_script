@@ -13,6 +13,13 @@
 #include <VirtualRobot/Nodes/ForceTorqueSensor.h>
 #include <VirtualRobot/Nodes/ContactSensor.h>
 
+#include "DetectBulletVersion.h"
+
+#include <boost/math/special_functions/fpclassify.hpp>
+
+#include <Eigen/Dense>
+
+#include <unordered_set>
 
 //#define DEBUG_FIXED_OBJECTS
 //#define DEBUG_SHOW_LINKS
@@ -25,7 +32,7 @@ namespace SimDynamics
 
     BulletRobot::BulletRobot(VirtualRobot::RobotPtr rob, bool enableJointMotors)
         : DynamicsRobot(rob)
-        // should be enough for up to 10ms/step
+          // should be enough for up to 10ms/step
         , bulletMaxMotorImulse(30 * BulletObject::ScaleFactor)
     {
         ignoreTranslationalJoints = false;
@@ -37,7 +44,7 @@ namespace SimDynamics
 
         for (; it != sensors.end(); it++)
         {
-            ForceTorqueSensorPtr ftSensor = boost::dynamic_pointer_cast<ForceTorqueSensor>(*it);
+            ForceTorqueSensorPtr ftSensor = std::dynamic_pointer_cast<ForceTorqueSensor>(*it);
 
             if (ftSensor)
             {
@@ -46,8 +53,9 @@ namespace SimDynamics
 
                 if (!hasLink(node))
                 {
-                    VR_WARNING << "Ignoring FT sensor " << ftSensor->getName() << ". Must be linked to a joint" << endl;
-                } else
+                    VR_WARNING << "Ignoring FT sensor " << ftSensor->getName() << ". Must be linked to a joint" << std::endl;
+                }
+                else
                 {
                     const LinkInfo& link = getLink(node);
                     enableForceTorqueFeedback(link);
@@ -58,7 +66,7 @@ namespace SimDynamics
     }
 
     BulletRobot::~BulletRobot()
-    = default;
+        = default;
 
 
 
@@ -88,23 +96,24 @@ namespace SimDynamics
                 RobotNodePtr joint;
                 //RobotNodePtr joint2;
 
-                if ( (rn->isTranslationalJoint() && !ignoreTranslationalJoints) || rn->isRotationalJoint())
+                if ((rn->isTranslationalJoint() && !ignoreTranslationalJoints) || rn->isRotationalJoint())
                 {
                     joint = rn;
                 }
 
-                RobotNodePtr parent = boost::dynamic_pointer_cast<RobotNode>(rn->getParent());
+                RobotNodePtr parent = std::dynamic_pointer_cast<RobotNode>(rn->getParent());
 
                 while (parent && !bodyA)
                 {
-                    if (!parent->getCollisionModel() && ( (parent->isTranslationalJoint() && !ignoreTranslationalJoints) || parent->isRotationalJoint()))
+                    if (!parent->getCollisionModel() && ((parent->isTranslationalJoint() && !ignoreTranslationalJoints) || parent->isRotationalJoint()))
                     {
                         if (!joint)
                         {
                             joint = parent;
-                        } else
+                        }
+                        else
                         {
-                            VR_WARNING << "No body between " << parent->getName() << " and " << joint->getName() << ", skipping " << parent->getName() << endl;
+                            VR_WARNING << "No body between " << parent->getName() << " and " << joint->getName() << ", skipping " << parent->getName() << std::endl;
                         }
                         /*else
                         {
@@ -116,8 +125,8 @@ namespace SimDynamics
 
                             double d = (p1.block(0, 3, 3, 1) - p2.block(0, 3, 3, 1)).norm();
                             THROW_VR_EXCEPTION_IF((d > 1e-6), "Could not create hinge2 joint: Joint coord systems must be located at the same position:" << joint->getName() << ", " << joint2->getName());
-                            RobotNodeRevolutePtr rev1 = boost::dynamic_pointer_cast<RobotNodeRevolute>(joint);
-                            RobotNodeRevolutePtr rev2 = boost::dynamic_pointer_cast<RobotNodeRevolute>(joint2);
+                            RobotNodeRevolutePtr rev1 = std::dynamic_pointer_cast<RobotNodeRevolute>(joint);
+                            RobotNodeRevolutePtr rev2 = std::dynamic_pointer_cast<RobotNodeRevolute>(joint2);
                             THROW_VR_EXCEPTION_IF(!rev1 || !rev2 , "Could not create hinge2 joint: Joints must be revolute nodes:" << joint->getName() << ", " << joint2->getName());
                             Eigen::Vector3f ax1 = rev1->getJointRotationAxis();
                             Eigen::Vector3f ax2 = rev2->getJointRotationAxis();
@@ -132,7 +141,7 @@ namespace SimDynamics
                         break;
                     }
 
-                    parent = boost::dynamic_pointer_cast<RobotNode>(parent->getParent());
+                    parent = std::dynamic_pointer_cast<RobotNode>(parent->getParent());
                 }
 
                 if (!bodyA)
@@ -169,21 +178,21 @@ namespace SimDynamics
         createDynamicsNode(rn);
         std::vector<std::string> ic = rn->getIgnoredCollisionModels();
         RobotPtr robot = rn->getRobot();
-        BulletObjectPtr drn1 = boost::dynamic_pointer_cast<BulletObject>(dynamicRobotNodes[rn]);
+        BulletObjectPtr drn1 = std::dynamic_pointer_cast<BulletObject>(dynamicRobotNodes[rn]);
         VR_ASSERT(drn1);
 
-        for (const auto & i : ic)
+        for (const auto& i : ic)
         {
             RobotNodePtr rn2 = robot->getRobotNode(i);
 
             if (!rn2)
             {
-                VR_ERROR << "Error while processing robot node <" << rn->getName() << ">: Ignored collision model <" << i << "> is not part of robot..." << endl;
+                VR_ERROR << "Error while processing robot node <" << rn->getName() << ">: Ignored collision model <" << i << "> is not part of robot..." << std::endl;
             }
             else
             {
                 createDynamicsNode(rn2);
-                BulletObjectPtr drn2 = boost::dynamic_pointer_cast<BulletObject>(dynamicRobotNodes[rn2]);
+                BulletObjectPtr drn2 = std::dynamic_pointer_cast<BulletObject>(dynamicRobotNodes[rn2]);
                 VR_ASSERT(drn2);
                 DynamicsWorld::GetWorld()->getEngine()->disableCollision(drn1.get(), drn2.get());
             }
@@ -211,7 +220,7 @@ namespace SimDynamics
         return result;
     }
 
-    boost::shared_ptr<btTypedConstraint> BulletRobot::createHingeJoint(boost::shared_ptr<btRigidBody> btBody1, boost::shared_ptr<btRigidBody> btBody2, Eigen::Matrix4f& coordSystemNode1, Eigen::Matrix4f& coordSystemNode2,  Eigen::Matrix4f& anchor_inNode1, Eigen::Matrix4f& anchor_inNode2, Eigen::Vector3f& /*axisGlobal*/, Eigen::Vector3f& axisLocal, Eigen::Matrix4f& coordSystemJoint, double limMinBT, double limMaxBT)
+    std::shared_ptr<btTypedConstraint> BulletRobot::createHingeJoint(std::shared_ptr<btRigidBody> btBody1, std::shared_ptr<btRigidBody> btBody2, Eigen::Matrix4f& coordSystemNode1, Eigen::Matrix4f& coordSystemNode2,  Eigen::Matrix4f& anchor_inNode1, Eigen::Matrix4f& anchor_inNode2, Eigen::Vector3f& /*axisGlobal*/, Eigen::Vector3f& axisLocal, Eigen::Matrix4f& coordSystemJoint, double limMinBT, double limMaxBT)
     {
         // HINGE joint
         /*Eigen::Matrix4f tmpGp1 = coordSystemNode1;
@@ -242,23 +251,23 @@ namespace SimDynamics
         tr1.getOrigin() = pivot1;
         tr2.getOrigin() = pivot2;
 
-        boost::shared_ptr<btHingeConstraint> hinge(new btHingeConstraint(*btBody1, *btBody2, tr1, tr2, true));
-//        hinge->setDbgDrawSize(0.15);
+        std::shared_ptr<btHingeConstraint> hinge(new btHingeConstraint(*btBody1, *btBody2, tr1, tr2, true));
+        //        hinge->setDbgDrawSize(0.15);
 
         // todo: check effects of parameters...
-//        hinge->setParam(BT_CONSTRAINT_STOP_ERP, 2.0f);
-//        hinge->setParam(BT_CONSTRAINT_ERP, 2.f);
+        //        hinge->setParam(BT_CONSTRAINT_STOP_ERP, 2.0f);
+        //        hinge->setParam(BT_CONSTRAINT_ERP, 2.f);
 
 
-//        hinge->setParam(BT_CONSTRAINT_CFM,0);
-//        hinge->setParam(BT_CONSTRAINT_STOP_CFM,0.f);
+        //        hinge->setParam(BT_CONSTRAINT_CFM,0);
+        //        hinge->setParam(BT_CONSTRAINT_STOP_CFM,0.f);
         //hinge->setLimit(limMin,limMax);//,btScalar(1.0f));
-//        hinge->setParam(BT_CONSTRAINT_CFM,0.0f);
+        //        hinge->setParam(BT_CONSTRAINT_CFM,0.0f);
         hinge->setLimit(btScalar(limMinBT), btScalar(limMaxBT));
         return hinge;
     }
 
-    boost::shared_ptr<btTypedConstraint> BulletRobot::createTranslationalJoint(boost::shared_ptr<btRigidBody> btBody1, boost::shared_ptr<btRigidBody> btBody2, Eigen::Matrix4f &coordSystemNode1, Eigen::Matrix4f &coordSystemNode2, Eigen::Matrix4f& anchor_inNode1, Eigen::Matrix4f& anchor_inNode2, Eigen::Vector3f &directionLocal, Eigen::Matrix4f& coordSystemJoint, double limMinBT, double limMaxBT)
+    std::shared_ptr<btTypedConstraint> BulletRobot::createTranslationalJoint(std::shared_ptr<btRigidBody> btBody1, std::shared_ptr<btRigidBody> btBody2, Eigen::Matrix4f& coordSystemNode1, Eigen::Matrix4f& coordSystemNode2, Eigen::Matrix4f& anchor_inNode1, Eigen::Matrix4f& anchor_inNode2, Eigen::Vector3f& directionLocal, Eigen::Matrix4f& coordSystemJoint, double limMinBT, double limMaxBT)
     {
         // we need to align coord system joint, so that z-axis is rotation axis
 
@@ -275,7 +284,7 @@ namespace SimDynamics
         tr1.getOrigin() = pivot1;
         tr2.getOrigin() = pivot2;
 
-        boost::shared_ptr<btSliderConstraint> joint(new btSliderConstraint(*btBody1, *btBody2, tr1, tr2, true));
+        std::shared_ptr<btSliderConstraint> joint(new btSliderConstraint(*btBody1, *btBody2, tr1, tr2, true));
 
         // disable agular part
         joint->setLowerAngLimit(btScalar(0));
@@ -287,12 +296,12 @@ namespace SimDynamics
         return joint;
     }
 
-    boost::shared_ptr<btTypedConstraint> BulletRobot::createFixedJoint(boost::shared_ptr<btRigidBody> btBody1, boost::shared_ptr<btRigidBody> btBody2, Eigen::Matrix4f& anchor_inNode1, Eigen::Matrix4f& anchor_inNode2)
+    std::shared_ptr<btTypedConstraint> BulletRobot::createFixedJoint(std::shared_ptr<btRigidBody> btBody1, std::shared_ptr<btRigidBody> btBody2, Eigen::Matrix4f& anchor_inNode1, Eigen::Matrix4f& anchor_inNode2)
     {
         btTransform localA, localB;
         localA = BulletEngine::getPoseBullet(anchor_inNode1);
         localB = BulletEngine::getPoseBullet(anchor_inNode2);
-        boost::shared_ptr<btGeneric6DofConstraint> generic6Dof(new btGeneric6DofConstraint(*btBody1, *btBody2, localA, localB, true));
+        std::shared_ptr<btGeneric6DofConstraint> generic6Dof(new btGeneric6DofConstraint(*btBody1, *btBody2, localA, localB, true));
         generic6Dof->setOverrideNumSolverIterations(100);
 
         for (int i = 0; i < 6; i++)
@@ -328,19 +337,19 @@ namespace SimDynamics
             THROW_VR_EXCEPTION("Joints are already connected:" << bodyA->getName() << "," << bodyB->getName());
         }
 
-        BulletObjectPtr drn1 = boost::dynamic_pointer_cast<BulletObject>(dynamicRobotNodes[bodyA]);
-        BulletObjectPtr drn2 = boost::dynamic_pointer_cast<BulletObject>(dynamicRobotNodes[bodyB]);
+        BulletObjectPtr drn1 = std::dynamic_pointer_cast<BulletObject>(dynamicRobotNodes[bodyA]);
+        BulletObjectPtr drn2 = std::dynamic_pointer_cast<BulletObject>(dynamicRobotNodes[bodyB]);
         VR_ASSERT(drn1);
         VR_ASSERT(drn2);
-        boost::shared_ptr<btRigidBody> btBody1 = drn1->getRigidBody();
-        boost::shared_ptr<btRigidBody> btBody2 = drn2->getRigidBody();
+        std::shared_ptr<btRigidBody> btBody1 = drn1->getRigidBody();
+        std::shared_ptr<btRigidBody> btBody2 = drn2->getRigidBody();
         VR_ASSERT(btBody1);
         VR_ASSERT(btBody2);
-        DynamicsWorld::GetWorld()->getEngine()->disableCollision(drn1.get(),drn2.get());
+        DynamicsWorld::GetWorld()->getEngine()->disableCollision(drn1.get(), drn2.get());
 
-        if (joint->getJointValue()!=0.0f)
+        if (joint->getJointValue() != 0.0f)
         {
-            VR_WARNING << joint->getName() << ": joint values != 0 may produce a wrong setup, setting joint value to zero" << endl;
+            VR_WARNING << joint->getName() << ": joint values != 0 may produce a wrong setup, setting joint value to zero" << std::endl;
             joint->setJointValue(0);
         }
 
@@ -366,14 +375,14 @@ namespace SimDynamics
         com2.block(0, 3, 3, 1) = -drn2->getCom();
         anchor_inNode2 = com2 * anchor_inNode2;
 
-        boost::shared_ptr<btTypedConstraint> jointbt;
+        std::shared_ptr<btTypedConstraint> jointbt;
 
         double vr2bulletOffset = 0.0f;
 
 
         if (joint->isTranslationalJoint() && !ignoreTranslationalJoints)
         {
-            boost::shared_ptr<RobotNodePrismatic> rnPrisJoint = boost::dynamic_pointer_cast<RobotNodePrismatic>(joint);
+            std::shared_ptr<RobotNodePrismatic> rnPrisJoint = std::dynamic_pointer_cast<RobotNodePrismatic>(joint);
 
             double limMin, limMax;
             btScalar diff = joint->getJointValueOffset();
@@ -389,7 +398,7 @@ namespace SimDynamics
         else if (joint->isRotationalJoint())
         {
             // create joint
-            boost::shared_ptr<RobotNodeRevolute> rnRevJoint = boost::dynamic_pointer_cast<RobotNodeRevolute>(joint);
+            std::shared_ptr<RobotNodeRevolute> rnRevJoint = std::dynamic_pointer_cast<RobotNodeRevolute>(joint);
 
             // transform axis direction (not position!)
             Eigen::Vector4f axisLocalJoint = Eigen::Vector4f::Zero();
@@ -414,7 +423,7 @@ namespace SimDynamics
         }
         else
         {
-            VR_WARNING << "Creating fixed joint between " << bodyA->getName() << " and " << bodyB->getName() << ". This might result in some artefacts (e.g. no strict ridgid connection)" << endl;
+            VR_WARNING << "Creating fixed joint between " << bodyA->getName() << " and " << bodyB->getName() << ". This might result in some artefacts (e.g. no strict ridgid connection)" << std::endl;
             // create fixed joint
             jointbt = createFixedJoint(btBody1, btBody2, anchor_inNode1, anchor_inNode2);
         }
@@ -430,13 +439,15 @@ namespace SimDynamics
 
         // activate joint feedback for translational joints (somehow, the jumping positions issue seems sometimes to be solved with this?!)
         if (joint && joint->isTranslationalJoint() && !ignoreTranslationalJoints)
+        {
             enableForceTorqueFeedback(i);
+        }
 
         // disable col model
         i.disabledCollisionPairs.push_back(
             std::pair<DynamicsObjectPtr, DynamicsObjectPtr>(
-                boost::dynamic_pointer_cast<DynamicsObject>(drn1),
-                boost::dynamic_pointer_cast<DynamicsObject>(drn2)));
+                std::dynamic_pointer_cast<DynamicsObject>(drn1),
+                std::dynamic_pointer_cast<DynamicsObject>(drn2)));
 
         links.push_back(i);
 #ifndef DEBUG_FIXED_OBJECTS
@@ -460,7 +471,7 @@ namespace SimDynamics
     {
         MutexLockPtr lock = getScopedLock();
 
-        for (auto & link : links)
+        for (auto& link : links)
         {
             if (link.nodeA == node1 && link.nodeB == node2)
             {
@@ -499,7 +510,7 @@ namespace SimDynamics
     void BulletRobot::actuateJoints(double dt)
     {
         MutexLockPtr lock = getScopedLock();
-        //cout << "=== === BulletRobot: actuateJoints() 1 === " << this << endl;
+        //cout << "=== === BulletRobot: actuateJoints() 1 === " << this << std::endl;
 
         auto  it = actuationTargets.begin();
 
@@ -508,11 +519,13 @@ namespace SimDynamics
 
         for (; it != actuationTargets.end(); it++)
         {
-            //cout << "it:" << it->first << ", name: " << it->first->getName() << endl;
+            //cout << "it:" << it->first << ", name: " << it->first->getName() << std::endl;
             VelocityMotorController& controller = actuationControllers[it->first];
 
             if (!it->second.node->isRotationalJoint() && !it->second.node->isTranslationalJoint())
+            {
                 continue;
+            }
 
             LinkInfo link = getLink(it->second.node);
 
@@ -523,74 +536,74 @@ namespace SimDynamics
             {
                 if (it->second.node->isRotationalJoint())
                 {
-                    boost::shared_ptr<btHingeConstraint> hinge = boost::dynamic_pointer_cast<btHingeConstraint>(link.joint);
+                    std::shared_ptr<btHingeConstraint> hinge = std::dynamic_pointer_cast<btHingeConstraint>(link.joint);
                     hinge->enableMotor(false);
                     continue;
                 }
                 else if (it->second.node->isTranslationalJoint() && !ignoreTranslationalJoints)
                 {
-                    boost::shared_ptr<btSliderConstraint> slider = boost::dynamic_pointer_cast<btSliderConstraint>(link.joint);
+                    std::shared_ptr<btSliderConstraint> slider = std::dynamic_pointer_cast<btSliderConstraint>(link.joint);
                     slider->setPoweredLinMotor(false);
                     continue;
                 }
-             }
+            }
 
 
             if (actuation.modes.torque)
             {
                 // TORQUE MODES
 
-                 if (it->second.node->isRotationalJoint())
-                 {
-                     boost::shared_ptr<btHingeConstraint> hinge = boost::dynamic_pointer_cast<btHingeConstraint>(link.joint);
-                     auto torque = it->second.jointTorqueTarget;
-                     btVector3 hingeAxisLocalA =
-                             hinge->getFrameOffsetA().getBasis().getColumn(2);
-                     btVector3 hingeAxisLocalB =
-                             hinge->getFrameOffsetB().getBasis().getColumn(2);
-                     btVector3 hingeAxisWorldA =
-                             hinge->getRigidBodyA().getWorldTransform().getBasis() *
-                             hingeAxisLocalA;
-                     btVector3 hingeAxisWorldB =
-                             hinge->getRigidBodyB().getWorldTransform().getBasis() *
-                             hingeAxisLocalB;
+                if (it->second.node->isRotationalJoint())
+                {
+                    std::shared_ptr<btHingeConstraint> hinge = std::dynamic_pointer_cast<btHingeConstraint>(link.joint);
+                    auto torque = it->second.jointTorqueTarget;
+                    btVector3 hingeAxisLocalA =
+                        hinge->getFrameOffsetA().getBasis().getColumn(2);
+                    btVector3 hingeAxisLocalB =
+                        hinge->getFrameOffsetB().getBasis().getColumn(2);
+                    btVector3 hingeAxisWorldA =
+                        hinge->getRigidBodyA().getWorldTransform().getBasis() *
+                        hingeAxisLocalA;
+                    btVector3 hingeAxisWorldB =
+                        hinge->getRigidBodyB().getWorldTransform().getBasis() *
+                        hingeAxisLocalB;
 
 
-                     int sign = torque > 0?1:-1;
-                     torque = std::min<double>(fabs(torque), it->first->getMaxTorque()) * sign;
+                    int sign = torque > 0 ? 1 : -1;
+                    torque = std::min<double>(fabs(torque), it->first->getMaxTorque()) * sign;
 
-                     btVector3 hingeTorqueA = - torque * hingeAxisWorldA;
-                     btVector3 hingeTorqueB =   torque * hingeAxisWorldB;
-                     hinge->enableMotor(false);
-                     hinge->getRigidBodyA().applyTorque(hingeTorqueA);
-                     hinge->getRigidBodyB().applyTorque(hingeTorqueB);
-                 }
-                 else
-                 {
-                     // not yet tested!
-                     boost::shared_ptr<btSliderConstraint> slider = boost::dynamic_pointer_cast<btSliderConstraint>(link.joint);
-                     auto torque = it->second.jointTorqueTarget;
-                     btVector3 sliderAxisLocalA =
-                             slider->getFrameOffsetA().getBasis().getColumn(2);
-                     btVector3 sliderAxisLocalB =
-                             slider->getFrameOffsetB().getBasis().getColumn(2);
-                     btVector3 sliderAxisWorldA =
-                             slider->getRigidBodyA().getWorldTransform().getBasis() *
-                             sliderAxisLocalA;
-                     btVector3 sliderAxisWorldB =
-                             slider->getRigidBodyB().getWorldTransform().getBasis() *
-                             sliderAxisLocalB;
+                    btVector3 hingeTorqueA = - torque * hingeAxisWorldA;
+                    btVector3 hingeTorqueB =   torque * hingeAxisWorldB;
+                    hinge->enableMotor(false);
+                    hinge->getRigidBodyA().applyTorque(hingeTorqueA);
+                    hinge->getRigidBodyB().applyTorque(hingeTorqueB);
+                }
+                else
+                {
+                    // not yet tested!
+                    std::shared_ptr<btSliderConstraint> slider = std::dynamic_pointer_cast<btSliderConstraint>(link.joint);
+                    auto torque = it->second.jointTorqueTarget;
+                    btVector3 sliderAxisLocalA =
+                        slider->getFrameOffsetA().getBasis().getColumn(2);
+                    btVector3 sliderAxisLocalB =
+                        slider->getFrameOffsetB().getBasis().getColumn(2);
+                    btVector3 sliderAxisWorldA =
+                        slider->getRigidBodyA().getWorldTransform().getBasis() *
+                        sliderAxisLocalA;
+                    btVector3 sliderAxisWorldB =
+                        slider->getRigidBodyB().getWorldTransform().getBasis() *
+                        sliderAxisLocalB;
 
 
-                     int sign = torque > 0?1:-1;
-                     torque = std::min<double>(fabs(torque), it->first->getMaxTorque()) * sign;
+                    int sign = torque > 0 ? 1 : -1;
+                    torque = std::min<double>(fabs(torque), it->first->getMaxTorque()) * sign;
 
-                     btVector3 sliderTorqueA = - torque * sliderAxisWorldA;
-                     btVector3 sliderTorqueB =   torque * sliderAxisWorldB;
-                     slider->setPoweredLinMotor(false);
-                     slider->btTypedConstraint::getRigidBodyA().applyCentralForce(sliderTorqueA);
-                     slider->btTypedConstraint::getRigidBodyB().applyCentralForce(sliderTorqueB);
-                 }
+                    btVector3 sliderTorqueA = - torque * sliderAxisWorldA;
+                    btVector3 sliderTorqueB =   torque * sliderAxisWorldB;
+                    slider->setPoweredLinMotor(false);
+                    slider->btTypedConstraint::getRigidBodyA().applyCentralForce(sliderTorqueA);
+                    slider->btTypedConstraint::getRigidBodyB().applyCentralForce(sliderTorqueB);
+                }
             }
             else if (actuation.modes.position || actuation.modes.velocity)
             {
@@ -632,29 +645,29 @@ namespace SimDynamics
                 }
                 /*if (it->second.node->getName() == "ArmL6_Elb2")
                 {
-                    cout << "ELBOW - pos act:" << posActual << ",\t posTarget: " << posTarget << ",\t delta: " << deltaPos << ",\t , vel target:" << velocityTarget << ",\t pid vel:" << targetVelocity << endl;
+                    std::cout << "ELBOW - pos act:" << posActual << ",\t posTarget: " << posTarget << ",\t delta: " << deltaPos << ",\t , vel target:" << velocityTarget << ",\t pid vel:" << targetVelocity << std::endl;
                 }*/
 
                 btScalar maxImpulse = bulletMaxMotorImulse;
-//                controller.setCurrentVelocity(velActual);
+                //                controller.setCurrentVelocity(velActual);
                 if (it->second.node->getMaxTorque() > 0)
                 {
                     maxImpulse = it->second.node->getMaxTorque() * btScalar(dt) * BulletObject::ScaleFactor  * BulletObject::ScaleFactor * BulletObject::ScaleFactor;
-                    //cout << "node:" << it->second.node->getName() << ", max impulse: " << maxImpulse << ", dt:" << dt << ", maxImp:" << it->second.node->getMaxTorque() << endl;
+                    //cout << "node:" << it->second.node->getName() << ", max impulse: " << maxImpulse << ", dt:" << dt << ", maxImp:" << it->second.node->getMaxTorque() << std::endl;
                 }
-                if(fabs(targetVelocity) > 0.00001)
+                if (fabs(targetVelocity) > 0.00001)
                 {
                     link.dynNode1->getRigidBody()->activate();
                     link.dynNode2->getRigidBody()->activate();
                 }
                 if (it->second.node->isRotationalJoint())
                 {
-                    boost::shared_ptr<btHingeConstraint> hinge = boost::dynamic_pointer_cast<btHingeConstraint>(link.joint);
+                    std::shared_ptr<btHingeConstraint> hinge = std::dynamic_pointer_cast<btHingeConstraint>(link.joint);
                     hinge->enableAngularMotor(true, btScalar(targetVelocity), maxImpulse);
                 }
                 else if (it->second.node->isTranslationalJoint() && !ignoreTranslationalJoints)
                 {
-                    boost::shared_ptr<btSliderConstraint> slider = boost::dynamic_pointer_cast<btSliderConstraint>(link.joint);
+                    std::shared_ptr<btSliderConstraint> slider = std::dynamic_pointer_cast<btSliderConstraint>(link.joint);
                     slider->setMaxLinMotorForce(maxImpulse * 1000); // Magic number!!!
                     slider->setTargetLinMotorVelocity(btScalar(targetVelocity));
                     slider->setPoweredLinMotor(true);
@@ -662,19 +675,19 @@ namespace SimDynamics
             }
         }
 
-        //cout << endl;
+        //cout << std::endl;
         setPoseNonActuatedRobotNodes();
     }
 
     void BulletRobot::updateSensors(double dt)
     {
         MutexLockPtr lock = getScopedLock();
-        boost::unordered_set<std::string> contactObjectNames;
+        std::unordered_set<std::string> contactObjectNames;
 
         // this seems stupid and it is, but that is abstract interfaces for you.
-        for (auto & sensor : sensors)
+        for (auto& sensor : sensors)
         {
-            ContactSensorPtr contactSensor = boost::dynamic_pointer_cast<ContactSensor>(sensor);
+            ContactSensorPtr contactSensor = std::dynamic_pointer_cast<ContactSensor>(sensor);
 
             if (contactSensor)
             {
@@ -684,9 +697,9 @@ namespace SimDynamics
 
         DynamicsWorldPtr world = DynamicsWorld::GetWorld();
         std::vector<SimDynamics::DynamicsEngine::DynamicsContactInfo> contacts = world->getEngine()->getContacts();
-        boost::unordered_map<std::string, VirtualRobot::ContactSensor::ContactFrame> frameMap;
+        std::unordered_map<std::string, VirtualRobot::ContactSensor::ContactFrame> frameMap;
 
-        for (auto & contact : contacts)
+        for (auto& contact : contacts)
         {
             if (contact.objectAName.empty() || contact.objectBName.empty())
             {
@@ -724,9 +737,9 @@ namespace SimDynamics
         }
 
         // Update forces and torques
-        for (auto & sensor : sensors)
+        for (auto& sensor : sensors)
         {
-            ForceTorqueSensorPtr ftSensor = boost::dynamic_pointer_cast<ForceTorqueSensor>(sensor);
+            ForceTorqueSensorPtr ftSensor = std::dynamic_pointer_cast<ForceTorqueSensor>(sensor);
 
             if (ftSensor)
             {
@@ -742,7 +755,7 @@ namespace SimDynamics
             }
             else
             {
-                ContactSensorPtr contactSensor = boost::dynamic_pointer_cast<ContactSensor>(sensor);
+                ContactSensorPtr contactSensor = std::dynamic_pointer_cast<ContactSensor>(sensor);
 
                 if (contactSensor)
                 {
@@ -759,7 +772,7 @@ namespace SimDynamics
     {
         MutexLockPtr lock = getScopedLock();
 
-        for (auto & link : links)
+        for (auto& link : links)
         {
             if (link.nodeJoint == node /*|| links[i].nodeJoint2 == node*/)
             {
@@ -775,7 +788,7 @@ namespace SimDynamics
     {
         MutexLockPtr lock = getScopedLock();
 
-        for (auto & link : links)
+        for (auto& link : links)
         {
             if ((link.dynNode1 == object1 && link.dynNode2 == object2) || (link.dynNode1 == object2 && link.dynNode2 == object1))
             {
@@ -783,7 +796,7 @@ namespace SimDynamics
             }
         }
 
-        VR_WARNING << "No link with nodes: " << object1->getName() << " and " << object2->getName() << endl;
+        VR_WARNING << "No link with nodes: " << object1->getName() << " and " << object2->getName() << std::endl;
         return LinkInfo();
     }
 
@@ -792,7 +805,7 @@ namespace SimDynamics
         MutexLockPtr lock = getScopedLock();
         std::vector<BulletRobot::LinkInfo> result;
 
-        for (auto & link : links)
+        for (auto& link : links)
         {
             if (link.nodeJoint == node /*|| links[i].nodeJoint2 == node*/ || link.nodeA == node || link.nodeB == node)
             {
@@ -808,7 +821,7 @@ namespace SimDynamics
         MutexLockPtr lock = getScopedLock();
         std::vector<BulletRobot::LinkInfo> result;
 
-        for (auto & link : links)
+        for (auto& link : links)
         {
             if (link.dynNode1 == node || link.dynNode2 == node)
             {
@@ -832,21 +845,21 @@ namespace SimDynamics
 
         if (!robot || !robot->hasRobotNode(nodeName))
         {
-            VR_ERROR << "no node with name " << nodeName << endl;
+            VR_ERROR << "no node with name " << nodeName << std::endl;
             return result;
         }
 
         if (!object)
         {
-            VR_ERROR << "no object " << endl;
+            VR_ERROR << "no object " << std::endl;
             return result;
         }
 
-        BulletObjectPtr bo = boost::dynamic_pointer_cast<BulletObject>(object);
+        BulletObjectPtr bo = std::dynamic_pointer_cast<BulletObject>(object);
 
         if (!bo)
         {
-            VR_ERROR << "no bullet object " << endl;
+            VR_ERROR << "no bullet object " << std::endl;
             return result;
         }
 
@@ -859,7 +872,7 @@ namespace SimDynamics
             while (nodeA && !drn)
             {
                 SceneObjectPtr ts = nodeA->getParent();
-                nodeA = boost::dynamic_pointer_cast<RobotNode>(ts);
+                nodeA = std::dynamic_pointer_cast<RobotNode>(ts);
 
                 if (nodeA)
                 {
@@ -869,22 +882,22 @@ namespace SimDynamics
 
             if (!drn)
             {
-                VR_ERROR << "No dynamics object..." << endl;
+                VR_ERROR << "No dynamics object..." << std::endl;
                 return result;
             }
         }
 
-        BulletObjectPtr bdrn = boost::dynamic_pointer_cast<BulletObject>(drn);
+        BulletObjectPtr bdrn = std::dynamic_pointer_cast<BulletObject>(drn);
 
         if (!bo)
         {
-            VR_ERROR << "no bullet robot object " << endl;
+            VR_ERROR << "no bullet robot object " << std::endl;
             return result;
         }
 
         // create bullet joint
-        boost::shared_ptr<btRigidBody> btBody1 = bdrn->getRigidBody();
-        boost::shared_ptr<btRigidBody> btBody2 = bo->getRigidBody();
+        std::shared_ptr<btRigidBody> btBody1 = bdrn->getRigidBody();
+        std::shared_ptr<btRigidBody> btBody2 = bo->getRigidBody();
 
         Eigen::Matrix4f coordSystemNode1 = bdrn->getComGlobal(); // todo: what if joint is not at 0 ?!
         Eigen::Matrix4f coordSystemNode2 = bo->getComGlobal();
@@ -908,7 +921,7 @@ namespace SimDynamics
         com2.block(0,3,3,1) = -drn2->getCom();
         anchor_inNode2 = com2 * anchor_inNode2;*/
 
-        boost::shared_ptr<btTypedConstraint> jointbt = createFixedJoint(btBody1, btBody2, anchor_inNode1, anchor_inNode2);
+        std::shared_ptr<btTypedConstraint> jointbt = createFixedJoint(btBody1, btBody2, anchor_inNode1, anchor_inNode2);
 
         result.reset(new LinkInfo());
         result->nodeA = nodeA;
@@ -928,7 +941,7 @@ namespace SimDynamics
 
         links.push_back(*result);
 
-        VR_INFO << "Attached object " << object->getName() << " to node " << nodeName << endl;
+        VR_INFO << "Attached object " << object->getName() << " to node " << nodeName << std::endl;
         return result;
     }
 
@@ -938,21 +951,21 @@ namespace SimDynamics
 
         if (!robot)
         {
-            VR_ERROR << "no robot " << endl;
+            VR_ERROR << "no robot " << std::endl;
             return false;
         }
 
         if (!object)
         {
-            VR_ERROR << "no object " << endl;
+            VR_ERROR << "no object " << std::endl;
             return false;
         }
 
-        BulletObjectPtr bo = boost::dynamic_pointer_cast<BulletObject>(object);
+        BulletObjectPtr bo = std::dynamic_pointer_cast<BulletObject>(object);
 
         if (!bo)
         {
-            VR_ERROR << "no bullet object " << endl;
+            VR_ERROR << "no bullet object " << std::endl;
             return false;
         }
 
@@ -961,16 +974,16 @@ namespace SimDynamics
 
         if (ls.size() == 0)
         {
-            VR_ERROR << "No link with object " << object->getName() << endl;
+            VR_ERROR << "No link with object " << object->getName() << std::endl;
             return true; // not a failure, object is not attached
         }
 
-        for (const auto & l : ls)
+        for (const auto& l : ls)
         {
             res = res & removeLink(l);
         }
 
-        VR_INFO << "Detached object " << object->getName() << " from robot " << robot->getName() << endl;
+        VR_INFO << "Detached object " << object->getName() << " from robot " << robot->getName() << std::endl;
         return res;
     }
 
@@ -978,7 +991,7 @@ namespace SimDynamics
     {
         MutexLockPtr lock = getScopedLock();
 
-        for (auto & link : links)
+        for (auto& link : links)
         {
             if (link.nodeJoint == node /*|| links[i].nodeJoint2 == node*/)
             {
@@ -998,7 +1011,7 @@ namespace SimDynamics
         {
             if (!hasLink(node))
             {
-                VR_ERROR << "No link for node " << node->getName() << endl;
+                VR_ERROR << "No link for node " << node->getName() << std::endl;
                 return;
             }
 
@@ -1008,11 +1021,11 @@ namespace SimDynamics
         {
             if (node->isTranslationalJoint() && ignoreTranslationalJoints)
             {
-                VR_WARNING << "Translational joints ignored. (ignoring node " << node->getName() << ")." << endl;
+                VR_WARNING << "Translational joints ignored. (ignoring node " << node->getName() << ")." << std::endl;
             }
             else
             {
-                VR_ERROR << "Only Revolute and translational joints implemented so far (ignoring node " << node->getName() << ")." << endl;
+                VR_ERROR << "Only Revolute and translational joints implemented so far (ignoring node " << node->getName() << ")." << std::endl;
             }
         }
     }
@@ -1024,7 +1037,7 @@ namespace SimDynamics
 
         if (!hasLink(node))
         {
-            VR_ERROR << "No link for node " << node->getName() << endl;
+            VR_ERROR << "No link for node " << node->getName() << std::endl;
             return;
         }
 
@@ -1036,7 +1049,7 @@ namespace SimDynamics
         }
         else
         {
-            VR_ERROR << "Only Revolute and Prismatic joints implemented so far (node: " << node->getName() <<")..." << endl;
+            VR_ERROR << "Only Revolute and Prismatic joints implemented so far (node: " << node->getName() << ")..." << std::endl;
         }
     }
 
@@ -1047,7 +1060,7 @@ namespace SimDynamics
 
         if (!hasLink(rn))
         {
-            //VR_ERROR << "No link with node " << rn->getName() << endl;
+            //VR_ERROR << "No link with node " << rn->getName() << std::endl;
             return 0.0f;
         }
 
@@ -1055,14 +1068,14 @@ namespace SimDynamics
 
         if (rn->isRotationalJoint())
         {
-            boost::shared_ptr<btHingeConstraint> hinge = boost::dynamic_pointer_cast<btHingeConstraint>(link.joint);
+            std::shared_ptr<btHingeConstraint> hinge = std::dynamic_pointer_cast<btHingeConstraint>(link.joint);
             VR_ASSERT(hinge);
 
             return (hinge->getHingeAngle() - link.jointValueOffset); // inverted joint direction in bullet
         }
         else if (rn->isTranslationalJoint())
         {
-            boost::shared_ptr<btSliderConstraint> slider = boost::dynamic_pointer_cast<btSliderConstraint>(link.joint);
+            std::shared_ptr<btSliderConstraint> slider = std::dynamic_pointer_cast<btSliderConstraint>(link.joint);
             VR_ASSERT(slider);
 
             return (slider->getLinearPos() - link.jointValueOffset) * 1000 / BulletObject::ScaleFactor; // m -> mm
@@ -1080,7 +1093,7 @@ namespace SimDynamics
 
         if (!hasLink(rn))
         {
-            //VR_ERROR << "No link with node " << rn->getName() << endl;
+            //VR_ERROR << "No link with node " << rn->getName() << std::endl;
             return 0.0f;
         }
 
@@ -1088,13 +1101,16 @@ namespace SimDynamics
 
         if (rn->isRotationalJoint())
         {
-            boost::shared_ptr<btHingeConstraint> hinge = boost::dynamic_pointer_cast<btHingeConstraint>(link.joint);
-
+            std::shared_ptr<btHingeConstraint> hinge = std::dynamic_pointer_cast<btHingeConstraint>(link.joint);
+#ifdef SIMOX_USES_OLD_BULLET
             return hinge->getMotorTargetVelosity();
+#else
+            return hinge->getMotorTargetVelocity();
+#endif
         }
         else if (rn->isTranslationalJoint())
         {
-            boost::shared_ptr<btSliderConstraint> slider = boost::dynamic_pointer_cast<btSliderConstraint>(link.joint);
+            std::shared_ptr<btSliderConstraint> slider = std::dynamic_pointer_cast<btSliderConstraint>(link.joint);
 
             return slider->getTargetLinMotorVelocity() * 1000; // / BulletObject::ScaleFactor; m -> mm
         }
@@ -1108,18 +1124,18 @@ namespace SimDynamics
 
         if (!hasLink(rn))
         {
-            //VR_ERROR << "No link with node " << rn->getName() << endl;
+            //VR_ERROR << "No link with node " << rn->getName() << std::endl;
             return 0.0f;
         }
 
         if (rn->isRotationalJoint())
         {
             LinkInfo link = getLink(rn);
-            boost::shared_ptr<btHingeConstraint> hinge = boost::dynamic_pointer_cast<btHingeConstraint>(link.joint);
+            std::shared_ptr<btHingeConstraint> hinge = std::dynamic_pointer_cast<btHingeConstraint>(link.joint);
 
             VR_ASSERT(hinge);
 
-            boost::shared_ptr<RobotNodeRevolute> rnRevJoint = boost::dynamic_pointer_cast<RobotNodeRevolute>(link.nodeJoint);
+            std::shared_ptr<RobotNodeRevolute> rnRevJoint = std::dynamic_pointer_cast<RobotNodeRevolute>(link.nodeJoint);
 
             Eigen::Vector3f deltaVel = link.dynNode2->getAngularVelocity() - link.dynNode1->getAngularVelocity();
             double speed = deltaVel.dot(rnRevJoint->getJointRotationAxis());
@@ -1128,11 +1144,11 @@ namespace SimDynamics
         else if (rn->isTranslationalJoint())
         {
             LinkInfo link = getLink(rn);
-            boost::shared_ptr<btSliderConstraint> slider = boost::dynamic_pointer_cast<btSliderConstraint>(link.joint);
+            std::shared_ptr<btSliderConstraint> slider = std::dynamic_pointer_cast<btSliderConstraint>(link.joint);
 
             VR_ASSERT(slider);
 
-            boost::shared_ptr<RobotNodePrismatic> rnPrisJoint = boost::dynamic_pointer_cast<RobotNodePrismatic>(link.nodeJoint);
+            std::shared_ptr<RobotNodePrismatic> rnPrisJoint = std::dynamic_pointer_cast<RobotNodePrismatic>(link.nodeJoint);
 
             Eigen::Vector3f jointDirection = rnPrisJoint->getGlobalPose().block<3, 3>(0, 0) * rnPrisJoint->getJointTranslationDirectionJointCoordSystem();
             Eigen::Vector3f deltaVel = (link.dynNode2->getLinearVelocity() - link.dynNode1->getLinearVelocity());
@@ -1140,7 +1156,7 @@ namespace SimDynamics
         }
         else
         {
-            VR_WARNING << "Only translational and rotational joints implemented." << endl;
+            VR_WARNING << "Only translational and rotational joints implemented." << std::endl;
             return 0.0;
         }
     }
@@ -1160,7 +1176,7 @@ namespace SimDynamics
 
         if (!hasLink(rn))
         {
-            //VR_ERROR << "No link with node " << rn->getName() << endl;
+            //VR_ERROR << "No link with node " << rn->getName() << std::endl;
             return result;
         }
 
@@ -1173,7 +1189,7 @@ namespace SimDynamics
         }
         else
         {
-            VR_WARNING << "Only translational and rotational joints implemented." << endl;
+            VR_WARNING << "Only translational and rotational joints implemented." << std::endl;
         }
 
         return result;
@@ -1186,7 +1202,7 @@ namespace SimDynamics
 
         if (!hasLink(rn))
         {
-            //VR_ERROR << "No link with node " << rn->getName() << endl;
+            //VR_ERROR << "No link with node " << rn->getName() << std::endl;
             return 0.0;
         }
 
@@ -1203,7 +1219,7 @@ namespace SimDynamics
         }
         else
         {
-            VR_WARNING << "Only translational and rotational joints implemented." << endl;
+            VR_WARNING << "Only translational and rotational joints implemented." << std::endl;
         }
         return 0.0;
     }
@@ -1217,7 +1233,7 @@ namespace SimDynamics
 
         if (!hasLink(rn))
         {
-            //VR_ERROR << "No link with node " << rn->getName() << endl;
+            //VR_ERROR << "No link with node " << rn->getName() << std::endl;
             return result;
         }
 
@@ -1230,7 +1246,7 @@ namespace SimDynamics
         }
         else
         {
-            VR_WARNING << "Only translational and rotational joints implemented." << endl;
+            VR_WARNING << "Only translational and rotational joints implemented." << std::endl;
         }
 
         return result;
@@ -1239,11 +1255,11 @@ namespace SimDynamics
     Eigen::Matrix4f BulletRobot::getComGlobal(const VirtualRobot::RobotNodePtr& rn)
     {
         MutexLockPtr lock = getScopedLock();
-        BulletObjectPtr bo = boost::dynamic_pointer_cast<BulletObject>(getDynamicsRobotNode(rn));
+        BulletObjectPtr bo = std::dynamic_pointer_cast<BulletObject>(getDynamicsRobotNode(rn));
 
         if (!bo)
         {
-            VR_ERROR << "Could not cast object..." << endl;
+            VR_ERROR << "Could not cast object..." << std::endl;
             return Eigen::Matrix4f::Identity();
         }
 
@@ -1259,7 +1275,7 @@ namespace SimDynamics
         for (unsigned int i = 0; i < set->getSize(); i++)
         {
             VirtualRobot::RobotNodePtr node = (*set)[i];
-            BulletObjectPtr bo = boost::dynamic_pointer_cast<BulletObject>(getDynamicsRobotNode(node));
+            BulletObjectPtr bo = std::dynamic_pointer_cast<BulletObject>(getDynamicsRobotNode(node));
             Eigen::Matrix4f pose = bo->getComGlobal();
             com += node->getMass() * pose.block(0, 3, 3, 1);
             totalMass += node->getMass();
@@ -1278,16 +1294,16 @@ namespace SimDynamics
         for (unsigned int i = 0; i < set->getSize(); i++)
         {
             VirtualRobot::RobotNodePtr node = (*set)[i];
-            BulletObjectPtr bo = boost::dynamic_pointer_cast<BulletObject>(getDynamicsRobotNode(node));
+            BulletObjectPtr bo = std::dynamic_pointer_cast<BulletObject>(getDynamicsRobotNode(node));
             Eigen::Vector3f vel = bo->getLinearVelocity();
 
             if (boost::math::isnan(vel(0)) || boost::math::isnan(vel(1)) || boost::math::isnan(vel(2)))
             {
-                VR_ERROR << "NAN result: getLinearVelocity:" << bo->getName() << ", i:" << i << endl;
+                VR_ERROR << "NAN result: getLinearVelocity:" << bo->getName() << ", i:" << i << std::endl;
                 node->print();
-                VR_ERROR << "BULLETOBJECT com:" << bo->getCom() << endl;
-                VR_ERROR << "BULLETOBJECT: ang vel:" << bo->getAngularVelocity() << endl;
-                VR_ERROR << "BULLETOBJECT:" << bo->getRigidBody()->getWorldTransform().getOrigin() << endl;
+                VR_ERROR << "BULLETOBJECT com:" << bo->getCom() << std::endl;
+                VR_ERROR << "BULLETOBJECT: ang vel:" << bo->getAngularVelocity() << std::endl;
+                VR_ERROR << "BULLETOBJECT:" << bo->getRigidBody()->getWorldTransform().getOrigin() << std::endl;
 
 
             }
@@ -1298,7 +1314,7 @@ namespace SimDynamics
 
         if (fabs(totalMass) < 1e-5)
         {
-            VR_ERROR << "Little mass: " << totalMass << ". Could not compute com velocity..." << endl;
+            VR_ERROR << "Little mass: " << totalMass << ". Could not compute com velocity..." << std::endl;
         }
         else
         {
@@ -1316,7 +1332,7 @@ namespace SimDynamics
         for (unsigned int i = 0; i < set->getSize(); i++)
         {
             VirtualRobot::RobotNodePtr node = (*set)[i];
-            BulletObjectPtr bo = boost::dynamic_pointer_cast<BulletObject>(getDynamicsRobotNode(node));
+            BulletObjectPtr bo = std::dynamic_pointer_cast<BulletObject>(getDynamicsRobotNode(node));
             Eigen::Vector3f vel = bo->getLinearVelocity() / 1000.0  * BulletObject::ScaleFactor;
 
             linMomentum += node->getMass() * vel;
@@ -1333,13 +1349,13 @@ namespace SimDynamics
         for (unsigned int i = 0; i < set->getSize(); i++)
         {
             VirtualRobot::RobotNodePtr node = (*set)[i];
-            BulletObjectPtr bo = boost::dynamic_pointer_cast<BulletObject>(getDynamicsRobotNode(node));
+            BulletObjectPtr bo = std::dynamic_pointer_cast<BulletObject>(getDynamicsRobotNode(node));
             Eigen::Vector3f vel = bo->getLinearVelocity() / 1000.0  * BulletObject::ScaleFactor;
             Eigen::Vector3f ang = bo->getAngularVelocity() / 1000.0  * BulletObject::ScaleFactor;
             Eigen::Vector3f com = bo->getComGlobal().block(0, 3, 3, 1) / 1000.0  * BulletObject::ScaleFactor;
             double mass = node->getMass();
 
-            boost::shared_ptr<btRigidBody> body = bo->getRigidBody();
+            std::shared_ptr<btRigidBody> body = bo->getRigidBody();
             Eigen::Matrix3f intertiaWorld = BulletEngine::getRotMatrix(body->getInvInertiaTensorWorld()).inverse().block(0, 0, 3, 3);
 
             angMomentum += com.cross(mass * vel) + intertiaWorld * ang;
@@ -1358,13 +1374,13 @@ namespace SimDynamics
         for (unsigned int i = 0; i < set->getSize(); i++)
         {
             VirtualRobot::RobotNodePtr node = (*set)[i];
-            BulletObjectPtr bo = boost::dynamic_pointer_cast<BulletObject>(getDynamicsRobotNode(node));
+            BulletObjectPtr bo = std::dynamic_pointer_cast<BulletObject>(getDynamicsRobotNode(node));
             Eigen::Vector3f bodyVel = bo->getLinearVelocity() / 1000.0  * BulletObject::ScaleFactor;
             Eigen::Vector3f ang = bo->getAngularVelocity() / 1000.0  * BulletObject::ScaleFactor;
             Eigen::Vector3f bodyCoM = bo->getComGlobal().block(0, 3, 3, 1) / 1000.0  * BulletObject::ScaleFactor;
             double mass = node->getMass();
 
-            boost::shared_ptr<btRigidBody> body = bo->getRigidBody();
+            std::shared_ptr<btRigidBody> body = bo->getRigidBody();
 
             btVector3 invIntertiaDiag = body->getInvInertiaDiagLocal();
             Eigen::Matrix3f intertiaLocal = Eigen::Matrix3f::Zero();
@@ -1432,7 +1448,7 @@ namespace SimDynamics
             // just a sanity check
             if (lastSize ==  notActuatedNodes.size())
             {
-                VR_ERROR << "Internal error?!" << endl;
+                VR_ERROR << "Internal error?!" << std::endl;
                 return;
             }
             else
@@ -1442,7 +1458,7 @@ namespace SimDynamics
         }
     }
 
-    void BulletRobot::enableForceTorqueFeedback(const LinkInfo& link , bool enable)
+    void BulletRobot::enableForceTorqueFeedback(const LinkInfo& link, bool enable)
     {
         MutexLockPtr lock = getScopedLock();
 
@@ -1534,7 +1550,7 @@ namespace SimDynamics
 
     void BulletRobot::setMaximumMotorImpulse(double maxImpulse)
     {
-		bulletMaxMotorImulse = (btScalar)maxImpulse;
+        bulletMaxMotorImulse = (btScalar)maxImpulse;
     }
 
     double BulletRobot::getMaximumMotorImpulse() const

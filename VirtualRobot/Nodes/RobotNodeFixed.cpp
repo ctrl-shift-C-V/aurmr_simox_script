@@ -79,14 +79,14 @@ namespace VirtualRobot
     {
         if (printDecoration)
         {
-            cout << "******** RobotNodeFixed ********" << endl;
+            std::cout << "******** RobotNodeFixed ********" << std::endl;
         }
 
         RobotNode::print(false, false);
 
         if (printDecoration)
         {
-            cout << "******** End RobotNodeFixed ********" << endl;
+            std::cout << "******** End RobotNodeFixed ********" << std::endl;
         }
 
 
@@ -94,7 +94,8 @@ namespace VirtualRobot
 
         if (printChildren)
         {
-            std::for_each(children.begin(), children.end(), boost::bind(&SceneObject::print, _1, true, true));
+            std::for_each(children.begin(), children.end(), std::bind(&SceneObject::print,
+                                                                      std::placeholders::_1, true, true));
         }
     }
 

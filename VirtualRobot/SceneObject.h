@@ -23,23 +23,19 @@
 #pragma once
 
 #include "VirtualRobot.h"
-#include "VirtualRobotException.h"
-#include "VirtualRobot.h"
-#include "Visualization/VisualizationNode.h"
+
 #include <Eigen/Core>
-#include <Eigen/Geometry>
+
+#include <type_traits>
 #include <string>
-#include <iomanip>
 #include <vector>
-
-
 
 
 namespace VirtualRobot
 {
     class Robot;
 
-    class VIRTUAL_ROBOT_IMPORT_EXPORT SceneObject : public boost::enable_shared_from_this<SceneObject>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT SceneObject : public std::enable_shared_from_this<SceneObject>
     {
         friend class RobotFactory;
     public:
@@ -322,14 +318,14 @@ namespace VirtualRobot
         /*!
             Retrieve a visualization in the given format.
             Example usage:
-             boost::shared_ptr<VirtualRobot::CoinVisualization> visualization = robot->getVisualization<CoinVisualization>();
+             std::shared_ptr<VirtualRobot::CoinVisualization> visualization = robot->getVisualization<CoinVisualization>();
              SoNode* visualisationNode = NULL;
              if (visualization)
                  visualisationNode = visualization->getCoinVisualization();
 
             @see CoinVisualizationFactory::getCoinVisualization() for convenient access!
         */
-        template <typename T> boost::shared_ptr<T> getVisualization(SceneObject::VisualizationType visuType = SceneObject::Full);
+        template <typename T> std::shared_ptr<T> getVisualization(SceneObject::VisualizationType visuType = SceneObject::Full);
 
         /*!
           Convenient method for highlighting the visualization of this object.
@@ -447,11 +443,11 @@ namespace VirtualRobot
      * A compile time error is thrown if a different class type is used as template argument.
      */
     template <typename T>
-    boost::shared_ptr<T> SceneObject::getVisualization(SceneObject::VisualizationType visuType)
+    std::shared_ptr<T> SceneObject::getVisualization(SceneObject::VisualizationType visuType)
     {
-        const bool IS_SUBCLASS_OF_VISUALIZATION = ::boost::is_base_of<Visualization, T>::value;
-        BOOST_MPL_ASSERT_MSG(IS_SUBCLASS_OF_VISUALIZATION, TEMPLATE_PARAMETER_FOR_VirtualRobot_getVisualization_MUST_BT_A_SUBCLASS_OF_VirtualRobot__Visualization, (T));
-        boost::shared_ptr<T> visualization(new T(getVisualization(visuType)));
+        static_assert(::std::is_base_of_v<Visualization, T>,
+                "TEMPLATE_PARAMETER_FOR_VirtualRobot_getVisualization_MUST_BT_A_SUBCLASS_OF_VirtualRobot__Visualization");
+        std::shared_ptr<T> visualization(new T(getVisualization(visuType)));
         return visualization;
     }
 

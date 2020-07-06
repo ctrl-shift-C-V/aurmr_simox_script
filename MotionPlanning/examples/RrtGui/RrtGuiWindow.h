@@ -115,6 +115,6 @@ protected:
     Saba::CSpaceTreePtr tree;
     Saba::CSpaceTreePtr tree2;
 
-    boost::shared_ptr<VirtualRobot::CoinVisualization> visualization;
+    std::shared_ptr<VirtualRobot::CoinVisualization> visualization;
 };
 

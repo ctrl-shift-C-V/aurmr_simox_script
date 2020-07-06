@@ -90,6 +90,6 @@ namespace VirtualRobot
         float initialTranslationalJointValue;
     };
 
-    typedef boost::shared_ptr<GenericIKSolver> GenericIKSolverPtr;
+    typedef std::shared_ptr<GenericIKSolver> GenericIKSolverPtr;
 } // namespace VirtualRobot
 

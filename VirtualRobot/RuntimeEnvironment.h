@@ -28,6 +28,10 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <iostream>
+
+#include <boost/program_options.hpp>
+#include <boost/core/demangle.hpp>
 
 #include <Eigen/Core>
 

@@ -236,7 +236,8 @@
 
 namespace VirtualRobot
 {
-
+    using std::cout;
+    using std::endl;
 
     const CompressionBZip2::UInt32 CompressionBZip2::BZ2_crc32Table[256] =
     {
@@ -407,7 +408,7 @@ namespace VirtualRobot
 
             if (currentError < 0) //== BZ_IO_ERROR) {
             {
-                VR_ERROR << "Could not close file?!" << endl;
+                VR_ERROR << "Could not close file?!" << std::endl;
                 return false;
             }
         }
@@ -4985,7 +4986,7 @@ preswitch:
                     std::streamoff o(-(int)(bzf->strm.avail_in));
                     /*if (p>o)
                     {
-                        cout << "Error, expecting position in stream > p?!" << endl;
+                        std::cout << "Error, expecting position in stream > p?!" << std::endl;
                         BZ_SETERR(BZ_SEQUENCE_ERROR); return;
                     }*/
                     bzf->strm.avail_in = 0;
@@ -4995,7 +4996,7 @@ preswitch:
                 }
                 else
                 {
-                    cout << "internal error, expecting handleIn..." << endl;
+                    std::cout << "internal error, expecting handleIn..." << std::endl;
                     BZ_SETERR(BZ_SEQUENCE_ERROR);
                     return;
                 }
@@ -5839,7 +5840,7 @@ return_notr:
 
         if (mode != eCompress)
         {
-            VR_ERROR << "Not in compression mode?!" << endl;
+            VR_ERROR << "Not in compression mode?!" << std::endl;
             return false;
         }
 
@@ -5852,7 +5853,7 @@ return_notr:
 
         if (currentError < 0) //== BZ_IO_ERROR) {
         {
-            VR_ERROR << "Could not compress data..." << endl;
+            VR_ERROR << "Could not compress data..." << std::endl;
             close();
             return false;
         }
@@ -5883,7 +5884,7 @@ return_notr:
 
         if (mode != eUncompress)
         {
-            VR_ERROR << "Not in uncompression mode?!" << endl;
+            VR_ERROR << "Not in uncompression mode?!" << std::endl;
             return false;
         }
 
@@ -5896,7 +5897,7 @@ return_notr:
 
         if (currentError < 0) //== BZ_IO_ERROR) {
         {
-            VR_ERROR << "Could not uncompress data..." << endl;
+            VR_ERROR << "Could not uncompress data..." << std::endl;
             close();
             return false;
         }

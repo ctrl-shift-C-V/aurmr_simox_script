@@ -22,6 +22,7 @@
 
 namespace VirtualRobot
 {
+    using std::endl;
 
     CoinVisualization::CoinVisualization(const VisualizationNodePtr visualizationNode) :
         Visualization(visualizationNode)
@@ -89,9 +90,9 @@ namespace VirtualRobot
 
         visuRoot->addChild(visualization);
 
-        BOOST_FOREACH(VisualizationNodePtr visualizationNode, visualizationNodes)
+        for (VisualizationNodePtr const& visualizationNode : visualizationNodes)
         {
-            boost::shared_ptr<CoinVisualizationNode> coinVisualizationNode = boost::dynamic_pointer_cast<CoinVisualizationNode>(visualizationNode);
+            std::shared_ptr<CoinVisualizationNode> coinVisualizationNode = std::dynamic_pointer_cast<CoinVisualizationNode>(visualizationNode);
 
             if (coinVisualizationNode && coinVisualizationNode->getCoinVisualization())
             {
@@ -105,7 +106,7 @@ namespace VirtualRobot
     {
         if (which >= visualizationNodes.size())
         {
-            VR_WARNING << "Could not find visualizationNode..." << endl;
+            VR_WARNING << "Could not find visualizationNode..." << std::endl;
             return false;
         }
 
@@ -141,11 +142,11 @@ namespace VirtualRobot
 
         if (!isVisualizationNodeRegistered(visualizationNode))
         {
-            VR_WARNING << "Could not find visualizationNode..." << endl;
+            VR_WARNING << "Could not find visualizationNode..." << std::endl;
             return false;
         }
 
-        boost::shared_ptr<CoinVisualizationNode> coinVisualizationNode = boost::dynamic_pointer_cast<CoinVisualizationNode>(visualizationNode);
+        std::shared_ptr<CoinVisualizationNode> coinVisualizationNode = std::dynamic_pointer_cast<CoinVisualizationNode>(visualizationNode);
 
 
         if (coinVisualizationNode)

@@ -39,7 +39,7 @@ RrtGuiWindow::RrtGuiWindow(const std::string& sceneFile, const std::string& sCon
                            const std::string& rns, const std::string& colModelRob1, const std::string& colModelRob2,  const std::string& colModelEnv)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
 
     this->sceneFile = sceneFile;
 
@@ -122,7 +122,7 @@ void RrtGuiWindow::setupUI()
 
     // setup
     viewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-    viewer->setAccumulationBuffer(true);
+    viewer->setAccumulationBuffer(false);
 
     viewer->setAntialiasing(true, 4);
 
@@ -267,7 +267,7 @@ void RrtGuiWindow::loadScene()
 
     if (!scene)
     {
-        VR_ERROR << " no scene ..." << endl;
+        VR_ERROR << " no scene ..." << std::endl;
         return;
     }
 
@@ -276,7 +276,7 @@ void RrtGuiWindow::loadScene()
 
     if (robots.size() != 1)
     {
-        VR_ERROR << "Need exactly 1 robot" << endl;
+        VR_ERROR << "Need exactly 1 robot" << std::endl;
         return;
     }
 
@@ -287,7 +287,7 @@ void RrtGuiWindow::loadScene()
 
     if (configs.size() < 2)
     {
-        VR_ERROR << "Need at least 2 Robot Configurations" << endl;
+        VR_ERROR << "Need at least 2 Robot Configurations" << std::endl;
         return;
     }
 
@@ -351,7 +351,7 @@ void RrtGuiWindow::selectStart(const std::string& conf)
         }
     }
 
-    VR_ERROR << "No configuration with name <" << conf << "> found..." << endl;
+    VR_ERROR << "No configuration with name <" << conf << "> found..." << std::endl;
 }
 void RrtGuiWindow::selectGoal(const std::string& conf)
 {
@@ -365,7 +365,7 @@ void RrtGuiWindow::selectGoal(const std::string& conf)
         }
     }
 
-    VR_ERROR << "No configuration with name <" << conf << "> found..." << endl;
+    VR_ERROR << "No configuration with name <" << conf << "> found..." << std::endl;
 }
 
 void RrtGuiWindow::selectRNS(const std::string& rns)
@@ -387,7 +387,7 @@ void RrtGuiWindow::selectRNS(const std::string& rns)
         }
     }
 
-    VR_ERROR << "No rns with name <" << rns << "> found..." << endl;
+    VR_ERROR << "No rns with name <" << rns << "> found..." << std::endl;
 }
 
 void RrtGuiWindow::selectColModelRobA(const std::string& colModel)
@@ -409,7 +409,7 @@ void RrtGuiWindow::selectColModelRobA(const std::string& colModel)
         }
     }
 
-    VR_ERROR << "No col model set with name <" << colModel << "> found..." << endl;
+    VR_ERROR << "No col model set with name <" << colModel << "> found..." << std::endl;
 }
 void RrtGuiWindow::selectColModelRobB(const std::string& colModel)
 {
@@ -430,7 +430,7 @@ void RrtGuiWindow::selectColModelRobB(const std::string& colModel)
         }
     }
 
-    VR_ERROR << "No col model set with name <" << colModel << "> found..." << endl;
+    VR_ERROR << "No col model set with name <" << colModel << "> found..." << std::endl;
 }
 void RrtGuiWindow::selectColModelEnv(const std::string& colModel)
 {
@@ -451,7 +451,7 @@ void RrtGuiWindow::selectColModelEnv(const std::string& colModel)
         }
     }
 
-    VR_ERROR << "No scene object set with name <" << colModel << "> found..." << endl;
+    VR_ERROR << "No scene object set with name <" << colModel << "> found..." << std::endl;
 }
 
 void RrtGuiWindow::selectStart(int nr)
@@ -578,7 +578,7 @@ void RrtGuiWindow::buildRRTVisu()
         return;
     }
 
-    boost::shared_ptr<Saba::CoinRrtWorkspaceVisualization> w(new Saba::CoinRrtWorkspaceVisualization(robot, cspace, rns->getTCP()->getName()));
+    std::shared_ptr<Saba::CoinRrtWorkspaceVisualization> w(new Saba::CoinRrtWorkspaceVisualization(robot, cspace, rns->getTCP()->getName()));
 
     if (UI.checkBoxShowRRT->isChecked())
     {
@@ -697,7 +697,7 @@ void RrtGuiWindow::plan()
 
     if (planOK)
     {
-        VR_INFO << " Planning succeeded " << endl;
+        VR_INFO << " Planning succeeded " << std::endl;
         solution = mp->getSolution();
         Saba::ShortcutProcessorPtr postProcessing(new Saba::ShortcutProcessor(solution, cspace, false));
         solutionOptimized = postProcessing->optimize(100);
@@ -715,7 +715,7 @@ void RrtGuiWindow::plan()
     }
     else
     {
-        VR_INFO << " Planning failed" << endl;
+        VR_INFO << " Planning failed" << std::endl;
     }
 
     sliderSolution(1000);

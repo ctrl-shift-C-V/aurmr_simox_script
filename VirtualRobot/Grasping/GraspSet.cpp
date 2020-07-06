@@ -9,7 +9,8 @@
 
 namespace VirtualRobot
 {
-
+    using std::cout;
+    using std::endl;
 
     GraspSet::GraspSet(const std::string& name, const std::string& robotType, const std::string& eef, const std::vector< GraspPtr >& grasps)
         : grasps(grasps), name(name), robotType(robotType), eef(eef)
@@ -77,19 +78,19 @@ namespace VirtualRobot
 
     void GraspSet::print() const
     {
-        cout << "**** Grasp set ****" << endl;
-        cout << "Name: " << name << endl;
-        cout << "Robot Type: " << robotType << endl;
-        cout << "End Effector: " << eef << endl;
-        cout << "Grasps:" << endl;
+        std::cout << "**** Grasp set ****" << std::endl;
+        std::cout << "Name: " << name << std::endl;
+        std::cout << "Robot Type: " << robotType << std::endl;
+        std::cout << "End Effector: " << eef << std::endl;
+        std::cout << "Grasps:" << std::endl;
 
         for (size_t i = 0; i < grasps.size(); i++)
         {
-            cout << "** grasp " << i << ":" << endl;
+            std::cout << "** grasp " << i << ":" << std::endl;
             grasps[i]->print(false);
         }
 
-        cout << endl;
+        std::cout << std::endl;
     }
 
     bool GraspSet::isCompatibleGrasp(GraspPtr grasp) const

@@ -14,8 +14,12 @@
 #include "VirtualRobot/VirtualRobotException.h"
 #include "VirtualRobot/XML/BaseIO.h"
 
+#include <fstream>
+
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     VisualizationNode::VisualizationNode(const TriMeshModelPtr& triMeshModel) :
         triMeshModel{triMeshModel}
@@ -26,6 +30,10 @@ namespace VirtualRobot
         boundingBox = false;
         globalPose.setIdentity();
     }
+
+    VisualizationNode::VisualizationNode(const TriMeshModel& triMeshModel) :
+        VisualizationNode(std::make_shared<TriMeshModel>(triMeshModel))
+    {}
 
     VisualizationNode::~VisualizationNode()
     {
@@ -121,7 +129,7 @@ namespace VirtualRobot
 
     void VisualizationNode::print()
     {
-        cout << "Dummy VisualizationNode" << endl;
+        std::cout << "Dummy VisualizationNode" << std::endl;
     }
 
     void VisualizationNode::setupVisualization(bool showVisualization, bool showAttachedVisualizations)
@@ -232,7 +240,7 @@ namespace VirtualRobot
 
         if (i == visualizations.end())
         {
-            VR_ERROR << "Could not find visualization factory. Aborting..." << endl;
+            VR_ERROR << "Could not find visualization factory. Aborting..." << std::endl;
             return VisualizationNodePtr();
         }
 
@@ -264,7 +272,7 @@ namespace VirtualRobot
         {
             if (!std::filesystem::create_directories(completePath))
             {
-                VR_ERROR << "Could not create model dir  " << completePath.string() << endl;
+                VR_ERROR << "Could not create model dir  " << completePath.string() << std::endl;
                 return false;
             }
         }

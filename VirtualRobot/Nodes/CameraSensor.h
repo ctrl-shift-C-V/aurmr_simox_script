@@ -29,7 +29,7 @@ namespace VirtualRobot
 {
 
     class CameraSensor;
-    typedef boost::shared_ptr<CameraSensor> CameraSensorPtr;
+    typedef std::shared_ptr<CameraSensor> CameraSensorPtr;
 
 
     /*!

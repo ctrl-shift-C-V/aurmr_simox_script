@@ -6,6 +6,8 @@
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
     RobotConfig::RobotConfig(RobotWeakPtr robot, const std::string& name)
         : name(name),
@@ -67,11 +69,11 @@ namespace VirtualRobot
 
     void RobotConfig::print() const
     {
-        cout << "  Robot Config <" << name << ">" << endl;
+        std::cout << "  Robot Config <" << name << ">" << std::endl;
 
         for (const auto& config : configs)
         {
-            cout << "  * " << config.first->getName() << ":\t" << config.second << endl;
+            std::cout << "  * " << config.first->getName() << ":\t" << config.second << std::endl;
         }
     }
 
@@ -86,7 +88,7 @@ namespace VirtualRobot
 
         if (!r)
         {
-            VR_WARNING << "Robot is already deleted, skipping update..." << endl;
+            VR_WARNING << "Robot is already deleted, skipping update..." << std::endl;
             return false;
         }
 
@@ -94,7 +96,7 @@ namespace VirtualRobot
 
         if (!rn)
         {
-            VR_WARNING << "Did not find robot node with name " << node << endl;
+            VR_WARNING << "Did not find robot node with name " << node << std::endl;
             return false;
         }
 
@@ -110,7 +112,7 @@ namespace VirtualRobot
 
         if (!r)
         {
-            VR_WARNING << "Robot is already deleted, skipping update..." << endl;
+            VR_WARNING << "Robot is already deleted, skipping update..." << std::endl;
             return false;
         }
 
@@ -148,7 +150,7 @@ namespace VirtualRobot
 
             if (!rn)
             {
-                VR_WARNING << "Could not completely clone RobotConfig " << name << " because new robot does not know a RobotNode with name " << i->first->getName() << endl;
+                VR_WARNING << "Could not completely clone RobotConfig " << name << " because new robot does not know a RobotNode with name " << i->first->getName() << std::endl;
             }
             else
             {
@@ -173,7 +175,7 @@ namespace VirtualRobot
 
         if (!r)
         {
-            VR_WARNING << "Robot is already deleted, skipping update..." << endl;
+            VR_WARNING << "Robot is already deleted, skipping update..." << std::endl;
             return false;
         }
 
@@ -212,7 +214,7 @@ namespace VirtualRobot
 
         if (!r)
         {
-            VR_WARNING << "Robot is already deleted..." << endl;
+            VR_WARNING << "Robot is already deleted..." << std::endl;
             return 0.0f;
         }
 
@@ -222,7 +224,7 @@ namespace VirtualRobot
 
         if (i == configs.end())
         {
-            VR_ERROR << "Internal error..." << endl;
+            VR_ERROR << "Internal error..." << std::endl;
             return 0.0f;
         }
 
@@ -306,7 +308,7 @@ namespace VirtualRobot
 
         if (!r)
         {
-            VR_WARNING << "Robot is already deleted, skipping update..." << endl;
+            VR_WARNING << "Robot is already deleted, skipping update..." << std::endl;
             return false;
         }
 
@@ -314,7 +316,7 @@ namespace VirtualRobot
 
         if (!rn)
         {
-            VR_WARNING << "Did not find robot node with name " << tcpName << endl;
+            VR_WARNING << "Did not find robot node with name " << tcpName << std::endl;
             return false;
         }
 

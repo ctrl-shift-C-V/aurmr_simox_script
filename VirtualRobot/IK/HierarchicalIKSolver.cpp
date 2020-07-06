@@ -1,4 +1,7 @@
 #include "HierarchicalIKSolver.h"
+
+#include <VirtualRobot/MathTools.h>
+
 //#define DEBUG
 
 HierarchicalIKSolver::HierarchicalIKSolver(RobotNodeSetPtr allRobotNodes) : HierarchicalIK(allRobotNodes)
@@ -27,7 +30,7 @@ bool HierarchicalIKSolver::computeSteps(float stepSize, float minChange, int max
         if (!MathTools::isValid(delta))
         {
 #ifdef DEBUG
-            VR_INFO << "Singular Jacobian" << endl;
+            VR_INFO << "Singular Jacobian" << std::endl;
 #endif
             return false;
         }
@@ -40,7 +43,7 @@ bool HierarchicalIKSolver::computeSteps(float stepSize, float minChange, int max
         if (checkTolerances())
         {
 #ifdef DEBUG
-            VR_INFO << "Tolerances ok, loop:" << step << endl;
+            VR_INFO << "Tolerances ok, loop:" << step << std::endl;
 #endif
             return true;
         }
@@ -48,7 +51,7 @@ bool HierarchicalIKSolver::computeSteps(float stepSize, float minChange, int max
         if (delta.norm() < minChange)
         {
 #ifdef DEBUG
-            VR_INFO << "Could not improve result any more (dTheta.norm()=" << delta.norm() << "), loop:" << step << endl;
+            VR_INFO << "Could not improve result any more (dTheta.norm()=" << delta.norm() << "), loop:" << step << std::endl;
 #endif
             return false;
         }

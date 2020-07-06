@@ -1,5 +1,6 @@
 PROJECT ( SimoxUtility )
 
+set(CMAKE_INCLUDE_CURRENT_DIR OFF)
 add_library(SimoxUtility SHARED) # SimoxUtility.h) # sources will be added later
 
 target_include_directories(SimoxUtility PUBLIC
@@ -24,8 +25,7 @@ target_link_libraries(SimoxUtility PUBLIC
         Boost::regex
 )
 
-target_compile_options(SimoxUtility PRIVATE -include eigen/AssertAsException.h)
-target_compile_options(SimoxUtility INTERFACE -include SimoxUtility/eigen/AssertAsException.h)
+target_compile_options(SimoxUtility PUBLIC -include SimoxUtility/eigen/AssertAsException.h)
 
 # disable boost auto linking
 if (Boost_USE_STATIC_LIBS)
@@ -49,6 +49,8 @@ MESSAGE (STATUS "\n***** CONFIGURING Simox project SimoxUtility *****")
 #################################### FILES ##################################
 SET(SOURCES
     SimoxUtility.cpp
+
+    algorithm/string/string_tools.cpp
 
     color/cmaps/colormaps.cpp
     color/cmaps/Named.cpp
@@ -82,10 +84,16 @@ SET(SOURCES
 
 SET(INCLUDES
     SimoxUtility.h
-    EigenStdVector.h
+
+    preprocessor/variadic_for_each.h
+    preprocessor/drop_front.h
 
     algorithm/for_each_if.h
     algorithm/apply.hpp
+    algorithm/get_map_keys_values.h
+    algorithm/string/string_tools.h
+    algorithm/string/string_conversion.h
+    algorithm/string/string_conversion_eigen.h
 
     color/cmaps/colormaps.h
     color/cmaps/Named.h
@@ -93,14 +101,18 @@ SET(INCLUDES
     color/Color.h
     color/ColorMap.h
     color/GlasbeyLUT.h
+    color/KellyLUT.h
     color/hsv.h
     color/interpolation.h
     color/json.h
 
+    EigenStdVector.h
+    eigen/EigenStdVector.h
     eigen/AssertAsException.h
 
     error/SimoxError.h
 
+    filesystem/make_relative.h
     filesystem/list_directory.h
     filesystem/remove_trailing_separator.h
 
@@ -151,6 +163,24 @@ SET(INCLUDES
     math/distance/delta_angle.h
     math/distance/angle_between.h
 
+    math/mean.h
+
+    math/compare/is_equal.h
+    math/compare/is_greater.h
+    math/compare/is_greater_equal.h
+    math/compare/is_inequal.h
+    math/compare/is_less.h
+    math/compare/is_less_equal.h
+    math/compare/value_in_limits_of.h
+
+    math/norm/norm_clamp.h
+    math/norm/norm_max.h
+    math/norm/norm_min.h
+
+    math/normal/orthogonal_vector.h
+    math/normal/normal_to_mat3.h
+    math/normal/normal_to_mat4.h
+
     math/periodic_clamp.h  # Legacy header.
     math/periodic/periodic_clamp.h
     math/periodic/periodic_diff.h
@@ -158,30 +188,52 @@ SET(INCLUDES
 
     math/pose/align_box_orientation.h
     math/pose/check_rotation_matrix.h
+    math/pose/is_homogeneous_transform.h
     math/pose/invert.h
     math/pose/orthogonalize.h
     math/pose/pose.h
     math/pose/transform.h
 
-    math/normal/orthogonal_vector.h
-    math/normal/normal_to_mat3.h
-    math/normal/normal_to_mat4.h
+    math/similarity/cosine_similarity.h
+    math/similarity/angular_similarity.h
+
+    math/sum.h
 
     math/SoftMinMax.h
     math/rescale.h
 
+    math/zero.h
+    math/isfinite.h
+
+    meta/undefined_t/undefined_t.h
+    meta/undefined_t/is_set.h
     meta/eigen/enable_if_compile_time_size.h
+    meta/eigen/is_eigen_array.h
     meta/eigen/is_eigen_matrix.h
     meta/has_member_macros/has_member.hpp
-    meta/EnumNames.hpp
     meta/type_name.h
     meta/boost_hana/has_hana_accessor.h
+    meta/boost_hana/hana_member_name.h
     meta/type_traits/is_any_of.h
+    meta/type_traits/is_std_array.h
+    meta/type_traits/are_arithmetic.h
+    meta/type_traits/is_string_like.h
+
+    meta/EnumNames.hpp
+    meta/enum/adapt_enum.h
+    meta/enum/EnumNames.hpp
+
+    xml/rapidxml/rapidxml.hpp
+    xml/rapidxml/rapidxml_print.hpp
+    xml/rapidxml/RapidXMLWrapper.h
+    xml/rapidxml/RapidXMLForwardDecl.h
 
     shapes/AxisAlignedBoundingBox.h
     shapes/OrientedBoxBase.h
     shapes/OrientedBox.h
     shapes/XYConstrainedOrientedBox.h
+
+    backport/span/gcc_header.h
 )
 
 simox_generate_subdir_headers(

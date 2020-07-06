@@ -12,6 +12,8 @@
 #include <iostream>
 #include "VirtualRobot/Visualization/TriMeshModel.h"
 
+#include <Eigen/Geometry>
+
 using namespace std;
 
 namespace VirtualRobot
@@ -427,7 +429,7 @@ namespace VirtualRobot
 
         if (sphereApprox.m_pVisualization)
         {
-            cout << __FUNCTION__ << ": Warning: already built a visu, overriding the visualization points..." << endl;
+            std::cout << __FUNCTION__ << ": Warning: already built a visu, overriding the visualization points..." << std::endl;
         }
 
         Eigen::Vector3f v1,v2,v3;

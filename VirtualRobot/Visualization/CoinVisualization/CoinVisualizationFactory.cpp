@@ -94,8 +94,10 @@ namespace filesystem = std::filesystem;
 
 namespace VirtualRobot
 {
+    using std::cout;
+    using std::endl;
 
-    boost::mutex CoinVisualizationFactory::globalTextureCacheMutex;
+    std::mutex CoinVisualizationFactory::globalTextureCacheMutex;
     CoinVisualizationFactory::TextureCacheMap CoinVisualizationFactory::globalTextureCache;
 
     CoinVisualizationFactory::CoinVisualizationFactory() = default;
@@ -179,7 +181,7 @@ namespace VirtualRobot
 
         if (primitive->type == Primitive::Box::TYPE)
         {
-            Primitive::Box* box = boost::dynamic_pointer_cast<Primitive::Box>(primitive).get();
+            Primitive::Box* box = std::dynamic_pointer_cast<Primitive::Box>(primitive).get();
             SoCube* soBox = new SoCube;
             soBox->width = box->width / 1000.f;
             soBox->height = box->height / 1000.f;
@@ -188,14 +190,14 @@ namespace VirtualRobot
         }
         else if (primitive->type == Primitive::Sphere::TYPE)
         {
-            Primitive::Sphere* sphere = boost::dynamic_pointer_cast<Primitive::Sphere>(primitive).get();
+            Primitive::Sphere* sphere = std::dynamic_pointer_cast<Primitive::Sphere>(primitive).get();
             SoSphere* soSphere = new SoSphere;
             soSphere->radius = sphere->radius / 1000.f;
             coinVisualization->addChild(soSphere);
         }
         else if (primitive->type == Primitive::Cylinder::TYPE)
         {
-            Primitive::Cylinder* cylinder = boost::dynamic_pointer_cast<Primitive::Cylinder>(primitive).get();
+            Primitive::Cylinder* cylinder = std::dynamic_pointer_cast<Primitive::Cylinder>(primitive).get();
             SoCylinder* soCylinder = new SoCylinder;
             soCylinder->radius = cylinder->radius / 1000.f;
             soCylinder->height = cylinder->height / 1000.f;
@@ -241,7 +243,7 @@ namespace VirtualRobot
             {
                 if (scaleX != 1.0f || scaleY != 1.0f || scaleZ != 1.0f)
                 {
-                    VR_WARNING << "Scaling not yet supported for Coin3D files" << endl;
+                    VR_WARNING << "Scaling not yet supported for Coin3D files" << std::endl;
                 }
 
                 return getVisualizationFromCoin3DFile(filename, boundingBox);
@@ -284,7 +286,7 @@ namespace VirtualRobot
 
         if (!readOK)
         {
-            VR_ERROR << "Could not read file with assimp: " << filename << endl;
+            VR_ERROR << "Could not read file with assimp: " << filename << std::endl;
             return visualizationNode;
         }
 
@@ -301,7 +303,7 @@ namespace VirtualRobot
 
         if (scaleX != 1.0f || scaleY != 1.0f || scaleZ != 1.0f)
         {
-            VR_WARNING << "Scaling not yet supported" << endl;
+            VR_WARNING << "Scaling not yet supported" << std::endl;
         }
 
         // passing an empty string to SoInput and trying to open it aborts the program
@@ -394,12 +396,12 @@ namespace VirtualRobot
 
     VisualizationPtr CoinVisualizationFactory::getVisualization(const std::vector<VisualizationNodePtr>& visus)
     {
-        return boost::make_shared<CoinVisualization>(visus);
+        return std::make_shared<CoinVisualization>(visus);
     }
 
     VisualizationPtr CoinVisualizationFactory::getVisualization(VisualizationNodePtr visu)
     {
-        return boost::make_shared<CoinVisualization>(visu);
+        return std::make_shared<CoinVisualization>(visu);
     }
 
     SoSeparator* CoinVisualizationFactory::CreateBoundingBox(SoNode* ivModel, bool wireFrame)
@@ -420,7 +422,7 @@ namespace VirtualRobot
 
         //boxAction.getXfBoundingBox().getBounds(minX, minY, minZ, maxX, maxY, maxZ);
         boxAction.getBoundingBox().getBounds(minX, minY, minZ, maxX, maxY, maxZ);
-        cout << "x: " << minX << "," << maxX << " ; Y: " << minY << "," << maxY << " ; Z: " << minZ << "," << maxZ << endl;
+        std::cout << "x: " << minX << "," << maxX << " ; Y: " << minY << "," << maxY << " ; Z: " << minZ << "," << maxZ << std::endl;
 
 
         SoCube* cu = new SoCube();
@@ -470,14 +472,14 @@ namespace VirtualRobot
     * \return new instance of CoinVisualizationFactory and call SoDB::init()
     * if it has not already been called.
     */
-    boost::shared_ptr<VisualizationFactory> CoinVisualizationFactory::createInstance(void*)
+    std::shared_ptr<VisualizationFactory> CoinVisualizationFactory::createInstance(void*)
     {
         if (!SoDB::isInitialized())
         {
             SoDB::init();
         }
 
-        boost::shared_ptr<CoinVisualizationFactory> coinFactory(new CoinVisualizationFactory());
+        std::shared_ptr<CoinVisualizationFactory> coinFactory(new CoinVisualizationFactory());
         return coinFactory;
     }
 
@@ -1100,7 +1102,7 @@ namespace VirtualRobot
         public:
             void dyingReference() override
             {
-                boost::mutex::scoped_lock lock(CoinVisualizationFactory::globalTextureCacheMutex);
+                std::scoped_lock lock(CoinVisualizationFactory::globalTextureCacheMutex);
                 CoinVisualizationFactory::globalTextureCache.erase(std::make_pair(filesize, path));
                 delete this;
             }
@@ -1120,7 +1122,7 @@ namespace VirtualRobot
         sa.apply(node);
         SoPathList& pl = sa.getPaths();
 
-        boost::mutex::scoped_lock lock(globalTextureCacheMutex);
+        std::scoped_lock lock(globalTextureCacheMutex);
         for (int i = 0; i < pl.getLength(); i++)
         {
             SoFullPath* p = (SoFullPath*) pl[i];
@@ -1392,7 +1394,7 @@ namespace VirtualRobot
             return new SoSeparator;
         }
 
-        boost::shared_ptr<VirtualRobot::CoinVisualization> visualizationRobot = robot->getVisualization<CoinVisualization>(visuType);
+        std::shared_ptr<VirtualRobot::CoinVisualization> visualizationRobot = robot->getVisualization<CoinVisualization>(visuType);
 
         if (visualizationRobot)
         {
@@ -1413,7 +1415,7 @@ namespace VirtualRobot
             return new SoSeparator;
         }
 
-        boost::shared_ptr<VirtualRobot::CoinVisualization> visualizationObject = object->getVisualization<CoinVisualization>(visuType);
+        std::shared_ptr<VirtualRobot::CoinVisualization> visualizationObject = object->getVisualization<CoinVisualization>(visuType);
 
         if (visualizationObject)
         {
@@ -1430,7 +1432,7 @@ namespace VirtualRobot
 
     SoNode* CoinVisualizationFactory::getCoinVisualization(VisualizationNodePtr visu)
     {
-        boost::shared_ptr< CoinVisualizationNode > coinVisu(boost::dynamic_pointer_cast< CoinVisualizationNode >(visu));
+        std::shared_ptr< CoinVisualizationNode > coinVisu(std::dynamic_pointer_cast< CoinVisualizationNode >(visu));
 
         if (!coinVisu)
         {
@@ -1798,17 +1800,17 @@ namespace VirtualRobot
 
                 if (fabs(normal1.norm() - 1.0f) > 1.1)
                 {
-                    VR_ERROR << "Wrong normal, norm:" << normal1.norm() << endl;
+                    VR_ERROR << "Wrong normal, norm:" << normal1.norm() << std::endl;
                 }
 
                 if (fabs(normal2.norm() - 1.0f) > 1.1)
                 {
-                    VR_ERROR << "Wrong normal, norm:" << normal2.norm() << endl;
+                    VR_ERROR << "Wrong normal, norm:" << normal2.norm() << std::endl;
                 }
 
                 if (fabs(normal3.norm() - 1.0f) > 1.1)
                 {
-                    VR_ERROR << "Wrong normal, norm:" << normal3.norm() << endl;
+                    VR_ERROR << "Wrong normal, norm:" << normal3.norm() << std::endl;
                 }
 
                 SoMatrixTransform* mt1 = new SoMatrixTransform;
@@ -2076,7 +2078,7 @@ namespace VirtualRobot
 
             if (!tcp)
             {
-                VR_ERROR << " No tcp in eef " << eef->getName() << endl;
+                VR_ERROR << " No tcp in eef " << eef->getName() << std::endl;
                 ok = false;
             }
         }
@@ -2318,7 +2320,7 @@ namespace VirtualRobot
             torusCompletion = 0;
         }
         auto torusNode = createTorus(radius, tubeRadius, torusCompletion, colorR, colorG, colorB, transparency);
-        SoNode* torus = boost::dynamic_pointer_cast<CoinVisualizationNode>(torusNode)->getCoinVisualization();
+        SoNode* torus = std::dynamic_pointer_cast<CoinVisualizationNode>(torusNode)->getCoinVisualization();
 
         SoSeparator* s = new SoSeparator();
         s->ref();
@@ -3406,7 +3408,7 @@ namespace VirtualRobot
 
         if (d.maxCoeff() > 1.0f)
         {
-            VR_ERROR << "Maximal coefficient must not be >1!" << endl;
+            VR_ERROR << "Maximal coefficient must not be >1!" << std::endl;
         }
 
         SoDrawStyle* ds = new SoDrawStyle;
@@ -3525,7 +3527,7 @@ namespace VirtualRobot
 
         if (d.maxCoeff() > 1.0f)
         {
-            VR_ERROR << "Maximal coefficient must not be >1!" << endl;
+            VR_ERROR << "Maximal coefficient must not be >1!" << std::endl;
         }
 
         SoDrawStyle* ds = new SoDrawStyle;
@@ -3634,7 +3636,7 @@ namespace VirtualRobot
     {
         if (!camNode)
         {
-            VR_ERROR << "No cam node to render..." << endl;
+            VR_ERROR << "No cam node to render..." << std::endl;
             return false;
         }
 
@@ -3700,7 +3702,7 @@ namespace VirtualRobot
         root->addChild(camInMeters);
 
         root->addChild(scene);
-        //VR_INFO << "*** preRender took " << (SbTime::getTimeOfDay() - t1).getValue() * 1000 << " ms" << endl;
+        //VR_INFO << "*** preRender took " << (SbTime::getTimeOfDay() - t1).getValue() * 1000 << " ms" << std::endl;
 
         SbTime t = SbTime::getTimeOfDay(); // for profiling
         bool ok = renderer->render(root) == TRUE ? true : false;
@@ -3709,7 +3711,7 @@ namespace VirtualRobot
         float msec = (SbTime::getTimeOfDay() - t).getValue() * 1000;
         if (msec > 300)
         {
-            VR_WARNING << "************ offscreen rendering took " << msec << " ms" << endl;
+            VR_WARNING << "************ offscreen rendering took " << msec << " ms" << std::endl;
         }
 
         root->unref();
@@ -3720,7 +3722,7 @@ namespace VirtualRobot
         {
             if (!renderErrorPrinted)
             {
-                VR_ERROR << "Rendering not successful! This error is printed only once." << endl;
+                VR_ERROR << "Rendering not successful! This error is printed only once." << std::endl;
                 renderErrorPrinted = true;
             }
 
@@ -3733,7 +3735,7 @@ namespace VirtualRobot
         float msec2 = (SbTime::getTimeOfDay() - t2a).getValue() * 1000;
         if (msec2 > 300)
         {
-            VR_WARNING << "************ getBuffer took " << msec2 << " ms" << endl;
+            VR_WARNING << "************ getBuffer took " << msec2 << " ms" << std::endl;
         }
         return true;
     }
@@ -3801,7 +3803,7 @@ namespace VirtualRobot
         //check input
         if (!camNode)
         {
-            VR_ERROR << "No cam node to render..." << endl;
+            VR_ERROR << "No cam node to render..." << std::endl;
             return false;
         }
         return renderOffscreenRgbDepthPointcloud(
@@ -3822,17 +3824,17 @@ namespace VirtualRobot
     {
         if (!offscreenRenderer)
         {
-            VR_ERROR << "No renderer..." << endl;
+            VR_ERROR << "No renderer..." << std::endl;
             return false;
         }
         if (!scene)
         {
-            VR_ERROR << "No scene to render..." << endl;
+            VR_ERROR << "No scene to render..." << std::endl;
             return false;
         }
         if (width <= 0 || height <= 0)
         {
-            VR_ERROR << "Invalid image dimensions..." << endl;
+            VR_ERROR << "Invalid image dimensions..." << std::endl;
             return false;
         }
         //setup
@@ -3891,7 +3893,7 @@ namespace VirtualRobot
         {
             if (!renderErrorPrinted)
             {
-                VR_ERROR << "Rendering not successful! This error is printed only once." << endl;
+                VR_ERROR << "Rendering not successful! This error is printed only once." << std::endl;
                 renderErrorPrinted = true;
             }
             return false;
@@ -4041,7 +4043,7 @@ namespace VirtualRobot
 
             if (visualizations[i]->getType() != getName())
             {
-                VR_ERROR << "Skipping Visualization " << i << ": Is type " << visualizations[i]->getType() << ", but factory is of type " << getName() << endl;
+                VR_ERROR << "Skipping Visualization " << i << ": Is type " << visualizations[i]->getType() << ", but factory is of type " << getName() << std::endl;
                 continue;
             }
 
@@ -4058,7 +4060,7 @@ namespace VirtualRobot
             }
             else
             {
-                VR_WARNING << "Invalid type casting to CoinVisualizationNode?!" << endl;
+                VR_WARNING << "Invalid type casting to CoinVisualizationNode?!" << std::endl;
             }
         }
 
@@ -4132,23 +4134,11 @@ namespace VirtualRobot
 
     SoSeparator* CoinVisualizationFactory::CreateEllipse(float x, float y, float z, SoMaterial* matBody, bool showAxes, float axesHeight, float axesWidth, SoMaterial* matX, SoMaterial* matY, SoMaterial* matZ)
     {
-        // check for min size
-        float minSize = 1e-6f;
-
-        if (x < minSize)
-        {
-            x = minSize;
-        }
-
-        if (y < minSize)
-        {
-            y = minSize;
-        }
-
-        if (z < minSize)
-        {
-            z = minSize;
-        }
+        // Check for min size.
+        const float minSize = 1e-6f;
+        x = std::max(x, minSize);
+        y = std::max(y, minSize);
+        z = std::max(z, minSize);
 
         if (!matBody)
         {
@@ -4190,7 +4180,6 @@ namespace VirtualRobot
         c->type.setValue(SoComplexity::OBJECT_SPACE);
         c->value.setValue(1.0f);
         result->addChild(c);
-
 
         SoSeparator* p1 = new SoSeparator;
         result->addChild(p1);
@@ -4259,6 +4248,53 @@ namespace VirtualRobot
         return result;
     }
 
+    SoSeparator* CoinVisualizationFactory::CreateCylindroid(float axisLengthX, float axisLengthY, float height, SoMaterial* material)
+    {
+        // Check for min size.
+        const float minSize = 1e-6f;
+        axisLengthX = std::max(axisLengthX, minSize);
+        axisLengthY = std::max(axisLengthY, minSize);
+        height = std::max(height, minSize);
+
+        if (!material)
+        {
+            material = new SoMaterial;
+            material->diffuseColor.setValue(0.3f, 0.6f, 0.9f);
+            material->ambientColor.setValue(0.3f, 0.6f, 0.9f);
+            material->transparency.setValue(0.3f);
+        }
+
+        // Ensure good quality.
+        SoComplexity* complexity = new SoComplexity;
+        complexity->type.setValue(SoComplexity::OBJECT_SPACE);
+        complexity->value.setValue(1.0f);
+
+        SoSeparator* cylindroid = new SoSeparator;
+
+        SoScale* scale = new SoScale;
+        scale->scaleFactor.setValue(axisLengthX, height, axisLengthY);
+
+        SoRotationXYZ* rotation = new SoRotationXYZ;
+        rotation->angle = -M_PI_2;
+        rotation->axis = SoRotationXYZ::X;
+
+        SoCylinder* cylinder = new SoCylinder;
+        cylinder->radius = 1;
+        cylinder->height = 1;
+
+        SoSeparator* root = new SoSeparator;
+        root->ref();
+        root->addChild(complexity);
+        cylindroid->addChild(material);
+        cylindroid->addChild(rotation);
+        cylindroid->addChild(scale);
+        cylindroid->addChild(cylinder);
+        root->addChild(cylindroid);
+        root->unrefNoDelete();
+
+        return root;
+    }
+
     void CoinVisualizationFactory::applyDisplacement(VisualizationNodePtr o, Eigen::Matrix4f& m)
     {
         if (!o)
@@ -4269,7 +4305,7 @@ namespace VirtualRobot
 
         if (o->getType() != getName())
         {
-            VR_ERROR << "Skipping Visualization type " << o->getType() << ", but factory is of type " << getName() << endl;
+            VR_ERROR << "Skipping Visualization type " << o->getType() << ", but factory is of type " << getName() << std::endl;
             return;
         }
 
@@ -4294,7 +4330,7 @@ namespace VirtualRobot
         }
         else
         {
-            VR_WARNING << "Invalid type casting to CoinVisualizationNode?!" << endl;
+            VR_WARNING << "Invalid type casting to CoinVisualizationNode?!" << std::endl;
         }
     }
 

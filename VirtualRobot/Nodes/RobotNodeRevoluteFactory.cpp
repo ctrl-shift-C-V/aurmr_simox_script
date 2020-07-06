@@ -7,6 +7,7 @@
 #include "RobotNodeRevoluteFactory.h"
 #include "RobotNode.h"
 #include "RobotNodeRevolute.h"
+#include "../CollisionDetection/CollisionModel.h"
 
 
 namespace VirtualRobot
@@ -64,9 +65,9 @@ namespace VirtualRobot
     /**
      * \return new instance of RobotNodeRevoluteFactory.
      */
-    boost::shared_ptr<RobotNodeFactory> RobotNodeRevoluteFactory::createInstance(void*)
+    std::shared_ptr<RobotNodeFactory> RobotNodeRevoluteFactory::createInstance(void*)
     {
-        boost::shared_ptr<RobotNodeRevoluteFactory> revoluteNodeFactory(new RobotNodeRevoluteFactory());
+        std::shared_ptr<RobotNodeRevoluteFactory> revoluteNodeFactory(new RobotNodeRevoluteFactory());
         return revoluteNodeFactory;
     }
 

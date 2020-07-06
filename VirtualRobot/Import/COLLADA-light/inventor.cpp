@@ -20,6 +20,8 @@
 
 #include <Inventor/actions/SoGetBoundingBoxAction.h>
 
+#include <boost/lexical_cast.hpp>
+
 #include <iostream>
 
 #ifdef TIMER_DEBUG
@@ -40,21 +42,21 @@ namespace Collada
         {
             SoRotation* transform = new SoRotation;
             root->addChild(transform);
-            std::vector<float> v = getVector<float>(node.child_value());
+            std::vector<float> v = getFloatVector(node.child_value());
             transform->rotation.setValue(SbVec3f(v[0], v[1], v[2]), v[3]);
         }
         else if (std::string("translate").compare(node.name()) == 0)
         {
             SoTranslation* transform = new SoTranslation;
             root->addChild(transform);
-            std::vector<float> v = getVector<float>(node.child_value());
+            std::vector<float> v = getFloatVector(node.child_value());
             transform->translation.setValue(v[0], v[1], v[2]);
         }
         else if (std::string("matrix").compare(node.name()) == 0)
         {
             SoMatrixTransform* transform = new SoMatrixTransform;
             root->addChild(transform);
-            std::vector<float> v = getVector<float>(node.child_value());
+            std::vector<float> v = getFloatVector(node.child_value());
             transform->matrix.setValue(SbMatrix(
                                            v[0],    v[4],    v[8],   v[12],
                                            v[1],    v[5],    v[9],   v[13],
@@ -120,8 +122,8 @@ namespace Collada
     {
         if (this->parent)
         {
-            cout << "Parent of " << this->name << " is " << this->parent->name << endl;
-            boost::dynamic_pointer_cast<InventorRobotNode>(this->parent)->visualization->addChild(this->visualization);
+            std::cout << "Parent of " << this->name << " is " << this->parent->name << std::endl;
+            std::dynamic_pointer_cast<InventorRobotNode>(this->parent)->visualization->addChild(this->visualization);
         }
         else
         {
@@ -129,7 +131,7 @@ namespace Collada
             root->addChild(this->visualization);
         }
 
-        BOOST_FOREACH(pugi::xml_node node, this->preJoint)
+        for (pugi::xml_node const& node : this->preJoint)
         {
             addTransform(this->preJointTransformation, node);
         }
@@ -144,7 +146,7 @@ namespace Collada
         /* SoPendulum seems broken :(
         SoPendulum *pendulum = new SoPendulum;
         this->preJointTransformation->addChild(pendulum);
-        vector<float> v = getVector<float>(this->joint_axis.child_value("axis"));
+        vector<float> v = getFloatVector(this->joint_axis.child_value("axis"));
         pendulum->rotation0.setValue(SbVec3f(0,0,1),0);
         pendulum->rotation1.setValue(SbVec3f(1,0,0),3.14);
         //pendulum->rotation.setValue(SbVec3f(1,0,0),0);
@@ -172,7 +174,7 @@ namespace Collada
     std::map<std::string, std::vector<float> > addMaterials(const pugi::xml_node& igeometry)
     {
         std::map<std::string, std::vector<float> > colormap;
-        BOOST_FOREACH(pugi::xpath_node imaterial, igeometry.select_nodes(".//instance_material"))
+        for (pugi::xpath_node const& imaterial : igeometry.select_nodes(".//instance_material"))
         {
             std::vector<float> diffuse_color = {0.5, 0.5, 0.5, 1};
             std::string symbol = imaterial.node().attribute("symbol").value();
@@ -186,12 +188,12 @@ namespace Collada
             if(shader_phong && !shader_lambert)
             {
                 pugi::xml_node diffuse = shader_phong.child("diffuse").child("color");
-                diffuse_color = getVector<float>(diffuse.child_value());
+                diffuse_color = getFloatVector(diffuse.child_value());
             }
             else if (!shader_phong && shader_lambert)
             {
                 pugi::xml_node diffuse = shader_lambert.child("diffuse").child("color");
-                diffuse_color = getVector<float>(diffuse.child_value());
+                diffuse_color = getFloatVector(diffuse.child_value());
             }
             colormap[symbol] = diffuse_color;
         }
@@ -207,7 +209,7 @@ namespace Collada
 
 #ifdef TIMER_DEBUG
         boost::timer::auto_cpu_timer timer(1, string("Inventor (") + string(geometry.attribute("id").value()) + string("):  %t sec CPU, %w sec real\n"));
-        cout << "Faces: " ;
+        std::cout << "Faces: " ;
 #endif
 
         // Temporarily skip complicated models
@@ -215,11 +217,11 @@ namespace Collada
 
         if (nPolylist > 5)
         {
-            cout << "More than five (" << nPolylist << ") seperated meshes .. skipping (" << geometry.attribute("id").value() << ")\n";
+            std::cout << "More than five (" << nPolylist << ") seperated meshes .. skipping (" << geometry.attribute("id").value() << ")\n";
             //                return;
         }
 
-        BOOST_FOREACH(pugi::xpath_node polylist, mesh.select_nodes(".//polylist"))
+        for (pugi::xpath_node const& polylist : mesh.select_nodes(".//polylist"))
         {
             //std::cout << "id: " << geometry.attribute("id").value() << std::endl;
             std::vector<float> color;
@@ -246,10 +248,10 @@ namespace Collada
             //faceSet->coordIndex.setValues(0,p2.size(),&p2[0]);
 
 
-            std::vector<int> p = getVector<int>(polylist.node().child_value("p"));
-            std::vector<int> vcount = getVector<int>(polylist.node().child_value("vcount"));
+            std::vector<int> p = getIntVector(polylist.node().child_value("p"));
+            std::vector<int> vcount = getIntVector(polylist.node().child_value("vcount"));
 #ifdef TIMER_DEBUG
-            cout << vcount.size() << ", " << flush;
+            std::cout << vcount.size() << ", " << flush;
 #endif
             pugi::xml_node vertexInputNode = polylist.node().select_single_node(".//input[@semantic='VERTEX']").node();
 
@@ -261,7 +263,7 @@ namespace Collada
 
             pugi::xml_node vertices = resolveURL(vertexInputNode);
             pugi::xml_node source = resolveURL(vertices.child("input"));
-            std::vector<float> floats = getVector<float>(source.child_value("float_array"));
+            std::vector<float> floats = getFloatVector(source.child_value("float_array"));
             coordinates->point.setValues(0, floats.size() / 3, (const float(*)[3]) &floats[0]);
 
             /* Explanation:
@@ -288,7 +290,7 @@ namespace Collada
 
         }
 #ifdef TIMER_DEBUG
-        cout << endl;
+        std::cout << std::endl;
 #endif
     }
 
@@ -343,7 +345,7 @@ namespace Collada
 
         if (structureMap.count(node))
         {
-            stack.back() = boost::dynamic_pointer_cast<InventorRobotNode>(structureMap[node])->visualization;
+            stack.back() = std::dynamic_pointer_cast<InventorRobotNode>(structureMap[node])->visualization;
             parents.push_back(structureMap[node]);
         }
         else
@@ -362,21 +364,21 @@ namespace Collada
     void InventorRobot::addCollisionModel(ColladaRobotNodePtr robotNode, pugi::xml_node RigidBodyNode)
     {
 
-        boost::shared_ptr<InventorRobotNode> inventorRobotNode = boost::dynamic_pointer_cast<InventorRobotNode>(robotNode);
+        std::shared_ptr<InventorRobotNode> inventorRobotNode = std::dynamic_pointer_cast<InventorRobotNode>(robotNode);
         SoSeparator* rigidBodySep = new SoSeparator;
         inventorRobotNode->collisionModel->addChild(rigidBodySep);
         // An additional Separator is necessary if there are multiple rigid bodies attached to the same joint
 
 
-        BOOST_FOREACH(pugi::xpath_node transformation, RigidBodyNode.select_nodes(".//mass_frame/translate|.//mass_frame/rotate"))
-        addTransform(rigidBodySep, transformation.node());
+        for (pugi::xpath_node const& transformation : RigidBodyNode.select_nodes(".//mass_frame/translate|.//mass_frame/rotate"))
+            addTransform(rigidBodySep, transformation.node());
 
-        BOOST_FOREACH(pugi::xpath_node shape, RigidBodyNode.select_nodes(".//shape"))
+        for (pugi::xpath_node const& shape : RigidBodyNode.select_nodes(".//shape"))
         {
             SoSeparator* separator  = new SoSeparator;
             rigidBodySep->addChild(separator);
-            BOOST_FOREACH(pugi::xpath_node transformation, shape.node().select_nodes(".//translate|.//rotate"))
-            addTransform(separator, transformation.node());
+            for (pugi::xpath_node const& transformation : shape.node().select_nodes(".//translate|.//rotate"))
+                addTransform(separator, transformation.node());
             addGeometry(separator, shape.node().child("instance_geometry"));
         }
     }

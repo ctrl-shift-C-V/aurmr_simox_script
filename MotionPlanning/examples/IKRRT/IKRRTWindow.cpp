@@ -40,7 +40,7 @@ float TIMER_MS = 30.0f;
 IKRRTWindow::IKRRTWindow(std::string& sceneFile, std::string& reachFile, std::string& rns, std::string& eef, std::string& colModel, std::string& colModelRob)
     : QMainWindow(nullptr)
 {
-    VR_INFO << " start " << endl;
+    VR_INFO << " start " << std::endl;
 
     this->sceneFile = sceneFile;
     this->reachFile = reachFile;
@@ -129,7 +129,7 @@ void IKRRTWindow::timerCB(void* data, SoSensor* /*sensor*/)
         {
             ikWindow->sliderSolution(1000);
             ikWindow->closeEEF();
-            cout << "Stopping playback" << endl;
+            std::cout << "Stopping playback" << std::endl;
             ikWindow->playbackMode = false;
         }
         else
@@ -152,7 +152,7 @@ void IKRRTWindow::setupUI()
 
     // setup
     viewer->setBackgroundColor(SbColor(1.0f, 1.0f, 1.0f));
-    viewer->setAccumulationBuffer(true);
+    viewer->setAccumulationBuffer(false);
     viewer->setAntialiasing(true, 4);
     viewer->setGLRenderAction(new SoLineHighlightRenderAction);
     viewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
@@ -265,11 +265,11 @@ void IKRRTWindow::saveScreenshot()
 
     if (bRes)
     {
-        cout << "wrote image " << counter << endl;
+        std::cout << "wrote image " << counter << std::endl;
     }
     else
     {
-        cout << "failed writing image " << counter << endl;
+        std::cout << "failed writing image " << counter << std::endl;
     }
 
 }
@@ -355,7 +355,7 @@ void IKRRTWindow::loadScene()
 
     if (!scene)
     {
-        VR_ERROR << " no scene ..." << endl;
+        VR_ERROR << " no scene ..." << std::endl;
         return;
     }
 
@@ -363,7 +363,7 @@ void IKRRTWindow::loadScene()
 
     if (robots.size() != 1)
     {
-        VR_ERROR << "Need exactly 1 robot" << endl;
+        VR_ERROR << "Need exactly 1 robot" << std::endl;
         return;
     }
 
@@ -374,12 +374,12 @@ void IKRRTWindow::loadScene()
 
     if (objects.size() < 1)
     {
-        VR_ERROR << "Need at least 1 object" << endl;
+        VR_ERROR << "Need at least 1 object" << std::endl;
         return;
     }
 
     object = objects[0];
-    VR_INFO << "using first manipulation object: " << object->getName() << endl;
+    VR_INFO << "using first manipulation object: " << object->getName() << std::endl;
 
 
     obstacles = scene->getObstacles();
@@ -390,7 +390,7 @@ void IKRRTWindow::loadScene()
 
         if (!eef)
         {
-            VR_ERROR << "Need a correct EEF in robot" << endl;
+            VR_ERROR << "Need a correct EEF in robot" << std::endl;
             return;
         }
 
@@ -400,7 +400,7 @@ void IKRRTWindow::loadScene()
 
         if (!rns)
         {
-            VR_ERROR << "Need a correct RNS in robot" << endl;
+            VR_ERROR << "Need a correct RNS in robot" << std::endl;
         }
 
     }
@@ -443,15 +443,15 @@ void IKRRTWindow::updateObject(float x[6])
 {
     if (object)
     {
-        //cout << "getGlobalPose robot:" << endl << robotEEF->getGlobalPose() << endl;
-        //cout << "getGlobalPose TCP:" << endl <<  robotEEF_EEF->getTcp()->getGlobalPose() << endl;
+        //cout << "getGlobalPose robot:" << endl << robotEEF->getGlobalPose() << std::endl;
+        //cout << "getGlobalPose TCP:" << endl <<  robotEEF_EEF->getTcp()->getGlobalPose() << std::endl;
         Eigen::Matrix4f m;
         MathTools::posrpy2eigen4f(x, m);
 
         m = object->getGlobalPose() * m;
         object->setGlobalPose(m);
-        cout << "object " << endl;
-        cout << m << endl;
+        std::cout << "object " << std::endl;
+        std::cout << m << std::endl;
 
     }
 
@@ -529,7 +529,7 @@ void IKRRTWindow::buildRRTVisu()
         return;
     }
 
-    boost::shared_ptr<Saba::CoinRrtWorkspaceVisualization> w(new Saba::CoinRrtWorkspaceVisualization(robot, cspace, eef->getTcpName()));
+    std::shared_ptr<Saba::CoinRrtWorkspaceVisualization> w(new Saba::CoinRrtWorkspaceVisualization(robot, cspace, eef->getTcpName()));
 
     if (tree)
     {
@@ -605,7 +605,7 @@ void IKRRTWindow::reachVisu()
         }
 
         /*
-            boost::shared_ptr<VirtualRobot::CoinVisualization> visualization = reachSpace->getVisualization<CoinVisualization>();
+            VirtualRobot::CoinVisualizationPtr visualization = reachSpace->getVisualization<CoinVisualization>();
             SoNode* visualisationNode = NULL;
             if (visualization)
                 visualisationNode = visualization->getCoinVisualization();
@@ -625,7 +625,7 @@ void IKRRTWindow::loadReach()
         return;
     }
 
-    cout << "Loading Reachability from " << reachFile << endl;
+    std::cout << "Loading Reachability from " << reachFile << std::endl;
     reachSpace.reset(new Reachability(robot));
 
     try
@@ -634,8 +634,8 @@ void IKRRTWindow::loadReach()
     }
     catch (VirtualRobotException& e)
     {
-        cout << " ERROR while loading reach space" << endl;
-        cout << e.what();
+        std::cout << " ERROR while loading reach space" << std::endl;
+        std::cout << e.what();
         reachSpace.reset();
         return;
     }
@@ -700,7 +700,7 @@ void IKRRTWindow::planIKRRT()
 
     if (planOK)
     {
-        VR_INFO << " Planning succeeded " << endl;
+        VR_INFO << " Planning succeeded " << std::endl;
         solution = ikRrt->getSolution();
         Saba::ShortcutProcessorPtr postProcessing(new Saba::ShortcutProcessor(solution, cspace, false));
         solutionOptimized = postProcessing->optimize(100);
@@ -710,7 +710,7 @@ void IKRRTWindow::planIKRRT()
     }
     else
     {
-        VR_INFO << " Planning failed" << endl;
+        VR_INFO << " Planning failed" << std::endl;
     }
 
     sliderSolution(1000);
@@ -725,7 +725,7 @@ void IKRRTWindow::colModel()
     if (reachSpace && graspSet && object)
     {
         Eigen::Matrix4f m = reachSpace->sampleReachablePose();
-        cout << "getEntry: " << (int)reachSpace->getEntry(m) << endl;
+        std::cout << "getEntry: " << (int)reachSpace->getEntry(m) << std::endl;
         /*SoSeparator* sep1 = new SoSeparator;
         SoSeparator *cs = CoinVisualizationFactory::CreateCoordSystemVisualization();
         SoMatrixTransform *mt = new SoMatrixTransform;
@@ -774,11 +774,11 @@ void IKRRTWindow::searchIK()
 
     if (grasp)
     {
-        VR_INFO << "IK successful..." << endl;
+        VR_INFO << "IK successful..." << std::endl;
     }
     else
     {
-        VR_INFO << "IK failed..." << endl;
+        VR_INFO << "IK failed..." << std::endl;
     }
 
     redraw();

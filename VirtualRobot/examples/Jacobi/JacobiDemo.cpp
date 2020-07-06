@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 {
     VirtualRobot::init(argc, argv, "Jacobi Demo");
 
-    cout << " --- START --- " << endl;
+    std::cout << " --- START --- " << std::endl;
     std::string filename("robots/ArmarIII/ArmarIII.xml");
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(filename);
     JacobiWindow rw(filename);

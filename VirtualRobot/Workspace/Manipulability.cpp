@@ -22,7 +22,8 @@
 
 namespace VirtualRobot
 {
-
+    using std::cout;
+    using std::endl;
 
     Manipulability::Manipulability(RobotPtr robot) : WorkspaceRepresentation(robot)
     {
@@ -78,7 +79,7 @@ namespace VirtualRobot
             {
                 if (mSc > 1.05)
                 {
-                    VR_WARNING << "Manipulability is larger than max value. Current Manip:" << m << ", maxManip:" << maxManip << ", percent:" << mSc << endl;
+                    VR_WARNING << "Manipulability is larger than max value. Current Manip:" << m << ", maxManip:" << maxManip << ", percent:" << mSc << std::endl;
                 }
 
                 mSc = 1.0f;
@@ -191,29 +192,29 @@ namespace VirtualRobot
 
         if (!lOK)
         {
-            VR_ERROR << "Could not get manip measure name from file?!" << endl;
+            VR_ERROR << "Could not get manip measure name from file?!" << std::endl;
             return false;
         }
 
         if (measure && (res != measure->getName()))
         {
-            VR_WARNING << "Different manipulability measure implementations!" << endl;
-            cout << "Manip File :" << res << endl;
-            cout << "Instance:" << measure->getName() << endl;
-            cout << "-> This may cause problems if you intend to extend the manipulability representation." << endl;
-            cout << "-> Otherwise you can ignore this warning." << endl;
+            VR_WARNING << "Different manipulability measure implementations!" << std::endl;
+            std::cout << "Manip File :" << res << std::endl;
+            std::cout << "Instance:" << measure->getName() << std::endl;
+            std::cout << "-> This may cause problems if you intend to extend the manipulability representation." << std::endl;
+            std::cout << "-> Otherwise you can ignore this warning." << std::endl;
         }
 
         measureName = res;
 
         if (!measure && measureName == PoseQualityManipulability::getTypeName())
         {
-            VR_INFO << "Creating manipulability measure" << endl;
+            VR_INFO << "Creating manipulability measure" << std::endl;
             measure.reset(new PoseQualityManipulability(nodeSet));
         }
         else if (!measure && measureName == PoseQualityExtendedManipulability::getTypeName())
         {
-            VR_INFO << "Creating extended manipulability measure" << endl;
+            VR_INFO << "Creating extended manipulability measure" << std::endl;
             measure.reset(new PoseQualityExtendedManipulability(nodeSet));
         }
 
@@ -257,7 +258,7 @@ namespace VirtualRobot
 
             if (!sd1 || !sd2)
             {
-                VR_ERROR << "Could not get rns for self dist name from file?!" << endl;
+                VR_ERROR << "Could not get rns for self dist name from file?!" << std::endl;
                 return false;
             }
 
@@ -268,14 +269,14 @@ namespace VirtualRobot
 
                 if (!selfDistStatic)
                 {
-                    VR_ERROR << " No rns with name " << selfDist1 << " found..." << endl;
+                    VR_ERROR << " No rns with name " << selfDist1 << " found..." << std::endl;
                     considerSelfDist = false;
                     selfDistDynamic.reset();
                 }
 
                 if (!selfDistDynamic)
                 {
-                    VR_ERROR << " No rns with name " << selfDist2 << " found..." << endl;
+                    VR_ERROR << " No rns with name " << selfDist2 << " found..." << std::endl;
                     considerSelfDist = false;
                     selfDistStatic.reset();
                 }
@@ -293,10 +294,10 @@ namespace VirtualRobot
         // init self dist
         if (considerSelfDist)
         {
-            PoseQualityExtendedManipulabilityPtr pqm = boost::dynamic_pointer_cast<PoseQualityExtendedManipulability>(measure);
+            PoseQualityExtendedManipulabilityPtr pqm = std::dynamic_pointer_cast<PoseQualityExtendedManipulability>(measure);
             if (pqm)
             {
-                VR_INFO << "Setting up self dist, alpha:" << selfDistAlpha << ", beta:" << selfDistBeta << endl;
+                VR_INFO << "Setting up self dist, alpha:" << selfDistAlpha << ", beta:" << selfDistBeta << std::endl;
                 pqm->considerObstacles(true, selfDistAlpha, selfDistBeta);
             }
         }
@@ -351,7 +352,7 @@ namespace VirtualRobot
         // since 2.9: alpha and beta for self dist
         float selfDistA = 0.0f;
         float selfDistB = 0.0f;
-        PoseQualityExtendedManipulabilityPtr pqm = boost::dynamic_pointer_cast<PoseQualityExtendedManipulability>(measure);
+        PoseQualityExtendedManipulabilityPtr pqm = std::dynamic_pointer_cast<PoseQualityExtendedManipulability>(measure);
         if (pqm)
         {
             pqm->getSelfDistParameters(selfDistA, selfDistB);
@@ -404,30 +405,30 @@ namespace VirtualRobot
 
     void Manipulability::customPrint()
     {
-        cout << "Manipulability Measure: " << measureName << endl;
-        cout << "Considered Joint Limits:";
+        std::cout << "Manipulability Measure: " << measureName << std::endl;
+        std::cout << "Considered Joint Limits:";
 
         if (considerJL)
         {
-            cout << " yes" << endl;
+            std::cout << " yes" << std::endl;
         }
         else
         {
-            cout << " no" << endl;
+            std::cout << " no" << std::endl;
         }
 
-        cout << "Maximal manipulability (as defined on construction):" << maxManip << endl;
-        cout << "Considered Self-Distance:";
+        std::cout << "Maximal manipulability (as defined on construction):" << maxManip << std::endl;
+        std::cout << "Considered Self-Distance:";
 
         if (considerSelfDist && selfDistStatic && selfDistDynamic)
         {
-            cout << " yes" << endl;
-            cout << " - Self Dist Col Model Static:" << selfDistStatic->getName() << endl;
-            cout << " - Self Dist Col Model Dynamic:" << selfDistDynamic->getName() << endl;
+            std::cout << " yes" << std::endl;
+            std::cout << " - Self Dist Col Model Static:" << selfDistStatic->getName() << std::endl;
+            std::cout << " - Self Dist Col Model Dynamic:" << selfDistDynamic->getName() << std::endl;
         }
         else
         {
-            cout << " no" << endl;
+            std::cout << " no" << std::endl;
         }
     }
 
@@ -435,7 +436,7 @@ namespace VirtualRobot
     {
         if (!measure)
         {
-            VR_INFO << "Creating manipulability measure" << endl;
+            VR_INFO << "Creating manipulability measure" << std::endl;
             measure.reset(new PoseQualityManipulability(nodeSet));
             measureName = measure->getName();
         }
@@ -452,7 +453,7 @@ namespace VirtualRobot
     {
         if (!data)
         {
-            VR_ERROR << "NULL DATA" << endl;
+            VR_ERROR << "NULL DATA" << std::endl;
             return 0.0f;
         }
 
@@ -480,7 +481,7 @@ namespace VirtualRobot
 
         if (!measure)
         {
-            VR_WARNING << "No manipulability measure given?!" << endl;
+            VR_WARNING << "No manipulability measure given?!" << std::endl;
             storeMaxManipulability = 1.0f;
             return true;
         }
@@ -517,7 +518,7 @@ namespace VirtualRobot
 
         if (storeMaxManipulability == 0.0f)
         {
-            VR_ERROR << "Maximum manipulability == 0 ??" << endl;
+            VR_ERROR << "Maximum manipulability == 0 ??" << std::endl;
             storeMaxManipulability = 1.0f;
             return false;
         }
@@ -597,7 +598,7 @@ namespace VirtualRobot
 
         for (int a = s; a < (int)data->getSize(0) - s; a++)
         {
-            cout << "#";
+            std::cout << "#";
 
             for (int b = s; b < (int)data->getSize(1) - s; b++)
             {

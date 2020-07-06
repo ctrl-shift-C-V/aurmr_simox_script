@@ -31,13 +31,13 @@ namespace Saba
 
         if (sampleGoalProbab < 0)
         {
-            SABA_WARNING << "Low value for sample goal probability, setting probability to 0" << endl;
+            SABA_WARNING << "Low value for sample goal probability, setting probability to 0" << std::endl;
             sampleGoalProbab = 0.0f;
         }
 
         if (sampleGoalProbab >= 1.0f)
         {
-            SABA_WARNING << "High value for sample goal probability, setting probability to 0.99" << endl;
+            SABA_WARNING << "High value for sample goal probability, setting probability to 0.99" << std::endl;
             sampleGoalProbab = 0.99f;
         }
 
@@ -73,8 +73,8 @@ namespace Saba
             {
                 // remove from working set
                 graspSetWorking->removeGrasp(grasp);
-                SABA_INFO << endl << "Found new IK Solution: " << grasp->getName() << endl;
-                SABA_INFO << config << endl;
+                SABA_INFO << endl << "Found new IK Solution: " << grasp->getName() << std::endl;
+                SABA_INFO << config << std::endl;
 
                 if (checkGoalConfig(config))
                 {
@@ -82,7 +82,7 @@ namespace Saba
                 }
                 else
                 {
-                    SABA_INFO << "IK solution in collision " << endl;
+                    SABA_INFO << "IK solution in collision " << std::endl;
                 }
 
             }
@@ -170,7 +170,7 @@ namespace Saba
 
                     if (!goalNode)
                     {
-                        SABA_ERROR << " no node for ID: " << lastAddedID2 << endl;
+                        SABA_ERROR << " no node for ID: " << lastAddedID2 << std::endl;
                         stopSearch = true;
                     }
                     else

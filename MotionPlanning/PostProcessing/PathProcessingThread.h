@@ -27,6 +27,8 @@
 #include "PathProcessor.h"
 #include "../CSpace/CSpacePath.h"
 
+#include <thread>
+#include <mutex>
 
 namespace Saba
 {
@@ -88,8 +90,8 @@ namespace Saba
         bool threadStarted;
         bool processingFinished;
         PathProcessorPtr pathProcessor;
-        boost::thread processingThread;
-        boost::mutex mutex;
+        std::thread processingThread;
+        std::mutex mutex;
 
         CSpacePathPtr resultPath;
         int optimizeSteps;

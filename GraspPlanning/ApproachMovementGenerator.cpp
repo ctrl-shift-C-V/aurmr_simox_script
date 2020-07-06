@@ -3,6 +3,7 @@
 #include <VirtualRobot/SceneObject.h>
 #include <VirtualRobot/Visualization/TriMeshModel.h>
 #include <VirtualRobot/Nodes/RobotNode.h>
+#include <VirtualRobot/CollisionDetection/CollisionModel.h>
 #include <VirtualRobot/EndEffector/EndEffector.h>
 #include <VirtualRobot/MathTools.h>
 #include <VirtualRobot/RobotConfig.h>
