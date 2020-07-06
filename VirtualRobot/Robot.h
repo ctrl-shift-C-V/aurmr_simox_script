@@ -301,6 +301,7 @@ namespace VirtualRobot
             \param jointValues A map containing RobotNode names with according values.
         */
         virtual void setJointValues(const std::map< std::string, float >& jointValues);
+        virtual std::map<std::string, float> getJointValues() const;
         /*!
             Set joint values [rad].
             The complete robot is updated to apply the new joint values.

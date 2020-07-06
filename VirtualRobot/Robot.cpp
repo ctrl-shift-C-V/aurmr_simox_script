@@ -1013,6 +1013,20 @@ namespace VirtualRobot
         applyJointValuesNoLock();
     }
 
+    std::map<std::string, float> Robot::getJointValues() const
+    {
+        ReadLock lock(mutex, use_mutex);
+        std::map<std::string, float> values;
+        for (const auto& node : getRobotNodes())
+        {
+            if (node->getJointLimitLo() < node->getJointLimitHi())
+            {
+                values[node->getName()] = node->getJointValue();
+            }
+        }
+        return values;
+    }
+
     void Robot::setJointValues(const std::map<RobotNodePtr, float>& jointValues)
     {
         WriteLock lock(mutex, use_mutex);
