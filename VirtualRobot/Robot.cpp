@@ -424,7 +424,7 @@ namespace VirtualRobot
      */
     void Robot::applyJointValues()
     {
-        WriteLock(mutex, use_mutex);
+        WriteLock lock(mutex, use_mutex);
         this->getRootNode()->updatePose(this->getGlobalPose());
     }
 
@@ -673,7 +673,7 @@ namespace VirtualRobot
 
     void LocalRobot::setGlobalPose(const Eigen::Matrix4f& globalPose, bool applyJointValues /*= true*/)
     {
-        WriteLock(mutex, use_mutex);
+        WriteLock lock(mutex, use_mutex);
         this->globalPose = globalPose;
 
         if (applyJointValues)
@@ -684,7 +684,7 @@ namespace VirtualRobot
 
     Eigen::Matrix4f LocalRobot::getGlobalPose() const
     {
-        ReadLock(mutex, use_mutex);
+        ReadLock lock(mutex, use_mutex);
         return globalPose;
     }
 
@@ -992,7 +992,7 @@ namespace VirtualRobot
 
     void Robot::setJointValues(const std::map< std::string, float >& jointValues)
     {
-        WriteLock(mutex, use_mutex);
+        WriteLock lock(mutex, use_mutex);
 
         std::map< std::string, float >::const_iterator it = jointValues.begin();
 
@@ -1015,7 +1015,7 @@ namespace VirtualRobot
 
     void Robot::setJointValues(const std::map<RobotNodePtr, float>& jointValues)
     {
-        WriteLock(mutex, use_mutex);
+        WriteLock lock(mutex, use_mutex);
 
         std::map< RobotNodePtr, float >::const_iterator it = jointValues.begin();
 
@@ -1065,7 +1065,7 @@ namespace VirtualRobot
     void Robot::setJointValues(const std::vector<RobotNodePtr> rn, const std::vector<float>& jointValues)
     {
         VR_ASSERT(rn.size() == jointValues.size());
-        WriteLock(mutex, use_mutex);
+        WriteLock lock(mutex, use_mutex);
 
         for (size_t i = 0; i < rn.size(); i++)
         {
