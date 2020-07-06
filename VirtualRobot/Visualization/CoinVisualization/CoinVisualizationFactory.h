@@ -88,8 +88,8 @@ namespace VirtualRobot
         VisualizationNodePtr createCoordSystem(float scaling = 1.0f, std::string* text = NULL, float axisLength = 100.0f, float axisSize = 3.0f, int nrOfBlocks = 10) override;
         VisualizationNodePtr createBoundingBox(const BoundingBox& bbox, bool wireFrame = false) override;
         VisualizationNodePtr createVertexVisualization(const Eigen::Vector3f& position, float radius, float transparency,  float colorR = 0.5f, float colorG = 0.5f, float colorB = 0.5f) override;
-        VisualizationNodePtr createTriMeshModelVisualization(TriMeshModelPtr model, Eigen::Matrix4f& pose, float scaleX = 1.0f, float scaleY = 1.0f, float scaleZ = 1.0f) override;
-        VisualizationNodePtr createTriMeshModelVisualization(TriMeshModelPtr model, bool showNormals, Eigen::Matrix4f& pose, bool showLines = true) override;
+        VisualizationNodePtr createTriMeshModelVisualization(const TriMeshModelPtr &model, const Eigen::Matrix4f& pose = Eigen::Matrix4f::Identity(), float scaleX = 1.0f, float scaleY = 1.0f, float scaleZ = 1.0f) override;
+        VisualizationNodePtr createTriMeshModelVisualization(const TriMeshModelPtr& model, bool showNormals, const Eigen::Matrix4f& pose, bool showLines = true) override;
         VisualizationNodePtr createPlane(const Eigen::Vector3f& position, const Eigen::Vector3f& normal, float extend, float transparency, float colorR = 0.5f, float colorG = 0.5f, float colorB = 0.5f) override;
         VisualizationNodePtr createArrow(const Eigen::Vector3f& n, float length = 50.0f, float width = 2.0f, const Color& color = Color::Gray()) override;
         VisualizationNodePtr createCircleArrow(float radius, float tubeRadius, float completion = 1, float colorR = 0.5f, float colorG = 0.5f, float colorB = 0.5f, float transparency = 0.0f, int sides = 8, int rings = 30) override;

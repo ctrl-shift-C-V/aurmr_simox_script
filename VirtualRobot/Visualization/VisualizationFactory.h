@@ -160,12 +160,12 @@ namespace VirtualRobot
             return nullptr;
         }
 
-        virtual VisualizationNodePtr createTriMeshModelVisualization(TriMeshModelPtr /*model*/, Eigen::Matrix4f& /*pose*/, float /*scaleX*/ = 1.0f, float /*scaleY*/ = 1.0f, float /*scaleZ*/ = 1.0f)
+        virtual VisualizationNodePtr createTriMeshModelVisualization(const TriMeshModelPtr& /*model*/, const Eigen::Matrix4f& /*pose*/, float /*scaleX*/ = 1.0f, float /*scaleY*/ = 1.0f, float /*scaleZ*/ = 1.0f)
         {
             return nullptr;
         }
 
-        virtual VisualizationNodePtr createTriMeshModelVisualization(TriMeshModelPtr /*model*/, bool /*showNormals*/, Eigen::Matrix4f& /*pose*/, bool /*showLines*/ = true)
+        virtual VisualizationNodePtr createTriMeshModelVisualization(const TriMeshModelPtr& /*model*/, bool /*showNormals*/, const Eigen::Matrix4f& /*pose*/, bool /*showLines*/ = true)
         {
             return nullptr;
         }

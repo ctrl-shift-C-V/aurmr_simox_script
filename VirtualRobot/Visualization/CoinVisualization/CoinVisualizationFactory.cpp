@@ -2224,7 +2224,7 @@ namespace VirtualRobot
         return res;
     }
 
-    VirtualRobot::VisualizationNodePtr CoinVisualizationFactory::createTriMeshModelVisualization(TriMeshModelPtr model, bool showNormals, Eigen::Matrix4f& pose, bool showLines)
+    VirtualRobot::VisualizationNodePtr CoinVisualizationFactory::createTriMeshModelVisualization(const TriMeshModelPtr& model, bool showNormals, const Eigen::Matrix4f& pose, bool showLines)
     {
         SoSeparator* res = new SoSeparator;
         SoNode* res1 = CoinVisualizationFactory::getCoinVisualization(model, showNormals, VisualizationFactory::Color::Gray(), showLines);
@@ -2237,7 +2237,7 @@ namespace VirtualRobot
     }
 
 
-    VirtualRobot::VisualizationNodePtr CoinVisualizationFactory::createTriMeshModelVisualization(TriMeshModelPtr model, Eigen::Matrix4f& pose, float scaleX, float scaleY, float scaleZ)
+    VirtualRobot::VisualizationNodePtr CoinVisualizationFactory::createTriMeshModelVisualization(const TriMeshModelPtr& model, const Eigen::Matrix4f &pose, float scaleX, float scaleY, float scaleZ)
     {
         SoSeparator* res = new SoSeparator;
 
