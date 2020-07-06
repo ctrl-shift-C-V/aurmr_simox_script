@@ -940,6 +940,21 @@ namespace VirtualRobot
         ReadLockPtr lock = r->getReadLock();
         return r->getRootNode()->toLocalCoordinateSystem(globalPose);
     }
+    Eigen::Matrix4f RobotNode::getPoseInFrame(const RobotNodePtr& frame) const
+    {
+        if (!frame)
+        {
+            THROW_VR_EXCEPTION("Frame is null");
+        }
+        ReadLockPtr lock = getRobot()->getReadLock();
+        const Eigen::Matrix4f pinroot = getPoseInRootFrame();
+        const Eigen::Matrix4f finroot = getPoseInRootFrame();
+        return finroot.inverse() * pinroot;
+    }
+    Eigen::Vector3f RobotNode::getPositionInFrame(const RobotNodePtr& frame) const
+    {
+        return getPoseInFrame(frame).topRightCorner<3, 1>();
+    }
 
     Eigen::Vector3f RobotNode::getPositionInRootFrame() const
     {

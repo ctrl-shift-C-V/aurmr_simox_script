@@ -150,7 +150,7 @@ namespace VirtualRobot
 
         */
         virtual Eigen::Matrix4f getPoseInRootFrame() const;
-
+        virtual Eigen::Matrix4f getPoseInFrame(const RobotNodePtr& frame) const;
 
         /*!
             The position of this node in the root coordinate system of the robot.
@@ -158,6 +158,7 @@ namespace VirtualRobot
 
         */
         virtual Eigen::Vector3f getPositionInRootFrame() const;
+        virtual Eigen::Vector3f getPositionInFrame(const RobotNodePtr& frame) const;
 
         virtual Eigen::Matrix3f getOrientationInRootFrame() const;
 
