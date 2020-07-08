@@ -550,7 +550,7 @@ namespace VirtualRobot
         return s;
     }
 
-    SoNode* CoinVisualizationFactory::createCoinPartCircle(float radius, float circleCompletion, float width, float colorR, float colorG, float colorB, size_t numberOfCircleParts)
+    SoNode* CoinVisualizationFactory::createCoinPartCircle(float radius, float circleCompletion, float width, float colorR, float colorG, float colorB, size_t numberOfCircleParts, float offset)
     {
         SoSeparator* s = new SoSeparator();
         s->ref();
@@ -565,7 +565,6 @@ namespace VirtualRobot
         SoCoordinate3* coordinate3 = new SoCoordinate3;
         circleCompletion = std::min<float>(1.0f, circleCompletion);
         circleCompletion = std::max<float>(-1.0f, circleCompletion);
-        float offset = 0;
         for (size_t i = 0; i < numberOfCircleParts; ++i)
         {
 
