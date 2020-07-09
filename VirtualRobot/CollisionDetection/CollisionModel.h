@@ -139,7 +139,7 @@ namespace VirtualRobot
         template <class T>
         std::shared_ptr<T> getVisualization()
         {
-            static_assert(::std::is_base_of_v<Visualization, T>,
+            static_assert(::std::is_base_of_v<VisualizationNode, T>,
                     "TEMPLATE_PARAMETER_FOR_VirtualRobot_getVisualization_MUST_BT_A_SUBCLASS_OF_VirtualRobot__Visualization");
             return std::dynamic_pointer_cast<T>(getVisualization());
         }
