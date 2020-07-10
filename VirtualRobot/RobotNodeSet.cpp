@@ -251,28 +251,38 @@ namespace VirtualRobot
         return rob;
     }
 
-    bool RobotNodeSet::hasRobotNode(RobotNodePtr robotNode) const
+    bool RobotNodeSet::hasRobotNode(const RobotNodePtr& robotNode) const
     {
-        for (const auto& i : robotNodes)
-        {
-            if (i == robotNode)
-            {
-                return true;
-            }
-        }
-        return false;
+        return getRobotNodeIndex(robotNode) >= 0;
     }
 
     bool RobotNodeSet::hasRobotNode(const std::string& nodeName) const
     {
-        for (const auto& robotNode : robotNodes)
+        return getRobotNodeIndex(nodeName) >= 0;
+    }
+
+    int RobotNodeSet::getRobotNodeIndex(const RobotNodePtr& robotNode) const
+    {
+        for (size_t i = 0; i < robotNodes.size(); i++)
         {
-            if (robotNode->getName() == nodeName)
+            if (robotNodes.at(i) == robotNode)
             {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
+    }
+
+    int RobotNodeSet::getRobotNodeIndex(const std::string& nodeName) const
+    {
+        for (size_t i = 0; i < robotNodes.size(); i++)
+        {
+            if (robotNodes.at(i)->getName() == nodeName)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
 
