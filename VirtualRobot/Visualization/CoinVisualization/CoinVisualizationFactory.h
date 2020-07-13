@@ -287,7 +287,7 @@ namespace VirtualRobot
         */
         static SoMatrixTransform* getMatrixTransformScaleMM2M(const Eigen::Matrix4f& m);
         static SoNode* createCoinLine(const Eigen::Matrix4f& from, const Eigen::Matrix4f& to, float width, float colorR, float colorG, float colorB);
-        static SoNode* createCoinPartCircle(float radius, float circleCompletion, float width, float colorR, float colorG, float colorB, size_t numberOfCircleParts);
+        static SoNode* createCoinPartCircle(float radius, float circleCompletion, float width, float colorR, float colorG, float colorB, size_t numberOfCircleParts, float offset=0);
 
 
         /*!
