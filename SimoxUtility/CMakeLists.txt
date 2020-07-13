@@ -122,6 +122,8 @@ SET(INCLUDES
     json/io.h
     json/json.hpp
 
+    math/scale_value.h
+
     math/convert/rad_to_deg.h
     math/convert/deg_to_rad.h
 
