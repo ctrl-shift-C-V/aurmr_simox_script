@@ -66,6 +66,7 @@ public slots:
     void displayPhysics();
     void exportVRML();
     void exportXML();
+    void updatePointDistanceVisu();
 
     SoQtExaminerViewer* getExaminerViewer()
     {
@@ -106,5 +107,11 @@ protected:
     std::shared_ptr<VirtualRobot::CoinVisualization> visualization;
 
     void testPerformance(VirtualRobot::RobotPtr robot, VirtualRobot::RobotNodeSetPtr rns);
+
+    struct PtDistanceVisu
+    {
+        SoSeparator* sep;
+    };
+    PtDistanceVisu ptDistance;
 };
 
