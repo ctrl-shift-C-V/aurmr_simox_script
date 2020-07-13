@@ -2239,7 +2239,7 @@ namespace VirtualRobot
     }
 
 
-    VirtualRobot::VisualizationNodePtr CoinVisualizationFactory::createTriMeshModelVisualization(const TriMeshModelPtr& model, const Eigen::Matrix4f &pose, float scaleX, float scaleY, float scaleZ)
+    VirtualRobot::VisualizationNodePtr CoinVisualizationFactory::createTriMeshModelVisualization(const TriMeshModelPtr& model, const Eigen::Matrix4f& pose, float scaleX, float scaleY, float scaleZ)
     {
         SoSeparator* res = new SoSeparator;
 
