@@ -622,24 +622,11 @@ namespace VirtualRobot
 
     VisualizationNodePtr CoinVisualizationFactory::createSphere(float radius, float colorR, float colorG, float colorB)
     {
-        SoSeparator* s = new SoSeparator();
-        s->ref();
-        SoUnits* u = new SoUnits();
-        u->units = SoUnits::MILLIMETERS;
-        s->addChild(u);
-
-        SoMaterial* m = new SoMaterial();
-        s->addChild(m);
-        m->ambientColor.setValue(colorR, colorG, colorB);
-        m->diffuseColor.setValue(colorR, colorG, colorB);
-
-        SoSphere* c = new SoSphere();
-        s->addChild(c);
-        c->radius = radius;
-
-        VisualizationNodePtr visualizationNode(new CoinVisualizationNode(s));
-        s->unref();
-        return visualizationNode;
+        return VisualizationNodePtr(
+                   new CoinVisualizationNode(
+                       CreateSphere(Eigen::Vector3f::Zero(),
+                                    radius,
+                                    colorR, colorG, colorB)));
     }
 
     VisualizationNodePtr CoinVisualizationFactory::createCylinder(float radius, float height, float colorR, float colorG, float colorB)
@@ -2153,7 +2140,16 @@ namespace VirtualRobot
         return res;
     }
 
-    SoSeparator* CoinVisualizationFactory::CreateArrow(const Eigen::Vector3f& n, float length, float width, const Color& color)
+    SoSeparator* CoinVisualizationFactory::CreateArrow(const Eigen::Vector3f& n,
+            float length, float width,
+            const Color& color)
+    {
+        return CreateArrow(Eigen::Vector3f::Zero(), n, length, width, color);
+    }
+    SoSeparator* CoinVisualizationFactory::CreateArrow(const Eigen::Vector3f& pt,
+            const Eigen::Vector3f& n,
+            float length, float width,
+            const Color& color)
     {
         Eigen::Vector3f n2 = n;
         if (n2.norm() < 1e-10)
@@ -2170,6 +2166,12 @@ namespace VirtualRobot
         SoUnits* u = new SoUnits();
         u->units = SoUnits::MILLIMETERS;
         res->addChild(u);
+
+        {
+            SoTranslation* transl = new SoTranslation;
+            transl->translation.setValue(pt(0), pt(1), pt(2));
+            res->addChild(transl);
+        }
 
         SbVec3f objNormal(n2(0), n2(1), n2(2));
         SbMatrix objNormalTrafo;
@@ -4246,6 +4248,52 @@ namespace VirtualRobot
 
         result->unrefNoDelete();
         return result;
+    }
+
+    SoSeparator* CoinVisualizationFactory::CreateSphere(
+        float radius,
+        float colorR,
+        float colorG,
+        float colorB)
+    {
+        return CreateSphere(
+                   Eigen::Vector3f::Zero(),
+                   radius,
+                   colorR,
+                   colorG,
+                   colorB);
+    }
+
+    SoSeparator* CoinVisualizationFactory::CreateSphere(
+        const Eigen::Vector3f& p,
+        float radius,
+        float colorR,
+        float colorG,
+        float colorB)
+    {
+        SoSeparator* s = new SoSeparator();
+        s->ref();
+        SoUnits* u = new SoUnits();
+        u->units = SoUnits::MILLIMETERS;
+        s->addChild(u);
+
+        {
+            SoTranslation* transl = new SoTranslation;
+            transl->translation.setValue(p(0), p(1), p(2));
+            s->addChild(transl);
+        }
+
+        SoMaterial* m = new SoMaterial();
+        s->addChild(m);
+        m->ambientColor.setValue(colorR, colorG, colorB);
+        m->diffuseColor.setValue(colorR, colorG, colorB);
+
+        SoSphere* c = new SoSphere();
+        s->addChild(c);
+        c->radius = radius;
+
+        s->unrefNoDelete();
+        return s;
     }
 
     SoSeparator* CoinVisualizationFactory::CreateCylindroid(float axisLengthX, float axisLengthY, float height, SoMaterial* material)

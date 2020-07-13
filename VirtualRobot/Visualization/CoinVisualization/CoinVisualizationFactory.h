@@ -134,6 +134,7 @@ namespace VirtualRobot
         static SoSeparator* CreateBBoxVisualization(const BoundingBox& bbox, bool wireFrame = false);
         static SoSeparator* CreatePointVisualization(const MathTools::ContactPoint& point, bool showNormals = false);
         static SoSeparator* CreatePointsVisualization(const std::vector<MathTools::ContactPoint>& points, bool showNormals = false);
+        static SoSeparator* CreateArrow(const Eigen::Vector3f& pt, const Eigen::Vector3f& n, float length = 50.0f, float width = 2.0f, const Color& color = Color::Gray());
         static SoSeparator* CreateArrow(const Eigen::Vector3f& n, float length = 50.0f, float width = 2.0f, const Color& color = Color::Gray());
         static SoSeparator* CreateVertexVisualization(const Eigen::Vector3f& position, float radius, float transparency, float colorR = 0.5f, float colorG = 0.5f, float colorB = 0.5f);
         static SoSeparator* CreateVerticesVisualization(const std::vector<Eigen::Vector3f>& positions, float radius, VisualizationFactory::Color color = VisualizationFactory::Color::Gray());
@@ -162,6 +163,17 @@ namespace VirtualRobot
                                           SoMaterial* matAxisY = NULL,
                                           SoMaterial* matAxisZ = NULL
                                          );
+
+        static SoSeparator* CreateSphere(float radius,
+                                         float colorR,
+                                         float colorG,
+                                         float colorB);
+
+        static SoSeparator* CreateSphere(const Eigen::Vector3f& p,
+                                         float radius,
+                                         float colorR,
+                                         float colorG,
+                                         float colorB);
 
         static SoSeparator* CreateCylindroid(float axisLengthX, float axisLengthY, float height, SoMaterial* matBody = nullptr);
 
