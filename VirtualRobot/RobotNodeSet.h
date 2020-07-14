@@ -139,11 +139,19 @@ namespace VirtualRobot
         RobotNodePtr& getNode(int i);
 
         // implement container interface for easy access
-        inline NodeContainerIterT begin()
+        inline auto begin()
         {
             return robotNodes.begin();
         }
-        inline NodeContainerIterT end()
+        inline auto end()
+        {
+            return robotNodes.end();
+        }
+        inline auto begin() const
+        {
+            return robotNodes.begin();
+        }
+        inline auto end() const
         {
             return robotNodes.end();
         }
