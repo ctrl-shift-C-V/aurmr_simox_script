@@ -69,7 +69,7 @@ namespace VirtualRobot
         /*!
             Returns all nodes.
         */
-        const std::vector< RobotNodePtr > getAllRobotNodes() const;
+        const std::vector<RobotNodePtr>& getAllRobotNodes() const;
 
         std::vector< std::string > getNodeNames() const;
         /*!

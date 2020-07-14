@@ -286,7 +286,7 @@ namespace VirtualRobot
     }
 
 
-    const std::vector< RobotNodePtr > RobotNodeSet::getAllRobotNodes() const
+    const std::vector< RobotNodePtr >& RobotNodeSet::getAllRobotNodes() const
     {
         return robotNodes;
     }
