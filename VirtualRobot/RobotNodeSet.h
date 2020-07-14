@@ -54,6 +54,8 @@ namespace VirtualRobot
             Use this method to create and fully initialize an instance of RobotNodeSet.
         */
         static RobotNodeSetPtr createRobotNodeSet(RobotPtr robot, const std::string& name, const std::vector< RobotNodePtr >& robotNodes, const RobotNodePtr kinematicRoot = RobotNodePtr(), const RobotNodePtr tcp = RobotNodePtr(), bool registerToRobot = false);
+        /// Merges the node sets (takes care of only adding each node once)
+        static RobotNodeSetPtr createRobotNodeSet(RobotPtr robot, const std::string& name, const std::vector< RobotNodeSetPtr >& robotNodes, const RobotNodePtr kinematicRoot = RobotNodePtr(), const RobotNodePtr tcp = RobotNodePtr(), bool registerToRobot = false);
 
         /*!
             Registers a copy of this node set with the given robot

@@ -81,6 +81,31 @@ namespace VirtualRobot
             }
         }
     }
+    RobotNodeSetPtr RobotNodeSet::createRobotNodeSet(
+        RobotPtr robot,
+        const std::string& name,
+        const std::vector< RobotNodeSetPtr >& robotNodes,
+        const RobotNodePtr kinematicRoot,
+        const RobotNodePtr tcp,
+        bool registerToRobot)
+    {
+        std::set<RobotNodePtr> nodeSet;
+        std::vector<RobotNodePtr> nodes;
+        for (const auto& rns : robotNodes)
+        {
+            THROW_VR_EXCEPTION_IF(!rns, "RNS is null");
+            THROW_VR_EXCEPTION_IF(rns->getRobot() != robot, "RNS for an other robot");
+            for (const auto& rn : *rns)
+            {
+                if (!nodeSet.count(rn))
+                {
+                    nodeSet.emplace(rn);
+                    nodes.emplace_back(rn);
+                }
+            }
+        }
+        return createRobotNodeSet(robot, name, nodes, kinematicRoot, tcp, registerToRobot);
+    }
 
 
     RobotNodeSetPtr RobotNodeSet::createRobotNodeSet(RobotPtr robot,
