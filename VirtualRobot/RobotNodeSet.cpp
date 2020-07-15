@@ -5,6 +5,7 @@
 #include "RobotConfig.h"
 #include "VirtualRobotException.h"
 #include "CollisionDetection/CollisionChecker.h"
+#include <set>
 
 #include <boost/mem_fn.hpp>
 
