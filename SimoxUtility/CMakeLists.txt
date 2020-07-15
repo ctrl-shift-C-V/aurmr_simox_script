@@ -81,6 +81,7 @@ SET(SOURCES
     math/SoftMinMax.cpp
 
     shapes/AxisAlignedBoundingBox.cpp
+    shapes/json_conversions.cpp
 )
 
 SET(INCLUDES
@@ -236,6 +237,7 @@ SET(INCLUDES
     shapes/OrientedBoxBase.h
     shapes/OrientedBox.h
     shapes/XYConstrainedOrientedBox.h
+    shapes/json_conversions.h
 
     backport/span/gcc_header.h
 )
