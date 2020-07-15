@@ -82,3 +82,29 @@ BOOST_AUTO_TEST_CASE(test_OrientedBox)
               Eigen::Vector3d::Random().cwiseAbs() * 10);
     }
 }
+
+
+#define BOOST_CHECK_EQUAL_VECTOR(lhs, rhs, prec) \
+    BOOST_TEST_INFO((lhs).transpose() << " == " << (rhs).transpose()); \
+    BOOST_CHECK_LE(((lhs) - (rhs)).norm(), prec);
+
+
+BOOST_AUTO_TEST_CASE(test_OrientedBox_from_pos_ori_extents)
+{
+    const Eigen::Vector3f pos(10, -20, 0);
+    const Eigen::Quaternionf quat = Eigen::Quaternionf(0.707f, 0, 0.707f, 0).normalized();
+    const Eigen::Matrix3f ori = quat.toRotationMatrix();
+    const Eigen::Vector3f extents(100, 200, 300);
+
+    const Eigen::Vector3f corner = pos - ori * extents / 2;
+
+    const simox::OrientedBox<float> ob(corner,
+                                        ori.col(0) * extents(0),
+                                        ori.col(1) * extents(1),
+                                        ori.col(2) * extents(2));
+
+    static const double prec = 1e-4;
+    BOOST_CHECK_EQUAL_VECTOR(ob.center(), pos, prec);
+    BOOST_CHECK_EQUAL_VECTOR(ob.rotation(), ori, prec);
+    BOOST_CHECK_EQUAL_VECTOR(ob.dimensions(), extents, prec);
+}

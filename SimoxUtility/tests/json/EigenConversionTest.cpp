@@ -160,4 +160,14 @@ BOOST_AUTO_TEST_CASE(test_Matrix4f_transform_from_pos_ori)
 }
 
 
+BOOST_AUTO_TEST_CASE(test_from_json_Vector3d)
+{
+    nlohmann::json j = nlohmann::json::parse("[ 100.0, -200.0, 0.0 ]");
+    Eigen::Vector3d v = j.get<Eigen::Vector3d>();
+    BOOST_CHECK_EQUAL(v.x(), 100);
+    BOOST_CHECK_EQUAL(v.y(), -200);
+    BOOST_CHECK_EQUAL(v.z(), 0);
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
