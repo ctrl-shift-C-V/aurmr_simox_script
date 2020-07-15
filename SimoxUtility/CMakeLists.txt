@@ -68,6 +68,7 @@ SET(SOURCES
     json/eigen_conversion.cpp
     json/io.cpp
     json/converters.cpp
+    json/util.cpp
 
     math/pose/align_box_orientation.cpp
     math/pose/check_rotation_matrix.cpp
@@ -121,6 +122,7 @@ SET(INCLUDES
     json/eigen_conversion.h
     json/io.h
     json/json.hpp
+    json/util.h
 
     math/scale_value.h
 
