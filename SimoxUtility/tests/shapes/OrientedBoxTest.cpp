@@ -12,6 +12,8 @@
 #include <boost/test/included/unit_test.hpp>
 
 #include <SimoxUtility/shapes/OrientedBox.h>
+#include <SimoxUtility/math/pose/pose.h>
+
 
 BOOST_AUTO_TEST_CASE(test_OrientedBox)
 {
@@ -89,22 +91,56 @@ BOOST_AUTO_TEST_CASE(test_OrientedBox)
     BOOST_CHECK_LE(((lhs) - (rhs)).norm(), prec);
 
 
-BOOST_AUTO_TEST_CASE(test_OrientedBox_from_pos_ori_extents)
+namespace
 {
-    const Eigen::Vector3f pos(10, -20, 0);
-    const Eigen::Quaternionf quat = Eigen::Quaternionf(0.707f, 0, 0.707f, 0).normalized();
-    const Eigen::Matrix3f ori = quat.toRotationMatrix();
-    const Eigen::Vector3f extents(100, 200, 300);
+    struct FromPosOriExtents
+    {
+        const double prec = 1e-4;
 
+        const Eigen::Vector3f pos {10, -20, 0};
+        const Eigen::Quaternionf quat = Eigen::Quaternionf(0.707f, 0, 0.707f, 0).normalized();
+        const Eigen::Matrix3f ori = quat.toRotationMatrix();
+        const Eigen::Vector3f extents{100, 200, 300};
+
+        void test_oriented_box(const simox::OrientedBox<float>& ob)
+        {
+            BOOST_CHECK_EQUAL_VECTOR(ob.center(), pos, prec);
+            BOOST_CHECK_EQUAL_VECTOR(ob.rotation(), ori, prec);
+            BOOST_CHECK_EQUAL_VECTOR(ob.dimensions(), extents, prec);
+        }
+    };
+}
+
+
+BOOST_FIXTURE_TEST_SUITE(TestFromPosOriExtents, FromPosOriExtents)
+
+BOOST_AUTO_TEST_CASE(test_OrientedBox_from_pos_ori_extents_by_corner_extent_vectors)
+{
     const Eigen::Vector3f corner = pos - ori * extents / 2;
-
     const simox::OrientedBox<float> ob(corner,
                                         ori.col(0) * extents(0),
                                         ori.col(1) * extents(1),
                                         ori.col(2) * extents(2));
-
-    static const double prec = 1e-4;
-    BOOST_CHECK_EQUAL_VECTOR(ob.center(), pos, prec);
-    BOOST_CHECK_EQUAL_VECTOR(ob.rotation(), ori, prec);
-    BOOST_CHECK_EQUAL_VECTOR(ob.dimensions(), extents, prec);
+    test_oriented_box(ob);
 }
+
+
+BOOST_AUTO_TEST_CASE(test_OrientedBox_from_pos_quat_extents)
+{
+    simox::OrientedBox<float> ob(pos, quat, extents);
+    test_oriented_box(ob);
+}
+
+BOOST_AUTO_TEST_CASE(test_OrientedBox_from_pos_orimat_extents)
+{
+    simox::OrientedBox<float> ob(pos, ori, extents);
+    test_oriented_box(ob);
+}
+
+BOOST_AUTO_TEST_CASE(test_OrientedBox_from_pose_ori_extents)
+{
+    simox::OrientedBox<float> ob(simox::math::pose(pos, quat), extents);
+    test_oriented_box(ob);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
