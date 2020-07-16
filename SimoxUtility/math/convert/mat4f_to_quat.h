@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Eigen/Geometry>
+#include "../../meta/eigen/enable_if_compile_time_size.h"
 
 namespace simox::math
 {
