@@ -1,5 +1,7 @@
 #include "AxisAlignedBoundingBox.h"
 
+#include <SimoxUtility/error/SimoxError.h>
+
 
 namespace simox
 {
@@ -34,6 +36,23 @@ namespace simox
         _limits(limits)
     {
     }
+
+
+    AxisAlignedBoundingBox AxisAlignedBoundingBox::from_points(const std::vector<Eigen::Vector3f>& points)
+    {
+        if (points.empty())
+        {
+            throwSimoxError("Points must not be empty in `AxisAlignedBoundingBox::from_points().`");
+        }
+
+        AxisAlignedBoundingBox aabb(points.front(), points.front());
+        for (const auto& p : points)
+        {
+            aabb.expand_to(p);
+        }
+        return aabb;
+    }
+
 
     Eigen::Matrix32f AxisAlignedBoundingBox::limits() const
     {
@@ -293,6 +312,11 @@ namespace simox
     AxisAlignedBoundingBox AxisAlignedBoundingBox::expanded_to(const Eigen::Vector3f& point) const
     {
         return { min().cwiseMin(point), max().cwiseMax(point) };
+    }
+
+    void AxisAlignedBoundingBox::throwSimoxError(const std::string& msg)
+    {
+        throw simox::error::SimoxError(msg);
     }
 
 }

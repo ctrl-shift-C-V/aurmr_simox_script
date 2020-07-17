@@ -120,6 +120,26 @@ namespace simox
             this->_t.template block<3, 1>(0, 3) = corner;
         }
 
+
+        OrientedBox(const vector_t& center, const rotation_t& orientation, const vector_t& extents) :
+            OrientedBox(center - orientation * extents / 2,
+                        orientation.col(0) * extents(0),
+                        orientation.col(1) * extents(1),
+                        orientation.col(2) * extents(2))
+        {
+        }
+
+        OrientedBox(const transform_t& center_pose, const vector_t& extents) :
+            OrientedBox(center_pose.template block<3, 1>(0, 3).eval(), center_pose.template block<3, 3>(0, 0).eval(), extents)
+        {
+        }
+
+        OrientedBox(const vector_t& center, const Eigen::Quaternion<FloatT>& ori, const vector_t& extents) :
+            OrientedBox(center, ori.toRotationMatrix(), extents)
+        {
+        }
+
+
         OrientedBox(const base& b) : base(b) {}
         template<class T>
         OrientedBox<T> cast() const
@@ -132,6 +152,7 @@ namespace simox
                 this->template axis_z<T>() * this->template dimension<T>(2)
             };
         }
+
 
         OrientedBox transformed(const rotation_t& t) const
         {
