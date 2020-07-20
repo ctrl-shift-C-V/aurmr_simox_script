@@ -91,7 +91,7 @@ BOOST_AUTO_TEST_CASE(test_OrientedBox)
     BOOST_CHECK_LE(((lhs) - (rhs)).norm(), prec);
 
 
-namespace
+namespace OrientedBoxTestHelpers
 {
     struct FromPosOriExtents
     {
@@ -112,7 +112,7 @@ namespace
 }
 
 
-BOOST_FIXTURE_TEST_SUITE(TestFromPosOriExtents, FromPosOriExtents)
+BOOST_FIXTURE_TEST_SUITE(TestFromPosOriExtents, OrientedBoxTestHelpers::FromPosOriExtents)
 
 BOOST_AUTO_TEST_CASE(test_OrientedBox_from_pos_ori_extents_by_corner_extent_vectors)
 {
