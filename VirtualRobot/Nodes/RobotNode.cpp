@@ -264,7 +264,7 @@ namespace VirtualRobot
 
     void RobotNode::updatePose(bool updateChildren)
     {
-        THROW_VR_EXCEPTION_IF(!initialized, "Not initialized");
+        THROW_VR_EXCEPTION_IF(!initialized, this->getName() + " is not initialized");
 
         updateTransformationMatrices();
 
@@ -323,7 +323,7 @@ namespace VirtualRobot
 
     void RobotNode::updatePose(const Eigen::Matrix4f& globalPose, bool updateChildren)
     {
-        THROW_VR_EXCEPTION_IF(!initialized, "Not initialized");
+        THROW_VR_EXCEPTION_IF(!initialized, this->getName() + " is not initialized");
 
         updateTransformationMatrices(globalPose);
 
