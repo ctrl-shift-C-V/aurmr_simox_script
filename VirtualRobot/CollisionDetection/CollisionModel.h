@@ -96,7 +96,7 @@ namespace VirtualRobot
         /*!
         The global pose defines the position of the joint in the world. This value is used for visualization.
         */
-        inline Eigen::Matrix4f getGlobalPose()
+        inline Eigen::Matrix4f getGlobalPose() const
         {
             return globalPose;
         }
