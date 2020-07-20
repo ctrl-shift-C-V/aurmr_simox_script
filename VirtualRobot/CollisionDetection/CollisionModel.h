@@ -102,6 +102,17 @@ namespace VirtualRobot
         }
         virtual void setGlobalPose(const Eigen::Matrix4f& pose);
 
+        inline Eigen::Vector3f transformToGlobal(const Eigen::Vector3f& p) const
+        {
+            Eigen::Vector4f h = getGlobalPose() * Eigen::Vector4f{p.x(), p.y(), p.z(), 1};
+            return h.topRows<3>() / h(3);
+        }
+        inline Eigen::Vector3f transformFromGlobal(const Eigen::Vector3f& p) const
+        {
+            Eigen::Vector4f h = getGlobalPose().inverse() * Eigen::Vector4f{p.x(), p.y(), p.z(), 1};
+            return h.topRows<3>() / h(3);
+        }
+
         CollisionCheckerPtr getCollisionChecker()
         {
             return colChecker;
