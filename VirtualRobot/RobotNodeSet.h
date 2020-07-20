@@ -157,6 +157,10 @@ namespace VirtualRobot
         {
             return robotNodes.end();
         }
+        inline unsigned int size() const 
+        {
+            return getSize();
+        }
 
         RobotPtr getRobot();
 
