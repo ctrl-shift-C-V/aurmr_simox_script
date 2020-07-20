@@ -2,9 +2,10 @@
 
 namespace simox::math
 {
-    template <class T>
-    inline constexpr T
-    scale_value_from_to(T val, T from_lo, T from_hi, T to_lo, T to_hi)
+    inline constexpr auto
+    scale_value_from_to(auto val,
+                        auto from_lo, auto from_hi,
+                        auto to_lo, auto to_hi)
     {
         return to_lo + (val - from_lo) / (from_hi - from_lo) * (to_hi - to_lo);
     }
