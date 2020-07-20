@@ -39,6 +39,8 @@ namespace VirtualRobot
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
         static TriMeshModel MakeBox(float a, float b, float c);
+        static TriMeshModel MakePoint(float x, float y, float z);
+        static TriMeshModelPtr MakePointPtr(float x, float y, float z);
 
         /// Constructor.
         TriMeshModel();
@@ -53,6 +55,10 @@ namespace VirtualRobot
             triangle() = default;
             triangle(const Eigen::Vector3f& v1, const Eigen::Vector3f& v2, const Eigen::Vector3f& v3) :
                 vertex1(v1), vertex2(v2), vertex3(v3) {}
+            triangle(const Eigen::Vector3f& v) :
+                triangle(v,v,v) {}
+            triangle(float x, float y, float z) :
+                triangle(Eigen::Vector3f{x,y,z}) {}
             Eigen::Vector3f vertex1;
             Eigen::Vector3f vertex2;
             Eigen::Vector3f vertex3;

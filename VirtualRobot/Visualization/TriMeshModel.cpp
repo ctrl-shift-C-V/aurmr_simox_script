@@ -51,6 +51,16 @@ namespace VirtualRobot
         addF(4, 5, 1, 0);
         return m;
     }
+    TriMeshModel    TriMeshModel::MakePoint(float x, float y, float z)
+    {
+        std::vector<triangle> tr;
+        tr.emplace_back(x, y, z);
+        return {tr};
+    }
+    TriMeshModelPtr TriMeshModel::MakePointPtr(float x, float y, float z)
+    {
+        return std::make_shared<VirtualRobot::TriMeshModel>(MakePoint(y, y, z));
+    }
 
     TriMeshModel::TriMeshModel(const std::vector<triangle>& triangles)
     {
