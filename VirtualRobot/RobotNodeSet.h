@@ -54,19 +54,24 @@ namespace VirtualRobot
             Use this method to create and fully initialize an instance of RobotNodeSet.
         */
         static RobotNodeSetPtr createRobotNodeSet(RobotPtr robot, const std::string& name, const std::vector< RobotNodePtr >& robotNodes, const RobotNodePtr kinematicRoot = RobotNodePtr(), const RobotNodePtr tcp = RobotNodePtr(), bool registerToRobot = false);
+        /// Merges the node sets (takes care of only adding each node once)
+        static RobotNodeSetPtr createRobotNodeSet(RobotPtr robot, const std::string& name, const std::vector< RobotNodeSetPtr >& robotNodes, const RobotNodePtr kinematicRoot = RobotNodePtr(), const RobotNodePtr tcp = RobotNodePtr(), bool registerToRobot = false);
 
         /*!
             Registers a copy of this node set with the given robot
          */
         RobotNodeSetPtr clone(RobotPtr newRobot, const RobotNodePtr newKinematicRoot = RobotNodePtr());
 
-        bool hasRobotNode(RobotNodePtr robotNode) const;
+        bool hasRobotNode(const RobotNodePtr& robotNode) const;
         bool hasRobotNode(const std::string& nodeName) const;
+
+        int getRobotNodeIndex(const RobotNodePtr& robotNode) const;
+        int getRobotNodeIndex(const std::string& nodeName) const;
 
         /*!
             Returns all nodes.
         */
-        const std::vector< RobotNodePtr > getAllRobotNodes() const;
+        const std::vector<RobotNodePtr>& getAllRobotNodes() const;
 
         std::vector< std::string > getNodeNames() const;
         /*!
@@ -136,11 +141,19 @@ namespace VirtualRobot
         RobotNodePtr& getNode(int i);
 
         // implement container interface for easy access
-        inline NodeContainerIterT begin()
+        inline auto begin()
         {
             return robotNodes.begin();
         }
-        inline NodeContainerIterT end()
+        inline auto end()
+        {
+            return robotNodes.end();
+        }
+        inline auto begin() const
+        {
+            return robotNodes.begin();
+        }
+        inline auto end() const
         {
             return robotNodes.end();
         }

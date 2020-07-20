@@ -68,6 +68,7 @@ SET(SOURCES
     json/eigen_conversion.cpp
     json/io.cpp
     json/converters.cpp
+    json/util.cpp
 
     math/pose/align_box_orientation.cpp
     math/pose/check_rotation_matrix.cpp
@@ -80,6 +81,7 @@ SET(SOURCES
     math/SoftMinMax.cpp
 
     shapes/AxisAlignedBoundingBox.cpp
+    shapes/json_conversions.cpp
 )
 
 SET(INCLUDES
@@ -121,6 +123,9 @@ SET(INCLUDES
     json/eigen_conversion.h
     json/io.h
     json/json.hpp
+    json/util.h
+
+    math/scale_value.h
 
     math/convert/rad_to_deg.h
     math/convert/deg_to_rad.h
@@ -232,6 +237,7 @@ SET(INCLUDES
     shapes/OrientedBoxBase.h
     shapes/OrientedBox.h
     shapes/XYConstrainedOrientedBox.h
+    shapes/json_conversions.h
 
     backport/span/gcc_header.h
 )

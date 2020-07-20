@@ -9,3 +9,4 @@
 #include "shapes/OrientedEllipsis.h"
 #include "shapes/OrientedEllipsisBase.h"
 #include "shapes/XYConstrainedOrientedBox.h"
+#include "shapes/json_conversions.h"

@@ -29,6 +29,19 @@ namespace simox
         /// Construct an AABB with limits in a 3x2 matrix.
         AxisAlignedBoundingBox(const Eigen::Matrix32f& limits);
 
+        /**
+         * @brief Compute the AABB of the given points.
+         * @throws `simox::error::SimoxError` If `points` is empty.
+         */
+        static AxisAlignedBoundingBox from_points(const std::vector<Eigen::Vector3f>& points);
+        /**
+         * @brief Compute the AABB of the given points.
+         * `PointT` must have x, y, z member variables.
+         * @throws `simox::error::SimoxError` If `points` is empty.
+         */
+        template <class PointT>
+        static AxisAlignedBoundingBox from_points(const std::vector<PointT>& points);
+
 
         Eigen::Matrix32f limits() const;
         Eigen::Matrix32f& limits();
@@ -97,21 +110,39 @@ namespace simox
         template <class PointT>
         bool is_inside(const PointT& p) const;
 
-        /// Expand `*this` (in-place) to include `point`.
+        /**
+         * @brief Expand `*this` (in-place) to include `point`.
+         * Note that `*this` should be suitable initialized beforehand.
+         * @see from_points()
+         */
         template <class PointT>
-        void expand_to(const PointT& p)
+        void expand_to(const PointT& point)
         {
-            expand_to(Eigen::Vector3f(p.x, p.y, p.z));
+            expand_to(Eigen::Vector3f(point.x, point.y, point.z));
         }
         void expand_to(const Eigen::Vector3f& point);
 
-        /// Return this AABB expanded to include `point`.
+        /**
+         * @brief Return this AABB expanded to include `point`.
+         * Note that `*this` should be suitable initialized beforehand.
+         * @see from_points()
+         */
         template <class PointT>
-        void expanded_to(const PointT& p) const
+        void expanded_to(const PointT& point) const
         {
-            expanded_to(Eigen::Vector3f(p.x, p.y, p.z));
+            expanded_to(Eigen::Vector3f(point.x, point.y, point.z));
         }
         AxisAlignedBoundingBox expanded_to(const Eigen::Vector3f& point) const;
+
+
+    private:
+
+        /**
+         * @brief Throw a simox::error::SimoxError() with the given message.
+         * This avoids exposing the include in the header.
+         */
+        [[noreturn]]
+        static void throwSimoxError(const std::string& msg);
 
 
     private:
@@ -136,6 +167,16 @@ namespace simox
 
 namespace aabb
 {
+    template <class PointT>
+    AxisAlignedBoundingBox from_points(const std::vector<PointT>& points)
+    {
+        return AxisAlignedBoundingBox::from_points<PointT>(points);
+    }
+    inline AxisAlignedBoundingBox from_points(const std::vector<Eigen::Vector3f>& points)
+    {
+        return AxisAlignedBoundingBox::from_points(points);
+    }
+
     /// Return the distance between center of `lhs`'s and `rhs`'s centers.
     float central_distance(const AxisAlignedBoundingBox& lhs, const AxisAlignedBoundingBox& rhs);
 
@@ -157,6 +198,23 @@ namespace aabb
            and p.x <= aabb.max_x() and p.y <= aabb.max_y() and p.z <= aabb.max_z();
     }
 }
+
+    template <class PointT>
+    AxisAlignedBoundingBox AxisAlignedBoundingBox::from_points(const std::vector<PointT>& points)
+    {
+        if (points.empty())
+        {
+            throwSimoxError("Points must not be empty in `AxisAlignedBoundingBox::from_points()`.");
+        }
+
+        const PointT& front = points.front();
+        AxisAlignedBoundingBox aabb(front.x, front.x, front.y, front.y, front.z, front.z);
+        for (const auto& p : points)
+        {
+            aabb.expand_to(p);
+        }
+        return aabb;
+    }
 
     template <class PointT>
     bool AxisAlignedBoundingBox::is_inside(const PointT& p) const

@@ -22,6 +22,8 @@
 */
 #pragma once
 
+#include <SimoxUtility/math/scale_value.h>
+
 #include "../VirtualRobot.h"
 #include "../VirtualRobotException.h"
 #include "../SceneObject.h"
@@ -246,6 +248,27 @@ namespace VirtualRobot
         inline float getJointLimitLow() const
         {
             return jointLimitLo;
+        }
+
+        inline float scaleJointValue(float val, float min = -1, float max = 1)
+        {
+            return simox::math::scale_value_from_to(val, jointLimitLo, jointLimitHi, min, max);
+        }
+        inline float unscaleJointValue(float val, float min = -1, float max = 1)
+        {
+            return simox::math::scale_value_from_to(val, min, max, jointLimitLo, jointLimitHi);
+        }
+        inline float getScaledJointValue(float min = -1, float max = 1)
+        {
+            return scaleJointValue(getJointValue(), min, max);
+        }
+        inline void setScaledJointValue(float val, float min = -1, float max = 1)
+        {
+            setJointValue(unscaleJointValue(val, min, max));
+        }
+        inline void setScaledJointValueNoUpdate(float val, float min = -1, float max = 1)
+        {
+            setJointValueNoUpdate(unscaleJointValue(val, min, max));
         }
 
         /*!

@@ -880,6 +880,16 @@ namespace VirtualRobot
         return static_cast<unsigned int>(flippedFacesCount);
     }
 
+    Eigen::Vector3f TriMeshModel::getNormalOfFace(std::size_t faceId) const
+    {
+        const auto& face = faces.at(faceId);
+        if (face.idNormal1 == UINT_MAX || face.idNormal2 == UINT_MAX  || face.idNormal3 == UINT_MAX)
+        {
+            return (normals.at(face.idNormal1) + normals.at(face.idNormal2) + normals.at(face.idNormal3)).normalized();
+        }
+        return face.normal;
+    }
+
 
     void TriMeshModel::print()
     {

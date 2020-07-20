@@ -88,7 +88,7 @@ namespace VirtualRobot
         VisualizationNodePtr createCoordSystem(float scaling = 1.0f, std::string* text = NULL, float axisLength = 100.0f, float axisSize = 3.0f, int nrOfBlocks = 10) override;
         VisualizationNodePtr createBoundingBox(const BoundingBox& bbox, bool wireFrame = false) override;
         VisualizationNodePtr createVertexVisualization(const Eigen::Vector3f& position, float radius, float transparency,  float colorR = 0.5f, float colorG = 0.5f, float colorB = 0.5f) override;
-        VisualizationNodePtr createTriMeshModelVisualization(const TriMeshModelPtr &model, const Eigen::Matrix4f& pose = Eigen::Matrix4f::Identity(), float scaleX = 1.0f, float scaleY = 1.0f, float scaleZ = 1.0f) override;
+        VisualizationNodePtr createTriMeshModelVisualization(const TriMeshModelPtr& model, const Eigen::Matrix4f& pose = Eigen::Matrix4f::Identity(), float scaleX = 1.0f, float scaleY = 1.0f, float scaleZ = 1.0f) override;
         VisualizationNodePtr createTriMeshModelVisualization(const TriMeshModelPtr& model, bool showNormals, const Eigen::Matrix4f& pose, bool showLines = true) override;
         VisualizationNodePtr createPlane(const Eigen::Vector3f& position, const Eigen::Vector3f& normal, float extend, float transparency, float colorR = 0.5f, float colorG = 0.5f, float colorB = 0.5f) override;
         VisualizationNodePtr createArrow(const Eigen::Vector3f& n, float length = 50.0f, float width = 2.0f, const Color& color = Color::Gray()) override;
@@ -134,6 +134,7 @@ namespace VirtualRobot
         static SoSeparator* CreateBBoxVisualization(const BoundingBox& bbox, bool wireFrame = false);
         static SoSeparator* CreatePointVisualization(const MathTools::ContactPoint& point, bool showNormals = false);
         static SoSeparator* CreatePointsVisualization(const std::vector<MathTools::ContactPoint>& points, bool showNormals = false);
+        static SoSeparator* CreateArrow(const Eigen::Vector3f& pt, const Eigen::Vector3f& n, float length = 50.0f, float width = 2.0f, const Color& color = Color::Gray());
         static SoSeparator* CreateArrow(const Eigen::Vector3f& n, float length = 50.0f, float width = 2.0f, const Color& color = Color::Gray());
         static SoSeparator* CreateVertexVisualization(const Eigen::Vector3f& position, float radius, float transparency, float colorR = 0.5f, float colorG = 0.5f, float colorB = 0.5f);
         static SoSeparator* CreateVerticesVisualization(const std::vector<Eigen::Vector3f>& positions, float radius, VisualizationFactory::Color color = VisualizationFactory::Color::Gray());
@@ -162,6 +163,17 @@ namespace VirtualRobot
                                           SoMaterial* matAxisY = NULL,
                                           SoMaterial* matAxisZ = NULL
                                          );
+
+        static SoSeparator* CreateSphere(float radius,
+                                         float colorR,
+                                         float colorG,
+                                         float colorB);
+
+        static SoSeparator* CreateSphere(const Eigen::Vector3f& p,
+                                         float radius,
+                                         float colorR,
+                                         float colorG,
+                                         float colorB);
 
         static SoSeparator* CreateCylindroid(float axisLengthX, float axisLengthY, float height, SoMaterial* matBody = nullptr);
 
@@ -275,7 +287,7 @@ namespace VirtualRobot
         */
         static SoMatrixTransform* getMatrixTransformScaleMM2M(const Eigen::Matrix4f& m);
         static SoNode* createCoinLine(const Eigen::Matrix4f& from, const Eigen::Matrix4f& to, float width, float colorR, float colorG, float colorB);
-        static SoNode* createCoinPartCircle(float radius, float circleCompletion, float width, float colorR, float colorG, float colorB, size_t numberOfCircleParts);
+        static SoNode* createCoinPartCircle(float radius, float circleCompletion, float width, float colorR, float colorG, float colorB, size_t numberOfCircleParts, float offset=0);
 
 
         /*!

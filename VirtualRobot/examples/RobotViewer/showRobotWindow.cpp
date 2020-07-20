@@ -4,6 +4,7 @@
 #include "VirtualRobot/Workspace/Reachability.h"
 #include <VirtualRobot/RuntimeEnvironment.h>
 #include <VirtualRobot/Import/RobotImporterFactory.h>
+#include <VirtualRobot/CollisionDetection/CDManager.h>
 #include <boost/algorithm/string/predicate.hpp>
 
 #include <QFileDialog>
@@ -54,6 +55,8 @@ showRobotWindow::showRobotWindow(std::string& sRobotFilename)
     sceneSep->addChild(lightModel);*/
 
     sceneSep->addChild(robotSep);
+    ptDistance.sep = new SoSeparator;
+    sceneSep->addChild(ptDistance.sep);
 
     setupUI();
 
@@ -110,6 +113,8 @@ void showRobotWindow::setupUI()
     viewer->setAccumulationBuffer(false);
     viewer->setAntialiasing(true, 4);
 
+    UI.groupBoxDistance->setChecked(false);
+
     connect(UI.pushButtonReset, SIGNAL(clicked()), this, SLOT(resetSceneryAll()));
     connect(UI.pushButtonLoad, SIGNAL(clicked()), this, SLOT(selectRobot()));
     connect(UI.pushButtonReLoad, SIGNAL(clicked()), this, SLOT(reloadRobot()));
@@ -135,6 +140,10 @@ void showRobotWindow::setupUI()
     connect(UI.comboBoxJoint, SIGNAL(activated(int)), this, SLOT(selectJoint(int)));
     connect(UI.horizontalSliderPos, SIGNAL(valueChanged(int)), this, SLOT(jointValueChanged(int)));
 
+    connect(UI.checkBoxDistToPtEnabled,  &QCheckBox::clicked,           this, &showRobotWindow::updatePointDistanceVisu);
+    connect(UI.doubleSpinBoxDistancePtX, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &showRobotWindow::updatePointDistanceVisu);
+    connect(UI.doubleSpinBoxDistancePtY, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &showRobotWindow::updatePointDistanceVisu);
+    connect(UI.doubleSpinBoxDistancePtZ, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &showRobotWindow::updatePointDistanceVisu);
 }
 
 QString showRobotWindow::formatString(const char* s, float f)
@@ -167,7 +176,6 @@ QString showRobotWindow::formatString(const char* s, float f)
     return str1;
 }
 
-
 void showRobotWindow::resetSceneryAll()
 {
     if (!robot)
@@ -180,8 +188,6 @@ void showRobotWindow::resetSceneryAll()
 
     selectJoint(UI.comboBoxJoint->currentIndex());
 }
-
-
 
 void showRobotWindow::displayTriangles()
 {
@@ -288,7 +294,7 @@ void showRobotWindow::showSensors()
 
     std::vector<SensorPtr> sensors = robot->getSensors();
 
-    for (auto & sensor : sensors)
+    for (auto& sensor : sensors)
     {
         sensor->setupVisualization(showSensors, showSensors);
         sensor->showCoordinateSystem(showSensors);
@@ -297,8 +303,6 @@ void showRobotWindow::showSensors()
     // rebuild visualization
     rebuildVisualization();
 }
-
-
 
 void showRobotWindow::displayPhysics()
 {
@@ -331,37 +335,37 @@ void showRobotWindow::exportVRML()
 
     Eigen::Matrix4f m1 = robot->getRobotNode(t1)->getGlobalPose();
     Eigen::Matrix4f m2 = robot->getRobotNode(t2)->getGlobalPose();
-    std::cout << "global pose " << t1 <<":" << endl << m1 << std::endl;
-    std::cout << "global pose " << t2 <<":" << endl << m2 << std::endl;
+    std::cout << "global pose " << t1 << ":" << endl << m1 << std::endl;
+    std::cout << "global pose " << t2 << ":" << endl << m2 << std::endl;
 
     Eigen::Matrix4f parentM1 = robot->getRobotNode(t1)->getParent()->getGlobalPose();
     Eigen::Matrix4f parentM2 = robot->getRobotNode(t2)->getParent()->getGlobalPose();
-    std::cout << "global pose parent " << t1 <<":" << endl << parentM1 << std::endl;
-    std::cout << "global pose parent " << t2 <<":" << endl << parentM2 << std::endl;
+    std::cout << "global pose parent " << t1 << ":" << endl << parentM1 << std::endl;
+    std::cout << "global pose parent " << t2 << ":" << endl << parentM2 << std::endl;
 
     Eigen::Matrix4f localM1 = robot->getRobotNode(t1)->getLocalTransformation();
     Eigen::Matrix4f localM2 = robot->getRobotNode(t2)->getLocalTransformation();
-    std::cout << "local trafo " << t1 <<":" << endl << localM1 << std::endl;
-    std::cout << "local trafo " << t2 <<":" << endl << localM2 << std::endl;
+    std::cout << "local trafo " << t1 << ":" << endl << localM1 << std::endl;
+    std::cout << "local trafo " << t2 << ":" << endl << localM2 << std::endl;
 
 
 
     Eigen::Matrix4f tmpRotMat1 = Eigen::Matrix4f::Identity();
     Eigen::Matrix4f tmpRotMat2 = Eigen::Matrix4f::Identity();
     Eigen::Vector3f rot1;
-    rot1 << 0,0,1;
+    rot1 << 0, 0, 1;
     Eigen::Vector3f rot2;
-    rot2 << 0,0,1;
+    rot2 << 0, 0, 1;
     tmpRotMat1.block(0, 0, 3, 3) = Eigen::AngleAxisf(0.0f, rot1).matrix();
     tmpRotMat2.block(0, 0, 3, 3) = Eigen::AngleAxisf(0.0f, rot2).matrix();
 
     m1 = parentM1 * localM1 /*getLocalTransformation()*/ * tmpRotMat1;
     m2 = parentM2 * localM2 /*getLocalTransformation()*/ * tmpRotMat2;
-    std::cout << "rot mat " << t1 <<":" << endl << tmpRotMat1 << std::endl;
-    std::cout << "rot mat " << t2 <<":" << endl << tmpRotMat2 << std::endl;
+    std::cout << "rot mat " << t1 << ":" << endl << tmpRotMat1 << std::endl;
+    std::cout << "rot mat " << t2 << ":" << endl << tmpRotMat2 << std::endl;
 
-    std::cout << "gp custom " << t1 <<":" << endl << m1 << std::endl;
-    std::cout << "gp custom " << t2 <<":" << endl << m2 << std::endl;
+    std::cout << "gp custom " << t1 << ":" << endl << m1 << std::endl;
+    std::cout << "gp custom " << t2 << ":" << endl << m2 << std::endl;
 
 
 
@@ -371,7 +375,7 @@ void showRobotWindow::exportVRML()
     std::string root2("RootRotated");
     Eigen::Matrix4f gpr1 = robot->getRobotNode(root1)->getGlobalPose();
     Eigen::Matrix4f gpr2 = robot->getRobotNode(root2)->getGlobalPose();
-*/
+    */
 
 
     std::string knee1("LegL_Knee_joint");
@@ -379,8 +383,8 @@ void showRobotWindow::exportVRML()
     Eigen::Matrix4f gpr1 = robot->getRobotNode(knee1)->getGlobalPose();
     Eigen::Matrix4f gpr2 = robot->getRobotNode(knee2)->getGlobalPose();
 
-    std::cout << "gp  " << knee1 <<":" << endl << gpr1 << std::endl;
-    std::cout << "gp  " << knee2 <<":" << endl << gpr2 << std::endl;
+    std::cout << "gp  " << knee1 << ":" << endl << gpr1 << std::endl;
+    std::cout << "gp  " << knee2 << ":" << endl << gpr2 << std::endl;
     std::cout << "gp knee1->knee2 :" << endl << robot->getRobotNode(knee1)->toLocalCoordinateSystem(robot->getRobotNode(knee2)->getGlobalPose()) << std::endl;
 
 
@@ -492,7 +496,6 @@ void showRobotWindow::exportVRML()
     }
 }
 
-
 void showRobotWindow::exportXML()
 {
     if (!robot)
@@ -515,6 +518,67 @@ void showRobotWindow::exportXML()
 
 }
 
+#include <VirtualRobot/Visualization/CoinVisualization/CoinVisualizationFactory.h>
+#include <VirtualRobot/CollisionDetection/CollisionModel.h>
+#include <VirtualRobot/SceneObject.h>
+#include <VirtualRobot/Visualization/VisualizationNode.h>
+#include <VirtualRobot/Visualization/TriMeshModel.h>
+void showRobotWindow::updatePointDistanceVisu()
+{
+    ptDistance.sep->removeAllChildren();
+    if (!UI.checkBoxDistToPtEnabled->isChecked())
+    {
+        UI.labelDistancePtDist->setText("");
+        return;
+    }
+
+
+    const Eigen::Vector3f pt = Eigen::Vector3d
+    {
+        UI.doubleSpinBoxDistancePtX->value(),
+        UI.doubleSpinBoxDistancePtY->value(),
+        UI.doubleSpinBoxDistancePtZ->value()
+    }.cast<float>();
+
+    CDManager cd;
+    // add models to cd
+    {
+        cd.addCollisionModel(robot->getRobotNodes());
+        auto tri = std::make_shared<VirtualRobot::TriMeshModel>();
+        auto i1 = tri->addVertex(pt);
+        auto i2 = tri->addVertex(pt);
+        auto i3 = tri->addVertex(pt);
+        tri->addFace(i1, i2, i3);
+
+        cd.addCollisionModel(
+            std::make_shared<VirtualRobot::SceneObject>(
+                "sphere",
+                std::make_shared<VirtualRobot::VisualizationNode>(tri),
+                std::make_shared<VirtualRobot::CollisionModel>(tri)
+            ));
+
+    }
+
+    float distance;
+    //calc and visu
+    {
+        Eigen::Vector3f pt1;
+        Eigen::Vector3f pt2;
+        int tri1;
+        int tri2;
+        distance = cd.getDistance(pt1, pt2, tri1, tri2);
+        const Eigen::Vector3f dir = (pt1 - pt2).normalized();
+        const float spherSize = 10;
+        using Factory = VirtualRobot::CoinVisualizationFactory;
+        ptDistance.sep->addChild(Factory::CreateArrow(pt2, dir, distance));
+        ptDistance.sep->addChild(Factory::CreateSphere(pt, spherSize, 0, 1, 0));
+        ptDistance.sep->addChild(Factory::CreateSphere(pt1, spherSize, 0, 0, 1));
+        ptDistance.sep->addChild(Factory::CreateSphere(pt2, spherSize, 0, 1, 1));
+    }
+
+    UI.labelDistancePtDist->setText(QString::number(distance));
+}
+
 void showRobotWindow::showRobot()
 {
     //m_pGraspScenery->showRobot(m_pShowRobot->state() == QCheckBox::On);
@@ -526,16 +590,12 @@ void showRobotWindow::closeEvent(QCloseEvent* event)
     QMainWindow::closeEvent(event);
 }
 
-
-
-
 int showRobotWindow::main()
 {
     SoQt::show(this);
     SoQt::mainLoop();
     return 0;
 }
-
 
 void showRobotWindow::quit()
 {
@@ -548,7 +608,7 @@ void showRobotWindow::updateJointBox()
 {
     UI.comboBoxJoint->clear();
 
-    for (auto & currentRobotNode : currentRobotNodes)
+    for (auto& currentRobotNode : currentRobotNodes)
     {
         UI.comboBoxJoint->addItem(QString(currentRobotNode->getName().c_str()));
     }
@@ -559,7 +619,7 @@ void showRobotWindow::updateRNSBox()
     UI.comboBoxRobotNodeSet->clear();
     UI.comboBoxRobotNodeSet->addItem(QString("<All>"));
 
-    for (auto & robotNodeSet : robotNodeSets)
+    for (auto& robotNodeSet : robotNodeSets)
     {
         UI.comboBoxRobotNodeSet->addItem(QString(robotNodeSet->getName().c_str()));
     }
@@ -687,6 +747,7 @@ void showRobotWindow::jointValueChanged(int pos)
     }
 
 #endif
+    updatePointDistanceVisu();
 }
 
 void showRobotWindow::showCoordSystem()
@@ -834,6 +895,7 @@ void showRobotWindow::testPerformance(RobotPtr robot, RobotNodeSetPtr rns)
 
 void showRobotWindow::loadRobot()
 {
+    UI.checkBoxDistToPtEnabled->setChecked(false);
     robotSep->removeAllChildren();
     std::cout << "Loading Robot from " << m_sRobotFilename << std::endl;
     currentEEF.reset();
@@ -874,12 +936,16 @@ void showRobotWindow::loadRobot()
     // just a simple test that inverts the kinematic structure of the robot
 #if 0
     if (robot->hasRobotNode("Index L J1"))
+    {
         robot = RobotFactory::cloneInversed(robot, "Index L J1");
+    }
 #endif
 
 #if 0
     if (robot->hasRobotNodeSet("LeftArm"))
+    {
         robot = RobotFactory::cloneSubSet(robot, robot->getRobotNodeSet("LeftArm"), "LeftArmRobot");
+    }
 #endif
 
 #if 0
@@ -1065,8 +1131,8 @@ void showRobotWindow::selectEEF(int nr)
 {
     std::cout << "Selecting EEF nr " << nr << std::endl;
 
-     UI.comboBoxEndEffectorPS->clear();
-     currentEEF.reset();
+    UI.comboBoxEndEffectorPS->clear();
+    currentEEF.reset();
 
     if (nr < 0 || nr >= (int)eefs.size())
     {
@@ -1076,7 +1142,7 @@ void showRobotWindow::selectEEF(int nr)
 
     std::vector<std::string> ps = currentEEF->getPreshapes();
     UI.comboBoxEndEffectorPS->addItem(QString("none"));
-    for (auto & p : ps)
+    for (auto& p : ps)
     {
         UI.comboBoxEndEffectorPS->addItem(QString(p.c_str()));
     }
@@ -1086,8 +1152,10 @@ void showRobotWindow::selectPreshape(int nr)
 {
     std::cout << "Selecting EEF preshape nr " << nr << std::endl;
 
-    if (!currentEEF || nr==0)
+    if (!currentEEF || nr == 0)
+    {
         return;
+    }
 
     nr--; // first entry is "none"
 
@@ -1106,7 +1174,7 @@ void showRobotWindow::updateEEFBox()
 {
     UI.comboBoxEndEffector->clear();
 
-    for (auto & eef : eefs)
+    for (auto& eef : eefs)
     {
         UI.comboBoxEndEffector->addItem(QString(eef->getName().c_str()));
     }
