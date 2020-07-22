@@ -1655,6 +1655,11 @@ namespace VirtualRobot
 
         if (!rootNodeName.empty())
         {
+            if (!robo->hasRobotNode(rootNodeName))
+            {
+                VR_WARNING << "In robot node set '" << nodeSetName
+                           << "': No root node '" << rootNodeName << "' found";
+            }
             kinRoot = robo->getRobotNode(rootNodeName);
         }
 
@@ -1662,6 +1667,11 @@ namespace VirtualRobot
 
         if (!tcpName.empty())
         {
+            if (!robo->hasRobotNode(tcpName))
+            {
+                VR_WARNING << "In robot node set '" << nodeSetName
+                           << "': No root node '" << tcpName << "' found";
+            }
             tcp = robo->getRobotNode(tcpName);
         }
 
