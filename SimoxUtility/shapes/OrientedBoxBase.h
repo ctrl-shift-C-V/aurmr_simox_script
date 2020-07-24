@@ -109,6 +109,36 @@ namespace simox
             return static_cast<T>(dimension(i));
         }
 
+        float_t dimension_x() const
+        {
+            return dimension(0);
+        }
+        template<class T>
+        T dimension_x() const
+        {
+            return dimension<T>(0);
+        }
+
+        float_t dimension_y() const
+        {
+            return dimension(1);
+        }
+        template<class T>
+        T dimension_y() const
+        {
+            return dimension<T>(1);
+        }
+
+        float_t dimension_z() const
+        {
+            return dimension(2);
+        }
+        template<class T>
+        T dimension_z() const
+        {
+            return dimension<T>(2);
+        }
+
         const transform_t& transformation() const
         {
             return _t;
