@@ -48,7 +48,7 @@ namespace VirtualRobot
         /*!Standard Constructor
         If collision checks should be done in parallel, different CollisionCheckers can be specified.
         */
-        CollisionModelImplementation(TriMeshModelPtr modelData, CollisionCheckerPtr /*pColChecker*/, int id)
+        CollisionModelImplementation(const TriMeshModelPtr& modelData, const CollisionCheckerPtr& /*pColChecker*/, int id)
         {
             this->modelData = modelData;
             this->id = id;
@@ -77,7 +77,7 @@ namespace VirtualRobot
             std::cout << "Dummy Collision Model Implementation..." << std::endl;
         };
 
-        TriMeshModelPtr getTriMeshModel()
+        const TriMeshModelPtr& getTriMeshModel()
         {
             return modelData;
         }

@@ -49,9 +49,9 @@ namespace VirtualRobot
         CollisionCheckerPQP();
         ~CollisionCheckerPQP() override;
 
-        float calculateDistance(const CollisionModelPtr& model1, const CollisionModelPtr& model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1 = NULL, int* trID2 = NULL) override;
-        bool checkCollision(const CollisionModelPtr& model1, const CollisionModelPtr& model2) override; //, Eigen::Vector3f *storeContact = NULL);
-        bool checkCollision(const CollisionModelPtr& model1, const Eigen::Vector3f& point, float tolerance = 0.0f) override;
+        float calculateDistance(const CollisionModelPtr& model1, const CollisionModelPtr& model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1 = NULL, int* trID2 = NULL) final;
+        bool checkCollision(const CollisionModelPtr& model1, const CollisionModelPtr& model2) final; //, Eigen::Vector3f *storeContact = NULL);
+        bool checkCollision(const CollisionModelPtr& model1, const Eigen::Vector3f& point, float tolerance = 0.0f) final;
 
         MultiCollisionResult checkMultipleCollisions(CollisionModelPtr const& model1, CollisionModelPtr const& model2);
 

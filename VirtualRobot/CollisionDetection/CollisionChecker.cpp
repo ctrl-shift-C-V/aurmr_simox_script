@@ -75,26 +75,26 @@ namespace VirtualRobot
     = default;
 
 
-    float CollisionChecker::calculateDistance(SceneObjectSetPtr model1, SceneObjectSetPtr model2)
+    float CollisionChecker::calculateDistance(const SceneObjectSetPtr& model1, const SceneObjectSetPtr& model2)
     {
         VR_ASSERT(model1 && model2);
         return calculateDistance(model1, model2, tmpV1, tmpV2, nullptr, nullptr);
     }
 
-    float CollisionChecker::calculateDistance(CollisionModelPtr model1, SceneObjectSetPtr model2)
+    float CollisionChecker::calculateDistance(const CollisionModelPtr& model1, const SceneObjectSetPtr& model2)
     {
         VR_ASSERT(model1 && model2);
         return calculateDistance(model1, model2, tmpV1, tmpV2, nullptr, nullptr);
     }
 
-    float CollisionChecker::calculateDistance(CollisionModelPtr model1, CollisionModelPtr model2)
+    float CollisionChecker::calculateDistance(const CollisionModelPtr& model1, const CollisionModelPtr& model2)
     {
         VR_ASSERT(model1 && model2);
         return calculateDistance(model1, model2, tmpV1, tmpV2, nullptr, nullptr);
     }
 
 
-    float CollisionChecker::calculateDistance(SceneObjectPtr model1, SceneObjectSetPtr model2)
+    float CollisionChecker::calculateDistance(const SceneObjectPtr& model1, const SceneObjectSetPtr& model2)
     {
         VR_ASSERT(model1 && model2);
         RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
@@ -110,7 +110,7 @@ namespace VirtualRobot
         }
     }
 
-    float CollisionChecker::calculateDistance(SceneObjectPtr model1, SceneObjectPtr model2)
+    float CollisionChecker::calculateDistance(const SceneObjectPtr& model1, const SceneObjectPtr& model2)
     {
         VR_ASSERT(model1 && model2);
         RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
@@ -139,7 +139,7 @@ namespace VirtualRobot
     }
 
 
-    float CollisionChecker::calculateDistance(SceneObjectPtr model1, SceneObjectSetPtr model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
+    float CollisionChecker::calculateDistance(const SceneObjectPtr& model1, const SceneObjectSetPtr& model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
     {
         VR_ASSERT(model1 && model2);
         RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
@@ -155,7 +155,7 @@ namespace VirtualRobot
         }
     }
 
-    float CollisionChecker::calculateDistance(SceneObjectPtr model1, SceneObjectPtr model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
+    float CollisionChecker::calculateDistance(const SceneObjectPtr& model1, const SceneObjectPtr& model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
     {
         VR_ASSERT(model1 && model2);
         RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
@@ -183,7 +183,7 @@ namespace VirtualRobot
         }
     }
 
-    float CollisionChecker::calculateDistance(SceneObjectSetPtr model1, SceneObjectSetPtr model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
+    float CollisionChecker::calculateDistance(const SceneObjectSetPtr& model1, const SceneObjectSetPtr& model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
     {
         VR_ASSERT(model1 && model2);
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == model2->getCollisionChecker(), "Collision models are linked to different Collision Checker instances");
@@ -240,7 +240,7 @@ namespace VirtualRobot
         return fResult;
     }
 
-    float CollisionChecker::calculateDistance(CollisionModelPtr model1, SceneObjectSetPtr model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
+    float CollisionChecker::calculateDistance(const CollisionModelPtr& model1, const SceneObjectSetPtr& model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
     {
         VR_ASSERT(model1 && model2);
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == model2->getCollisionChecker(), "Collision models are linked to different Collision Checker instances");
@@ -289,7 +289,7 @@ namespace VirtualRobot
         return fResult;
     }
 
-    float CollisionChecker::calculateDistance(CollisionModelPtr model1, CollisionModelPtr model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
+    float CollisionChecker::calculateDistance(const CollisionModelPtr& model1, const CollisionModelPtr& model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1, int* trID2)
     {
         VR_ASSERT(model1 && model2);
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == model2->getCollisionChecker(), "Collision models are linked to different Collision Checker instances");
@@ -301,7 +301,7 @@ namespace VirtualRobot
 
 
 
-    bool CollisionChecker::checkCollision(std::vector<CollisionModelPtr>& model1, CollisionModelPtr model2)
+    bool CollisionChecker::checkCollision(const std::vector<CollisionModelPtr>& model1, const CollisionModelPtr& model2)
     {
         VR_ASSERT(model2);
         VR_ASSERT(isInitialized());
@@ -312,22 +312,18 @@ namespace VirtualRobot
             return false;
         }
 
-        std::vector< CollisionModelPtr >::iterator it1 = model1.begin();
-
-        while (it1 != model1.end())
+        for (const auto& m1 : model1)
         {
-            if (checkCollision(*it1, model2))
+            if (checkCollision(m1, model2))
             {
                 return true;
             }
-
-            it1++;
         }
 
         return false;
     }
 
-    bool CollisionChecker::checkCollision(SceneObjectSetPtr model1, SceneObjectSetPtr model2)
+    bool CollisionChecker::checkCollision(const SceneObjectSetPtr& model1, const SceneObjectSetPtr& model2)
     {
         VR_ASSERT(model1 && model2);
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == model2->getCollisionChecker(), "Collision models are linked to different Collision Checker instances");
@@ -370,7 +366,7 @@ namespace VirtualRobot
         return false;
     }
 
-    bool CollisionChecker::checkCollision(SceneObjectPtr model1, SceneObjectSetPtr model2)
+    bool CollisionChecker::checkCollision(const SceneObjectPtr& model1, const SceneObjectSetPtr& model2)
     {
         VR_ASSERT(model1 && model2);
         RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
@@ -386,7 +382,7 @@ namespace VirtualRobot
         }
     }
 
-    SceneObjectSetPtr CollisionChecker::getRobotModels(RobotPtr r)
+    SceneObjectSetPtr CollisionChecker::getRobotModels(const RobotPtr& r)
     {
         SceneObjectSetPtr result(new SceneObjectSet(r->getName(), shared_from_this()));
         std::vector<RobotNodePtr> cm = r->getRobotNodes();
@@ -403,7 +399,7 @@ namespace VirtualRobot
     }
 
 
-    bool CollisionChecker::checkCollision(CollisionModelPtr model1, SceneObjectSetPtr model2)
+    bool CollisionChecker::checkCollision(const CollisionModelPtr& model1, const SceneObjectSetPtr& model2)
     {
         VR_ASSERT(model1 && model2);
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == model2->getCollisionChecker(), "Collision models are linked to different Collision Checker instances");
@@ -433,7 +429,7 @@ namespace VirtualRobot
         return false;
     }
 
-    bool CollisionChecker::checkCollision(SceneObjectPtr model1, SceneObjectPtr model2)
+    bool CollisionChecker::checkCollision(const SceneObjectPtr& model1, const SceneObjectPtr& model2)
     {
         VR_ASSERT(model1 && model2);
         RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
@@ -461,7 +457,7 @@ namespace VirtualRobot
         }
     }
 
-    bool CollisionChecker::checkCollision(CollisionModelPtr model, const Eigen::Vector3f &point, float tolerance)
+    bool CollisionChecker::checkCollision(const CollisionModelPtr& model, const Eigen::Vector3f &point, float tolerance)
     {
         VR_ASSERT(model);
         VR_ASSERT_MESSAGE(model->getCollisionChecker() == shared_from_this(), "Collision models are linked to different Collision Checker instances");
@@ -470,7 +466,7 @@ namespace VirtualRobot
         return collisionCheckerImplementation->checkCollision(model, point, tolerance);//, storeContact);
     }
 
-    bool CollisionChecker::checkCollision(SceneObjectSetPtr modelSet, const Eigen::Vector3f &point, float tolerance)
+    bool CollisionChecker::checkCollision(const SceneObjectSetPtr& modelSet, const Eigen::Vector3f &point, float tolerance)
     {
         VR_ASSERT(modelSet);
         VR_ASSERT_MESSAGE(modelSet->getCollisionChecker() == shared_from_this(), "Collision models are linked to different Collision Checker instances");
@@ -495,7 +491,7 @@ namespace VirtualRobot
         return false;
     }
 
-    bool CollisionChecker::checkCollision(CollisionModelPtr model1, CollisionModelPtr model2)
+    bool CollisionChecker::checkCollision(const CollisionModelPtr& model1, const CollisionModelPtr& model2)
     {
         THROW_VR_EXCEPTION_IF(!model1, "model1 is null");
         THROW_VR_EXCEPTION_IF(!model2, "model2 is null");
@@ -752,7 +748,7 @@ namespace VirtualRobot
         return COL_CHECKER_IMPL::IsSupported_Multithreading_MultipleColCheckers();
     }
 
-    void CollisionChecker::getContacts(const MathTools::Plane& p, CollisionModelPtr colModel, std::vector< MathTools::ContactPoint >& storeContatcs, float maxDist /*= 1.0f*/)
+    void CollisionChecker::getContacts(const MathTools::Plane& p, const CollisionModelPtr& colModel, std::vector< MathTools::ContactPoint >& storeContatcs, float maxDist /*= 1.0f*/)
     {
         THROW_VR_EXCEPTION_IF(!colModel, "NULl data");
 

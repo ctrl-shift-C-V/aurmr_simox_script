@@ -51,7 +51,7 @@ namespace VirtualRobot
         /*!Standard Constructor
         Ptr If collision checks should be done in parallel, different CollisionCheckers can be specified.
         */
-        CollisionModelPQP(TriMeshModelPtr modelData, CollisionCheckerPtr colChecker, int id);
+        CollisionModelPQP(const TriMeshModelPtr& modelData, CollisionCheckerPtr colChecker, int id);
         /*!Standard Destructor
         */
         ~CollisionModelPQP() override;
