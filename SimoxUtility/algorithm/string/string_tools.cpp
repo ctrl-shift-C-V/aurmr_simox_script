@@ -79,7 +79,10 @@ std::string join(const std::vector<std::string> vec, const std::string& delimite
             if (ignoreEmptyElements && vec.at(index).empty()) continue;
             ss << vec.at(index);
         }
-        if (index != vec.size()) ss << delimiter;
+        if (index < vec.size() - 1)
+        {
+            ss << delimiter;
+        }
     }
     return ss.str();
 }
