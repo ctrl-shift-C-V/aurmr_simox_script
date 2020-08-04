@@ -4,4 +4,5 @@
 
 #include "algorithm/for_each_if.h"
 #include "algorithm/get_map_keys_values.h"
+#include "algorithm/minmax.h"
 #include "algorithm/string.h"
