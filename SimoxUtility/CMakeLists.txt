@@ -93,6 +93,7 @@ SET(INCLUDES
     algorithm/for_each_if.h
     algorithm/apply.hpp
     algorithm/get_map_keys_values.h
+    algorithm/minmax.h
     algorithm/string/string_tools.h
     algorithm/string/string_conversion.h
     algorithm/string/string_conversion_eigen.h

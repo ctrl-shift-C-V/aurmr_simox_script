@@ -1,11 +1,13 @@
 #pragma once
 
 #include <algorithm>
+#include <functional>
 #include <initializer_list>
 #include <map>
 #include <string>
 
 #include <SimoxUtility/algorithm/apply.hpp>
+#include <SimoxUtility/algorithm/minmax.h>
 
 #include "Color.h"
 #include "interpolation.h"
@@ -78,6 +80,24 @@ namespace simox::color
         void set_vmax(float vmax) { this->_vmax = vmax; }
         void set_vmin(const std::vector<float>& values) { set_vmin(*std::max_element(values.begin(), values.end())); }
         void set_vmax(const std::vector<float>& values) { set_vmax(*std::max_element(values.begin(), values.end())); }
+        /**
+         * @brief Set the value minimum to the minimum of `values`, measured by `unaryFunc`.
+         * You may have to specify the template argument (when template argument deduction fails).
+         */
+        template <class T>
+        void set_vmin(const std::vector<T>& values, std::function<float(const T&)> unaryFunc)
+        {
+            set_vmax(simox::alg::min(values, unaryFunc));
+        }
+        /**
+         * @brief Set the value maximum to the maximum of `values`, measured by `unaryFunc`.
+         * You may have to specify the template argument (when template argument deduction fails).
+         */
+        template <class T>
+        void set_vmax(const std::vector<T>& values, std::function<float(const T&)> unaryFunc)
+        {
+            set_vmax(simox::alg::max(values, unaryFunc));
+        }
 
         /// Sets the value limits, i.e. scales the color map to the range [vmin, vmax].
         void set_vlimits(float vmin, float vmax)
@@ -91,9 +111,20 @@ namespace simox::color
             set_vmin(*min);
             set_vmax(*max);
         }
+        /**
+         * @brief Set the value minimum and maximum to the minimum and maximum of `values`, measured by `unaryFunc`.
+         * You may have to specify the template argument (when template argument deduction fails).
+         */
+        template <class T>
+        void set_vlimits(const std::vector<T>& values, std::function<float(const T&)> unaryFunc)
+        {
+            const auto [min, max] = simox::alg::minmax(simox::alg::min(values, unaryFunc));
+            set_vmin(unaryFunc(min));
+            set_vmax(unaryFunc(max));
+        }
 
 
-        /// Get this colormap reversed (but defined in the same value range as this).
+        /// Get this colormap reversed (but defined in the same value range as `*this`).
         ColorMap reversed() const;
 
 
