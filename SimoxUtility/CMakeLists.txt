@@ -211,6 +211,8 @@ SET(INCLUDES
     math/zero.h
     math/isfinite.h
 
+    math/project_to_plane.h
+
     meta/undefined_t/undefined_t.h
     meta/undefined_t/is_set.h
     meta/eigen/enable_if_compile_time_size.h
