@@ -8,28 +8,24 @@
 //base
 namespace simox::meta
 {
+    template < class Derived, int M, int N>
+    static constexpr bool is_matMN_v = Derived::RowsAtCompileTime == M &&
+                                       Derived::ColsAtCompileTime == N;
+
     template<class Derived, int M, int N, class T2 = void>
-    using enable_if_matMN = std::enable_if_t <
-                            Derived::RowsAtCompileTime == M &&
-                            Derived::ColsAtCompileTime == N,
-                            T2 >;
+    using enable_if_matMN = std::enable_if_t<is_matMN_v<Derived, M, N>, T2>;
 
     template<class D1, int K, int L, class D2, int M, int N, class T2 = void>
     using enable_if_matKL_matMN = std::enable_if_t <
-                                  D1::RowsAtCompileTime == K &&
-                                  D1::ColsAtCompileTime == L &&
-                                  D2::RowsAtCompileTime == M &&
-                                  D2::ColsAtCompileTime == N,
+                                  is_matMN_v<D1, K, L>&&
+                                  is_matMN_v<D2, M, N>,
                                   T2 >;
 
     template<class D1, int K, int L, class D2, int M, int N, class D3, int O, int P, class T2 = void>
     using enable_if_matKL_matMN_matOP = std::enable_if_t <
-                                        D1::RowsAtCompileTime == K &&
-                                        D1::ColsAtCompileTime == L &&
-                                        D2::RowsAtCompileTime == M &&
-                                        D2::ColsAtCompileTime == N &&
-                                        D3::RowsAtCompileTime == O &&
-                                        D3::ColsAtCompileTime == P,
+                                        is_matMN_v<D1, K, L>&&
+                                        is_matMN_v<D2, M, N>&&
+                                        is_matMN_v<D3, O, P>,
                                         T2 >;
 }
 
@@ -37,6 +33,13 @@ namespace simox::meta
 //one v3 / m3 / m4
 namespace simox::meta
 {
+    template < class Derived>
+    static constexpr bool is_mat3_v = is_matMN_v<Derived, 3, 3>;
+    template < class Derived>
+    static constexpr bool is_mat4_v = is_matMN_v<Derived, 4, 4>;
+    template < class Derived>
+    static constexpr bool is_vec3_v = is_matMN_v<Derived, 3, 1>;
+
     template<class Derived, class T2 = void>
     using enable_if_mat3 = enable_if_matMN<Derived, 3, 3, T2 >;
 
