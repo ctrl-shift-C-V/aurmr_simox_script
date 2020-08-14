@@ -41,6 +41,7 @@ namespace VirtualRobot
         static TriMeshModel MakeBox(float a, float b, float c);
         static TriMeshModel MakePoint(float x, float y, float z);
         static TriMeshModelPtr MakePointPtr(float x, float y, float z);
+        static TriMeshModelPtr MakePointPtr(const Eigen::Vector3f& p);
 
         /// Constructor.
         TriMeshModel();

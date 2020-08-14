@@ -59,7 +59,11 @@ namespace VirtualRobot
     }
     TriMeshModelPtr TriMeshModel::MakePointPtr(float x, float y, float z)
     {
-        return std::make_shared<VirtualRobot::TriMeshModel>(MakePoint(y, y, z));
+        return std::make_shared<VirtualRobot::TriMeshModel>(MakePoint(x, y, z));
+    }
+    TriMeshModelPtr TriMeshModel::MakePointPtr(const Eigen::Vector3f& p)
+    {
+        return MakePointPtr(p.x(), p.y(), p.z());
     }
 
     TriMeshModel::TriMeshModel(const std::vector<triangle>& triangles)
