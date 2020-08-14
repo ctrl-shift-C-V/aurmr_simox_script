@@ -525,7 +525,11 @@ namespace VirtualRobot
         }
     }
 
-    RobotNodePtr RobotNode::clone(RobotPtr newRobot, bool cloneChildren, RobotNodePtr initializeWithParent, CollisionCheckerPtr colChecker, float scaling)
+    RobotNodePtr RobotNode::clone(RobotPtr newRobot, bool cloneChildren,
+                                  RobotNodePtr initializeWithParent,
+                                  CollisionCheckerPtr colChecker,
+                                  float scaling,
+                                  bool preventCloningMeshesIfScalingIs1)
     {
         ReadLockPtr lock = getRobot()->getReadLock();
 
@@ -539,16 +543,17 @@ namespace VirtualRobot
 
         VisualizationNodePtr clonedVisualizationNode;
 
+        const bool deepMeshClone = !preventCloningMeshesIfScalingIs1 || std::abs(scaling - 1) <= 0;
         if (visualizationModel)
         {
-            clonedVisualizationNode = visualizationModel->clone(true, scaling);
+            clonedVisualizationNode = visualizationModel->clone(deepMeshClone, scaling);
         }
 
         CollisionModelPtr clonedCollisionModel;
 
         if (collisionModel)
         {
-            clonedCollisionModel = collisionModel->clone(colChecker, scaling);
+            clonedCollisionModel = collisionModel->clone(colChecker, scaling, deepMeshClone);
         }
 
         RobotNodePtr result = _clone(newRobot, clonedVisualizationNode, clonedCollisionModel, colChecker, scaling);
@@ -569,7 +574,7 @@ namespace VirtualRobot
 
                 if (n)
                 {
-                    RobotNodePtr c = n->clone(newRobot, true, RobotNodePtr(), colChecker, scaling);
+                    RobotNodePtr c = n->clone(newRobot, true, RobotNodePtr(), colChecker, scaling, preventCloningMeshesIfScalingIs1);
 
                     if (c)
                     {

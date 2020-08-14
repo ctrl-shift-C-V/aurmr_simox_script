@@ -754,7 +754,14 @@ namespace VirtualRobot
         return result;
     }
 
-    VirtualRobot::RobotPtr Robot::extractSubPart(RobotNodePtr startJoint, const std::string& newRobotType, const std::string& newRobotName, bool cloneRNS, bool cloneEEFs, CollisionCheckerPtr collisionChecker, float scaling)
+    VirtualRobot::RobotPtr Robot::extractSubPart(RobotNodePtr startJoint,
+            const std::string& newRobotType,
+            const std::string& newRobotName,
+            bool cloneRNS,
+            bool cloneEEFs,
+            CollisionCheckerPtr collisionChecker,
+            float scaling,
+            bool preventCloningMeshesIfScalingIs1)
     {
         THROW_VR_EXCEPTION_IF(!startJoint, " StartJoint is nullptr");
         THROW_VR_EXCEPTION_IF(!hasRobotNode(startJoint), " StartJoint '" + startJoint->getName() + "' is not part of this robot '" + getName() + "'");
@@ -770,7 +777,7 @@ namespace VirtualRobot
         //stefan Warning!!!!! which robot-type to create
         RobotPtr result(new LocalRobot(newRobotName, newRobotType));
 
-        RobotNodePtr rootNew = startJoint->clone(result, true, RobotNodePtr(), colChecker, scaling);
+        RobotNodePtr rootNew = startJoint->clone(result, true, RobotNodePtr(), colChecker, scaling, preventCloningMeshesIfScalingIs1);
         THROW_VR_EXCEPTION_IF(!rootNew, "Clone failed...");
         result->setRootNode(rootNew);
         result->setScaling(scaling);
@@ -884,9 +891,17 @@ namespace VirtualRobot
     }
 
 
-    VirtualRobot::RobotPtr Robot::clone(const std::string& name, CollisionCheckerPtr collisionChecker, float scaling)
+    VirtualRobot::RobotPtr Robot::clone(const std::string& name,
+                                        CollisionCheckerPtr collisionChecker,
+                                        float scaling,
+                                        bool preventCloningMeshesIfScalingIs1)
     {
-        VirtualRobot::RobotPtr result = extractSubPart(this->getRootNode(), this->getType(), name, true, true, collisionChecker, scaling);
+        VirtualRobot::RobotPtr result = extractSubPart(this->getRootNode(),
+                                        this->getType(),
+                                        name, true, true,
+                                        collisionChecker,
+                                        scaling,
+                                        preventCloningMeshesIfScalingIs1);
         result->setGlobalPose(getGlobalPose());
         result->filename = filename;
         result->type = type;
@@ -894,9 +909,11 @@ namespace VirtualRobot
         return result;
     }
 
-    RobotPtr Robot::clone()
+    RobotPtr Robot::clone(CollisionCheckerPtr collisionChecker,
+                          float scaling,
+                          bool preventCloningMeshesIfScalingIs1)
     {
-        return clone(getName());
+        return clone(getName(), collisionChecker, scaling, preventCloningMeshesIfScalingIs1);
     }
 
     void Robot::createVisualizationFromCollisionModels()

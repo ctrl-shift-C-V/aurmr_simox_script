@@ -144,7 +144,7 @@ namespace VirtualRobot
         /*
             This call locks the robot's mutex.
         */
-        virtual Eigen::Matrix4f getGlobalPose() const override;
+        Eigen::Matrix4f getGlobalPose() const override;
 
         /*!
             The pose of this node in the root coordinate system of the robot.
@@ -235,7 +235,12 @@ namespace VirtualRobot
             \param colChecker Must only be set if the cloned RobotNode should be registered to a different collision checker instance.
             \param scaling Scale Can be set to create a scaled version of this robot. Scaling is applied on kinematic, visual, and collision data.
         */
-        virtual RobotNodePtr clone(RobotPtr newRobot, bool cloneChildren = true, RobotNodePtr initializeWithParent = RobotNodePtr(), CollisionCheckerPtr colChecker = CollisionCheckerPtr(), float scaling = 1.0f);
+        virtual RobotNodePtr clone(RobotPtr newRobot,
+                                   bool cloneChildren = true,
+                                   RobotNodePtr initializeWithParent = RobotNodePtr(),
+                                   CollisionCheckerPtr colChecker = CollisionCheckerPtr(),
+                                   float scaling = 1.0f,
+                                   bool preventCloningMeshesIfScalingIs1 = false);
 
         inline float getJointValueOffset() const
         {

@@ -233,7 +233,14 @@ namespace VirtualRobot
             \param collisionChecker The new robot can be registered to a different collision checker. If not set, the collision checker of the original robot is used.
             \param scaling Can be set to create a scaled version of this robot. Scaling is applied on kinematic, visual, and collision data.
         */
-        virtual RobotPtr extractSubPart(RobotNodePtr startJoint, const std::string& newRobotType, const std::string& newRobotName, bool cloneRNS = true, bool cloneEEFs = true, CollisionCheckerPtr collisionChecker = CollisionCheckerPtr(), float scaling = 1.0f);
+        virtual RobotPtr extractSubPart(RobotNodePtr startJoint,
+                                        const std::string& newRobotType,
+                                        const std::string& newRobotName,
+                                        bool cloneRNS = true,
+                                        bool cloneEEFs = true,
+                                        CollisionCheckerPtr collisionChecker = CollisionCheckerPtr(),
+                                        float scaling = 1.0f,
+                                        bool preventCloningMeshesIfScalingIs1 = false);
 
         /*!
             Clones this robot.
@@ -242,8 +249,13 @@ namespace VirtualRobot
             \param scaling Scale Can be set to create a scaled version of this robot. Scaling is applied on kinematic, visual, and collision data.
 
         */
-        virtual RobotPtr clone(const std::string& name, CollisionCheckerPtr collisionChecker = CollisionCheckerPtr(), float scaling = 1.0f);
-        virtual RobotPtr clone();
+        virtual RobotPtr clone(const std::string& name,
+                               CollisionCheckerPtr collisionChecker = CollisionCheckerPtr(),
+                               float scaling = 1.0f,
+                               bool preventCloningMeshesIfScalingIs1 = false);
+        virtual RobotPtr clone(CollisionCheckerPtr collisionChecker = CollisionCheckerPtr(),
+                               float scaling = 1.0f,
+                               bool preventCloningMeshesIfScalingIs1 = false);
 
         //! Just storing the filename.
         virtual void setFilename(const std::string& filename);
@@ -443,7 +455,7 @@ namespace VirtualRobot
     std::shared_ptr<T> Robot::getVisualization(SceneObject::VisualizationType visuType, bool sensors)
     {
         static_assert(::std::is_base_of_v<Visualization, T>,
-                "TEMPLATE_PARAMETER_FOR_VirtualRobot_getVisualization_MUST_BT_A_SUBCLASS_OF_VirtualRobot__Visualization");
+                      "TEMPLATE_PARAMETER_FOR_VirtualRobot_getVisualization_MUST_BT_A_SUBCLASS_OF_VirtualRobot__Visualization");
         std::vector<RobotNodePtr> collectedRobotNodes;
         getRobotNodes(collectedRobotNodes);
         std::vector<VisualizationNodePtr> collectedVisualizationNodes;
