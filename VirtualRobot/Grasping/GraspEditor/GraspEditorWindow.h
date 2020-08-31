@@ -24,7 +24,7 @@
 
 #include <vector>
 
-#include "ui_GraspEditor.h"
+// #include "ui_GraspEditor.h"
 
 namespace Ui
 {

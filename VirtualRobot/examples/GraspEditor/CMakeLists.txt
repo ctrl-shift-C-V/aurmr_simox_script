@@ -1,12 +1,10 @@
 PROJECT ( GraspEditor )
 
 IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)
-    MESSAGE (STATUS " ** Adding GraspEditor gui")
 
-    SET(demo_SRCS    GraspEditorWindow.cpp GraspEditor.cpp)
-    SET(demo_INCS    GraspEditorWindow.h)
-    SET(GUI_MOC_HDRS ${demo_INCS})
-    SET(GUI_UIS      GraspEditor.ui)
+	# the variable "demo_SRCS" contains all .cpp files of this project
+        FILE(GLOB demo_SRCS ${PROJECT_SOURCE_DIR}/GraspEditor.cpp)
+
 
 	# create the executable
 	VirtualRobotQtApplication(${PROJECT_NAME} "${demo_SRCS}" "${demo_INCS}" "${GUI_MOC_HDRS}" "${GUI_UIS}")
