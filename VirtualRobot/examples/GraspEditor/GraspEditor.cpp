@@ -21,7 +21,7 @@ using namespace VirtualRobot;
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
-#include <VirtualRobot/Grasping/GraspEditor/GraspEditorWindow.h>
+#include "GraspEditorWindow.h"
 
 
 int main(int argc, char* argv[])

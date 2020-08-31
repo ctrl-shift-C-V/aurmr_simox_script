@@ -713,19 +713,6 @@ if(Simox_BUILD_EXAMPLES)
     ADD_SUBDIRECTORY(examples/)
 endif()
 
-# -----------------------------------------------------------------------------------
-# Adding the UI files to the library
-if (Simox_USE_COIN_VISUALIZATION AND SOQT_FOUND)
-    MESSAGE (STATUS " ** Adding GraspEditor gui")
-
-
-    SET(SOURCES ${SOURCES} Grasping/GraspEditor/GraspEditorWindow.cpp)
-    SET(INCLUDES ${INCLUDES}
-        Grasping/GraspEditor/GraspEditorWindow.h
-        Grasping/GraspEditor/GraspEditor.ui
-    )
-endif()
-
 # Finished adding UI files
 #-----------------------------------------------------------------------------------
 set_target_properties(VirtualRobot PROPERTIES SOURCES "${SOURCES};${INCLUDES}")
