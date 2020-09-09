@@ -74,6 +74,8 @@ namespace VirtualRobot
         const std::vector<RobotNodePtr>& getAllRobotNodes() const;
 
         std::vector< std::string > getNodeNames() const;
+        std::vector<float> getNodeLimitsLo() const;
+        std::vector<float> getNodeLimitsHi() const;
         /*!
             Returns the topmost node of the robot's kinematic tree to be used for updating all members of this set.
             This node is usually defined in the RobotNodeSet's XML definition.
