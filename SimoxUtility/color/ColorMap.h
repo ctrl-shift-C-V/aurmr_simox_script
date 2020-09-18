@@ -87,7 +87,7 @@ namespace simox::color
         template <class T>
         void set_vmin(const std::vector<T>& values, std::function<float(const T&)> unaryFunc)
         {
-            set_vmax(simox::alg::min(values, unaryFunc));
+            set_vmin(simox::alg::min(values, unaryFunc));
         }
         /**
          * @brief Set the value maximum to the maximum of `values`, measured by `unaryFunc`.
