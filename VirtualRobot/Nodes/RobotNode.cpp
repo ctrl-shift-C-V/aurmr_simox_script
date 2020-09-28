@@ -953,7 +953,7 @@ namespace VirtualRobot
         }
         ReadLockPtr lock = getRobot()->getReadLock();
         const Eigen::Matrix4f pinroot = getPoseInRootFrame();
-        const Eigen::Matrix4f finroot = getPoseInRootFrame();
+        const Eigen::Matrix4f finroot = frame->getPoseInRootFrame();
         return finroot.inverse() * pinroot;
     }
     Eigen::Vector3f RobotNode::getPositionInFrame(const RobotNodePtr& frame) const
