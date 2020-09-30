@@ -327,6 +327,27 @@ namespace VirtualRobot
         return res;
     }
 
+    std::vector<float> RobotNodeSet::getNodeLimitsLo() const
+    {
+        std::vector<float> r;
+        r.reserve(robotNodes.size());
+        for (auto n : robotNodes)
+        {
+            r.emplace_back(n->getJointLimitLo());
+        }
+        return r;
+    }
+    std::vector<float> RobotNodeSet::getNodeLimitsHi() const
+    {
+        std::vector<float> r;
+        r.reserve(robotNodes.size());
+        for (auto n : robotNodes)
+        {
+            r.emplace_back(n->getJointLimitHi());
+        }
+        return r;
+    }
+
     RobotNodePtr RobotNodeSet::getKinematicRoot() const
     {
         return kinematicRoot;

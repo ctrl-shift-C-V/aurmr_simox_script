@@ -126,6 +126,22 @@ namespace VirtualRobot
             return localTransformation;
         }
 
+        using SceneObject::getChildren;
+        template<class T>
+        auto getChildren()
+        {
+            std::vector<std::shared_ptr<T>> result;
+            for (const auto& c : getChildren())
+            {
+                RobotNodePtr n = std::dynamic_pointer_cast<T>(c);
+                if (n)
+                {
+                    result.emplace_back(n);
+                }
+            }
+            return result;
+        }
+
         /*!
             Initialize robot node. Here pointers to robot and children are created from names.
             Be sure all children are created and registered to robot before calling initialize.

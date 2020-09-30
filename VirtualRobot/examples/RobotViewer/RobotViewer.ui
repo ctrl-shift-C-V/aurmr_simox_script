@@ -42,9 +42,9 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-91</y>
-          <width>847</width>
-          <height>1038</height>
+          <y>0</y>
+          <width>841</width>
+          <height>1061</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -397,23 +397,85 @@
              <widget class="QWidget" name="widget_4" native="true">
               <layout class="QGridLayout" name="gridLayout_8">
                <item row="1" column="0">
-                <widget class="QLabel" name="labelInfo2">
+                <widget class="QLabel" name="label_7">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
-                  <string>TextLabel</string>
+                  <string>Total</string>
                  </property>
                 </widget>
                </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="labelInfo1">
+               <item row="2" column="2">
+                <widget class="QLabel" name="labelTriColRNS">
                  <property name="text">
-                  <string>TextLabel</string>
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QLabel" name="labelTriVisuRNS">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLabel" name="labelTriVisuTotal">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QLabel" name="labelTriColJoint">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_9">
+                 <property name="text">
+                  <string>Joint</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QLabel" name="labelTriColTotal">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QLabel" name="labelTriVisuJoint">
+                 <property name="text">
+                  <string/>
                  </property>
                 </widget>
                </item>
                <item row="2" column="0">
-                <widget class="QLabel" name="labelInfo3">
+                <widget class="QLabel" name="label_10">
                  <property name="text">
-                  <string>TextLabel</string>
+                  <string>RobotNodeSet</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLabel" name="label_14">
+                 <property name="text">
+                  <string>Visu</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QLabel" name="label_15">
+                 <property name="text">
+                  <string>Col</string>
                  </property>
                 </widget>
                </item>

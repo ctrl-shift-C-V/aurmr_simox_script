@@ -1,3 +1,5 @@
+#include <filesystem>
+
 #include "AssimpReader.h"
 #include <VirtualRobot/Visualization/TriMeshModel.h>
 #include <VirtualRobot/ManipulationObject.h>
@@ -169,6 +171,24 @@ namespace VirtualRobot
             return both;
         }();
         return extensions;
+    }
+    bool AssimpReader::can_load(const std::string& file)
+    {
+        std::filesystem::path p{file};
+        if (!p.has_extension())
+        {
+            return false;
+        }
+        std::string ext = p.extension().string().substr(1);
+        for (auto& c : ext)
+        {
+            c = std::toupper(c);
+        }
+        if (ext.empty())
+        {
+            return false;
+        }
+        return get_extensions().find(ext) != std::string::npos;
     }
 
     bool AssimpReader::readFileAsTriMesh(const std::string& filename, const TriMeshModelPtr& t)

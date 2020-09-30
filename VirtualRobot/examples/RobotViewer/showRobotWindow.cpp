@@ -217,22 +217,13 @@ void showRobotWindow::displayTriangles()
         trisJointCol = currentRobotNode->getNumFaces(true);
     }
 
-    if (UI.checkBoxColModel->checkState() == Qt::Checked)
-    {
-        text1 = tr("Total\t:") + QString::number(trisAllCol);
-        text2 = tr("RobotNodeSet:\t") + QString::number(trisRNSCol);
-        text3 = tr("Joint:\t") + QString::number(trisJointCol);
-    }
-    else
-    {
-        text1 = tr("Total:\t") + QString::number(trisAllFull);
-        text2 = tr("RobotNodeSet:\t") + QString::number(trisRNSFull);
-        text3 = tr("Joint:\t") + QString::number(trisJointFull);
-    }
+    UI.labelTriVisuTotal->setText(QString::number(trisAllFull));
+    UI.labelTriVisuRNS  ->setText(QString::number(trisRNSFull));
+    UI.labelTriVisuJoint->setText(QString::number(trisJointFull));
 
-    UI.labelInfo1->setText(text1);
-    UI.labelInfo2->setText(text2);
-    UI.labelInfo3->setText(text3);
+    UI.labelTriColTotal->setText(QString::number(trisAllCol));
+    UI.labelTriColRNS  ->setText(QString::number(trisRNSCol));
+    UI.labelTriColJoint->setText(QString::number(trisJointCol));
 }
 
 void showRobotWindow::robotFullModel()

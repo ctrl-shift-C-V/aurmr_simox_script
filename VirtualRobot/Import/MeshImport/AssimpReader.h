@@ -21,6 +21,7 @@ namespace VirtualRobot
             return "Open Asset Import Library";
         }
         static std::string get_extensions();
+        static bool can_load(const std::string& file);
 
         // read data and store it to trimesh
         bool readFileAsTriMesh(const std::string& _filename, const TriMeshModelPtr& t);
