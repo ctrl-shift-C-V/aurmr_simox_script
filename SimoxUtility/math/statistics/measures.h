@@ -7,6 +7,7 @@
 
 
 #include <SimoxUtility/error/SimoxError.h>
+#include <SimoxUtility/math/mean.h>
 
 
 namespace simox::math
@@ -51,13 +52,7 @@ namespace detail
     Float mean(const std::vector<Float>& values)
     {
         detail::check_not_empty(values);
-
-        Float sum = 0;
-        for (Float v : values)
-        {
-            sum += v;
-        }
-        return sum / values.size();
+        return simox::math::mean(values.begin(), values.end());
     }
 
     template <typename Float>
