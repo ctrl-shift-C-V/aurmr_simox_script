@@ -90,7 +90,7 @@ float simox::math::quantile(const std::vector<float>& _values, float p, bool isS
     }
 }
 
-float simox::math::lowerQuartile(const std::vector<float>& values, bool isSorted)
+float simox::math::lower_quartile(const std::vector<float>& values, bool isSorted)
 {
     return quantile(values, .25, isSorted);
 }
@@ -100,20 +100,20 @@ float simox::math::median(const std::vector<float>& values, bool isSorted)
     return quantile(values, .5, isSorted);
 }
 
-float simox::math::upperQuartile(const std::vector<float>& values, bool isSorted)
+float simox::math::upper_quartile(const std::vector<float>& values, bool isSorted)
 {
     return quantile(values, .75, isSorted);
 }
 
-float simox::math::interquartileRange(const std::vector<float>& _values, bool isSorted)
+float simox::math::interquartile_range(const std::vector<float>& _values, bool isSorted)
 {
     checkNotEmpty(_values);
 
     const std::vector<float>& values = isSorted ? _values : sorted(_values);
-    return interquartileRange(lowerQuartile(values, true), upperQuartile(values, true));
+    return interquartile_range(lower_quartile(values, true), upper_quartile(values, true));
 }
 
-float simox::math::interquartileRange(float lowerQuartile, float upperQuartile)
+float simox::math::interquartile_range(float lowerQuartile, float upperQuartile)
 {
     return upperQuartile - lowerQuartile;
 }

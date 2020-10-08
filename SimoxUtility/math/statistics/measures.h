@@ -19,11 +19,11 @@ namespace simox::math
 
     float quantile(const std::vector<float>& values, float p, bool isSorted=false);
 
-    float lowerQuartile(const std::vector<float>& values, bool isSorted=false);
+    float lower_quartile(const std::vector<float>& values, bool isSorted=false);
     float median(const std::vector<float>& values, bool isSorted=false);
-    float upperQuartile(const std::vector<float>& values, bool isSorted=false);
+    float upper_quartile(const std::vector<float>& values, bool isSorted=false);
 
-    float interquartileRange(const std::vector<float>& values, bool isSorted=false);
-    float interquartileRange(float lowerQuartile, float upperQuartile);
+    float interquartile_range(const std::vector<float>& values, bool isSorted=false);
+    float interquartile_range(float lower_quartile, float upper_quartile);
 
 }

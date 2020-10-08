@@ -18,16 +18,16 @@ BoxPlotStats::BoxPlotStats(const std::vector<float>& values, bool isSorted, floa
 
 void BoxPlotStats::set(const std::vector<float>& _values, bool isSorted)
 {
-    const std::vector<float>& values = isSorted ? _values : sorted(_values);
+    const std::vector<float>& values = isSorted ? _values : math::sorted(_values);
 
     this->minimum = math::min(values, true);
     this->maximum = math::max(values, true);
 
-    this->lowerQuartile = math::lowerQuartile(values, true);
+    this->lowerQuartile = math::lower_quartile(values, true);
     this->median = math::median(values, true);
-    this->upperQuartile = math::upperQuartile(values, true);
+    this->upperQuartile = math::upper_quartile(values, true);
 
-    const float iqr = interquartileRange(lowerQuartile, upperQuartile);
+    const float iqr = math::interquartile_range(lowerQuartile, upperQuartile);
 
     this->minWhisker = lowerQuartile - whisk * iqr;
     this->maxWhisker = upperQuartile + whisk * iqr;
