@@ -82,7 +82,6 @@ SET(SOURCES
 
     math/statistics/BoxPlotStats.cpp
     math/statistics/Histogram.cpp
-    math/statistics/measures.cpp
 
 
     shapes/AxisAlignedBoundingBox.cpp

@@ -8,7 +8,7 @@ namespace math { namespace stat
 
 void sort(std::vector<float>& values)
 {
-    simox::math::sort(values);
+    std::sort(values.begin(), values.end());
 }
 
 std::vector<float> sorted(const std::vector<float>& values)

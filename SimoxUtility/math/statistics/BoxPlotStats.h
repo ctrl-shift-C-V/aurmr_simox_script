@@ -13,7 +13,6 @@ namespace simox::math
     {
     public:
 
-
         BoxPlotStats();
         BoxPlotStats(const std::vector<float>& values, bool isSorted = false, float whisk = 1.5);
 
