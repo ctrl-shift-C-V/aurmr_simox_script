@@ -80,7 +80,6 @@ SET(SOURCES
     math/pose/invert.cpp
     math/pose/orthogonalize.cpp
 
-    math/statistics/BoxPlotStats.cpp
     math/statistics/Histogram.cpp
 
 
