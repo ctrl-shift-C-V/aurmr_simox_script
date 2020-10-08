@@ -80,7 +80,7 @@ SET(SOURCES
     math/pose/invert.cpp
     math/pose/orthogonalize.cpp
 
-    math/statistics/Histogram.cpp
+    math/statistics/Histogram1D.cpp
 
 
     shapes/AxisAlignedBoundingBox.cpp
@@ -215,7 +215,7 @@ SET(INCLUDES
     math/similarity/angular_similarity.h
 
     math/statistics/BoxPlotStats.h
-    math/statistics/Histogram.h
+    math/statistics/Histogram1D.h
     math/statistics/measures.h
 
 
