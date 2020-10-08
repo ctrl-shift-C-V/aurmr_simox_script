@@ -271,8 +271,6 @@ SET(SOURCES
     math/Triangle.cpp
     math/WeightedAverage.cpp
     math/statistics/measures.cpp
-    math/statistics/BoxPlot.cpp
-    math/statistics/Histogram.cpp
 
     MJCF/Document.cpp
     MJCF/elements/core/AnyElement.cpp

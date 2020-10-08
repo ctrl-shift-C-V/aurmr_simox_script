@@ -1,120 +1,74 @@
 #include "measures.h"
 
-#include <algorithm>
-#include <cmath>
-#include <stdexcept>
+#include <SimoxUtility/math/statistics/measures.h>
 
 
 namespace math { namespace stat
 {
 
-static void checkNotEmpty(const std::vector<float>& values)
-{
-    if (values.empty())
-        throw std::range_error("Given values are empty.");
-}
-
 void sort(std::vector<float>& values)
 {
-    std::sort(values.begin(), values.end());
+    simox::math::sort(values);
 }
 
 std::vector<float> sorted(const std::vector<float>& values)
 {
-    std::vector<float> s = values;
-    std::sort(s.begin(), s.end());
-    return s;
+    return simox::math::sorted(values);
 }
 
 float min(const std::vector<float>& values, bool isSorted)
 {
-    checkNotEmpty(values);
-    return isSorted ? values.front() : *std::min_element(values.begin(), values.end());
+    return simox::math::min(values, isSorted);
 }
 
 float max(const std::vector<float>& values, bool isSorted)
 {
-    checkNotEmpty(values);
-    return isSorted ? values.back() : *std::max_element(values.begin(), values.end());
+    return simox::math::max(values, isSorted);
 }
 
 float mean(const std::vector<float>& values)
 {
-    checkNotEmpty(values);
-
-    float sum = 0;
-    for (float v : values)
-    {
-        sum += v;
-    }
-    return sum / values.size();
+    return simox::math::mean(values);
 }
 
 float stddev(const std::vector<float>& values)
 {
-    return stddev(values, mean(values));
+    return simox::math::stddev(values);
 }
 
 float stddev(const std::vector<float>& values, float mean)
 {
-    checkNotEmpty(values);
-    float sum = 0;
-    for (float v : values)
-    {
-        float diff = v - mean;
-        sum += diff * diff;
-    }
-    float variance = sum / (values.size() - 1);
-    return std::sqrt(variance);
+    return simox::math::stddev(values, mean);
 }
 
-float quantile(const std::vector<float>& _values, float p, bool isSorted)
+float quantile(const std::vector<float>& values, float p, bool isSorted)
 {
-    checkNotEmpty(_values);
-    const std::vector<float>& values = isSorted ? _values : sorted(_values);
-
-    float location = p < 1 ? p * values.size() : values.size() - 1;
-
-    std::size_t floor = static_cast<std::size_t>(std::floor(location));
-    std::size_t ceil = static_cast<std::size_t>(std::ceil(location));
-
-    if (floor == ceil)
-    {
-        return values.at(floor);
-    }
-    else
-    {
-        float t = location - floor;
-        return (1 - t) * values.at(floor) + t * values.at(ceil);
-    }
+    return simox::math::quantile(values, p, isSorted);
 }
 
 float lowerQuartile(const std::vector<float>& values, bool isSorted)
 {
-    return quantile(values, .25, isSorted);
+    return simox::math::lower_quartile(values, isSorted);
 }
 
 float median(const std::vector<float>& values, bool isSorted)
 {
-    return quantile(values, .5, isSorted);
+    return simox::math::median(values, isSorted);
 }
 
 float upperQuartile(const std::vector<float>& values, bool isSorted)
 {
-    return quantile(values, .75, isSorted);
+    return simox::math::upper_quartile(values, isSorted);
 }
 
-float interquartileRange(const std::vector<float>& _values, bool isSorted)
+float interquartileRange(const std::vector<float>& values, bool isSorted)
 {
-    checkNotEmpty(_values);
-
-    const std::vector<float>& values = isSorted ? _values : sorted(_values);
-    return interquartileRange(lowerQuartile(values, true), upperQuartile(values, true));
+    return simox::math::interquartile_range(values, isSorted);
 }
 
 float interquartileRange(float lowerQuartile, float upperQuartile)
 {
-    return upperQuartile - lowerQuartile;
+    return simox::math::interquartile_range(lowerQuartile, upperQuartile);
 }
 
 
