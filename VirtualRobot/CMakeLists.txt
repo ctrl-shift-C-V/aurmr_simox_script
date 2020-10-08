@@ -270,7 +270,6 @@ SET(SOURCES
     math/Primitive.cpp
     math/Triangle.cpp
     math/WeightedAverage.cpp
-    math/statistics/measures.cpp
 
     MJCF/Document.cpp
     MJCF/elements/core/AnyElement.cpp
@@ -482,9 +481,6 @@ SET(INCLUDES
     math/TransformedFunctionR2R3.h
     math/Triangle.h
     math/WeightedAverage.h
-    math/statistics/measures.h
-    math/statistics/BoxPlot.h
-    math/statistics/Histogram.h
 
     mjcf.h
     MJCF/Document.h
