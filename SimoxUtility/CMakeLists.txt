@@ -80,6 +80,11 @@ SET(SOURCES
     math/pose/invert.cpp
     math/pose/orthogonalize.cpp
 
+    math/statistics/BoxPlotStats.cpp
+    math/statistics/Histogram.cpp
+    math/statistics/measures.cpp
+
+
     shapes/AxisAlignedBoundingBox.cpp
     shapes/json_conversions.cpp
 )
@@ -210,6 +215,10 @@ SET(INCLUDES
 
     math/similarity/cosine_similarity.h
     math/similarity/angular_similarity.h
+
+    math/statistics/BoxPlotStats.h
+    math/statistics/Histogram.h
+    math/statistics/measures.h
 
 
     meta/undefined_t/undefined_t.h
