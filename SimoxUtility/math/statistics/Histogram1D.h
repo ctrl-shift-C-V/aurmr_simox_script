@@ -8,29 +8,29 @@ namespace simox::math
 {
 
     /**
-     * @brief Histogram for one-dimensional float data.
+     * @brief Histogram1D for one-dimensional float data.
      */
-    class Histogram
+    class Histogram1D
     {
     public:
 
         /// No initialization constructor.
-        Histogram();
+        Histogram1D();
 
         /// Construct with the given data.
         /// Minimum and maximum are derived automatically.
-        Histogram(const std::vector<float>& data, std::size_t numBins = 128);
+        Histogram1D(const std::vector<float>& data, std::size_t numBins = 128);
 
         /// Construct with the given data and given limits.
-        Histogram(const std::vector<float>& data, float min, float max, std::size_t numBins = 128);
+        Histogram1D(const std::vector<float>& data, float min, float max, std::size_t numBins = 128);
 
 
         /// Set the number of bins and set them to 0.
         void resetBins(std::size_t numBins);
 
-        /// Insert the given value into the histogram.
+        /// Insert the given value into the Histogram1D.
         void insert(float value);
-        /// Inserts the given values into the histogram.
+        /// Inserts the given values into the Histogram1D.
         void insert(const std::vector<float>& value);
 
         /// Set the limits.
@@ -67,7 +67,7 @@ namespace simox::math
 
 
         /**
-         * @brief Applies a median filter to the histogram bins.
+         * @brief Applies a median filter to the Histogram1D bins.
          *
          * The size specifies the number of neighours (in each direction)
          * considered.
@@ -79,8 +79,8 @@ namespace simox::math
         void applyMedianFilter(std::size_t size = 2);
 
 
-        /// Streams a CVS-like description of the histogram containing the bin data.
-        friend std::ostream& operator<<(std::ostream& os, const Histogram& histo);
+        /// Streams a CVS-like description of the Histogram1D containing the bin data.
+        friend std::ostream& operator<<(std::ostream& os, const Histogram1D& histo);
 
 
     private:
