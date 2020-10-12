@@ -1,10 +1,11 @@
+ADD_SU_TEST( AngleBetween )
+ADD_SU_TEST( Compare )
 ADD_SU_TEST( ConverterTest )
 ADD_SU_TEST( DeltaAngleTest )
-ADD_SU_TEST( SoftMinMax )
 ADD_SU_TEST( Normal )
-ADD_SU_TEST( Compare )
 ADD_SU_TEST( periodic )
-ADD_SU_TEST( AngleBetween )
+ADD_SU_TEST( SoftMinMax )
+ADD_SU_TEST( statistics )
 
 ADD_SUBDIRECTORY(pose)
 

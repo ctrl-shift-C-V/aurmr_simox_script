@@ -70,15 +70,18 @@ SET(SOURCES
     json/converters.cpp
     json/util.cpp
 
+    math/SoftMinMax.cpp
+
+    math/periodic/periodic_diff.cpp
+    math/periodic/periodic_mean.cpp
+
     math/pose/align_box_orientation.cpp
     math/pose/check_rotation_matrix.cpp
     math/pose/invert.cpp
     math/pose/orthogonalize.cpp
 
-    math/periodic/periodic_diff.cpp
-    math/periodic/periodic_mean.cpp
+    math/statistics/Histogram1D.cpp
 
-    math/SoftMinMax.cpp
 
     shapes/AxisAlignedBoundingBox.cpp
     shapes/json_conversions.cpp
@@ -126,7 +129,25 @@ SET(INCLUDES
     json/json.hpp
     json/util.h
 
+
+    math/mean.h
+    math/sum.h
+    math/SoftMinMax.h
+
     math/scale_value.h
+    math/rescale.h
+    math/project_to_plane.h
+
+    math/isfinite.h
+    math/zero.h
+
+    math/compare/is_equal.h
+    math/compare/is_greater.h
+    math/compare/is_greater_equal.h
+    math/compare/is_inequal.h
+    math/compare/is_less.h
+    math/compare/is_less_equal.h
+    math/compare/value_in_limits_of.h
 
     math/convert/rad_to_deg.h
     math/convert/deg_to_rad.h
@@ -169,16 +190,6 @@ SET(INCLUDES
     math/distance/delta_angle.h
     math/distance/angle_between.h
 
-    math/mean.h
-
-    math/compare/is_equal.h
-    math/compare/is_greater.h
-    math/compare/is_greater_equal.h
-    math/compare/is_inequal.h
-    math/compare/is_less.h
-    math/compare/is_less_equal.h
-    math/compare/value_in_limits_of.h
-
     math/norm/norm_clamp.h
     math/norm/norm_max.h
     math/norm/norm_min.h
@@ -203,15 +214,10 @@ SET(INCLUDES
     math/similarity/cosine_similarity.h
     math/similarity/angular_similarity.h
 
-    math/sum.h
+    math/statistics/BoxPlotStats.h
+    math/statistics/Histogram1D.h
+    math/statistics/measures.h
 
-    math/SoftMinMax.h
-    math/rescale.h
-
-    math/zero.h
-    math/isfinite.h
-
-    math/project_to_plane.h
 
     meta/undefined_t/undefined_t.h
     meta/undefined_t/is_set.h

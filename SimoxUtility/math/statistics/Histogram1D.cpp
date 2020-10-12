@@ -1,57 +1,58 @@
-#include "Histogram.h"
+#include "Histogram1D.h"
 
 #include <algorithm>
 
 
-namespace VirtualRobot
+namespace simox::math
 {
 
-Histogram::Histogram()
+
+Histogram1D::Histogram1D()
 {}
 
-Histogram::Histogram(const std::vector<float>& data, std::size_t numBins)
+Histogram1D::Histogram1D(const std::vector<float>& data, std::size_t numBins)
 {
     setMinMax(data);
     resetBins(numBins);
     insert(data);
 }
 
-Histogram::Histogram(const std::vector<float>& data, float min, float max, std::size_t numBins)
+Histogram1D::Histogram1D(const std::vector<float>& data, float min, float max, std::size_t numBins)
 {
     setMinMax(min, max);
     resetBins(numBins);
     insert(data);
 }
 
-void Histogram::resetBins(std::size_t numBins)
+void Histogram1D::resetBins(std::size_t numBins)
 {
     bins.assign(numBins, 0);
 }
 
-std::size_t Histogram::valueToIndex(float value) const
+std::size_t Histogram1D::valueToIndex(float value) const
 {
     // normalized = 0..1
     float normalized = (value - min) / (max - min);
     std::size_t index = static_cast<std::size_t>(normalized * getNumberOfBins());
 
     // avoid out-of-bounce errors
-    // (if histogram is falsely used, this could lead to peaks at the edges)
+    // (if Histogram1D is falsely used, this could lead to peaks at the edges)
     return std::max(std::size_t(0), std::min(getNumberOfBins() - 1, index));
 }
 
-float Histogram::indexToValue(std::size_t index) const
+float Histogram1D::indexToValue(std::size_t index) const
 {
     float normalized = static_cast<float>(index) / getNumberOfBins();
     float value = normalized * (max - min) + min;
     return value;
 }
 
-void Histogram::insert(float value)
+void Histogram1D::insert(float value)
 {
     bins[valueToIndex(value)]++;
 }
 
-void Histogram::insert(const std::vector<float>& values)
+void Histogram1D::insert(const std::vector<float>& values)
 {
     for (float v : values)
     {
@@ -59,13 +60,13 @@ void Histogram::insert(const std::vector<float>& values)
     }
 }
 
-void Histogram::setMinMax(float min, float max)
+void Histogram1D::setMinMax(float min, float max)
 {
     this->min = min;
     this->max = max;
 }
 
-void Histogram::setMinMax(const std::vector<float>& data)
+void Histogram1D::setMinMax(const std::vector<float>& data)
 {
     float min = data.front();
     float max = data.front();
@@ -78,49 +79,49 @@ void Histogram::setMinMax(const std::vector<float>& data)
     setMinMax(min, max);
 }
 
-const std::vector<std::size_t>& Histogram::getBins() const
+const std::vector<std::size_t>& Histogram1D::getBins() const
 {
     return bins;
 }
 
-std::size_t Histogram::getNumberOfBins() const
+std::size_t Histogram1D::getNumberOfBins() const
 {
     return bins.size();
 }
 
-float Histogram::getMin() const
+float Histogram1D::getMin() const
 {
     return min;
 }
 
-float Histogram::getMax() const
+float Histogram1D::getMax() const
 {
     return max;
 }
 
-std::size_t Histogram::getMinBinIndex() const
+std::size_t Histogram1D::getMinBinIndex() const
 {
     return static_cast<std::size_t>(
                 std::distance(bins.begin(), std::min_element(bins.begin(), bins.end())));
 }
 
-float Histogram::getMinBinValue() const
+float Histogram1D::getMinBinValue() const
 {
     return indexToValue(getMaxBinIndex());
 }
 
-std::size_t Histogram::getMaxBinIndex() const
+std::size_t Histogram1D::getMaxBinIndex() const
 {
     return static_cast<std::size_t>(
                 std::distance(bins.begin(), std::max_element(bins.begin(), bins.end())));
 }
 
-float Histogram::getMaxBinValue() const
+float Histogram1D::getMaxBinValue() const
 {
     return indexToValue(getMaxBinIndex());
 }
 
-void Histogram::applyMedianFilter(std::size_t size)
+void Histogram1D::applyMedianFilter(std::size_t size)
 {
     std::vector<std::size_t> newBins(bins.size());
     std::vector<std::size_t> neighborhood(2 * size + 1);
@@ -147,9 +148,9 @@ void Histogram::applyMedianFilter(std::size_t size)
     bins = newBins;
 }
 
-std::ostream& operator<<(std::ostream& os, const Histogram& histo)
+std::ostream& operator<<(std::ostream& os, const Histogram1D& histo)
 {
-    os << "Histogram:\n";
+    os << "Histogram1D:\n";
     os << "min:;" << histo.min << ";max:;" << histo.max << ";\n";
 
     os << "Index:;";

@@ -17,5 +17,6 @@
 #include "math/rescale.h"
 #include "math/scale_value.h"
 #include "math/similarity.h"
+#include "math/statistics.h"
 #include "math/sum.h"
 #include "math/zero.h"
