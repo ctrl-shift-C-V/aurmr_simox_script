@@ -807,7 +807,7 @@ namespace VirtualRobot
 
     RobotPtr RobotIO::processRobot(rapidxml::xml_node<char>* robotXMLNode, const std::string& basePath, RobotDescription loadMode)
     {
-        THROW_VR_EXCEPTION_IF(!robotXMLNode, "No <Robot> tag in XML definition");
+        THROW_VR_EXCEPTION_IF(!robotXMLNode, "No <Robot> tag in XML definition! base path = " << basePath);
 
         // process Attributes
         std::string robotRoot;
