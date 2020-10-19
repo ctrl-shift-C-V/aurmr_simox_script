@@ -7,5 +7,6 @@
 	</CollisionModel>
 	<Physics>
 		<SimulationType value='Static'/>
+		<Mass unit='kg' value='0'/>
 	</Physics>
 </ManipulationObject>
