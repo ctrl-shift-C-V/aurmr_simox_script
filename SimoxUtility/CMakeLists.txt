@@ -82,6 +82,7 @@ SET(SOURCES
 
     math/statistics/Histogram1D.cpp
 
+    simox/SimoxPath.cpp
 
     shapes/AxisAlignedBoundingBox.cpp
     shapes/json_conversions.cpp
@@ -236,6 +237,8 @@ SET(INCLUDES
     meta/EnumNames.hpp
     meta/enum/adapt_enum.h
     meta/enum/EnumNames.hpp
+
+    simox/SimoxPath.h
 
     xml/rapidxml/rapidxml.hpp
     xml/rapidxml/rapidxml_print.hpp
