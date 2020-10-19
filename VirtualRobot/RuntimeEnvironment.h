@@ -120,8 +120,8 @@ namespace VirtualRobot
                 }
             }
         }
-        template<class T>
-        static void getValue(T& target, const std::string& key, const auto& defaultValue)
+        template <class T, class D>
+        static void getValue(T& target, const std::string& key, const D& defaultValue)
         {
             target = getValue<T>(key, defaultValue);
         }

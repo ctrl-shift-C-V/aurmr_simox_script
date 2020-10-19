@@ -71,7 +71,8 @@ namespace VirtualRobot
         /// Virtual destructor.
         virtual ~TriMeshModel() = default;
 
-        Eigen::Vector3f nonUniformSampleSurface(auto& gen) const
+        template <typename T>
+        Eigen::Vector3f nonUniformSampleSurface(T& gen) const
         {
             if (faces.empty())
             {

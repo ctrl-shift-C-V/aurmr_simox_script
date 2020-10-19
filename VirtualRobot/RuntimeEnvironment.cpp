@@ -12,6 +12,7 @@
 #include <boost/algorithm/string/classification.hpp>
 
 #include <filesystem>
+#include <boost/filesystem.hpp>
 
 
 namespace VirtualRobot
