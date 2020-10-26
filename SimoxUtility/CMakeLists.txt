@@ -86,6 +86,8 @@ SET(SOURCES
 
     shapes/AxisAlignedBoundingBox.cpp
     shapes/json_conversions.cpp
+
+    threads/system_thread_id.cpp
 )
 
 SET(INCLUDES
@@ -252,6 +254,8 @@ SET(INCLUDES
     shapes/json_conversions.h
 
     backport/span/gcc_header.h
+
+    threads/system_thread_id.h
 )
 
 simox_generate_subdir_headers(
