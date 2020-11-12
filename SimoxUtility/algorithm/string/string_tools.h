@@ -22,10 +22,14 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 #include <vector>
 #include <locale>
 
-namespace simox::alg {
+
+namespace simox::alg
+{
+
     static std::locale DEFAULT_LOCALE = std::locale::classic();
 
     std::string to_lower(const std::string& str);
@@ -57,4 +61,25 @@ namespace simox::alg {
     bool starts_with(std::string const& input, std::string const& search);
 
     bool ends_with(std::string const& input, std::string const& search);
+
+
+    template <typename IterT>
+    std::vector<std::string> multi_to_string(IterT begin, IterT end)
+    {
+        std::vector<std::string> result;
+        for (auto it = begin; it != end; ++it)
+        {
+            std::stringstream ss;
+            ss << *it;
+            result.push_back(ss.str());
+            ++begin;
+        }
+        return result;
+    }
+
+    template <typename T>
+    std::vector<std::string> multi_to_string(const std::vector<T>& vector)
+    {
+        return multi_to_string(vector.begin(), vector.end());
+    }
 }
