@@ -6,7 +6,16 @@
 namespace simox::color::cmaps
 {
 
-    // Source: https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html
+    /*
+     * Source: https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html
+     *
+     *
+     * Note: Don't use rainbow-colormaps (e.g. jet) for linear data (e.g. probabilities, scores).
+     *
+     * See: D. Borland and R. M. Taylor Ii, "Rainbow Color Map (Still) Considered Harmful,"
+     * in IEEE Computer Graphics and Applications, vol. 27, no. 2, pp. 14-17, March-April 2007,
+     * doi: 10.1109/MCG.2007.323435, URL: https://ieeexplore.ieee.org/document/4118486?arnumber=4118486
+     */
 
 
     // Perceptually Uniform Sequential
