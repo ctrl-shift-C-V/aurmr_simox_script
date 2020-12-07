@@ -88,6 +88,7 @@ SET(SOURCES
     shapes/json_conversions.cpp
 
     threads/system_thread_id.cpp
+    threads/CountingSemaphore.cpp
 )
 
 SET(INCLUDES
@@ -256,6 +257,7 @@ SET(INCLUDES
     backport/span/gcc_header.h
 
     threads/system_thread_id.h
+    threads/CountingSemaphore.h
 )
 
 simox_generate_subdir_headers(
