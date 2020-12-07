@@ -62,6 +62,8 @@ namespace simox::alg
 
     bool ends_with(std::string const& input, std::string const& search);
 
+    bool contains(const std::string& haystack, const std::string& needle);
+
 
     template <typename IterT>
     std::vector<std::string> multi_to_string(IterT begin, IterT end)

@@ -107,4 +107,10 @@ bool ends_with(const std::string& input, const std::string& search)
     return boost::ends_with(input, search);
 }
 
+bool contains(const std::string& haystack, const std::string& needle)
+{
+    return boost::algorithm::contains(haystack, needle);
+}
+
+
 }
