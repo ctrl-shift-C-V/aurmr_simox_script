@@ -1,22 +1,31 @@
 SET(TEST_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 MACRO(ADD_SU_TEST TEST_NAME)
-
-    # message("TEST_ROOT_DIR: ${TEST_ROOT_DIR}")
-    # message("CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
-    SET(TRG_NAME "${TEST_NAME}")
+    if("${TEST_NAME}" MATCHES ".*\.cpp$")
+        set(TEST_NAME_WITH_ENDING "${TEST_NAME}")
+    else()
+        set(TEST_NAME_WITH_ENDING "${TEST_NAME}.cpp")
+    endif()
+    if(IS_ABSOLUTE "${TEST_NAME_WITH_ENDING}")
+        set(ABS_PATH "${TEST_NAME_WITH_ENDING}")
+        string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}" "" TMP "${TEST_NAME_WITH_ENDING}")
+        string(REPLACE "${CMAKE_CURRENT_BINARY_DIR}" "" REL_PATH "${TMP}")
+    else()
+        set(REL_PATH "${TEST_NAME_WITH_ENDING}")
+        set(ABS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${REL_PATH}")
+    endif()
+    string(REGEX REPLACE ".cpp\$" "" TMP "${REL_PATH}")
+    string(REGEX REPLACE "/" "_" TRG_NAME "${TMP}")
 
     STRING(REPLACE "${TEST_ROOT_DIR}" "" TEST_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
     if (TEST_PATH)
         STRING(SUBSTRING "${TEST_PATH}" 1 -1 TEST_PATH)         # Remove initial /
         STRING(REPLACE "/" "__" TEST_PREFIX "${TEST_PATH}/")    # Replace / by __
-        # message("TEST_PREFIX: ${TEST_PREFIX}")
         STRING(PREPEND TRG_NAME "${TEST_PREFIX}")
     endif()
     SET(TRG_NAME "SimoxUtility__${TRG_NAME}")
-    # message("TRG_NAME: ${TRG_NAME}")
 
-    ADD_EXECUTABLE(${TRG_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_NAME}.cpp)
+    ADD_EXECUTABLE(${TRG_NAME} "${ABS_PATH}")
     TARGET_LINK_LIBRARIES(${TRG_NAME} PRIVATE SimoxUtility Boost::unit_test_framework)
     target_include_directories(${TRG_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/..)
     if (NOT Boost_USE_STATIC_LIBS)

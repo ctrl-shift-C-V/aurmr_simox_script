@@ -260,12 +260,66 @@ SET(INCLUDES
     threads/CountingSemaphore.h
 )
 
+##########################################################################################################
+#################################### generate meta functions ##################################
+
+macro(make_check_for_member)
+    macro(make_check_for_member_sub category name)
+        set(targrel meta/type_traits/member/${category}/${name}.h)
+        set(ofile ${CMAKE_CURRENT_LIST_DIR}/${targrel})
+        set(ifile ${CMAKE_SOURCE_DIR}/CMakeModules/check_for_member/${category}.in.h)
+        set(NAME ${name})
+        configure_file(${ifile} ${ofile} @ONLY)
+        list(APPEND INCLUDES ${targrel})
+    endmacro()
+    set(GEN_CHECK_MEMBER_META_CODE_KEYWORDS ${ARGN})
+    list(REMOVE_DUPLICATES GEN_CHECK_MEMBER_META_CODE_KEYWORDS)
+    set(GEN_CHECK_MEMBER_META_CODE_CATEGORIES
+        method static_method
+        variable static_variable
+        type
+    )
+    foreach(v ${GEN_CHECK_MEMBER_META_CODE_KEYWORDS})
+        foreach(c ${GEN_CHECK_MEMBER_META_CODE_CATEGORIES})
+            make_check_for_member_sub(${c} ${v})
+        endforeach()
+    endforeach()
+endmacro()
+make_check_for_member(
+    #terator
+    begin end cbegin cend
+    #container
+    size empty reserve clear resize
+    emplace_back emplace_front emplace
+    push_back push_front
+    insert
+    at front back data
+    #point members (wh sometimes are homogeneous coords)
+    point vertex x y z w h _0 _1 _2
+    #quat members
+    qx qy qz qw
+    #points members
+    vertices points
+    #other
+    value val npos
+    value_t value_type size_type size_t iterator
+    first second
+    exact extract str string c_str swap
+    min max
+)
+
+
+##########################################################################################################
+#################################### generate_subdir_headers ##################################
 simox_generate_subdir_headers(
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}
     INCLUDES
 )
 
+##########################################################################################################
+##########################################################################################################
+##########################################################################################################
 if(BUILD_TESTING)
     # include unit tests
     ADD_SUBDIRECTORY(tests)
