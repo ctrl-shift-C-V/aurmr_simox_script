@@ -52,6 +52,8 @@ SET(SOURCES
 
     algorithm/string/string_tools.cpp
 
+    caching/CacheMap.cpp
+
     color/cmaps/colormaps.cpp
     color/cmaps/Named.cpp
     color/Color.cpp
@@ -104,6 +106,8 @@ SET(INCLUDES
     algorithm/string/string_tools.h
     algorithm/string/string_conversion.h
     algorithm/string/string_conversion_eigen.h
+
+    caching/CacheMap.h
 
     color/cmaps/colormaps.h
     color/cmaps/Named.h
