@@ -34,46 +34,121 @@
 namespace CacheMapTest
 {
 
-}
-
-
-BOOST_AUTO_TEST_SUITE(CacheMapTest)
-
-
-BOOST_AUTO_TEST_CASE(test_at_empty)
+struct Fixture
 {
-    auto fetchFn = [](int i)
+    Fixture()
     {
-        return std::to_string(i);
-    };
-
-    simox::caching::CacheMap<int, std::string> cache(fetchFn);
-
-    BOOST_CHECK(cache.empty());
-    BOOST_CHECK_EQUAL(cache.size(), 0);
-
-    BOOST_CHECK_EQUAL(cache.get(1), "1");
-    BOOST_CHECK_EQUAL(cache.size(), 1);
-
-    BOOST_CHECK_EQUAL(cache.get(1), "1");
-    BOOST_CHECK_EQUAL(cache.size(), 1);
-
-    BOOST_CHECK_EQUAL(cache.get(2), "2");
-    BOOST_CHECK_EQUAL(cache.size(), 2);
-
-    BOOST_CHECK_EQUAL(cache.get(2), "2");
-    BOOST_CHECK_EQUAL(cache.size(), 2);
-
-
-    const bool clear = true;
-    cache.setFetchFn([](int i)
+    }
+    ~Fixture()
     {
-        return std::to_string(-i);
-    }, clear);
-    BOOST_CHECK_EQUAL(cache.size(), 0);
-    BOOST_CHECK(cache.empty());
+    }
+
+    template <class CacheT>
+    void test_cache()
+    {
+        test_cache_with_fetchFn<CacheT>();
+        test_cache_no_fetchFn_on_construction<CacheT>();
+    }
+
+    template <class CacheT>
+    void test_cache_with_fetchFn()
+    {
+        auto fetchFn = [](int i)
+        {
+            return std::to_string(i);
+        };
+
+        CacheT cache(fetchFn);
+
+        BOOST_CHECK(cache.empty());
+        BOOST_CHECK_EQUAL(cache.size(), 0);
+
+        BOOST_CHECK_EQUAL(cache.get(1), "1");
+        BOOST_CHECK_EQUAL(cache.size(), 1);
+
+        BOOST_CHECK_EQUAL(cache.get(1), "1");
+        BOOST_CHECK_EQUAL(cache.size(), 1);
+
+        BOOST_CHECK_EQUAL(cache.get(2), "2");
+        BOOST_CHECK_EQUAL(cache.size(), 2);
+
+        BOOST_CHECK_EQUAL(cache.get(2), "2");
+        BOOST_CHECK_EQUAL(cache.size(), 2);
+
+        BOOST_CHECK(cache.contains(1));
+        BOOST_CHECK(cache.contains(2));
+        BOOST_CHECK(!cache.contains(3));
+
+        // Iterators are not printable => not using _EQUAL/_NE
+        BOOST_CHECK(cache.find(1) != cache.end());
+        BOOST_CHECK(cache.find(2) != cache.end());
+        BOOST_CHECK(cache.find(3) == cache.end());
+
+
+        // Test iteration
+        BOOST_REQUIRE_GT(cache.size(), 0);  // Otherwise, next test is meaningless.
+        for (const auto& [key, value] : cache)
+        {
+            BOOST_CHECK_EQUAL(fetchFn(key), value);
+        }
+
+
+        // Resetting fetch function
+
+        auto fetchFn2 = [](int i)
+        {
+            return std::to_string(-i);
+        };
+
+        const bool clear = true;
+        cache.setFetchFn(fetchFn2, clear);
+        BOOST_CHECK_EQUAL(cache.size(), 0);
+        BOOST_CHECK(cache.empty());
+        BOOST_CHECK(!cache.contains(1));
+        BOOST_CHECK(!cache.contains(2));
+
+        BOOST_CHECK_EQUAL(cache.get(1), fetchFn2(1));
+        BOOST_CHECK_EQUAL(cache.get(3), fetchFn2(3));
+    }
+
+    template <class CacheT>
+    void test_cache_no_fetchFn_on_construction()
+    {
+        auto fetchFn = [](int i)
+        {
+            return std::to_string(i);
+        };
+
+        CacheT cache;
+
+        BOOST_CHECK_THROW(cache.get(1), simox::error::SimoxError);
+        BOOST_CHECK_EQUAL(cache.get(1, fetchFn), fetchFn(1));
+
+        cache.setFetchFn(fetchFn);
+        BOOST_CHECK_EQUAL(cache.get(2, fetchFn), fetchFn(2));
+    }
+};
+
 }
 
+
+BOOST_FIXTURE_TEST_SUITE(CacheMapTest, CacheMapTest::Fixture)
+
+
+BOOST_AUTO_TEST_CASE(test_default_map)
+{
+    test_cache<simox::caching::CacheMap<int, std::string>>();
+}
+
+BOOST_AUTO_TEST_CASE(test_map)
+{
+    test_cache<simox::caching::CacheMap<int, std::string, std::map>>();
+}
+
+BOOST_AUTO_TEST_CASE(test_unordered_map)
+{
+    test_cache<simox::caching::CacheMap<int, std::string, std::unordered_map>>();
+}
 
 
 BOOST_AUTO_TEST_SUITE_END()
