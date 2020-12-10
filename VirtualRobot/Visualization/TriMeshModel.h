@@ -38,6 +38,8 @@ namespace VirtualRobot
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
+        static TriMeshModelPtr FromFile(const std::string& str);
+
         static TriMeshModel MakeBox(float a, float b, float c);
         static TriMeshModel MakePoint(float x, float y, float z);
         static TriMeshModelPtr MakePointPtr(float x, float y, float z);

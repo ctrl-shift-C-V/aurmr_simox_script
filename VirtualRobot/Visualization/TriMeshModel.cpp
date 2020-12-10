@@ -9,6 +9,10 @@
 #include "../DataStructures/nanoflann.hpp"
 #include "../DataStructures/KdTreePointCloud.h"
 
+#include "../Import/MeshImport/AssimpReader.h"
+#include "CoinVisualization/CoinVisualizationFactory.h"
+#include "VisualizationNode.h"
+
 #include<Eigen/Geometry>
 
 #include <algorithm>
@@ -16,6 +20,7 @@
 #include <fstream>
 #include <iomanip>
 #include <set>
+#include <filesystem>
 
 
 namespace VirtualRobot
@@ -25,6 +30,33 @@ namespace VirtualRobot
 
     TriMeshModel::TriMeshModel() = default;
 
+    TriMeshModelPtr TriMeshModel::FromFile(const std::string &str)
+    {
+        const auto tolower = [](std::string s)
+        {
+            for (auto& c : s)
+            {
+                c = std::tolower(c);
+            }
+            return std::move(s);
+        };
+        const std::string ext = tolower(std::filesystem::path{str}.extension());
+        if (VirtualRobot::AssimpReader::can_load(str))
+        {
+            return VirtualRobot::AssimpReader{}.readFileAsTriMesh(str);
+        }
+        if (ext == ".wrl" || ext == ".iv")
+        {
+            VirtualRobot::CoinVisualizationFactory fact;
+            std::array<char*,1> argv = {nullptr};
+            int argc = 0;
+            fact.init(argc, argv.data(), "");
+            const auto vnode = fact.getVisualizationFromFile(str);
+            return vnode ? vnode->getTriMeshModel() : nullptr;
+        }
+        return nullptr;
+    }
+    
     TriMeshModel TriMeshModel::MakeBox(float a, float b, float c)
     {
         TriMeshModel m;
