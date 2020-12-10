@@ -240,10 +240,12 @@ SET(INCLUDES
     meta/type_traits/is_std_array.h
     meta/type_traits/are_arithmetic.h
     meta/type_traits/is_string_like.h
+    meta/template_traits/is_instantiation_of.h
 
     meta/EnumNames.hpp
     meta/enum/adapt_enum.h
     meta/enum/EnumNames.hpp
+    meta/key_type.h
 
     simox/SimoxPath.h
 
