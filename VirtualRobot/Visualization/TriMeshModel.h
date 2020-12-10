@@ -59,9 +59,9 @@ namespace VirtualRobot
             triangle(const Eigen::Vector3f& v1, const Eigen::Vector3f& v2, const Eigen::Vector3f& v3) :
                 vertex1(v1), vertex2(v2), vertex3(v3) {}
             triangle(const Eigen::Vector3f& v) :
-                triangle(v,v,v) {}
+                triangle(v, v, v) {}
             triangle(float x, float y, float z) :
-                triangle(Eigen::Vector3f{x,y,z}) {}
+                triangle(Eigen::Vector3f{x, y, z}) {}
             Eigen::Vector3f vertex1;
             Eigen::Vector3f vertex2;
             Eigen::Vector3f vertex3;
