@@ -68,7 +68,7 @@ namespace simox::alg {
         return help::to_<T>(s, help::type<T>{}, locale, trim);
     }
 
-    template<typename T, typename std::enable_if<!std::is_integral<T>::value>::type* = nullptr>
+    template<typename T, typename std::enable_if<std::is_fundamental<T>::value>::type* = nullptr>
     inline std::vector<T> to_vec(const std::vector<std::string>& vec, std::locale locale = DEFAULT_LOCALE, bool trimElements = false)
     {
         std::vector<T> res;
@@ -79,14 +79,14 @@ namespace simox::alg {
         return res;
     }
 
-    template<typename T, typename std::enable_if<!std::is_integral<T>::value>::type* = nullptr>
+    template<typename T, typename std::enable_if<std::is_fundamental<T>::value>::type* = nullptr>
     inline std::vector<T> to_vec(const std::string& str, const std::string& splitBy = "\t ", bool trimElements = true,
                                  bool ignoreEmptyElements = true, std::locale locale = DEFAULT_LOCALE)
     {
         return to_vec<T>(split(str, splitBy, trimElements, ignoreEmptyElements, locale), locale, false);
     }
 
-    template<typename T, typename std::enable_if<!std::is_integral<T>::value>::type* = nullptr>
+    template<typename T, typename std::enable_if<std::is_fundamental<T>::value>::type* = nullptr>
     inline std::vector<T> to_vec_check_size(const std::string& str, unsigned int expectedSize, const std::string& splitBy = "\t ",
                                        bool trimElements = true, bool ignoreEmptyElements = true, std::locale locale = DEFAULT_LOCALE)
     {

@@ -97,6 +97,11 @@ std::string replace_first(const std::string& input, const std::string& search, c
     return boost::algorithm::replace_first_copy(input, search, replace);
 }
 
+std::string replace_last(const std::string& input, const std::string& search, const std::string& replace)
+{
+    return boost::algorithm::replace_last_copy(input, search, replace);
+}
+
 bool starts_with(const std::string& input, const std::string& search)
 {
     return boost::starts_with(input, search);

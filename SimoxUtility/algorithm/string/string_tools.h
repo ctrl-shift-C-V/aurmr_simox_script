@@ -56,6 +56,8 @@ namespace simox::alg
 
     std::string replace_first(std::string const& input, std::string const& search, std::string const& replace);
 
+    std::string replace_last(std::string const& input, std::string const& search, std::string const& replace);
+
     std::string replace_all(std::string const& input, std::string const& search, std::string const& replace);
 
     bool starts_with(std::string const& input, std::string const& search);
