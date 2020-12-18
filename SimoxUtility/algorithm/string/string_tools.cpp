@@ -3,10 +3,13 @@
 #include "SimoxUtility/error/SimoxError.h"
 
 #include <algorithm>
-
 #include <iomanip>
+#include <regex>
+
 #include <boost/algorithm/string.hpp>
 #include <boost/bind.hpp>
+
+#include <iostream>
 
 namespace simox::alg
 {
@@ -23,6 +26,34 @@ std::string to_upper(const std::string& str)
     std::string res = str;
     std::transform(res.begin(), res.end(), res.begin(), toupper);
     return res;
+}
+
+
+std::string capitalize_words(const std::string& str)
+{
+    std::regex regex("\\s[a-z]");
+    std::stringstream result;
+
+    long lastEnd = 0;
+
+    for (std::sregex_iterator it(str.begin(), str.end(), regex);
+         it != std::sregex_iterator(); ++it)
+    {
+        std::string match = it->str();
+
+        result << it->prefix();
+        result << match.at(0) << static_cast<char>(std::toupper(match.at(1)));
+
+        lastEnd = it->position() + it->length();
+    }
+    if (lastEnd >= 0 && size_t(lastEnd) < str.size())
+    {
+        result << str.substr(size_t(lastEnd));
+    }
+
+    std::string sresult = result.str();
+    sresult[0] = static_cast<char>(std::toupper(sresult[0]));
+    return sresult;
 }
 
 

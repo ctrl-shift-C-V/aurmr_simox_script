@@ -36,6 +36,14 @@ namespace simox::alg
 
     std::string to_upper(const std::string& str);
 
+    /**
+     * @brief Capitalize all words in `str`.
+     *
+     * More precisely, this makes all lower-case letters occuring after
+     * a whitespace upper-case
+     */
+    std::string capitalize_words(const std::string& str);
+
     void trim(std::string& str, const std::locale& locale = DEFAULT_LOCALE);
 
     std::string trim_copy(const std::string& str, const std::locale& locale = DEFAULT_LOCALE);
