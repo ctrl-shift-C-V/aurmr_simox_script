@@ -84,3 +84,20 @@ BOOST_AUTO_TEST_CASE(from_string)
     BOOST_CHECK_THROW((simox::alg::to_eigen_vec_check_rows<double>(testVector3, 10, ",")), simox::error::SimoxError);
     BOOST_CHECK((simox::alg::to_eigen_vec<double, 9>(testVector3, ",")) == expectedVector9d);
 }
+
+BOOST_AUTO_TEST_CASE(capitalize_words)
+{
+    BOOST_CHECK_EQUAL(simox::alg::capitalize_words(""), "");
+    BOOST_CHECK_EQUAL(simox::alg::capitalize_words("   "), "   ");
+    BOOST_CHECK_EQUAL(simox::alg::capitalize_words(" 1 2 3 4 "), " 1 2 3 4 ");
+
+    BOOST_CHECK_EQUAL(simox::alg::capitalize_words("test"), "Test");
+    BOOST_CHECK_EQUAL(simox::alg::capitalize_words("  hello world! "), "  Hello World! ");
+    BOOST_CHECK_EQUAL(simox::alg::capitalize_words("cap\neach\n - line"), "Cap\nEach\n - Line");
+
+    const std::string in = "\nthis is a Partly CaPiTaLiZed sTrInG _with 0some #strange +occurences.right?yes";
+    const std::string ex = "\nThis Is A Partly CaPiTaLiZed STrInG _with 0some #strange +occurences.right?yes";
+    const std::string out = simox::alg::capitalize_words(in);
+    BOOST_CHECK_EQUAL(out, ex);
+    BOOST_CHECK_EQUAL_COLLECTIONS(out.begin(), out.end(), ex.begin(), ex.end());
+}
