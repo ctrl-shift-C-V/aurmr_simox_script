@@ -164,10 +164,6 @@ namespace SimDynamics
 
         rigidBody.reset(new btRigidBody(btRBInfo));
         rigidBody->setUserPointer((void*)(this));
-#if 0
-        rigidBody->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
-        std::cout << "TEST3" << std::endl;
-#endif
 
         setPoseIntern(o->getGlobalPose());
     }

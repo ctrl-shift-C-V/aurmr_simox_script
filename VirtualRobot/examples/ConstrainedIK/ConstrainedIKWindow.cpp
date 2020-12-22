@@ -642,12 +642,6 @@ void ConstrainedIKWindow::performanceEvaluation()
             ik->addConstraint(balanceConstraint);
         }
 
-#if 0
-        JointLimitAvoidanceConstraintPtr jointLimitConstraint(new JointLimitAvoidanceConstraint(robot, kc));
-        ik->addConstraint(jointLimitConstraint);
-        VR_INFO << "JLAC Added" << std::endl;
-#endif
-
         ik->initialize();
 
         clock_t startT = clock();

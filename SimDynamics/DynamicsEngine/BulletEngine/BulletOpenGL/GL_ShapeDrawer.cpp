@@ -666,46 +666,6 @@ void GL_ShapeDrawer::drawOpenGL(btScalar* m, const btCollisionShape* shape, cons
                     break;
                 }
 
-
-
-#if 0
-
-                case CONE_SHAPE_PROXYTYPE:
-                {
-                    const btConeShape* coneShape = static_cast<const btConeShape*>(shape);
-                    int upIndex = coneShape->getConeUpIndex();
-                    float radius = coneShape->getRadius();//+coneShape->getMargin();
-                    float height = coneShape->getHeight();//+coneShape->getMargin();
-
-                    switch (upIndex)
-                    {
-                        case 0:
-                            glRotatef(90.0, 0.0, 1.0, 0.0);
-                            break;
-
-                        case 1:
-                            glRotatef(-90.0, 1.0, 0.0, 0.0);
-                            break;
-
-                        case 2:
-                            break;
-
-                        default:
-                        {
-                        }
-                    };
-
-                    glTranslatef(0.0, 0.0, -0.5 * height);
-
-                    glutSolidCone(radius, height, 10, 10);
-
-
-                    break;
-
-                }
-
-#endif
-
                 case STATIC_PLANE_PROXYTYPE:
                 {
                     const btStaticPlaneShape* staticPlaneShape = static_cast<const btStaticPlaneShape*>(shape);

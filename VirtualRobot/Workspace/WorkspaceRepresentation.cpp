@@ -1883,23 +1883,7 @@ namespace VirtualRobot
 
         if (getVoxelFromPose(x, v))
         {
-#if 0
-            std::cout << "pose:";
 
-            for (int i = 0; i < 6; i++)
-            {
-                std::cout << x[i] << ",";
-            }
-
-            std::cout << "Voxel:";
-
-            for (int i = 0; i < 6; i++)
-            {
-                std::cout << v[i] << ",";
-            }
-
-            std::cout << std::endl;
-#endif
             data->setDatumCheckNeighbors(v, e, neighborVoxels);
         }
 

@@ -170,25 +170,6 @@ int main(int argc, char* argv[])
     world->addObject(dynObj);
     o->print();
 
-
-#if 0
-    std::string f = "/home/niko/coding/armarx/SimulationX/data/environment/KIT_Robot_Kitchen.xml";
-    ManipulationObjectPtr mo = ObjectIO::loadManipulationObject(f);
-    SimDynamics::DynamicsObjectPtr dynObj2 = world->CreateDynamicsObject(mo, DynamicsObject::eKinematic);
-    world->addObject(dynObj2);
-#endif
-
-
-#if 0
-    std::string f = "/home/SMBAD/vahrenka/.armarx/mongo/.cache/files/lowersink.xml";
-    ManipulationObjectPtr mo = ObjectIO::loadManipulationObject(f);
-    SimDynamics::DynamicsObjectPtr dynObj2 = world->CreateDynamicsObject(mo);
-    //dynObj->setPosition(Eigen::Vector3f(3000,3000,1000.0f));
-    world->addObject(dynObj2);
-#endif
-
-
-
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(robFile);
     VirtualRobot::RobotPtr robot = VirtualRobot::RobotIO::loadRobot(robFile);
 
@@ -207,38 +188,6 @@ int main(int argc, char* argv[])
 
     BulletOpenGLViewer viewer(world);
     //viewer.enableContraintsDebugDrawing();
-
-#if 0
-    std::cout << "TEST7" << std::endl;
-    ObstaclePtr o = Obstacle::createBox(10, 10, 1500);
-    DynamicsObjectPtr do1 = DynamicsWorld::GetWorld()->CreateDynamicsObject(o, DynamicsObject::eStatic);
-    ObstaclePtr o2 = Obstacle::createBox(10, 10, 1000);
-    Eigen::Matrix4f gpxy = Eigen::Matrix4f::Identity();
-    //gpxy(1,3) -= 213.0f;
-    gpxy(0, 3) += 3000.0f;
-    o2->setGlobalPose(gpxy);
-    DynamicsObjectPtr do2 = DynamicsWorld::GetWorld()->CreateDynamicsObject(o2, DynamicsObject::eStatic);
-    DynamicsEnginePtr e = DynamicsWorld::GetWorld()->getEngine();
-    e->disableCollision(do1.get());
-    e->disableCollision(do2.get());
-    /*
-    std::vector<DynamicsObjectPtr> dos = e->getObjects();
-    for (size_t i=0;i<dos.size();i++)
-    {
-        e->disableCollision(do1.get(),dos[i].get());
-        e->disableCollision(do2.get(),dos[i].get());
-        if (e->checkCollisionEnabled(do1.get(),dos[i].get()))
-        {
-            std::cout << "OOPS" << std::endl;
-        }
-        if (e->checkCollisionEnabled(do2.get(),dos[i].get()))
-        {
-            std::cout << "OOPS" << std::endl;
-        }
-    }*/
-    e->addObject(do1);
-    e->addObject(do2);
-#endif
 
     return glutmain(argc, argv, 640, 480, "Show SimDynamics Scene", &viewer);
 }

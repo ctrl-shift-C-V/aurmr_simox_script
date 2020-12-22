@@ -210,11 +210,6 @@ void GL_DialogWindow::draw(btScalar deltaTime)
 
 void    GL_DialogWindow::saveOpenGLState()
 {
-#if 0
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
-#endif
-
     glMatrixMode(GL_TEXTURE);
     glPushMatrix();
     glLoadIdentity();

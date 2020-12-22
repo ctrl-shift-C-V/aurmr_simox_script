@@ -157,19 +157,7 @@ namespace SimDynamics
 
                 // we assume that all models are handled by Bullet, so we do not need to update children
                 robotNodeActuator->updateVisualizationPose(resPose, false);
-#if 0
-
-                if (rn->getName() == "Shoulder 1 L")
-                {
-                    std::cout << "Shoulder 1 L:" << ja << ", speed:" << bdr->getJointSpeed(rn) << std::endl;
-                }
-
-#endif
-            } /*else
-
-        {
-            VR_WARNING << "Could not determine dynamic robot?!" << std::endl;
-        }*/
+            }
         }
         else
         {

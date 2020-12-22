@@ -116,22 +116,6 @@ namespace SimDynamics
         VR_ASSERT(node);
         VR_ASSERT(robot->hasRobotNode(node));
 
-        // if node is a joint without model, there is no dyn node!
-        //DynamicsObjectPtr dnyRN;
-        //if (hasDynamicsRobotNode(node))
-        //  dnyRN = getDynamicsRobotNode(node);
-        //  createDynamicsNode(node);
-
-
-#if 0
-
-        if (node->getName() == "Elbow R")
-        {
-            std::cout << "##### +++++ New Node target:" << node->getName() << ", jointValue:" << jointValue << std::endl;
-        }
-
-#endif
-
         robotNodeActuationTarget target;
         target.actuation.modes.position = 1;
         target.node = node;

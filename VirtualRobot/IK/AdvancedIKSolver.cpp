@@ -201,11 +201,6 @@ namespace VirtualRobot
         GraspPtr g = graspSet->getGrasp(pos);
         Eigen::Matrix4f m = g->getTcpPoseGlobal(object->getGlobalPose());
 
-#if 0
-
-        // assuming that reachability is checked in the solve() method, so we don't have ot check it here (->avoid double checks)
-        if (checkReachable(m))
-#endif
             if (_sampleSolution(m, selection, maxLoops))
             {
                 return g;

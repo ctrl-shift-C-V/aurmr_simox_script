@@ -494,13 +494,6 @@ void reachabilityWindow::extendReach()
 
     int steps = UI.spinBoxExtend->value();
 
-#if 0
-    ManipulabilityPtr manipSpace = boost::dynamic_pointer_cast<Manipulability>(reachSpace);
-    if (manipSpace && manipSpace->getManipulabilityMeasure())
-    {
-        manipSpace->getManipulabilityMeasure()->setVerbose(true);
-    }
-#endif
     //reachSpace->addRandomTCPPoses(steps, 1, true);
     reachSpace->addRandomTCPPoses(steps, QThread::idealThreadCount() < 1 ? 1 : QThread::idealThreadCount(), true);
 

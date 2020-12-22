@@ -31,10 +31,7 @@ int main(int argc, char* argv[])
 
     std::string filename1("objects/plate.xml");
     std::string filename2("robots/ArmarIII/ArmarIII.xml");
-#if 0
-    filename1 = "objects/iCub/LegoXWing_RightHand_300.xml";
-    filename2 = "robots/iCub/iCub.xml";
-#endif
+
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(filename1);
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(filename2);
 

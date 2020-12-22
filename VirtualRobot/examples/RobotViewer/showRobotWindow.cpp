@@ -318,154 +318,6 @@ void showRobotWindow::exportVRML()
         return;
     }
 
-#if 0
-    resetSceneryAll();
-
-    std::string t1("LegL_Hip1_joint");
-    std::string t2("LegR_Hip1_joint");
-
-    Eigen::Matrix4f m1 = robot->getRobotNode(t1)->getGlobalPose();
-    Eigen::Matrix4f m2 = robot->getRobotNode(t2)->getGlobalPose();
-    std::cout << "global pose " << t1 << ":" << endl << m1 << std::endl;
-    std::cout << "global pose " << t2 << ":" << endl << m2 << std::endl;
-
-    Eigen::Matrix4f parentM1 = robot->getRobotNode(t1)->getParent()->getGlobalPose();
-    Eigen::Matrix4f parentM2 = robot->getRobotNode(t2)->getParent()->getGlobalPose();
-    std::cout << "global pose parent " << t1 << ":" << endl << parentM1 << std::endl;
-    std::cout << "global pose parent " << t2 << ":" << endl << parentM2 << std::endl;
-
-    Eigen::Matrix4f localM1 = robot->getRobotNode(t1)->getLocalTransformation();
-    Eigen::Matrix4f localM2 = robot->getRobotNode(t2)->getLocalTransformation();
-    std::cout << "local trafo " << t1 << ":" << endl << localM1 << std::endl;
-    std::cout << "local trafo " << t2 << ":" << endl << localM2 << std::endl;
-
-
-
-    Eigen::Matrix4f tmpRotMat1 = Eigen::Matrix4f::Identity();
-    Eigen::Matrix4f tmpRotMat2 = Eigen::Matrix4f::Identity();
-    Eigen::Vector3f rot1;
-    rot1 << 0, 0, 1;
-    Eigen::Vector3f rot2;
-    rot2 << 0, 0, 1;
-    tmpRotMat1.block(0, 0, 3, 3) = Eigen::AngleAxisf(0.0f, rot1).matrix();
-    tmpRotMat2.block(0, 0, 3, 3) = Eigen::AngleAxisf(0.0f, rot2).matrix();
-
-    m1 = parentM1 * localM1 /*getLocalTransformation()*/ * tmpRotMat1;
-    m2 = parentM2 * localM2 /*getLocalTransformation()*/ * tmpRotMat2;
-    std::cout << "rot mat " << t1 << ":" << endl << tmpRotMat1 << std::endl;
-    std::cout << "rot mat " << t2 << ":" << endl << tmpRotMat2 << std::endl;
-
-    std::cout << "gp custom " << t1 << ":" << endl << m1 << std::endl;
-    std::cout << "gp custom " << t2 << ":" << endl << m2 << std::endl;
-
-
-
-
-
-    /*std::string root1("Root_joint");
-    std::string root2("RootRotated");
-    Eigen::Matrix4f gpr1 = robot->getRobotNode(root1)->getGlobalPose();
-    Eigen::Matrix4f gpr2 = robot->getRobotNode(root2)->getGlobalPose();
-    */
-
-
-    std::string knee1("LegL_Knee_joint");
-    std::string knee2("LegR_Knee_joint");
-    Eigen::Matrix4f gpr1 = robot->getRobotNode(knee1)->getGlobalPose();
-    Eigen::Matrix4f gpr2 = robot->getRobotNode(knee2)->getGlobalPose();
-
-    std::cout << "gp  " << knee1 << ":" << endl << gpr1 << std::endl;
-    std::cout << "gp  " << knee2 << ":" << endl << gpr2 << std::endl;
-    std::cout << "gp knee1->knee2 :" << endl << robot->getRobotNode(knee1)->toLocalCoordinateSystem(robot->getRobotNode(knee2)->getGlobalPose()) << std::endl;
-
-
-
-
-
-
-    std::string n1("LegR_Ank2_joint");
-    std::string n2("LegL_Ank2_joint");
-    RobotNodePtr start1 = robot->getRobotNode(n1);
-    RobotNodePtr tcp1 = robot->getRobotNode(n2);
-
-    m1 = start1->toLocalCoordinateSystem(tcp1->getGlobalPose());
-    std::cout << "trafo (" << n1 << " -> " << n2 << "):" << endl << m1 << std::endl;
-
-
-    return;
-#endif
-
-#if 0
-    resetSceneryAll();
-
-    RobotNodePtr start1 = robot->getRobotNode("Shoulder 2 L");
-    RobotNodePtr tcp1 = robot->getRobotNode("Wrist 1 L");
-
-    Eigen::Matrix4f m1 = start1->toLocalCoordinateSystem(tcp1->getGlobalPose());
-    std::cout << "OLD trafo (FW):" << endl << m1 << std::endl;
-
-    /*
-    RobotFactory::robotStructureDef newStructure;
-    newStructure.rootName = "TCP L";
-
-    RobotFactory::robotNodeDef rn1;
-    rn1.name = "TCP L";
-    rn1.children.push_back("Wrist 2 L");
-    rn1.invertTransformation = true;
-    newStructure.parentChildMapping.push_back(rn1);
-
-    RobotFactory::robotNodeDef rn2;
-    rn2.name = "Wrist 2 L";
-    rn2.children.push_back("Wrist 1 L");
-    rn2.invertTransformation = true;
-    newStructure.parentChildMapping.push_back(rn2);
-
-    RobotFactory::robotNodeDef rn3;
-    rn3.name = "Wrist 1 L";
-    rn3.children.push_back("Underarm L");
-    rn3.invertTransformation = true;
-    newStructure.parentChildMapping.push_back(rn3);
-
-    RobotFactory::robotNodeDef rn4;
-    rn4.name = "Underarm L";
-    rn4.children.push_back("Elbow L");
-    rn4.invertTransformation = true;
-    newStructure.parentChildMapping.push_back(rn4);
-
-    RobotFactory::robotNodeDef rn5;
-    rn5.name = "Elbow L";
-    rn5.children.push_back("Upperarm L");
-    rn5.invertTransformation = true;
-    newStructure.parentChildMapping.push_back(rn5);
-
-    RobotFactory::robotNodeDef rn6;
-    rn6.name = "Upperarm L";
-    rn6.children.push_back("Shoulder 2 L");
-    rn6.invertTransformation = true;
-    newStructure.parentChildMapping.push_back(rn6);
-
-    RobotFactory::robotNodeDef rn7;
-    rn7.name = "Shoulder 2 L";
-    rn7.children.push_back("Shoulder 1 L");
-    rn7.invertTransformation = true;
-    newStructure.parentChildMapping.push_back(rn7);
-
-    robot = RobotFactory::cloneChangeStructure(robot, newStructure);
-    */
-    robot = RobotFactory::cloneChangeStructure(robot, "Shoulder 1 L", "TCP L");
-
-    updatRobotInfo();
-
-    RobotNodePtr start2 = robot->getRobotNode("Shoulder 2 L");
-    RobotNodePtr tcp2 = robot->getRobotNode("Wrist 1 L");
-
-    Eigen::Matrix4f m2 = start2->toLocalCoordinateSystem(tcp2->getGlobalPose());
-    std::cout << "NEW trafo (INV):" << endl << m2 << std::endl;
-
-    return;
-
-#endif
-
     QString fi = QFileDialog::getSaveFileName(this, tr("VRML 2.0 File"), QString(), tr("VRML Files (*.wrl)"));
     std::string s = std::string(fi.toLatin1());
 
@@ -725,19 +577,6 @@ void showRobotWindow::jointValueChanged(int pos)
     robot->setJointValue(currentRobotNodes[nr], fPos);
     UI.lcdNumberJointValue->display((double)fPos);
 
-#if 0
-    RobotNodePtr rnl = robot->getRobotNode("LeftLeg_TCP");
-    RobotNodePtr rnr = robot->getRobotNode("RightLeg_TCP");
-
-    if (rnl && rnr)
-    {
-        std::cout << "LEFT:" << std::endl;
-        MathTools::printMat(rnl->getGlobalPose());
-        std::cout << "RIGHT:" << std::endl;
-        MathTools::printMat(rnr->getGlobalPose());
-    }
-
-#endif
     updatePointDistanceVisu();
 }
 
@@ -924,42 +763,6 @@ void showRobotWindow::loadRobot()
         return;
     }
 
-    // just a simple test that inverts the kinematic structure of the robot
-#if 0
-    if (robot->hasRobotNode("Index L J1"))
-    {
-        robot = RobotFactory::cloneInversed(robot, "Index L J1");
-    }
-#endif
-
-#if 0
-    if (robot->hasRobotNodeSet("LeftArm"))
-    {
-        robot = RobotFactory::cloneSubSet(robot, robot->getRobotNodeSet("LeftArm"), "LeftArmRobot");
-    }
-#endif
-
-#if 0
-    if (robot->hasRobotNode("Wrist 2 L") && robot->hasRobotNode("Wrist 2 R"))
-    {
-        std::vector<std::string> l;
-        l.push_back("Wrist 2 L");
-        l.push_back("Wrist 2 R");
-        robot = RobotFactory::cloneUniteSubsets(robot, "RobotWithUnitedHands", l);
-    }
-    VR_INFO << "=========== PERFORMANCE orig ============" << std::endl;
-    testPerformance(robot, robot->getRobotNodeSet("Joints_Revolute"));
-    if (robot->hasRobotNode("LWy_joint") && robot->hasRobotNode("RWy_joint"))
-    {
-        std::vector<std::string> l;
-        l.push_back("LWy_joint");
-        l.push_back("RWy_joint");
-        robot = RobotFactory::cloneUniteSubsets(robot, "RobotWithUnitedHands", l);
-    }
-    VR_INFO << "=========== PERFORMANCE clone ============" << std::endl;
-    testPerformance(robot, robot->getRobotNodeSet("Joints_Revolute"));// ("BPy_joint"));
-#endif
-
     updatRobotInfo();
 }
 
@@ -1006,27 +809,6 @@ void showRobotWindow::updatRobotInfo()
 
     displayTriangles();
 
-#if 0
-    RobotPtr r2 = robot->clone(robot->getName(), robot->getCollisionChecker(), 2.0f);
-    Eigen::Matrix4f gp = Eigen::Matrix4f::Identity();
-    gp(0, 3) += 1000.0f;
-
-    r2->setGlobalPose(gp);
-    extraSep->removeAllChildren();
-    useColModel = UI.checkBoxColModel->checkState() == Qt::Checked;
-    SceneObject::VisualizationType colModel = (UI.checkBoxColModel->isChecked()) ? SceneObject::Collision : SceneObject::Full;
-
-    VirtualRobot::CoinVisualizationPtr visualization = r2->getVisualization<CoinVisualization>(colModel);
-    SoNode* visualisationNode = NULL;
-
-    if (visualization)
-    {
-        visualisationNode = visualization->getCoinVisualization();
-    }
-
-    extraSep->addChild(visualisationNode);
-#endif
-
     // build visualization
     rebuildVisualization();
     robotStructure();
@@ -1070,48 +852,6 @@ void showRobotWindow::closeHand()
 
 void showRobotWindow::openHand()
 {
-#if 0
-
-    if (robot)
-    {
-        std::vector<RobotNodePtr> rn = robot->getRobotNodes();
-        std::vector<RobotNodePtr> rnJoints;
-
-        for (size_t j = 0; j < rn.size(); j++)
-        {
-            if (rn[j]->isRotationalJoint())
-            {
-                rnJoints.push_back(rn[j]);
-            }
-        }
-
-        int loops = 10000;
-        clock_t startT = clock();
-
-        for (int i = 0; i < loops; i++)
-        {
-            std::vector<float> jv;
-
-            for (size_t j = 0; j < rnJoints.size(); j++)
-            {
-                float t = RandomFloat(); // value from 0 to 1
-                t = rnJoints[j]->getJointLimitLo() + (rnJoints[j]->getJointLimitHi() - rnJoints[j]->getJointLimitLo()) * t;
-                jv.push_back(t);
-            }
-
-            robot->setJointValues(rnJoints, jv);
-        }
-
-        clock_t endT = clock();
-
-        float diffClock = (float)(((float)(endT - startT) / (float)CLOCKS_PER_SEC) * 1000.0f);
-        std::cout << "RobotNodes:" << rn.size() << std::endl;
-        std::cout << "Joints:" << rnJoints.size() << std::endl;
-        std::cout << "loops:" << loops << ". time (ms):" << diffClock << ". Per loop:" << diffClock / (float)loops << std::endl;
-    }
-
-#endif
-
     if (currentEEF)
     {
         currentEEF->openActors();

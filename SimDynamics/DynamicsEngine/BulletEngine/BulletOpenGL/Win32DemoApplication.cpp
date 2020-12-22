@@ -17,30 +17,6 @@ subject to the following restrictions:
 
 #include "Win32DemoApplication.h"
 
-
-
-
-#if 0
-void    Win32DemoApplication::renderme()
-{
-}
-void    Win32DemoApplication::setTexturing(bool useTexture)
-{
-}
-
-void    Win32DemoApplication::setShadows(bool useShadows)
-{
-}
-
-void    Win32DemoApplication::setCameraDistance(float camDist)
-{
-}
-void    Win32DemoApplication::clientResetScene()
-{
-
-}
-#endif
-
 void Win32DemoApplication::updateModifierKeys()
 {
     //not yet

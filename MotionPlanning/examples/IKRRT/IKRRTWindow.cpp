@@ -720,28 +720,6 @@ void IKRRTWindow::planIKRRT()
 
 void IKRRTWindow::colModel()
 {
-#if 0
-
-    if (reachSpace && graspSet && object)
-    {
-        Eigen::Matrix4f m = reachSpace->sampleReachablePose();
-        std::cout << "getEntry: " << (int)reachSpace->getEntry(m) << std::endl;
-        /*SoSeparator* sep1 = new SoSeparator;
-        SoSeparator *cs = CoinVisualizationFactory::CreateCoordSystemVisualization();
-        SoMatrixTransform *mt = new SoMatrixTransform;
-        SbMatrix ma(reinterpret_cast<SbMat*>(m.data()));
-        mt->matrix.setValue(ma);
-        sep1->addChild(mt);
-        sep1->addChild(cs);
-        sceneSep->addChild(sep1);*/
-
-
-        GraspPtr g = graspSet->getGrasp(0);
-        m = g->getObjectTargetPoseGlobal(m);
-        object->setGlobalPose(m);
-    }
-
-#endif
     buildVisu();
 }
 

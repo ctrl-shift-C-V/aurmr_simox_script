@@ -439,20 +439,6 @@ void showRobotWindow::jointValueChanged(int pos)
     float fPos = currentRobotNodes[nr]->getJointLimitLo() + (float)pos / 1000.0f * (currentRobotNodes[nr]->getJointLimitHi() - currentRobotNodes[nr]->getJointLimitLo());
     robot->setJointValue(currentRobotNodes[nr], fPos);
     UI.lcdNumberJointValue->display((double)fPos);
-
-#if 0
-    RobotNodePtr rnl = robot->getRobotNode("LeftLeg_TCP");
-    RobotNodePtr rnr = robot->getRobotNode("RightLeg_TCP");
-
-    if (rnl && rnr)
-    {
-        cout << "LEFT:" << endl;
-        MathTools::printMat(rnl->getGlobalPose());
-        cout << "RIGHT:" << endl;
-        MathTools::printMat(rnr->getGlobalPose());
-    }
-
-#endif
 }
 
 void showRobotWindow::showCoordSystem()
@@ -660,65 +646,3 @@ void showRobotWindow::robotCoordSystems()
     // rebuild visualization
     rebuildVisualization();
 }
-/*
-void showRobotWindow::closeHand()
-{
-    if (currentEEF)
-        currentEEF->closeActors();
-}
-
-void showRobotWindow::openHand()
-{
-#if 0
-    if (robot)
-    {
-        float randMult = (float)(1.0/(double)(RAND_MAX));
-        std::vector<RobotNodePtr> rn = robot->getRobotNodes();
-        std::vector<RobotNodePtr> rnJoints;
-        for (size_t j=0;j<rn.size();j++)
-        {
-            if (rn[j]->isRotationalJoint())
-                rnJoints.push_back(rn[j]);
-        }
-        int loops = 10000;
-        clock_t startT = clock();
-        for (int i=0;i<loops;i++)
-        {
-            std::vector<float> jv;
-            for (size_t j=0;j<rnJoints.size();j++)
-            {
-                float t = (float)rand() * randMult; // value from 0 to 1
-                t = rnJoints[j]->getJointLimitLo() + (rnJoints[j]->getJointLimitHi() - rnJoints[j]->getJointLimitLo())*t;
-                jv.push_back(t);
-            }
-            robot->setJointValues(rnJoints,jv);
-        }
-        clock_t endT = clock();
-
-        float diffClock = (float)(((float)(endT - startT) / (float)CLOCKS_PER_SEC) * 1000.0f);
-        cout << "RobotNodes:" << rn.size() << endl;
-        cout << "Joints:" << rnJoints.size() << endl;
-        cout << "loops:" << loops << ". time (ms):" << diffClock << ". Per loop:" << diffClock/(float)loops << endl;
-    }
-#endif
-    if (currentEEF)
-        currentEEF->openActors();
-}
-
-void showRobotWindow::selectEEF( int nr )
-{
-    cout << "Selecting EEF nr " << nr << endl;
-    if (nr<0 || nr>=(int)eefs.size())
-        return;
-    currentEEF = eefs[nr];
-}
-
-void showRobotWindow::updateEEFBox()
-{
-    UI.comboBoxEndEffector->clear();
-
-    for (unsigned int i=0;i<eefs.size();i++)
-    {
-        UI.comboBoxEndEffector->addItem(QString(eefs[i]->getName().c_str()));
-    }
-}*/

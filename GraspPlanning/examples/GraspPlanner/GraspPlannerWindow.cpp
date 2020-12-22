@@ -61,10 +61,6 @@ GraspPlannerWindow::GraspPlannerWindow(std::string& robFile, std::string& eefNam
     graspsSep = new SoSeparator;
     graspsSep->ref();
 
-#if 0
-    SoSeparator* s = CoinVisualizationFactory::CreateCoordSystemVisualization();
-    sceneSep->addChild(s);
-#endif
     sceneSep->addChild(robotSep);
     sceneSep->addChild(objectSep);
     sceneSep->addChild(frictionConeSep);
@@ -314,12 +310,6 @@ void GraspPlannerWindow::loadObject(const string& objFile)
         object = Obstacle::createBox(50.0f, 50.0f, 10.0f);
     }
 
-#if 0
-    TriMeshModelPtr tm = object->getVisualization()->getTriMeshModel();
-    MathTools::ConvexHull3DPtr cv = ConvexHullGenerator::CreateConvexHull(tm->vertices);
-    object = GraspStudio::MeshConverter::CreateManipulationObject(object->getName(), cv);
-#endif
-
     //Eigen::Vector3f minS,maxS;
     //object->getCollisionModel()->getTriMeshModel()->getSize(minS,maxS);
     //cout << "minS: \n" << minS << "\nMaxS:\n" << maxS << std::endl;
@@ -422,30 +412,6 @@ void GraspPlannerWindow::plan()
 
 void GraspPlannerWindow::closeEEF()
 {
-#if 0
-    static int pp = 0;
-    static Eigen::Vector3f approachDir;
-    /*object->getCollisionModel()->getTriMeshModel()->print();
-    object->getCollisionModel()->getTriMeshModel()->checkAndCorrectNormals(false);*/
-    object->getCollisionModel()->getTriMeshModel()->print();
-
-    if (pp == 0)
-    {
-        Eigen::Vector3f position;
-        approach->getPositionOnObject(position, approachDir);
-
-        // set new pose
-        approach->setEEFToApproachPose(position, approachDir);
-        //eefCloned->getEndEffector(eefName)->getGCP()->showCoordinateSystem(true);
-    }
-    else
-    {
-        approach->moveEEFAway(approachDir, 3.0f, 5);
-    }
-
-    pp = (pp + 1) % 5;
-    return;
-#endif
     contacts.clear();
 
     if (eefCloned && eefCloned->getEndEffector(eefName))

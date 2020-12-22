@@ -490,21 +490,6 @@ namespace SimDynamics
     void BulletRobot::ensureKinematicConstraints()
     {
         // results in strange behavior?!
-#if 0
-        // update globalpose of robot
-        Eigen::Matrix4f gpRoot = robot->getRootNode()->getGlobalPoseVisualization();
-        Eigen::Matrix4f rootPreJoint = robot->getRootNode()->getPreJointTransformation();
-        robot->setGlobalPose(gpRoot * rootPreJoint.inverse());
-        //robot->applyJointValues();
-        std::map<VirtualRobot::RobotNodePtr, DynamicsObjectPtr>::iterator i = dynamicRobotNodes.begin();
-
-        while (i != dynamicRobotNodes.end())
-        {
-            i->second->setPose(i->first->getGlobalPoseVisualization());
-            i++;
-        }
-
-#endif
     }
 
     void BulletRobot::actuateJoints(double dt)

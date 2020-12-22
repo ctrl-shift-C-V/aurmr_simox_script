@@ -74,26 +74,6 @@ SimDynamicsWindow::SimDynamicsWindow(std::string& sRobotFilename)
 
     addObject();
 
-#if 0
-    std::string f = "/home/niko/coding/armarx/SimulationX/data/environment/KIT_Robot_Kitchen.xml";
-    ManipulationObjectPtr mo = ObjectIO::loadManipulationObject(f);
-    mo->setSimulationType(VirtualRobot::SceneObject::Physics::eStatic);
-    dynamicsObject2 = dynamicsWorld->CreateDynamicsObject(mo);
-    //dynObj->setPosition(Eigen::Vector3f(3000,3000,1000.0f));
-    dynamicsWorld->addObject(dynamicsObject2);
-#endif
-
-#if 0
-    std::string f = "/home/SMBAD/vahrenka/.armarx/mongo/.cache/files/lowersink.xml";
-    ManipulationObjectPtr mo = ObjectIO::loadManipulationObject(f);
-    mo->setSimulationType(SceneObject::Physics::eDynamic);
-    SimDynamics::DynamicsObjectPtr dynObj2 = dynamicsWorld->CreateDynamicsObject(mo);
-    //dynObj2->setSimType(VirtualRobot::SceneObject::Physics::eDynamic);
-    dynObj2->setPosition(Eigen::Vector3f(0, 0, -200.0f));
-    dynamicsWorld->addObject(dynObj2);
-    dynamicsObjects.push_back(dynObj2);
-#endif
-
     setupUI();
     loadRobot(robotFilename);
 
@@ -734,16 +714,6 @@ void SimDynamicsWindow::updateJointInfo()
     UI.label_RNRPYGP->setText(qGPRPY);
     UI.label_RNPosVisu->setText(qVisu);
     UI.label_RNPosCom->setText(qCom);
-
-#if 0
-
-    // print some joint info
-    if (viewer->engineRunning())
-    {
-        std::cout << info << std::endl;
-    }
-
-#endif
 }
 
 void SimDynamicsWindow::updateRobotInfo()
