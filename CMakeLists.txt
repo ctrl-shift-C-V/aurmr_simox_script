@@ -1,19 +1,26 @@
 cmake_minimum_required(VERSION 3.10)
 MESSAGE (STATUS "cmake version: ${CMAKE_VERSION}")
-#######################################################################################
-PROJECT(Simox LANGUAGES CXX VERSION 2.3.74.0)
-MESSAGE (STATUS "** Simox version: ${Simox_VERSION}")
-INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
-SET(Simox_BOOST_VERSION 1.65.1)
-# If OS is Ubuntu 20, use another Boost version.
+# If OS is Ubuntu 20 we nned to change some things
 execute_process(COMMAND lsb_release -cs
     OUTPUT_VARIABLE RELEASE_CODENAME
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-if (RELEASE_CODENAME STREQUAL focal)
-    message(STATUS "Detected Ubuntu 20, using Boost 1.71.0")
+#######################################################################################
+PROJECT(Simox LANGUAGES CXX VERSION 2.3.74.0)
+MESSAGE (STATUS "** Simox version: ${Simox_VERSION}")
+INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
+
+#determine boost version
+if(NOT "" STREQUAL "${Simox_BOOST_VERSION}")
+    #keep the value
+elseif("" STREQUAL "$ENV{Simox_BOOST_VERSION}")
+    SET(Simox_BOOST_VERSION $ENV{Simox_BOOST_VERSION})
+elseif(RELEASE_CODENAME STREQUAL focal)
     SET(Simox_BOOST_VERSION 1.71.0)
+else()
+    SET(Simox_BOOST_VERSION 1.65.1)
 endif()
+message(STATUS "Using Boost Version ${Simox_BOOST_VERSION}")
 #######################################################################################
 #global config
 # Set up build type
