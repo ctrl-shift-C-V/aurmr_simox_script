@@ -13,7 +13,8 @@ INCLUDE(${Simox_SOURCE_DIR}/CMakeModules/SimoxMacros.cmake)
 #determine boost version
 if(NOT "" STREQUAL "${Simox_BOOST_VERSION}")
     #keep the value
-elseif("" STREQUAL "$ENV{Simox_BOOST_VERSION}")
+elseif(NOT "" STREQUAL "$ENV{Simox_BOOST_VERSION}")
+    message(STATUS "Use boost version from env variable Simox_BOOST_VERSION")
     SET(Simox_BOOST_VERSION $ENV{Simox_BOOST_VERSION})
 elseif(RELEASE_CODENAME STREQUAL focal)
     SET(Simox_BOOST_VERSION 1.71.0)
