@@ -8,10 +8,8 @@ namespace VirtualRobot
 
 
     SupportPolygon::SupportPolygon(SceneObjectSetPtr contactModels)
-        : contactModels(contactModels)
+        : contactModels(contactModels), floor(MathTools::getFloorPlane())
     {
-        floor =  MathTools::getFloorPlane();
-
         VR_ASSERT(this->contactModels);
 
         for (size_t i = 0; i < contactModels->getSize(); i++)

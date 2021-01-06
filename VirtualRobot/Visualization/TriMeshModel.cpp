@@ -38,7 +38,7 @@ namespace VirtualRobot
             {
                 c = std::tolower(c);
             }
-            return std::move(s);
+            return s;
         };
         const std::string ext = tolower(std::filesystem::path{str}.extension());
         if (VirtualRobot::AssimpReader::can_load(str))

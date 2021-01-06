@@ -2171,7 +2171,7 @@ namespace VirtualRobot
 
         for (unsigned int i = 0; i < numThreads; i++)
         {
-            threads[i] = std::thread([=] ()
+            threads[i] = std::thread([=, this] ()
             {
                 // each thread gets a cloned robot
                 CollisionCheckerPtr cc(new CollisionChecker());
@@ -2180,13 +2180,13 @@ namespace VirtualRobot
                 RobotNodeSetPtr clonedNodeSet = clonedRobot->getRobotNodeSet(this->nodeSet->getName());
                 RobotNodePtr clonedTcpNode = clonedRobot->getRobotNode(this->tcpNode->getName());
 
-                SceneObjectSetPtr staticCollisionModel = this->staticCollisionModel;
-                if (staticCollisionModel && clonedRobot->hasRobotNodeSet(staticCollisionModel->getName()))
+                SceneObjectSetPtr static_collision_model = this->staticCollisionModel;
+                if (static_collision_model && clonedRobot->hasRobotNodeSet(static_collision_model->getName()))
                 {
-                    staticCollisionModel = clonedRobot->getRobotNodeSet(staticCollisionModel->getName());
+                    static_collision_model = clonedRobot->getRobotNodeSet(static_collision_model->getName());
                 }
 
-                SceneObjectSetPtr dynamicCollisionModel = this->dynamicCollisionModel;
+                SceneObjectSetPtr dynamic_collision_model = this->dynamicCollisionModel;
                 if (dynamicCollisionModel && clonedRobot->hasRobotNodeSet(dynamicCollisionModel->getName()))
                 {
                     dynamicCollisionModel = clonedRobot->getRobotNodeSet(dynamicCollisionModel->getName());
@@ -2215,13 +2215,13 @@ namespace VirtualRobot
                         clonedRobot->setJointValues(clonedNodeSet, v);
 
                         // check for collisions
-                        if (!checkForSelfCollisions || !staticCollisionModel || !dynamicCollisionModel)
+                        if (!checkForSelfCollisions || !static_collision_model || !dynamicCollisionModel)
                         {
                             successfullyRandomized = true;
                             break;
                         }
 
-                        if (!clonedRobot->getCollisionChecker()->checkCollision(staticCollisionModel, dynamicCollisionModel))
+                        if (!clonedRobot->getCollisionChecker()->checkCollision(static_collision_model, dynamicCollisionModel))
                         {
                             successfullyRandomized = true;
                             break;

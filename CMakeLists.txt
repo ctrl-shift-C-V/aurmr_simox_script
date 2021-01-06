@@ -56,6 +56,7 @@ MESSAGE (STATUS "** Module path: "  ${CMAKE_MODULE_PATH})
 
 # we want a global automoc
 FIND_PACKAGE(Qt5 5.5.0 COMPONENTS OpenGL Core Gui Widgets)
+set(OpenGL_GL_PREFERENCE LEGACY)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
