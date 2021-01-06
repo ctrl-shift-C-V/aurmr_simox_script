@@ -760,7 +760,7 @@ namespace VirtualRobot
             // each thread gets a cloned robot
             CollisionCheckerPtr cc(new CollisionChecker());
             RobotPtr clonedRobot = VirtualRobot::RobotIO::loadRobot(this->robot->getFilename(), RobotIO::eCollisionModel);
-            threads[i] = std::thread([=] ()
+            threads[i] = std::thread([=, this] ()
             {
 
                 clonedRobot->setUpdateVisualization(false);
@@ -779,16 +779,16 @@ namespace VirtualRobot
                     dynamicCollisionModel = clonedRobot->getRobotNodeSet(dynamicCollisionModel->getName());
                 }
 
-                RobotNodeSetPtr selfDistStatic = this->selfDistStatic;
-                if (selfDistStatic && clonedRobot->hasRobotNodeSet(selfDistStatic->getName()))
+                RobotNodeSetPtr self_dist_static = this->selfDistStatic;
+                if (self_dist_static && clonedRobot->hasRobotNodeSet(self_dist_static->getName()))
                 {
-                    selfDistStatic = clonedRobot->getRobotNodeSet(selfDistStatic->getName());
+                    self_dist_static = clonedRobot->getRobotNodeSet(self_dist_static->getName());
                 }
 
-                RobotNodeSetPtr selfDistDynamic = this->selfDistDynamic;
-                if (selfDistDynamic && clonedRobot->hasRobotNodeSet(selfDistDynamic->getName()))
+                RobotNodeSetPtr self_dist_dynamic = this->selfDistDynamic;
+                if (self_dist_dynamic && clonedRobot->hasRobotNodeSet(self_dist_dynamic->getName()))
                 {
-                    selfDistDynamic = clonedRobot->getRobotNodeSet(selfDistDynamic->getName());
+                    self_dist_dynamic = clonedRobot->getRobotNodeSet(self_dist_dynamic->getName());
                 }
 
 
@@ -836,7 +836,7 @@ namespace VirtualRobot
                     if (successfullyRandomized)
                     {
                         Eigen::Matrix4f p = clonedTcpNode->getGlobalPose();
-                        addPose(p, clonedMeasure, selfDistStatic, selfDistDynamic);
+                        addPose(p, clonedMeasure, self_dist_static, self_dist_dynamic);
                     }
                     else
                     {
