@@ -85,11 +85,11 @@ SimDynamicsWindow::SimDynamicsWindow(std::string& sRobotFilename)
     // register callback
     float TIMER_MS = 30.0f;
     SoSensorManager* sensor_mgr = SoDB::getSensorManager();
-    timerSensor = new SoTimerSensor(timerCB, static_cast<void *>(this));
+    timerSensor = new SoTimerSensor(timerCB, static_cast<void*>(this));
     timerSensor->setInterval(SbTime(TIMER_MS / 1000.0f));
     sensor_mgr->insertTimerSensor(timerSensor);
 
-    viewer->addStepCallback(stepCB, static_cast<void *>(this));
+    viewer->addStepCallback(stepCB, static_cast<void*>(this));
 }
 
 
@@ -108,6 +108,10 @@ void SimDynamicsWindow::timerCB(void* data, SoSensor* /*sensor*/)
     SimDynamicsWindow* window = static_cast<SimDynamicsWindow*>(data);
     VR_ASSERT(window);
 
+    if (window->UI.checkBoxAutoMoveRobot->isChecked())
+    {
+        window->setPose();
+    }
     // now its safe to update physical information and set the models to the according poses
     window->updateJointInfo();
     window->updateRobotInfo();
@@ -118,7 +122,7 @@ void SimDynamicsWindow::timerCB(void* data, SoSensor* /*sensor*/)
     window->UI.label_simuStepCount->setText(QString::number(window->simuStepCount));
 }
 
-void SimDynamicsWindow::stepCB(void *data, btScalar /*timeStep*/)
+void SimDynamicsWindow::stepCB(void* data, btScalar /*timeStep*/)
 {
     SimDynamicsWindow* window = static_cast<SimDynamicsWindow*>(data);
     VR_ASSERT(window);
@@ -217,7 +221,7 @@ void SimDynamicsWindow::buildVisualization()
     viewer->addVisualization(dynamicsRobot, colModel);
     viewer->addVisualization(dynamicsObject, colModel);
 
-    for (const auto & dynamicsObject : dynamicsObjects)
+    for (const auto& dynamicsObject : dynamicsObjects)
     {
         viewer->addVisualization(dynamicsObject, colModel);
     }
@@ -244,7 +248,7 @@ void SimDynamicsWindow::comVisu()
     {
         std::vector<RobotNodePtr> n = robot->getRobotNodes();
 
-        for (const auto & i : n)
+        for (const auto& i : n)
         {
             SoSeparator* sep = new SoSeparator;
             comSep->addChild(sep);
@@ -300,7 +304,7 @@ void SimDynamicsWindow::updateJoints()
     UI.comboBoxRobotNode->clear();
     std::vector<RobotNodePtr> nodes = robot->getRobotNodes();
 
-    for (auto & node : nodes)
+    for (auto& node : nodes)
     {
         if (node->isRotationalJoint() || node->isTranslationalJoint())
         {
@@ -349,8 +353,15 @@ bool SimDynamicsWindow::loadRobot(std::string robotFilename)
         //gp(2,3) = 5.0f;
         gp(2, 3) = -bbox.getMin()(2) + 4.0f;
         robot->setGlobalPose(gp);
+        if (UI.checkBox_kinematicJoints->isChecked())
+        {
+            for (auto n : robot->getRobotNodes())
+            {
+                n->setSimulationType(SceneObject::Physics::eKinematic);
+            }
+        }
         dynamicsRobot = dynamicsWorld->CreateDynamicsRobot(robot);
-        if(! UI.checkBox_selfCol->isChecked())
+        if (! UI.checkBox_selfCol->isChecked())
         {
             //we don't want to call this function with true (we would enable all collisions)
             dynamicsRobot->enableSelfCollisions(false);
@@ -669,14 +680,14 @@ void SimDynamicsWindow::updateJointInfo()
         info += "/";
         info += tmp.toStdString();
 
-        Eigen::Vector3f pos = rn->getGlobalPose().block<3,1>(0,3);
+        Eigen::Vector3f pos = rn->getGlobalPose().block<3, 1>(0, 3);
         qGP = QString("GlobalPosition (simox): ") + QString::number(pos(0), 'f', 2) + " / " + QString::number(pos(1), 'f', 2) + " / " + QString::number(pos(2), 'f', 2);
 
         auto rpy = VirtualRobot::MathTools::eigen4f2rpy(gp);
         qGPRPY = "GlobalRPY (simox): " +
-                QString::number(rpy(0), 'f', 2) + " / "+
-                QString::number(rpy(1), 'f', 2) + " / "+
-                QString::number(rpy(2), 'f', 2);
+                 QString::number(rpy(0), 'f', 2) + " / " +
+                 QString::number(rpy(1), 'f', 2) + " / " +
+                 QString::number(rpy(2), 'f', 2);
 
         gp = rn->getGlobalPose();
         qVisu = QString("VISU (simox):");
@@ -719,7 +730,7 @@ void SimDynamicsWindow::updateJointInfo()
 void SimDynamicsWindow::updateRobotInfo()
 {
     Eigen::Vector3f com = robot->getCoMGlobal();
-    Eigen::Vector3f pos = robot->getGlobalPose().block<3,1>(0,3);
+    Eigen::Vector3f pos = robot->getGlobalPose().block<3, 1>(0, 3);
     Eigen::Vector3f rpy = VirtualRobot::MathTools::eigen4f2rpy(robot->getGlobalPose());
 
     UI.label_RobotPos->setText(QString::number(pos(0), 'f', 2) + " / " + QString::number(pos(1), 'f', 2) + " / " + QString::number(pos(2), 'f', 2));
@@ -727,12 +738,12 @@ void SimDynamicsWindow::updateRobotInfo()
     UI.label_RobotCom->setText(QString::number(com(0), 'f', 2) + " / " + QString::number(com(1), 'f', 2) + " / " + QString::number(com(2), 'f', 2));
 
 
-    Eigen::Vector3f rpos = robot->getRootNode()->getGlobalPose().block<3,1>(0,3);
+    Eigen::Vector3f rpos = robot->getRootNode()->getGlobalPose().block<3, 1>(0, 3);
     Eigen::Vector3f rrpy = VirtualRobot::MathTools::eigen4f2rpy(robot->getRootNode()->getGlobalPose());
     UI.label_RootNodePos->setText(QString::number(rpos(0), 'f', 2) + " / " + QString::number(rpos(1), 'f', 2) + " / " + QString::number(rpos(2), 'f', 2));
     UI.label_RootNodeRPY->setText(QString::number(rrpy(0), 'f', 2) + " / " + QString::number(rrpy(1), 'f', 2) + " / " + QString::number(rrpy(2), 'f', 2));
 
-    Eigen::Vector3f rltpos = robot->getRootNode()->getLocalTransformation().block<3,1>(0,3);
+    Eigen::Vector3f rltpos = robot->getRootNode()->getLocalTransformation().block<3, 1>(0, 3);
     Eigen::Vector3f rltrpy = VirtualRobot::MathTools::eigen4f2rpy(robot->getRootNode()->getLocalTransformation());
     UI.label_RootLocalTransfPos->setText(QString::number(rltpos(0), 'f', 2) + " / " + QString::number(rltpos(1), 'f', 2) + " / " + QString::number(rltpos(2), 'f', 2));
     UI.label_RootLocalTransfRPY->setText(QString::number(rltrpy(0), 'f', 2) + " / " + QString::number(rltrpy(1), 'f', 2) + " / " + QString::number(rltrpy(2), 'f', 2));
@@ -802,7 +813,7 @@ void SimDynamicsWindow::updateContactVisu()
 
     std::vector<SimDynamics::DynamicsEngine::DynamicsContactInfo> c = dynamicsWorld->getEngine()->getContacts();
 
-    for (auto & i : c)
+    for (auto& i : c)
     {
         std::cout << "Contact: " << i.objectAName << " + " << i.objectBName << std::endl;
         SoSeparator* normal = new SoSeparator;
@@ -999,7 +1010,7 @@ void SimDynamicsWindow::reloadRobot()
 
 void SimDynamicsWindow::resetPose()
 {
-    Eigen::Vector3f rpos = robot->getRootNode()->getGlobalPose().block<3,1>(0,3);
+    Eigen::Vector3f rpos = robot->getRootNode()->getGlobalPose().block<3, 1>(0, 3);
     Eigen::Vector3f rrpy = VirtualRobot::MathTools::eigen4f2rpy(robot->getRootNode()->getGlobalPose());
 
     UI.spinBox_Pos_X->setValue(rpos[0]);
