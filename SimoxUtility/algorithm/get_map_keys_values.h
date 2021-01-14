@@ -4,6 +4,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <type_traits>
 
 
 namespace simox::alg
@@ -52,15 +53,16 @@ namespace simox::alg
     }
 
 
-    /// Get the results of applying `unary_func` to the values of `map`.
-    template <class R, class K, class V, template<class...> class MapT = std::map, class...Ts>
-    std::vector<V> get_values(const MapT<K, V, Ts...>& map, std::function<R(const V&)> unary_func)
+    /// Get the results of applying `value_fn` to the values of `map`.
+    template <class ValueFn, class K, class V, template<class...> class MapT = std::map, class...Ts>
+    std::vector<std::invoke_result_t<ValueFn, const V&>>
+    get_values(const MapT<K, V, Ts...>& map, ValueFn value_fn)
     {
-        std::vector<V> values;
+        std::vector<std::invoke_result_t<ValueFn, const V&>> values;
         values.reserve(map.size());
         for (const auto& [k, v] : map)
         {
-            values.push_back(unary_func(v));
+            values.push_back(value_fn(v));
         }
         return values;
     }
@@ -87,8 +89,8 @@ namespace simox
         return simox::alg::get_values(map);
     }
     template <class R, class K, class V, template<class...> class MapT = std::map, class...Ts>
-    std::vector<V> get_values(const MapT<K, V, Ts...>& map, std::function<R(const V&)> unary_func)
+    std::vector<V> get_values(const MapT<K, V, Ts...>& map, std::function<R(const V&)> value_fn)
     {
-        return simox::alg::get_values(map, unary_func);
+        return simox::alg::get_values(map, value_fn);
     }
 }
