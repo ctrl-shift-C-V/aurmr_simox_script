@@ -66,6 +66,19 @@ namespace simox::alg
         }
         return values;
     }
+    /// Get the results of applying `value_fn` to the values of `map`.
+    template <class ValueFn, class K, class V, template<class...> class MapT = std::map, class...Ts>
+    std::vector<std::invoke_result_t<ValueFn, V&>>
+    get_values(MapT<K, V, Ts...>& map, ValueFn value_fn)
+    {
+        std::vector<std::invoke_result_t<ValueFn, V&>> values;
+        values.reserve(map.size());
+        for (auto& [k, v] : map)
+        {
+            values.push_back(value_fn(v));
+        }
+        return values;
+    }
 }
 
 
