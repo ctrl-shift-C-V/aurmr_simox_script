@@ -3,8 +3,8 @@
 #include <functional>
 #include <map>
 #include <set>
-#include <vector>
 #include <type_traits>
+#include <vector>
 
 
 namespace simox::alg
@@ -20,7 +20,7 @@ namespace simox::alg
         }
         for (const auto& [k, v] : map)
         {
-            keys.push_back(k);
+            keys.emplace_back(k);
         }
         return keys;
     }
@@ -62,7 +62,7 @@ namespace simox::alg
         values.reserve(map.size());
         for (const auto& [k, v] : map)
         {
-            values.push_back(value_fn(v));
+            values.emplace_back(value_fn(v));
         }
         return values;
     }
@@ -75,7 +75,7 @@ namespace simox::alg
         values.reserve(map.size());
         for (auto& [k, v] : map)
         {
-            values.push_back(value_fn(v));
+            values.emplace_back(value_fn(v));
         }
         return values;
     }
@@ -120,21 +120,25 @@ namespace simox::alg
 namespace simox
 {
     template <class K, class V, template<class...> class MapT = std::map, class...Ts>
+    [[deprecated("Function has moved to namespace ::simox::alg.")]]
     std::vector<K> get_keys(const MapT<K, V, Ts...>& map)
     {
         return simox::alg::get_keys(map);
     }
     template <class K, class V, template<class...> class MapT = std::map, class...Ts>
+    [[deprecated("Function has moved to namespace ::simox::alg.")]]
     std::set<K> get_keys_set(const MapT<K, V, Ts...>& map)
     {
         return simox::alg::get_keys_set(map);
     }
     template <class K, class V, template<class...> class MapT = std::map, class...Ts>
+    [[deprecated("Function has moved to namespace ::simox::alg.")]]
     std::vector<V> get_values(const MapT<K, V, Ts...>& map)
     {
         return simox::alg::get_values(map);
     }
     template <class R, class K, class V, template<class...> class MapT = std::map, class...Ts>
+    [[deprecated("Function has moved to namespace ::simox::alg.")]]
     std::vector<V> get_values(const MapT<K, V, Ts...>& map, std::function<R(const V&)> value_fn)
     {
         return simox::alg::get_values(map, value_fn);
