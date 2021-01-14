@@ -79,6 +79,39 @@ namespace simox::alg
         }
         return values;
     }
+
+
+    /// Get the (const) pointers to the values of (const) `map`.
+    template <class K, class V, template<class...> class MapT = std::map, class...Ts>
+    std::vector<const V*> get_value_ptrs(const MapT<K, V, Ts...>& map)
+    {
+        return get_values(map, [](const V& value)
+        {
+            return &value;
+        });
+    }
+    /// Get the (non-const) pointers to the values of (non-const) `map`.
+    template <class K, class V, template<class...> class MapT = std::map, class...Ts>
+    std::vector<V*> get_value_ptrs(MapT<K, V, Ts...>& map)
+    {
+        return get_values(map, [](V& value)
+        {
+            return &value;
+        });
+    }
+
+    /// Get the const pointers to the values of `map`.
+    template <class K, class V, template<class...> class MapT = std::map, class...Ts>
+    std::vector<const V*> get_value_cptrs(MapT<K, V, Ts...>& map)
+    {
+        return get_values(map, [](const V& value) { return &value; });
+    }
+    /// Get the const pointers to the values of `map`.
+    template <class K, class V, template<class...> class MapT = std::map, class...Ts>
+    std::vector<const V*> get_value_cptrs(const MapT<K, V, Ts...>& map)
+    {
+        return get_value_ptrs(map);
+    }
 }
 
 
