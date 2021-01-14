@@ -6,7 +6,7 @@
 #include <vector>
 
 
-namespace simox
+namespace simox::alg
 {
     /// Get the keys of `map` in a vector.
     template <class K, class V, template<class...> class Template = std::map, class...Ts>
@@ -63,5 +63,32 @@ namespace simox
             values.push_back(unary_func(v));
         }
         return values;
+    }
+}
+
+
+
+// Legacy definitions in old (general) namespace.
+namespace simox
+{
+    template <class K, class V, template<class...> class MapT = std::map, class...Ts>
+    std::vector<K> get_keys(const MapT<K, V, Ts...>& map)
+    {
+        return simox::alg::get_keys(map);
+    }
+    template <class K, class V, template<class...> class MapT = std::map, class...Ts>
+    std::set<K> get_keys_set(const MapT<K, V, Ts...>& map)
+    {
+        return simox::alg::get_keys_set(map);
+    }
+    template <class K, class V, template<class...> class MapT = std::map, class...Ts>
+    std::vector<V> get_values(const MapT<K, V, Ts...>& map)
+    {
+        return simox::alg::get_values(map);
+    }
+    template <class R, class K, class V, template<class...> class MapT = std::map, class...Ts>
+    std::vector<V> get_values(const MapT<K, V, Ts...>& map, std::function<R(const V&)> unary_func)
+    {
+        return simox::alg::get_values(map, unary_func);
     }
 }
