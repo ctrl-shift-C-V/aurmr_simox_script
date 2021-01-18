@@ -40,16 +40,16 @@ BOOST_AUTO_TEST_CASE(test_soft_min_max_of_random)
 
     BOOST_TEST_MESSAGE(num * percentile);
 
-    BOOST_CHECK_EQUAL(smm.get_soft_min(), values.at(20));  // Values 00-19 discarded.
-    BOOST_CHECK_EQUAL(smm.get_soft_max(), values.at(79));  // Values 80-99 discarded.
+    BOOST_CHECK_EQUAL(smm.getSoftMin(), values.at(20));  // Values 00-19 discarded.
+    BOOST_CHECK_EQUAL(smm.getSoftMax(), values.at(79));  // Values 80-99 discarded.
 }
 
 
 BOOST_AUTO_TEST_CASE(test_exceptions)
 {
     simox::math::SoftMinMax smm;
-    BOOST_CHECK_THROW(smm.get_soft_min(), std::out_of_range);
-    BOOST_CHECK_THROW(smm.get_soft_max(), std::out_of_range);
+    BOOST_CHECK_THROW(smm.getSoftMin(), std::out_of_range);
+    BOOST_CHECK_THROW(smm.getSoftMax(), std::out_of_range);
 
     BOOST_CHECK_THROW(simox::math::SoftMinMax(0, 0), std::invalid_argument);
 

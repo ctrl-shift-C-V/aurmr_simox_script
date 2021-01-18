@@ -20,8 +20,8 @@ namespace simox::math
 
     void SoftMinMax::reset(float percentile, std::size_t numValues)
     {
-        min_queue = MinQueue();
-        max_queue = MaxQueue();
+        minQueue = MinQueue();
+        maxQueue = MaxQueue();
 
         if (percentile < 0 || percentile > 0.5f)
         {
@@ -38,73 +38,73 @@ namespace simox::math
         this->percentile = percentile;
         this->num_elements = numValues;
 
-        allowed_heap_size_cache = allowed_heap_size();
+        allowed_heap_size_cache = allowedHeapSize();
     }
 
     void SoftMinMax::add(float value)
     {
-        if (min_queue.size() != max_queue.size())
+        if (minQueue.size() != maxQueue.size())
         {
             std::stringstream msg;
             msg << "Invariant violated: minQueue.size() == maxQueue.size(), "
-                << "but were " << min_queue.size() << " and " << max_queue.size();
+                << "but were " << minQueue.size() << " and " << maxQueue.size();
             throw std::logic_error(msg.str());
         }
 
-        if (min_queue.size() < allowed_heap_size_cache)
+        if (minQueue.size() < allowed_heap_size_cache)
         {
             // Heaps not full yet
-            min_queue.push(value);
-            max_queue.push(value);
+            minQueue.push(value);
+            maxQueue.push(value);
             return;
         }
 
         // Heaps are full
 
         // Check minQueue
-        if (value < min_queue.top())
+        if (value < minQueue.top())
         {
             // insert and pop
-            min_queue.push(value);
-            min_queue.pop();
+            minQueue.push(value);
+            minQueue.pop();
         } // else ignore value
 
         // Check maxQueue
-        if (value > max_queue.top())
+        if (value > maxQueue.top())
         {
-            max_queue.push(value);
-            max_queue.pop();
+            maxQueue.push(value);
+            maxQueue.pop();
         }
 
     }
 
-    float SoftMinMax::get_soft_min() const
+    float SoftMinMax::getSoftMin() const
     {
-        if (max_queue.empty())
+        if (maxQueue.empty())
         {
             throw std::out_of_range("Calling getSoftMin() but no element was added.");
         }
-        return min_queue.top();
+        return minQueue.top();
     }
 
-    float SoftMinMax::get_soft_max() const
+    float SoftMinMax::getSoftMax() const
     {
-        if (max_queue.empty())
+        if (maxQueue.empty())
         {
             throw std::out_of_range("Calling getSoftMin() but no element was added.");
         }
 
-        return max_queue.top();
+        return maxQueue.top();
     }
 
-    std::size_t SoftMinMax::num_outside_soft_min_max() const
+    std::size_t SoftMinMax::numOutsideSoftMinMax() const
     {
         return size_t(std::ceil(percentile * num_elements));
     }
 
-    std::size_t SoftMinMax::allowed_heap_size() const
+    std::size_t SoftMinMax::allowedHeapSize() const
     {
-        return std::max(std::size_t(1), num_outside_soft_min_max() + 1);
+        return std::max(std::size_t(1), numOutsideSoftMinMax() + 1);
     }
 
 }
