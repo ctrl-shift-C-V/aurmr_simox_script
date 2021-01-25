@@ -18,6 +18,7 @@
 #include "../RuntimeEnvironment.h"
 #include "rapidxml.hpp"
 #include "mujoco/RobotMjcf.h"
+#include <VirtualRobot/Import/URDF/SimoxURDFFactory.h>
 
 #include <SimoxUtility/filesystem/remove_trailing_separator.h>
 
@@ -1424,44 +1425,82 @@ namespace VirtualRobot
     }
 
 
-    VirtualRobot::RobotPtr RobotIO::loadRobot(const std::string& xmlFile, RobotDescription loadMode)
+    VirtualRobot::RobotPtr RobotIO::loadRobot(const std::string& modelFile, RobotDescription loadMode)
     {
-        std::string fullFile = xmlFile;
+        std::string fullFile = modelFile;
+
+        std::string fileType = fullFile.substr(fullFile.find_last_of(".") + 1);
+
 
         if (!RuntimeEnvironment::getDataFileAbsolute(fullFile))
         {
-            VR_ERROR << "Could not open XML file:" << xmlFile << std::endl;
+            VR_ERROR << "Could not open " + fileType + " file:" << modelFile << std::endl;
+            return RobotPtr();
+
+        }
+
+        if(fileType == "xml")
+        {
+            std::ifstream in(fullFile.c_str());
+
+            if (!in.is_open())
+            {
+                VR_ERROR << "Could not open XML file:" << fullFile << std::endl;
+                return RobotPtr();
+            }
+            std::stringstream buffer;
+            buffer << in.rdbuf();
+
+            //i don't see big redunancies between the xml and the urdf branch.
+            std::string robotXML(buffer.str());
+            std::filesystem::path filenameBaseComplete(fullFile);
+            std::filesystem::path filenameBasePath = filenameBaseComplete.parent_path();
+            std::string basePath = filenameBasePath.string();
+
+            in.close();
+
+            VirtualRobot::RobotPtr res = createRobotFromString(robotXML, basePath, loadMode);
+
+            if (!res)
+            {
+                VR_ERROR << "Error while parsing file " << fullFile << std::endl;
+            }
+
+            res->applyJointValues();
+            res->setFilename(fullFile);
+            return res;
+
+        }
+        else if(fileType == "urdf")
+        {
+            SimoxURDFFactory f;
+
+            // to ensure that 3d model files can be loaded during converting we need to add the correct data path
+            //#Question: Do we need this here as well? Is going up two directories still correct in the new context?
+            std::filesystem::path tmppath = modelFile;
+            tmppath = tmppath.parent_path();
+            tmppath = tmppath / "/../..";
+            std::string modelsBasePath = tmppath.generic_string();
+            RuntimeEnvironment::addDataPath(modelsBasePath);
+
+            //create VirtualRobot Object
+            VirtualRobot::RobotPtr r = f.loadFromFile(modelFile);
+
+            
+
+            //do we still need this?
+            std::string outPath = std::filesystem::current_path().generic_string();
+            std::cout << "Saving converted file to " << outPath << "/urdf_output.xml..." << std::endl;
+
+            RobotIO::saveXML(r, "urdf_output.xml", outPath);
+            return r;
+
+        }
+        else
+        {
+            std::cout << "File does not have correct file Type!" << std::endl; 
             return RobotPtr();
         }
-
-        // load file
-        std::ifstream in(fullFile.c_str());
-
-        if (!in.is_open())
-        {
-            VR_ERROR << "Could not open XML file:" << fullFile << std::endl;
-            return RobotPtr();
-        }
-
-        std::stringstream buffer;
-        buffer << in.rdbuf();
-        std::string robotXML(buffer.str());
-        std::filesystem::path filenameBaseComplete(xmlFile);
-        std::filesystem::path filenameBasePath = filenameBaseComplete.parent_path();
-        std::string basePath = filenameBasePath.string();
-
-        in.close();
-
-        VirtualRobot::RobotPtr res = createRobotFromString(robotXML, basePath, loadMode);
-
-        if (!res)
-        {
-            VR_ERROR << "Error while parsing file " << fullFile << std::endl;
-        }
-
-        res->applyJointValues();
-        res->setFilename(xmlFile);
-        return res;
     }
 
 
