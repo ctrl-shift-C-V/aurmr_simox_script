@@ -845,6 +845,7 @@ namespace VirtualRobot
                 catch (...)
                 {
                     THROW_VR_EXCEPTION("Error while processing file <" << filenameNewComplete.string() << ">." << endl);
+
                 }
 
                 RobotPtr r = loadRobot(filenameNewComplete.string(), loadMode);
@@ -1473,6 +1474,7 @@ namespace VirtualRobot
         }
         else if(fileType == "urdf")
         {
+
             SimoxURDFFactory f;
 
             // to ensure that 3d model files can be loaded during converting we need to add the correct data path
@@ -1486,13 +1488,6 @@ namespace VirtualRobot
             //create VirtualRobot Object
             VirtualRobot::RobotPtr r = f.loadFromFile(modelFile);
 
-            
-
-            //do we still need this?
-            std::string outPath = std::filesystem::current_path().generic_string();
-            std::cout << "Saving converted file to " << outPath << "/urdf_output.xml..." << std::endl;
-
-            RobotIO::saveXML(r, "urdf_output.xml", outPath);
             return r;
 
         }
