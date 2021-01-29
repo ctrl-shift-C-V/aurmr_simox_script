@@ -2,18 +2,20 @@
 
 namespace simox::qt
 {
-    SimoxQwtSpectrogramData::SimoxQwtSpectrogramData(std::size_t iterations, std::size_t max_fft_width) :
-        _iterations{iterations}
+    SimoxQwtSpectrogramData::SimoxQwtSpectrogramData(
+        std::size_t iterations,
+        std::size_t bucket_count,
+        float frequency)
     {
-        setInterval(Qt::XAxis, QwtInterval(0, iterations));
-        setInterval(Qt::YAxis, QwtInterval(0, max_fft_width));
+        setFrequency(frequency, bucket_count);
+        setIterations(iterations);
         setInterval(Qt::ZAxis, QwtInterval(0.0, 10.0));
     }
 
     double SimoxQwtSpectrogramData::value(double fx, double fy) const
     {
         const std::size_t x = fx;
-        const std::size_t y = fy;
+        const std::size_t y = fy / _bucket_height;
         if (x >= _vals.size())
         {
             return 0;
@@ -65,5 +67,13 @@ namespace simox::qt
     void SimoxQwtSpectrogramData::setIterations(std::size_t iterations)
     {
         _iterations = iterations;
+        setInterval(Qt::XAxis, QwtInterval(0, iterations));
+    }
+
+    void SimoxQwtSpectrogramData::setFrequency(float freq, std::size_t bucket_count)
+    {
+        _bucket_height = freq / 2 / bucket_count;
+        _bucket_count = bucket_count;
+        setInterval(Qt::YAxis, QwtInterval(0, freq / 2));
     }
 }
