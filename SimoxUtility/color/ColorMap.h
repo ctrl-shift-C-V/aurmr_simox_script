@@ -56,6 +56,18 @@ namespace simox::color
          */
         Color at(float value) const;
 
+        /**
+         * @brief Get the color for the given scalar value.
+         *
+         * Empty color maps always return black.
+         *
+         * @param value The scalar value.
+         * @param vmin  Override for vmin().
+         * @param vmax  Override for vmax().
+         * @return
+         */
+        Color at(float value, std::optional<float> vmin, std::optional<float> vmax) const;
+
         /// @see `ColorMap::at()`
         Color operator()(float value) const { return this->at(value); }
 
