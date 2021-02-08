@@ -10,7 +10,7 @@ target_include_directories(VirtualRobot PUBLIC
 
 
 
-target_link_libraries(VirtualRobot PUBLIC SimoxUtility)
+target_link_libraries(VirtualRobot PUBLIC SimoxUtility SimoxQtUtility)
 #######################################################################
 # Setup dependencies
 #######################################################################

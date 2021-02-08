@@ -37,13 +37,25 @@ namespace simox::color
         ColorMap(const std::string& name, std::initializer_list<std::pair<float, Color>> init);
 
 
-        bool empty() const { return keys.empty(); }
+        bool empty() const
+        {
+            return keys.empty();
+        }
         /// Get the number of keys.
-        size_t size() const { return keys.size(); }
+        size_t size() const
+        {
+            return keys.size();
+        }
 
-        void clear() { keys.clear(); }
+        void clear()
+        {
+            keys.clear();
+        }
         /// Add a key color at the given value.
-        void add_key(float value, const Color& color) { keys[value] = color; }
+        void add_key(float value, const Color& color)
+        {
+            keys[value] = color;
+        }
 
 
         /**
@@ -56,30 +68,75 @@ namespace simox::color
          */
         Color at(float value) const;
 
+        /**
+         * @brief Get the color for the given scalar value.
+         *
+         * Empty color maps always return black.
+         *
+         * @param value The scalar value.
+         * @param vmin  Override for vmin().
+         * @param vmax  Override for vmax().
+         * @return
+         */
+        Color at(float value, std::optional<float> vmin, std::optional<float> vmax) const;
+
         /// @see `ColorMap::at()`
-        Color operator()(float value) const { return this->at(value); }
+        Color operator()(float value) const
+        {
+            return this->at(value);
+        }
 
         /// Apply this colormap to a vector.
         template <typename V>
-        std::vector<Color> operator()(const std::vector<V>& vector) const { return simox::alg::apply(*this, vector); }
+        std::vector<Color> operator()(const std::vector<V>& vector) const
+        {
+            return simox::alg::apply(*this, vector);
+        }
         /// Apply this colormap to a map's values.
         template <typename K, typename V>
-        std::map<K, Color> operator()(const std::map<K, V>& map) const { return simox::alg::apply(*this, map); }
+        std::map<K, Color> operator()(const std::map<K, V>& map) const
+        {
+            return simox::alg::apply(*this, map);
+        }
 
 
-        std::string name() const { return _name; }
-        void setName(const std::string& name) { this->_name = name; }
+        std::string name() const
+        {
+            return _name;
+        }
+        void setName(const std::string& name)
+        {
+            this->_name = name;
+        }
 
 
         /// The value corresponding to the bottom color.
-        float vmin() const { return _vmin ? *_vmin : original_vmin(); }
+        float vmin() const
+        {
+            return _vmin ? *_vmin : original_vmin();
+        }
         /// The value corresponding to the top color.
-        float vmax() const { return _vmax ? *_vmax : original_vmax(); }
+        float vmax() const
+        {
+            return _vmax ? *_vmax : original_vmax();
+        }
 
-        void set_vmin(float vmin) { this->_vmin = vmin; }
-        void set_vmax(float vmax) { this->_vmax = vmax; }
-        void set_vmin(const std::vector<float>& values) { set_vmin(*std::max_element(values.begin(), values.end())); }
-        void set_vmax(const std::vector<float>& values) { set_vmax(*std::max_element(values.begin(), values.end())); }
+        void set_vmin(float vmin)
+        {
+            this->_vmin = vmin;
+        }
+        void set_vmax(float vmax)
+        {
+            this->_vmax = vmax;
+        }
+        void set_vmin(const std::vector<float>& values)
+        {
+            set_vmin(*std::max_element(values.begin(), values.end()));
+        }
+        void set_vmax(const std::vector<float>& values)
+        {
+            set_vmax(*std::max_element(values.begin(), values.end()));
+        }
         /**
          * @brief Set the value minimum to the minimum of `values`, measured by `unaryFunc`.
          * You may have to specify the template argument (when template argument deduction fails).

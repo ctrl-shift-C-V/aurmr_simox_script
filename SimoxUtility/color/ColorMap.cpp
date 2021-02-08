@@ -48,6 +48,11 @@ namespace simox::color
 
     Color ColorMap::at(float value) const
     {
+        return at(value, _vmin, _vmax);
+    }
+
+    Color ColorMap::at(float value, std::optional<float> vmin, std::optional<float> vmax) const
+    {
         if (empty())
         {
             return Color::black();
@@ -58,12 +63,16 @@ namespace simox::color
             return keys.begin()->second;
         }
 
-        if (_vmin || _vmax)
+        if (vmin || vmax)
         {
             // Original: [1 .. 2]
             // Virtual:  [100 .. 200]
             // => Scale 150 to 1.5
-            value = simox::math::rescale(value, vmin(), vmax(), original_vmin(), original_vmax());
+            value = simox::math::rescale(value,
+                                         vmin.value_or(original_vmin()),
+                                         vmax.value_or(original_vmax()),
+                                         original_vmin(),
+                                         original_vmax());
         }
 
         // keys.size() >= 2

@@ -62,6 +62,8 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+find_package(qwt QUIET)
+
 FIND_PACKAGE (Eigen3 REQUIRED)
 FIND_PACKAGE(Boost ${Simox_BOOST_VERSION} EXACT COMPONENTS
     filesystem
@@ -104,6 +106,7 @@ set (Simox_BUILD_GraspStudio TRUE CACHE BOOL "Build Grasp Planning library")
 set (Simox_BUILD_SimDynamics TRUE CACHE BOOL "Build Dynamic Simulation")
 
 MESSAGE (STATUS "** SIMOX BUILD SimoxUtility: TRUE (can't be turned off)")
+MESSAGE (STATUS "** SIMOX BUILD SimoxQtUtility: TRUE (can't be turned off)")
 MESSAGE (STATUS "** SIMOX BUILD VirtualRobot: ${Simox_BUILD_VirtualRobot}")
 MESSAGE (STATUS "** SIMOX BUILD Saba        : ${Simox_BUILD_Saba}")
 MESSAGE (STATUS "** SIMOX BUILD GraspStudio : ${Simox_BUILD_GraspStudio}")
@@ -207,6 +210,9 @@ add_subdirectory(SimoxUtility)
 list (APPEND SIMOX_EXPORT_TARGET_LIST SimoxUtility)
 list (APPEND Simox_LIBRARIES          SimoxUtility)
 
+add_subdirectory(SimoxQtUtility)
+list (APPEND SIMOX_EXPORT_TARGET_LIST SimoxQtUtility)
+list (APPEND Simox_LIBRARIES          SimoxQtUtility)
 #######################################################################################
 if (Simox_BUILD_VirtualRobot)
     add_subdirectory(VirtualRobot)
