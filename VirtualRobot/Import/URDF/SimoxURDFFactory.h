@@ -75,7 +75,7 @@ namespace VirtualRobot
 
 
     protected:
-        RobotNodePtr createBodyNode(RobotPtr robot, std::shared_ptr<urdf::Link> urdfBody, const std::string& basePath, bool useColModelsIfNoVisuModel = true);
+        RobotNodePtr createBodyNode(const std::string& name, RobotPtr robot, std::shared_ptr<urdf::Link> urdfBody, const std::string& basePath, bool useColModelsIfNoVisuModel = true);
         RobotNodePtr createJointNode(RobotPtr robot, std::shared_ptr<urdf::Joint> urdfJoint);
         Eigen::Matrix4f convertPose(urdf::Pose& p);
         VirtualRobot::VisualizationNodePtr convertVisu(std::shared_ptr<urdf::Geometry> g, urdf::Pose& pose, const std::string& basePath);

@@ -758,14 +758,14 @@ void showRobotWindow::loadRobot()
     }
     catch (VirtualRobotException& e)
     {
-        std::cout << " ERROR while creating robot" << std::endl;
-        std::cout << e.what();
+        std::cout << " ERROR while creating robot! Exception:" << std::endl;
+        std::cout << e.what() << std::endl;
         return;
     }
 
     if (!robot)
     {
-        std::cout << " ERROR while creating robot" << std::endl;
+        std::cout << " ERROR while creating robot! robot is null" << std::endl;
         return;
     }
 
