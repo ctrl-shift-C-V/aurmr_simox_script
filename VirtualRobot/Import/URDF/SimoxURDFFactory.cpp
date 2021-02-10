@@ -101,13 +101,21 @@ namespace VirtualRobot
 
         VirtualRobot::RobotPtr robo(new VirtualRobot::LocalRobot(robotName, robotType));
 
-        for (const auto& bodyPair : urdfModel->links_)
+        std::map<std::string, std::string> linkRenameMap;
         {
-            const auto& body = bodyPair.second;
-            RobotNodePtr nodeVisual = createBodyNode(robo, body, basePath, useColModelsIfNoVisuModel);
+            for (const auto& [name, _] : urdfModel->links_)
+            {
+                linkRenameMap[name] = urdfModel->joints_.count(name) ? name + "_link" : name;
+            }
+        }
+
+        for (const auto& [_, body] : urdfModel->links_)
+        {
+            const auto& name = linkRenameMap.at(body->name);
+            RobotNodePtr nodeVisual = createBodyNode(name, robo, body, basePath, useColModelsIfNoVisuModel);
 
             allNodes.push_back(nodeVisual);
-            allNodesMap[body->name] = nodeVisual;
+            allNodesMap[name] = nodeVisual;
             std::vector<std::string> childrenlist;
 
             for (size_t i = 0; i < body->child_joints.size(); i++)
@@ -122,15 +130,12 @@ namespace VirtualRobot
         }
 
 
-        for (const auto& jointPair : urdfModel->joints_)
+        for (const auto& [name, joint] : urdfModel->joints_)
         {
-            const auto& joint = jointPair.second;
             RobotNodePtr nodeJoint = createJointNode(robo, joint);
             allNodes.push_back(nodeJoint);
             allNodesMap[joint->name] = nodeJoint;
-            std::vector<std::string> childrenlist;
-            childrenlist.push_back(joint->child_link_name);
-            childrenMap[nodeJoint] = childrenlist;
+            childrenMap[nodeJoint] = std::vector<std::string>{linkRenameMap.at(joint->child_link_name)};
         }
 
         RobotNodePtr rootNode = allNodesMap[urdfModel->getRoot()->name];
@@ -155,27 +160,29 @@ namespace VirtualRobot
 
     std::string SimoxURDFFactory::getFilename(const std::string& f, const string& basePath)
     {
-        if (f.find(basePath) == 0)
+        std::string result = f;
+        if (!basePath.empty() && (result.find(basePath) == 0))
         {
-            //f is already absolute
-            return f;
+            //result is already absolute
+            return result;
         }
 
-        std::string result = f;
+        if (result.find("file://") == 0)
+        {
+            result = result.substr(7);
+        }
 
-        std::string part1 = result.substr(0, 10);
-
-        if (part1 != "package://")
+        if (result.substr(0, 10) != "package://")
         {
             // No ROS package structure, just try to find the file in the data directory
 
             std::filesystem::path p_base(basePath);
-            std::filesystem::path p_f(f);
-            result = (p_base / p_f).string();
+            std::filesystem::path p_result(result);
+            result = (p_base / p_result).string();
 
             if (!VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(result))
             {
-                result = f;
+                result = result;
                 if (!VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(result))
                 {
                     VR_ERROR << "Could not determine absolute path of " << result << std::endl;
@@ -195,9 +202,9 @@ namespace VirtualRobot
                 package_base = basePath.substr(0, basePath.rfind(package_name));
             }
 
-            std::filesystem::path p_f(result);
+            std::filesystem::path p_result(result);
             std::filesystem::path p_base(package_base);
-            result = (p_base / p_f).string();
+            result = (p_base / p_result).string();
         }
         return result;
     }
@@ -311,7 +318,7 @@ namespace VirtualRobot
         return res;
     }
 
-    RobotNodePtr SimoxURDFFactory::createBodyNode(RobotPtr robo, std::shared_ptr<urdf::Link> urdfBody, const std::string& basePath, bool useColModelsIfNoVisuModel)
+    RobotNodePtr SimoxURDFFactory::createBodyNode(const std::string& name, RobotPtr robo, std::shared_ptr<urdf::Link> urdfBody, const std::string& basePath, bool useColModelsIfNoVisuModel)
     {
         RobotNodePtr result;
 
@@ -322,7 +329,6 @@ namespace VirtualRobot
 
         VirtualRobot::RobotNodeFactoryPtr fixedNodeFactory = VirtualRobot::RobotNodeFactory::fromName(VirtualRobot::RobotNodeFixedFactory::getName(), NULL);
 
-        std::string name = urdfBody->name;
         Eigen::Matrix4f preJointTransform = Eigen::Matrix4f::Identity();
 
         VirtualRobot::VisualizationNodePtr rnVisu;
