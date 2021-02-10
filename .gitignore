@@ -27,6 +27,7 @@ CMakeLists.txt.user*
 *.dylib
 moc_*
 
+
 # eclipse stuff
 .project
 .pydevproject
@@ -34,6 +35,10 @@ moc_*
 .metadata
 .cproject
 .project
+
+# qtcreator project stuff
+*.pro
+*.pro.user
 
 .cmake/api/v1/query/cache-v2
 .cmake/api/v1/query/codemodel-v2
