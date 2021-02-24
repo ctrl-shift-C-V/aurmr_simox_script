@@ -7,14 +7,22 @@ namespace simox::threads
     CountingSemaphore::CountingSemaphore()
     {}
 
-    CountingSemaphore::CountingSemaphore(unsigned int count) : _count(count)
+    CountingSemaphore::CountingSemaphore(unsigned int count) :
+        _count(count)
+    {}
+
+    CountingSemaphore::CountingSemaphore(unsigned int count, unsigned int maxCount) :
+        _count(count), _maxCount(maxCount)
     {}
 
 
     void CountingSemaphore::notify()
     {
         std::lock_guard<std::mutex> lock(_mutex);
-        ++_count;
+        if (!_maxCount || _count < *_maxCount)
+        {
+            ++_count;
+        }
         _condition.notify_one();
     }
 
