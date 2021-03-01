@@ -101,6 +101,7 @@ SET(INCLUDES
 
     algorithm/advanced.h
     algorithm/apply.hpp
+    algorithm/contains.h
     algorithm/for_each_if.h
     algorithm/fuzzy_find.h
     algorithm/get_map_keys_values.h
