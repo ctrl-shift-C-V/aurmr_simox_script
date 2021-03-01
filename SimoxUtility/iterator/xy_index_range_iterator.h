@@ -1,9 +1,6 @@
 #pragma once
 
-#include <exception>
-#include <iostream> // FIXME remove
 #include <iterator>
-#include <vector>
 
 namespace simox::iterator {
 
