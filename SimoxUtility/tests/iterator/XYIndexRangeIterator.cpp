@@ -13,8 +13,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
- * @package    RobotAPI::ArmarXObjects::FrameTracking
- * @author     Adrian Knobloch ( adrian dot knobloch at student dot kit dot edu )
+ * @package    SimoxUtility/Iterators
+ * @author     Fabian Reister ( fabian dot reister at kit dot edu )
  * @date       2019
  * @copyright  http://www.gnu.org/licenses/gpl-2.0.txt
  *             GNU General Public License
