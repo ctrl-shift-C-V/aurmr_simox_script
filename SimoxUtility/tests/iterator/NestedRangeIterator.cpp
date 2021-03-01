@@ -14,7 +14,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * @package    
- * @author     Fabian Reister ( adrian dot knobloch at student dot kit dot edu )
+ * @author     Fabian Reister ( fabian dot reister at kit dot edu )
  * @date       2021
  * @copyright  http://www.gnu.org/licenses/gpl-2.0.txt
  *             GNU General Public License
