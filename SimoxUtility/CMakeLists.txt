@@ -99,12 +99,12 @@ SET(INCLUDES
     preprocessor/variadic_for_each.h
     preprocessor/drop_front.h
 
-    algorithm/for_each_if.h
+    algorithm/advanced.h
     algorithm/apply.hpp
+    algorithm/for_each_if.h
+    algorithm/fuzzy_find.h
     algorithm/get_map_keys_values.h
     algorithm/minmax.h
-    algorithm/advanced.h
-    algorithm/fuzzy_find.h
     algorithm/string/string_tools.h
     algorithm/string/string_conversion.h
     algorithm/string/string_conversion_eigen.h
