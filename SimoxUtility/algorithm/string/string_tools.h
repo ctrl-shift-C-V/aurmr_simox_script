@@ -44,6 +44,7 @@ namespace simox::alg
      */
     std::string capitalize_words(const std::string& str);
 
+
     void trim(std::string& str, const std::locale& locale = DEFAULT_LOCALE);
 
     std::string trim_copy(const std::string& str, const std::locale& locale = DEFAULT_LOCALE);
@@ -51,6 +52,7 @@ namespace simox::alg
     void trim_if(std::string& str, const std::string& trim = "\t ");
 
     std::string trim_copy_if(const std::string& str, const std::string& trim = "\t ");
+
 
     std::vector<std::string> split(const std::string& str, const std::string& splitBy = "\t ", bool trimElements = true,
                                    bool removeEmptyElements = true, const std::locale& locale = DEFAULT_LOCALE);
@@ -62,17 +64,27 @@ namespace simox::alg
     std::string join(const std::vector<std::string> vec, const std::string& delimiter = " ", bool trimElements = false,
                      bool ignoreEmptyElements = false, const std::locale& locale = DEFAULT_LOCALE);
 
+
     std::string replace_first(std::string const& input, std::string const& search, std::string const& replace);
 
     std::string replace_last(std::string const& input, std::string const& search, std::string const& replace);
 
     std::string replace_all(std::string const& input, std::string const& search, std::string const& replace);
 
+
     bool starts_with(std::string const& input, std::string const& search);
 
     bool ends_with(std::string const& input, std::string const& search);
 
     bool contains(const std::string& haystack, const std::string& needle);
+    inline bool contains(const std::string& haystack, const char* needle)
+    {
+        return contains(haystack, std::string(needle));
+    }
+    inline bool contains(const std::string& string, const char character)
+    {
+        return string.find(character) != std::string::npos;
+    }
 
 
     template <typename IterT>
