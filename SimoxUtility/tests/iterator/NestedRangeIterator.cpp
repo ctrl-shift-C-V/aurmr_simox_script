@@ -15,7 +15,7 @@
  *
  * @package    
  * @author     Fabian Reister ( adrian dot knobloch at student dot kit dot edu )
- * @date       2019
+ * @date       2021
  * @copyright  http://www.gnu.org/licenses/gpl-2.0.txt
  *             GNU General Public License
  */
