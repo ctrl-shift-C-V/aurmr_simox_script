@@ -112,6 +112,24 @@ namespace simox::alg
     {
         return get_value_ptrs(map);
     }
+
+
+    /// Get a value from `map` if it exsits or a default value otherwise.
+    template <class K, class V, template<class...> class MapT = std::map, class...Ts>
+    V get_value_or_default(const MapT<K, V, Ts...>& map, const K& key, const V& default_value)
+    {
+        auto it = map.find(key);
+        return it != map.end() ? it->second : default_value;
+    }
+
+    // overload for `std::string` to match `char[]`.
+    template <class K, template<class...> class MapT = std::map, class...Ts>
+    std::string get_value_or_default(const MapT<K, std::string, Ts...>& map, const K& key, const std::string& default_value)
+    {
+        auto it = map.find(key);
+        return it != map.end() ? it->second : default_value;
+    }
+
 }
 
 
