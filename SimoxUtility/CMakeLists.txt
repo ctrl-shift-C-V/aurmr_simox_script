@@ -81,6 +81,7 @@ SET(SOURCES
     math/pose/check_rotation_matrix.cpp
     math/pose/invert.cpp
     math/pose/orthogonalize.cpp
+    math/pose/interpolate.cpp
 
     math/statistics/Histogram1D.cpp
 
@@ -99,12 +100,13 @@ SET(INCLUDES
     preprocessor/variadic_for_each.h
     preprocessor/drop_front.h
 
-    algorithm/for_each_if.h
+    algorithm/advanced.h
     algorithm/apply.hpp
+    algorithm/contains.h
+    algorithm/for_each_if.h
+    algorithm/fuzzy_find.h
     algorithm/get_map_keys_values.h
     algorithm/minmax.h
-    algorithm/advanced.h
-    algorithm/fuzzy_find.h
     algorithm/string/string_tools.h
     algorithm/string/string_conversion.h
     algorithm/string/string_conversion_eigen.h
@@ -220,6 +222,7 @@ SET(INCLUDES
     math/pose/orthogonalize.h
     math/pose/pose.h
     math/pose/transform.h
+    math/pose/interpolate.h
 
     math/similarity/cosine_similarity.h
     math/similarity/angular_similarity.h
