@@ -81,6 +81,7 @@ SET(SOURCES
     math/pose/check_rotation_matrix.cpp
     math/pose/invert.cpp
     math/pose/orthogonalize.cpp
+    math/pose/interpolate.cpp
 
     math/statistics/Histogram1D.cpp
 
@@ -221,6 +222,7 @@ SET(INCLUDES
     math/pose/orthogonalize.h
     math/pose/pose.h
     math/pose/transform.h
+    math/pose/interpolate.h
 
     math/similarity/cosine_similarity.h
     math/similarity/angular_similarity.h
