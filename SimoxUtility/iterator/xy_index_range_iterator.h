@@ -67,11 +67,11 @@ public:
     return !operator==(other);
   }
 
-  XYIndexRangeIterator begin() {
+  XYIndexRangeIterator begin() const {
     return XYIndexRangeIterator(min_xy_index, max_xy_index);
   }
 
-  XYIndexRangeIterator end() {
+  XYIndexRangeIterator end() const {
     XYIndexRangeIterator it = begin();
     it.xy_index = IndexType(min_xy_index.x, max_xy_index.y + 1);
     return it;
