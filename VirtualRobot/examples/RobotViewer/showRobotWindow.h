@@ -67,6 +67,7 @@ public slots:
     void exportVRML();
     void exportXML();
     void updatePointDistanceVisu();
+    void openDiffIK();
 
     SoQtExaminerViewer* getExaminerViewer()
     {

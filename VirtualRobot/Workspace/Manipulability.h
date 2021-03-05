@@ -1,4 +1,4 @@
-/**
+/*
 * This file is part of Simox.
 *
 * Simox is free software; you can redistribute it and/or modify

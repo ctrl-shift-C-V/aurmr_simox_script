@@ -3,17 +3,17 @@ PROJECT ( RobotViewer )
 IF(Simox_VISUALIZATION AND Simox_USE_COIN_VISUALIZATION)
  	
 	# the variable "demo_SRCS" contains all .cpp files of this project
-	FILE(GLOB demo_SRCS ${PROJECT_SOURCE_DIR}/RobotViewer.cpp ${PROJECT_SOURCE_DIR}/showRobotWindow.cpp)
-	FILE(GLOB demo_INCS ${PROJECT_SOURCE_DIR}/showRobotWindow.h)
+        FILE(GLOB demo_SRCS ${PROJECT_SOURCE_DIR}/RobotViewer.cpp ${PROJECT_SOURCE_DIR}/showRobotWindow.cpp DiffIKWidget.cpp)
+        FILE(GLOB demo_INCS ${PROJECT_SOURCE_DIR}/showRobotWindow.h DiffIKWidget.h)
 
 
   ################################## moc'ing ##############################
   set(GUI_MOC_HDRS
-      ${PROJECT_SOURCE_DIR}/showRobotWindow.h
+      ${PROJECT_SOURCE_DIR}/showRobotWindow.h DiffIKWidget.h
   )
 
   set(GUI_UIS
-      ${PROJECT_SOURCE_DIR}/RobotViewer.ui
+      ${PROJECT_SOURCE_DIR}/RobotViewer.ui DiffIKWidget.ui
   )
 
   # create the executable

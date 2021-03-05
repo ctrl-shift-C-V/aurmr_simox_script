@@ -1,5 +1,6 @@
 
 #include "showRobotWindow.h"
+#include "DiffIKWidget.h"
 #include "VirtualRobot/EndEffector/EndEffector.h"
 #include "VirtualRobot/Workspace/Reachability.h"
 #include <VirtualRobot/RuntimeEnvironment.h>
@@ -70,6 +71,7 @@ showRobotWindow::~showRobotWindow()
 {
     robot.reset();
     sceneSep->unref();
+    DiffIKWidget::close();
 }
 
 /*
@@ -105,7 +107,7 @@ void showRobotWindow::setupUI()
 
 
     viewer->setGLRenderAction(new SoLineHighlightRenderAction);
-    viewer->setTransparencyType(SoGLRenderAction::BLEND);
+    viewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
     viewer->setFeedbackVisibility(true);
     viewer->setSceneGraph(sceneSep);
     viewer->viewAll();
@@ -144,6 +146,8 @@ void showRobotWindow::setupUI()
     connect(UI.doubleSpinBoxDistancePtX, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &showRobotWindow::updatePointDistanceVisu);
     connect(UI.doubleSpinBoxDistancePtY, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &showRobotWindow::updatePointDistanceVisu);
     connect(UI.doubleSpinBoxDistancePtZ, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &showRobotWindow::updatePointDistanceVisu);
+
+    connect(UI.openDiffIKButton, SIGNAL(clicked()), this, SLOT(openDiffIK()));
 }
 
 QString showRobotWindow::formatString(const char* s, float f)
@@ -428,6 +432,11 @@ void showRobotWindow::updatePointDistanceVisu()
     UI.labelDistancePtDist->setText(QString::number(distance));
 }
 
+void showRobotWindow::openDiffIK() {
+    DiffIKWidget::open(this, sceneSep);
+    DiffIKWidget::update(robot);
+}
+
 void showRobotWindow::showRobot()
 {
     //m_pGraspScenery->showRobot(m_pShowRobot->state() == QCheckBox::On);
@@ -507,6 +516,7 @@ void showRobotWindow::selectRNS(int nr)
     }
 
     updateJointBox();
+    DiffIKWidget::update(robot);
     selectJoint(0);
     displayTriangles();
 }
@@ -583,6 +593,7 @@ void showRobotWindow::jointValueChanged(int pos)
     robot->setJointValue(currentRobotNodes[nr], fPos);
     UI.lcdNumberJointValue->display((double)fPos);
 
+    DiffIKWidget::update(robot);
     updatePointDistanceVisu();
 }
 
@@ -792,6 +803,7 @@ void showRobotWindow::updatRobotInfo()
     robot->getRobotNodeSets(robotNodeSets);
     robot->getEndEffectors(eefs);
     updateEEFBox();
+    DiffIKWidget::update(robot);
     updateRNSBox();
     selectRNS(0);
 

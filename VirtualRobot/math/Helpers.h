@@ -63,6 +63,8 @@ namespace math
         static Eigen::Vector3f Average(const std::vector<Eigen::Vector3f>& vectors);
         static void Swap(float& a,float& b);
 
+        static Eigen::Vector3f LimitTo(const Eigen::Vector3f& val, float maxNorm);
+
 
         // POSE UTILITY
         // These methods have been moved to <SimoxUtility/math/pose.h>, but remain here for
