@@ -192,6 +192,9 @@ SET(SOURCES
     Compression/CompressionBZip2.cpp
     Compression/CompressionRLE.cpp
 
+    Controller/CartesianPositionController.cpp
+    Controller/CartesianVelocityController.cpp
+
     EndEffector/EndEffector.cpp
     EndEffector/EndEffectorActor.cpp
 
@@ -229,10 +232,20 @@ SET(SOURCES
     IK/constraints/PositionConstraint.cpp
     IK/constraints/ReferenceConfigurationConstraint.cpp
     IK/constraints/TSRConstraint.cpp
+    IK/CompositeDiffIK/CompositeDiffIK.cpp
+    IK/CompositeDiffIK/ManipulabilityNullspaceGradient.cpp
+    IK/CompositeDiffIK/SoechtingNullspaceGradient.cpp
 
     Import/RobotImporterFactory.cpp
     Import/SimoxXMLFactory.cpp
     Import/MeshImport/AssimpReader.cpp
+
+    Manipulability/AbstractManipulability.cpp
+    Manipulability/SingleChainManipulability.cpp
+    Manipulability/BimanualManipulability.cpp
+    Manipulability/AbstractManipulabilityTracking.cpp
+    Manipulability/SingleChainManipulabilityTracking.cpp
+    Manipulability/BimanualManipulabilityTracking.cpp
 
     math/AbstractFunctionR1R2.cpp
     math/AbstractFunctionR1R3.cpp
@@ -388,6 +401,9 @@ SET(INCLUDES
     Compression/CompressionBZip2.h
     Compression/CompressionRLE.h
 
+    Controller/CartesianPositionController.h
+    Controller/CartesianVelocityController.h
+
     DataStructures/nanoflann.hpp
     DataStructures/KdTreePointCloud.h
 
@@ -428,10 +444,21 @@ SET(INCLUDES
     IK/constraints/PositionConstraint.h
     IK/constraints/ReferenceConfigurationConstraint.h
     IK/constraints/TSRConstraint.h
+    IK/CompositeDiffIK/CompositeDiffIK.h
+    IK/CompositeDiffIK/ManipulabilityNullspaceGradient.h
+    IK/CompositeDiffIK/Soechting.h
+    IK/CompositeDiffIK/SoechtingNullspaceGradient.h
 
     Import/RobotImporterFactory.h
     Import/SimoxXMLFactory.h
     Import/MeshImport/AssimpReader.h
+
+    Manipulability/AbstractManipulability.h
+    Manipulability/SingleChainManipulability.h
+    Manipulability/BimanualManipulability.h
+    Manipulability/AbstractManipulabilityTracking.h
+    Manipulability/SingleChainManipulabilityTracking.h
+    Manipulability/BimanualManipulabilityTracking.h
 
     math/AbstractFunctionR1Ori.h
     math/AbstractFunctionR1R2.h

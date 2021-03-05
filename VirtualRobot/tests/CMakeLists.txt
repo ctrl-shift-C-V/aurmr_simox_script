@@ -35,6 +35,8 @@ ADD_VR_TEST( VirtualRobotRuntimeEnvironmentTest )
 
 ADD_VR_TEST( VirtualRobotMjcfTest )
 
+ADD_VR_TEST( VirtualRobotManipulabilityTest )
+
 
 ADD_VR_TEST( VirtualRobotMujocoMeshTest )
 

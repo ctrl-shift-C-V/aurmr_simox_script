@@ -256,6 +256,16 @@ namespace math
         std::swap(a, b);
     }
 
+    Eigen::Vector3f Helpers::LimitTo(const Eigen::Vector3f& val, float maxNorm)
+    {
+        float norm = val.norm();
+        if (norm > maxNorm)
+        {
+            return val / norm * maxNorm;
+        }
+        return val;
+    }
+
     Eigen::Matrix4f Helpers::CreateTranslationPose(const Eigen::Vector3f& pos)
     {
         return Pose(pos, Eigen::Matrix3f::Identity());
