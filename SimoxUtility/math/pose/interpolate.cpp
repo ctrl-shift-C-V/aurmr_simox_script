@@ -5,9 +5,7 @@ namespace simox::math {
 
 
 Eigen::Affine3f interpolatePose(const Eigen::Affine3f &posePre, const Eigen::Affine3f &poseNext, float t) {
-    
-    assert(0 <= t <= 1);
-    
+
     Eigen::Affine3f pose = Eigen::Affine3f::Identity();
 
     pose.translation() = (1 - t) * posePre.translation() + t * poseNext.translation();
