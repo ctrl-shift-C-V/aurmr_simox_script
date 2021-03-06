@@ -81,6 +81,9 @@ public:
     /*! Calculates damping factor for singularity avoidance */
     double getDamping(const Eigen::MatrixXd &matrix);
 
+    /* Calculate weight matrix for joint limits avoidance */
+    Eigen::MatrixXd getJointsLimitsWeightMatrix(const Eigen::VectorXd jointAngles, const Eigen::VectorXd jointLimitsLow, const Eigen::VectorXd jointLimitsHigh);
+
     Eigen::MatrixXd computeManipulabilityJacobianMandelNotation(const Eigen::Tensor<double, 3> &manipulabilityJacobian);
 
     Eigen::VectorXd symMatrixToVector(const Eigen::MatrixXd &sym_matrix);
@@ -96,6 +99,10 @@ public:
     virtual VisualizationNodePtr getManipulabilityVis(const Eigen::MatrixXd &manipulability, const std::string &visualizationType = "", double scaling = 1000.0) = 0;
 
     virtual void setConvertMMtoM(bool value) = 0;
+
+    void setjointAngleLimitGradient(const Eigen::VectorXd &gradient);
+
+    Eigen::Matrix<double, Eigen::Dynamic, 1> jointAngleLimitGradient;  // TODO initialize
 };
 
 typedef std::shared_ptr<AbstractManipulabilityTracking> AbstractManipulabilityTrackingPtr;

@@ -164,6 +164,35 @@ double AbstractManipulabilityTracking::getDamping(const Eigen::MatrixXd &matrix)
     return damping;
 }
 
+Eigen::MatrixXd AbstractManipulabilityTracking::getJointsLimitsWeightMatrix(const Eigen::VectorXd jointAngles, const Eigen::VectorXd jointLimitsLow, const Eigen::VectorXd jointLimitsHigh) {
+    int nbJoints = jointAngles.size();
+    Eigen::VectorXd weights(nbJoints);
+    Eigen::VectorXd gradient(nbJoints);
+
+    //std::cout << "Saved gradient:\n" << jointAngleLimitGradient << std::endl;
+
+    for (int i = 0; i < nbJoints; i++) {
+        // TODO add condition on velocities
+        gradient(i) = std::pow(jointLimitsHigh(i) - jointLimitsLow(i), 2) * (2*jointAngles(i) - jointLimitsHigh(i) - jointLimitsLow(i)) / 
+                            ( 4 * std::pow(jointLimitsHigh(i) - jointAngles(i), 2) * std::pow(jointAngles(i) - jointLimitsLow(i), 2) );
+
+        if((std::abs(gradient(i)) - std::abs(jointAngleLimitGradient(i))) >= 0.) {
+            // Joint going towards limits
+            weights(i) = 1. / std::sqrt((1. + std::abs(gradient(i))));
+        } 
+        else {
+            // Joint going towards the center
+            weights(i) = 1.;
+        }
+    }
+    //std::cout << "Gradient:\n" << gradient << std::endl;
+    setjointAngleLimitGradient(gradient);
+    
+    Eigen::MatrixXd weightsMatrix = weights.asDiagonal();
+    return weightsMatrix;
+}
+
+
 Eigen::MatrixXd AbstractManipulabilityTracking::computeManipulabilityJacobianMandelNotation(const Eigen::Tensor<double, 3> &manipulabilityJacobian) {
     int num_task_vars = getTaskVars();
 
@@ -195,6 +224,10 @@ Eigen::VectorXd AbstractManipulabilityTracking::symMatrixToVector(const Eigen::M
         nextIndex += diagonal_i.size();
     }
     return v;
+}
+
+void AbstractManipulabilityTracking::setjointAngleLimitGradient(const Eigen::VectorXd &gradient) {
+    this->jointAngleLimitGradient = gradient;
 }
 
 }
