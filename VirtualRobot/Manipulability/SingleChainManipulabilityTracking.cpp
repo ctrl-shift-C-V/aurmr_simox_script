@@ -81,14 +81,22 @@ Eigen::VectorXf SingleChainManipulabilityTracking::calculateVelocity(const Eigen
     Eigen::Tensor<double, 3> manipJ_sub = subCube(manipJ);
 
     Eigen::MatrixXd matManipJ = computeManipulabilityJacobianMandelNotation(manipJ_sub);
+    Eigen::MatrixXd dampedLSI;
     if (jointLimitAvoidance)
     {
         // Compute weighted manipulability Jacobian
         Eigen::MatrixXd jointsWeightMatrix = getJointsLimitsWeightMatrix(manipulability->getJointAngles(), manipulability->getJointLimitsLow(), manipulability->getJointLimitsHigh());
         matManipJ = matManipJ * jointsWeightMatrix;
+        // Compute pseudo-inverse of weighted manipulability Jacobian
+        double dampingFactor = getDamping(matManipJ);
+        dampedLSI = jointsWeightMatrix * dampedLeastSquaresInverse(matManipJ, dampingFactor);
     }
-    double dampingFactor = getDamping(matManipJ);
-    Eigen::MatrixXd dampedLSI = dampedLeastSquaresInverse(matManipJ, dampingFactor);
+    else{
+        // Compute pseudo-inverse of manipulability Jacobian
+        double dampingFactor = getDamping(matManipJ);
+        dampedLSI = dampedLeastSquaresInverse(matManipJ, dampingFactor);
+    }
+    
     Eigen::MatrixXd manipulability_mandel = symMatrixToVector(manipulability_velocity);
     
     Eigen::VectorXd dq = dampedLSI * (gainMatrix.rows() == 0 ? getDefaultGainMatrix() : gainMatrix) * manipulability_mandel;
