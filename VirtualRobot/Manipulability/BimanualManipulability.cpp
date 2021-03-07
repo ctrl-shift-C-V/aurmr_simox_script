@@ -119,6 +119,63 @@ std::vector<std::string> BimanualManipulability::getJointNames() {
     return robotNodeNames;
 }
 
+Eigen::VectorXd BimanualManipulability::getJointAngles() {
+    Eigen::VectorXd jointAngles(rnsLeft->getSize() + rnsRight->getSize());
+    jointAngles.head(rnsLeft->getSize()) = rnsLeft->getJointValuesEigen().cast<double>();
+    jointAngles.tail(rnsRight->getSize()) = rnsRight->getJointValuesEigen().cast<double>();
+    return jointAngles;
+}
+
+Eigen::VectorXd BimanualManipulability::getJointLimitsHigh() {
+    Eigen::VectorXd jointLimitHi(rnsLeft->getSize() + rnsRight->getSize());
+    for (size_t i = 0; i < rnsLeft->getSize(); i++)
+    {
+        RobotNodePtr rn = rnsLeft->getNode(i);
+        /*if (rn->isLimitless())
+        {
+            jointLimitHi(i) = ?infinity;
+        }
+        else */
+        jointLimitHi(i) = rn->getJointLimitHi();
+    }
+    for (size_t i = 0; i < rnsRight->getSize(); i++)
+    {
+        RobotNodePtr rn = rnsRight->getNode(i);
+        /*if (rn->isLimitless())
+        {
+            jointLimitHi(i) = ?infinity;
+        }
+        else */
+        jointLimitHi(i + rnsLeft->getSize()) = rn->getJointLimitHi();
+    }
+    return jointLimitHi;
+}
+    
+Eigen::VectorXd BimanualManipulability::getJointLimitsLow() {
+    Eigen::VectorXd jointLimitLo(rnsLeft->getSize() + rnsRight->getSize());
+    for (size_t i = 0; i < rnsLeft->getSize(); i++)
+    {
+        RobotNodePtr rn = rnsLeft->getNode(i);
+        /*if (rn->isLimitless())
+        {
+            jointLimitLo(i) = ?infinity;
+        }
+        else */
+        jointLimitLo(i) = rn->getJointLimitLo();
+    }
+    for (size_t i = 0; i < rnsRight->getSize(); i++)
+    {
+        RobotNodePtr rn = rnsRight->getNode(i);
+        /*if (rn->isLimitless())
+        {
+            jointLimitLo(i) = ?infinity;
+        }
+        else */
+        jointLimitLo(i + rnsLeft->getSize()) = rn->getJointLimitLo();
+    }
+    return jointLimitLo;
+}
+
 RobotPtr BimanualManipulability::getRobot() {
     return rnsLeft->getRobot();
 }

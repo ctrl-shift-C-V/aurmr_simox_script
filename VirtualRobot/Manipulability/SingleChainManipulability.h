@@ -67,6 +67,12 @@ public:
 
     virtual std::vector<std::string> getJointNames() override;
 
+    virtual Eigen::VectorXd getJointAngles() override;
+
+    virtual Eigen::VectorXd getJointLimitsHigh() override;
+    
+    virtual Eigen::VectorXd getJointLimitsLow() override;
+
 protected:
     virtual Eigen::MatrixXd computeJacobian(IKSolver::CartesianSelection mode) override;
 
@@ -85,6 +91,7 @@ class SingleChainManipulability : public AbstractSingleChainManipulability
 {
 public:
     SingleChainManipulability(const Eigen::Matrix<double, 6, Eigen::Dynamic> &jacobian, Mode mode, Type type,
+                              const Eigen::Matrix<double, Eigen::Dynamic, 1> &jointAngles = Eigen::MatrixXd(), const Eigen::VectorXd &jointLimitsHigh = Eigen::MatrixXd(), const Eigen::VectorXd &jointLimitsLow = Eigen::MatrixXd(),
                               const std::vector<std::string> &jointNames = std::vector<std::string>(),
                               const Eigen::Vector3f &globalPosition = Eigen::Vector3f::Zero(), const Eigen::Vector3f &localPosition = Eigen::Vector3f::Zero());
 
@@ -93,6 +100,12 @@ public:
     virtual Eigen::Vector3f getGlobalPosition() override;
 
     virtual std::vector<std::string> getJointNames() override;
+
+    virtual Eigen::VectorXd getJointAngles() override;
+
+    virtual Eigen::VectorXd getJointLimitsHigh() override;
+    
+    virtual Eigen::VectorXd getJointLimitsLow() override;
 
     void setJacobian(const Eigen::Matrix<double, 6, Eigen::Dynamic> &jacobian);
 
@@ -112,6 +125,9 @@ private:
     std::vector<std::string> jointNames;
     Eigen::Vector3f globalPosition;
     Eigen::Vector3f localPosition;
+    Eigen::VectorXd jointAngles;
+    Eigen::VectorXd jointLimitsHigh;
+    Eigen::VectorXd jointLimitsLow;
 };
 
 typedef std::shared_ptr<SingleChainManipulability> SingleChainManipulabilityPtr;

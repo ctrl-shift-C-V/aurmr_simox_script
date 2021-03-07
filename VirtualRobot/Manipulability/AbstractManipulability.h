@@ -84,6 +84,12 @@ public:
 
     virtual std::vector<std::string> getJointNames() = 0;
 
+    virtual Eigen::VectorXd getJointAngles() = 0;
+
+    virtual Eigen::VectorXd getJointLimitsHigh() = 0;
+
+    virtual Eigen::VectorXd getJointLimitsLow() = 0;
+
     static Eigen::MatrixXd GetJacobianSubMatrix(const Eigen::Matrix<double, 6, Eigen::Dynamic> &jacobian, IKSolver::CartesianSelection mode);
 
     static Eigen::MatrixXd GetJacobianSubMatrix(const Eigen::Matrix<double, 6, Eigen::Dynamic> &jacobian, Mode mode);
