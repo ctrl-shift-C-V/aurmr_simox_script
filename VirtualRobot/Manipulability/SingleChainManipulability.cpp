@@ -41,7 +41,6 @@ Eigen::MatrixXd AbstractSingleChainManipulability::computeManipulability(const E
         int nbJoints = jacobian.cols();
         weightMatrix.setIdentity(nbJoints, nbJoints); 
     }
-    std::cout << weightMatrix << std::endl;
     Eigen::MatrixXd velocityManipulability = jacobian * weightMatrix * weightMatrix.transpose() * jacobian.transpose();
 
     switch (type) {
