@@ -39,17 +39,23 @@ SingleChainManipulabilityTracking::SingleChainManipulabilityTracking(AbstractSin
 }
 
 Eigen::Tensor<double, 3> SingleChainManipulabilityTracking::computeManipulabilityJacobian(const Eigen::MatrixXd &jacobian) {
+    int rows = jacobian.rows(); // task space dim
+    int columns = jacobian.cols(); // joint space dim
+
     Eigen::Tensor<double, 3> derivJ = computeJacobianDerivative(jacobian);
 
     Eigen::array<int, 3> shuffling({1, 0, 2}); // Permutation of first two dimensions
     Eigen::Tensor<double, 3> permDerivJ = derivJ.shuffle(shuffling);
 
+    // Define default weight matrix 
+    if (manipulability->weightMatrix.rows() == 0) {
+        manipulability->weightMatrix.setIdentity(columns, columns);
+    }
+
     // Compute dJ/dq x_2 J
-    Eigen::Tensor<double, 3> dJtdq_J = tensorMatrixProduct(permDerivJ, jacobian);
+    Eigen::Tensor<double, 3> dJtdq_J = tensorMatrixProduct(permDerivJ, jacobian * manipulability->weightMatrix * manipulability->weightMatrix.transpose());
 
     // Compute dJ'/dq x_1 J + dJ/dq x_2 J
-    int rows = jacobian.rows(); // task space dim
-    int columns = jacobian.cols(); // joint space dim
     Eigen::array<int, 2> shufflingTranpose({1, 0}); // for transposing
     Eigen::Tensor<double, 3> manipJ(rows,rows,columns);
     for(int s = 0; s < columns; ++s) {

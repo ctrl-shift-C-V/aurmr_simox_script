@@ -42,7 +42,7 @@ public:
         Whole = 1, Position = 2, Orientation = 3
     };
 
-    AbstractManipulability(Mode mode, Type type);
+    AbstractManipulability(Mode mode, Type type, Eigen::MatrixXd weightMatrixInit = Eigen::MatrixXd());
 
     Eigen::MatrixXd computeJacobian();
 
@@ -95,6 +95,8 @@ public:
     static Eigen::MatrixXd GetJacobianSubMatrix(const Eigen::Matrix<double, 6, Eigen::Dynamic> &jacobian, Mode mode);
 
     static IKSolver::CartesianSelection GetCartesianSelection(Mode mode);
+
+    Eigen::MatrixXd weightMatrix; 
 
 protected:
     virtual Eigen::MatrixXd computeJacobian(IKSolver::CartesianSelection mode) = 0;
