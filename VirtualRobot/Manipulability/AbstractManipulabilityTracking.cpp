@@ -182,7 +182,6 @@ Eigen::MatrixXd AbstractManipulabilityTracking::getJointsLimitsWeightMatrix(cons
             weights(i) = 1.;
         }
         else {
-            // TODO add condition on velocities
             gradient(i) = std::pow(jointLimitsHigh(i) - jointLimitsLow(i), 2) * (2*jointAngles(i) - jointLimitsHigh(i) - jointLimitsLow(i)) /
                                 ( 4 * std::pow(jointLimitsHigh(i) - jointAngles(i), 2) * std::pow(jointAngles(i) - jointLimitsLow(i), 2) );
 
