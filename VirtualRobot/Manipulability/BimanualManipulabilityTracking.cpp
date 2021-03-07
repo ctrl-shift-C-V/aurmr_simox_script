@@ -33,7 +33,7 @@ BimanualManipulabilityTracking::BimanualManipulabilityTracking(BimanualManipulab
 {
 }
 
-Eigen::VectorXf BimanualManipulabilityTracking::calculateVelocity(const Eigen::MatrixXd &manipulabilityDesired, Eigen::MatrixXd gainMatrix) {
+Eigen::VectorXf BimanualManipulabilityTracking::calculateVelocity(const Eigen::MatrixXd &manipulabilityDesired, const Eigen::MatrixXd &gainMatrix, bool jointLimitAvoidance) {
     // Compute left and right Jacobians
     Eigen::MatrixXd jacobianLeft = manipulability->computeFullJacobianLeft();
     Eigen::MatrixXd jacobianRight = manipulability->computeFullJacobianRight();
@@ -55,18 +55,18 @@ Eigen::VectorXf BimanualManipulabilityTracking::calculateVelocity(const Eigen::M
     Eigen::Tensor<double, 3> manipJ_sub = subCube(manipJ);
     Eigen::MatrixXd matManipJ = computeManipulabilityJacobianMandelNotation(manipJ_sub);
 
+    if (jointLimitAvoidance)
+    {
+        // TODO
+        std::cout << "Joint limit avoidance for bimanual manipulability is not yet implemented!" << std::endl;
+    }
+
     // Compute damped pseudo-inverse of manipulability Jacobian
     double dampingFactor = getDamping(matManipJ);
     Eigen::MatrixXd dampedLSI = dampedLeastSquaresInverse(matManipJ, dampingFactor);
     
-    // Set gain matrix
-    if (gainMatrix.rows() == 0)
-    {
-        gainMatrix = getDefaultGainMatrix();
-    }
-
     // Compute joint velocity
-    Eigen::VectorXd dq = dampedLSI * gainMatrix * manipulability_mandel;
+    Eigen::VectorXd dq = dampedLSI * (gainMatrix.rows() == 0 ? getDefaultGainMatrix() : gainMatrix) * manipulability_mandel;
     return dq.cast<float>();
 }
 

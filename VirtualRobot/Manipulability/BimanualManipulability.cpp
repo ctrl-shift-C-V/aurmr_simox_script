@@ -131,22 +131,22 @@ Eigen::VectorXd BimanualManipulability::getJointLimitsHigh() {
     for (size_t i = 0; i < rnsLeft->getSize(); i++)
     {
         RobotNodePtr rn = rnsLeft->getNode(i);
-        /*if (rn->isLimitless())
+        if (rn->isLimitless())
         {
-            jointLimitHi(i) = ?infinity;
+            jointLimitHi(i) = 0;
         }
-        else */
-        jointLimitHi(i) = rn->getJointLimitHi();
+        else
+            jointLimitHi(i) = rn->getJointLimitHi();
     }
     for (size_t i = 0; i < rnsRight->getSize(); i++)
     {
         RobotNodePtr rn = rnsRight->getNode(i);
-        /*if (rn->isLimitless())
+        if (rn->isLimitless())
         {
-            jointLimitHi(i) = ?infinity;
+            jointLimitHi(i + rnsLeft->getSize()) = 0;
         }
-        else */
-        jointLimitHi(i + rnsLeft->getSize()) = rn->getJointLimitHi();
+        else
+            jointLimitHi(i + rnsLeft->getSize()) = rn->getJointLimitHi();
     }
     return jointLimitHi;
 }
@@ -156,22 +156,22 @@ Eigen::VectorXd BimanualManipulability::getJointLimitsLow() {
     for (size_t i = 0; i < rnsLeft->getSize(); i++)
     {
         RobotNodePtr rn = rnsLeft->getNode(i);
-        /*if (rn->isLimitless())
+        if (rn->isLimitless())
         {
-            jointLimitLo(i) = ?infinity;
+            jointLimitLo(i) = 0;
         }
-        else */
-        jointLimitLo(i) = rn->getJointLimitLo();
+        else
+            jointLimitLo(i) = rn->getJointLimitLo();
     }
     for (size_t i = 0; i < rnsRight->getSize(); i++)
     {
         RobotNodePtr rn = rnsRight->getNode(i);
-        /*if (rn->isLimitless())
+        if (rn->isLimitless())
         {
-            jointLimitLo(i) = ?infinity;
+            jointLimitLo(i + rnsLeft->getSize()) = 0;
         }
-        else */
-        jointLimitLo(i + rnsLeft->getSize()) = rn->getJointLimitLo();
+        else
+            jointLimitLo(i + rnsLeft->getSize()) = rn->getJointLimitLo();
     }
     return jointLimitLo;
 }

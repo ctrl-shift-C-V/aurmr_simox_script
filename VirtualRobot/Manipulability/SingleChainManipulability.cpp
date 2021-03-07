@@ -97,12 +97,12 @@ Eigen::VectorXd SingleRobotNodeSetManipulability::getJointLimitsHigh() {
     for (size_t i = 0; i < rns->getSize(); i++)
     {
         RobotNodePtr rn = rns->getNode(i);
-        /*if (rn->isLimitless())
+        if (rn->isLimitless())
         {
-            jointLimitHi(i) = ?infinity;
+            jointLimitHi(i) = 0;
         }
-        else */
-        jointLimitHi(i) = rn->getJointLimitHi();
+        else
+            jointLimitHi(i) = rn->getJointLimitHi();
     }
     return jointLimitHi;
 }
@@ -112,12 +112,12 @@ Eigen::VectorXd SingleRobotNodeSetManipulability::getJointLimitsLow() {
     for (size_t i = 0; i < rns->getSize(); i++)
     {
         RobotNodePtr rn = rns->getNode(i);
-        /*if (rn->isLimitless())
+        if (rn->isLimitless())
         {
-            jointLimitLo(i) = ?infinity;
+            jointLimitLo(i) = 0;
         }
-        else */
-        jointLimitLo(i) = rn->getJointLimitLo();
+        else
+            jointLimitLo(i) = rn->getJointLimitLo();
     }
     return jointLimitLo;
 }

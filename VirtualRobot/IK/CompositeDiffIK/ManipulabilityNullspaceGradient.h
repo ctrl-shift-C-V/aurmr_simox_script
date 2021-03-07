@@ -30,11 +30,13 @@ namespace VirtualRobot
     {
     public:
         NullspaceManipulability(AbstractManipulabilityTrackingPtr manipulabilityTracking,
-                                float k_gain, const Eigen::MatrixXd& manipulabilityDesired);
+                                const Eigen::MatrixXd& manipulabilityDesired,
+                                const Eigen::MatrixXd &gainMatrix = Eigen::MatrixXd(), bool jointLimitAvoidance = false);
 
         AbstractManipulabilityTrackingPtr manipulabilityTracking;
-        float k_gain;
         Eigen::MatrixXd manipulabilityDesired;
+        Eigen::MatrixXd gainMatrix;
+        bool jointLimitAvoidance;
 
         double computeDistance();
 

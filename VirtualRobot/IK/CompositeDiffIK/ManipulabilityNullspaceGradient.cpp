@@ -26,11 +26,13 @@
 namespace VirtualRobot
 {
 
-NullspaceManipulability::NullspaceManipulability(AbstractManipulabilityTrackingPtr manipulabilityTracking, float k_gain, const Eigen::MatrixXd& manipulabilityDesired) :
+NullspaceManipulability::NullspaceManipulability(AbstractManipulabilityTrackingPtr manipulabilityTracking, const Eigen::MatrixXd& manipulabilityDesired,
+                                                 const Eigen::MatrixXd &gainMatrix, bool jointLimitAvoidance) :
     CompositeDiffIK::NullspaceGradient(manipulabilityTracking->getJointNames()),
     manipulabilityTracking(manipulabilityTracking),
-    k_gain(k_gain),
-    manipulabilityDesired(manipulabilityDesired)
+    manipulabilityDesired(manipulabilityDesired),
+    gainMatrix(gainMatrix),
+    jointLimitAvoidance(jointLimitAvoidance)
 {
 }
 
@@ -45,7 +47,7 @@ void NullspaceManipulability::init(CompositeDiffIK::Parameters&)
 
 Eigen::VectorXf NullspaceManipulability::getGradient(CompositeDiffIK::Parameters& /*params*/, int /*stepNr*/)
 {
-    Eigen::VectorXf velocities = manipulabilityTracking->calculateVelocity(manipulabilityDesired);
+    Eigen::VectorXf velocities = manipulabilityTracking->calculateVelocity(manipulabilityDesired, gainMatrix, jointLimitAvoidance);
     // check if nan
     unsigned int nan = 0;
     for (unsigned int i = 0; i < velocities.rows(); i++) {
@@ -56,7 +58,7 @@ Eigen::VectorXf NullspaceManipulability::getGradient(CompositeDiffIK::Parameters
     }
     if (nan > 0)
         std::cout << "Nan in nullspace manipulability velocities: " << nan << "/" << velocities.rows() << " \n";
-    return k_gain * velocities;
+    return velocities;
 }
 
 }

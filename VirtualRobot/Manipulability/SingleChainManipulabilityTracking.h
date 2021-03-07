@@ -43,9 +43,7 @@ public:
 
     Eigen::Tensor<double, 3> computeManipulabilityJacobian(const Eigen::MatrixXd &jacobian);
 
-    Eigen::VectorXf calculateVelocity(const Eigen::MatrixXd &manipulabilityDesired, Eigen::MatrixXd gainMatrix=Eigen::MatrixXd()) override;
-
-    Eigen::VectorXf calculateVelocityWithJointLimitsAvoidance(const Eigen::MatrixXd &manipulabilityDesired, Eigen::MatrixXd gainMatrix=Eigen::MatrixXd());
+    Eigen::VectorXf calculateVelocity(const Eigen::MatrixXd &manipulabilityDesired, const Eigen::MatrixXd &gainMatrix = Eigen::MatrixXd(), bool jointLimitAvoidance = false) override;
 
     virtual int getTaskVars() override;
 
