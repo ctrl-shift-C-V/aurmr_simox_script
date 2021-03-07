@@ -358,7 +358,7 @@ void DiffIKWidget::stepFollowManip() {
         return;
     }
 
-    Eigen::VectorXf velocity = manipTracking->calculateVelocity(followManip);
+    Eigen::VectorXf velocity = manipTracking->calculateVelocity(followManip, Eigen::MatrixXd(), true);
     std::cout << "Nullspace velocities without gain:\n" << velocity << "\n" << std::endl;
     Eigen::VectorXf jointValues = newRNS->getJointValuesEigen() + velocity * ui->kGain->value();;
     newRNS->setJointValues(jointValues);
@@ -463,7 +463,8 @@ void DiffIKWidget::solveIK(bool untilReached) {
             std::cout << "Wrong manipulability matrix!" << std::endl;
             return;
         }
-        nsman = VirtualRobot::NullspaceManipulabilityPtr(new VirtualRobot::NullspaceManipulability(manipTracking, kGain, followManip));
+        nsman = VirtualRobot::NullspaceManipulabilityPtr(new VirtualRobot::NullspaceManipulability(manipTracking, followManip, Eigen::MatrixXd(), true));
+        nsman->kP = kGain;
         ik->addNullspaceGradient(nsman);
     }
 
@@ -568,7 +569,13 @@ float randomFloat(float a, float b) {
 
 void DiffIKWidget::setRandomJointValues() {
     robot->setPropagatingJointValuesEnabled(false);
-    for (auto node : robot->getRobotNodes()) {
+    std::vector<std::string> robotNodeNames = currentRobotNodeSet->getNodeNames();
+    if (ui->checkBoxBimanual && currentRobotNodeSet2) {
+        auto robotNodeNames2 = currentRobotNodeSet2->getNodeNames();
+        robotNodeNames.insert(robotNodeNames.end(), robotNodeNames2.begin(), robotNodeNames2.end());
+    }
+    for (const auto &name : robotNodeNames) {
+        auto node = robot->getRobotNode(name);
         if (node->isRotationalJoint()) {
             float jointValue = randomFloat(node->getJointLimitLo(), node->getJointLimitHi());
             if (!std::isnan(jointValue))
@@ -613,7 +620,7 @@ void Worker::followManip(VirtualRobot::AbstractManipulabilityTrackingPtr manipTr
     double lastDistance = 1000;
     int count = 0;
     while (distance > maxDistance) {
-        Eigen::VectorXf velocity = manipTracking->calculateVelocity(followManip);
+        Eigen::VectorXf velocity = manipTracking->calculateVelocity(followManip, Eigen::MatrixXd(), true);
         Eigen::VectorXf jointValues = rns->getJointValuesEigen() + velocity * kGain;
         rns->setJointValues(jointValues);
         distance = manipTracking->computeDistance(followManip);

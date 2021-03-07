@@ -31,8 +31,8 @@
 namespace VirtualRobot
 {
 
-std::map<std::string, float> AbstractManipulabilityTracking::calculateVelocityMap(const Eigen::MatrixXd &manipulabilityDesired, const std::vector<std::string> &jointNames) {
-    Eigen::VectorXf velocities = calculateVelocity(manipulabilityDesired);
+std::map<std::string, float> AbstractManipulabilityTracking::calculateVelocityMap(const Eigen::MatrixXd &manipulabilityDesired, const std::vector<std::string> &jointNames, const Eigen::MatrixXd &gainMatrix, bool jointLimitAvoidance) {
+    Eigen::VectorXf velocities = calculateVelocity(manipulabilityDesired, gainMatrix, jointLimitAvoidance);
     std::map<std::string, float> velocityMap;
     if ((unsigned int)velocities.rows() == jointNames.size()) {
         for (unsigned int index = 0; index < jointNames.size(); index++) {
@@ -164,28 +164,39 @@ double AbstractManipulabilityTracking::getDamping(const Eigen::MatrixXd &matrix)
     return damping;
 }
 
-Eigen::MatrixXd AbstractManipulabilityTracking::getJointsLimitsWeightMatrix(const Eigen::VectorXd jointAngles, const Eigen::VectorXd jointLimitsLow, const Eigen::VectorXd jointLimitsHigh) {
+Eigen::MatrixXd AbstractManipulabilityTracking::getJointsLimitsWeightMatrix(const Eigen::VectorXd &jointAngles, const Eigen::VectorXd &jointLimitsLow, const Eigen::VectorXd &jointLimitsHigh) {
     int nbJoints = jointAngles.size();
     Eigen::VectorXd weights(nbJoints);
-    Eigen::VectorXd gradient(nbJoints);
+    Eigen::VectorXd gradient = Eigen::VectorXd::Zero(nbJoints);
+
+    if (jointAngleLimitGradient.rows() == 0)
+    {
+        jointAngleLimitGradient = Eigen::VectorXd::Zero(nbJoints);
+    }
 
     //std::cout << "Saved gradient:\n" << jointAngleLimitGradient << std::endl;
 
     for (int i = 0; i < nbJoints; i++) {
-        // TODO add condition on velocities
-        gradient(i) = std::pow(jointLimitsHigh(i) - jointLimitsLow(i), 2) * (2*jointAngles(i) - jointLimitsHigh(i) - jointLimitsLow(i)) / 
-                            ( 4 * std::pow(jointLimitsHigh(i) - jointAngles(i), 2) * std::pow(jointAngles(i) - jointLimitsLow(i), 2) );
-
-        if((std::abs(gradient(i)) - std::abs(jointAngleLimitGradient(i))) >= 0.) {
-            // Joint going towards limits
-            weights(i) = 1. / std::sqrt((1. + std::abs(gradient(i))));
-        } 
-        else {
-            // Joint going towards the center
+        if (jointLimitsLow(i) == 0 && jointLimitsHigh(i) == 0) {
+            // Joint is limitless
             weights(i) = 1.;
         }
+        else {
+            // TODO add condition on velocities
+            gradient(i) = std::pow(jointLimitsHigh(i) - jointLimitsLow(i), 2) * (2*jointAngles(i) - jointLimitsHigh(i) - jointLimitsLow(i)) /
+                                ( 4 * std::pow(jointLimitsHigh(i) - jointAngles(i), 2) * std::pow(jointAngles(i) - jointLimitsLow(i), 2) );
+
+            if((std::abs(gradient(i)) - std::abs(jointAngleLimitGradient(i))) >= 0.) {
+                // Joint going towards limits
+                weights(i) = 1. / std::sqrt((1. + std::abs(gradient(i))));
+            }
+            else {
+                // Joint going towards the center
+                weights(i) = 1.;
+            }
+        }
     }
-    //std::cout << "Gradient:\n" << gradient << std::endl;
+    //std::cout << "Gradient:\n" << gradient << "\n\n" << std::endl;
     setjointAngleLimitGradient(gradient);
     
     Eigen::MatrixXd weightsMatrix = weights.asDiagonal();

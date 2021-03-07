@@ -42,7 +42,7 @@ class BimanualManipulabilityTracking : public AbstractManipulabilityTracking
 public:
     BimanualManipulabilityTracking(BimanualManipulabilityPtr manipulability);
 
-    Eigen::VectorXf calculateVelocity(const Eigen::MatrixXd &manipulabilityDesired, Eigen::MatrixXd gainMatrix=Eigen::MatrixXd()) override;
+    Eigen::VectorXf calculateVelocity(const Eigen::MatrixXd &manipulabilityDesired, const Eigen::MatrixXd &gainMatrix=Eigen::MatrixXd(), bool jointLimitAvoidance = false) override;
 
     Eigen::Tensor<double, 3> computeBimanualManipulabilityJacobian(const Eigen::MatrixXd &jacobianLeft, const Eigen::MatrixXd &jacobianRight, const Eigen::MatrixXd &bimanualGraspMatrix);
 

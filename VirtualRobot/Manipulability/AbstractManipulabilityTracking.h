@@ -54,9 +54,9 @@ auto Matrix_to_Tensor(const MatrixType<Scalar> &matrix, Dims... dims)
 class AbstractManipulabilityTracking
 {
 public:
-    virtual Eigen::VectorXf calculateVelocity(const Eigen::MatrixXd &manipulabilityDesired, Eigen::MatrixXd gainMatrix=Eigen::MatrixXd()) = 0;
+    virtual Eigen::VectorXf calculateVelocity(const Eigen::MatrixXd &manipulabilityDesired, const Eigen::MatrixXd &gainMatrix = Eigen::MatrixXd(), bool jointLimitAvoidance = false) = 0;
 
-    std::map<std::string, float> calculateVelocityMap(const Eigen::MatrixXd &manipulabilityDesired, const std::vector<std::string> &jointNames);
+    std::map<std::string, float> calculateVelocityMap(const Eigen::MatrixXd &manipulabilityDesired, const std::vector<std::string> &jointNames, const Eigen::MatrixXd &gainMatrix = Eigen::MatrixXd(), bool jointLimitAvoidance = false);
 
     Eigen::Tensor<double, 3> computeJacobianDerivative(const Eigen::MatrixXd &jacobian);
 
@@ -82,7 +82,7 @@ public:
     double getDamping(const Eigen::MatrixXd &matrix);
 
     /* Calculate weight matrix for joint limits avoidance */
-    Eigen::MatrixXd getJointsLimitsWeightMatrix(const Eigen::VectorXd jointAngles, const Eigen::VectorXd jointLimitsLow, const Eigen::VectorXd jointLimitsHigh);
+    Eigen::MatrixXd getJointsLimitsWeightMatrix(const Eigen::VectorXd &jointAngles, const Eigen::VectorXd &jointLimitsLow, const Eigen::VectorXd &jointLimitsHigh);
 
     Eigen::MatrixXd computeManipulabilityJacobianMandelNotation(const Eigen::Tensor<double, 3> &manipulabilityJacobian);
 
