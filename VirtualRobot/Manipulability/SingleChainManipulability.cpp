@@ -88,6 +88,40 @@ std::vector<std::string> SingleRobotNodeSetManipulability::getJointNames() {
     return rns->getNodeNames();
 }
 
+Eigen::VectorXd SingleRobotNodeSetManipulability::getJointAngles() {
+    return rns->getJointValuesEigen().cast<double>();
+}
+
+Eigen::VectorXd SingleRobotNodeSetManipulability::getJointLimitsHigh() {
+    Eigen::VectorXd jointLimitHi(rns->getSize());
+    for (size_t i = 0; i < rns->getSize(); i++)
+    {
+        RobotNodePtr rn = rns->getNode(i);
+        /*if (rn->isLimitless())
+        {
+            jointLimitHi(i) = ?infinity;
+        }
+        else */
+        jointLimitHi(i) = rn->getJointLimitHi();
+    }
+    return jointLimitHi;
+}
+    
+Eigen::VectorXd SingleRobotNodeSetManipulability::getJointLimitsLow() {
+    Eigen::VectorXd jointLimitLo(rns->getSize());
+    for (size_t i = 0; i < rns->getSize(); i++)
+    {
+        RobotNodePtr rn = rns->getNode(i);
+        /*if (rn->isLimitless())
+        {
+            jointLimitLo(i) = ?infinity;
+        }
+        else */
+        jointLimitLo(i) = rn->getJointLimitLo();
+    }
+    return jointLimitLo;
+}
+
 Eigen::MatrixXd SingleRobotNodeSetManipulability::computeJacobian(IKSolver::CartesianSelection mode) {
     return ik->getJacobianMatrix(node, mode).cast<double>();
 }
@@ -97,13 +131,17 @@ Eigen::MatrixXd SingleRobotNodeSetManipulability::computeJacobian(IKSolver::Cart
 
 SingleChainManipulability::SingleChainManipulability(const Eigen::Matrix<double, 6, Eigen::Dynamic> &jacobian,
                                                      AbstractManipulability::Mode mode, AbstractManipulability::Type type,
+                                                     const Eigen::Matrix<double, Eigen::Dynamic, 1> &jointAngles, const Eigen::VectorXd &jointLimitsHigh, const Eigen::VectorXd &jointLimitsLow,
                                                      const std::vector<std::string> &jointNames,
                                                      const Eigen::Vector3f &globalPosition, const Eigen::Vector3f &localPosition) :
     AbstractSingleChainManipulability(mode, type),
     jacobian(jacobian),
     jointNames(jointNames),
     globalPosition(globalPosition),
-    localPosition(localPosition)
+    localPosition(localPosition),
+    jointAngles(jointAngles),
+    jointLimitsHigh(jointLimitsHigh),
+    jointLimitsLow(jointLimitsLow)
 {
 }
 
@@ -117,6 +155,18 @@ Eigen::Vector3f SingleChainManipulability::getGlobalPosition() {
 
 std::vector<std::string> SingleChainManipulability::getJointNames() {
     return jointNames;
+}
+
+Eigen::VectorXd SingleChainManipulability::getJointAngles() {
+    return jointAngles;
+}
+
+Eigen::VectorXd SingleChainManipulability::getJointLimitsHigh() {
+    return jointLimitsHigh;
+}
+    
+Eigen::VectorXd SingleChainManipulability::getJointLimitsLow() {
+    return jointLimitsLow;
 }
 
 void SingleChainManipulability::setJacobian(const Eigen::Matrix<double, 6, Eigen::Dynamic> &jacobian) {

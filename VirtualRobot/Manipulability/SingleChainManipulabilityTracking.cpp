@@ -30,6 +30,12 @@ namespace VirtualRobot
 
 SingleChainManipulabilityTracking::SingleChainManipulabilityTracking(AbstractSingleChainManipulabilityPtr manipulability) : manipulability(manipulability)
 {
+    // Initialize the jointAngleLimitGradient vector
+    Eigen::MatrixXd jacobian = manipulability->computeJacobian();
+    int nbJoints = jacobian.cols();
+    Eigen::VectorXd gradient(nbJoints);
+    gradient.setZero();
+    jointAngleLimitGradient = gradient;
 }
 
 Eigen::Tensor<double, 3> SingleChainManipulabilityTracking::computeManipulabilityJacobian(const Eigen::MatrixXd &jacobian) {
@@ -78,6 +84,34 @@ Eigen::VectorXf SingleChainManipulabilityTracking::calculateVelocity(const Eigen
     double dampingFactor = getDamping(matManipJ);
     Eigen::MatrixXd dampedLSI = dampedLeastSquaresInverse(matManipJ, dampingFactor);
     Eigen::MatrixXd manipulability_mandel = symMatrixToVector(manipulability_velocity);
+
+    if (gainMatrix.rows() == 0)
+    {
+        gainMatrix = getDefaultGainMatrix();
+    }
+    
+    Eigen::VectorXd dq = dampedLSI * gainMatrix * manipulability_mandel;
+    return dq.cast<float>();
+}
+
+Eigen::VectorXf SingleChainManipulabilityTracking::calculateVelocityWithJointLimitsAvoidance(const Eigen::MatrixXd &manipulabilityDesired, Eigen::MatrixXd gainMatrix) {
+    Eigen::MatrixXd jacobian = manipulability->computeFullJacobian(); // full jacobian is required for derivative
+    Eigen::MatrixXd jacobian_sub = manipulability->getJacobianSubMatrix(jacobian);
+    Eigen::MatrixXd manipulabilityCurrent = manipulability->computeManipulability(jacobian_sub);
+    Eigen::MatrixXd manipulability_velocity = logMap(manipulabilityDesired, manipulabilityCurrent);
+    Eigen::MatrixXd manipulability_mandel = symMatrixToVector(manipulability_velocity);
+
+    // Compute manipulability Jacobian
+    Eigen::Tensor<double, 3> manipJ = computeManipulabilityJacobian(jacobian);
+    Eigen::Tensor<double, 3> manipJ_sub = subCube(manipJ);
+    Eigen::MatrixXd matManipJ = computeManipulabilityJacobianMandelNotation(manipJ_sub);
+
+    // Compute weighted manipulability Jacobian
+    Eigen::MatrixXd jointsWeightMatrix = getJointsLimitsWeightMatrix(manipulability->getJointAngles(), manipulability->getJointLimitsHigh(), manipulability->getJointLimitsLow());
+    matManipJ = matManipJ * jointsWeightMatrix;
+    // Damping factor, and pseudo inverse 
+    double dampingFactor = getDamping(matManipJ);
+    Eigen::MatrixXd dampedLSI = jointsWeightMatrix * dampedLeastSquaresInverse(matManipJ, dampingFactor);
 
     if (gainMatrix.rows() == 0)
     {

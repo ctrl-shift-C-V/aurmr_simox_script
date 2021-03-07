@@ -74,6 +74,12 @@ public:
 
     virtual std::vector<std::string> getJointNames() override;
 
+    virtual Eigen::VectorXd getJointAngles() override;
+
+    virtual Eigen::VectorXd getJointLimitsHigh() override;
+    
+    virtual Eigen::VectorXd getJointLimitsLow() override;
+
     RobotPtr getRobot();
 
     RobotNodeSetPtr createRobotNodeSet(const std::string &name = "BimanualManipulabilityTracking");

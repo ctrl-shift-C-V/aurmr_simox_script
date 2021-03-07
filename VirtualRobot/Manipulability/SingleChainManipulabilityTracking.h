@@ -45,6 +45,8 @@ public:
 
     Eigen::VectorXf calculateVelocity(const Eigen::MatrixXd &manipulabilityDesired, Eigen::MatrixXd gainMatrix=Eigen::MatrixXd()) override;
 
+    Eigen::VectorXf calculateVelocityWithJointLimitsAvoidance(const Eigen::MatrixXd &manipulabilityDesired, Eigen::MatrixXd gainMatrix=Eigen::MatrixXd());
+
     virtual int getTaskVars() override;
 
     virtual AbstractManipulability::Mode getMode() override;
