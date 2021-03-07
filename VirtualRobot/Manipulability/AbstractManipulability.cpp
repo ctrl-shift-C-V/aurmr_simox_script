@@ -32,10 +32,11 @@
 namespace VirtualRobot
 {
 
-AbstractManipulability::AbstractManipulability(AbstractManipulability::Mode mode, AbstractManipulability::Type type) :
+AbstractManipulability::AbstractManipulability(AbstractManipulability::Mode mode, AbstractManipulability::Type type,  Eigen::MatrixXd weightMatrixInit) :
     mode(mode),
     type(type)
 {
+    weightMatrix = weightMatrixInit;
 }
 
 Eigen::MatrixXd AbstractManipulability::computeJacobian() {

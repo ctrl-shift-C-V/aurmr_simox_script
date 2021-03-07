@@ -37,7 +37,12 @@ namespace VirtualRobot
 {
 
 Eigen::MatrixXd AbstractSingleChainManipulability::computeManipulability(const Eigen::MatrixXd &jacobian, AbstractManipulability::Type type) {
-    Eigen::MatrixXd velocityManipulability = jacobian * jacobian.transpose();
+    if (weightMatrix.rows() == 0){
+        int nbJoints = jacobian.cols();
+        weightMatrix.setIdentity(nbJoints, nbJoints); 
+    }
+    std::cout << weightMatrix << std::endl;
+    Eigen::MatrixXd velocityManipulability = jacobian * weightMatrix * weightMatrix.transpose() * jacobian.transpose();
 
     switch (type) {
     case Velocity:
@@ -52,13 +57,14 @@ Eigen::MatrixXd AbstractSingleChainManipulability::computeManipulability(const E
 
 
 
-SingleRobotNodeSetManipulability::SingleRobotNodeSetManipulability(const RobotNodeSetPtr &rns, Mode mode, Type type, bool convertMMtoM)
-    : SingleRobotNodeSetManipulability(rns, rns->getTCP(), mode, type, RobotNodePtr(), convertMMtoM)
+
+SingleRobotNodeSetManipulability::SingleRobotNodeSetManipulability(const RobotNodeSetPtr &rns, Mode mode, Type type, Eigen::MatrixXd weightMatrixInit, bool convertMMtoM)
+    : SingleRobotNodeSetManipulability(rns, rns->getTCP(), mode, type, RobotNodePtr(), weightMatrixInit, convertMMtoM)
 {
 }
 
-SingleRobotNodeSetManipulability::SingleRobotNodeSetManipulability(const RobotNodeSetPtr &rns, const RobotNodePtr &node, Mode mode, Type type, const RobotNodePtr &coordSystem, bool convertMMtoM)
-    : AbstractSingleChainManipulability(mode, type), rns(rns), node(node), coordSystem(coordSystem)
+SingleRobotNodeSetManipulability::SingleRobotNodeSetManipulability(const RobotNodeSetPtr &rns, const RobotNodePtr &node, Mode mode, Type type, const RobotNodePtr &coordSystem, Eigen::MatrixXd weightMatrixInit, bool convertMMtoM)
+    : AbstractSingleChainManipulability(mode, type, weightMatrixInit), rns(rns), node(node), coordSystem(coordSystem)
 {
     ik.reset(new DifferentialIK(rns, coordSystem, JacobiProvider::eSVDDamped));
     ik->convertModelScalingtoM(convertMMtoM);

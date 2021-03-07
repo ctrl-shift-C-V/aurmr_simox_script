@@ -46,14 +46,14 @@ typedef std::shared_ptr<AbstractSingleChainManipulability> AbstractSingleChainMa
 class SingleRobotNodeSetManipulability : public AbstractSingleChainManipulability
 {
 public:
-    SingleRobotNodeSetManipulability(const RobotNodeSetPtr& rns, Mode mode, Type type, bool convertMMtoM = true);
+    SingleRobotNodeSetManipulability(const RobotNodeSetPtr& rns, Mode mode, Type type, Eigen::MatrixXd weightMatrixInit = Eigen::MatrixXd(), bool convertMMtoM = true);
 
     /**
      * @param rns The robotNodes (i.e., joints) for which the Jacobians should be calculated.
      * @param node
      * @param coordSystem The coordinate system in which the Jacobians are defined. By default the global coordinate system is used.
      */
-    SingleRobotNodeSetManipulability(const RobotNodeSetPtr& rns, const RobotNodePtr& node, Mode mode, Type type, const RobotNodePtr& coordSystem = RobotNodePtr(), bool convertMMtoM = true);
+    SingleRobotNodeSetManipulability(const RobotNodeSetPtr& rns, const RobotNodePtr& node, Mode mode, Type type, const RobotNodePtr& coordSystem = RobotNodePtr(), Eigen::MatrixXd weightMatrixInit = Eigen::MatrixXd(), bool convertMMtoM = true);
 
     RobotNodeSetPtr getRobotNodeSet();
 
