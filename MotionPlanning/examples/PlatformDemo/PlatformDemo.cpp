@@ -30,7 +30,7 @@ int main(int argc, char** argv)
 
     std::cout << " --- START --- " << std::endl;
 
-    std::string filenameScene("/scenes/examples/PlatformDemo/PlatformDemo.xml");
+    std::string filenameScene("scenes/examples/PlatformDemo/PlatformDemo.xml");
     VirtualRobot::RuntimeEnvironment::getDataFileAbsolute(filenameScene);
     std::string rnsName("Planning");
     std::string colModel1("ColModel Robot Body");

@@ -3,7 +3,7 @@
 <Scene name="PlanningScene">
 
         <Robot name="Armar-III" initConfig="start">
-            <File>/robots/ArmarIII/ArmarIII_withPlatformJoints.xml</File>
+            <File>robots/ArmarIII/ArmarIII_withPlatformJoints.xml</File>
 
             <Configuration name="start">
                 <Node name="X_Platform" unit="mm" value="4500"/>
