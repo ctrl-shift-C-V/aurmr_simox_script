@@ -262,12 +262,12 @@ MESSAGE (STATUS "** Simox: Generating CMake files for build and install setup")
 # Add all targets to the build-tree export set
 
 export(
-	TARGETS
-		${SIMOX_EXPORT_TARGET_LIST}
-	NAMESPACE
-		Simox::
+  TARGETS
+    ${SIMOX_EXPORT_TARGET_LIST}
+  NAMESPACE
+    Simox::
   FILE
-		"${PROJECT_BINARY_DIR}/SimoxTargets.cmake"
+    "${PROJECT_BINARY_DIR}/SimoxTargets.cmake"
 )
 
 
@@ -407,5 +407,3 @@ else()
     add_custom_target(astyle
                       COMMENT "Unable to format source files: AStyle was not found!")
 endif()
-
-
