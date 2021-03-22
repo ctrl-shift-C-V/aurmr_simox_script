@@ -24,6 +24,7 @@ get_filename_component(Simox_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 # Our library dependencies (contains definitions for IMPORTED targets)
 if(NOT TARGET Simox AND NOT Simox_BINARY_DIR)
   include("${Simox_CMAKE_DIR}/SimoxTargets.cmake")
+  include("${Simox_CMAKE_DIR}/SimoxTargetsLegacy.cmake")
 endif()
 # These are IMPORTED targets created by SimoxTargets.cmake
 set(Simox_LIBRARIES "@Simox_LIBRARIES@")
