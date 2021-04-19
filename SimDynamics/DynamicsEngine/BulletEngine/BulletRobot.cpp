@@ -30,12 +30,19 @@ using namespace std;
 namespace SimDynamics
 {
 
-    BulletRobot::BulletRobot(VirtualRobot::RobotPtr rob, bool enableJointMotors)
+    BulletRobot::BulletRobot(VirtualRobot::RobotPtr rob)
         : DynamicsRobot(rob)
           // should be enough for up to 10ms/step
         , bulletMaxMotorImulse(30 * BulletObject::ScaleFactor)
     {
         ignoreTranslationalJoints = false;
+
+        const bool enableJointMotors = not rob->isPassive();
+
+        if(not enableJointMotors)
+        {
+            VR_INFO << "Robot " <<  rob->getName()  << " is passive (no joint motors)";
+        }
 
         buildBulletModels(enableJointMotors);
 
@@ -65,12 +72,10 @@ namespace SimDynamics
         }
     }
 
-    BulletRobot::~BulletRobot()
-        = default;
+    BulletRobot::~BulletRobot() = default;
 
 
-
-    void BulletRobot::buildBulletModels(bool /*enableJointMotors*/)
+    void BulletRobot::buildBulletModels(const bool enableJointMotors)
     {
         MutexLockPtr lock = getScopedLock();
 
@@ -157,7 +162,7 @@ namespace SimDynamics
 
                 if (bodyA != bodyB)
                 {
-                    createLink(bodyA, joint, /*joint2,*/ bodyB);
+                    createLink(bodyA, joint, /*joint2,*/ bodyB, enableJointMotors);
                 }
             }
 
@@ -325,7 +330,7 @@ namespace SimDynamics
     }
 
 
-    void BulletRobot::createLink(VirtualRobot::RobotNodePtr bodyA, VirtualRobot::RobotNodePtr joint, /*VirtualRobot::RobotNodePtr joint2,*/ VirtualRobot::RobotNodePtr bodyB, bool enableJointMotors)
+    void BulletRobot::createLink(VirtualRobot::RobotNodePtr bodyA, VirtualRobot::RobotNodePtr joint, /*VirtualRobot::RobotNodePtr joint2,*/ VirtualRobot::RobotNodePtr bodyB, const bool enableJointMotors)
     {
         MutexLockPtr lock = getScopedLock();
 

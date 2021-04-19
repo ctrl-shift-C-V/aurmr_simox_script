@@ -39,7 +39,7 @@ namespace SimDynamics
             Constructor.
             Create a dynamic representation by building all related bullet objects.
         */
-        BulletRobot(VirtualRobot::RobotPtr rob, bool enableJointMotors = true);
+        BulletRobot(VirtualRobot::RobotPtr rob);
 
         /*!
         */
@@ -213,7 +213,7 @@ namespace SimDynamics
         // fixed                (joint=fixed        !joint2)
         // hinge                (joint=revolute     !joint2)
         // universal (hinge2)   (joint=revolute     joint2=revolute) // experimental
-        void createLink(VirtualRobot::RobotNodePtr bodyA, VirtualRobot::RobotNodePtr joint, /*VirtualRobot::RobotNodePtr joint2,*/ VirtualRobot::RobotNodePtr bodyB, bool enableJointMotors = true);
+        void createLink(VirtualRobot::RobotNodePtr bodyA, VirtualRobot::RobotNodePtr joint, /*VirtualRobot::RobotNodePtr joint2,*/ VirtualRobot::RobotNodePtr bodyB, bool enableJointMotors);
 
         void createLink(VirtualRobot::RobotNodePtr node1, VirtualRobot::RobotNodePtr node2, bool enableJointMotors);
 

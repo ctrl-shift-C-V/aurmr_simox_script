@@ -191,7 +191,9 @@ namespace SimDynamics
                 VR_ERROR << "Skipping non-BULLET object " << (*i)->getName() << "!" << std::endl;
                 continue;
             }
+
             auto friction = btObject->getSceneObject()->getPhysics().friction;
+            // TODO const auto damping = btObject->getSceneObject()->getPhysics().damping;
 
             btObject->getRigidBody()->setRestitution(bulletConfig->bulletObjectRestitution);
             btObject->getRigidBody()->setFriction(friction > 0.0 ? friction : bulletConfig->bulletObjectFriction);
