@@ -990,11 +990,7 @@ namespace VirtualRobot
 
         attr = robotXMLNode->first_attribute("passive", 0, false);
 
-        if (!attr)
-        {
-            VR_INFO << "Robot definition expects attribute 'passive' but is not set" << std::endl;
-        }
-        else
+        if(attr != nullptr)
         {
             const std::string passiveStrRep = attr->value();
             passive = toBool(passiveStrRep);
