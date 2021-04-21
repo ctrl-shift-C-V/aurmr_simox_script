@@ -909,11 +909,25 @@ namespace VirtualRobot
         return robo;
     }
 
+    inline bool toBool(const std::string& strRepr) noexcept
+    {
+        try {
+            const int passiveIntRepr = std::stoi(strRepr);
+            return static_cast<bool>(passiveIntRepr);
+                
+        } catch (std::invalid_argument&) {
+            // nothing to do here
+        }
+
+        return strRepr == "true";
+    }
+    
 
     RobotPtr RobotIO::processRobotAttributes(rapidxml::xml_node<char>* robotXMLNode, std::string& robotRoot)
     {
         std::string robotName;
         std::string robotType;
+        bool passive{false}; // if true, robot joints will not be actuated
 
         // process attributes of robot
         rapidxml::xml_attribute<>* attr;
@@ -974,6 +988,16 @@ namespace VirtualRobot
         robotRoot = attr->value();
 
 
+        attr = robotXMLNode->first_attribute("passive", 0, false);
+
+        if(attr != nullptr)
+        {
+            const std::string passiveStrRep = attr->value();
+            passive = toBool(passiveStrRep);
+        
+            VR_INFO << "Robot is 'passive' according to config" << std::endl;
+        }
+
         // build robot
         RobotPtr robo(new LocalRobot(robotName, robotType));
         /*attr = robotXMLNode->first_attribute("RadianToMMfactor", 0, false);
@@ -981,6 +1005,12 @@ namespace VirtualRobot
         {
             robo->setRadianToMMfactor(atof(attr->value()));
         }*/
+
+        if(passive){
+            robo->setPassive();
+        }
+
+
         return robo;
     }
 

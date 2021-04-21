@@ -419,6 +419,17 @@ namespace VirtualRobot
 
         bool getPropagatingJointValuesEnabled() const;
         void setPropagatingJointValuesEnabled(bool enabled);
+
+
+        void setPassive(){
+            passive = true;
+        }
+
+        bool isPassive() const
+        {
+            return passive;
+        }
+
     protected:
         Robot();
         /*!
@@ -440,6 +451,8 @@ namespace VirtualRobot
         mutable std::recursive_mutex mutex;
         bool use_mutex;
         bool propagatingJointValuesEnabled = true;
+
+        bool passive{false};
 
         //float radianToMMfactor = 10;
 
