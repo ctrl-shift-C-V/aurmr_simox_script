@@ -44,3 +44,5 @@ moc_*
 .cmake/api/v1/query/codemodel-v2
 .cmake/api/v1/query/cmakeFiles-v1
 
+# vscode stuff
+.vscode
