@@ -352,7 +352,7 @@ namespace VirtualRobot
     /**
      * \return VirtualRobot::Robot::name
      */
-    std::string Robot::getName()
+    std::string Robot::getName() const
     {
         return name;
     }
@@ -360,7 +360,7 @@ namespace VirtualRobot
     /**
      * \return VirtualRobot::Robot::type
      */
-    std::string Robot::getType()
+    std::string Robot::getType() const
     {
         return type;
     }
