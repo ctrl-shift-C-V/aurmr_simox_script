@@ -966,7 +966,7 @@ namespace VirtualRobot
         this->filename = filename;
     }
 
-    std::string Robot::getFilename()
+    std::string Robot::getFilename() const
     {
         return filename;
     }

@@ -261,7 +261,7 @@ namespace VirtualRobot
         virtual void setFilename(const std::string& filename);
 
         //! Retrieve the stored filename.
-        virtual std::string getFilename();
+        virtual std::string getFilename() const;
 
         /*!
             This readlock can be used to protect data access. It locks the mutex until deletion.
