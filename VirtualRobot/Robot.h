@@ -118,8 +118,8 @@ namespace VirtualRobot
         void setupVisualization(bool showVisualization, bool showAttachedVisualizations) override;
 
 
-        virtual std::string getName();
-        virtual std::string getType();
+        virtual std::string getName() const;
+        virtual std::string getType() const;
 
         /*!
         Print status information.
@@ -261,7 +261,7 @@ namespace VirtualRobot
         virtual void setFilename(const std::string& filename);
 
         //! Retrieve the stored filename.
-        virtual std::string getFilename();
+        virtual std::string getFilename() const;
 
         /*!
             This readlock can be used to protect data access. It locks the mutex until deletion.
