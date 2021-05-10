@@ -9,19 +9,29 @@
 
 namespace simox::alg
 {
-    /// Get the keys of `map` in a vector.
-    template <class K, class V, template<class...> class MapT = std::map, class...Ts>
-    std::vector<K> get_keys(const MapT<K, V, Ts...>& map)
+
+    namespace detail
     {
-        std::vector<K> keys;
-        if constexpr(std::is_same_v<std::map<K, V, Ts...>, MapT<K, V, Ts...>>)
+        auto key_type(auto&& c) 
         {
-            keys.reserve(map.size());
+            auto [k, v] = *c.begin();
+            return k;
         }
+    }
+
+    /// Get the keys of an associative container, a vector of key-value pairs, ...
+    auto get_keys(const auto& map)
+    {
+        using K = decltype(detail::key_type(map));
+
+        std::vector<K> keys;
+        keys.reserve(map.size());
+
         for (const auto& [k, v] : map)
         {
             keys.emplace_back(k);
         }
+
         return keys;
     }
 
