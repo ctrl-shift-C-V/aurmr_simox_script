@@ -107,6 +107,7 @@ SET(INCLUDES
     algorithm/fuzzy_find.h
     algorithm/get_map_keys_values.h
     algorithm/minmax.h
+    algorithm/vector.hpp
     algorithm/string/string_tools.h
     algorithm/string/string_conversion.h
     algorithm/string/string_conversion_eigen.h
