@@ -234,6 +234,9 @@ namespace simox
             return _d(0) * _d(1) * _d(2);
         }
 
+        void scale(const vector_t& factors) {
+            _d = _d.cwiseProduct(factors);
+        }
         void scale(float_t factor)
         {
             _d *= factor;
