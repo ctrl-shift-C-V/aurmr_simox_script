@@ -46,3 +46,6 @@ moc_*
 
 # vscode stuff
 .vscode
+
+# clangd
+.cache
