@@ -172,7 +172,7 @@ SET(SOURCES
     Primitive.cpp
     Random.cpp
     Robot.cpp
-    Safety.cpp
+    # Safety.cpp
     RobotConfig.cpp
     RobotFactory.cpp
     RobotNodeSet.cpp
@@ -378,7 +378,7 @@ SET(INCLUDES
     Primitive.h
     Random.h
     Robot.h
-    Safety.h
+    # Safety.h
     RobotConfig.h
     RobotFactory.h
     RobotNodeSet.h
