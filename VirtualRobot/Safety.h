@@ -27,7 +27,7 @@ namespace VirtualRobot
                        nodes.end(),
                        std::back_inserter(nodePositions),
                        [](const RobotNodePtr& node)
-                       { return node->getPoseInRootFrame(); });
+                       { return node->getPositionInRootFrame().head<2>(); });
 
         const MathTools::ConvexHull2DPtr hull =
             MathTools::createConvexHull2D(nodePositions);
