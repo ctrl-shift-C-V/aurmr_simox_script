@@ -627,6 +627,65 @@ namespace VirtualRobot
         }
     }
 
+    struct NodeMapping
+    {
+        RobotNodePtr node;
+
+        float sign;
+    };
+
+     /**
+     * This method processes the \p parentNode Tag and extracts a list of \<Node name="xyz"/\> tags.
+     * All other child tags raise a VirtualRobot::VirtualRobotException.
+     * The resulting nodes are stored in \p nodeList.
+     *
+     * If the parameter \p clearList is true all elements from \p nodeList are removed.
+     */
+    void BaseIO::processNodeMapping(rapidxml::xml_node<char>* parentNode, RobotPtr robot, std::unordered_map<RobotNodePtr, NodeMapping>& nodeMapping)
+    {
+        std::string parentName = processNameAttribute(parentNode, true);
+        rapidxml::xml_node<>* node = parentNode->first_node();
+
+        while (node)
+        {
+            std::string nodeName = getLowerCase(node->name());
+
+            if (nodeName == "mapping")
+            {
+                const std::string from = processStringAttribute("from", node, true);
+                const std::string to = processStringAttribute("to", node, true);
+                const int sign = processFloatAttribute("sign", node, true);
+
+                ARMARX_CHECK(sign == 1 or sign == -1) << "'sign' attribute has to be either '1' or '-1'";
+                ARMARX_CHECK(not from.empty()) << "'from' attribute is empty!";
+                ARMARX_CHECK(not to.empty()) << "'to' attribute is empty!";
+
+                // std::string nodeNameAttr = processNameAttribute(node);
+                // THROW_VR_EXCEPTION_IF(nodeNameAttr.empty(), "Missing name attribute for <Node> belonging to Robot node set " << parentName);
+                // RobotNodePtr robotNode = robot->getRobotNode(nodeNameAttr);
+                // THROW_VR_EXCEPTION_IF(!robotNode, "<node> tag with name '" << nodeNameAttr << "' not present in the current robot");
+                // nodeList.push_back(robotNode);
+
+                RobotNodePtr fromRobotNode = robot->getRobotNode(from);
+                THROW_VR_EXCEPTION_IF(fromRobotNode == nullptr);
+                RobotNodePtr toRobotNode = robot->getRobotNode(to);
+                THROW_VR_EXCEPTION_IF(toRobotNode == nullptr);
+
+                // allow bidirectional lookup
+                nodeMapping.emplace(from, NodeMapping{.node = to, .sign = sign});
+                nodeMapping.emplace(to, NodeMapping{.node = from, .sign = sign});
+
+            }
+            else
+            {
+                THROW_VR_EXCEPTION("XML definition <" << nodeName << "> not supported in <RobotNodeSet> with name " << parentName);
+            }
+
+            node = node->next_sibling();
+        }
+    }
+
+
     /**
     * This method takes a rapidxml::xml_node and returns the value of the
     * first tag it finds with name \p attributeName.
@@ -1650,6 +1709,86 @@ namespace VirtualRobot
 
         std::vector<RobotNodePtr> nodeList;
         processNodeList(setXMLNode, robo, nodeList);
+
+        RobotNodePtr kinRoot;
+
+        if (!rootNodeName.empty())
+        {
+            if (!robo->hasRobotNode(rootNodeName))
+            {
+                VR_WARNING << "In robot node set '" << nodeSetName
+                           << "': No root node '" << rootNodeName << "' found";
+            }
+            kinRoot = robo->getRobotNode(rootNodeName);
+        }
+
+        RobotNodePtr tcp;
+
+        if (!tcpName.empty())
+        {
+            if (!robo->hasRobotNode(tcpName))
+            {
+                VR_WARNING << "In robot node set '" << nodeSetName
+                           << "': No root node '" << tcpName << "' found";
+            }
+            tcp = robo->getRobotNode(tcpName);
+        }
+
+        RobotNodeSetPtr rns = RobotNodeSet::createRobotNodeSet(robo, nodeSetName, nodeList, kinRoot, tcp, true);
+
+        return rns;
+    }
+
+        RobotNodeSetPtr BaseIO::processRobotNodeMapping(rapidxml::xml_node<char>* setXMLNode, RobotPtr robo, const std::string& robotRootNode, int& robotNodeSetCounter)
+    {
+        THROW_VR_EXCEPTION_IF(!setXMLNode, "NULL data for setXMLNode");
+
+        std::string nodeSetName;
+        std::string rootNodeName;
+        std::string tcpName;
+
+        // get name and root
+        rapidxml::xml_attribute<>* attr = setXMLNode->first_attribute();
+
+        // while (attr)
+        // {
+        //     std::string name = getLowerCase(attr->name());
+
+        //     if (name == "name")
+        //     {
+        //         THROW_VR_EXCEPTION_IF(!nodeSetName.empty(), "Robot node set contains multiple definitions of attribute name. First value of name is: " << nodeSetName);
+        //         nodeSetName = attr->value();
+        //     }
+        //     else if (name == "kinematicroot")
+        //     {
+        //         THROW_VR_EXCEPTION_IF(!rootNodeName.empty(), "Robot node set contains multiple definitions of attribute kinematicroot. First value of kinematicroot is: " << rootNodeName);
+        //         rootNodeName = attr->value();
+        //     }
+        //     else if (name == "tcp")
+        //     {
+        //         THROW_VR_EXCEPTION_IF(!tcpName.empty(), "Robot node set contains multiple definitions of attribute tcp. First value of tcpis: " << tcpName);
+        //         tcpName = attr->value();
+        //     }
+
+        //     attr = attr->next_attribute();
+        // }
+
+        // if (nodeSetName.empty())
+        // {
+        //     std::stringstream ss;
+        //     ss << robo->getType() << "_RobotNodeSet_" << robotNodeSetCounter;
+        //     nodeSetName = ss.str();
+        //     robotNodeSetCounter++;
+        //     VR_WARNING << "RobotNodeSet definition expects attribute 'name'. Setting name to " << nodeSetName << std::endl;
+        // }
+
+        // if (rootNodeName.empty())
+        // {
+        //     rootNodeName = robotRootNode;
+        // }
+
+        std::vector<RobotNodePtr> nodeList;
+        processNodeMapping(setXMLNode, robo, nodeList);
 
         RobotNodePtr kinRoot;
 
