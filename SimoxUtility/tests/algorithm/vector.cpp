@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(test_appended)
 BOOST_AUTO_TEST_CASE(test_subvec)
 {
     const std::vector<int> ref { 3 };
-    auto res = simox::alg::subvector(vec, 3);
+    auto res = simox::alg::subvector(vec, 2);
 
     BOOST_CHECK_EQUAL(res.size(), ref.size());
     for (unsigned int i = 0; i < res.size(); ++i)

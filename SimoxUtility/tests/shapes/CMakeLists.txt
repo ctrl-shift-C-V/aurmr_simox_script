@@ -13,5 +13,5 @@ SET(TEST_FILES
 )
 
 foreach (FILENAME IN LISTS TEST_FILES)
-    configure_file("${FILENAME}" "${Simox_TEST_DIR}/${FILENAME}" COPYONLY)
+    configure_file("${FILENAME}" "${Simox_BINARY_DIR}/SimoxUtility/tests/shapes/${FILENAME}" COPYONLY)
 endforeach()

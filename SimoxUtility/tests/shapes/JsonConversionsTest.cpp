@@ -73,6 +73,7 @@ BOOST_AUTO_TEST_CASE(test_read_AABB)
     namespace fs = std::filesystem;
     float prec = 1e-4f;
 
+
     for (const std::string& filename : JSON_AABB_FILENAMES)
     {
         BOOST_TEST_CONTEXT("File " << filename)
