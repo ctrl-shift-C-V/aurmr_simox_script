@@ -91,9 +91,12 @@ class SingleChainManipulability : public AbstractSingleChainManipulability
 {
 public:
     SingleChainManipulability(const Eigen::Matrix<double, 6, Eigen::Dynamic> &jacobian, Mode mode, Type type,
-                              const Eigen::Matrix<double, Eigen::Dynamic, 1> &jointAngles = Eigen::MatrixXd(), const Eigen::VectorXd &jointLimitsHigh = Eigen::MatrixXd(), const Eigen::VectorXd &jointLimitsLow = Eigen::MatrixXd(),
+                              const Eigen::Matrix<double, Eigen::Dynamic, 1> &jointAngles = Eigen::MatrixXd::Zero(0, 1),
+                              const Eigen::VectorXd &jointLimitsHigh = Eigen::MatrixXd::Zero(0, 1),
+                              const Eigen::VectorXd &jointLimitsLow = Eigen::MatrixXd::Zero(0, 1),
                               const std::vector<std::string> &jointNames = std::vector<std::string>(),
-                              const Eigen::Vector3f &globalPosition = Eigen::Vector3f::Zero(), const Eigen::Vector3f &localPosition = Eigen::Vector3f::Zero());
+                              const Eigen::Vector3f &globalPosition = Eigen::Vector3f::Zero(),
+                              const Eigen::Vector3f &localPosition = Eigen::Vector3f::Zero());
 
     virtual Eigen::Vector3f getLocalPosition() override;
 
