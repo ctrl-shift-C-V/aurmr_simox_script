@@ -43,6 +43,7 @@ namespace rapidxml
 
 namespace VirtualRobot
 {
+
     /*!
         Several basic XML IO methods.
         \see RobotIO, SceneIO, ObjectIO
@@ -96,6 +97,8 @@ namespace VirtualRobot
         static std::vector< Units > getUnitsAttributes(rapidxml::xml_node<char>* node);
         static void getAllAttributes(rapidxml::xml_node<char>* node, const std::string& attrString, std::vector<std::string>& storeValues);
         static void processDHNode(rapidxml::xml_node<char>* dhXMLNode, DHParameter& dh);
+
+        static NodeMapping processNodeMapping(rapidxml::xml_node<char>* XMLNode, RobotPtr robot);
 
         static std::string toXML(const Eigen::Matrix4f& m, std::string ident = "\t");
 
