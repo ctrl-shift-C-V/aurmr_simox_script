@@ -16,6 +16,7 @@
 #include "../Visualization/TriMeshModel.h"
 #include "../RobotConfig.h"
 #include "../RuntimeEnvironment.h"
+#include "VirtualRobot.h"
 #include "rapidxml.hpp"
 #include "mujoco/RobotMjcf.h"
 #include <VirtualRobot/Import/URDF/SimoxURDFFactory.h>
@@ -820,7 +821,9 @@ namespace VirtualRobot
         std::vector<rapidxml::xml_node<char>* > robotNodeSetNodes;
         std::vector<rapidxml::xml_node<char>* > endeffectorNodes;
 
-        processRobotChildNodes(robotXMLNode, robo, robotRoot, basePath, childrenFromRobotFilesMap, robotNodeSetNodes, endeffectorNodes, loadMode);
+        NodeMapping nodeMapping;
+
+        processRobotChildNodes(robotXMLNode, robo, robotRoot, basePath, childrenFromRobotFilesMap, robotNodeSetNodes, endeffectorNodes, nodeMapping, loadMode);
 
         // process childfromrobot tags
         std::map< RobotNodePtr, std::vector< ChildFromRobotDef > >::iterator iter = childrenFromRobotFilesMap.begin();
@@ -905,6 +908,8 @@ namespace VirtualRobot
                 THROW_VR_EXCEPTION("Node without parent: " << node->getName());
             }
         }
+
+        robo->registerNodeMapping(nodeMapping);
 
         return robo;
     }
@@ -1023,6 +1028,7 @@ namespace VirtualRobot
                                          std::vector<ChildFromRobotDef> >& childrenFromRobotFilesMap,
                                          std::vector<rapidxml::xml_node<char>* >& robotNodeSetNodes,
                                          std::vector<rapidxml::xml_node<char>* >& endeffectorNodes,
+                                         NodeMapping& nodeMapping,
                                          RobotDescription loadMode)
     {
         std::vector<RobotNodePtr> robotNodes;
@@ -1105,6 +1111,11 @@ namespace VirtualRobot
             {
                 //skip
             }
+            else if ("nodemapping" == nodeName)
+            {
+                VR_INFO << "Found robot node mapping";
+                nodeMapping = processNodeMapping(XMLNode, robo);
+            }
             else
             {
                 THROW_VR_EXCEPTION("XML node of type <" << nodeName_ << "> is not supported. Ignoring contents..." << endl);
@@ -1120,6 +1131,7 @@ namespace VirtualRobot
         {
             THROW_VR_EXCEPTION("Error while initializing Robot" << endl);
         }
+
     }
 
 
