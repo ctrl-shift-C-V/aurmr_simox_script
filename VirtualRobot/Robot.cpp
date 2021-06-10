@@ -1246,5 +1246,27 @@ namespace VirtualRobot
         propagatingJointValuesEnabled = enabled;
     }
 
+    void Robot::validateNodeMapping(const NodeMapping& nodeMapping) const
+    {
+        for(const auto& nodeMap : nodeMapping)
+        {
+            THROW_VR_EXCEPTION_IF(not hasRobotNode(nodeMap.first), "Node '" + nodeMap.first + " not found in the node set!");
+            THROW_VR_EXCEPTION_IF(not hasRobotNode(nodeMap.second.node), "Node '" + nodeMap.second.node + " not found in the node set!");
+        }
+    }
+
+    void Robot::registerNodeMapping(const NodeMapping& nodeMapping){
+
+        validateNodeMapping(nodeMapping);
+
+        this->nodeMapping = nodeMapping;
+    }
+
+    const NodeMapping& Robot::getNodeMapping() const
+    {
+        return nodeMapping;
+    }
+    
+
 } // namespace VirtualRobot
 
