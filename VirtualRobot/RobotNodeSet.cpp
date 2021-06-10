@@ -3,6 +3,7 @@
 #include "SceneObjectSet.h"
 #include "Robot.h"
 #include "RobotConfig.h"
+#include "VirtualRobot.h"
 #include "VirtualRobotException.h"
 #include "CollisionDetection/CollisionChecker.h"
 #include <set>
@@ -551,8 +552,14 @@ namespace VirtualRobot
     {
         THROW_VR_EXCEPTION_IF((i >= (int)robotNodes.size() || i < 0), "Index out of bounds:" << i << ", (should be between 0 and " << (robotNodes.size() - 1));
 
-        return robotNodes[i];
+        return robotNodes.at(i);
     }
+
+    RobotNodePtr& RobotNodeSet::getNode(const std::string& nodeName)
+    {
+        return getNode(getRobotNodeIndex(nodeName));
+    }
+
 
     RobotNodePtr& RobotNodeSet::operator[](int i)
     {
@@ -801,6 +808,41 @@ namespace VirtualRobot
     {
         THROW_VR_EXCEPTION("Not allowed for RobotNodeSets.");
         return false;
+    }
+
+    bool RobotNodeSet::mirror(const RobotNodeSet& targetNodeSet)
+    {
+        const NodeMapping nodeMapping = getRobot()->getNodeMapping();
+        const auto nodeNames = getNodeNames();
+
+        for(const auto& targetNode : targetNodeSet.getAllRobotNodes())
+        {
+            // if node exists in both node set, just copy the joint value
+            if(hasRobotNode(targetNode->getName()))
+            {
+                targetNode->setJointValue(getNode(targetNode->getName())->getJointValue());
+                continue;
+            }
+
+            // otherwise, check if mirroring is possible
+            const auto nodeIt = nodeMapping.find(targetNode->getName());
+            if(nodeIt == nodeMapping.end())
+            {
+                return false;
+            }
+
+            const NodeMappingElement& mapping = nodeIt->second;
+            if(not hasRobotNode(mapping.node))
+            {
+                return false;
+            }
+
+            // mirror it
+            const auto& sourceNode = getNode(mapping.node);
+            targetNode->setJointValue(mapping.sign * sourceNode->getJointValue());
+        }
+
+        return true;
     }
 
     bool RobotNodeSet::isKinematicRoot(RobotNodePtr robotNode)
