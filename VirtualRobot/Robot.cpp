@@ -2,6 +2,7 @@
 #include "Robot.h"
 #include "RobotConfig.h"
 #include "Trajectory.h"
+#include "VirtualRobot.h"
 #include "VirtualRobotException.h"
 #include "Nodes/Sensor.h"
 #include "Visualization/VisualizationNode.h"
@@ -137,7 +138,7 @@ namespace VirtualRobot
         }
     }
 
-    bool LocalRobot::hasRobotNode(RobotNodePtr node)
+    bool LocalRobot::hasRobotNode(RobotNodePtr node) const
     {
         if (!node)
         {
@@ -154,7 +155,7 @@ namespace VirtualRobot
         return false;
     }
 
-    bool LocalRobot::hasRobotNode(const std::string& robotNodeName)
+    bool LocalRobot::hasRobotNode(const std::string& robotNodeName) const
     {
         return (robotNodeMap.find(robotNodeName) != robotNodeMap.end());
     }
@@ -195,7 +196,7 @@ namespace VirtualRobot
         robotNodeSetMap[nodeSetName] = nodeSet;
     }
 
-    bool Robot::hasRobotNodeSet(RobotNodeSetPtr nodeSet)
+    bool Robot::hasRobotNodeSet(RobotNodeSetPtr nodeSet) const
     {
         if (!nodeSet)
         {
@@ -207,14 +208,9 @@ namespace VirtualRobot
         return hasRobotNodeSet(nodeSetName);
     }
 
-    bool LocalRobot::hasRobotNodeSet(const std::string& name)
+    bool LocalRobot::hasRobotNodeSet(const std::string& name) const
     {
-        if (robotNodeSetMap.find(name) != robotNodeSetMap.end())
-        {
-            return true;
-        }
-
-        return false;
+        return robotNodeSetMap.find(name) != robotNodeSetMap.end();
     }
 
     void LocalRobot::deregisterRobotNodeSet(RobotNodeSetPtr nodeSet)
@@ -263,7 +259,7 @@ namespace VirtualRobot
     /**
      * \return true if instance of VirtualRobot::Robot contains a reference to \p endEffector and false otherwise
      */
-    bool Robot::hasEndEffector(EndEffectorPtr endEffector)
+    bool Robot::hasEndEffector(EndEffectorPtr endEffector) const
     {
         if (!endEffector)
         {
@@ -284,7 +280,7 @@ namespace VirtualRobot
     /**
      * \return true if instance of VirtualRobot::Robot contains an endeffector with name \p endEffectorName and false otherwise
      */
-    bool LocalRobot::hasEndEffector(const std::string& endEffectorName)
+    bool LocalRobot::hasEndEffector(const std::string& endEffectorName) const
     {
         if (endEffectorName.empty())
         {
@@ -303,7 +299,7 @@ namespace VirtualRobot
     /**
      * \return reference to endeffector with name \p endEffectorName or Null-Pointer otherwise
      */
-    EndEffectorPtr LocalRobot::getEndEffector(const std::string& endEffectorName)
+    EndEffectorPtr LocalRobot::getEndEffector(const std::string& endEffectorName) const
     {
         if (endEffectorMap.find(endEffectorName) == endEffectorMap.end())
         {
@@ -311,14 +307,14 @@ namespace VirtualRobot
             return EndEffectorPtr();
         }
 
-        return endEffectorMap[endEffectorName];
+        return endEffectorMap.at(endEffectorName);
     }
 
     /**
      * This method stores all endeffectors belonging to the robot in \p storeEEF.
      * If there are no registered endeffectors \p storeEEF will be empty.
      */
-    void LocalRobot::getEndEffectors(std::vector<EndEffectorPtr>& storeEEF)
+    void LocalRobot::getEndEffectors(std::vector<EndEffectorPtr>& storeEEF) const
     {
         storeEEF.clear();
         storeEEF.reserve(endEffectorMap.size());
@@ -341,7 +337,7 @@ namespace VirtualRobot
     }
 
 
-    std::vector<EndEffectorPtr> Robot::getEndEffectors()
+    std::vector<EndEffectorPtr> Robot::getEndEffectors() const
     {
         std::vector<EndEffectorPtr> res;
         getEndEffectors(res);
@@ -658,7 +654,7 @@ namespace VirtualRobot
     {
         std::vector<RobotNodePtr> robotNodes = this->getRobotNodes();
 
-        if (robotNodes.size() == 0)
+        if (robotNodes.empty())
         {
             return CollisionChecker::getGlobalCollisionChecker();
         }
@@ -720,7 +716,7 @@ namespace VirtualRobot
         return res;
     }
 
-    float Robot::getMass()
+    float Robot::getMass() const
     {
         float res = 0;
         std::vector<RobotNodePtr> robotNodes = this->getRobotNodes();
@@ -735,7 +731,7 @@ namespace VirtualRobot
         return res;
     }
 
-    std::vector< CollisionModelPtr > Robot::getCollisionModels()
+    std::vector< CollisionModelPtr > Robot::getCollisionModels() const
     {
         std::vector< CollisionModelPtr > result;
         std::vector<RobotNodePtr> robotNodes = this->getRobotNodes();
@@ -1106,7 +1102,7 @@ namespace VirtualRobot
         applyJointValuesNoLock();
     }
 
-    VirtualRobot::BoundingBox Robot::getBoundingBox(bool collisionModel)
+    VirtualRobot::BoundingBox Robot::getBoundingBox(bool collisionModel) const
     {
         VirtualRobot::BoundingBox bbox;
         std::vector<RobotNodePtr> rn = getRobotNodes();
@@ -1126,7 +1122,7 @@ namespace VirtualRobot
         return bbox;
     }
 
-    SensorPtr Robot::getSensor(const std::string& name)
+    SensorPtr Robot::getSensor(const std::string& name) const
     {
         std::vector<RobotNodePtr> rn = getRobotNodes();
 
@@ -1146,7 +1142,7 @@ namespace VirtualRobot
         return SensorPtr();
     }
 
-    std::vector<SensorPtr> Robot::getSensors()
+    std::vector<SensorPtr> Robot::getSensors() const
     {
         std::vector<SensorPtr> result;
         std::vector<RobotNodePtr> rn = getRobotNodes();
@@ -1155,7 +1151,7 @@ namespace VirtualRobot
         {
             std::vector<SensorPtr> s = i->getSensors();
 
-            if (s.size() > 0)
+            if (!s.empty())
             {
                 result.insert(result.end(), s.begin(), s.end());
             }
@@ -1164,7 +1160,7 @@ namespace VirtualRobot
         return result;
     }
 
-    std::string Robot::toXML(const std::string& basePath,  const std::string& modelPath /*= "models"*/, bool storeEEF, bool storeRNS, bool storeSensors)
+    std::string Robot::toXML(const std::string& basePath,  const std::string& modelPath /*= "models"*/, bool storeEEF, bool storeRNS, bool storeSensors) const
     {
         std::stringstream ss;
         ss << "<?xml version='1.0' encoding='UTF-8'?>" << endl << std::endl;
@@ -1215,7 +1211,7 @@ namespace VirtualRobot
         return ss.str();
     }
 
-    float Robot::getScaling()
+    float Robot::getScaling() const
     {
         return scaling;
     }

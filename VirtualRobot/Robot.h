@@ -148,8 +148,8 @@ namespace VirtualRobot
         */
         virtual void registerRobotNode(RobotNodePtr node) = 0;
         virtual void deregisterRobotNode(RobotNodePtr node) = 0;
-        virtual bool hasRobotNode(RobotNodePtr node) = 0;
-        virtual bool hasRobotNode(const std::string& robotNodeName) = 0;
+        virtual bool hasRobotNode(RobotNodePtr node) const = 0;
+        virtual bool hasRobotNode(const std::string& robotNodeName) const = 0;
         virtual RobotNodePtr getRobotNode(const std::string& robotNodeName) const = 0;
         virtual std::vector< RobotNodePtr > getRobotNodes() const;
         virtual std::vector<std::string> getRobotNodeNames() const;
@@ -160,8 +160,8 @@ namespace VirtualRobot
         */
         virtual void registerRobotNodeSet(RobotNodeSetPtr nodeSet) = 0;
         virtual void deregisterRobotNodeSet(RobotNodeSetPtr nodeSet) = 0;
-        virtual bool hasRobotNodeSet(RobotNodeSetPtr nodeSet);
-        virtual bool hasRobotNodeSet(const std::string& name) = 0;
+        virtual bool hasRobotNodeSet(RobotNodeSetPtr nodeSet) const;
+        virtual bool hasRobotNodeSet(const std::string& name) const = 0;
         virtual RobotNodeSetPtr getRobotNodeSet(const std::string& nodeSetName) const = 0;
         virtual std::vector<RobotNodeSetPtr> getRobotNodeSets() const;
         virtual std::vector<std::string> getRobotNodeSetNames() const;
@@ -171,13 +171,13 @@ namespace VirtualRobot
          *
          */
         virtual void registerEndEffector(EndEffectorPtr endEffector) = 0;
-        virtual bool hasEndEffector(EndEffectorPtr endEffector);
-        virtual bool hasEndEffector(const std::string& endEffectorName) = 0;
-        virtual EndEffectorPtr getEndEffector(const std::string& endEffectorName) = 0;
-        virtual std::vector<EndEffectorPtr> getEndEffectors();
-        virtual void getEndEffectors(std::vector<EndEffectorPtr>& storeEEF) = 0;
+        virtual bool hasEndEffector(EndEffectorPtr endEffector) const;
+        virtual bool hasEndEffector(const std::string& endEffectorName) const = 0;
+        virtual EndEffectorPtr getEndEffector(const std::string& endEffectorName) const = 0;
+        virtual std::vector<EndEffectorPtr> getEndEffectors() const;
+        virtual void getEndEffectors(std::vector<EndEffectorPtr>& storeEEF) const = 0;
 
-        virtual std::vector< CollisionModelPtr > getCollisionModels();
+        virtual std::vector< CollisionModelPtr > getCollisionModels() const;
 
         CollisionCheckerPtr getCollisionChecker() override;
 
@@ -220,7 +220,7 @@ namespace VirtualRobot
         Eigen::Vector3f getCoMGlobal() override;
 
         //! Return accumulated mass of this robot.
-        virtual float getMass();
+        virtual float getMass() const;
 
 
         /*!
@@ -367,15 +367,15 @@ namespace VirtualRobot
             \param collisionModel Either the collision or the visualization model is considered.
             \return The bounding box.
         */
-        virtual BoundingBox getBoundingBox(bool collisionModel = true);
+        virtual BoundingBox getBoundingBox(bool collisionModel = true) const;
 
         /*!
          * Returns the sensor with the given name.
          */
-        virtual SensorPtr getSensor(const std::string& name);
+        virtual SensorPtr getSensor(const std::string& name) const;
 
         template<class SensorType>
-        std::shared_ptr<SensorType> getSensor(const std::string& name)
+        std::shared_ptr<SensorType> getSensor(const std::string& name) const
         {
             return std::dynamic_pointer_cast<SensorType>(getSensor(name));
         }
@@ -383,10 +383,10 @@ namespace VirtualRobot
         /*!
             Returns all sensors that are defined within this robot.
         */
-        virtual std::vector<SensorPtr> getSensors();
+        virtual std::vector<SensorPtr> getSensors() const;
 
         template<class SensorType>
-        std::vector<std::shared_ptr<SensorType> > getSensors()
+        std::vector<std::shared_ptr<SensorType> > getSensors() const
         {
             std::vector<std::shared_ptr<SensorType> > result;
             std::vector<SensorPtr> sensors = getSensors();
@@ -404,9 +404,9 @@ namespace VirtualRobot
             Creates an XML string that defines the complete robot. Filenames of all visualization models are set to modelPath/RobotNodeName_visu and/or modelPath/RobotNodeName_colmodel.
             @see RobotIO::saveXML.
         */
-        virtual std::string toXML(const std::string& basePath = ".", const std::string& modelPath = "models", bool storeEEF = true, bool storeRNS = true, bool storeSensors = true);
+        virtual std::string toXML(const std::string& basePath = ".", const std::string& modelPath = "models", bool storeEEF = true, bool storeRNS = true, bool storeSensors = true) const;
 
-        float getScaling();
+        float getScaling() const;
         void setScaling(float scaling);
 
         /**
@@ -503,21 +503,21 @@ namespace VirtualRobot
 
         void registerRobotNode(RobotNodePtr node) override;
         void deregisterRobotNode(RobotNodePtr node) override;
-        bool hasRobotNode(const std::string& robotNodeName) override;
-        bool hasRobotNode(RobotNodePtr node) override;
+        bool hasRobotNode(const std::string& robotNodeName) const override;
+        bool hasRobotNode(RobotNodePtr node) const override;
         RobotNodePtr getRobotNode(const std::string& robotNodeName) const override;
         void getRobotNodes(std::vector< RobotNodePtr >& storeNodes, bool clearVector = true) const override;
 
         void registerRobotNodeSet(RobotNodeSetPtr nodeSet) override;
         void deregisterRobotNodeSet(RobotNodeSetPtr nodeSet) override;
-        bool hasRobotNodeSet(const std::string& name) override;
+        bool hasRobotNodeSet(const std::string& name) const override;
         RobotNodeSetPtr getRobotNodeSet(const std::string& nodeSetName) const override;
         void getRobotNodeSets(std::vector<RobotNodeSetPtr>& storeNodeSet) const override;
 
         void registerEndEffector(EndEffectorPtr endEffector) override;
-        bool hasEndEffector(const std::string& endEffectorName) override;
-        EndEffectorPtr getEndEffector(const std::string& endEffectorName) override;
-        void getEndEffectors(std::vector<EndEffectorPtr>& storeEEF) override;
+        bool hasEndEffector(const std::string& endEffectorName) const override;
+        EndEffectorPtr getEndEffector(const std::string& endEffectorName) const override;
+        void getEndEffectors(std::vector<EndEffectorPtr>& storeEEF) const override;
 
         void setGlobalPose(const Eigen::Matrix4f& globalPose, bool applyJointValues = true) override;
         void setGlobalPose(const Eigen::Matrix4f& globalPose) override;
@@ -531,6 +531,7 @@ namespace VirtualRobot
         std::map< std::string, RobotNodePtr > robotNodeMap;
         std::map< std::string, RobotNodeSetPtr > robotNodeSetMap;
         std::map< std::string, EndEffectorPtr > endEffectorMap;
+
     };
 
 
