@@ -93,12 +93,12 @@ namespace VirtualRobot
             c[i]->initialize(shared_from_this());
         }
 
+        initialized = true;
         if (parent)
         {
             updatePose(parent->getGlobalPose());
         }
 
-        initialized = true;
         return initializePhysics();
     }
 
