@@ -116,6 +116,7 @@ namespace VirtualRobot
                                            std::vector<ChildFromRobotDef> > & childrenFromRobotFilesMap,
                                            std::vector<rapidxml::xml_node<char>* >& robotNodeSetNodes,
                                            std::vector<rapidxml::xml_node<char>* >& endeffectorNodes,
+                                           NodeMapping& nodeMapping,
                                            RobotDescription loadMode = eFull);
         static RobotNodePtr processRobotNode(rapidxml::xml_node<char>* robotNodeXMLNode,
                                              RobotPtr robo,

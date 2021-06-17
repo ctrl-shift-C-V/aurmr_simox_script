@@ -141,6 +141,7 @@ namespace VirtualRobot
         RobotNodePtr& operator[](int i);
 
         RobotNodePtr& getNode(int i);
+        RobotNodePtr& getNode(const std::string& nodeName);
 
         // implement container interface for easy access
         inline auto begin()
@@ -221,6 +222,8 @@ namespace VirtualRobot
         bool addSceneObjects(std::vector<RobotNodePtr> robotNodes) override;
         //! this is forbidden for RobotNodeSets, a call will throw an exception
         bool removeSceneObject(SceneObjectPtr sceneObject) override;
+
+        [[nodiscard]] bool mirror(const RobotNodeSet& targetNodeSet);
 
     protected:
         /*!

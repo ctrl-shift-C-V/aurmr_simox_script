@@ -40,6 +40,16 @@ namespace VirtualRobot
     class Visualization;
     class RobotNode;
 
+
+    struct NodeMappingElement
+    {
+        std::string node;
+
+        float sign;
+    };
+
+    using NodeMapping = std::unordered_map<std::string, NodeMappingElement>;
+
     /*!
         This is the main object defining the kinematic structure of a robot.
 
@@ -166,6 +176,11 @@ namespace VirtualRobot
         virtual std::vector<RobotNodeSetPtr> getRobotNodeSets() const;
         virtual std::vector<std::string> getRobotNodeSetNames() const;
         virtual void getRobotNodeSets(std::vector<RobotNodeSetPtr>& storeNodeSet) const = 0;
+
+        /*!
+        * Node mapping
+        */
+        const NodeMapping& getNodeMapping() const;
 
         /**
          *
@@ -430,8 +445,15 @@ namespace VirtualRobot
             return passive;
         }
 
+        void registerNodeMapping(const NodeMapping& nodeMapping);
+
+
     protected:
         Robot();
+
+        void validateNodeMapping(const NodeMapping& nodeMapping) const;
+
+
         /*!
             Goes through all RobotNodes and if no visualization is present:
             * the collision model is checked and in case it owns a visualization
@@ -455,6 +477,9 @@ namespace VirtualRobot
         bool passive{false};
 
         //float radianToMMfactor = 10;
+
+    private:
+        NodeMapping nodeMapping;
 
     };
 

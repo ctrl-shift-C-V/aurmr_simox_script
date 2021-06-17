@@ -627,6 +627,43 @@ namespace VirtualRobot
         }
     }
 
+
+    NodeMapping BaseIO::processNodeMapping(rapidxml::xml_node<char>* XMLNode, RobotPtr robot)
+    {
+        std::string parentName = processNameAttribute(XMLNode, true);
+        rapidxml::xml_node<>* node = XMLNode->first_node();
+
+        NodeMapping nodeMapping;
+        while (node != nullptr)
+        {
+            std::string nodeName = getLowerCase(node->name());
+
+            if (nodeName == "mapping")
+            {
+                const std::string from = processStringAttribute("from", node, true);
+                const std::string to = processStringAttribute("to", node, true);
+                const float sign = processFloatAttribute("sign", node, true);
+
+                THROW_VR_EXCEPTION_IF(not(sign == 1 or sign == -1), "'sign' attribute has to be either '1' or '-1'");
+                THROW_VR_EXCEPTION_IF(from.empty(),  "'from' attribute is empty!");
+                THROW_VR_EXCEPTION_IF(to.empty(), "'to' attribute is empty!");
+
+                // allow bidirectional lookup
+                nodeMapping.emplace(from, NodeMappingElement{.node = from, .sign = sign});
+                nodeMapping.emplace(to, NodeMappingElement{.node = to, .sign = sign});
+            }
+            else
+            {
+                THROW_VR_EXCEPTION("XML definition <" << nodeName << "> not supported in <NodeMapping> with name " << parentName);
+            }
+
+            node = node->next_sibling();
+        }
+
+        return nodeMapping;
+    }
+
+
     /**
     * This method takes a rapidxml::xml_node and returns the value of the
     * first tag it finds with name \p attributeName.
@@ -1679,6 +1716,7 @@ namespace VirtualRobot
 
         return rns;
     }
+
 
     bool BaseIO::processFloatValueTags(rapidxml::xml_node<char>* XMLNode, int dim, Eigen::VectorXf& stroreResult)
     {
