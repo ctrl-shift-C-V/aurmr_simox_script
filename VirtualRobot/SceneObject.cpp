@@ -93,12 +93,15 @@ namespace VirtualRobot
             c[i]->initialize(shared_from_this());
         }
 
+        Eigen::Matrix4f m = Eigen::Matrix4f::Identity();
+
         if (parent)
         {
-            updatePose(parent->getGlobalPose());
+            m = parent->getGlobalPose();
         }
 
         initialized = true;
+        updatePose(m);
         return initializePhysics();
     }
 

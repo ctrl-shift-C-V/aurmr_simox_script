@@ -29,8 +29,6 @@ ADD_VR_TEST( VirtualRobotIOTest )
 ADD_VR_TEST( VirtualRobotGazeIKTest )
 ADD_VR_TEST( VirtualRobotMeshImportTest )
 
-ADD_VR_TEST( ManipulationObjectGlobalPoseTest )
-
 ADD_VR_TEST( VirtualRobotTimeOptimalTrajectoryTest )
 
 ADD_VR_TEST( VirtualRobotRuntimeEnvironmentTest )

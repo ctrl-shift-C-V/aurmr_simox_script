@@ -1,7 +1,6 @@
 
 #include "ObjectIO.h"
 #include "../VirtualRobotException.h"
-#include "VirtualRobot.h"
 #include "rapidxml.hpp"
 
 
@@ -253,15 +252,7 @@ namespace VirtualRobot
         // get name
         std::string objName = processNameAttribute(objectXMLNode);
 
-
-        // update global pose
-        rapidxml::xml_node<>* poseNode = objectXMLNode->first_node("globalpose", 0, false);
-        if (poseNode != nullptr)
-        {
-            processTransformNode(poseNode, objName, globalPose);
-        }
-
-        // Check if there is an xml file to load
+        // first check if there is an xml file to load
         rapidxml::xml_node<>* xmlFileNode = objectXMLNode->first_node("file", 0, false);
 
         if (xmlFileNode)
@@ -279,11 +270,18 @@ namespace VirtualRobot
                 result->setName(objName);
             }
 
-            // update global pose           
-            result->setGlobalPose(globalPose);
+            // update global pose
+            rapidxml::xml_node<>* poseNode = objectXMLNode->first_node("globalpose", 0, false);
+
+            if (poseNode)
+            {
+                processTransformNode(poseNode, objName, globalPose);
+                result->setGlobalPose(globalPose);
+            }
 
             return result;
         }
+
 
 
         THROW_VR_EXCEPTION_IF(objName.empty(), "ManipulationObject definition expects attribute 'name'");
