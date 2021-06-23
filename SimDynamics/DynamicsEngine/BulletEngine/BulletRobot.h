@@ -198,6 +198,9 @@ namespace SimDynamics
          */
         double getMaximumMotorImpulse() const;
 
+        void addJointFriction(VirtualRobot::RobotNodePtr node);
+
+
     protected:
         void buildBulletModels(bool enableJointMotors);
 

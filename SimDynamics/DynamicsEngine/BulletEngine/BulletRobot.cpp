@@ -468,6 +468,10 @@ namespace SimDynamics
             // start standard actuator
             actuateNode(joint, joint->getJointValue());
         }
+        else
+        {
+            addJointFriction(joint);
+        }
 
 #endif
     }
@@ -1006,6 +1010,34 @@ namespace SimDynamics
             }
 
             DynamicsRobot::actuateNode(node, jointValue);
+        }
+        else
+        {
+            if (node->isTranslationalJoint() && ignoreTranslationalJoints)
+            {
+                VR_WARNING << "Translational joints ignored. (ignoring node " << node->getName() << ")." << std::endl;
+            }
+            else
+            {
+                VR_ERROR << "Only Revolute and translational joints implemented so far (ignoring node " << node->getName() << ")." << std::endl;
+            }
+        }
+    }
+
+    void BulletRobot::addJointFriction(VirtualRobot::RobotNodePtr node)
+    {
+        MutexLockPtr lock = getScopedLock();
+        VR_ASSERT(node);
+
+        if (node->isRotationalJoint() || (node->isTranslationalJoint() && !ignoreTranslationalJoints))
+        {
+            if (!hasLink(node))
+            {
+                VR_ERROR << "No link for node " << node->getName() << std::endl;
+                return;
+            }
+
+            DynamicsRobot::addJointFriction(node);
         }
         else
         {
