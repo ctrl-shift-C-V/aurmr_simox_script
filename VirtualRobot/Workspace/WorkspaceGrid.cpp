@@ -266,7 +266,7 @@ namespace VirtualRobot
         }
     }
 
-    void WorkspaceGrid::setEntries(std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr>& wsData, Eigen::Matrix4f& graspGlobal, GraspPtr grasp)
+    void WorkspaceGrid::setEntries(std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr>& wsData, const Eigen::Matrix4f& graspGlobal, GraspPtr grasp)
     {
         if (!data)
         {
@@ -446,7 +446,7 @@ namespace VirtualRobot
         return fillGridData(ws, graspGlobal, g, baseRobotNode);
     }
 
-    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode)
+    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode)
     {
         if (!ws)
         {
