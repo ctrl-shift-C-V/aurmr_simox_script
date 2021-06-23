@@ -79,6 +79,8 @@ namespace SimDynamics
         virtual double getNodeTarget(VirtualRobot::RobotNodePtr node);
         virtual void enableActuation(ActuationMode mode);
         virtual void disableActuation();
+        
+        void addJointFriction(VirtualRobot::RobotNodePtr node);
 
         /*!
             Usually this method is called by the framework in every tick to perform joint actuation.

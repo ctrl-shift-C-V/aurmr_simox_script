@@ -109,6 +109,37 @@ namespace SimDynamics
         actuateNode(robot->getRobotNode(node), jointValue);
     }
 
+    void DynamicsRobot::addJointFriction(VirtualRobot::RobotNodePtr node)
+    {
+        MutexLockPtr lock = getScopedLock();
+        VR_ASSERT(robot);
+        VR_ASSERT(node);
+        VR_ASSERT(robot->hasRobotNode(node));
+
+        //if (!hasDynamicsRobotNode(node))
+        //    createDynamicsNode(node);
+
+        //DynamicsObjectPtr dnyRN = getDynamicsRobotNode(node);
+
+        robotNodeActuationTarget target;
+        target.actuation.modes.torque = 1;
+        target.node = node;
+        target.jointTorqueTarget = 1;
+        //target.dynNode = dnyRN;
+
+        actuationTargets[node] = target;
+
+        if (actuationControllers.find(node) == actuationControllers.end())
+        {
+            actuationControllers[node] = VelocityMotorController(node->getMaxVelocity(), node->getMaxAcceleration());
+            actuationControllers[node].reset(PID_p, PID_i, PID_d);
+        }
+        else
+        {
+            actuationControllers[node].reset();
+        }
+    }
+
     void DynamicsRobot::actuateNode(VirtualRobot::RobotNodePtr node, double jointValue)
     {
         MutexLockPtr lock = getScopedLock();
