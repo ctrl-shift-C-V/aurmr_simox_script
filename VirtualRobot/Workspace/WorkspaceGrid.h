@@ -91,7 +91,7 @@ namespace VirtualRobot
             Fill the grid with inverse reachability data generated from grasp g and object o.
         */
         bool fillGridData(WorkspaceRepresentationPtr ws, ManipulationObjectPtr o, GraspPtr g, RobotNodePtr baseRobotNode);
-        bool fillGridData(WorkspaceRepresentationPtr ws, Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode);
+        bool fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode);
 
 
         /*!
@@ -127,7 +127,7 @@ namespace VirtualRobot
             so when defining a grasping pose, the inverse reachability can be represented by this grid
             Therefor the "world coordinates" of the inverse reachability distributions are computed by T_grasp * ReachTransformation^-1
         */
-        void setEntries(std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr>& wsData, Eigen::Matrix4f& graspGlobal, GraspPtr grasp);
+        void setEntries(std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr>& wsData, const Eigen::Matrix4f& graspGlobal, GraspPtr grasp);
 
         inline int getDataPos(int x, int y)
         {
