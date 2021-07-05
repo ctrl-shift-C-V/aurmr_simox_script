@@ -83,9 +83,11 @@ namespace VirtualRobot
             \param global If set, the boundignBox is transformed to globalCoordinate system. Otherwise the local BBox is returned.
         */
         BoundingBox getBoundingBox(bool global = true);
+
+        [[deprecated("The behavior of this function has changed. To obtain the bounding box in the global coordinate frame, use getGlobalBoundingBox() instead.")]]
         BoundingBox getLocalBoundingBox()
         {
-            return getBoundingBox();
+            return getBoundingBox(false);
         }
         BoundingBox getGlobalBoundingBox()
         {
