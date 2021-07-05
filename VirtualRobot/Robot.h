@@ -131,6 +131,9 @@ namespace VirtualRobot
         virtual std::string getName() const;
         virtual std::string getType() const;
 
+        void setType(const std::string& type);
+        void setName(const std::string& name);
+
         /*!
         Print status information.
         */

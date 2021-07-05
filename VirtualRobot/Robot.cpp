@@ -360,6 +360,16 @@ namespace VirtualRobot
     {
         return type;
     }
+    
+    void Robot::setType(const std::string& type) 
+    {
+        this->type = type;
+    }
+    
+    void Robot::setName(const std::string& name) 
+    {
+        this->name = name;
+    }
 
     void Robot::print(bool /*printChildren*/, bool /*printDecoration*/) const
     {
