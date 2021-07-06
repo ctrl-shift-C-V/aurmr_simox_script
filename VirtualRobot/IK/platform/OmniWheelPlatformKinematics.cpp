@@ -21,6 +21,8 @@
 
 #include "OmniWheelPlatformKinematics.h"
 
+#include <Eigen/Dense>
+
 namespace VirtualRobot
 {
     // OmniWheelPlatformKinematicsParams
