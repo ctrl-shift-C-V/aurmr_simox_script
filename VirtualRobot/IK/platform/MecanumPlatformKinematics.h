@@ -90,10 +90,10 @@ namespace VirtualRobot
         MecanumPlatformKinematics(const Params& params);
 
         //! inverse model
-        WheelVelocities calcWheelVelocity(const CartesianVelocity& v);
+        WheelVelocities calcWheelVelocity(const CartesianVelocity& v) const;
 
         //! forward model
-        CartesianVelocity calcCartesianVelocity(const WheelVelocities& w);
+        CartesianVelocity calcCartesianVelocity(const WheelVelocities& w) const;
 
         const Params& getParams() const;
 

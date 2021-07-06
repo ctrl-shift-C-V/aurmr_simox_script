@@ -81,10 +81,10 @@ namespace VirtualRobot
         OmniWheelPlatformKinematics(const Params& info);
 
         //! inverse model
-        WheelVelocities calcWheelVelocity(const CartesianVelocity& v);
+        WheelVelocities calcWheelVelocity(const CartesianVelocity& v) const;
 
         //! forward model
-        CartesianVelocity calcCartesianVelocity(const WheelVelocities& w);
+        CartesianVelocity calcCartesianVelocity(const WheelVelocities& w) const;
 
         const Params& getParams() const;
 

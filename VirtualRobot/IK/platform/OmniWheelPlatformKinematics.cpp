@@ -51,13 +51,13 @@ namespace VirtualRobot
     }
 
     OmniWheelPlatformKinematics::WheelVelocities
-    OmniWheelPlatformKinematics::calcWheelVelocity(const CartesianVelocity& v)
+    OmniWheelPlatformKinematics::calcWheelVelocity(const CartesianVelocity& v) const
     {
         return C * v;
     }
 
     OmniWheelPlatformKinematics::CartesianVelocity
-    OmniWheelPlatformKinematics::calcCartesianVelocity(const WheelVelocities& w)
+    OmniWheelPlatformKinematics::calcCartesianVelocity(const WheelVelocities& w) const
     {
         return C_inv * w;
     }

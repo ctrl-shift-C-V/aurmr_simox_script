@@ -1,5 +1,4 @@
 
-
 #include "MecanumPlatformKinematics.h"
 
 namespace VirtualRobot
@@ -44,18 +43,19 @@ namespace VirtualRobot
         return m;
     }
 
-    MecanumPlatformKinematics::MecanumPlatformKinematics(const Params& params) : params(params)
+    MecanumPlatformKinematics::MecanumPlatformKinematics(const Params& params) :
+        params(params), J(params.J()), J_inv(params.J_inv())
     {
     }
 
     MecanumPlatformKinematics::WheelVelocities
-    MecanumPlatformKinematics::calcWheelVelocity(const CartesianVelocity& v)
+    MecanumPlatformKinematics::calcWheelVelocity(const CartesianVelocity& v) const
     {
         return J_inv * v;
     }
 
     MecanumPlatformKinematics::CartesianVelocity
-    MecanumPlatformKinematics::calcCartesianVelocity(const WheelVelocities& w)
+    MecanumPlatformKinematics::calcCartesianVelocity(const WheelVelocities& w) const
     {
         return J * w;
     }
