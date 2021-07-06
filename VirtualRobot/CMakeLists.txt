@@ -346,7 +346,6 @@ SET(SOURCES
 
     Workspace/Manipulability.cpp
     Workspace/Reachability.cpp
-    Workspace/NaturalPosture.cpp
     Workspace/WorkspaceDataArray.cpp
     Workspace/WorkspaceGrid.cpp
     Workspace/WorkspaceRepresentation.cpp
@@ -591,7 +590,6 @@ SET(INCLUDES
 
     Workspace/Manipulability.h
     Workspace/Reachability.h
-    Workspace/NaturalPosture.h
     Workspace/VoxelTree6D.hpp
     Workspace/VoxelTree6DElement.hpp
     Workspace/VoxelTreeND.hpp
