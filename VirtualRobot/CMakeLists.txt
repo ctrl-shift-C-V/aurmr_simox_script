@@ -236,6 +236,9 @@ SET(SOURCES
     IK/CompositeDiffIK/CompositeDiffIK.cpp
     IK/CompositeDiffIK/ManipulabilityNullspaceGradient.cpp
     IK/CompositeDiffIK/SoechtingNullspaceGradient.cpp
+    
+    IK/platform/OmniWheelPlatformKinematics.cpp
+    IK/platform/MecanumPlatformKinematics.cpp
 
     Import/RobotImporterFactory.cpp
     Import/SimoxXMLFactory.cpp
@@ -450,6 +453,9 @@ SET(INCLUDES
     IK/CompositeDiffIK/ManipulabilityNullspaceGradient.h
     IK/CompositeDiffIK/Soechting.h
     IK/CompositeDiffIK/SoechtingNullspaceGradient.h
+
+    IK/platform/OmniWheelPlatformKinematics.h
+    IK/platform/MecanumPlatformKinematics.h
 
     Import/RobotImporterFactory.h
     Import/SimoxXMLFactory.h
