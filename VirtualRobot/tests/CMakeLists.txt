@@ -53,3 +53,5 @@ ADD_VR_TEST( MathGaussianImplicitSurface3DNormalsTest )
 ADD_VR_TEST( MathGaussianImplicitSurface3DTest )
 ADD_VR_TEST( MathHelpersTest )
 ADD_VR_TEST( PQP_optimization )
+
+ADD_VR_TEST( MecanumPlatformKinematicsTest )

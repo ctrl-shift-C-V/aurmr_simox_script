@@ -20,28 +20,34 @@
  *             GNU General Public License
  */
 
-#define BOOST_TEST_MODULE Armar6RT::ArmarXLibraries::Armar6MecanumPlatform
+#define BOOST_TEST_MODULE VirtualRobot_MecanumPlatformKinematics
 
-#define ARMARX_BOOST_TEST
-
-#include <Armar6RT/Test.h>
-#include "../Armar6MecanumPlatform.h"
+#include <VirtualRobot/VirtualRobotTest.h>
 
 #include <iostream>
 
-#include <Armar6RT/libraries/Armar6MecanumPlatform/Armar6MecanumPlatform.h>
+#include <VirtualRobot/IK/platform/MecanumPlatformKinematics.h>
 
 #include <Eigen/src/Core/IO.h>
 
-using namespace armarx;
+BOOST_AUTO_TEST_SUITE(MecanumPlatformKinematics)
 
 BOOST_AUTO_TEST_CASE(testExample)
 {
     Eigen::IOFormat vecfmt(5, 0, "", ", ", "", "", "(", ")");
-    Armar6MecanumPlatform p;
-    std::cout << "1 0 0: " << p.calcWheelVelocity(1, 0, 0).format(vecfmt) << std::endl;
-    std::cout << "0 1 0: " << p.calcWheelVelocity(0, 1, 0).format(vecfmt) << std::endl;
-    std::cout << "0 0 1: " << p.calcWheelVelocity(0, 0, 1).format(vecfmt) << std::endl;
+    
+    const VirtualRobot::MecanumPlatformKinematicsParams params
+    {
+        .l1 = 250,
+        .l2 = 300,
+        .R = 95.f
+    };
+
+    const VirtualRobot::MecanumPlatformKinematics p(params);
+
+    // std::cout << "1 0 0: " << p.calcWheelVelocity(Eigen::Vector3f{1, 0, 0}).format(vecfmt) << std::endl;
+    // std::cout << "0 1 0: " << p.calcWheelVelocity(Eigen::Vector3f{0, 1, 0}).format(vecfmt) << std::endl;
+    // std::cout << "0 0 1: " << p.calcWheelVelocity(Eigen::Vector3f{0, 0, 1}).format(vecfmt) << std::endl;
     BOOST_CHECK_EQUAL(true, true);
 }
 
@@ -49,13 +55,20 @@ BOOST_AUTO_TEST_CASE(testExample)
 
 BOOST_AUTO_TEST_CASE(testInv)
 {
-    Armar6MecanumPlatform p;
+    const VirtualRobot::MecanumPlatformKinematicsParams params
+    {
+        .l1 = 250,
+        .l2 = 300,
+        .R = 95.f
+    };
+
+    const VirtualRobot::MecanumPlatformKinematics p(params);
 
     float vx = 100.0;
     float vy = 200.0;
     float vAngle = 0.1f;
 
-    Eigen::Vector4f wheelVelocities = p.calcWheelVelocity(vx, vy, vAngle);
+    Eigen::Vector4f wheelVelocities = p.calcWheelVelocity(Eigen::Vector3f{vx, vy, vAngle});
     Eigen::Vector3f velocities = p.calcCartesianVelocity(wheelVelocities);
 
     BOOST_TEST(vx == velocities(0), boost::test_tools::tolerance(0.1));
@@ -67,7 +80,14 @@ BOOST_AUTO_TEST_CASE(testInv)
 
 BOOST_AUTO_TEST_CASE(testMoveForwardCartesianVel)
 {
-    Armar6MecanumPlatform p;
+    const VirtualRobot::MecanumPlatformKinematicsParams params
+    {
+        .l1 = 250,
+        .l2 = 300,
+        .R = 95.f
+    };
+
+    const VirtualRobot::MecanumPlatformKinematics p(params);
 
     Eigen::Vector4f wheelVelocities = Eigen::Vector4f::Ones();
     Eigen::Vector3f velocities = p.calcCartesianVelocity(wheelVelocities);
@@ -80,9 +100,16 @@ BOOST_AUTO_TEST_CASE(testMoveForwardCartesianVel)
 
 BOOST_AUTO_TEST_CASE(testMoveForwardWheelVel)
 {
-    Armar6MecanumPlatform p;
+    const VirtualRobot::MecanumPlatformKinematicsParams params
+    {
+        .l1 = 250,
+        .l2 = 300,
+        .R = 95.f
+    };
 
-    Eigen::Vector4f wheelVelocities = p.calcWheelVelocity(0.0, 100.0, 0.0);
+    const VirtualRobot::MecanumPlatformKinematics p(params);
+
+    Eigen::Vector4f wheelVelocities = p.calcWheelVelocity(Eigen::Vector3f{0.0, 100.0, 0.0});
 
     BOOST_TEST(0 < wheelVelocities(0));
     BOOST_TEST(wheelVelocities(0) == wheelVelocities(1), boost::test_tools::tolerance(0.1));
@@ -90,3 +117,4 @@ BOOST_AUTO_TEST_CASE(testMoveForwardWheelVel)
     BOOST_TEST(wheelVelocities(0) == wheelVelocities(3), boost::test_tools::tolerance(0.1));
 }
 
+BOOST_AUTO_TEST_SUITE_END()
