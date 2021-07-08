@@ -4,8 +4,11 @@ MESSAGE (STATUS "\n***** CONFIGURING Simox project SimoxQtUtility *****")
 
 #################################### FILES ##################################
 SET(SOURCES
+
 )
+
 SET(INCLUDES
+
 )
 
 if (qwt_FOUND)
@@ -83,20 +86,24 @@ endif()
 
 # Finished adding UI files
 #-----------------------------------------------------------------------------------
+
 SET_TARGET_PROPERTIES(SimoxQtUtility PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${Simox_BIN_DIR})
 SET_TARGET_PROPERTIES(SimoxQtUtility PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${Simox_LIB_DIR})
 SET_TARGET_PROPERTIES(SimoxQtUtility PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${Simox_LIB_DIR})
+
+
 #######################################################################################
 ############################ Setup for installation ###################################
 #######################################################################################
 
-install(TARGETS SimoxQtUtility
+INSTALL(TARGETS SimoxQtUtility
     # IMPORTANT: Add the library to the "export-set"
     EXPORT SimoxTargets
     RUNTIME DESTINATION bin COMPONENT bin
     LIBRARY DESTINATION lib COMPONENT shlib
     ARCHIVE DESTINATION lib COMPONENT library
-    COMPONENT dev)
+    COMPONENT dev
+)
 
 INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} DESTINATION "${Simox_INSTALL_HEADER_DIR}"
     COMPONENT Headers
@@ -110,7 +117,7 @@ INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} DESTINATION 
         PATTERN "build*" EXCLUDE
         PATTERN "data" EXCLUDE
         PATTERN "examples" EXCLUDE
-    )
+)
 
 INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/data DESTINATION "."
     COMPONENT ApplicationData
@@ -128,6 +135,6 @@ INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/data DESTINATION "."
         PATTERN "*.bin"
         PATTERN ".svn" EXCLUDE
         PATTERN ".git" EXCLUDE
-        )
+)
 
 MESSAGE (STATUS "***** Finished CONFIGURING Simox project SimoxQtUtility *****\n")
