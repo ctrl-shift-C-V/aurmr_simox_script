@@ -4,68 +4,119 @@
 * @copyright  2019 Raphael Grimm
 */
 
-#define BOOST_TEST_MODULE SimoxUtility/shapes/OrientedBoxTest
+#define BOOST_TEST_MODULE SimoxUtility/shapes/JsonConversionsTest
 
-#include <random>
+#include <fstream>
 #include <iostream>
+#include <random>
+#include <filesystem>
 
 #include <boost/test/included/unit_test.hpp>
-
-#include <filesystem>
 
 #include <SimoxUtility/shapes/json_conversions.h>
 #include <SimoxUtility/shapes/OrientedBox.h>
 #include <SimoxUtility/shapes/AxisAlignedBoundingBox.h>
-#include <SimoxUtility/json/io.h>
-
-
-#include <SimoxUtility/json/util.h>
 #include <SimoxUtility/json/eigen_conversion.h>
+#include <SimoxUtility/json/io.h>
+#include <SimoxUtility/json/util.h>
 
 
-namespace
-{
-    static const std::vector<std::string> JSON_AABB_FILENAMES = {
-        "AABB_center_extents.json",
-        "AABB_min_max.json",
-    };
-    static const std::vector<std::string> JSON_ORIENTED_BOX_FILENAMES = {
-        "OrientedBox_position_orientation_extents.json",
-        "OrientedBox_pos_ori_dimensions.json",
-    };
+#include "JsonConversionsTest_files.h"
 
-    const float PRECF = 1e-3f;
-    const double PRECD = 1e-3;
-}
 
 #define BOOST_CHECK_EQUAL_VECTOR(lhs, rhs, prec) \
     BOOST_TEST_INFO((lhs).transpose() << " == " << (rhs).transpose()); \
     BOOST_CHECK_LE(((lhs) - (rhs)).norm(), prec);
 
 
-namespace
+namespace JsonConversionsTest
 {
-    template <typename Float>
-    void test_read_OrientedBox_type(const Float prec)
+    struct Fixture
     {
-        namespace fs = std::filesystem;
+        const float PRECF = 1e-3f;
+        const double PRECD = 1e-3;
+        std::string prefix = "JsonConversionsTest__";
 
-        for (const std::string& filename : JSON_ORIENTED_BOX_FILENAMES)
+        std::vector<std::string> jsonAabbFilenames;
+        std::vector<std::string> jsonOrientedBoxFilenames;
+        std::vector<std::string> jsonAllFilenames;
+
+
+        Fixture()
         {
-            BOOST_TEST_CONTEXT("File " << filename)
+            auto writeFile = [this](std::string filename, const std::string& text,
+                    std::vector<std::string>& list)
             {
-                BOOST_REQUIRE(fs::is_regular_file(filename));
+                filename = prefix + filename;
 
-                const nlohmann::json j = nlohmann::read_json(filename);
+                BOOST_TEST_MESSAGE("Writing " << std::filesystem::absolute(filename));
+                if (std::filesystem::exists(filename))
+                {
+                    std::filesystem::remove(filename);
+                }
+                {
+                    std::ofstream ofs(filename);
+                    ofs << text;
+                }
 
-                const simox::OrientedBox<float> ob = j.get<simox::OrientedBox<float>>();
-                BOOST_CHECK_EQUAL_VECTOR(ob.center(), Eigen::Vector3f(10, -20, 0), prec);
-                BOOST_CHECK_EQUAL_VECTOR(ob.rotation(), Eigen::Quaternionf(0.707f, 0, 0.707f, 0).toRotationMatrix(), prec);
-                BOOST_CHECK_EQUAL_VECTOR(ob.dimensions(), Eigen::Vector3f(100, 200, 300), prec * Float(1e2));
+                list.push_back(filename);
+                jsonAllFilenames.push_back(filename);
+            };
+
+            writeFile("AABB_center_extents.json", AABB_center_extents, jsonAabbFilenames);
+            writeFile("AABB_min_max.json", AABB_min_max, jsonAabbFilenames);
+            writeFile("OrientedBox_position_orientation_extents.json", OrientedBox_position_orientation_extents, jsonOrientedBoxFilenames);
+            writeFile("OrientedBox_pos_ori_dimensions.json", OrientedBox_pos_ori_dimensions, jsonOrientedBoxFilenames);
+
+            for (const std::string& filename : jsonAllFilenames)
+            {
+                BOOST_TEST_CONTEXT("filename: " << filename)
+                {
+                    BOOST_REQUIRE(std::filesystem::is_regular_file(filename));
+                }
             }
         }
-    }
+        ~Fixture()
+        {
+            for (const std::string& filename : jsonAllFilenames)
+            {
+                if (std::filesystem::exists(filename))
+                {
+                    BOOST_TEST_MESSAGE("Removing " << std::filesystem::absolute(filename));
+                    std::filesystem::remove(filename);
+                }
+            }
+        }
+
+
+        template <typename FloatT>
+        void test_read_OrientedBox_type(const FloatT prec)
+        {
+            using Vector3 = Eigen::Matrix<FloatT, 3, 1>;
+            using Quaternion = Eigen::Quaternion<FloatT>;
+
+            for (const std::string& filename : jsonOrientedBoxFilenames)
+            {
+                BOOST_TEST_CONTEXT("File " << filename)
+                {
+                    BOOST_REQUIRE(std::filesystem::is_regular_file(filename));
+
+                    const nlohmann::json j = nlohmann::read_json(filename);
+
+                    const simox::OrientedBox<FloatT> ob = j.get<simox::OrientedBox<FloatT>>();
+                    BOOST_CHECK_EQUAL_VECTOR(ob.center(), Vector3(10, -20, 0), prec);
+                    BOOST_CHECK_EQUAL_VECTOR(ob.rotation(), Quaternion(0.707, 0, 0.707, 0).toRotationMatrix(), prec);
+                    BOOST_CHECK_EQUAL_VECTOR(ob.dimensions(), Vector3(100, 200, 300), prec * FloatT(1e2));
+                }
+            }
+        }
+
+    };
+
 }
+
+
+BOOST_FIXTURE_TEST_SUITE(JsonConversionsTest, Fixture)
 
 
 BOOST_AUTO_TEST_CASE(test_read_AABB)
@@ -74,7 +125,7 @@ BOOST_AUTO_TEST_CASE(test_read_AABB)
     float prec = 1e-4f;
 
 
-    for (const std::string& filename : JSON_AABB_FILENAMES)
+    for (const std::string& filename : jsonAabbFilenames)
     {
         BOOST_TEST_CONTEXT("File " << filename)
         {
@@ -97,7 +148,11 @@ BOOST_AUTO_TEST_CASE(test_read_OrientedBox_float)
     test_read_OrientedBox_type<float>(PRECF);
 }
 
+
 BOOST_AUTO_TEST_CASE(test_read_OrientedBox_double)
 {
     test_read_OrientedBox_type<double>(PRECD);
 }
+
+
+BOOST_AUTO_TEST_SUITE_END()
