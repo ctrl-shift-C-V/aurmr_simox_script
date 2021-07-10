@@ -10,6 +10,7 @@
 
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
+#include <boost/math/special_functions.hpp>
 
 #include <filesystem>
 #include <boost/filesystem.hpp>

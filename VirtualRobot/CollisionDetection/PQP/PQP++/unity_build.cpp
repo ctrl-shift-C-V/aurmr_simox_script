@@ -834,6 +834,9 @@ namespace PQP
         // compute a rotation matrix
 
         PQP_REAL C[3][3], E[3][3], R[3][3], s[3], axis[3], mean[3], coord;
+        s[0] = 0;
+        s[1] = 0;
+        s[2] = 0;
 
 #if RAPID2_FIT
         moment* tri_moment = new moment[num_tris];

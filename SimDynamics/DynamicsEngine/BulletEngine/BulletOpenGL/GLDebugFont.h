@@ -15,9 +15,12 @@ subject to the following restrictions:
 
 
 #pragma once
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 
 #include "LinearMath/btVector3.h"
 
+#pragma GCC diagnostic pop
 
 void    GLDebugDrawStringInternal(int x, int y, const char* string, const btVector3& rgb, bool enableBlend, int spacing);
 void    GLDebugDrawStringInternal(int x, int y, const char* string, const btVector3& rgb);
