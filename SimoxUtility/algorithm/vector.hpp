@@ -1,10 +1,17 @@
 #pragma once
 
 #include <vector>
-
+#include <algorithm>
 
 namespace simox::alg
 {
+
+    template <typename TypeT>
+    bool
+    contains(const std::vector<TypeT>& haystack, const TypeT& needle)
+    {
+        return std::find(haystack.begin(), haystack.end(), needle) != haystack.end();
+    }
 
     template <typename TypeT>
     std::vector<TypeT>
