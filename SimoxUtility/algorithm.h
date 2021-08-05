@@ -8,4 +8,5 @@
 #include "algorithm/fuzzy_find.h"
 #include "algorithm/get_map_keys_values.h"
 #include "algorithm/minmax.h"
+#include "algorithm/ordered_circular_buffer.h"
 #include "algorithm/string.h"
