@@ -1,9 +1,7 @@
 #pragma once
 
-#include <functional>
 #include <map>
 #include <set>
-#include <type_traits>
 #include <vector>
 
 
@@ -65,10 +63,10 @@ namespace simox::alg
 
     /// Get the results of applying `value_fn` to the values of `map`.
     template <class ValueFn, class K, class V, template<class...> class MapT = std::map, class...Ts>
-    std::vector<std::invoke_result_t<ValueFn, const V&>>
+    auto
     get_values(const MapT<K, V, Ts...>& map, ValueFn value_fn)
     {
-        std::vector<std::invoke_result_t<ValueFn, const V&>> values;
+        std::vector<decltype(value_fn(*(V*)(0)))> values;
         values.reserve(map.size());
         for (const auto& [k, v] : map)
         {
@@ -78,10 +76,10 @@ namespace simox::alg
     }
     /// Get the results of applying `value_fn` to the values of `map`.
     template <class ValueFn, class K, class V, template<class...> class MapT = std::map, class...Ts>
-    std::vector<std::invoke_result_t<ValueFn, V&>>
+    auto
     get_values(MapT<K, V, Ts...>& map, ValueFn value_fn)
     {
-        std::vector<std::invoke_result_t<ValueFn, V&>> values;
+        std::vector<decltype(value_fn(*(V*)(0)))> values;
         values.reserve(map.size());
         for (auto& [k, v] : map)
         {
@@ -147,28 +145,7 @@ namespace simox::alg
 // Legacy definitions in old (general) namespace.
 namespace simox
 {
-    template <class K, class V, template<class...> class MapT = std::map, class...Ts>
-    [[deprecated("Function has moved to namespace ::simox::alg.")]]
-    std::vector<K> get_keys(const MapT<K, V, Ts...>& map)
-    {
-        return simox::alg::get_keys(map);
-    }
-    template <class K, class V, template<class...> class MapT = std::map, class...Ts>
-    [[deprecated("Function has moved to namespace ::simox::alg.")]]
-    std::set<K> get_keys_set(const MapT<K, V, Ts...>& map)
-    {
-        return simox::alg::get_keys_set(map);
-    }
-    template <class K, class V, template<class...> class MapT = std::map, class...Ts>
-    [[deprecated("Function has moved to namespace ::simox::alg.")]]
-    std::vector<V> get_values(const MapT<K, V, Ts...>& map)
-    {
-        return simox::alg::get_values(map);
-    }
-    template <class R, class K, class V, template<class...> class MapT = std::map, class...Ts>
-    [[deprecated("Function has moved to namespace ::simox::alg.")]]
-    std::vector<V> get_values(const MapT<K, V, Ts...>& map, std::function<R(const V&)> value_fn)
-    {
-        return simox::alg::get_values(map, value_fn);
-    }
+    using simox::alg::get_keys;
+    using simox::alg::get_keys_set;
+    using simox::alg::get_values;
 }
