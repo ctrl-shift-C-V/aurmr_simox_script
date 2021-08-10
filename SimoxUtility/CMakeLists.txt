@@ -69,6 +69,7 @@ SET(INCLUDES
     algorithm/string/string_tools.h
     algorithm/string/string_conversion.h
     algorithm/string/string_conversion_eigen.h
+    algorithm/ordered_circular_buffer.h
 
     caching/CacheMap.h
 
