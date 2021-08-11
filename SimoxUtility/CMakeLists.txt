@@ -41,6 +41,8 @@ SET(SOURCES
 
     math/statistics/Histogram1D.cpp
 
+    meta/type_name.cpp
+
     simox/SimoxPath.cpp
 
     shapes/AxisAlignedBoundingBox.cpp

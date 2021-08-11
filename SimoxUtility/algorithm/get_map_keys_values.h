@@ -8,20 +8,10 @@
 namespace simox::alg
 {
 
-    namespace detail
-    {
-        auto key_type(auto&& c) 
-        {
-            auto [k, v] = *c.begin();
-            return k;
-        }
-    }
-
     /// Get the keys of an associative container, a vector of key-value pairs, ...
-    auto get_keys(const auto& map)
+    template <class K, class V, template<class...> class MapT = std::map, class...Ts>
+    std::vector<K> get_keys(const MapT<K, V, Ts...>& map)
     {
-        using K = decltype(detail::key_type(map));
-
         std::vector<K> keys;
         keys.reserve(map.size());
 
