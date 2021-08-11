@@ -90,8 +90,8 @@ BOOST_AUTO_TEST_CASE(testMoveForward)
     BOOST_CHECK_CLOSE(std::abs(wheelVelocities(1)), std::abs(wheelVelocities(2)), 0.001);
 
     // .. but with different signs
-    BOOST_CHECK_LE(wheelVelocities(1), 0.0);
-    BOOST_CHECK_GE(wheelVelocities(2), 0.0);
+    BOOST_CHECK_GE(wheelVelocities(1), 0.0);
+    BOOST_CHECK_LE(wheelVelocities(2), 0.0);
 }
 
 BOOST_AUTO_TEST_CASE(testRotate)
