@@ -18,13 +18,17 @@
 
 #include "OmniWheelPlatformKinematics.h"
 
+#include <Eigen/Core>
 #include <Eigen/Dense>
+
+#include "VirtualRobot.h"
 
 namespace VirtualRobot
 {
     // OmniWheelPlatformKinematicsParams
 
-    Eigen::Matrix3f OmniWheelPlatformKinematicsParams::B() const
+    Eigen::Matrix3f
+    OmniWheelPlatformKinematicsParams::B() const
     {
         Eigen::Matrix3f b;
 
@@ -37,7 +41,8 @@ namespace VirtualRobot
         return b;
     }
 
-    Eigen::Matrix3f OmniWheelPlatformKinematicsParams::C() const
+    Eigen::Matrix3f
+    OmniWheelPlatformKinematicsParams::C() const
     {
         return B().transpose().inverse() * R / n;
     }
@@ -52,16 +57,17 @@ namespace VirtualRobot
     OmniWheelPlatformKinematics::WheelVelocities
     OmniWheelPlatformKinematics::calcWheelVelocity(const CartesianVelocity& v) const
     {
-        return C * v;
+        return C_inv * v;
     }
 
     OmniWheelPlatformKinematics::CartesianVelocity
     OmniWheelPlatformKinematics::calcCartesianVelocity(const WheelVelocities& w) const
     {
-        return C_inv * w;
+        return C * w;
     }
 
-    const OmniWheelPlatformKinematics::Params& OmniWheelPlatformKinematics::getParams() const
+    const OmniWheelPlatformKinematics::Params&
+    OmniWheelPlatformKinematics::getParams() const
     {
         return params;
     }
