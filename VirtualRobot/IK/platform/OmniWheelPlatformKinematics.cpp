@@ -44,7 +44,7 @@ namespace VirtualRobot
     Eigen::Matrix3f
     OmniWheelPlatformKinematicsParams::C() const
     {
-        Eigen::Matrix3f r = Eigen::Vector3f{-1, -1, 1}.asDiagonal();
+        Eigen::Matrix3f r = Eigen::Vector3f{-1, 1, 1}.asDiagonal();
 
         return r * B().transpose().inverse() * R / n;
     }
