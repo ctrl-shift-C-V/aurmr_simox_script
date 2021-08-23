@@ -30,9 +30,6 @@
 #include <vector>
 #include <iostream>
 
-#include <boost/program_options.hpp>
-#include <boost/core/demangle.hpp>
-
 #include <Eigen/Core>
 
 
@@ -96,35 +93,6 @@ namespace VirtualRobot
 
         //! Return the corresponding vale to key. If key cannot be found, defaultValue is returned.
         static std::string getValue(const std::string& key, const std::string& defaultValue = "");
-        template<class T>
-        static T getValue(const std::string& key, const T& defaultValue)
-        {
-            if constexpr(std::is_same_v<T, std::string>)
-            {
-                return getValue(key, defaultValue);
-            }
-            else
-            {
-                static_assert(std::is_arithmetic_v<T>);
-                try
-                {
-                    return hasValue(key) ? boost::lexical_cast<T>(getValue(key)) : defaultValue;
-                }
-                catch(...)
-                {
-                    VR_WARNING << "Failed to lexical cast value '" << getValue(key)
-                               << "' for key '" << key << "' to "
-                               << boost::core::demangle(typeid(T).name())
-                               << "'" << std::endl;
-                    throw;
-                }
-            }
-        }
-        template <class T, class D>
-        static void getValue(T& target, const std::string& key, const D& defaultValue)
-        {
-            target = getValue<T>(key, defaultValue);
-        }
         static bool hasValue(const std::string& key);
 
         /// Indicate whether the given flag was specified.
@@ -186,26 +154,7 @@ namespace VirtualRobot
         RuntimeEnvironment() {}
         virtual ~RuntimeEnvironment() {}
 
-        static bool pathInitialized;
-
         static void init();
-        /// Make the options description based on the added keys and flags.
-        static boost::program_options::options_description makeOptionsDescription();
-        static void processParsedOptions(const boost::program_options::parsed_options& parsed);
-
-        static std::string caption;
-
-        /// Pairs of (key, description). If not given, description is empty.
-        static std::vector< std::pair<std::string, std::string> > processKeys;
-        /// Pairs of (flag, description). If not given, description is empty.
-        static std::vector< std::pair<std::string, std::string> > processFlags;
-
-        static std::vector< std::string > dataPaths;
-        static std::vector< std::string > unrecognizedOptions;
-
-        static std::map< std::string, std::string > keyValues;
-        static std::set< std::string > flags;
-        static bool helpFlag;
     };
 
 } // namespace

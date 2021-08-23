@@ -1,8 +1,6 @@
 #include "Primitive.h"
 #include "MathTools.h"
 
-#include <boost/format.hpp>
-
 namespace VirtualRobot
 {
     namespace Primitive
@@ -43,26 +41,26 @@ namespace VirtualRobot
         //derivate functions
         std::string Box::toXMLString(int tabs)
         {
-            return getXMLString(
-                       "Box",
-                       (boost::format("width=\"%f\" height=\"%f\" depth=\"%f\"") % width % height % depth).str(),
-                       tabs);
+            std::stringstream format;
+            format << "width=\"" << width
+                   << "\" height=\"" << height
+                   << "\" depth=\"" << depth << "\"";
+            return getXMLString("Box", format.str(), tabs);
         }
 
         std::string Sphere::toXMLString(int tabs)
         {
-            return getXMLString(
-                       "Sphere",
-                       (boost::format("radius=\"%f\"") % radius).str(),
-                       tabs);
+            std::stringstream format;
+            format << "radius=\"" << radius << "\"";
+            return getXMLString("Sphere", format.str(), tabs);
         }
 
         std::string Cylinder::toXMLString(int tabs)
         {
-            return getXMLString(
-                       "Cylinder",
-                       (boost::format("radius=\"%f\" height=\"%f\"") % radius % height).str(),
-                       tabs);
+            std::stringstream format;
+            format << "radius=\"" << radius
+                   << "\" height=\"" << height << "\"";
+            return getXMLString("Cylinder", format.str(), tabs);
         }
 
     } //namespace Primitive

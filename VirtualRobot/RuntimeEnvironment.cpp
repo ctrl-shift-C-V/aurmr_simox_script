@@ -8,37 +8,125 @@
 #include "VirtualRobotException.h"
 #include "Visualization/VisualizationFactory.h"
 
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/classification.hpp>
-#include <boost/math/special_functions.hpp>
+#include <SimoxUtility/algorithm/string/string_tools.h>
+
+#include <boost/program_options.hpp>
 
 #include <filesystem>
-#include <boost/filesystem.hpp>
 
 
 namespace VirtualRobot
 {
-    using std::cout;
-    using std::endl;
+    static bool RuntimeEnvironment_pathInitialized = false;
 
-    bool RuntimeEnvironment::pathInitialized = false;
+    static std::string RuntimeEnvironment_caption = "Simox runtime options";
 
-    std::string RuntimeEnvironment::caption = "Simox runtime options";
+    /// Pairs of (key, description). If not given, description is empty.
+    static std::vector< std::pair<std::string, std::string> > RuntimeEnvironment_processKeys;
+    /// Pairs of (flag, description). If not given, description is empty.
+    static std::vector< std::pair<std::string, std::string> > RuntimeEnvironment_processFlags;
 
-    std::vector< std::pair<std::string, std::string> > RuntimeEnvironment::processKeys;
-    std::vector< std::pair<std::string, std::string> > RuntimeEnvironment::processFlags;
+    static std::vector< std::string > RuntimeEnvironment_dataPaths;
+    static std::vector< std::string > RuntimeEnvironment_unrecognizedOptions;
 
-    std::vector< std::string > RuntimeEnvironment::dataPaths;
-    std::vector< std::string > RuntimeEnvironment::unrecognizedOptions;
-    std::map< std::string, std::string > RuntimeEnvironment::keyValues;
-    std::set< std::string > RuntimeEnvironment::flags;
-    bool RuntimeEnvironment::helpFlag = false;
+    static std::map< std::string, std::string > RuntimeEnvironment_keyValues;
+    static std::set< std::string > RuntimeEnvironment_flags;
+    static bool RuntimeEnvironment_helpFlag = false;
+
+
+    /// Make the options description based on the added keys and flags.
+    static boost::program_options::options_description RuntimeEnvironment_makeOptionsDescription()
+    {
+        // Declare the supported options.
+
+        boost::program_options::options_description desc(RuntimeEnvironment_caption);
+        desc.add_options()
+            ("help", "Simox command line parser: Set options with '--key value'\n")
+            ("data-path", boost::program_options::value<std::vector<std::string>>()->composing(),
+             "Set data path. Multiple data paths are allowed.")
+        ;
+
+        for (const auto& item : RuntimeEnvironment_processKeys)
+        {
+            desc.add_options()
+            (item.first.c_str(), boost::program_options::value<std::vector<std::string>>(), item.second.c_str())
+            ;
+        }
+
+        for (const auto& item : RuntimeEnvironment_processFlags)
+        {
+            desc.add_options()
+            (item.first.c_str(), item.second.c_str())
+            ;
+        }
+        return desc;
+    }
+
+    static void RuntimeEnvironment_processParsedOptions(const boost::program_options::parsed_options& parsed)
+    {
+        boost::program_options::variables_map vm;
+        //boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
+        boost::program_options::store(parsed, vm);
+        boost::program_options::notify(vm);
+
+        // process data-path entries
+        if (vm.count("data-path"))
+        {
+            //VR_INFO << "Data paths are: " << std::endl;
+            std::vector<std::string> dp = vm["data-path"].as< std::vector< std::string > >();
+
+            for (const auto& i : dp)
+            {
+                RuntimeEnvironment::addDataPath(i);
+                //VR_INFO << dp[i] << "\n";
+            }
+        }
+
+        // process generic keys
+        for (const auto& processKey : RuntimeEnvironment_processKeys)
+        {
+            const std::string& key = processKey.first;
+            if (vm.count(key.c_str()) > 0)
+            {
+                std::vector<std::string> dp = vm[key.c_str()].as<std::vector<std::string>>();
+
+                if (dp.size() > 1)
+                {
+                    VR_WARNING << "More than one parameter for key '" << key << "'. Using only first one..." << std::endl;
+                }
+
+                if (dp.size() > 0)
+                {
+                    RuntimeEnvironment::addKeyValuePair(key, dp[0]);    // take the first one...
+                }
+            }
+
+        }
+
+        for (const auto& flag : RuntimeEnvironment_processFlags)
+        {
+            if (vm.count(flag.first.c_str()) > 0)
+            {
+                RuntimeEnvironment_flags.insert(flag.first);
+            }
+        }
+        RuntimeEnvironment_helpFlag = vm.count("help") > 0;
+
+        // collect unrecognized arguments
+        std::vector<std::string> options = boost::program_options::collect_unrecognized(
+                    parsed.options, boost::program_options::include_positional);
+
+        for (const auto& option : options)
+        {
+            RuntimeEnvironment_unrecognizedOptions.push_back(option);
+        }
+    }
 
     void RuntimeEnvironment::init()
     {
-        if (!pathInitialized)
+        if (!RuntimeEnvironment_pathInitialized)
         {
-            pathInitialized = true;
+            RuntimeEnvironment_pathInitialized = true;
             bool pathFound = false;
             char* simox_data_path = getenv("SIMOX_DATA_PATH");
 
@@ -120,7 +208,7 @@ namespace VirtualRobot
 
     bool RuntimeEnvironment::getDataFileAbsolute(std::string& fileName)
     {
-        if (!pathInitialized)
+        if (!RuntimeEnvironment_pathInitialized)
         {
             init();
         }
@@ -142,7 +230,7 @@ namespace VirtualRobot
             // silently skip this error (e.g. device not ready, permission denied etc)
         }
 
-        for (auto& dataPath : dataPaths)
+        for (auto& dataPath : RuntimeEnvironment_dataPaths)
         {
             std::filesystem::path p(dataPath);
 
@@ -172,116 +260,30 @@ namespace VirtualRobot
 
     void RuntimeEnvironment::processCommandLine(int argc, char* argv[])
     {
-        if (!pathInitialized)
+        if (!RuntimeEnvironment_pathInitialized)
         {
             init();
         }
 
-        const boost::program_options::options_description description = makeOptionsDescription();
+        const boost::program_options::options_description description = RuntimeEnvironment_makeOptionsDescription();
 
         const boost::program_options::parsed_options parsed =
             boost::program_options::command_line_parser(argc, argv).options(description).allow_unregistered().run();
 
-        processParsedOptions(parsed);
-    }
-
-    boost::program_options::options_description RuntimeEnvironment::makeOptionsDescription()
-    {
-        // Declare the supported options.
-
-        boost::program_options::options_description desc(caption);
-        desc.add_options()
-            ("help", "Simox command line parser: Set options with '--key value'\n")
-            ("data-path", boost::program_options::value<std::vector<std::string>>()->composing(),
-             "Set data path. Multiple data paths are allowed.")
-        ;
-
-        for (const auto& item : processKeys)
-        {
-            desc.add_options()
-            (item.first.c_str(), boost::program_options::value<std::vector<std::string>>(), item.second.c_str())
-            ;
-        }
-
-        for (const auto& item : processFlags)
-        {
-            desc.add_options()
-            (item.first.c_str(), item.second.c_str())
-            ;
-        }
-        return desc;
-    }
-
-    void RuntimeEnvironment::processParsedOptions(const boost::program_options::parsed_options& parsed)
-    {
-        boost::program_options::variables_map vm;
-        //boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
-        boost::program_options::store(parsed, vm);
-        boost::program_options::notify(vm);
-
-        // process data-path entries
-        if (vm.count("data-path"))
-        {
-            //VR_INFO << "Data paths are: " << std::endl;
-            std::vector<std::string> dp = vm["data-path"].as< std::vector< std::string > >();
-
-            for (const auto& i : dp)
-            {
-                addDataPath(i);
-                //VR_INFO << dp[i] << "\n";
-            }
-        }
-
-        // process generic keys
-        for (const auto& processKey : processKeys)
-        {
-            const std::string& key = processKey.first;
-            if (vm.count(key.c_str()) > 0)
-            {
-                std::vector<std::string> dp = vm[key.c_str()].as<std::vector<std::string>>();
-
-                if (dp.size() > 1)
-                {
-                    VR_WARNING << "More than one parameter for key '" << key << "'. Using only first one..." << std::endl;
-                }
-
-                if (dp.size() > 0)
-                {
-                    addKeyValuePair(key, dp[0]);    // take the first one...
-                }
-            }
-
-        }
-
-        for (const auto& flag : processFlags)
-        {
-            if (vm.count(flag.first.c_str()) > 0)
-            {
-                flags.insert(flag.first);
-            }
-        }
-        helpFlag = vm.count("help") > 0;
-
-        // collect unrecognized arguments
-        std::vector<std::string> options = boost::program_options::collect_unrecognized(
-                    parsed.options, boost::program_options::include_positional);
-
-        for (const auto& option : options)
-        {
-            unrecognizedOptions.push_back(option);
-        }
+        RuntimeEnvironment_processParsedOptions(parsed);
     }
 
     void RuntimeEnvironment::addKeyValuePair(const std::string& key, const std::string& value)
     {
-        keyValues[key] = value;
+        RuntimeEnvironment_keyValues[key] = value;
     }
 
     std::string RuntimeEnvironment::getValue(const std::string& key, const std::string& defaultValue)
     {
-        if (keyValues.find(key) != keyValues.end())
+        auto it  = RuntimeEnvironment_keyValues.find(key);
+        if (it != RuntimeEnvironment_keyValues.end())
         {
-            return keyValues[key];
+            return it->second;
         }
 
         return defaultValue;
@@ -289,28 +291,28 @@ namespace VirtualRobot
 
     std::map< std::string, std::string > RuntimeEnvironment::getKeyValuePairs()
     {
-        return keyValues;
+        return RuntimeEnvironment_keyValues;
     }
 
     std::vector< std::string> RuntimeEnvironment::getUnrecognizedOptions()
     {
-        return unrecognizedOptions;
+        return RuntimeEnvironment_unrecognizedOptions;
     }
 
 
     std::vector< std::string > RuntimeEnvironment::getDataPaths()
     {
-        if (!pathInitialized)
+        if (!RuntimeEnvironment_pathInitialized)
         {
             init();
         }
 
-        return dataPaths;
+        return RuntimeEnvironment_dataPaths;
     }
 
     void RuntimeEnvironment::setCaption(const std::string& caption)
     {
-        RuntimeEnvironment::caption = caption;
+        RuntimeEnvironment_caption = caption;
     }
 
     bool RuntimeEnvironment::addDataPath(const std::string& path, bool quiet)
@@ -321,7 +323,7 @@ namespace VirtualRobot
 
             if (std::filesystem::is_directory(p) || std::filesystem::is_symlink(p))
             {
-                dataPaths.push_back(path);
+                RuntimeEnvironment_dataPaths.push_back(path);
                 return true;
             }
         }
@@ -359,7 +361,7 @@ namespace VirtualRobot
 
     void RuntimeEnvironment::print()
     {
-        if (!pathInitialized)
+        if (!RuntimeEnvironment_pathInitialized)
         {
             init();
         }
@@ -367,13 +369,13 @@ namespace VirtualRobot
         std::cout << " *********** Simox RuntimeEnvironment ************* " << std::endl;
         std::cout << "Data paths:"  << std::endl;
 
-        for (const auto& dataPath : dataPaths)
+        for (const auto& dataPath : RuntimeEnvironment_dataPaths)
         {
             std::cout << " * " << dataPath << std::endl;
         }
 
         const std::size_t descriptionOffset = std::max(
-                    getMaxLength(processKeys), getMaxLength(processFlags)) + 4;
+                    getMaxLength(RuntimeEnvironment_processKeys), getMaxLength(RuntimeEnvironment_processFlags)) + 4;
 
         auto printDescriptions = [&descriptionOffset](
                 const std::vector<std::pair<std::string, std::string>>& items,
@@ -392,33 +394,33 @@ namespace VirtualRobot
             }
         };
 
-        printDescriptions(processKeys, "keys");
-        printDescriptions(processFlags, "flags");
+        printDescriptions(RuntimeEnvironment_processKeys, "keys");
+        printDescriptions(RuntimeEnvironment_processFlags, "flags");
 
 
-        if (keyValues.size() > 0)
+        if (RuntimeEnvironment_keyValues.size() > 0)
         {
             std::cout << "Parsed options:"  << std::endl;
-            for (const auto& item : keyValues)
+            for (const auto& item : RuntimeEnvironment_keyValues)
             {
                 std::cout << " * " << item.first << ": " << item.second << std::endl;
             }
         }
 
-        if (flags.size() > 0)
+        if (RuntimeEnvironment_flags.size() > 0)
         {
             std::cout << "Parsed flags:"  << std::endl;
-            for (const auto& flag : flags)
+            for (const auto& flag : RuntimeEnvironment_flags)
             {
                 std::cout << " * " << flag << std::endl;
             }
         }
 
-        if (unrecognizedOptions.size() > 0)
+        if (RuntimeEnvironment_unrecognizedOptions.size() > 0)
         {
             std::cout << "Unrecognized options:" << std::endl;
 
-            for (const auto& unrecognizedOption : unrecognizedOptions)
+            for (const auto& unrecognizedOption : RuntimeEnvironment_unrecognizedOptions)
             {
                 std::cout << " * <" << unrecognizedOption << ">" << std::endl;
             }
@@ -427,32 +429,32 @@ namespace VirtualRobot
 
     void RuntimeEnvironment::printOptions(std::ostream& os)
     {
-        os << makeOptionsDescription() << std::endl;
+        os << RuntimeEnvironment_makeOptionsDescription() << std::endl;
     }
 
     void RuntimeEnvironment::considerKey(const std::string& key, const std::string& description)
     {
-        processKeys.emplace_back(key, description);
+        RuntimeEnvironment_processKeys.emplace_back(key, description);
     }
 
     void RuntimeEnvironment::considerFlag(const std::string& flag, const std::string& description)
     {
-        processFlags.emplace_back(flag, description);
+        RuntimeEnvironment_processFlags.emplace_back(flag, description);
     }
 
     bool RuntimeEnvironment::hasValue(const std::string& key)
     {
-        return keyValues.find(key) != keyValues.end();
+        return RuntimeEnvironment_keyValues.find(key) != RuntimeEnvironment_keyValues.end();
     }
 
     bool RuntimeEnvironment::hasFlag(const std::string& flag)
     {
-        return flags.find(flag) != flags.end();
+        return RuntimeEnvironment_flags.find(flag) != RuntimeEnvironment_flags.end();
     }
 
     bool RuntimeEnvironment::hasHelpFlag()
     {
-        return helpFlag;
+        return RuntimeEnvironment_helpFlag;
     }
 
 
@@ -482,8 +484,7 @@ namespace VirtualRobot
         const std::string stringTrimmed = string.substr(1, string.size() - 1);
         const std::string delimiter = ",";
 
-        std::vector<std::string> stringSplit;
-        boost::split(stringSplit, stringTrimmed, boost::is_any_of(delimiter));
+        std::vector<std::string> stringSplit = simox::alg::split(stringTrimmed, delimiter);
 
         if (stringSplit.size() != 3)
         {
@@ -506,7 +507,7 @@ namespace VirtualRobot
             {
                 error = true;
             }
-            if (error || boost::math::isinf(a) || boost::math::isinf(-a) || boost::math::isnan(a))
+            if (error || std::isinf(a) || std::isinf(-a) || std::isnan(a))
             {
                 VR_WARNING << "Could not convert '" << string << "' to a number." << std::endl;
                 return false;

@@ -3,8 +3,6 @@
 
 #include <VirtualRobot/MathTools.h>
 
-#include <boost/math/special_functions/fpclassify.hpp>
-
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
 #include <cfloat>
@@ -98,7 +96,7 @@ namespace VirtualRobot
         // w is \delta H / \delta q, hence we are only interested in the direction -> fabs, a neg value wouldn't make sense in further processing
         w = fabs(w);
 
-        if (boost::math::isinf(w) || boost::math::isinf(-w) || boost::math::isnan(w))
+        if (std::isinf(w) || std::isinf(-w) || std::isnan(w))
         {
             std::cout << "nan" << std::endl;
         }

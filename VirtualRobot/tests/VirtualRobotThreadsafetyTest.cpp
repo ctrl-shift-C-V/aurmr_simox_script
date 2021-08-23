@@ -14,11 +14,11 @@
 #include <VirtualRobot/Nodes/RobotNode.h>
 #include <string>
 
-#include <boost/thread.hpp>
-
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
+
+#include <thread>
 
 BOOST_AUTO_TEST_SUITE(RobotNode)
 
@@ -89,8 +89,8 @@ BOOST_AUTO_TEST_CASE(testIntelligentCoordinate)
 
     rob->setThreadsafe(true);
 
-    boost::thread t1(thread1);
-    boost::thread t2(thread2);
+    std::thread t1(thread1);
+    std::thread t2(thread2);
     t1.join();
     t2.join();
     // design more advanced and complete tests

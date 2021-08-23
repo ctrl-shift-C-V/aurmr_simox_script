@@ -20,17 +20,7 @@
 
 #include <Inventor/actions/SoGetBoundingBoxAction.h>
 
-#include <boost/lexical_cast.hpp>
-
 #include <iostream>
-
-#ifdef TIMER_DEBUG
-#ifndef Q_MOC_RUN
-#include <boost/timer/timer.hpp>
-#endif
-#endif
-
-using namespace std;
 
 namespace Collada
 {
@@ -159,7 +149,7 @@ namespace Collada
     std::vector<T> offsetSelection(std::vector<T> v, int offset, int stride)
     {
         assert(v.size() % stride == 0);
-        vector<T> result(v.size() / stride);
+        std::vector<T> result(v.size() / stride);
 
         // classical for-loop is faster than iterators and push_back()
         //int j=0;
@@ -207,11 +197,6 @@ namespace Collada
         pugi::xml_node geometry = resolveURL(node, "//library_geometries");
         pugi::xml_node mesh = geometry.child("mesh");
 
-#ifdef TIMER_DEBUG
-        boost::timer::auto_cpu_timer timer(1, string("Inventor (") + string(geometry.attribute("id").value()) + string("):  %t sec CPU, %w sec real\n"));
-        std::cout << "Faces: " ;
-#endif
-
         // Temporarily skip complicated models
         int nPolylist = mesh.select_nodes(".//polylist").size();
 
@@ -250,15 +235,12 @@ namespace Collada
 
             std::vector<int> p = getIntVector(polylist.node().child_value("p"));
             std::vector<int> vcount = getIntVector(polylist.node().child_value("vcount"));
-#ifdef TIMER_DEBUG
-            std::cout << vcount.size() << ", " << flush;
-#endif
             pugi::xml_node vertexInputNode = polylist.node().select_single_node(".//input[@semantic='VERTEX']").node();
 
             // get number of input nodes
             int stride = polylist.node().select_nodes(".//input").size();
             // Get the vertex indices
-            int vertexOffset = boost::lexical_cast<int>(vertexInputNode.attribute("offset").value());
+            int vertexOffset = std::stoi(vertexInputNode.attribute("offset").value());
             //vector<int> vertexIndices(p.size()/stride+vcount.size());
 
             pugi::xml_node vertices = resolveURL(vertexInputNode);
@@ -289,9 +271,6 @@ namespace Collada
 
 
         }
-#ifdef TIMER_DEBUG
-        std::cout << std::endl;
-#endif
     }
 
 

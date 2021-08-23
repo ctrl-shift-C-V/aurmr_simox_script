@@ -7,8 +7,6 @@
 #include "../VirtualRobotException.h"
 #include "../CollisionDetection/CollisionChecker.h"
 
-#include <boost/math/special_functions/fpclassify.hpp>
-
 #include <Eigen/Geometry>
 
 #include <algorithm>
@@ -890,7 +888,7 @@ namespace VirtualRobot
             {
                 jv[i] = (nodes[i]->getJointValue() + dTheta[i]);
 
-                if (boost::math::isnan(jv[i]) || boost::math::isinf(jv[i]))
+                if (std::isnan(jv[i]) || std::isinf(jv[i]))
                 {
                     VR_WARNING << "Aborting, invalid joint value (nan)" << std::endl;
                     return false;

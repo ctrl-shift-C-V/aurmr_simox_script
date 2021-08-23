@@ -5,8 +5,6 @@
 #include "../Visualization/VisualizationNode.h"
 #include "../XML/BaseIO.h"
 
-#include <boost/assert.hpp>
-
 #include <filesystem>
 #include <algorithm>
 
@@ -14,8 +12,6 @@
 
 namespace VirtualRobot
 {
-    using std::endl;
-
     CollisionModel::CollisionModel(const VisualizationNodePtr& visu, const std::string& name, CollisionCheckerPtr colChecker, int id, float margin)
     {
         globalPose = Eigen::Matrix4f::Identity();
@@ -137,7 +133,7 @@ namespace VirtualRobot
         if (visualization && updateVisualization)
         {
             visualization->setGlobalPose(m);
-            BOOST_ASSERT(origVisualization);
+            assert(origVisualization);
             origVisualization->setGlobalPose(m);
         }
     }

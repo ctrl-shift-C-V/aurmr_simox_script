@@ -3,6 +3,8 @@
 #include "GraspPlanning/Visualization/CoinVisualization/CoinConvexHullVisualization.h"
 #include "GraspPlanning/ContactConeGenerator.h"
 #include "GraspPlanning/MeshConverter.h"
+#include <GraspPlanning/GraspQuality/GraspEvaluationPoseUncertainty.h>
+
 #include "VirtualRobot/EndEffector/EndEffector.h"
 #include "VirtualRobot/Workspace/Reachability.h"
 #include "VirtualRobot/ManipulationObject.h"
@@ -14,7 +16,7 @@
 #include "VirtualRobot/XML/RobotIO.h"
 #include "VirtualRobot/Visualization/CoinVisualization/CoinVisualizationFactory.h"
 #include "VirtualRobot/Visualization/TriMeshModel.h"
-#include <GraspPlanning/GraspQuality/GraspEvaluationPoseUncertainty.h>
+#include <VirtualRobot/Visualization/VisualizationNode.h>
 
 #include <QFileDialog>
 #include <QProgressDialog>
@@ -24,6 +26,7 @@
 #include <ctime>
 #include <vector>
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 #include <sstream>
 

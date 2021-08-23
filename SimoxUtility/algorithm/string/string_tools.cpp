@@ -2,14 +2,12 @@
 
 #include "SimoxUtility/error/SimoxError.h"
 
+#include <boost/algorithm/string.hpp>
+
 #include <algorithm>
+#include <iostream>
 #include <iomanip>
 #include <regex>
-
-#include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
-
-#include <iostream>
 
 namespace simox::alg
 {
@@ -78,9 +76,19 @@ std::vector<std::string> split(const std::string& str, const std::string& splitB
     std::vector<std::string> strs;
     boost::split(strs, str, boost::is_any_of(splitBy));
 
-    if (trimElements) std::for_each(strs.begin(), strs.end(), boost::bind(&boost::trim<std::string>, _1, locale));
+    if (trimElements)
+    {
+        for (std::string& str : strs)
+        {
+            simox::alg::trim(str, locale);
+        }
+    }
 
-    if (removeEmptyElements) strs.erase(std::remove_if(strs.begin(), strs.end(), [](const std::string& s) { return s.empty(); }), strs.end());
+    if (removeEmptyElements)
+    {
+        auto eraseIt = std::remove_if(strs.begin(), strs.end(), [](const std::string& s) { return s.empty(); });
+        strs.erase(eraseIt, strs.end());
+    }
 
     return strs;
 }

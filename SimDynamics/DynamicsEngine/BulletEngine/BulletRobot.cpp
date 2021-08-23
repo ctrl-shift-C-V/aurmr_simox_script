@@ -15,8 +15,6 @@
 
 #include "DetectBulletVersion.h"
 
-#include <boost/math/special_functions/fpclassify.hpp>
-
 #include <Eigen/Dense>
 
 #include <unordered_set>
@@ -1319,7 +1317,7 @@ namespace SimDynamics
             BulletObjectPtr bo = std::dynamic_pointer_cast<BulletObject>(getDynamicsRobotNode(node));
             Eigen::Vector3f vel = bo->getLinearVelocity();
 
-            if (boost::math::isnan(vel(0)) || boost::math::isnan(vel(1)) || boost::math::isnan(vel(2)))
+            if (std::isnan(vel(0)) || std::isnan(vel(1)) || std::isnan(vel(2)))
             {
                 VR_ERROR << "NAN result: getLinearVelocity:" << bo->getName() << ", i:" << i << std::endl;
                 node->print();

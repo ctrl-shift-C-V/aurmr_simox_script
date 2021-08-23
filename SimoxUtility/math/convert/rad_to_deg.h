@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/math/constants/constants.hpp>
+#include <cmath>
 
 namespace simox::math
 {
@@ -8,7 +8,7 @@ namespace simox::math
     std::enable_if_t<std::is_floating_point_v<FloatT>, FloatT>
     rad_to_deg(FloatT rad)
     {
-        return rad * 180.f / boost::math::constants::pi<FloatT>();
+        return rad * 180.f / static_cast<FloatT>(M_PI);
     }
 
     template<class FloatT>

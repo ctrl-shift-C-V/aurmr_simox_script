@@ -10,8 +10,6 @@
 
 #include <VirtualRobot/Random.h>
 
-#include <boost/math/special_functions/fpclassify.hpp>
-
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 
@@ -981,7 +979,7 @@ namespace VirtualRobot
 
     bool VIRTUAL_ROBOT_IMPORT_EXPORT MathTools::isValid(const Eigen::MatrixXf& v)
     {
-        return !(boost::math::isinf(v.maxCoeff()) || boost::math::isinf(-v.minCoeff()) || boost::math::isnan(v.sum()));
+        return !(std::isinf(v.maxCoeff()) || std::isinf(-v.minCoeff()) || std::isnan(v.sum()));
     }
 
 
@@ -1999,7 +1997,7 @@ namespace VirtualRobot
         else
             resF(2) = static_cast<float>(std::asin(p));
 
-        VR_ASSERT (!boost::math::isnan(resF(2)));
+        VR_ASSERT (!std::isnan(resF(2)));
 
         if (resF(0)<0)
             resF(0) = 2.0f * M_PIf + resF(0); // -2PI,2PI -> 0,2PI

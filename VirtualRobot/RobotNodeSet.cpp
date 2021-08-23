@@ -6,11 +6,9 @@
 #include "VirtualRobot.h"
 #include "VirtualRobotException.h"
 #include "CollisionDetection/CollisionChecker.h"
-#include <set>
-
-#include <boost/mem_fn.hpp>
 
 #include <algorithm>
+#include <set>
 
 namespace VirtualRobot
 {
@@ -407,7 +405,7 @@ namespace VirtualRobot
     void RobotNodeSet::getJointValues(std::vector<float>& fillVector) const
     {
         fillVector.resize(robotNodes.size());
-        std::transform(robotNodes.begin(), robotNodes.end(), fillVector.begin(), boost::mem_fn(&RobotNode::getJointValue));
+        std::transform(robotNodes.begin(), robotNodes.end(), fillVector.begin(), std::mem_fn(&RobotNode::getJointValue));
     }
 
     void RobotNodeSet::getJointValues(Eigen::VectorXf& fillVector) const

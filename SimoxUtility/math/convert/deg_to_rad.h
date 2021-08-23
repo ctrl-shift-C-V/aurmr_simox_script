@@ -1,8 +1,8 @@
 #pragma once
 
-#include <boost/math/constants/constants.hpp>
+#include <Eigen/Core>
 
-#include "../../meta/eigen/enable_if_compile_time_size.h"
+#include <type_traits>
 
 namespace simox::math
 {
@@ -10,7 +10,7 @@ namespace simox::math
     std::enable_if_t<std::is_floating_point_v<FloatT>, FloatT>
     deg_to_rad(FloatT deg)
     {
-        return deg / 180.f * boost::math::constants::pi<FloatT>();
+        return deg / 180.f * static_cast<FloatT>(M_PI);
     }
 
     template<class FloatT>

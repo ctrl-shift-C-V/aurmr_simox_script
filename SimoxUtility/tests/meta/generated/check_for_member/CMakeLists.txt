@@ -1,7 +1,0 @@
-foreach(name ${GEN_CHECK_MEMBER_META_CODE_KEYWORDS})
-    set(ifile   ${CMAKE_SOURCE_DIR}/CMakeModules/check_for_member/test.in.cpp)
-    set(ofile   ${CMAKE_CURRENT_BINARY_DIR}/${name}.cpp)
-    set(NAME ${name})
-    configure_file("${ifile}" "${ofile}" @ONLY)
-    add_su_test("${ofile}")
-endforeach()

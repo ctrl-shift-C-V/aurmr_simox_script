@@ -39,20 +39,20 @@ namespace Eigen
 
 BOOST_AUTO_TEST_SUITE(VirtualRobotMjcfTest)
 
-BOOST_AUTO_TEST_CASE(test_boost_lexical_cast)
-{
-    for (bool in : { true, false })
-    {
-        const std::string string = boost::lexical_cast<std::string>(in);
-        bool out = boost::lexical_cast<bool>(string);
-        MSG_CONVERSION(in, string, out);
-        BOOST_CHECK_EQUAL(in, out);
-    }
+//BOOST_AUTO_TEST_CASE(test_boost_lexical_cast)
+//{
+//    for (bool in : { true, false })
+//    {
+//        const std::string string = boost::lexical_cast<std::string>(in);
+//        bool out = boost::lexical_cast<bool>(string);
+//        MSG_CONVERSION(in, string, out);
+//        BOOST_CHECK_EQUAL(in, out);
+//    }
 
-    // this cannot be handled by boost
-    BOOST_CHECK_THROW(boost::lexical_cast<bool>("true"), boost::bad_lexical_cast);
-    BOOST_CHECK_THROW(boost::lexical_cast<bool>("false"), boost::bad_lexical_cast);
-}
+//    // this cannot be handled by boost
+//    BOOST_CHECK_THROW(boost::lexical_cast<bool>("true"), boost::bad_lexical_cast);
+//    BOOST_CHECK_THROW(boost::lexical_cast<bool>("false"), boost::bad_lexical_cast);
+//}
 
 BOOST_AUTO_TEST_SUITE_END()
 

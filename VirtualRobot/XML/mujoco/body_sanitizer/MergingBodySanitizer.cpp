@@ -1,8 +1,8 @@
 #include "MergingBodySanitizer.h"
 
-#include <boost/algorithm/string/join.hpp>
-
 #include <VirtualRobot/math/Helpers.h>
+
+#include <SimoxUtility/algorithm/string/string_tools.h>
 
 
 namespace VirtualRobot::mujoco
@@ -39,7 +39,7 @@ const std::string& MergedBodyList::getMergedBodyName() const
 
 void MergedBodyList::updateMergedBodyName()
 {
-    mergedBodyName = boost::algorithm::join(originalBodyNames, "~");
+    mergedBodyName = simox::alg::join(originalBodyNames, "~");
 }
 
 

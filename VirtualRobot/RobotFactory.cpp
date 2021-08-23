@@ -13,9 +13,8 @@
 #include "Visualization//VisualizationFactory.h"
 #include "VirtualRobotException.h"
 
-#include <boost/assert.hpp>
-
 #include <algorithm>
+#include <cassert>
 #include <deque>
 
 namespace VirtualRobot
@@ -170,7 +169,7 @@ namespace VirtualRobot
                 edge.first = currentEdge.second;
                 edge.second = parent;
 
-                BOOST_ASSERT(edge.second);
+                assert(edge.second);
                 edges.push_back(edge);
             }
 
@@ -192,7 +191,7 @@ namespace VirtualRobot
                     edge.second = childNode;
                     edge.first = currentEdge.second;
 
-                    BOOST_ASSERT(edge.second);
+                    assert(edge.second);
                     edges.push_back(edge);
                 }
             }
