@@ -2,21 +2,27 @@
 
 #include <Eigen/Core>
 
+#include <cmath>
 #include <type_traits>
+
 
 namespace simox::math
 {
-    template<class FloatT>
-    std::enable_if_t<std::is_floating_point_v<FloatT>, FloatT>
+    template <class FloatT,
+              typename = std::enable_if_t<std::is_floating_point_v<FloatT>>>
+    FloatT
     deg_to_rad(FloatT deg)
     {
-        return deg / 180.f * static_cast<FloatT>(M_PI);
+        return deg * static_cast<FloatT>(M_PI / 180.);
     }
 
-    template<class FloatT>
-    std::enable_if_t<std::is_floating_point_v<FloatT>, Eigen::Matrix<FloatT, 3, 1>>
-    deg_to_rad(Eigen::Ref<const Eigen::Matrix<FloatT, 3, 1>> deg)
+
+    template <class Derived,
+              typename = std::enable_if_t<std::is_floating_point_v<typename Derived::Scalar>> >
+    auto
+    deg_to_rad(const Eigen::MatrixBase<Derived>& deg)
     {
-        return {deg_to_rad(deg(0)), deg_to_rad(deg(1)), deg_to_rad(deg(2))};
+        return deg * static_cast<typename Derived::Scalar>(M_PI / 180.);
     }
+
 }
