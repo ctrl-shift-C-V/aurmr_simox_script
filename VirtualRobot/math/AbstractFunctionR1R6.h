@@ -34,7 +34,7 @@ namespace math
         virtual Eigen::Vector3f GetPositionDerivative(float t) = 0;
         virtual Eigen::Vector3f GetOrientationDerivative(float t) = 0;
 
+        virtual ~AbstractFunctionR1R6() = default;
     private:
     };
 }
-
