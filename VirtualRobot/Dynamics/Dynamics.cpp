@@ -7,7 +7,6 @@
 #include <VirtualRobot/Nodes/RobotNodeRevolute.h>
 #include <VirtualRobot/Nodes/RobotNodePrismatic.h>
 #include <VirtualRobot/XML/RobotIO.h>
-#include <VirtualRobot/RuntimeEnvironment.h>
 #include <VirtualRobot/Units.h>
 #include <VirtualRobot/MathTools.h>
 

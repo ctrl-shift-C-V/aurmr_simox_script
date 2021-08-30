@@ -12,6 +12,8 @@
 #include "VirtualRobot/XML/ObjectIO.h"
 #include "VirtualRobot/XML/RobotIO.h"
 
+#include <VirtualRobot/Visualization/VisualizationNode.h>
+
 #include "VirtualRobot/Visualization/CoinVisualization/CoinVisualizationFactory.h"
 #include <QFileDialog>
 #include <Eigen/Geometry>

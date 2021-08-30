@@ -6,7 +6,8 @@
 #include <VirtualRobot/RuntimeEnvironment.h>
 #include <VirtualRobot/Import/RobotImporterFactory.h>
 #include <VirtualRobot/CollisionDetection/CDManager.h>
-#include <boost/algorithm/string/predicate.hpp>
+
+#include <SimoxUtility/algorithm/string/string_tools.h>
 
 #include <QFileDialog>
 #include <Eigen/Geometry>
@@ -329,7 +330,7 @@ void showRobotWindow::exportVRML()
     {
         return;
     }
-    if (!boost::algorithm::ends_with(s, ".wrl"))
+    if (!simox::alg::ends_with(s, ".wrl"))
     {
         s += ".wrl";
     }

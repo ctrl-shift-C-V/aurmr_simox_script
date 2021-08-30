@@ -1,29 +1,28 @@
 
 #include "RobotNode.h"
-#include "../VirtualRobot.h"
-#include "../VirtualRobotException.h"
-#include "../Robot.h"
-#include "../RobotNodeSet.h"
-#include "../CollisionDetection/CollisionModel.h"
-#include "../Visualization/VisualizationFactory.h"
-#include "../Visualization/Visualization.h"
-#include "../Visualization/TriMeshModel.h"
-#include "../XML/BaseIO.h"
-#include <cmath>
-#include <iomanip>
-#include <boost/optional/optional_io.hpp>
-#include <algorithm>
-#include <filesystem>
-#include "../math/Helpers.h"
-#include "../Visualization/VisualizationNode.h"
+
+#include <VirtualRobot/VirtualRobotException.h>
+#include <VirtualRobot/Robot.h>
+#include <VirtualRobot/RobotNodeSet.h>
+#include <VirtualRobot/CollisionDetection/CollisionModel.h>
+#include <VirtualRobot/Visualization/VisualizationFactory.h>
+#include <VirtualRobot/Visualization/VisualizationNode.h>
+#include <VirtualRobot/Visualization/Visualization.h>
+#include <VirtualRobot/Visualization/TriMeshModel.h>
+#include <VirtualRobot/math/Helpers.h>
+#include <VirtualRobot/XML/BaseIO.h>
+
 
 #include <Eigen/Core>
 
+#include <filesystem>
+#include <algorithm>
+#include <iomanip>
+#include <cmath>
+
+
 namespace VirtualRobot
 {
-    using std::cout;
-    using std::endl;
-
     RobotNode::RobotNode(RobotWeakPtr rob,
                          const std::string& name,
                          float jointLimitLo,
@@ -504,8 +503,8 @@ namespace VirtualRobot
             // scope1
             std::ostringstream sos;
             sos << std::setiosflags(std::ios::fixed);
-            sos << "* localTransformation:" << endl << localTransformation << std::endl;
-            sos << "* globalPose:" << endl << getGlobalPose() << std::endl;
+            sos << "* localTransformation:\n" << localTransformation << "\n";
+            sos << "* globalPose:\n" << getGlobalPose() << "\n";
             std::cout << sos.str();
         } // scope1
 
@@ -1119,11 +1118,11 @@ namespace VirtualRobot
 
             if (crn)
             {
-                ss << "\t\t<Child name='" << children[i]->getName() << "'/>" << std::endl;
+                ss << "\t\t<Child name='" << children[i]->getName() << "'/>\n";
             }
         }
 
-        ss << "\t</RobotNode>" << endl << std::endl;
+        ss << "\t</RobotNode>\n\n";
         return ss.str();
     }
 

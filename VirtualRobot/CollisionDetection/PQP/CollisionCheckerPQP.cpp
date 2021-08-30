@@ -10,8 +10,6 @@
 
 #include <VirtualRobot/Visualization/TriMeshModel.h>
 
-#include <boost/assert.hpp>
-
 ///
 /// \brief Computes the intersection line between two triangles V and U
 /// \param V0 Vertex 0 of triangle V
@@ -155,8 +153,8 @@ namespace VirtualRobot
 
     bool CollisionCheckerPQP::checkCollision(const CollisionModelPtr& model1, const Eigen::Vector3f& point, float tolerance)
     {
-        BOOST_ASSERT(model1);
-        BOOST_ASSERT(model1->getCollisionModelImplementation());
+        assert(model1);
+        assert(model1->getCollisionModelImplementation());
         std::shared_ptr<PQP::PQP_Model> m1 = model1->getCollisionModelImplementation()->getPQPModel();
         VR_ASSERT_MESSAGE(m1, "NULL data in ColChecker!");
 
@@ -194,10 +192,10 @@ namespace VirtualRobot
 
     MultiCollisionResult CollisionCheckerPQP::checkMultipleCollisions(const CollisionModelPtr& model1, const CollisionModelPtr& model2)
     {
-        BOOST_ASSERT(model1);
-        BOOST_ASSERT(model1->getCollisionModelImplementation());
-        BOOST_ASSERT(model2);
-        BOOST_ASSERT(model2->getCollisionModelImplementation());
+        assert(model1);
+        assert(model1->getCollisionModelImplementation());
+        assert(model2);
+        assert(model2->getCollisionModelImplementation());
         std::shared_ptr<PQP::PQP_Model> m1 = model1->getCollisionModelImplementation()->getPQPModel();
         std::shared_ptr<PQP::PQP_Model> m2 = model2->getCollisionModelImplementation()->getPQPModel();
 

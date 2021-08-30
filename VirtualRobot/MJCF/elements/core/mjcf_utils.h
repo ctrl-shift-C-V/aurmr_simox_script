@@ -1,12 +1,12 @@
 #pragma once
 
-#include <string>
-#include <type_traits>
-
-#include <Eigen/Eigen>
-#include <boost/lexical_cast.hpp>
-
 #include "exceptions.h"
+
+#include <Eigen/Core>
+#include <Eigen/Geometry>
+
+#include <type_traits>
+#include <string>
 
 
 namespace std
@@ -100,7 +100,9 @@ namespace mjcf
     {
         static_assert (!Eigen::is_eigen_expression<AttrT>::value, "Resolved an Eigen type.");
         static_assert (!std::is_same<bool, AttrT>::value, "Resolved bool.");
-        return boost::lexical_cast<std::string>(b);
+        std::stringstream s;
+        s << b;
+        return s.str();
     }
 
     template<typename Derived>
@@ -130,7 +132,11 @@ namespace mjcf
     void fromAttr(const std::string& valueStr, AttrT& value)
     {
         static_assert (!Eigen::is_eigen_expression<AttrT>::value, "Resolved an Eigen type.");
-        value = boost::lexical_cast<AttrT>(valueStr);
+        std::stringstream s(valueStr);
+        if (!(s >> value))
+        {
+            throw std::bad_cast();
+        }
     }
 
     template <typename Derived>
@@ -199,8 +205,12 @@ namespace mjcf
         std::stringstream ss(string);
         for (std::string valueStr; std::getline(ss, valueStr, delim);)
         {
-            // may throw boost::bad_lexical_cast (derives from std::bad_cast)
-            Scalar value = boost::lexical_cast<Scalar>(valueStr);
+            std::stringstream s(valueStr);
+            Scalar value;
+            if (!(s >> value))
+            {
+                throw std::bad_cast();
+            }
             coeffs.push_back(value);
         }
 

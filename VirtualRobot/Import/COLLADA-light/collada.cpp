@@ -32,29 +32,15 @@
  * (Especially how to access text elements, children, and a rough idea how XPATH works). Further, this library relies heavily on the [boost](http://boost.org) libraries.
  */
 
-#ifdef WIN32
-#pragma warning(push)
-#pragma warning(disable: 4996)
-#endif
-
 #include "collada.h"
 
+#include <SimoxUtility/algorithm/string/string_tools.h>
+
 #include <iostream>
+#include <cassert>
 #include <vector>
-#include <map>
 #include <cmath>
-
-
-#include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/foreach.hpp>
-
-
-#ifdef TIMER_DEBUG
-#ifndef Q_MOC_RUN
-#include <boost/timer/timer.hpp>
-#endif
-#endif
+#include <map>
 
 #define IN_ARTICULATED_SYSTEMS "//library_articulated_systems"
 #define IN_KINEMATICS_MODELS "//library_kinematics_models"
@@ -67,21 +53,18 @@
 
 #define TARGETING_ATTRIBUTES "./@url|@source|@target"
 
-using namespace std;
-
 
 namespace Collada
 {
 
     std::vector<int> getIntVector(std::string text)
     {
-        std::vector<std::string> splitted;
-        boost::algorithm::trim(text);
+        simox::alg::trim(text);
         std::vector<int> result;
-        boost::algorithm::split(splitted, text, boost::algorithm::is_space());
+        std::vector<std::string> splitted = simox::alg::split(text, "\t ");
         for (std::string const& number : splitted)
         {
-            result.push_back(boost::lexical_cast<int>(number));
+            result.push_back(std::stoi(number));
         }
 
         return result;
@@ -89,13 +72,12 @@ namespace Collada
 
     std::vector<float> getFloatVector(std::string text)
     {
-        std::vector<std::string> splitted;
-        boost::algorithm::trim(text);
+        simox::alg::trim(text);
         std::vector<float> result;
-        boost::algorithm::split(splitted, text, boost::algorithm::is_space());
+        std::vector<std::string> splitted = simox::alg::split(text, "\t ");
         for (std::string const& number : splitted)
         {
-            result.push_back(boost::lexical_cast<float>(number));
+            result.push_back(std::stof(number));
         }
 
         return result;
@@ -123,8 +105,7 @@ namespace Collada
     {
         pugi::xpath_variable_set vars;
         vars.set("root", node.select_nodes(root.c_str()));
-        std::vector<std::string>  v;
-        boost::algorithm::split(v, sidref, boost::algorithm::is_any_of("/"));
+        std::vector<std::string>  v = simox::alg::split(sidref, "/");
         vars.set("name", v.front().c_str());
         vars.set("context", node.select_nodes("$root//*[@id=$name]", &vars));
 
@@ -173,7 +154,7 @@ namespace Collada
             }
 
 
-            if (string("attachment_full").compare(node.name()) == 0)
+            if (node.name() == std::string("attachment_full"))
             {
                 pugi::xml_node instance = resolveSIDREF(node, node.attribute("joint").value(), IN_KINEMATICS_MODELS);
                 pugi::xml_node joint = resolveURL(instance, IN_JOINTS);
@@ -192,7 +173,7 @@ namespace Collada
             }
             else
             {
-                if (string("link").compare(node.name()) == 0)
+                if (node.name() == std::string("link"))
                 {
                     parents.back()->preJoint = stack[depth()];  // QUICKFIX -- LOGIC ERROR IN ROBOT EDITOR
 #ifdef COLLADA_IMPORT_USE_SENSORS
@@ -259,28 +240,22 @@ namespace Collada
 #endif
 
         // First step: gather all joint_axis_info
-        map<pugi::xml_node, pair<pugi::xml_node, pugi::xml_node> > jointMap;
-        vector<pugi::xml_node> kinematicsModels;
+        std::map<pugi::xml_node, std::pair<pugi::xml_node, pugi::xml_node> > jointMap;
+        std::vector<pugi::xml_node> kinematicsModels;
 
-
-#ifdef TIMER_DEBUG
-        boost::shared_ptr<boost::timer::auto_cpu_timer> timer;
-        timer.reset(new boost::timer::auto_cpu_timer(1, "Physics and sensors and axis_infos: %t sec CPU, %w sec real\n"));
-#endif
-
-        BOOST_FOREACH(pugi::xpath_node instance, collada.select_nodes("$kinematicsScene/instance_articulated_system", &vars))
+        for (pugi::xpath_node instance : collada.select_nodes("$kinematicsScene/instance_articulated_system", &vars))
         {
             pugi::xml_node motion_articulated_system = resolveURL(instance.node(), IN_ARTICULATED_SYSTEMS);
-            BOOST_FOREACH(pugi::xpath_node motion_axis_info, motion_articulated_system.select_nodes(".//axis_info"))
+            for (pugi::xpath_node motion_axis_info : motion_articulated_system.select_nodes(".//axis_info"))
             {
                 pugi::xml_node kinematics_axis_info = resolveSIDREF(collada, motion_axis_info.node().attribute("axis").value(), IN_ARTICULATED_SYSTEMS); /*TODO restrict research*/
                 pugi::xml_node joint_axis = resolveSIDREF(collada, kinematics_axis_info.attribute("axis").value(), IN_ARTICULATED_SYSTEMS_AND_KINEMATICS_MODELS_AND_JOINTS);
-                jointMap[joint_axis] = make_pair(motion_axis_info.node(), kinematics_axis_info);
+                jointMap[joint_axis] = std::make_pair(motion_axis_info.node(), kinematics_axis_info);
             }
 
 #ifdef COLLADA_IMPORT_USE_SENSORS
             // Get sensors
-            BOOST_FOREACH(pugi::xpath_node sensor, motion_articulated_system.select_nodes(".//extra[@type='attach_sensor']"))
+            for (pugi::xpath_node sensor : motion_articulated_system.select_nodes(".//extra[@type='attach_sensor']"))
             {
                 pugi::xml_node link = resolveSIDREF(collada, sensor.node().select_single_node(".//frame_origin/@link").attribute().value(), IN_KINEMATICS_MODELS);
                 sensorMap[link].push_back(sensor.node());
@@ -293,19 +268,16 @@ namespace Collada
 
         // Physics (center of mass, inertia and collision model)
         XmlMap physicsMap;
-        BOOST_FOREACH(pugi::xpath_node node, scene.select_nodes("./instance_physics_scene"))
+        for (pugi::xpath_node node : scene.select_nodes("./instance_physics_scene"))
         {
             pugi::xml_node physicsScene = resolveURL(node.node(), IN_PHYSICS_SCENES);
-            BOOST_FOREACH(pugi::xpath_node instance, physicsScene.select_nodes("instance_physics_model/instance_rigid_body"))
+            for (pugi::xpath_node instance : physicsScene.select_nodes("instance_physics_model/instance_rigid_body"))
             {
                 pugi::xml_node rigidBody = resolveSIDREF(collada, instance.node().attribute("body").value(), IN_PHYSICS_MODELS);
                 pugi::xml_node visualNode = resolveURL(instance.node(), IN_VISUAL_SCENES);
                 physicsMap[visualNode] = rigidBody;
             }
         }
-#ifdef TIMER_DEBUG
-        timer.reset(new boost::timer::auto_cpu_timer(1, "Parse kinematics: %t sec CPU, %w sec real\n"));
-#endif
 
         // Now get all joint_axes (these correspond to robot nodes) and connect them to the axis info (done via previous std::maps)
         StructureMap visualizationMap;
@@ -315,7 +287,7 @@ namespace Collada
         // pugixml had to be pathed to make xpath_node_set work with boost. non-inversive (verbose) alternative:
         // BOOST_FOREACH(xpath_node node, std::make_pair(set.begin(), set.end()))
 
-        BOOST_FOREACH(pugi::xpath_node bind, bindJointAxes)
+        for (pugi::xpath_node bind : bindJointAxes)
         {
             ColladaRobotNodePtr robotNode = this->robotNodeFactory();
             {
@@ -327,11 +299,11 @@ namespace Collada
 
                 robotNode->joint_axis = resolveSIDREF(collada, newparam_kinematics.child_value("SIDREF"), IN_ARTICULATED_SYSTEMS_AND_KINEMATICS_MODELS_AND_JOINTS);
 
-                if (string("revolute").compare(robotNode->joint_axis.name()) == 0)
+                if (std::string("revolute") == robotNode->joint_axis.name())
                 {
                     robotNode->type = ColladaRobotNode::eREVOLUTE;
                 }
-                else if (string("prismatic").compare(robotNode->joint_axis.name()) == 0)
+                else if (std::string("prismatic") == robotNode->joint_axis.name())
                 {
                     robotNode->type = ColladaRobotNode::ePRISMATIC;
                 }
@@ -357,32 +329,24 @@ namespace Collada
                 pugi::xml_node param = kinematics_scene.select_single_node(".//bind[@symbol=$param/text()]/param", &vars).node();
                 pugi::xml_node newparam_motion = resolveSIDREF(collada, param.attribute("ref").value(), IN_ARTICULATED_SYSTEMS);
                 pugi::xml_node newparam_kinematics = resolveSIDREF(collada, newparam_motion.child_value("SIDREF"), IN_ARTICULATED_SYSTEMS);
-                robotNode->value = boost::lexical_cast<float>(newparam_kinematics.child_value("float"));
+                robotNode->value = std::stof(newparam_kinematics.child_value("float"));
             }
         }
 
-#ifdef TIMER_DEBUG
-        timer.reset(new boost::timer::auto_cpu_timer(1, "Parse kinematics structure (walker): %t sec CPU, %w sec real\n"));
-#endif
-
         // Now optain the kinematic structure
-        BOOST_FOREACH(pugi::xml_node model, kinematicsModels)
+        for (pugi::xml_node model : kinematicsModels)
         {
             std::cout << model.name() << std::endl;
             ModelWalker modelWalker(structureMap);
 #ifdef COLLADA_IMPORT_USE_SENSORS
             modelWalker.setSensorMap(sensorMap);
 #endif
-            BOOST_FOREACH(pugi::xpath_node link, model.select_nodes("./technique_common/link"))
+            for (pugi::xpath_node link : model.select_nodes("./technique_common/link"))
             {
                 link.node().traverse(modelWalker);
             }
 
         }
-
-#ifdef TIMER_DEBUG
-        timer.reset(new boost::timer::auto_cpu_timer(1, "Parse visual scene (walker): %t sec CPU, %w sec real\n"));
-#endif
 
         // Parse the visual scene.
         assert(scene);
@@ -390,21 +354,17 @@ namespace Collada
         ColladaWalkerPtr walker = this->visualSceneWalkerFactory(visualizationMap, physicsMap);
         visualScene.traverse(*walker);
 
-#ifdef TIMER_DEBUG
-        timer.reset(new boost::timer::auto_cpu_timer(1, "Add collision models (walker): %t sec CPU, %w sec real\n"));
-#endif
         // Parse the collision models
-        BOOST_FOREACH(ColladaRobotNodePtr node, robotNodeSet)
+        for (ColladaRobotNodePtr node : robotNodeSet)
         {
-            BOOST_FOREACH(pugi::xml_node body, node->rigidBodies)
-            this->addCollisionModel(node, body);
+            for (pugi::xml_node body : node->rigidBodies)
+            {
+                this->addCollisionModel(node, body);
+            }
         }
 
-#ifdef TIMER_DEBUG
-        timer.reset(new boost::timer::auto_cpu_timer(1, "Initialize nodes (such as simox, coin)): %t sec CPU, %w sec real\n"));
-#endif
         // Initialize the nodes.
-        BOOST_FOREACH(ColladaRobotNodePtr node, robotNodeSet)
+        for (ColladaRobotNodePtr node : robotNodeSet)
         {
             node->initialize();
         }
@@ -412,23 +372,25 @@ namespace Collada
 
     ColladaRobotNodePtr ColladaRobot::getRoot()
     {
-        BOOST_FOREACH(ColladaRobotNodePtr node, robotNodeSet)
-
-        if (!node->parent)
+        for (ColladaRobotNodePtr node : robotNodeSet)
         {
-            return node;
+            if (!node->parent)
+            {
+                return node;
+            }
         }
 
         return ColladaRobotNodePtr();
     }
 
-    ColladaRobotNodePtr ColladaRobot::getNode(string name)
+    ColladaRobotNodePtr ColladaRobot::getNode(std::string name)
     {
-        BOOST_FOREACH(ColladaRobotNodePtr node, robotNodeSet)
-
-        if (name.compare(node->name) == 0)
+        for (ColladaRobotNodePtr node : robotNodeSet)
         {
-            return node;
+            if (name.compare(node->name) == 0)
+            {
+                return node;
+            }
         }
 
         return ColladaRobotNodePtr();
@@ -438,7 +400,5 @@ namespace Collada
     {
         return this->robotNodeSet;
     }
-#ifdef WIN32
-#pragma warning(pop)
-#endif
+
 }//namespace

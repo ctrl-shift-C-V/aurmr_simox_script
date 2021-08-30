@@ -2,9 +2,10 @@
 
 #include <cmath>
 
-#include <Eigen/Dense>
+#include <Eigen/Core>
 
 #include "../../meta/eigen/enable_if_compile_time_size.h"
+
 
 namespace simox::math
 {
@@ -32,12 +33,14 @@ namespace simox::math
         m(2, 2) = cbeta * cgamma;
     }
 
+
     template<class D1, class D2> inline
     meta::enable_if_vec3_mat3<D1, D2>
     rpy_to_mat3f(const Eigen::MatrixBase<D1>& v, Eigen::MatrixBase<D2>& m)
     {
         rpy_to_mat3f(v(0), v(1), v(2), m);
     }
+
 
     inline Eigen::Matrix3f rpy_to_mat3f(float r, float p, float y)
     {
@@ -46,11 +49,12 @@ namespace simox::math
         return m;
     }
 
+
     template<class D1> inline
-    meta::enable_if_vec3<D1, Eigen::Matrix3f>
+    meta::enable_if_vec3<D1, Eigen::Matrix<typename D1::Scalar, 3, 3>>
     rpy_to_mat3f(const Eigen::MatrixBase<D1>& v)
     {
-        Eigen::Matrix3f m;
+        Eigen::Matrix<typename D1::Scalar, 3, 3> m;
         rpy_to_mat3f(v, m);
         return m;
     }

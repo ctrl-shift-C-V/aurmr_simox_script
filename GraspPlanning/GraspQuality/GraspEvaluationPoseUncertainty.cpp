@@ -1,4 +1,9 @@
 #include "GraspEvaluationPoseUncertainty.h"
+
+#include <VirtualRobot/Robot.h>
+#include <VirtualRobot/Obstacle.h>
+#include <VirtualRobot/CollisionDetection/CollisionChecker.h>
+#include <VirtualRobot/Grasping/Grasp.h>
 #include <VirtualRobot/Random.h>
 #include <VirtualRobot/math/Helpers.h>
 #include <VirtualRobot/math/ClampedNormalDistribution.hpp>

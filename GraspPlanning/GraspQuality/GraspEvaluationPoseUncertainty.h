@@ -23,12 +23,13 @@
 
 #pragma once
 
-#include <VirtualRobot/VirtualRobotCommon.h>
+#include <VirtualRobot/VirtualRobot.h>
 
 #include "GraspQualityMeasure.h"
 
 #include <string>
 #include <vector>
+#include <memory>
 
 
 namespace GraspStudio
@@ -176,7 +177,7 @@ namespace GraspStudio
 
     };
 
-    typedef boost::shared_ptr<GraspEvaluationPoseUncertainty> GraspEvaluationPoseUncertaintyPtr;
+    typedef std::shared_ptr<GraspEvaluationPoseUncertainty> GraspEvaluationPoseUncertaintyPtr;
 
 }
 

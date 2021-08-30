@@ -2,17 +2,14 @@
 
 #include <Eigen/QR>
 #include <Eigen/Geometry>
-#include <boost/format.hpp>
-#include <boost/bind.hpp>
-#include <boost/math/special_functions/fpclassify.hpp>
-#include <VirtualRobot/VirtualRobotCommon.h>
+
+#include <VirtualRobot/Robot.h>
 
 #include <algorithm>
 #include <cfloat>
 
-using namespace std;
-
-namespace VirtualRobot {
+namespace VirtualRobot
+{
 
     RobotPoseDifferentialIK::RobotPoseDifferentialIK(RobotPtr robot, RobotNodeSetPtr _rns, RobotNodePtr _coordSystem, JacobiProvider::InverseJacobiMethod invJacMethod) :
         DifferentialIK(_rns, _coordSystem, invJacMethod)
@@ -62,7 +59,7 @@ namespace VirtualRobot {
                     index += 3;
             }
             else
-                    VR_ERROR << "Internal error?!" << endl; // Error
+                    VR_ERROR << "Internal error?!\n"; // Error
         }
         return Jacobian;
     }
@@ -106,7 +103,7 @@ namespace VirtualRobot {
                     axis = Eigen::Vector3f::UnitZ();
                 else
                 {
-                    cout << "int. err. " << endl;
+                    std::cout << "int. err. " << std::endl;
                     continue;
                 }
 
@@ -136,7 +133,7 @@ namespace VirtualRobot {
                     axis = Eigen::Vector3f::UnitZ();
                 else
                 {
-                    cout << "int. err. " << endl;
+                    std::cout << "int. err. " << std::endl;
                     continue;
                 }
                 if (coordSystem)
@@ -171,7 +168,7 @@ namespace VirtualRobot {
                     positionRobot.block(0, i, 3, 1) = r;
                     if (r.norm() > 1e10)
                     {
-                        cout << "posRobot error" << endl;
+                        std::cout << "posRobot error" << std::endl;
                     }
                 }
                 // and the orientation part
@@ -394,15 +391,16 @@ namespace VirtualRobot {
             // no box constraints
             error = getError(stepSize);
             if (jVerbose)
-                cout << "Error Cartesian:" << error.transpose() << endl << endl;
+                std::cout << "Error Cartesian:" << error.transpose() << std::endl << std::endl;
             Jacobian = getJacobianMatrix();
             Eigen::MatrixXf pseudoXf = computePseudoInverseJacobianMatrix(Jacobian);
             if (jVerbose)
-                cout << "PseudoInv min/max:" << endl << pseudoXf.minCoeff() << "," << pseudoXf.maxCoeff() << endl << endl;
+                std::cout << "PseudoInv min/max:" << std::endl
+                          << pseudoXf.minCoeff() << "," << pseudoXf.maxCoeff() << std::endl << std::endl;
             Eigen::VectorXf dThetaXf = pseudoXf * error;
             dTheta = dThetaXf;
             if (jVerbose)
-                cout << "dTheta:" << dTheta.transpose() << endl << endl;
+                std::cout << "dTheta:" << dTheta.transpose() << std::endl << std::endl;
  
             if (considerMaxAngle)
             {
@@ -419,7 +417,7 @@ namespace VirtualRobot {
                 {
                     scale = maximal / maxAngularDifference;
                     if (jVerbose)
-                        cout << "Cutting, maxAngularDifference=" << maxAngularDifference << ", scale = " << scale << endl << endl;
+                        std::cout << "Cutting, maxAngularDifference=" << maxAngularDifference << ", scale = " << scale << std::endl << std::endl;
                 }
                 dTheta *= scale;
             }
@@ -467,9 +465,9 @@ namespace VirtualRobot {
             for (unsigned int i = 0; i < nodes.size(); i++)
             {
                 jv[i] = (nodes[i]->getJointValue() + dTheta[i]);
-                if (boost::math::isnan(jv[i]) || boost::math::isinf(jv[i]))
+                if (std::isnan(jv[i]) || std::isinf(jv[i]))
                 {
-                    VR_WARNING << "Aborting, invalid joint value (nan)" << endl;
+                    VR_WARNING << "Aborting, invalid joint value (nan)" << std::endl;
                     return false;
                 }
             }
@@ -488,7 +486,7 @@ namespace VirtualRobot {
             robot->setGlobalPose(resPose);
 
             if (considerBoxConstraints && !rns->checkJointLimits(jv)){
-               VR_ERROR << "Joint limit violated" << endl;
+               VR_ERROR << "Joint limit violated" << std::endl;
             }
             robot->setJointValues(rns, jv);
 
@@ -497,7 +495,7 @@ namespace VirtualRobot {
             if (checkTolerances())
             {
                 if (verbose)
-                    VR_INFO << "Tolerances ok, loop:" << step << endl;
+                    VR_INFO << "Tolerances ok, loop:" << step << std::endl;
                 return true;
             }
 
@@ -507,7 +505,7 @@ namespace VirtualRobot {
             if ( (performMinOneStep && step == 0) || posDist<bestDist)
             {
                 if (verbose && step != 0)
-                    VR_INFO << "Loop:" << step << ", best IK dist: " << posDist << endl;
+                    VR_INFO << "Loop:" << step << ", best IK dist: " << posDist << std::endl;
 
                 bestPose = robot->getGlobalPose();
                 jvBest = jv;
@@ -517,7 +515,7 @@ namespace VirtualRobot {
             if (checkImprovement && posDist>lastDist)
             {
                 if (verbose)
-                    VR_INFO << "Could not improve result any more (current position error=" << posDist << ", last loop's error:" << lastDist << "), loop:" << step << endl;
+                    VR_INFO << "Could not improve result any more (current position error=" << posDist << ", last loop's error:" << lastDist << "), loop:" << step << std::endl;
                 robot->setGlobalPose(bestPose);
                 robot->setJointValues(rns, jvBest);
                 return false;
@@ -526,7 +524,7 @@ namespace VirtualRobot {
             if (dTheta.norm()<minChange)
             {
                 if (verbose)
-                    VR_INFO << "Could not improve result any more (dTheta.norm()=" << d << "), loop:" << step << endl;
+                    VR_INFO << "Could not improve result any more (dTheta.norm()=" << d << "), loop:" << step << std::endl;
 
                 // set best result
                 robot->setGlobalPose(bestPose);
@@ -543,9 +541,9 @@ namespace VirtualRobot {
         robot->setJointValues(rns, jvBest);
         if (verbose && maxNStep > 1)
         {
-            VR_INFO << "IK failed, improvementSteps:" << nrImprovements << ", loop:" << step << endl;
-            VR_INFO << "pos error:" << getMeanErrorPosition() << endl;
-            VR_INFO << "rot error (tcp 0):" << getErrorRotation(tcp_set[0]) << endl;
+            VR_INFO << "IK failed, improvementSteps:" << nrImprovements << ", loop:" << step << std::endl;
+            VR_INFO << "pos error:" << getMeanErrorPosition() << std::endl;
+            VR_INFO << "rot error (tcp 0):" << getErrorRotation(tcp_set[0]) << std::endl;
         }
         return false;
     }

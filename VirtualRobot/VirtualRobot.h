@@ -266,14 +266,14 @@ namespace VirtualRobot
 
 #else
 
-#include <boost/assert.hpp>
+#include <cassert>
 
 /*!
 This assert macro does nothing on RELEASE builds.
 */
-#define VR_ASSERT( a )  BOOST_ASSERT( a )
+#define VR_ASSERT( expr )  assert(expr)
 
-#define VR_ASSERT_MESSAGE(a,b) BOOST_ASSERT_MSG(a, b)
+#define VR_ASSERT_MESSAGE(expr, msg) assert((expr)&&(msg))
 
 #endif
 

@@ -21,10 +21,8 @@
 *
 */
 #include "RobotImporterFactory.h"
-#include <Eigen/Core>
 
-#include <boost/algorithm/string/join.hpp>
-
+#include <SimoxUtility/algorithm/string/string_tools.h>
 
 using namespace std;
 
@@ -38,7 +36,7 @@ namespace VirtualRobot
         {
             filter.push_back(RobotImporterFactory::fromName(subclass, NULL)->getFileFilter());
         }
-        return boost::algorithm::join(filter, ";;");
+        return simox::alg::join(filter, ";;");
     }
 
     string RobotImporterFactory::getAllExtensions()
@@ -49,7 +47,7 @@ namespace VirtualRobot
             string extension = RobotImporterFactory::fromName(subclass, NULL)->getFileExtension();
             filter.push_back("*." + extension);
         }
-        return boost::algorithm::join(filter, " ");
+        return simox::alg::join(filter, " ");
     }
 
     RobotImporterFactoryPtr RobotImporterFactory::fromFileExtension(string type, void* params)
