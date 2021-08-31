@@ -101,6 +101,20 @@ namespace simox::alg
     }
 
 
+    /**
+     * @brief If `string` begins with `prefix`, return `string` without the
+     * leading `prefix`.
+     */
+    std::string remove_prefix(const std::string& string, const std::string& prefix);
+
+    /**
+     * @brief If `string` ends with `suffix`, return `string` without the
+     * ending `suffix`.
+     */
+    std::string remove_suffix(const std::string& string, const std::string& suffix);
+
+
+
     template <typename IterT>
     std::vector<std::string> multi_to_string(IterT begin, IterT end)
     {

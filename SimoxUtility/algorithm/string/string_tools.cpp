@@ -177,4 +177,20 @@ bool alg::contains(const std::string& haystack, const std::string& needle)
 }
 
 
+std::string alg::remove_prefix(const std::string& string, const std::string& prefix)
+{
+    return simox::alg::starts_with(string, prefix)
+            ? string.substr(prefix.size(), std::string::npos)
+            : string;
+}
+
+
+std::string alg::remove_suffix(const std::string& string, const std::string& suffix)
+{
+    return simox::alg::ends_with(string, suffix)
+            ? string.substr(0, string.size() - suffix.size())
+            : string;
+}
+
+
 }

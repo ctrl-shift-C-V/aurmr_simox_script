@@ -101,3 +101,33 @@ BOOST_AUTO_TEST_CASE(capitalize_words)
     BOOST_CHECK_EQUAL(out, ex);
     BOOST_CHECK_EQUAL_COLLECTIONS(out.begin(), out.end(), ex.begin(), ex.end());
 }
+
+
+BOOST_AUTO_TEST_CASE(remove_prefix_suffix)
+{
+    // Do something:
+
+    BOOST_CHECK_EQUAL(simox::alg::remove_prefix("my_word", "my_"), "word");
+    BOOST_CHECK_EQUAL(simox::alg::remove_suffix("word_is", "_is"), "word");
+
+    BOOST_CHECK_EQUAL(simox::alg::remove_prefix("one-one-one", "one-"), "one-one");
+    BOOST_CHECK_EQUAL(simox::alg::remove_suffix("one-one-one", "-one"), "one-one");
+
+    BOOST_CHECK_EQUAL(simox::alg::remove_prefix("one two three", "four"), "one two three");
+    BOOST_CHECK_EQUAL(simox::alg::remove_suffix("one two three", "four"), "one two three");
+
+    BOOST_CHECK_EQUAL(simox::alg::remove_prefix("one", "one"), "");
+    BOOST_CHECK_EQUAL(simox::alg::remove_suffix("one", "one"), "");
+
+
+    // Change nothing:
+
+    BOOST_CHECK_EQUAL(simox::alg::remove_prefix("inc_omplete-prefix", "incomplete"), "inc_omplete-prefix");
+    BOOST_CHECK_EQUAL(simox::alg::remove_suffix("suffix-inc_omplete", "incomplete"), "suffix-inc_omplete");
+
+    BOOST_CHECK_EQUAL(simox::alg::remove_prefix("one two three", "four"), "one two three");
+    BOOST_CHECK_EQUAL(simox::alg::remove_suffix("one two three", "four"), "one two three");
+
+    BOOST_CHECK_EQUAL(simox::alg::remove_prefix("", ""), "");
+    BOOST_CHECK_EQUAL(simox::alg::remove_suffix("", ""), "");
+}
