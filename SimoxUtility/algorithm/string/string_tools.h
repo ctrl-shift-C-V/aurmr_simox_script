@@ -54,15 +54,30 @@ namespace simox::alg
     std::string trim_copy_if(const std::string& str, const std::string& trim = "\t ");
 
 
-    std::vector<std::string> split(const std::string& str, const std::string& splitBy = "\t ", bool trimElements = true,
-                                   bool removeEmptyElements = true, const std::locale& locale = DEFAULT_LOCALE);
+    std::vector<std::string>
+    split(const std::string& str,
+          const std::string& splitBy = "\t ",
+          bool trimElements = true,
+          bool removeEmptyElements = true,
+          const std::locale& locale = DEFAULT_LOCALE);
 
-    //! @param expectedSize throws SimoxError if split not matches expectedSize
-    std::vector<std::string> split_check_size(const std::string& str, unsigned int expectedSize, const std::string& splitBy = "\t ",
-                                         bool trimElements = true, bool removeEmptyElements = true, const std::locale& locale = DEFAULT_LOCALE);
 
-    std::string join(const std::vector<std::string> vec, const std::string& delimiter = " ", bool trimElements = false,
-                     bool ignoreEmptyElements = false, const std::locale& locale = DEFAULT_LOCALE);
+    /// @param expectedSize throws SimoxError if split not matches expectedSize
+    std::vector<std::string>
+    split_check_size(
+            const std::string& str,
+            unsigned int expectedSize,
+            const std::string& splitBy = "\t ",
+            bool trimElements = true,
+            bool removeEmptyElements = true,
+            const std::locale& locale = DEFAULT_LOCALE);
+
+    std::string
+    join(const std::vector<std::string> vec,
+         const std::string& delimiter = " ",
+         bool trimElements = false,
+         bool ignoreEmptyElements = false,
+         const std::locale& locale = DEFAULT_LOCALE);
 
 
     std::string replace_first(std::string const& input, std::string const& search, std::string const& replace);
@@ -73,7 +88,6 @@ namespace simox::alg
 
 
     bool starts_with(std::string const& input, std::string const& search);
-
     bool ends_with(std::string const& input, std::string const& search);
 
     bool contains(const std::string& haystack, const std::string& needle);
