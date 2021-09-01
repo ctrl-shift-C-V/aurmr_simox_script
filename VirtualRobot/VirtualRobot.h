@@ -105,11 +105,12 @@
 #endif
 
 
-// allow std vector to be used with Eigen objects
-
-#include <SimoxUtility/EigenStdVector.h>
-
 #include <memory>
+#include <vector>
+#include <deque>
+#include <queue>
+
+#include <Eigen/Core>
 
 
 namespace VirtualRobot
@@ -276,4 +277,3 @@ This assert macro does nothing on RELEASE builds.
 #define VR_ASSERT_MESSAGE(expr, msg) assert((expr)&&(msg))
 
 #endif
-
