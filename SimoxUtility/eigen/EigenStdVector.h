@@ -1,20 +1,10 @@
 #pragma once
 
-#include<Eigen/StdVector>
-#ifndef EIGEN_STL_VECTOR_SPECIFICATION_DEFINED
-#define EIGEN_STL_VECTOR_SPECIFICATION_DEFINED
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Vector2f)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Vector3f)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Vector4f)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::VectorXf)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::VectorXd)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix2f)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix3f)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix4f)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::MatrixXf)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::MatrixXd)
+#include <Eigen/Core>
 
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Vector3d)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Vector3i)
-#endif
+#include <vector>
+#include <memory>
+#include <deque>
+#include <queue>
 
+#pragma message("This header is deprecated. It contains fixes for C++ prior to C++11. See https://eigen.tuxfamily.org/dox/group__TopicStlContainers.html. Remove this header and check if e.g. <Eigen/Core> and <vector> should be used instead.")
