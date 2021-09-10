@@ -649,8 +649,8 @@ namespace VirtualRobot
                 THROW_VR_EXCEPTION_IF(to.empty(), "'to' attribute is empty!");
 
                 // allow bidirectional lookup
-                nodeMapping.emplace(from, NodeMappingElement{.node = from, .sign = sign});
-                nodeMapping.emplace(to, NodeMappingElement{.node = to, .sign = sign});
+                nodeMapping.emplace(from, NodeMappingElement{.node = to, .sign = sign});
+                nodeMapping.emplace(to, NodeMappingElement{.node = from, .sign = sign});
             }
             else
             {
