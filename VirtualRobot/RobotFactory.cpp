@@ -947,7 +947,7 @@ namespace VirtualRobot
                     {
                         continue;
                     }
-                    if (rns->hasRobotNode(k->getName()))
+                    if (rns->hasRobotNode(k->getName()) || rns->getTCP() == k)
                     {
                         ok = false;
                         break;
