@@ -81,7 +81,9 @@ if (SimDynamics_USE_BULLET)
                 target_include_directories(SimDynamics PUBLIC ${GLUT_INCLUDE_DIR})
             ELSE ()
                 # This is the lines for linux.  This should always work if everything is installed and working fine.
-                target_include_directories(SimDynamics PUBLIC "/usr/include;/usr/local/include;${GLUT_INCLUDE_DIR}")
+
+                # The directory /usr/local/include does not exist by default + this is not necessary.
+                # target_include_directories(SimDynamics PUBLIC "/usr/include;/usr/local/include;${GLUT_INCLUDE_DIR}")
             ENDIF ()
         ELSE ()
             SET( GLUT_glut_LIBRARY "" CACHE PATH "Glut library." )
