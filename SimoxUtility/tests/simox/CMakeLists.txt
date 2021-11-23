@@ -1,2 +1,2 @@
 
-ADD_SU_TEST( SimoxPathTest )
+# ADD_SU_TEST( SimoxPathTest )
