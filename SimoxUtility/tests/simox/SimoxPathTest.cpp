@@ -31,6 +31,7 @@ BOOST_AUTO_TEST_CASE(test_path_existences)
 }
 
 
+/*
 BOOST_AUTO_TEST_CASE(test_test_file_path)
 {
     BOOST_TEST_CONTEXT("This test file: '" << __FILE__ << "'")
@@ -39,3 +40,4 @@ BOOST_AUTO_TEST_CASE(test_test_file_path)
                           __FILE__);
     }
 }
+*/
