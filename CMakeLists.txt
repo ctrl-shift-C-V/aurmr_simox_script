@@ -327,8 +327,20 @@ install(FILES
 
 
 # Install the export set for use with the install-tree
-install(EXPORT SimoxTargets DESTINATION
-  "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+install(
+    EXPORT
+        SimoxTargets
+    DESTINATION "${INSTALL_CMAKE_DIR}"
+    COMPONENT dev
+)
+
+
+install(
+    EXPORT SimoxTargets
+    FILE SimoxTargetsLegacy.cmake
+    DESTINATION "${INSTALL_CMAKE_DIR}"
+    COMPONENT dev
+)
 
 
 #######################################################################################
