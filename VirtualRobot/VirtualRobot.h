@@ -41,7 +41,21 @@
   examples showing how these libraries can be used to build complex tools in the
   context of mobile manipulation.
 
-  Further information and documentation can be found at the wiki pages: http://sourceforge.net/p/simox/wiki/
+  Further information and documentation can be found at the wiki pages: https://gitlab.com/Simox/simox/-/wikis/home
+
+  \section SimoxUtility SimoxUtility
+
+  \ref simox "SimoxUtility"
+  is a utility library providing general-purpose code tools to help working with,
+  among others,
+  C++ strings and containers,
+  maths (e.g. pose, radians and degrees, scaling, clamping, periodic mean, ...),
+  data file formats (e.g. JSON, XMl),
+  colors and colormaps,
+  as well as
+  shapes like axis-aligned and oriented (bounding) boxes.
+
+
 
   \section VirtualRobot VirtualRobot
 
@@ -86,7 +100,7 @@
   functionality. As a reference implementation Simox offers Coin3D/SoQt-based visualization
   support.
 
-  Please have a look at the wiki pages: http://sourceforge.net/p/simox/wiki/
+  Please have a look at the wiki pages: https://gitlab.com/Simox/simox/-/wikis/home
  *
  */
 

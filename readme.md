@@ -1,7 +1,10 @@
 Simox
 -----
 
-The aim of the lightweight platform independent C++ toolbox Simox is to provide a set of algorithms for 3D simulation of robot systems, sampling based motion planning and grasp planning. Simox consists of three libraries (Virtual Robot, Saba and Grasp Studio) and nmerous examples showing how these libraries can be used to build complex tools in the
+The aim of the lightweight platform independent C++ toolbox Simox is to provide a set of 
+algorithms for 3D simulation of robot systems, sampling based motion planning and grasp 
+planning. Simox consists of three libraries (Virtual Robot, Saba and Grasp Studio) and numerous 
+examples showing how these libraries can be used to build complex tools in the
 context of mobile manipulation. The library Virtual Robot can be used to define complex
 robot systems, which may cover multiple robots with many degrees of freedom. The robot
 structure and its visualization can be easily defined via XML files and environments with
@@ -31,7 +34,9 @@ support.
 
 Documentation  
 -------
-https://gitlab.com/Simox/simox/wikis/home
+Wiki: https://gitlab.com/Simox/simox/wikis/home
+
+API Reference: http://simox.sourceforge.net/documentation/
 
 License
 -------
