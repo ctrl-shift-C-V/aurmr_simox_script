@@ -13,6 +13,22 @@ Eigen::Matrix3f simox::math::orthogonalize(const Eigen::Matrix3f& matrix)
 
 Eigen::Matrix3f simox::math::orthogonalize_svd(const Eigen::Matrix3f& matrix)
 {
+    auto svd = matrix.jacobiSvd(Eigen::ComputeFullU | Eigen::ComputeFullV);
+
+    Eigen::Matrix3f orth = svd.matrixU() * svd.matrixV().transpose();
+    if (orth.determinant() >= 0)
+    {
+        return orth;
+    }
+    else
+    {
+        return -orth;
+    }
+}
+
+
+Eigen::Matrix3f simox::math::orthogonalize_qr(const Eigen::Matrix3f& matrix)
+{
     auto householder = matrix.householderQr();
     Eigen::Matrix3f orth = householder.householderQ();
 
@@ -27,22 +43,6 @@ Eigen::Matrix3f simox::math::orthogonalize_svd(const Eigen::Matrix3f& matrix)
         }
     }
     return orth;
-}
-
-
-Eigen::Matrix3f simox::math::orthogonalize_qr(const Eigen::Matrix3f& matrix)
-{
-    auto svd = matrix.jacobiSvd(Eigen::ComputeFullU | Eigen::ComputeFullV);
-
-    Eigen::Matrix3f orth = svd.matrixU() * svd.matrixV().transpose();
-    if (orth.determinant() >= 0)
-    {
-        return orth;
-    }
-    else
-    {
-        return -orth;
-    }
 }
 
 
