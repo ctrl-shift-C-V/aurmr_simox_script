@@ -630,6 +630,8 @@ namespace VirtualRobot
 
     NodeMapping BaseIO::processNodeMapping(rapidxml::xml_node<char>* XMLNode, RobotPtr robot)
     {
+        (void) robot;
+
         std::string parentName = processNameAttribute(XMLNode, true);
         rapidxml::xml_node<>* node = XMLNode->first_node();
 

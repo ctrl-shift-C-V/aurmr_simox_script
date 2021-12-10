@@ -408,6 +408,8 @@ namespace Saba
 
     float CSpace::getDirectedMaxMovement(const Eigen::VectorXf& /*config*/, const Eigen::VectorXf& nextConfig)
     {
+        (void) nextConfig;
+
         // SABA_ASSERT(config.rows() == dimension)
         SABA_ASSERT(nextConfig.rows() == dimension)
 
