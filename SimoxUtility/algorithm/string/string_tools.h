@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <string>
+#include <cstring>
 #include <sstream>
 #include <vector>
 #include <locale>

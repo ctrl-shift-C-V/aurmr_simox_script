@@ -5,6 +5,7 @@
 #include <initializer_list>
 #include <map>
 #include <string>
+#include <optional>
 
 #include <SimoxUtility/algorithm/apply.hpp>
 #include <SimoxUtility/algorithm/minmax.h>
