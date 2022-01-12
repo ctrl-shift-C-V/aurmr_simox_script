@@ -91,13 +91,13 @@ namespace simox::color
         template <typename V>
         std::vector<Color> operator()(const std::vector<V>& vector) const
         {
-            return simox::alg::apply(*this, vector);
+            return simox::alg::apply(vector, *this);
         }
         /// Apply this colormap to a map's values.
         template <typename K, typename V>
         std::map<K, Color> operator()(const std::map<K, V>& map) const
         {
-            return simox::alg::apply(*this, map);
+            return simox::alg::apply(map, *this);
         }
 
 

@@ -11,10 +11,12 @@ namespace simox::alg
 
     template <typename ValueIn, typename UnaryOp>
     std::vector<std::invoke_result_t<UnaryOp, ValueIn>>
-    apply(const UnaryOp& op, const std::vector<ValueIn>& vector)
+    apply(const std::vector<ValueIn>& vector, const UnaryOp& op)
     {
         using ValueOut = std::invoke_result_t<UnaryOp, ValueIn>;
         std::vector<ValueOut> result;
+        result.reserve(vector.size());
+
         std::transform(vector.begin(), vector.end(), std::back_inserter(result), op);
         return result;
     }
@@ -22,7 +24,7 @@ namespace simox::alg
 
     template <typename Key, typename ValueIn, typename UnaryOp>
     std::map<Key, std::invoke_result_t<UnaryOp, ValueIn>>
-    apply(const UnaryOp& op, const std::map<Key, ValueIn>& map)
+    apply(const std::map<Key, ValueIn>& map, const UnaryOp& op)
     {
         using ValueOut = std::invoke_result_t<UnaryOp, ValueIn>;
         std::map<Key, ValueOut> result;
@@ -35,4 +37,3 @@ namespace simox::alg
 
 
 }
-
