@@ -18,16 +18,9 @@ using namespace std;
 namespace VirtualRobot
 {
 
-    WorkspaceGrid::WorkspaceGrid(float fMinX, float fMaxX, float fMinY, float fMaxY, float fDiscretizeSize)
+    WorkspaceGrid::WorkspaceGrid(float fMinX, float fMaxX, float fMinY, float fMaxY, float fDiscretizeSize, const bool checkNeighbors) 
+        : minX(fMinX), maxX(fMaxX), minY(fMinY), maxY(fMaxY), discretizeSize(fDiscretizeSize), data(nullptr), checkNeighbors(checkNeighbors)
     {
-
-        minX = fMinX;
-        maxX = fMaxX;
-        minY = fMinY;
-        maxY = fMaxY;
-        discretizeSize = fDiscretizeSize;
-        data = nullptr;
-
         if (fMinX >= fMaxX || fMinY >= fMaxY)
         {
             THROW_VR_EXCEPTION("ERROR min >= max");
@@ -267,17 +260,22 @@ namespace VirtualRobot
 
         setCellEntry(nPosX, nPosY, value, grasp);
 
-        if (nPosX > 0 && nPosX < (gridSizeX - 1) && nPosY > 0 && nPosY < (gridSizeY - 1))
+        // update neighbor cells as well
+        if(checkNeighbors)
         {
-            setCellEntry(nPosX - 1, nPosY, value, grasp);
+            if (nPosX > 0 && nPosX < (gridSizeX - 1) && nPosY > 0 && nPosY < (gridSizeY - 1))
+            {
+                setCellEntry(nPosX - 1, nPosY, value, grasp);
             setCellEntry(nPosX - 1, nPosY - 1, value, grasp);
             setCellEntry(nPosX - 1, nPosY + 1, value, grasp);
             setCellEntry(nPosX, nPosY - 1, value, grasp);
             setCellEntry(nPosX, nPosY + 1, value, grasp);
-            setCellEntry(nPosX + 1, nPosY - 1, value, grasp);
-            setCellEntry(nPosX + 1, nPosY, value, grasp);
-            setCellEntry(nPosX + 1, nPosY + 1, value, grasp);
+                setCellEntry(nPosX + 1, nPosY - 1, value, grasp);
+                setCellEntry(nPosX + 1, nPosY, value, grasp);
+                setCellEntry(nPosX + 1, nPosY + 1, value, grasp);
+            }
         }
+        
     }
 
     void WorkspaceGrid::setEntries(std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr>& wsData, const Eigen::Matrix4f& graspGlobal, GraspPtr grasp)

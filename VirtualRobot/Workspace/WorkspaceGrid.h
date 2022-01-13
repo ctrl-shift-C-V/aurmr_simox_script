@@ -44,7 +44,7 @@ namespace VirtualRobot
         /*!
             Setup the 2D grid with given extends and discretization parameter.
         */
-        WorkspaceGrid(float minX, float maxX, float minY, float maxY, float discretizeSize);
+        WorkspaceGrid(float minX, float maxX, float minY, float maxY, float discretizeSize, bool checkNeighbors = false);
         ~WorkspaceGrid();
 
         //! returns entry of position in x/y plane (in world coords)
@@ -176,6 +176,9 @@ namespace VirtualRobot
 
         int* data;                              // stores the quality values
         std::vector<GraspPtr>* graspLink;       // points to list of all reachable grasps
+
+
+        const bool checkNeighbors;
 
     };
 
