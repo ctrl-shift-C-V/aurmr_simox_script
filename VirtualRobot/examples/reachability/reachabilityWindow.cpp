@@ -3,6 +3,7 @@
 #include "VirtualRobot/EndEffector/EndEffector.h"
 #include "VirtualRobot/Workspace/Reachability.h"
 #include "VirtualRobot/Workspace/Manipulability.h"
+#include "VirtualRobot/Workspace/NaturalPosture.h"
 #include "VirtualRobot/IK/PoseQualityExtendedManipulability.h"
 #include "VirtualRobot/XML/RobotIO.h"
 #include "VirtualRobot/Visualization/CoinVisualization/CoinVisualizationFactory.h"
