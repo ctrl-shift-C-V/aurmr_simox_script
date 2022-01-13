@@ -4,8 +4,13 @@
 #include "../ManipulationObject.h"
 #include "../Nodes/RobotNode.h"
 #include "../Robot.h"
+#include "VirtualRobot.h"
+#include "Workspace/WorkspaceData.h"
+#include <cmath>
 #include <iostream>
 #include <algorithm>
+#include <Eigen/src/Geometry/AngleAxis.h>
+#include <Eigen/src/Geometry/Transform.h>
 using namespace std;
 
 #define MIN_VALUES_STORE_GRASPS 100
@@ -235,6 +240,15 @@ namespace VirtualRobot
         }
     }
 
+    Eigen::Vector2f WorkspaceGrid::getPosition(int cellX, int cellY) const
+    {
+        float x = minX + cellX / gridSizeX * gridExtendX;
+        float y = minY + cellY / gridSizeY * gridExtendY;
+
+        return {x,y};
+
+    }
+
     void WorkspaceGrid::setEntryCheckNeighbors(float x, float y, int value, GraspPtr grasp)
     {
         if (!data)
@@ -434,7 +448,7 @@ namespace VirtualRobot
         maxY = y + gridExtendY / 2.0f;
     }
 
-    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, ManipulationObjectPtr o, GraspPtr g, RobotNodePtr baseRobotNode)
+    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, ManipulationObjectPtr o, GraspPtr g, RobotNodePtr baseRobotNode, const float baseOrientation)
     {
         if (!ws || !o || !g)
         {
@@ -443,10 +457,10 @@ namespace VirtualRobot
 
         Eigen::Matrix4f graspGlobal = g->getTcpPoseGlobal(o->getGlobalPose());
 
-        return fillGridData(ws, graspGlobal, g, baseRobotNode);
+        return fillGridData(ws, graspGlobal, g, baseRobotNode, baseOrientation);
     }
 
-    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode)
+    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode, const float baseOrientation)
     {
         if (!ws)
         {
@@ -455,10 +469,15 @@ namespace VirtualRobot
 
         // ensure robot is at identity
         Eigen::Matrix4f gpOrig = Eigen::Matrix4f::Identity();
+
+        VR_ASSERT(baseRobotNode);
         if (baseRobotNode)
         {
             gpOrig = baseRobotNode->getRobot()->getGlobalPose();
-            baseRobotNode->getRobot()->setGlobalPose(Eigen::Matrix4f::Identity());
+
+            Eigen::Isometry3f baseRobotNodePose = Eigen::Isometry3f::Identity();
+            baseRobotNodePose.linear() = Eigen::AngleAxisf(baseOrientation, Eigen::Vector3f::UnitZ()).toRotationMatrix();
+            baseRobotNode->getRobot()->setGlobalPose(baseRobotNodePose.matrix());
         }
 
         WorkspaceRepresentation::WorkspaceCut2DPtr cutXY = ws->createCut(graspGlobal, discretizeSize, false);
