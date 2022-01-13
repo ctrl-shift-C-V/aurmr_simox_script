@@ -130,6 +130,10 @@ namespace VirtualRobot
                 addColorKey(0, 0, 0, 0, 0.0f);
                 addColorKey(0, 0, 255, 255, 1.0f);
                 break;
+            case eGray:
+                addColorKey(255, 255, 255, 255, 0.0f);
+                addColorKey(0, 0, 0, 255, 1.0f);
+                break;
         }
 
         sort();

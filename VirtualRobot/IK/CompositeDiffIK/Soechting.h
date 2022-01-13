@@ -64,10 +64,12 @@ struct Soechting
             soechtingTarget(0) *= -1;
         }
 
+        // spherical coordinates: distance, azimuth, elevation
         const float R = soechtingTarget.norm();
         const float Chi = MathTools::rad2deg(std::atan2(soechtingTarget.x(), soechtingTarget.y()));
         const float Psi = MathTools::rad2deg(std::atan2(soechtingTarget.z(), soechtingTarget.head<2>().norm()));
 
+        //  Kondo, Koichi. “Inverse Kinematics of a Human Arm,” n.d., 16.
         SoechtingAngles sa;
         if (accuratePointing) {
             // Angles derived from accurate pointing

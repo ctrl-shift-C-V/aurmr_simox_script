@@ -36,7 +36,7 @@ namespace VirtualRobot
 
         enum type
         {
-            eIntensity, eHot, eRed, eGreen, eBlue, eHotAlpha, eRedAlpha, eBlueAlpha, eGreenAlpha
+            eIntensity, eHot, eRed, eGreen, eBlue, eHotAlpha, eRedAlpha, eBlueAlpha, eGreenAlpha, eGray
         };
         ColorMap(type t);
 

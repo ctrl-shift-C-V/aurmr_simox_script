@@ -8,6 +8,8 @@ Constraint::Constraint(const RobotNodeSetPtr& nodeSet) :
     lastLastError(-1),
     optimizationFunctionFactor(1)
 {
+    name ="Constraint";
+    initialized = true;
 }
 
 void Constraint::initialize()

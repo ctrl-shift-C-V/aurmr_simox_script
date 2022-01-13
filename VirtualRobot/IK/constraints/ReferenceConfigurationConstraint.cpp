@@ -36,6 +36,7 @@ ReferenceConfigurationConstraint::ReferenceConfigurationConstraint(const RobotPt
     // Reference configuration is considered a soft constraint
     addOptimizationFunction(0, true);
 
+    name = "ReferenceConfigurationConstraint";
     initialized = true;
 }
 
@@ -49,6 +50,8 @@ ReferenceConfigurationConstraint::ReferenceConfigurationConstraint(const RobotPt
 
     // Joint limit avoidance is considered a soft constraint
     addOptimizationFunction(0, true);
+
+    name = "ReferenceConfigurationConstraint";
 
     initialized = true;
 }

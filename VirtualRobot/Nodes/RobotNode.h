@@ -206,6 +206,21 @@ namespace VirtualRobot
         float getJointLimitLo();
         float getJointLimitHi();
 
+        struct JointLimits
+        {
+            float low;
+            float high;
+        };
+
+        JointLimits getJointLimits()
+        {
+            return JointLimits
+            {
+                .low = getJointLimitLo(),
+                .high = getJointLimitHi()
+            };
+        }
+
         /*!
             Set joint limits [rad].
         */
@@ -463,4 +478,3 @@ namespace VirtualRobot
     };
 
 } // namespace VirtualRobot
-

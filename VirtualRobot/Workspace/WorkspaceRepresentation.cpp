@@ -1124,8 +1124,11 @@ namespace VirtualRobot
         }
     }
 
-    void WorkspaceRepresentation::initialize(RobotNodeSetPtr nodeSet, float discretizeStepTranslation, float discretizeStepRotation,
-            float minBounds[6], float maxBounds[6],
+    void WorkspaceRepresentation::initialize(RobotNodeSetPtr nodeSet,
+                                             float discretizeStepTranslation,
+                                             float discretizeStepRotation,
+                                             const float minBounds[6],
+                                             const float maxBounds[6],
             SceneObjectSetPtr staticCollisionModel,
             SceneObjectSetPtr dynamicCollisionModel,
             RobotNodePtr baseNode /*= RobotNodePtr()*/,

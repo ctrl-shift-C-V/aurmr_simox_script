@@ -53,6 +53,8 @@ PoseConstraint::PoseConstraint(const RobotPtr& robot, const RobotNodeSetPtr& nod
     addOptimizationFunction(ORIENTATION_COMPONENT);
 
     initialized = true;
+
+    name = "PoseConstraint";
 }
 
 void PoseConstraint::setVisualization(const SceneObjectSetPtr& visualizationNodeSet)

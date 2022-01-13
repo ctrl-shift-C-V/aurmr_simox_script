@@ -16,6 +16,7 @@ namespace VirtualRobot
     {
         nodes = rns->getAllRobotNodes();
         initialized = true; // no need of spiecial initialization
+        name = "JointLimitAvoidanceJacobi";
         VR_ASSERT(nodes.size() > 0);
     }
 

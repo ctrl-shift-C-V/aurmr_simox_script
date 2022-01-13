@@ -3,6 +3,7 @@
 #include "VirtualRobot/EndEffector/EndEffector.h"
 #include "VirtualRobot/Workspace/Reachability.h"
 #include "VirtualRobot/Workspace/Manipulability.h"
+#include "VirtualRobot/Workspace/NaturalPosture.h"
 #include "VirtualRobot/IK/PoseQualityExtendedManipulability.h"
 #include "VirtualRobot/XML/RobotIO.h"
 #include "VirtualRobot/Visualization/CoinVisualization/CoinVisualizationFactory.h"
@@ -582,7 +583,11 @@ void reachabilityWindow::createReach()
 
         std::string measure = std::string(UICreate.comboBoxQualityMeasure->currentText().toLatin1());
 
-        if (measure != "Reachability")
+        if(measure == "NaturalPosture")
+        {
+            reachSpace.reset(new NaturalPosture(robot));
+        }
+        else if (measure != "Reachability")
         {
             reachSpace.reset(new Manipulability(robot));
             ManipulabilityPtr manipSpace = std::dynamic_pointer_cast<Manipulability>(reachSpace);

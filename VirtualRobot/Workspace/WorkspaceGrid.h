@@ -44,7 +44,7 @@ namespace VirtualRobot
         /*!
             Setup the 2D grid with given extends and discretization parameter.
         */
-        WorkspaceGrid(float minX, float maxX, float minY, float maxY, float discretizeSize);
+        WorkspaceGrid(float minX, float maxX, float minY, float maxY, float discretizeSize, bool checkNeighbors = false);
         ~WorkspaceGrid();
 
         //! returns entry of position in x/y plane (in world coords)
@@ -90,8 +90,8 @@ namespace VirtualRobot
         /*!
             Fill the grid with inverse reachability data generated from grasp g and object o.
         */
-        bool fillGridData(WorkspaceRepresentationPtr ws, ManipulationObjectPtr o, GraspPtr g, RobotNodePtr baseRobotNode);
-        bool fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode);
+        bool fillGridData(WorkspaceRepresentationPtr ws, ManipulationObjectPtr o, GraspPtr g, RobotNodePtr baseRobotNode, float baseOrientation = 0);
+        bool fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode, float baseOrientation = 0);
 
 
         /*!
@@ -104,11 +104,44 @@ namespace VirtualRobot
         */
         void getExtends(float& storeMinX, float& storeMaxX, float& storeMinY, float& storeMaxY);
 
+        struct Extends
+        {
+            float minX;
+            float maxX;
+
+            float minY;
+            float maxY;
+        };
+
+        Extends getExtends() const
+        {
+            return Extends
+            {
+                .minX = minX,
+                .maxX = maxX,
+                .minY = minY,
+                .maxY = maxY
+            };
+        }
+
 
         /*!
             Number of cells in x and y
         */
         void getCells(int& storeCellsX, int& storeCellsY);
+
+        struct Size
+        {
+            int x,y;
+        };
+
+        Size getCells() const
+        {
+            return Size{.x = gridSizeX, .y = gridSizeY};
+        }
+
+
+        Eigen::Vector2f getPosition(int cellX, int cellY) const;
 
 
         float getDiscretizeSize() const;
@@ -143,6 +176,9 @@ namespace VirtualRobot
 
         int* data;                              // stores the quality values
         std::vector<GraspPtr>* graspLink;       // points to list of all reachable grasps
+
+
+        const bool checkNeighbors;
 
     };
 

@@ -55,6 +55,7 @@ TSRConstraint::TSRConstraint(const RobotPtr& robot, const RobotNodeSetPtr& nodeS
     addOptimizationFunction(POSITION_COMPONENT);
     addOptimizationFunction(ORIENTATION_COMPONENT);
 
+    name = "TSRConstraint";
     initialized = true;
 }
 
