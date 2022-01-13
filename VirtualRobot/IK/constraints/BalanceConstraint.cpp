@@ -142,6 +142,7 @@ BalanceConstraint::BalanceConstraint(const RobotPtr& robot, const RobotNodeSetPt
     Constraint(joints)
 {
     initialize(robot, joints, bodies, contactNodes, tolerance, minimumStability, maxSupportDistance, supportPolygonUpdates, considerCoMHeight);
+    name = "BalanceConstraint";
 }
 
 BalanceConstraint::BalanceConstraint(const RobotPtr& robot, const RobotNodeSetPtr& joints, const RobotNodeSetPtr& bodies, const SupportPolygonPtr& supportPolygon,
@@ -149,6 +150,8 @@ BalanceConstraint::BalanceConstraint(const RobotPtr& robot, const RobotNodeSetPt
     Constraint(joints)
 {
     initialize(robot, joints, bodies, supportPolygon->getContactModels(), tolerance, minimumStability, maxSupportDistance, supportPolygonUpdates, considerCoMHeight);
+    name = "BalanceConstraint";
+
 }
 
 void BalanceConstraint::initialize(const RobotPtr& robot, const RobotNodeSetPtr& joints, const RobotNodeSetPtr& bodies, const SceneObjectSetPtr& contactNodes,
@@ -321,4 +324,3 @@ SupportPolygonPtr BalanceConstraint::getSupportPolygon()
 {
     return supportPolygon;
 }
-

@@ -44,6 +44,8 @@ namespace VirtualRobot
         positionMaxStep = -1.0f;
 
         tmpUpdateErrorDelta.resize(6);
+
+        name = "DifferentialIK";
     }
 
 
