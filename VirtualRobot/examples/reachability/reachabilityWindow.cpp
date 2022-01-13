@@ -582,7 +582,11 @@ void reachabilityWindow::createReach()
 
         std::string measure = std::string(UICreate.comboBoxQualityMeasure->currentText().toLatin1());
 
-        if (measure != "Reachability")
+        if(measure == "NaturalPosture")
+        {
+            reachSpace.reset(new NaturalPosture(robot));
+        }
+        else if (measure != "Reachability")
         {
             reachSpace.reset(new Manipulability(robot));
             ManipulabilityPtr manipSpace = std::dynamic_pointer_cast<Manipulability>(reachSpace);
