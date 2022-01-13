@@ -15,7 +15,7 @@ namespace VirtualRobot
     using std::endl;
 
     JacobiProvider::JacobiProvider(RobotNodeSetPtr rns, InverseJacobiMethod invJacMethod) :
-        name("JacobiProvvider"), rns(rns), inverseMethod(invJacMethod)
+        name("JacobiProvider"), rns(rns), inverseMethod(invJacMethod)
     {
         initialized = false;
         dampedSvdLambda = 0.1;
