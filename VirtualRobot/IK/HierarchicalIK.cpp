@@ -75,6 +75,8 @@ namespace VirtualRobot
             }
         }
 
+        VR_ASSERT(jacobies.size() == jacDefs.size());
+
         // generate hierarchical gradient descent
 
         // init with first jacobi
