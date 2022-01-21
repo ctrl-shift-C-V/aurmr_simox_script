@@ -12,6 +12,7 @@
 #include <VirtualRobot/Workspace/Manipulability.h>
 #include <VirtualRobot/IK/PoseQualityExtendedManipulability.h>
 
+#include "VirtualRobot/Workspace/NaturalPosture.h"
 #include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/Qt/SoQt.h>
@@ -76,6 +77,8 @@ void endlessExtend(std::string robotFile, std::string reachFile, int steps, unsi
     // try manipulability file
     try
     {
+        VR_INFO << "Trying to load natural manipulability map" << std::endl;
+
         reachSpace.reset(new Manipulability(robot));
         reachSpace->load(reachFile);
     }
@@ -92,6 +95,8 @@ void endlessExtend(std::string robotFile, std::string reachFile, int steps, unsi
 
         try
         {
+            VR_INFO << "Trying to load natural reachability map" << std::endl;
+
             reachSpace.reset(new Reachability(robot));
             reachSpace->load(reachFile);
         }
@@ -100,6 +105,25 @@ void endlessExtend(std::string robotFile, std::string reachFile, int steps, unsi
             loadOK = false;
         }
     }
+
+    if (!loadOK)
+    {
+        loadOK = true;
+
+        try
+        {
+            VR_INFO << "Trying to load natural posture reachability map" << std::endl;
+
+            reachSpace.reset(new NaturalPosture(robot));
+            reachSpace->load(reachFile);
+        }
+        catch (...)
+        {
+            loadOK = false;
+            VR_ERROR << "Failed." << std::endl;
+        }
+    }
+
 
     if (!loadOK)
     {

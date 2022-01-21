@@ -717,6 +717,24 @@ void reachabilityWindow::loadReachFile(std::string filename)
         }
     }
 
+     if (!loadOK)
+    {
+        loadOK = true;
+
+        try
+        {
+            VR_INFO << "Trying to load natural posture reachability map" << std::endl;
+
+            reachSpace.reset(new NaturalPosture(robot));
+            reachSpace->load(reachFile);
+        }
+        catch (...)
+        {
+            loadOK = false;
+            VR_ERROR << "Failed." << std::endl;
+        }
+    }
+
     if (!loadOK)
     {
         VR_ERROR << "Could not load reach/manip file" << std::endl;
