@@ -9,8 +9,8 @@
 #include <cmath>
 #include <iostream>
 #include <algorithm>
-#include <Eigen/src/Geometry/AngleAxis.h>
-#include <Eigen/src/Geometry/Transform.h>
+
+
 using namespace std;
 
 #define MIN_VALUES_STORE_GRASPS 100
@@ -564,4 +564,3 @@ namespace VirtualRobot
     }
 
 } //  namespace
-

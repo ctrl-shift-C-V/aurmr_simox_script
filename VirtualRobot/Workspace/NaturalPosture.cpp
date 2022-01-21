@@ -6,7 +6,7 @@
 #include <fstream>
 #include <stdexcept>
 
-#include <Eigen/src/Core/Matrix.h>
+
 
 #include <VirtualRobot/IK/CompositeDiffIK/Soechting.h>
 #include <VirtualRobot/IK/CompositeDiffIK/SoechtingNullspaceGradient.h>
