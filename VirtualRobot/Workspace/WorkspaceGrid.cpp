@@ -446,7 +446,7 @@ namespace VirtualRobot
         maxY = y + gridExtendY / 2.0f;
     }
 
-    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, ManipulationObjectPtr o, GraspPtr g, RobotNodePtr baseRobotNode, const float baseOrientation)
+    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, ManipulationObjectPtr o, GraspPtr g, RobotNodePtr baseRobotNode, const float baseOrientation, const float maxAngle)
     {
         if (!ws || !o || !g)
         {
@@ -455,10 +455,10 @@ namespace VirtualRobot
 
         Eigen::Matrix4f graspGlobal = g->getTcpPoseGlobal(o->getGlobalPose());
 
-        return fillGridData(ws, graspGlobal, g, baseRobotNode, baseOrientation);
+        return fillGridData(ws, graspGlobal, g, baseRobotNode, baseOrientation, maxAngle);
     }
 
-    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode, const float baseOrientation)
+    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode, const float baseOrientation, const float maxAngle)
     {
         if (!ws)
         {
@@ -475,12 +475,13 @@ namespace VirtualRobot
 
             Eigen::Isometry3f baseRobotNodePose = Eigen::Isometry3f::Identity();
             baseRobotNodePose.linear() = Eigen::AngleAxisf(baseOrientation, Eigen::Vector3f::UnitZ()).toRotationMatrix();
+            
             baseRobotNode->getRobot()->setGlobalPose(baseRobotNodePose.matrix());
         }
 
         WorkspaceRepresentation::WorkspaceCut2DPtr cutXY = ws->createCut(graspGlobal, discretizeSize, false);
 
-        std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr> transformations = ws->createCutTransformations(cutXY, baseRobotNode);
+        std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr> transformations = ws->createCutTransformations(cutXY, baseRobotNode, maxAngle);
         setEntries(transformations, graspGlobal, g);
         if (baseRobotNode)
         {

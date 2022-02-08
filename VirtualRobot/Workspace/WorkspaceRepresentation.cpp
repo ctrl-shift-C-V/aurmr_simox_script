@@ -13,6 +13,7 @@
 #include "../ManipulationObject.h"
 #include "../Grasping/Grasp.h"
 #include "../Grasping/GraspSet.h"
+#include "SimoxUtility/math/periodic/periodic_clamp.h"
 #include <VirtualRobot/Random.h>
 #include <fstream>
 #include <cmath>
@@ -1792,7 +1793,7 @@ namespace VirtualRobot
         return true;
     }
 
-    std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr> WorkspaceRepresentation::createCutTransformations(WorkspaceRepresentation::WorkspaceCut2DPtr cutXY, RobotNodePtr referenceNode)
+    std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr> WorkspaceRepresentation::createCutTransformations(WorkspaceRepresentation::WorkspaceCut2DPtr cutXY, RobotNodePtr referenceNode, const float maxAngle)
     {
         THROW_VR_EXCEPTION_IF(!cutXY, "NULL data");
 
@@ -1828,7 +1829,15 @@ namespace VirtualRobot
                         tp->transformation = referenceNode->toLocalCoordinateSystem(tp->transformation);
                     }
 
-                    result.push_back(tp);
+                    Eigen::Isometry3f pose(tp->transformation);
+
+                    float yaw = std::atan2(pose.translation().y(), pose.translation().x()) - M_PI_2f32;
+                    yaw = simox::math::periodic_clamp(yaw, -M_PIf32, M_PIf32);
+
+                    if (yaw < maxAngle and yaw > -maxAngle)
+                    {
+                        result.push_back(tp);
+                    }
                 }
             }
         }
