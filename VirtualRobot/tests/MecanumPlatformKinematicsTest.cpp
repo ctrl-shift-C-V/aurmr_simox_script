@@ -28,7 +28,7 @@
 
 #include <VirtualRobot/IK/platform/MecanumPlatformKinematics.h>
 
-#include <Eigen/src/Core/IO.h>
+
 
 BOOST_AUTO_TEST_SUITE(MecanumPlatformKinematics)
 

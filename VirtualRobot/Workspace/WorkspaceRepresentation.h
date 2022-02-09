@@ -28,6 +28,7 @@
 #include "../MathTools.h"
 #include "../XML/FileIO.h"
 
+#include <cmath>
 #include <vector>
 
 #include <Eigen/Core>
@@ -325,7 +326,7 @@ namespace VirtualRobot
             Build all transformations from referenceNode to cutXY data.h Only entries>0 are considered.
             If referenceNode is set, the transformations are given in the corresponding coordinate system.
         */
-        std::vector<WorkspaceCut2DTransformationPtr> createCutTransformations(WorkspaceCut2DPtr cutXY, RobotNodePtr referenceNode = RobotNodePtr());
+        std::vector<WorkspaceCut2DTransformationPtr> createCutTransformations(WorkspaceCut2DPtr cutXY, RobotNodePtr referenceNode = RobotNodePtr(), float maxAngle = M_PIf32);
 
         /*!
             Computes the axis aligned bounding box of this object in global coordinate system.
@@ -495,4 +496,3 @@ namespace VirtualRobot
     };
 
 } // namespace VirtualRobot
-

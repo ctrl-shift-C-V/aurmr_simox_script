@@ -6,7 +6,7 @@
 #include <fstream>
 #include <stdexcept>
 
-#include <Eigen/src/Core/Matrix.h>
+
 
 #include <VirtualRobot/IK/CompositeDiffIK/Soechting.h>
 #include <VirtualRobot/IK/CompositeDiffIK/SoechtingNullspaceGradient.h>
@@ -46,7 +46,6 @@ namespace VirtualRobot
 
         if (robot->getName() == "Armar6" && nodeSet->getName() == "RightArm")
         {
-            // std::cout << "Adding soechting nullspace" << std::endl;
             VirtualRobot::SoechtingNullspaceGradientWithWrist::ArmJointsWithWrist armjoints;
             armjoints.clavicula      = robot->getRobotNode("ArmR1_Cla1");
             armjoints.shoulder1      = robot->getRobotNode("ArmR2_Sho1");
@@ -60,11 +59,9 @@ namespace VirtualRobot
             soechtingNullspaceGradient.reset(new VirtualRobot::SoechtingNullspaceGradientWithWrist(
                 target, "ArmR2_Sho1", VirtualRobot::Soechting::ArmType::Right, armjoints));
             soechtingNullspaceGradient->kP = 1.0;
-            // ik->addNullspaceGradient(gradient);
         }
         else if (robot->getName() == "Armar6" && nodeSet->getName() == "LeftArm")
         {
-            // std::cout << "Adding soechting nullspace" << std::endl;
             VirtualRobot::SoechtingNullspaceGradientWithWrist::ArmJointsWithWrist armjoints;
             armjoints.clavicula      = robot->getRobotNode("ArmL1_Cla1");
             armjoints.shoulder1      = robot->getRobotNode("ArmL2_Sho1");
@@ -78,8 +75,6 @@ namespace VirtualRobot
             soechtingNullspaceGradient.reset(new VirtualRobot::SoechtingNullspaceGradientWithWrist(
                 target, "ArmL2_Sho1", VirtualRobot::Soechting::ArmType::Left, armjoints));
             soechtingNullspaceGradient->kP = 1.0;
-
-            // ik->addNullspaceGradient(gradient);
         }
         else
         {
@@ -89,33 +84,16 @@ namespace VirtualRobot
         const auto weightedDiff = soechtingNullspaceGradient->getGradient(params, -1);
         const float e1          = weightedDiff.squaredNorm();
 
-        // auto wristAdduction = nodeSet->getNode("ArmR7_Wri1");
-        // auto wristExtension = nodeSet->getNode("ArmR8_Wri2");
-
-        // const Eigen::Vector2f wristTarget{M_PI_2f32 + MathTools::deg2rad(10),
-        //                                   M_PI_2f32 - MathTools::deg2rad(20)};
-        // const Eigen::Vector2f wristJointValues{wristAdduction->getJointValue(),
-        //                                        wristExtension->getJointValue()};
-
-        // set(wristAdduction, 1.F, M_PI_2f32 + MathTools::deg2rad(10));
-        // set(wristExtension, 1.F, M_PI_2f32 - MathTools::deg2rad(20));
-
-        // const float e2 = (wristTarget - wristJointValues).squaredNorm();
-
         return std::sqrt(e1);
     }
 
     void NaturalPosture::addPose(const Eigen::Matrix4f& pose)
     {
-        // VR_INFO << "Adding pose";
-
         Eigen::Matrix4f p = pose;
         toLocal(p);
 
-        float x[6];
-
-        matrix2Vector(p, x);
-        //MathTools::eigen4f2rpy(p,x);
+        std::array<float, 6> x;
+        matrix2Vector(p, x.data());
 
         // check for achieved values
         for (int i = 0; i < 6; i++)
@@ -132,64 +110,38 @@ namespace VirtualRobot
         }
 
         // get voxels
-        unsigned int v[6];
-
-        if (getVoxelFromPose(x, v))
+        std::array<unsigned int, 6> v;
+        if (getVoxelFromPose(x.data(), v.data()))
         {
+            // value corresponds to the norm of the gradient => costs
+            const float value = evaluate();
 
-            // float m   = getCurrentManipulability(qualMeasure, selfDistSt, selfDistDyn);
-            // float mSc = m / maxManip;
-
-            // if (mSc > 1)
-            // {
-            //     if (mSc > 1.05)
-            //     {
-            //         VR_WARNING << "Manipulability is larger than max value. Current Manip:" << m << ", maxManip:" << maxManip << ", percent:" << mSc << std::endl;
-            //     }
-
-            //     mSc = 1.0f;
-            // }
-
-            // if (m < 0)
-            // {
-            //     mSc = 0;
-            // }
-
-            // unsigned char e = (unsigned char)(mSc * (float)UCHAR_MAX + 0.5f);
-
-            //cout<<"m = "<<m<<endl;
-            //cout<<"mSc = "<<mSc<<endl;
-            //cout<<"e = "<<int(e)<<endl;
-
-            const float ee = evaluate();
-
-            // VR_INFO << "evaluate: " << ee;
-
-            const float mSc = std::min(ee / 10, 1.0F);
-
-            if (mSc > 1.0)
+            // scale and clip costs
+            const float scaledCosts = value / 10 * 6;
+            if (scaledCosts > 1.0)
             {
-                VR_WARNING << "mSc too large " << mSc;
+                VR_WARNING << "Costs too large: " << scaledCosts;
             }
 
-            // // add at least 1, since the pose is reachable
-            // if (e == 0)
-            // {
-            //     e = 1;
-            // }
+            const float costs = std::clamp(scaledCosts, 0.F, 1.0F); // [0,1]
 
-            const auto e = static_cast<unsigned char>(mSc * static_cast<float>(UCHAR_MAX) + 0.5F);
+            // convert costs to objective / quality measure (similar to manipulability; the higher, the better)
+            const float objective = 1 - costs; // [0,1]
 
-            const auto oldVal = data->get(v);
-            if (oldVal == 0) // if unset
+            // convert to fixed size type
+            const auto cellValue = static_cast<unsigned char>(objective * static_cast<float>(UCHAR_MAX) + 0.5F);
+
+            // update grid
+            const auto oldCellValue = data->get(v.data());
+            if (oldCellValue == 0) // if unset
             {
-                data->setDatum(v, e);
+                data->setDatum(v.data(), cellValue);
             }
             else
             {
-                if (e < oldVal)
+                if (cellValue < oldCellValue)
                 {
-                    data->setDatum(v, e);
+                    data->setDatum(v.data(), cellValue);
                 }
             }
         }

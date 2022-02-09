@@ -29,7 +29,7 @@
 
 #include "MathTools.h"
 
-// #include <Eigen/src/Core/IO.h>
+// 
 
 #include <VirtualRobot/IK/platform/OmniWheelPlatformKinematics.h>
 // #include <VirtualRobot/VirtualRobotTest.h>

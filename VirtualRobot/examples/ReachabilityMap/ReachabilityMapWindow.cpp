@@ -16,6 +16,7 @@
 #include <cmath>
 
 #include "Inventor/actions/SoLineHighlightRenderAction.h"
+#include "VirtualRobot/Workspace/NaturalPosture.h"
 #include <Inventor/nodes/SoShapeHints.h>
 #include <Inventor/nodes/SoLightModel.h>
 
@@ -650,6 +651,23 @@ void ReachabilityMapWindow::loadReachFile(std::string filename)
             success = true;
 
             VR_INFO << "Map '" << reachFile << "' loaded as Reachability map";
+        }
+        catch (...)
+        {
+            VR_ERROR << "Coulkd not load reachability file..." << std::endl;
+        }
+    }
+
+    // 3rd try to load as natural posture file
+    if (!success)
+    {
+        try
+        {
+            reachSpace.reset(new NaturalPosture(robot));
+            reachSpace->load(reachFile);
+            success = true;
+
+            VR_INFO << "Map '" << reachFile << "' loaded as natural posture map";
         }
         catch (...)
         {

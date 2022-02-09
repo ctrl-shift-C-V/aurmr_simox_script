@@ -1,7 +1,7 @@
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
-#include <Eigen/src/Core/Matrix.h>
+
 
 #include "MathTools.h"
 #include "VirtualRobot.h"
