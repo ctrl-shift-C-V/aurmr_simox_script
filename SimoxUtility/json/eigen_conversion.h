@@ -63,7 +63,19 @@ namespace Eigen
     template <typename Derived>
     void from_json(const nlohmann::json& j, Eigen::QuaternionBase<Derived>& quat);
 
+    // Eigen::Transform (Isometry, Affine, ...)
 
+    template <typename T, int N, int Type>
+    void to_json(nlohmann::json& j, const Eigen::Transform<T,N,Type>& transform)
+    {
+        to_json(j, transform.matrix());
+    }
+
+    template <typename T, int N, int Type>
+    void from_json(const nlohmann::json& j, Eigen::Transform<T,N,Type>& transform)
+    {
+        from_json(j, transform.matrix());
+    }
 
     // IMPLEMENTATION
 
