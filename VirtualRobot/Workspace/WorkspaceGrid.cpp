@@ -17,6 +17,7 @@ using namespace std;
 
 namespace VirtualRobot
 {
+    constexpr int INVALID_VALUE = -1;
 
     WorkspaceGrid::WorkspaceGrid(float fMinX, float fMaxX, float fMinY, float fMaxY, float fDiscretizeSize, const bool checkNeighbors) 
         : minX(fMinX), maxX(fMaxX), minY(fMinY), maxY(fMaxY), discretizeSize(fDiscretizeSize), data(nullptr), checkNeighbors(checkNeighbors)
@@ -40,7 +41,7 @@ namespace VirtualRobot
         VR_INFO << ": creating grid with " << gridSizeX << "x" << gridSizeY << " = " << gridSizeX* gridSizeY << " entries" << std::endl;
         data = new int[gridSizeX * gridSizeY];
         graspLink = new std::vector<GraspPtr>[gridSizeX * gridSizeY];
-        memset(data, 0, sizeof(int)*gridSizeX * gridSizeY);
+        memset(data, INVALID_VALUE, sizeof(int)*gridSizeX * gridSizeY);
     }
 
     WorkspaceGrid::~WorkspaceGrid()
@@ -53,14 +54,14 @@ namespace VirtualRobot
     {
         delete []graspLink;
         graspLink = new std::vector<GraspPtr>[gridSizeX * gridSizeY];
-        memset(data, 0, sizeof(int)*gridSizeX * gridSizeY);
+        memset(data, INVALID_VALUE, sizeof(int)*gridSizeX * gridSizeY);
     }
 
     int WorkspaceGrid::getEntry(float x, float y)
     {
         if (!data)
         {
-            return 0;
+            return INVALID_VALUE;
         }
 
         int nPosX = (int)(((x - minX) / gridExtendX) * gridSizeX);
@@ -69,7 +70,7 @@ namespace VirtualRobot
         if (nPosX < 0 || nPosY < 0 || nPosX >= gridSizeX || nPosY >= gridSizeY)
         {
             //cout << __PRETTY_FUNCTION__ << " internal error: " << fX << "," << fY << std::endl;
-            return 0;
+            return INVALID_VALUE;
         }
 
         return data[getDataPos(nPosX, nPosY)];
@@ -131,13 +132,13 @@ namespace VirtualRobot
     {
         if (!data)
         {
-            return 0;
+            return INVALID_VALUE;
         }
 
         if (cellX < 0 || cellY < 0 || cellX >= gridSizeX || cellY >= gridSizeY)
         {
             //cout << __PRETTY_FUNCTION__ << " internal error: " << nX << "," << nY << std::endl;
-            return 0;
+            return INVALID_VALUE;
         }
 
         return data[getDataPos(cellX, cellY)];
@@ -201,7 +202,7 @@ namespace VirtualRobot
         setCellEntry(nPosX, nPosY, value, grasp);
     }
 
-    void WorkspaceGrid::setCellEntry(int cellX, int cellY, int value, GraspPtr grasp)
+    void WorkspaceGrid::setCellEntry(int cellX, int cellY, const int value, GraspPtr grasp)
     {
         if (!data)
         {
@@ -228,6 +229,13 @@ namespace VirtualRobot
 
     void WorkspaceGrid::checkAndReplaceValue(int& val, int newVal)
     {
+        // check if cell is uninitialized
+        if(val == INVALID_VALUE)
+        {
+            val = newVal;
+            return;
+        }
+
         switch(mode)
         {
             case CellUpdateMode::MIN:
@@ -273,10 +281,10 @@ namespace VirtualRobot
             if (nPosX > 0 && nPosX < (gridSizeX - 1) && nPosY > 0 && nPosY < (gridSizeY - 1))
             {
                 setCellEntry(nPosX - 1, nPosY, value, grasp);
-            setCellEntry(nPosX - 1, nPosY - 1, value, grasp);
-            setCellEntry(nPosX - 1, nPosY + 1, value, grasp);
-            setCellEntry(nPosX, nPosY - 1, value, grasp);
-            setCellEntry(nPosX, nPosY + 1, value, grasp);
+                setCellEntry(nPosX - 1, nPosY - 1, value, grasp);
+                setCellEntry(nPosX - 1, nPosY + 1, value, grasp);
+                setCellEntry(nPosX, nPosY - 1, value, grasp);
+                setCellEntry(nPosX, nPosY + 1, value, grasp);
                 setCellEntry(nPosX + 1, nPosY - 1, value, grasp);
                 setCellEntry(nPosX + 1, nPosY, value, grasp);
                 setCellEntry(nPosX + 1, nPosY + 1, value, grasp);
