@@ -214,17 +214,10 @@ namespace VirtualRobot
             return;
         }
 
-        if (data[getDataPos(cellX, cellY)] <= value)
-        {
-            data[getDataPos(cellX, cellY)] = value;
-
-
-            if (grasp && find(graspLink[getDataPos(cellX, cellY)].begin(), graspLink[getDataPos(cellX, cellY)].end(), grasp) == graspLink[getDataPos(cellX, cellY)].end())
-            {
-                graspLink[getDataPos(cellX, cellY)].push_back(grasp);
-            }
-        }
-        else if (value >= MIN_VALUES_STORE_GRASPS)
+        int& lastVal = data[getDataPos(cellX, cellY)];
+        checkAndReplaceValue(lastVal, value);
+        
+        if (value >= MIN_VALUES_STORE_GRASPS)
         {
             if (grasp && find(graspLink[getDataPos(cellX, cellY)].begin(), graspLink[getDataPos(cellX, cellY)].end(), grasp) == graspLink[getDataPos(cellX, cellY)].end())
             {
@@ -232,6 +225,20 @@ namespace VirtualRobot
             }
         }
     }
+
+    void WorkspaceGrid::checkAndReplaceValue(int& val, int newVal)
+    {
+        switch(mode)
+        {
+            case CellUpdateMode::MIN:
+                val = std::min(val, newVal);
+                break;
+            case CellUpdateMode::MAX:
+                val = std::max(val, newVal);
+                break;
+        }
+    }
+
 
     Eigen::Vector2f WorkspaceGrid::getPosition(int cellX, int cellY) const
     {
