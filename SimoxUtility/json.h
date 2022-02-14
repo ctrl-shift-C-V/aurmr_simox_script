@@ -5,4 +5,5 @@
 #include "json/converters.h"
 #include "json/eigen_conversion.h"
 #include "json/io.h"
+#include "json/json.h"
 #include "json/util.h"

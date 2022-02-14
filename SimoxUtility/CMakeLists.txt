@@ -99,6 +99,7 @@ SET(INCLUDES
     json/eigen_conversion.h
     json/io.h
     json/json.hpp
+    json/json.h
     json/util.h
 
 
