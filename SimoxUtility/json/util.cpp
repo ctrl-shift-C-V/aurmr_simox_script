@@ -5,7 +5,8 @@
 
 namespace simox
 {
-    nlohmann::json::const_reference json::at_any_key(const nlohmann::json& j, const std::vector<std::string>& keys)
+    json::json::const_reference
+    json::at_any_key(const json& j, const std::vector<std::string>& keys)
     {
         for (const std::string& key : keys)
         {

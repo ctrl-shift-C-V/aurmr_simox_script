@@ -24,6 +24,7 @@ SET(SOURCES
     filesystem/list_directory.cpp
 
     json/eigen_conversion.cpp
+    json/error.cpp
     json/io.cpp
     json/converters.cpp
     json/util.cpp
@@ -97,8 +98,10 @@ SET(INCLUDES
     json.h
     json/converters.h
     json/eigen_conversion.h
+    json/error.h
     json/io.h
     json/json.hpp
+    json/json.h
     json/util.h
 
 

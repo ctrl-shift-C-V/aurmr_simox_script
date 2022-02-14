@@ -11,6 +11,7 @@
 #include <filesystem>
 
 #include <SimoxUtility/json/io.h>
+#include <SimoxUtility/json/error.h>
 
 
 namespace fs = std::filesystem;
@@ -19,7 +20,7 @@ struct Fixture
 {
     const std::string FILENAME = "JsonIOTest.json";
 
-    nlohmann::json testj;
+    simox::json::json testj;
 
 
     Fixture()
@@ -56,7 +57,7 @@ BOOST_AUTO_TEST_CASE(test_read_json_existent)
     BOOST_CHECK(fs::exists(FILENAME));
 
     // Test reading.
-    const nlohmann::json j = nlohmann::read_json(FILENAME);
+    const simox::json::json j = simox::json::read(FILENAME);
 
     BOOST_CHECK_EQUAL(j, testj);
     BOOST_CHECK_EQUAL(j.at("s").get<std::string>(), testj.at("s").get<std::string>());
@@ -70,8 +71,8 @@ BOOST_AUTO_TEST_CASE(test_read_json_nonexistent)
     BOOST_CHECK(!fs::exists(FILENAME));
 
     // Test reading.
-    nlohmann::json j;
-    BOOST_CHECK_THROW(j = nlohmann::read_json(FILENAME), std::ios_base::failure);
+    simox::json::json j;
+    BOOST_CHECK_THROW(j = simox::json::read(FILENAME), simox::json::error::IOError);
 }
 
 
@@ -81,7 +82,7 @@ BOOST_AUTO_TEST_CASE(test_write_json_valid)
     BOOST_CHECK(!fs::exists(FILENAME));
 
     // Test writing.
-    nlohmann::write_json(FILENAME, testj);
+    simox::json::write(FILENAME, testj);
     // Check that something has been written.
     BOOST_CHECK(fs::exists(FILENAME));
 }
@@ -96,7 +97,7 @@ BOOST_AUTO_TEST_CASE(test_write_json_invalid)
     BOOST_CHECK(fs::exists(FILENAME));
 
     // Test writing.
-    BOOST_CHECK_THROW(nlohmann::write_json(FILENAME, testj);, std::ios_base::failure);
+    BOOST_CHECK_THROW(simox::json::write(FILENAME, testj), simox::json::error::IOError);
 
     // Clean up.
     fs::remove(FILENAME);
@@ -107,14 +108,14 @@ BOOST_AUTO_TEST_CASE(test_write_json_invalid)
 BOOST_AUTO_TEST_CASE(test_read_after_write_json)
 {
     // Ensure file does not exist.
-    BOOST_CHECK(!fs::exists(FILENAME));
+    BOOST_CHECK(not fs::exists(FILENAME));
 
     // Test writing.
-    nlohmann::write_json(FILENAME, testj);
+    simox::json::write(FILENAME, testj);
 
     // Test reading.
-    nlohmann::json j;
-    BOOST_CHECK_NO_THROW(j = nlohmann::read_json(FILENAME));
+    simox::json::json j;
+    BOOST_CHECK_NO_THROW(j = simox::json::read(FILENAME));
 
     BOOST_CHECK_EQUAL(j, testj);
     BOOST_CHECK_EQUAL(j.at("s").get<std::string>(), testj.at("s").get<std::string>());
