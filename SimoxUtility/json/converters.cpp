@@ -7,11 +7,11 @@ namespace simox
 {
     Eigen::Matrix4f json::posquat2eigen4f(const std::string& str)
     {
-        return posquat2eigen4f(::nlohmann::json::parse(str));
+        return posquat2eigen4f(::simox::json::json::parse(str));
     }
     Eigen::Matrix4f json::posquat2eigen4f(const char* str)
     {
-        return posquat2eigen4f(::nlohmann::json::parse(str));
+        return posquat2eigen4f(::simox::json::json::parse(str));
     }
     Eigen::Matrix4f json::posquat2eigen4f(const nlohmann::json& j)
     {
@@ -28,11 +28,11 @@ namespace simox
 
     std::vector<Eigen::Matrix4f> json::posquatArray2eigen4fVector(const std::string& str)
     {
-        return posquatArray2eigen4fVector(::nlohmann::json::parse(str));
+        return posquatArray2eigen4fVector(::simox::json::json::parse(str));
     }
     std::vector<Eigen::Matrix4f> json::posquatArray2eigen4fVector(const char* str)
     {
-        return posquatArray2eigen4fVector(::nlohmann::json::parse(str));
+        return posquatArray2eigen4fVector(::simox::json::json::parse(str));
     }
 
     std::vector<Eigen::Matrix4f> json::posquatArray2eigen4fVector(const nlohmann::json& j)
@@ -90,11 +90,11 @@ namespace simox
 
     std::map<std::string, float> json::json2NameValueMap(const std::string& str)
     {
-        return json2NameValueMap(::nlohmann::json::parse(str));
+        return json2NameValueMap(::simox::json::json::parse(str));
     }
     std::map<std::string, float> json::json2NameValueMap(const char* str)
     {
-        return json2NameValueMap(::nlohmann::json::parse(str));
+        return json2NameValueMap(::simox::json::json::parse(str));
     }
     std::map<std::string, float> json::json2NameValueMap(const nlohmann::json& j)
     {

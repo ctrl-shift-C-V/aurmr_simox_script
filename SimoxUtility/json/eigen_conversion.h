@@ -1,17 +1,18 @@
 #pragma once
 
-#include "json.hpp"
-
 #include <Eigen/Core>
 
+#include "json.h"
+
+
 /**
- * Provide `to_json()` and `from_json()` overloads for `nlohmann::json`,
+ * Provide `to_json()` and `from_json()` overloads for `simox::json::json`,
  * which allows simple syntax like:
  *
  * @code
  * Eigen::Matrix3f in, out;
  *
- * nlohmann::json j;
+ * simox::json::json j;
  * j = in;
  * out = j.get<Eigen::Matrix3f>();
  * @endcode
@@ -27,18 +28,18 @@ namespace Eigen
 
     /// Writes the matrix as list of rows.
     template <typename Derived>
-    void to_json(nlohmann::json& j, const Eigen::MatrixBase<Derived>& matrix);
+    void to_json(simox::json::json& j, const Eigen::MatrixBase<Derived>& matrix);
 
     /// Reads the matrix from list of rows.
     template <typename Derived>
-    void from_json(const nlohmann::json& j, Eigen::MatrixBase<Derived>& matrix);
+    void from_json(const simox::json::json& j, Eigen::MatrixBase<Derived>& matrix);
 
 
     // Specialization for Eigen::Vector3f (implemented in .cpp)
 
     /// If `j` is an object, reads vector from `x, y, z` keys. Otherwise, reads it as matrix.
     template <>
-    void from_json<Eigen::Vector3f>(const nlohmann::json& j, Eigen::MatrixBase<Eigen::Vector3f>& vector);
+    void from_json<Eigen::Vector3f>(const simox::json::json& j, Eigen::MatrixBase<Eigen::Vector3f>& vector);
 
 
     // Specialization for Eigen::Matrix4f as transformation matrix (implemented in .cpp).
@@ -50,29 +51,29 @@ namespace Eigen
      * Otherweise, reads it from list of rows.
      */
     template <>
-    void from_json<Eigen::Matrix4f>(const nlohmann::json& j, Eigen::MatrixBase<Eigen::Matrix4f>& matrix);
+    void from_json<Eigen::Matrix4f>(const simox::json::json& j, Eigen::MatrixBase<Eigen::Matrix4f>& matrix);
 
 
     // Eigen::Quaternion
 
     /// Writes the quaternion with `qw, qx, qy, qz` keys.
     template <typename Derived>
-    void to_json(nlohmann::json& j, const Eigen::QuaternionBase<Derived>& quat);
+    void to_json(simox::json::json& j, const Eigen::QuaternionBase<Derived>& quat);
 
     /// Reads the quaternion from `qw, qx, qy, qz` keys.
     template <typename Derived>
-    void from_json(const nlohmann::json& j, Eigen::QuaternionBase<Derived>& quat);
+    void from_json(const simox::json::json& j, Eigen::QuaternionBase<Derived>& quat);
 
     // Eigen::Transform (Isometry, Affine, ...)
 
     template <typename T, int N, int Type>
-    void to_json(nlohmann::json& j, const Eigen::Transform<T,N,Type>& transform)
+    void to_json(simox::json::json& j, const Eigen::Transform<T,N,Type>& transform)
     {
         to_json(j, transform.matrix());
     }
 
     template <typename T, int N, int Type>
-    void from_json(const nlohmann::json& j, Eigen::Transform<T,N,Type>& transform)
+    void from_json(const simox::json::json& j, Eigen::Transform<T,N,Type>& transform)
     {
         from_json(j, transform.matrix());
     }
@@ -88,13 +89,13 @@ namespace jsonbase
 
     /// Writes the matrix as list of rows.
     template <typename Derived>
-    void to_json(nlohmann::json& j, const Eigen::MatrixBase<Derived>& matrix)
+    void to_json(simox::json::json& j, const Eigen::MatrixBase<Derived>& matrix)
     {
         for (int row = 0; row < matrix.rows(); ++row)
         {
             if (matrix.cols() > 1)
             {
-                nlohmann::json jrow = nlohmann::json::array();
+                simox::json::json jrow = simox::json::json::array();
                 for (int col = 0; col < matrix.cols(); ++col)
                 {
                     jrow.push_back(matrix(row, col));
@@ -110,7 +111,7 @@ namespace jsonbase
 
     /// Reads the matrix from list of rows.
     template <typename Derived>
-    void from_json(const nlohmann::json& j, Eigen::MatrixBase<Derived>& matrix)
+    void from_json(const simox::json::json& j, Eigen::MatrixBase<Derived>& matrix)
     {
         using Scalar = typename Eigen::MatrixBase<Derived>::Scalar;
         using Index = typename Eigen::MatrixBase<Derived>::Index;
@@ -136,20 +137,20 @@ namespace jsonbase
 
 
     template <typename Derived>
-    void to_json(nlohmann::json& j, const Eigen::MatrixBase<Derived>& matrix)
+    void to_json(simox::json::json& j, const Eigen::MatrixBase<Derived>& matrix)
     {
         jsonbase::to_json(j, matrix);
     }
 
     template <typename Derived>
-    void from_json(const nlohmann::json& j, Eigen::MatrixBase<Derived>& matrix)
+    void from_json(const simox::json::json& j, Eigen::MatrixBase<Derived>& matrix)
     {
         jsonbase::from_json(j, matrix);
     }
 
 
     template <typename Derived>
-    void to_json(nlohmann::json& j, const Eigen::QuaternionBase<Derived>& quat)
+    void to_json(simox::json::json& j, const Eigen::QuaternionBase<Derived>& quat)
     {
         j["qw"] = quat.w();
         j["qx"] = quat.x();
@@ -158,7 +159,7 @@ namespace jsonbase
     }
 
     template <typename Derived>
-    void from_json(const nlohmann::json& j, Eigen::QuaternionBase<Derived>& quat)
+    void from_json(const simox::json::json& j, Eigen::QuaternionBase<Derived>& quat)
     {
         using Scalar = typename Eigen::QuaternionBase<Derived>::Scalar;
         quat.w() = j.at("qw").get<Scalar>();
