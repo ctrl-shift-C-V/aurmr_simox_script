@@ -119,6 +119,8 @@ namespace VirtualRobot
         WorkspaceData* clone() override;
 
         bool save(std::ofstream& file) override;
+
+        void reset(int x, int y, int z) override;
     protected:
 
         void ensureData(unsigned int x, unsigned int y, unsigned int z);
