@@ -473,7 +473,7 @@ namespace VirtualRobot
         return fillGridData(ws, graspGlobal, g, baseRobotNode, baseOrientation, maxAngle);
     }
 
-    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode, const float baseOrientation, const float maxAngle)
+    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &global_T_grasp, GraspPtr g, RobotNodePtr baseRobotNode, float baseOrientation, const float maxAngle)
     {
         if (!ws)
         {
@@ -483,42 +483,22 @@ namespace VirtualRobot
         // ensure robot is at identity
         Eigen::Matrix4f gpOrig = Eigen::Matrix4f::Identity();
 
-        if(isFlipped)
-        {
-            baseOrientation *= -1;
-        }
-
         VR_ASSERT(baseRobotNode);
         if (baseRobotNode)
         {
             gpOrig = baseRobotNode->getRobot()->getGlobalPose();
-
-            // Eigen::Isometry3f baseRobotNodePose = Eigen::Isometry3f::Identity();
-            // baseRobotNodePose.linear() = Eigen::AngleAxisf(baseOrientation, Eigen::Vector3f::UnitZ()).toRotationMatrix();
-            
             baseRobotNode->getRobot()->setGlobalPose(Eigen::Matrix4f::Identity());
         }
 
-        //Eigen::Isometry3f robot_T_global = Eigen::Isometry3f::Identity();
-        const Eigen::AngleAxisf global_R_robot_inv(-baseOrientation, Eigen::Vector3f::UnitZ());// .toRotationMatrix();
-        const Eigen::AngleAxisf global_R_robot(baseOrientation, Eigen::Vector3f::UnitZ());// .toRotationMatrix();
+        const Eigen::AngleAxisf global_R_robot_inv(-baseOrientation, Eigen::Vector3f::UnitZ());
 
-        Eigen::Isometry3f robot_T_grasp(global_T_grasp);//robot_T_global * Eigen::Isometry3f(global_T_grasp);
-
+        Eigen::Isometry3f robot_T_grasp(global_T_grasp);
         robot_T_grasp.linear() = global_R_robot_inv.toRotationMatrix() * robot_T_grasp.linear();
 
         WorkspaceRepresentation::WorkspaceCut2DPtr cutXY = ws->createCut(robot_T_grasp.matrix(), discretizeSize, false);
 
         std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr> transformations = ws->createCutTransformations(cutXY, baseRobotNode, M_PI/*, isFlipped*/);
-        
-        // for(WorkspaceRepresentation::WorkspaceCut2DTransformationPtr&  tp: transformations)
-        // {
-        //     tp->transformation = (global_R_robot * Eigen::Isometry3f(tp->transformation)).matrix();
-        // }
-        
         setEntries(transformations, global_T_grasp.matrix(), g);
-
-
 
         if (baseRobotNode)
         {
