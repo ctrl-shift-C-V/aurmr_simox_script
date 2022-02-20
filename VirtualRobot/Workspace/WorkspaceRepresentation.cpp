@@ -21,6 +21,8 @@
 #include <climits>
 #include <thread>
 
+#include <Eigen/Geometry>
+
 namespace VirtualRobot
 {
     using std::cout;
