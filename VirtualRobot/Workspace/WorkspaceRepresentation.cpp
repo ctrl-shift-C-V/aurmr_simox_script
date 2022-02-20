@@ -14,6 +14,7 @@
 #include "../Grasping/Grasp.h"
 #include "../Grasping/GraspSet.h"
 #include "SimoxUtility/math/periodic/periodic_clamp.h"
+#include "VirtualRobot.h"
 #include <VirtualRobot/Random.h>
 #include <fstream>
 #include <cmath>
@@ -1269,7 +1270,7 @@ namespace VirtualRobot
         return true;
     }
 
-    void WorkspaceRepresentation::invalidateBehindRobot()
+    void WorkspaceRepresentation::invalidateBehindRobot(const bool inverted)
     {
         int step = 1;
 
@@ -1287,10 +1288,20 @@ namespace VirtualRobot
             {
                 for(int c = 0; c < numVoxels[2]; c+= step)
                 {
-                    if(voxelPositionX > 0)
+                    if(inverted)
                     {
-                        data->reset(a,b,c);
-                    }   
+                        if(voxelPositionX < 0)
+                        {
+                            data->reset(a,b,c);
+                        }  
+
+                    }else {
+                    
+                        if(voxelPositionX > 0)
+                        {
+                            data->reset(a,b,c);
+                        }   
+                    }
                 }
             }
         }

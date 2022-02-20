@@ -119,7 +119,7 @@ namespace VirtualRobot
         //! The kinematic chain that is covered by this workspace data
         RobotNodeSetPtr getNodeSet();
 
-        void invalidateBehindRobot();
+        void invalidateBehindRobot(bool inverted = false);
         
 
         /*!
