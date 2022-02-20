@@ -10,6 +10,15 @@ namespace VirtualRobot
     using std::cout;
     using std::endl;
 
+    void WorkspaceDataArray::reset(const int x, const int y, const int z)
+    {
+        if (data[x * sizeTr0 + y * sizeTr1 + z])
+        {
+            delete [] data[x * sizeTr0 + y * sizeTr1 + z];
+            data[x * sizeTr0 + y * sizeTr1 + z] = NULL;
+        }
+    }
+
     WorkspaceDataArray::WorkspaceDataArray(unsigned int size1, unsigned int size2, unsigned int size3,
                                            unsigned int size4, unsigned int size5, unsigned int size6, bool adjustOnOverflow)
     {

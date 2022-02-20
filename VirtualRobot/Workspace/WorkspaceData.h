@@ -130,6 +130,9 @@ namespace VirtualRobot
             minValidValue = v;
         }
 
+        virtual void reset(int x, int y, int z) = 0;
+
+
     protected:
 
         unsigned char minValidValue;

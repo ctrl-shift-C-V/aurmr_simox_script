@@ -119,6 +119,9 @@ namespace VirtualRobot
         //! The kinematic chain that is covered by this workspace data
         RobotNodeSetPtr getNodeSet();
 
+        void invalidateBehindRobot();
+        
+
         /*!
             Initialize and reset all data.
             \param nodeSet The robot node set that should be considered for workspace (e.g. reachability) analysis.

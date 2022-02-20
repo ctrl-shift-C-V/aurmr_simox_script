@@ -1269,6 +1269,34 @@ namespace VirtualRobot
         return true;
     }
 
+    void WorkspaceRepresentation::invalidateBehindRobot()
+    {
+        int step = 1;
+
+        Eigen::Vector3f size;
+        size(0) = spaceSize[0] / numVoxels[0];
+        size(1) = spaceSize[1] / numVoxels[1];
+        size(2) = spaceSize[2] / numVoxels[2];
+
+
+        for (int a = 0; a < numVoxels[0]; a += step)
+        {
+            float voxelPositionX = minBounds[0] + (a + 0.5f) * size(0);
+
+            for (int b = 0; b < numVoxels[1]; b += step)
+            {
+                for(int c = 0; c < numVoxels[2]; c+= step)
+                {
+                    if(voxelPositionX > 0)
+                    {
+                        data->reset(a,b,c);
+                    }   
+                }
+            }
+        }
+    }
+
+
     WorkspaceRepresentation::VolumeInfo WorkspaceRepresentation::computeVolumeInformation()
     {
         WorkspaceRepresentation::VolumeInfo result;
