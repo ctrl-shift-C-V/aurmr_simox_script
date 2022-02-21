@@ -9,6 +9,7 @@
 #include <cmath>
 #include <iostream>
 #include <algorithm>
+#include <Eigen/src/Geometry/Transform.h>
 
 
 using namespace std;
@@ -491,11 +492,18 @@ namespace VirtualRobot
         }
 
         const Eigen::AngleAxisf global_R_robot_inv(-baseOrientation, Eigen::Vector3f::UnitZ());
+        const Eigen::AngleAxisf global_R_robot(baseOrientation, Eigen::Vector3f::UnitZ());
 
         Eigen::Isometry3f robot_T_grasp(global_T_grasp);
         robot_T_grasp.linear() = global_R_robot_inv.toRotationMatrix() * robot_T_grasp.linear();
 
+        Eigen::Isometry3f robot_T_grasp2(global_T_grasp);
+        robot_T_grasp2.linear() = global_R_robot.toRotationMatrix() * robot_T_grasp2.linear();
+
         WorkspaceRepresentation::WorkspaceCut2DPtr cutXY = ws->createCut(robot_T_grasp.matrix(), discretizeSize, false);
+
+        // VR_INFO << "Reference global pose" << cutXY->referenceGlobalPose;
+        cutXY->referenceGlobalPose = (global_R_robot_inv * Eigen::Isometry3f(global_T_grasp)).matrix();
 
         std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr> transformations = ws->createCutTransformations(cutXY, baseRobotNode, M_PI/*, isFlipped*/);
         setEntries(transformations, global_T_grasp.matrix(), g);
