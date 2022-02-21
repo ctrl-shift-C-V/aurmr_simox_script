@@ -1875,10 +1875,10 @@ namespace VirtualRobot
                     float yaw = std::atan2(pose.translation().y(), pose.translation().x()) - M_PI_2f32;
                     yaw = simox::math::periodic_clamp(yaw, -M_PIf32, M_PIf32);
 
-                    if (yaw < maxAngle and yaw > -maxAngle)
-                    {
+                    // if (yaw < maxAngle and yaw > -maxAngle)
+                    // {
                         result.push_back(tp);
-                    }
+                    // }
                 }
             }
         }
