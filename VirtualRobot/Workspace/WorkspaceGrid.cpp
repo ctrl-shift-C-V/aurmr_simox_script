@@ -513,7 +513,15 @@ namespace VirtualRobot
         // cutXY->referenceGlobalPose = (global_R_robot * Eigen::Isometry3f(global_T_grasp)).matrix();
 
         std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr> transformations = ws->createCutTransformations(cutXY, baseRobotNode, M_PI/*, isFlipped*/);
-        setEntries(transformations, global_T_grasp.matrix(), g);
+        
+        VR_INFO << "Base orientation: " << baseOrientation;
+
+        // for(auto& tp: transformations)
+        // {
+        //     tp->transformation =  (Eigen::AngleAxisf(baseOrientation, Eigen::Vector3f::UnitZ()) * Eigen::Isometry3f(tp->transformation)).matrix();
+        // }
+        
+        setEntries(transformations, global_T_grasp_orig.matrix(), g);
 
         if (baseRobotNode)
         {
