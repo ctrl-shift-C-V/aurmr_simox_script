@@ -514,6 +514,30 @@ namespace VirtualRobot
 
         std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr> transformations = ws->createCutTransformations(cutXY, baseRobotNode, M_PI/*, isFlipped*/);
         
+
+       
+
+        transformations.erase(std::remove_if(transformations.begin(), transformations.end(), [](const WorkspaceRepresentation::WorkspaceCut2DTransformationPtr& tp){
+            
+            const Eigen::Isometry3f robot_T_tcp(tp->transformation);
+
+            //  // the hand's forward axis is z
+            // const auto handForwardVector = robot_T_tcp.linear() * Eigen::Vector3f::UnitZ();
+
+            // const float yaw = std::atan2(handForwardVector.y() , handForwardVector.x());
+            // VR_INFO << "Hand forward vector is " << handForwardVector << "with yaw " << yaw;
+
+
+            // if(robot_T_tcp.translation().x() > 0) // right side
+            // {
+            //     if(yaw )
+            // }
+
+            // const float yawPlatformNeutral = yaw - M_PI_2f32;
+            
+            return robot_T_tcp.translation().head<2>().norm() < 100; 
+        }), transformations.end());
+
         VR_INFO << "Base orientation: " << baseOrientation;
 
         // for(auto& tp: transformations)
