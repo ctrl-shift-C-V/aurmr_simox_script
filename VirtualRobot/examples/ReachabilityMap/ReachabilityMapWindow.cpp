@@ -690,6 +690,8 @@ void ReachabilityMapWindow::loadReachFile(std::string filename)
             }
         }
     }*/
+
+    reachSpace->invalidateBehindRobot(true);
 }
 void ReachabilityMapWindow::setObjectRandom()
 {

@@ -1286,6 +1286,9 @@ namespace VirtualRobot
 
             for (int b = 0; b < numVoxels[1]; b += step)
             {
+
+                float voxelPositionY = minBounds[1] + (b + 0.5f) * size(1);
+
                 for(int c = 0; c < numVoxels[2]; c+= step)
                 {
                     if(inverted)
@@ -1295,12 +1298,26 @@ namespace VirtualRobot
                             data->reset(a,b,c);
                         }  
 
+                        // 45 deg to the front for the other hands workspace
+                        // if(-voxelPositionY > voxelPositionX)
+                        if(voxelPositionY < 0)
+                        {
+                            data->reset(a,b,c);
+                        }
+
                     }else {
                     
                         if(voxelPositionX > 0)
                         {
                             data->reset(a,b,c);
                         }   
+
+                         // 45 deg to the front for the other hands workspace
+                        if(voxelPositionY < 0)
+                        // if(-voxelPositionY > -voxelPositionX)
+                        {
+                            data->reset(a,b,c);
+                        }
                     }
                 }
             }
