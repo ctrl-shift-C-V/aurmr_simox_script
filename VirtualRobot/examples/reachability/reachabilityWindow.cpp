@@ -1,6 +1,7 @@
 
 #include "reachabilityWindow.h"
 #include "VirtualRobot/EndEffector/EndEffector.h"
+#include "VirtualRobot/VirtualRobot.h"
 #include "VirtualRobot/Workspace/Reachability.h"
 #include "VirtualRobot/Workspace/Manipulability.h"
 #include "VirtualRobot/Workspace/NaturalPosture.h"
@@ -760,6 +761,9 @@ void reachabilityWindow::loadReachFile(std::string filename)
             }
         }
     }
+   
+    // VR_INFO << "removing parts of RM";
+    // reachSpace->invalidateBehindRobot(true);
 }
 
 void reachabilityWindow::loadReach()

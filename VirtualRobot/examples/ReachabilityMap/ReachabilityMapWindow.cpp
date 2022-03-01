@@ -690,6 +690,7 @@ void ReachabilityMapWindow::loadReachFile(std::string filename)
             }
         }
     }*/
+
 }
 void ReachabilityMapWindow::setObjectRandom()
 {

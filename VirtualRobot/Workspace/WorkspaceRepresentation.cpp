@@ -14,12 +14,15 @@
 #include "../Grasping/Grasp.h"
 #include "../Grasping/GraspSet.h"
 #include "SimoxUtility/math/periodic/periodic_clamp.h"
+#include "VirtualRobot.h"
 #include <VirtualRobot/Random.h>
 #include <fstream>
 #include <cmath>
 #include <cfloat>
 #include <climits>
 #include <thread>
+
+#include <Eigen/Geometry>
 
 namespace VirtualRobot
 {
@@ -1267,6 +1270,61 @@ namespace VirtualRobot
         return true;
     }
 
+    void WorkspaceRepresentation::invalidateBehindRobot(const bool inverted)
+    {
+        int step = 1;
+
+        Eigen::Vector3f size;
+        size(0) = spaceSize[0] / numVoxels[0];
+        size(1) = spaceSize[1] / numVoxels[1];
+        size(2) = spaceSize[2] / numVoxels[2];
+
+
+        for (int a = 0; a < numVoxels[0]; a += step)
+        {
+            float voxelPositionX = minBounds[0] + (a + 0.5f) * size(0);
+
+            for (int b = 0; b < numVoxels[1]; b += step)
+            {
+
+                float voxelPositionY = minBounds[1] + (b + 0.5f) * size(1);
+
+                for(int c = 0; c < numVoxels[2]; c+= step)
+                {
+                    if(inverted)
+                    {
+                        if(voxelPositionX < 0)
+                        {
+                            data->reset(a,b,c);
+                        }  
+
+                        // 45 deg to the front for the other hands workspace
+                        // if(-voxelPositionY > voxelPositionX)
+                        if(voxelPositionY < 0)
+                        {
+                            data->reset(a,b,c);
+                        }
+
+                    }else {
+                    
+                        if(voxelPositionX > 0)
+                        {
+                            data->reset(a,b,c);
+                        }   
+
+                         // 45 deg to the front for the other hands workspace
+                        if(voxelPositionY < 0)
+                        // if(-voxelPositionY > -voxelPositionX)
+                        {
+                            data->reset(a,b,c);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
     WorkspaceRepresentation::VolumeInfo WorkspaceRepresentation::computeVolumeInformation()
     {
         WorkspaceRepresentation::VolumeInfo result;
@@ -1834,10 +1892,10 @@ namespace VirtualRobot
                     float yaw = std::atan2(pose.translation().y(), pose.translation().x()) - M_PI_2f32;
                     yaw = simox::math::periodic_clamp(yaw, -M_PIf32, M_PIf32);
 
-                    if (yaw < maxAngle and yaw > -maxAngle)
-                    {
+                    // if (yaw < maxAngle and yaw > -maxAngle)
+                    // {
                         result.push_back(tp);
-                    }
+                    // }
                 }
             }
         }
