@@ -762,10 +762,8 @@ void reachabilityWindow::loadReachFile(std::string filename)
         }
     }
    
-    VR_INFO << "removing parts of RM";
-
-    reachSpace->invalidateBehindRobot(true);
-
+    // VR_INFO << "removing parts of RM";
+    // reachSpace->invalidateBehindRobot(true);
 }
 
 void reachabilityWindow::loadReach()
