@@ -91,7 +91,7 @@ namespace VirtualRobot
             Fill the grid with inverse reachability data generated from grasp g and object o.
         */
         bool fillGridData(WorkspaceRepresentationPtr ws, ManipulationObjectPtr o, GraspPtr g, RobotNodePtr baseRobotNode, float baseOrientation = 0, float maxAngle = M_PIf32);
-        bool fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode, float baseOrientation = 0, float maxAngle = M_PIf32);
+        bool fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode, float baseOrientation = 0, float maxAngle = M_PIf32, float minCenterDistance = 0);
 
 
         /*!

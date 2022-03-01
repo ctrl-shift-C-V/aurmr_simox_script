@@ -473,7 +473,7 @@ namespace VirtualRobot
         return fillGridData(ws, graspGlobal, g, baseRobotNode, baseOrientation, maxAngle);
     }
 
-    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &global_T_grasp_orig, GraspPtr g, RobotNodePtr baseRobotNode, float baseOrientation, const float maxAngle)
+    bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &global_T_grasp_orig, GraspPtr g, RobotNodePtr baseRobotNode, float baseOrientation, const float maxAngle, const float minCenterDistance)
     {
         if (!ws)
         {
@@ -499,11 +499,15 @@ namespace VirtualRobot
 
         std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr> transformations = ws->createCutTransformations(cutXY, baseRobotNode, M_PI/*, isFlipped*/);
         
-        transformations.erase(std::remove_if(transformations.begin(), transformations.end(), [](const WorkspaceRepresentation::WorkspaceCut2DTransformationPtr& tp){
-            
-            const Eigen::Isometry3f robot_T_tcp(tp->transformation);
-            return robot_T_tcp.translation().head<2>().norm() < 100; 
-        }), transformations.end());
+        // cut out a cylinder around the robot if minCenterDistance is specified
+        if(minCenterDistance > 0)
+        {
+            transformations.erase(std::remove_if(transformations.begin(), transformations.end(), [&](const WorkspaceRepresentation::WorkspaceCut2DTransformationPtr& tp){
+                
+                const Eigen::Isometry3f robot_T_tcp(tp->transformation);
+                return robot_T_tcp.translation().head<2>().norm() < minCenterDistance; 
+            }), transformations.end());
+        }
 
         setEntries(transformations, global_T_grasp_orig.matrix(), g);
 
