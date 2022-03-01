@@ -480,8 +480,6 @@ namespace VirtualRobot
             return false;
         }
 
-        // baseOrientation = 0;
-
         // ensure robot is at identity
         Eigen::Matrix4f gpOrig = Eigen::Matrix4f::Identity();
 
@@ -492,58 +490,21 @@ namespace VirtualRobot
             baseRobotNode->getRobot()->setGlobalPose(Eigen::Matrix4f::Identity());
         }
 
-        // const Eigen::AngleAxisf global_R_robot_inv(baseOrientation, Eigen::Vector3f::UnitZ());
-        // const Eigen::AngleAxisf global_R_robot(-baseOrientation, Eigen::Vector3f::UnitZ());
 
         Eigen::Isometry3f global_T_grasp(global_T_grasp_orig);
-
         global_T_grasp.linear() = Eigen::AngleAxisf(-baseOrientation, Eigen::Vector3f::UnitZ()) * global_T_grasp.linear();
 
 
-        // Eigen::Isometry3f robot_T_grasp(global_T_grasp);
-        // robot_T_grasp.linear() = global_R_robot_inv.toRotationMatrix() * robot_T_grasp.linear();
-
-        // Eigen::Isometry3f robot_T_grasp2(global_T_grasp);
-        // robot_T_grasp2.linear() = global_R_robot.toRotationMatrix() * robot_T_grasp2.linear();
-
         WorkspaceRepresentation::WorkspaceCut2DPtr cutXY = ws->createCut(global_T_grasp.matrix(), discretizeSize, false);
-
-        // VR_INFO << "Reference global pose" << cutXY->referenceGlobalPose;
-        // cutXY->referenceGlobalPose = (global_R_robot * Eigen::Isometry3f(global_T_grasp)).matrix();
 
         std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr> transformations = ws->createCutTransformations(cutXY, baseRobotNode, M_PI/*, isFlipped*/);
         
-
-       
-
         transformations.erase(std::remove_if(transformations.begin(), transformations.end(), [](const WorkspaceRepresentation::WorkspaceCut2DTransformationPtr& tp){
             
             const Eigen::Isometry3f robot_T_tcp(tp->transformation);
-
-            //  // the hand's forward axis is z
-            // const auto handForwardVector = robot_T_tcp.linear() * Eigen::Vector3f::UnitZ();
-
-            // const float yaw = std::atan2(handForwardVector.y() , handForwardVector.x());
-            // VR_INFO << "Hand forward vector is " << handForwardVector << "with yaw " << yaw;
-
-
-            // if(robot_T_tcp.translation().x() > 0) // right side
-            // {
-            //     if(yaw )
-            // }
-
-            // const float yawPlatformNeutral = yaw - M_PI_2f32;
-            
             return robot_T_tcp.translation().head<2>().norm() < 100; 
         }), transformations.end());
 
-        VR_INFO << "Base orientation: " << baseOrientation;
-
-        // for(auto& tp: transformations)
-        // {
-        //     tp->transformation =  (Eigen::AngleAxisf(baseOrientation, Eigen::Vector3f::UnitZ()) * Eigen::Isometry3f(tp->transformation)).matrix();
-        // }
-        
         setEntries(transformations, global_T_grasp_orig.matrix(), g);
 
         if (baseRobotNode)
