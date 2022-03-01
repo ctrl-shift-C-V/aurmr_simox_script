@@ -100,6 +100,16 @@ namespace simox::alg
         return string.find(character) != std::string::npos;
     }
 
+    unsigned long count(const std::string& input, const std::string& search);
+    inline unsigned long count(const std::string& input, const char* search)
+    {
+        return count(input, std::string(search));
+    }
+    inline unsigned long count(const std::string& input, const char search)
+    {
+        return count(input, std::to_string(search));
+    }
+
 
     /**
      * @brief If `string` begins with `prefix`, return `string` without the

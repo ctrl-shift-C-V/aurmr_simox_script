@@ -176,6 +176,20 @@ bool alg::contains(const std::string& haystack, const std::string& needle)
     return boost::algorithm::contains(haystack, needle);
 }
 
+unsigned long alg::count(const std::string& input, const std::string& search)
+{
+    auto start = 0U;
+    auto end = input.find(search);
+    unsigned long num = 0;
+    while (end != std::string::npos)
+    {
+        num++;
+        start = end + search.length();
+        end = input.find(search, start);
+    }
+    return num;
+}
+
 
 std::string alg::remove_prefix(const std::string& string, const std::string& prefix)
 {
