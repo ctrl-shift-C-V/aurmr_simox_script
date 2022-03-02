@@ -21,6 +21,8 @@
 
 #include <Inventor/SbImage.h>
 
+#include <iomanip>
+
 namespace
 {
     bool readScene(
@@ -281,20 +283,37 @@ namespace VirtualRobot
         result->addChild(materialNode);
     }
 
+    static void addOverallMaterial(SoSeparator* result)
+    {
+        SoMaterialBinding* materialBinding = new SoMaterialBinding;
+        materialBinding->value = SoMaterialBinding::OVERALL;
+        result->addChild(materialBinding);
+
+        SoMaterial* materialNode = new SoMaterial;
+        materialNode->diffuseColor.setValue(1.0f, 1.0f, 1.0f);
+        materialNode->ambientColor.setValue(1.0f, 1.0f, 1.0f);
+        materialNode->specularColor.setValue(1.0f, 1.0f, 1.0f);
+
+        result->addChild(materialNode);
+    }
+
     static void addTextureMaterial(aiMaterial* material, aiTextureType textureType,
                                    std::filesystem::path const& meshPath,
                                    SoSeparator* result)
     {
         aiString path;
-        aiTextureMapping mapping;
-        unsigned int uvindex = 0;
-        ai_real blend = 0.0f;
-        aiTextureOp op;
-        aiTextureMapMode mapMode[3];
-        aiReturn textureOk = material->GetTexture(textureType, 0,
-                                                  &path, &mapping, &uvindex, &blend,
-                                                  &op, mapMode);
-        if (textureOk == aiReturn_SUCCESS)
+        aiTextureMapMode mapMode[3] = {aiTextureMapMode_Wrap, aiTextureMapMode_Wrap, aiTextureMapMode_Wrap};
+        aiReturn pathOk = material->Get(_AI_MATKEY_TEXTURE_BASE, textureType, 0, path);
+        aiReturn mapUOk = material->Get(_AI_MATKEY_MAPPINGMODE_U_BASE, textureType, 0, mapMode[0]);
+        aiReturn mapVOk = material->Get(_AI_MATKEY_MAPPINGMODE_V_BASE, textureType, 0, mapMode[1]);
+
+        std::cout << "PathOK: " << pathOk
+                  << ", mapU: " << mapUOk
+                  << ", mapV: " << mapVOk << std::endl;
+                //material->GetTexture(textureType, 0,
+                //                                  &path, &mapping, &uvindex, &blend,
+                //                                 &op, mapMode);
+        if (pathOk == aiReturn_SUCCESS)
         {
             SoTexture2* textureNode = new SoTexture2();
             std::filesystem::path texturePath = meshPath.parent_path() / path.C_Str();
@@ -338,7 +357,7 @@ namespace VirtualRobot
         }
         else
         {
-            VR_WARNING << "Could not get texture data: " << textureOk
+            VR_WARNING << "Could not get texture data: " << pathOk
                        << "In file: " << meshPath << "\n";
         }
     }
@@ -427,6 +446,9 @@ namespace VirtualRobot
     {
         std::filesystem::path meshPath = filename;
 
+        // For assimp to work correctly, we need to set the locale to something english
+        setlocale(LC_ALL, "C");
+
         Assimp::Importer importer;
         // Triangulate, so that we can assume faces with 3 vertices (aiProcess_Triangulate)
         // Generate normals if they are not present so that the subsequent code
@@ -434,17 +456,25 @@ namespace VirtualRobot
         // Generate UV coordinates if possible (for primitive shapes like boxes, spheres, ...)
         const aiScene* scene = importer.ReadFile(
                                    filename,
-                                   aiProcess_JoinIdenticalVertices |
+                                   //aiProcess_JoinIdenticalVertices |
                                    aiProcess_Triangulate |
                                    aiProcess_GenSmoothNormals |
                                    aiProcess_GenUVCoords |
+                                   aiProcess_TransformUVCoords |
                                    aiProcess_SortByPType
                                    );
+
+        if (!scene)
+        {
+            VR_WARNING << "Could not load mesh file: '" << filename << "'\n"
+                       << importer.GetErrorString() << std::endl;
+            return nullptr;
+        }
 
         unsigned int numMeshes = scene->mNumMeshes;
         if (numMeshes < 1)
         {
-            VR_INFO << "No mesh found in file: " << filename << "\n";
+            VR_INFO << "No mesh found in file: " << filename << std::endl;
             return nullptr;
         }
 
@@ -466,7 +496,7 @@ namespace VirtualRobot
         {
             VR_WARNING << "Material index is invalid: " << materialIndex
                       << " >= " << scene->mNumMaterials
-                      << "\nIn file: " << filename;
+                      << "\nIn file: " << filename << std::endl;
             return nullptr;
         }
         aiMaterial* material = scene->mMaterials[materialIndex];
@@ -479,7 +509,9 @@ namespace VirtualRobot
                 << numMeshes << " mesh(es), "
                 << numVertices << " vertices, "
                 << numFaces << " faces, "
-                << numTextures << " texture(s)\n";
+                << numTextures << " texture(s), "
+                << (mesh->HasVertexColors(0) ? "has" : "no") << " vertex colors, "
+                << (mesh->HasTextureCoords(0) ? "has" : "no") << " texture coordinates\n";
 
 
         SoSeparator* result = new SoSeparator;
@@ -489,6 +521,10 @@ namespace VirtualRobot
         if (mesh->HasVertexColors(0))
         {
             addPerVertexColorMaterial(mesh->mColors[0], numVertices, result);
+        }
+        else
+        {
+            addOverallMaterial(result);
         }
 
         // Not sure what to do with the material colors
@@ -509,9 +545,24 @@ namespace VirtualRobot
         addNormals(numVertices, mesh->mNormals, result);
 
         // Not all meshes have texture coordinates
+        auto* vertices = mesh->mVertices;
+        auto* uvs = mesh->mTextureCoords[0];
+
         if (mesh->HasTextureCoords(0))
         {
             addTextureCoordinates(numVertices, mesh->mTextureCoords[0], result);
+
+#if 0
+            // Print first vertices and texture coordinates
+            for (int i = 0; i < numVertices; ++i)
+            {
+                aiVector3D xyz = vertices[i];
+                aiVector3D uv = uvs[i];
+
+                std::cout << std::setprecision(4)
+                          << xyz.x << ", " << xyz.y << ", " << xyz.z << ", " << uv.x << ", " << uv.y << std::endl;
+            }
+#endif
         }
 
         addIndexedFaceSet(numFaces, mesh->mFaces, result);

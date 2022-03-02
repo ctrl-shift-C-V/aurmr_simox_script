@@ -21,6 +21,12 @@
 
 #include <VirtualRobot/Import/MeshImport/AssimpReader.h>
 
+#include <assimp/Importer.hpp>
+#include <assimp/Exporter.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/material.h>
+
 
 using namespace VirtualRobot;
 using VirtualRobot::RuntimeEnvironment;
@@ -59,8 +65,8 @@ int main(int argc, char* argv[])
     }
     else
     {
-        //input = "/home/paus/code/h2t/PriorKnowledgeData/data/PriorKnowledgeData/objects/KIT/Amicelli/Amicelli.obj";
-        input = "/home/paus/code/h2t/PriorKnowledgeData/data/PriorKnowledgeData/objects/Maintenance/workbench/workbench.x3d";
+        input = "/home/paus/code/h2t/PriorKnowledgeData/data/PriorKnowledgeData/objects/KIT/Amicelli/Amicelli.ply";
+        //input = "/home/paus/code/h2t/PriorKnowledgeData/data/PriorKnowledgeData/objects/Maintenance/workbench/workbench.x3d";
     }
 
     fs::path inputFilename;
@@ -82,6 +88,42 @@ int main(int argc, char* argv[])
     else
     {
         std::cout << "Could not load file: " << inputFilename << "\n";
+    }
+
+    Assimp::Importer importer;
+
+    const aiScene* scene = importer.ReadFile(inputFilename.c_str(),
+                      aiProcess_Triangulate |
+                      aiProcess_GenSmoothNormals |
+                      aiProcess_GenUVCoords |
+                      aiProcess_TransformUVCoords |
+                      aiProcess_SortByPType);
+    if (!scene)
+    {
+        std::cout << "Could not read input file: " << inputFilename << std::endl;
+        return -1;
+    }
+
+    Assimp::Exporter exporter;
+
+    size_t exportFormatCount = exporter.GetExportFormatCount();
+    for (size_t i = 0; i < exportFormatCount; ++i)
+    {
+        const aiExportFormatDesc* desc = exporter.GetExportFormatDescription(i);
+
+        std::cout << desc->id << ", " << desc->fileExtension << ": " << desc->description << std::endl;
+    }
+
+    std::filesystem::path outputFileStem = inputFilename.parent_path() / inputFilename.stem();
+    std::string outputFile = outputFileStem.string() + ".ply";
+    aiReturn exportOk = exporter.Export(scene, "ply", outputFile);
+    if (exportOk == aiReturn_SUCCESS)
+    {
+        std::cout << "Exported file: " << outputFile << std::endl;
+    }
+    else
+    {
+        std::cout << "Error exporting file: " << outputFile << std::endl;
     }
 
     return 0;
