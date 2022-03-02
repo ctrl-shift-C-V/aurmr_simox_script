@@ -89,6 +89,8 @@
 #include <Inventor/VRMLnodes/SoVRMLImageTexture.h>
 #include <Inventor/VRMLnodes/SoVRMLAppearance.h>
 
+#include <Import/MeshImport/AssimpReader.h>
+
 namespace filesystem = std::filesystem;
 
 
@@ -275,23 +277,13 @@ namespace VirtualRobot
 
     VisualizationNodePtr CoinVisualizationFactory::getVisualizationFromFileWithAssimp(const std::string& filename, bool boundingBox, float scaleX, float scaleY, float scaleZ)
     {
-        VisualizationNodePtr visualizationNode(new VisualizationNode);
-
-        // try to read from file
-        TriMeshModelPtr t(new TriMeshModel());
-        AssimpReader r;
-        r.parameters.scaling = 1000.0f; // mm
-        r.parameters.mergeMultipleMeshes = true;
-        bool readOK = r.readFileAsTriMesh(filename, t);
-
-        if (!readOK)
+        SoNode* node = AssimpReader::readFileAsSoNode(filename);
+        if (!node)
         {
-            VR_ERROR << "Could not read file with assimp: " << filename << std::endl;
-            return visualizationNode;
+            return nullptr;
         }
 
-        Eigen::Matrix4f id = Eigen::Matrix4f::Identity();
-        visualizationNode = createTriMeshModelVisualization(t, id, scaleX, scaleY, scaleZ);
+        VisualizationNodePtr visualizationNode(new CoinVisualizationNode(node));
         visualizationNode->setFilename(filename, boundingBox);
 
         return visualizationNode;
