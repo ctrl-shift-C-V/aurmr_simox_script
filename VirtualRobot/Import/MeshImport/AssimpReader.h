@@ -7,6 +7,7 @@
 #include <cfloat>
 
 struct aiScene;
+class SoNode;
 
 namespace VirtualRobot
 {
@@ -29,6 +30,7 @@ namespace VirtualRobot
 
         TriMeshModelPtr readFileAsTriMesh(const std::string& filename);
         TriMeshModelPtr readBufferAsTriMesh(const std::string_view& v);
+        static SoNode* readFileAsSoNode(const std::string& filename);
 
         ManipulationObjectPtr readFileAsManipulationObject(const std::string& filename, const std::string& name = "");
         ManipulationObjectPtr readBufferAsManipulationObject(const std::string_view& v, const std::string& name = "");
