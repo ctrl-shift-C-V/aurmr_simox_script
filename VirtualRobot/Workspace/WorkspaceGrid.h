@@ -91,7 +91,7 @@ namespace VirtualRobot
             Fill the grid with inverse reachability data generated from grasp g and object o.
         */
         bool fillGridData(WorkspaceRepresentationPtr ws, ManipulationObjectPtr o, GraspPtr g, RobotNodePtr baseRobotNode, float baseOrientation = 0, float maxAngle = M_PIf32);
-        bool fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode, float baseOrientation = 0, float maxAngle = M_PIf32);
+        bool fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &graspGlobal, GraspPtr g, RobotNodePtr baseRobotNode, float baseOrientation = 0, float maxAngle = M_PIf32, float minCenterDistance = 0);
 
 
         /*!
@@ -122,6 +122,17 @@ namespace VirtualRobot
                 .minY = minY,
                 .maxY = maxY
             };
+        }
+
+        enum CellUpdateMode
+        {
+            MIN,
+            MAX
+        };
+
+        void setCellUpdateMode(const CellUpdateMode mode)
+        {
+            this->mode = mode;
         }
 
 
@@ -162,6 +173,10 @@ namespace VirtualRobot
         */
         void setEntries(std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr>& wsData, const Eigen::Matrix4f& graspGlobal, GraspPtr grasp);
 
+        void checkAndReplaceValue(int& val, int newVal);
+
+
+
         inline int getDataPos(int x, int y)
         {
             return (x * gridSizeY + y);
@@ -177,9 +192,10 @@ namespace VirtualRobot
         int* data;                              // stores the quality values
         std::vector<GraspPtr>* graspLink;       // points to list of all reachable grasps
 
-
         const bool checkNeighbors;
 
+    private:
+        CellUpdateMode mode = CellUpdateMode::MAX;
     };
 
 }
