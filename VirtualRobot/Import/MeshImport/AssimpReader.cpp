@@ -283,16 +283,30 @@ namespace VirtualRobot
         result->addChild(materialNode);
     }
 
-    static void addOverallMaterial(SoSeparator* result)
+    static void addOverallMaterial(aiMaterial* material, SoSeparator* result)
     {
         SoMaterialBinding* materialBinding = new SoMaterialBinding;
         materialBinding->value = SoMaterialBinding::OVERALL;
         result->addChild(materialBinding);
 
+        aiColor3D diffuseColor (0.f,0.f,0.f);
+        bool diffuseOk = material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor) == aiReturn_SUCCESS;
+
         SoMaterial* materialNode = new SoMaterial;
-        materialNode->diffuseColor.setValue(1.0f, 1.0f, 1.0f);
-        materialNode->ambientColor.setValue(1.0f, 1.0f, 1.0f);
-        materialNode->specularColor.setValue(1.0f, 1.0f, 1.0f);
+        if (diffuseOk)
+        {
+            materialNode->diffuseColor.setValue(diffuseColor.r, diffuseColor.g, diffuseColor.b);
+
+            // TODO: We should get the ambient and specular color as well
+            materialNode->ambientColor = materialNode->diffuseColor;
+            materialNode->specularColor = materialNode->diffuseColor;
+        }
+        else
+        {
+            materialNode->diffuseColor.setValue(1.0f, 1.0f, 1.0f);
+            materialNode->ambientColor.setValue(1.0f, 1.0f, 1.0f);
+            materialNode->specularColor.setValue(1.0f, 1.0f, 1.0f);
+        }
 
         result->addChild(materialNode);
     }
@@ -478,96 +492,80 @@ namespace VirtualRobot
             return nullptr;
         }
 
-        // We only load the first mesh
-        // If there are files with multiple meshes inside, we would need to loop over them
-        aiMesh* mesh = scene->mMeshes[0];
-        unsigned int numVertices = mesh->mNumVertices;
-        unsigned int numFaces = mesh->mNumFaces;
-
-        if (!mesh->HasNormals())
+        SoSeparator* group = new SoSeparator;
+        for (unsigned int meshIndex = 0; meshIndex < numMeshes; ++meshIndex)
         {
-            throw std::runtime_error("Expected assimp mesh to have normals since we requested to generate them if they are not present");
-        }
+            // We only load the first mesh
+            // If there are files with multiple meshes inside, we would need to loop over them
+            aiMesh* mesh = scene->mMeshes[meshIndex];
+            unsigned int numVertices = mesh->mNumVertices;
+            unsigned int numFaces = mesh->mNumFaces;
 
-        // Each mesh has a corresponding material (via mMaterialIndex)
-        // We use the material to lookup textures
-        unsigned int materialIndex = mesh->mMaterialIndex;
-        if (materialIndex >= scene->mNumMaterials)
-        {
-            VR_WARNING << "Material index is invalid: " << materialIndex
-                      << " >= " << scene->mNumMaterials
-                      << "\nIn file: " << filename << std::endl;
-            return nullptr;
-        }
-        aiMaterial* material = scene->mMaterials[materialIndex];
-        // We only lookup diffuse color textures
-        // Maybe other texture types should be supported as well?
-        aiTextureType textureType = aiTextureType_DIFFUSE;
-        unsigned int numTextures = material->GetTextureCount(textureType);
-
-        VR_INFO << "Loaded mesh from file '" << filename << "' with "
-                << numMeshes << " mesh(es), "
-                << numVertices << " vertices, "
-                << numFaces << " faces, "
-                << numTextures << " texture(s), "
-                << (mesh->HasVertexColors(0) ? "has" : "no") << " vertex colors, "
-                << (mesh->HasTextureCoords(0) ? "has" : "no") << " texture coordinates\n";
-
-
-        SoSeparator* result = new SoSeparator;
-
-        // We only look at the first vertex color attribute (index 0)
-        // Coin does not support multiple colors per vertex
-        if (mesh->HasVertexColors(0))
-        {
-            addPerVertexColorMaterial(mesh->mColors[0], numVertices, result);
-        }
-        else
-        {
-            addOverallMaterial(result);
-        }
-
-        // Not sure what to do with the material colors
-        // Ignore them for now
-#if 0
-        aiColor3D diffuseColor (0.f,0.f,0.f);
-        bool diffuseOk = material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor) == aiReturn_SUCCESS;
-        std::cout << "diffuseColor: " << diffuseOk << ": "
-                  << diffuseColor.r << ", " << diffuseColor.g << ", " << diffuseColor.b << "\n";
-#endif
-
-        if (numTextures > 0)
-        {
-            addTextureMaterial(material, textureType, meshPath, result);
-        }
-
-        addVertices(numVertices, mesh->mVertices, result);
-        addNormals(numVertices, mesh->mNormals, result);
-
-        // Not all meshes have texture coordinates
-        auto* vertices = mesh->mVertices;
-        auto* uvs = mesh->mTextureCoords[0];
-
-        if (mesh->HasTextureCoords(0))
-        {
-            addTextureCoordinates(numVertices, mesh->mTextureCoords[0], result);
-
-#if 0
-            // Print first vertices and texture coordinates
-            for (int i = 0; i < numVertices; ++i)
+            if (!mesh->HasNormals())
             {
-                aiVector3D xyz = vertices[i];
-                aiVector3D uv = uvs[i];
-
-                std::cout << std::setprecision(4)
-                          << xyz.x << ", " << xyz.y << ", " << xyz.z << ", " << uv.x << ", " << uv.y << std::endl;
+                VR_WARNING << "Expected assimp mesh to have normals since we requested to generate them if they are not present\n"
+                           << "Mesh index: " << meshIndex << "File: " << filename << std::endl;
+                continue;
             }
-#endif
+
+            // Each mesh has a corresponding material (via mMaterialIndex)
+            // We use the material to lookup textures
+            unsigned int materialIndex = mesh->mMaterialIndex;
+            if (materialIndex >= scene->mNumMaterials)
+            {
+                VR_WARNING << "Material index is invalid: " << materialIndex
+                           << " >= " << scene->mNumMaterials
+                           << "\nMesh index: " << meshIndex << "File: " << filename << std::endl;
+                continue;
+            }
+            aiMaterial* material = scene->mMaterials[materialIndex];
+            // We only lookup diffuse color textures
+            // Maybe other texture types should be supported as well?
+            aiTextureType textureType = aiTextureType_DIFFUSE;
+            unsigned int numTextures = material->GetTextureCount(textureType);
+
+            VR_INFO << "Loaded mesh from file '" << filename << "' with "
+                    << "mesh index " << meshIndex << "(total #meshes " << numMeshes << "), "
+                    << numVertices << " vertices, "
+                    << numFaces << " faces, "
+                    << numTextures << " texture(s), "
+                    << (mesh->HasVertexColors(0) ? "has" : "no") << " vertex colors, "
+                    << (mesh->HasTextureCoords(0) ? "has" : "no") << " texture coordinates\n";
+
+
+            SoSeparator* result = new SoSeparator;
+
+            // We only look at the first vertex color attribute (index 0)
+            // Coin does not support multiple colors per vertex
+            if (mesh->HasVertexColors(0))
+            {
+                addPerVertexColorMaterial(mesh->mColors[0], numVertices, result);
+            }
+            else
+            {
+                // TODO: Add assigned material properties
+                addOverallMaterial(material, result);
+            }
+
+            if (numTextures > 0)
+            {
+                addTextureMaterial(material, textureType, meshPath, result);
+            }
+
+            addVertices(numVertices, mesh->mVertices, result);
+            addNormals(numVertices, mesh->mNormals, result);
+
+            if (mesh->HasTextureCoords(0))
+            {
+                addTextureCoordinates(numVertices, mesh->mTextureCoords[0], result);
+            }
+
+            addIndexedFaceSet(numFaces, mesh->mFaces, result);
+
+            group->addChild(result);
         }
 
-        addIndexedFaceSet(numFaces, mesh->mFaces, result);
-
-        return result;
+        return group;
     }
 
     ManipulationObjectPtr AssimpReader::readFileAsManipulationObject(const std::string& filename, const std::string& name)
