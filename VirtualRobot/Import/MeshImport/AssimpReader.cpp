@@ -277,8 +277,8 @@ namespace VirtualRobot
         }
 
         materialNode->diffuseColor.finishEditing();
-        materialNode->ambientColor = materialNode->diffuseColor;
-        materialNode->specularColor = materialNode->diffuseColor;
+        //materialNode->ambientColor = materialNode->diffuseColor;
+        //materialNode->specularColor = materialNode->diffuseColor;
 
         result->addChild(materialNode);
     }
@@ -289,23 +289,50 @@ namespace VirtualRobot
         materialBinding->value = SoMaterialBinding::OVERALL;
         result->addChild(materialBinding);
 
-        aiColor3D diffuseColor (0.f,0.f,0.f);
-        bool diffuseOk = material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor) == aiReturn_SUCCESS;
-
         SoMaterial* materialNode = new SoMaterial;
+
+        aiColor3D diffuseColor(0.0f, 0.0f, 0.0f);
+        bool diffuseOk = material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor) == aiReturn_SUCCESS;
         if (diffuseOk)
         {
+            // std::cout << "diffuse: " << diffuseColor.r << ", " << diffuseColor.g << ", " << diffuseColor.b << std::endl;
             materialNode->diffuseColor.setValue(diffuseColor.r, diffuseColor.g, diffuseColor.b);
-
-            // TODO: We should get the ambient and specular color as well
-            materialNode->ambientColor = materialNode->diffuseColor;
-            materialNode->specularColor = materialNode->diffuseColor;
         }
         else
         {
             materialNode->diffuseColor.setValue(1.0f, 1.0f, 1.0f);
-            materialNode->ambientColor.setValue(1.0f, 1.0f, 1.0f);
-            materialNode->specularColor.setValue(1.0f, 1.0f, 1.0f);
+        }
+
+        aiColor3D ambientColor(0.0f, 0.0f, 0.0f);
+        bool ambientOk = material->Get(AI_MATKEY_COLOR_AMBIENT, ambientColor) == aiReturn_SUCCESS;
+        if (ambientOk)
+        {
+            // std::cout << "diffuse: " << ambientColor.r << ", " << ambientColor.g << ", " << ambientColor.b << std::endl;
+            materialNode->ambientColor.setValue(ambientColor.r, ambientColor.g, ambientColor.b);
+        }
+
+        aiColor3D specularColor(0.0f, 0.0f, 0.0f);
+        bool specularOk = material->Get(AI_MATKEY_COLOR_SPECULAR, specularColor) == aiReturn_SUCCESS;
+        if (specularOk)
+        {
+            // std::cout << "diffuse: " << specularColor.r << ", " << specularColor.g << ", " << specularColor.b << std::endl;
+            materialNode->specularColor.setValue(specularColor.r, specularColor.g, specularColor.b);
+        }
+
+        aiColor3D emissiveColor(0.0f, 0.0f, 0.0f);
+        bool emissiveOk = material->Get(AI_MATKEY_COLOR_EMISSIVE, emissiveColor) == aiReturn_SUCCESS;
+        if (emissiveOk)
+        {
+            // std::cout << "diffuse: " << emissiveColor.r << ", " << emissiveColor.g << ", " << emissiveColor.b << std::endl;
+            materialNode->emissiveColor.setValue(emissiveColor.r, emissiveColor.g, emissiveColor.b);
+        }
+
+        float shininess = 0.0f;
+        bool shininessOk = material->Get(AI_MATKEY_SHININESS, shininess) == aiReturn_SUCCESS;
+        if (shininessOk && shininess)
+        {
+            // std::cout << "shininess: " << shininess << std::endl;
+            materialNode->shininess = shininess;
         }
 
         result->addChild(materialNode);
@@ -535,16 +562,13 @@ namespace VirtualRobot
 
             SoSeparator* result = new SoSeparator;
 
+            addOverallMaterial(material, result);
+
             // We only look at the first vertex color attribute (index 0)
             // Coin does not support multiple colors per vertex
             if (mesh->HasVertexColors(0))
             {
                 addPerVertexColorMaterial(mesh->mColors[0], numVertices, result);
-            }
-            else
-            {
-                // TODO: Add assigned material properties
-                addOverallMaterial(material, result);
             }
 
             if (numTextures > 0)
