@@ -1,6 +1,5 @@
-#include <filesystem>
-
 #include "AssimpReader.h"
+
 #include <VirtualRobot/Visualization/TriMeshModel.h>
 #include <VirtualRobot/ManipulationObject.h>
 
@@ -21,7 +20,7 @@
 
 #include <Inventor/SbImage.h>
 
-#include <iomanip>
+#include <filesystem>
 
 namespace
 {
@@ -348,44 +347,36 @@ namespace VirtualRobot
         aiReturn mapUOk = material->Get(_AI_MATKEY_MAPPINGMODE_U_BASE, textureType, 0, mapMode[0]);
         aiReturn mapVOk = material->Get(_AI_MATKEY_MAPPINGMODE_V_BASE, textureType, 0, mapMode[1]);
 
-        std::cout << "PathOK: " << pathOk
-                  << ", mapU: " << mapUOk
-                  << ", mapV: " << mapVOk << std::endl;
-                //material->GetTexture(textureType, 0,
-                //                                  &path, &mapping, &uvindex, &blend,
-                //                                 &op, mapMode);
         if (pathOk == aiReturn_SUCCESS)
         {
             SoTexture2* textureNode = new SoTexture2();
             std::filesystem::path texturePath = meshPath.parent_path() / path.C_Str();
             textureNode->filename.set(texturePath.c_str());
 
-            // Texture map mode for the first coordinate (assimp 0, Coin S)
-            if (mapMode[0] == aiTextureMapMode_Wrap)
+            // Texture map mode for the first coordinate (assimp U, Coin S)
+            if (mapUOk)
             {
-                textureNode->wrapS = SoTexture2::REPEAT;
-            }
-            else if (mapMode[0] == aiTextureMapMode_Clamp)
-            {
-                textureNode->wrapS = SoTexture2::CLAMP;
-            }
-            else
-            {
-                VR_INFO << "Could not map TextureMapMode " << mapMode[0] << "\n";
+                if (mapMode[0] == aiTextureMapMode_Wrap)
+                {
+                    textureNode->wrapS = SoTexture2::REPEAT;
+                }
+                else if (mapMode[0] == aiTextureMapMode_Clamp)
+                {
+                    textureNode->wrapS = SoTexture2::CLAMP;
+                }
             }
 
-            // Texture map mode for the second coordinate (assimp 1, Coin T)
-            if (mapMode[1] == aiTextureMapMode_Wrap)
+            // Texture map mode for the second coordinate (assimp V, Coin T)
+            if (mapVOk)
             {
-                textureNode->wrapT = SoTexture2::REPEAT;
-            }
-            else if (mapMode[1] == aiTextureMapMode_Clamp)
-            {
-                textureNode->wrapT = SoTexture2::CLAMP;
-            }
-            else
-            {
-                VR_INFO << "Could not map TextureMapMode " << mapMode[1] << "\n";
+                if (mapMode[1] == aiTextureMapMode_Wrap)
+                {
+                    textureNode->wrapT = SoTexture2::REPEAT;
+                }
+                else if (mapMode[1] == aiTextureMapMode_Clamp)
+                {
+                    textureNode->wrapT = SoTexture2::CLAMP;
+                }
             }
 
             SbImage const& image = textureNode->image.getValue();
@@ -409,7 +400,7 @@ namespace VirtualRobot
         SoCoordinate3* vertexNode = new SoCoordinate3;
         vertexNode->point.setNum(numVertices);
         SbVec3f* vertexData = vertexNode->point.startEditing();
-        // Consider memcpy!
+
         for (unsigned int i = 0; i < numVertices; ++i)
         {
             vertexData[i][0] = vertices[i].x;
@@ -417,6 +408,7 @@ namespace VirtualRobot
             vertexData[i][2] = vertices[i].z;
         }
         vertexNode->point.finishEditing();
+
         result->addChild(vertexNode);
     }
 
@@ -425,13 +417,13 @@ namespace VirtualRobot
     {
         SoNormal* normalNode = new SoNormal;
         normalNode->vector.setNum(numNormals);
-        SbVec3f* normalData = normalNode->vector.startEditing();
-        // Consider memcpy!
+        SbVec3f* normalsData = normalNode->vector.startEditing();
+
         for (unsigned int i = 0; i < numNormals; ++i)
         {
-            normalData[i][0] = normals[i].x;
-            normalData[i][1] = normals[i].y;
-            normalData[i][2] = normals[i].z;
+            normalsData[i][0] = normals[i].x;
+            normalsData[i][1] = normals[i].y;
+            normalsData[i][2] = normals[i].z;
         }
         normalNode->vector.finishEditing();
 
@@ -497,7 +489,7 @@ namespace VirtualRobot
         // Generate UV coordinates if possible (for primitive shapes like boxes, spheres, ...)
         const aiScene* scene = importer.ReadFile(
                                    filename,
-                                   //aiProcess_JoinIdenticalVertices |
+                                   // aiProcess_JoinIdenticalVertices |
                                    aiProcess_Triangulate |
                                    aiProcess_GenSmoothNormals |
                                    aiProcess_GenUVCoords |
@@ -551,6 +543,7 @@ namespace VirtualRobot
             aiTextureType textureType = aiTextureType_DIFFUSE;
             unsigned int numTextures = material->GetTextureCount(textureType);
 
+#if 0
             VR_INFO << "Loaded mesh from file '" << filename << "' with "
                     << "mesh index " << meshIndex << "(total #meshes " << numMeshes << "), "
                     << numVertices << " vertices, "
@@ -558,6 +551,7 @@ namespace VirtualRobot
                     << numTextures << " texture(s), "
                     << (mesh->HasVertexColors(0) ? "has" : "no") << " vertex colors, "
                     << (mesh->HasTextureCoords(0) ? "has" : "no") << " texture coordinates\n";
+#endif
 
 
             SoSeparator* result = new SoSeparator;

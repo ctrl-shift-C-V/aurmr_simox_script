@@ -414,7 +414,6 @@ namespace VirtualRobot
 
         //boxAction.getXfBoundingBox().getBounds(minX, minY, minZ, maxX, maxY, maxZ);
         boxAction.getBoundingBox().getBounds(minX, minY, minZ, maxX, maxY, maxZ);
-        std::cout << "x: " << minX << "," << maxX << " ; Y: " << minY << "," << maxY << " ; Z: " << minZ << "," << maxZ << std::endl;
 
 
         SoCube* cu = new SoCube();
