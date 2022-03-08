@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "convert_meshes"
+version = "0.1.0"
+description = ""
+authors = ["Rainer Kartmann <rainer dot kartmann at kit dot edu>"]
+
+[tool.poetry.dependencies]
+python = "^3.6.2"
+ipython = "5.5"
+pymeshlab = "^2021.10"
+click = "^8.0.4"
+rich = "^11.2.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["setuptools", "poetry-core>=1.0.0"]     
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "h2t"
+url = "https://pypi.humanoids.kit.edu/simple/"
+

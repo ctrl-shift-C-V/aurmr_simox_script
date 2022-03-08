@@ -1,0 +1,29 @@
+#! /bin/bash
+
+# This file's directory.
+own_dir="$(dirname $0)"
+# The repository root directory.
+root_dir="$(dirname "$own_dir")"
+# The python package directory.
+pkg_dir="$root_dir"/convert_meshes
+
+# Activate the environment.
+if [[ -d "$root_dir/.venv" ]]; then
+  venv="$root_dir/.venv"
+elif [[ -d "$root_dir/venv" ]]; then
+  venv="$root_dir/venv"
+else
+  pushd "$root_dir"
+  venv="$(poetry env info --path)"
+  popd
+fi
+
+source "$venv/bin/activate"
+
+
+# Add the python package to PYTHONPATH
+# (might not be necessary as the script is in the right directory).
+export PYTHONPATH="$root_dir:$PYTHONPATH"
+
+# Call the python script.
+"$pkg_dir"/convert_meshes.py "$@"
