@@ -325,6 +325,7 @@ SET(SOURCES
     Nodes/RobotNode.cpp
     Nodes/RobotNodeActuator.cpp
     Nodes/RobotNodeCornelius.cpp
+    Nodes/RobotNodeCorneliusFactory.cpp
     Nodes/RobotNodeFixed.cpp
     Nodes/RobotNodeFixedFactory.cpp
     Nodes/RobotNodePrismatic.cpp
@@ -561,6 +562,7 @@ SET(INCLUDES
     Nodes/RobotNode.h
     Nodes/RobotNodeActuator.h
     Nodes/RobotNodeCornelius.h
+    Nodes/RobotNodeCorneliusFactory.h
     Nodes/RobotNodeFactory.h
     Nodes/RobotNodeFixed.h
     Nodes/RobotNodeFixedFactory.h

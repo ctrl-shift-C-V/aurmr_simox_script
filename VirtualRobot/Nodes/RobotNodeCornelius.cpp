@@ -1,11 +1,10 @@
-
 #include "RobotNodeCornelius.h"
 #include "Nodes/Sensor.h"
 #include "Robot.h"
 #include "VirtualRobotException.h"
 
-#include <cmath>
 #include <algorithm>
+#include <cmath>
 
 #include <Eigen/Geometry>
 
@@ -36,9 +35,9 @@ namespace VirtualRobot
         this->localTransformation = preJointTransform;
         this->jointRotationAxis = axis;
         this->jointRotationAxis.normalize();
-        tmpRotMat.setIdentity();
         checkValidRobotNodeType();
     }
+
 
     RobotNodeCornelius::RobotNodeCornelius(
             RobotWeakPtr rob,
@@ -49,12 +48,12 @@ namespace VirtualRobot
             VisualizationNodePtr visualization,
             CollisionModelPtr collisionModel,
             float jointValueOffset,
-            const SceneObject::Physics& p,
+            const SceneObject::Physics& physics,
             CollisionCheckerPtr colChecker,
             RobotNodeType type
             ) :
         RobotNode(rob, name, jointLimitLo, jointLimitHi, visualization, collisionModel,
-                  jointValueOffset, p, colChecker, type)
+                  jointValueOffset, physics, colChecker, type)
 
     {
         initialized = false;
@@ -81,8 +80,7 @@ namespace VirtualRobot
         RotAlpha(2, 2) = cos(alpha);
 
         this->localTransformation = RotTheta * TransD * TransA * RotAlpha;
-        this->jointRotationAxis = Eigen::Vector3f(0, 0, 1);         // rotation around z axis
-        tmpRotMat.setIdentity();
+        this->jointRotationAxis = Eigen::Vector3f::UnitZ();  // rotation around z axis
         checkValidRobotNodeType();
     }
 
@@ -90,16 +88,31 @@ namespace VirtualRobot
     RobotNodeCornelius::~RobotNodeCornelius()
     = default;
 
-    bool RobotNodeCornelius::initialize(SceneObjectPtr parent, const std::vector<SceneObjectPtr>& children)
+
+    bool RobotNodeCornelius::initialize(
+            SceneObjectPtr parent,
+            const std::vector<SceneObjectPtr>& children)
     {
         return RobotNode::initialize(parent, children);
     }
 
-    void RobotNodeCornelius::updateTransformationMatrices(const Eigen::Matrix4f& parentPose)
+
+    void RobotNodeCornelius::updateTransformationMatrices(
+            const Eigen::Matrix4f& parentPose)
     {
-        simox::math::orientation(tmpRotMat) = Eigen::AngleAxisf(jointValue + jointValueOffset, jointRotationAxis).matrix();
-        globalPose = parentPose * localTransformation * tmpRotMat;
+        const Eigen::Matrix4f rot = simox::math::pose(
+                    Eigen::AngleAxisf(jointValue + jointValueOffset, jointRotationAxis));
+        globalPose = parentPose * localTransformation * rot;
+
+        std::cout << __FUNCTION__ << "() with "
+                  << "joint value = " << jointValue
+                  << ", joint vaue offset = " << jointValueOffset
+                  << ", joint rotation axis = " << jointRotationAxis.transpose()
+                  << ", | joint rotation axis | = " << jointRotationAxis.norm()
+                  << ", rot matrix: \n" << rot
+                  << std::endl;
     }
+
 
     void RobotNodeCornelius::print(bool printChildren, bool printDecoration) const
     {
@@ -112,7 +125,7 @@ namespace VirtualRobot
 
         RobotNode::print(false, false);
 
-        std::cout << "* JointRotationAxis: " << jointRotationAxis[0] << ", " << jointRotationAxis[1] << ", " << jointRotationAxis[2] << std::endl;
+        std::cout << "* JointRotationAxis: " << jointRotationAxis.transpose() << std::endl;
 
         if (printDecoration)
         {
@@ -121,11 +134,13 @@ namespace VirtualRobot
 
         if (printChildren)
         {
-            std::vector< SceneObjectPtr > children = this->getChildren();
-            std::for_each(children.begin(), children.end(), std::bind(&SceneObject::print,
-                                                                      std::placeholders::_1, true, true));
+            for (const SceneObjectPtr& child : this->getChildren())
+            {
+                child->print(true, true);
+            }
         }
     }
+
 
     RobotNodePtr RobotNodeCornelius::_clone(
             const RobotPtr newRobot,
@@ -153,15 +168,24 @@ namespace VirtualRobot
         return result;
     }
 
+
     bool RobotNodeCornelius::isRotationalJoint() const
     {
         return true;
     }
 
+
+    Eigen::Vector3f RobotNodeCornelius::getJointRotationAxisInJointCoordSystem() const
+    {
+        return jointRotationAxis;
+    }
+
+
     void RobotNodeCornelius::setJointRotationAxis(Eigen::Vector3f newAxis)
     {
         this->jointRotationAxis = newAxis;
     }
+
 
     Eigen::Vector3f RobotNodeCornelius::getJointRotationAxis(const SceneObjectPtr coordSystem) const
     {
@@ -176,17 +200,6 @@ namespace VirtualRobot
         }
 
         return result4f.head<3>();
-    }
-
-    void RobotNodeCornelius::updateVisualizationPose(const Eigen::Matrix4f& globalPose, bool updateChildren /*= false*/)
-    {
-        RobotNode::updateVisualizationPose(globalPose, updateChildren);
-    }
-
-
-    Eigen::Vector3f RobotNodeCornelius::getJointRotationAxisInJointCoordSystem() const
-    {
-        return jointRotationAxis;
     }
 
     void RobotNodeCornelius::checkValidRobotNodeType()
@@ -220,7 +233,7 @@ namespace VirtualRobot
 
     float RobotNodeCornelius::getLMTC(float angle)
     {
-        return std::sqrt(2 - 2 * cos(angle));
+        return std::sqrt(2 - 2 * std::cos(angle));
     }
 
 
