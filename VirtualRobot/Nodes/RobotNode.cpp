@@ -12,7 +12,6 @@
 #include <VirtualRobot/math/Helpers.h>
 #include <VirtualRobot/XML/BaseIO.h>
 
-
 #include <Eigen/Core>
 
 #include <filesystem>
@@ -23,19 +22,18 @@
 
 namespace VirtualRobot
 {
-    RobotNode::RobotNode(RobotWeakPtr rob,
-                         const std::string& name,
-                         float jointLimitLo,
-                         float jointLimitHi,
-                         VisualizationNodePtr visualization,
-                         CollisionModelPtr collisionModel,
-                         float jointValueOffset,
-                         const SceneObject::Physics& p,
-                         CollisionCheckerPtr colChecker,
-                         RobotNodeType type)
-        : SceneObject(name, visualization, collisionModel, p, colChecker)
-
-
+    RobotNode::RobotNode(
+            RobotWeakPtr rob,
+            const std::string& name,
+            float jointLimitLo,
+            float jointLimitHi,
+            VisualizationNodePtr visualization,
+            CollisionModelPtr collisionModel,
+            float jointValueOffset,
+            const SceneObject::Physics& physics,
+            CollisionCheckerPtr colChecker,
+            RobotNodeType type) :
+        SceneObject(name, visualization, collisionModel, physics, colChecker)
     {
         nodeType = type;
         maxVelocity = -1.0f;
@@ -123,9 +121,7 @@ namespace VirtualRobot
 
             default:
                 VR_ERROR << "RobotNodeType nyi..." << std::endl;
-
         }
-
     }
 
     bool RobotNode::getEnforceJointLimits() const

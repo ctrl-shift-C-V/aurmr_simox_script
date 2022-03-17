@@ -78,15 +78,13 @@ namespace VirtualRobot
                   const std::string& name,
                   float jointLimitLo,
                   float jointLimitHi,
-                  VisualizationNodePtr visualization = VisualizationNodePtr(),
-                  CollisionModelPtr collisionModel = CollisionModelPtr(),
+                  VisualizationNodePtr visualization = nullptr,
+                  CollisionModelPtr collisionModel = nullptr,
                   float jointValueOffset = 0.0f,
-                  const SceneObject::Physics& p = SceneObject::Physics(),
-                  CollisionCheckerPtr colChecker = CollisionCheckerPtr(),
+                  const SceneObject::Physics& physics = {},
+                  CollisionCheckerPtr colChecker = nullptr,
                   RobotNodeType type = Generic);
 
-        /*!
-        */
         ~RobotNode() override;
 
 
