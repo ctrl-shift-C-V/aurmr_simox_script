@@ -34,118 +34,7 @@
 namespace VirtualRobot
 {
 
-    class VIRTUAL_ROBOT_IMPORT_EXPORT RobotNodeCorneliusSub : public RobotNode
-    {
-    public:
-
-        friend class RobotFactory;
-        friend class RobotNodeCornelius;
-
-        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-
-
-        RobotNodeCorneliusSub(
-                RobotWeakPtr rob,                                   ///< The robot
-                const std::string& name,                            ///< The name
-                float jointLimitLo,                                 ///< lower joint limit
-                float jointLimitHi,                                 ///< upper joint limit
-                const Eigen::Matrix4f& preJointTransform,           ///< This transformation is applied before the translation of the joint is done
-                const Eigen::Vector3f& axis,                        ///< The rotation axis (in local joint coord system)
-                VisualizationNodePtr visualization = nullptr,       ///< A visualization model
-                CollisionModelPtr collisionModel = nullptr,         ///< A collision model
-                float jointValueOffset = 0.0f,                      ///< An offset that is internally added to the joint value
-                const SceneObject::Physics& p = {},                 ///< physics information
-                CollisionCheckerPtr colChecker = nullptr,           ///< A collision checker instance (if not set, the global col checker is used)
-                RobotNodeType type = Generic
-                );
-
-        RobotNodeCorneliusSub(
-                RobotWeakPtr rob,                                   ///< The robot
-                const std::string& name,                            ///< The name
-                float jointLimitLo,                                 ///< lower joint limit
-                float jointLimitHi,                                 ///< upper joint limit
-                float a,                                            ///< dh paramters
-                float d,                                            ///< dh paramters
-                float alpha,                                        ///< dh paramters
-                float theta,                                        ///< dh paramters
-                VisualizationNodePtr visualization = nullptr,       ///< A visualization model
-                CollisionModelPtr collisionModel = nullptr,         ///< A collision model
-                float jointValueOffset = 0.0f,                      ///< An offset that is internally added to the joint value
-                const SceneObject::Physics& p = {},                 ///< physics information
-                CollisionCheckerPtr colChecker = {},                ///< A collision checker instance (if not set, the global col checker is used)
-                RobotNodeType type = Generic
-                );
-
-        ~RobotNodeCorneliusSub() override;
-
-
-        bool
-        initialize(
-                SceneObjectPtr parent = nullptr,
-                const std::vector<SceneObjectPtr>& children = {}
-                ) override;
-
-        void
-        print(
-                bool printChildren = false,
-                bool printDecoration = true
-                ) const override;
-
-        bool
-        isRotationalJoint() const override;
-
-
-        Eigen::Vector3f
-        getJointRotationAxis(const SceneObjectPtr coordSystem = nullptr) const;
-
-        Eigen::Vector3f
-        getJointRotationAxisInJointCoordSystem() const;
-
-        void
-        setJointRotationAxis(const Eigen::Vector3f& newAxis);
-
-        virtual float
-        getLMTC(float angle);
-
-        virtual float
-        getLMomentArm(float angle);
-
-
-    protected:
-
-        RobotNodeCorneliusSub();
-
-
-        std::string
-        _toXML(
-                const std::string& modelPath
-                ) override;
-
-        void
-        checkValidRobotNodeType() override;
-
-        void
-        updateTransformationMatrices(
-                const Eigen::Matrix4f& parentPose
-                ) override;
-
-        RobotNodePtr
-        _clone(
-                const RobotPtr newRobot,
-                const VisualizationNodePtr visualizationModel,
-                const CollisionModelPtr collisionModel,
-                CollisionCheckerPtr colChecker,
-                float scaling
-                ) override;
-
-
-    protected:
-
-        Eigen::Vector3f jointRotationAxis;  // (given in local joint coord system)
-
-    };
-
-
+    using RobotNodeCorneliusPtr = std::shared_ptr<class RobotNodeCornelius>;
 
     class VIRTUAL_ROBOT_IMPORT_EXPORT RobotNodeCornelius : public RobotNode
     {
@@ -168,7 +57,8 @@ namespace VirtualRobot
                 float jointValueOffset = 0.0f,                      ///< An offset that is internally added to the joint value
                 const SceneObject::Physics& p = {},                 ///< physics information
                 CollisionCheckerPtr colChecker = nullptr,           ///< A collision checker instance (if not set, the global col checker is used)
-                RobotNodeType type = Generic
+                RobotNodeType type = Generic,
+                bool isSub = false  ///< Whether this node is a sub node of the top-cornelius node.
                 );
 
         RobotNodeCornelius(
@@ -283,12 +173,10 @@ namespace VirtualRobot
 
     protected:
 
+        bool isSub = false;
         Eigen::Vector3f jointRotationAxis;  // (given in local joint coord system)
 
     };
-
-    using RobotNodeCorneliusSubPtr = std::shared_ptr<RobotNodeCorneliusSub>;
-    using RobotNodeCorneliusPtr = std::shared_ptr<RobotNodeCornelius>;
 
 } // namespace VirtualRobot
 
