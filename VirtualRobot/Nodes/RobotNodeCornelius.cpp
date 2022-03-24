@@ -103,26 +103,33 @@ namespace VirtualRobot
             const std::vector<SceneObjectPtr>& children)
     {
         // Create a sub joint as a child.
-        const bool isSub = true;
-        RobotNodeCorneliusPtr sub = std::make_shared<RobotNodeCornelius>(
-                    robot,
-                    name + "_sub",
-                    jointLimitLo,
-                    jointLimitHi,
-                    localTransformation,  // const Eigen::Matrix4f& preJointTransform,
-                    jointRotationAxis,  // const Eigen::Vector3f& axis,
-                    nullptr,  // visualizationModel,
-                    nullptr,  // collisionModel
-                    jointValueOffset,
-                    Physics{},  //physics,
-                    nullptr,  // collisionChecker,
-                    nodeType,
-                    isSub
-                    );
-        sub->initialize(shared_from_this(), children);
+        if (not isSub)
+        {
+            const bool isSub = true;
+            RobotNodeCorneliusPtr sub = std::make_shared<RobotNodeCornelius>(
+                        robot,
+                        name + "_sub",
+                        jointLimitLo,
+                        jointLimitHi,
+                        localTransformation,  // const Eigen::Matrix4f& preJointTransform,
+                        jointRotationAxis,  // const Eigen::Vector3f& axis,
+                        nullptr,  // visualizationModel,
+                        nullptr,  // collisionModel
+                        jointValueOffset,
+                        Physics{},  //physics,
+                        nullptr,  // collisionChecker,
+                        nodeType,
+                        isSub
+                        );
+            sub->initialize(shared_from_this(), children);
 
-        bool success = RobotNode::initialize(parent, {sub});
-        return success;
+            bool success = RobotNode::initialize(parent, {sub});
+            return success;
+        }
+        else
+        {
+            return RobotNode::initialize(parent, children);
+        }
     }
 
 
