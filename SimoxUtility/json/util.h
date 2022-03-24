@@ -1,6 +1,8 @@
 #pragma once
 
 #include <optional>
+#include <string>
+#include <vector>
 
 #include "json.h"
 
@@ -24,6 +26,23 @@ namespace simox::json
     T get_at_any_key(const json& j, const std::vector<std::string>& keys)
     {
         return at_any_key(j, keys).get<T>();
+    }
+
+
+    template <class ValueT, class DefaultT = ValueT>
+    void get_to_if_exists(const json& j,
+                          const std::string& key,
+                          ValueT& dest,
+                          const DefaultT& default_ = ValueT{})
+    {
+        if (j.count(key))
+        {
+            j.at(key).get_to(dest);
+        }
+        else
+        {
+            dest = default_;
+        }
     }
 
 }
