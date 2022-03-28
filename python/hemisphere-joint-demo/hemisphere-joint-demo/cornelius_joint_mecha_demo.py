@@ -8,275 +8,6 @@ from armarx import remote_gui as rg
 
 from armarx.remote_gui.widgets.ndarray import NdArrayWidget
 
-from numpy import pi
-
-
-# Function definitions
-def f_zenith(a1, a2, L, T_0):
-    return -np.arcsin((2 * L ** 2 - 4 * L ** 2 * (L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a1 / L)) * np.sin(
-        T_0 + np.arcsin(a2 / L)) ** 3 - L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a1 / L)) * np.sin(
-        T_0 + np.arcsin(a2 / L)) - L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 5 * np.sin(
-        T_0) - L * np.sqrt(2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-        T_0 + np.arcsin(a2 / L)) ** 3 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-        T_0 + np.arcsin(a2 / L)) - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-        T_0 + np.arcsin(a2 / L)) ** 2 + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-        T_0 + np.arcsin(a1 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) * np.sin(
-        T_0 + np.arcsin(a2 / L)) ** 3 + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) * np.sin(
-        T_0 + np.arcsin(a2 / L)) + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-        T_0 + np.arcsin(a2 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 - L ** 8 * np.sin(
-        T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(T_0 + np.arcsin(a2 / L)) ** 4 + L ** 8 * np.sin(
-        T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8 * np.sin(
-        T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(T_0 + np.arcsin(a2 / L)) ** 4 - L ** 8 * np.sin(
-        T_0 + np.arcsin(a1 / L)) ** 2 - L ** 8 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8) * np.sin(
-        T_0 + np.arcsin(a2 / L))) ** 2 / ((-L ** 2 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 2) * (
-                -L ** 4 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-            T_0 + np.arcsin(a2 / L)) ** 2 + L ** 4) ** 2) - 4 * L ** 2 * (
-                                   L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-                               T_0 + np.arcsin(a2 / L)) - L ** 5 * np.sin(T_0) * np.sin(
-                               T_0 + np.arcsin(a1 / L)) ** 2 - L ** 5 * np.sin(T_0) * np.sin(
-                               T_0 + np.arcsin(a1 / L)) * np.sin(T_0 + np.arcsin(a2 / L)) + L ** 5 * np.sin(
-                               T_0) - L * np.sqrt(
-                               2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-                                   T_0 + np.arcsin(a2 / L)) ** 3 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                   T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-                                   T_0 + np.arcsin(a2 / L)) - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                   T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                                   T_0 + np.arcsin(a2 / L)) ** 2 + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                   T_0 + np.arcsin(a1 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                   T_0 + np.arcsin(a1 / L)) * np.sin(
-                                   T_0 + np.arcsin(a2 / L)) ** 3 + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                   T_0 + np.arcsin(a1 / L)) * np.sin(T_0 + np.arcsin(a2 / L)) + 2 * L ** 8 * np.sin(
-                                   T_0) ** 2 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 - 2 * L ** 8 * np.sin(
-                                   T_0) ** 2 - L ** 8 * np.sin(T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(
-                                   T_0 + np.arcsin(a2 / L)) ** 4 + L ** 8 * np.sin(
-                                   T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(
-                                   T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8 * np.sin(
-                                   T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                                   T_0 + np.arcsin(a2 / L)) ** 4 - L ** 8 * np.sin(
-                                   T_0 + np.arcsin(a1 / L)) ** 2 - L ** 8 * np.sin(
-                                   T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8) * np.sin(T_0 + np.arcsin(a1 / L))) ** 2 / (
-                                   (-L ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 + L ** 2) * (
-                                       -L ** 4 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                                   T_0 + np.arcsin(a2 / L)) ** 2 + L ** 4) ** 2)) / (2 * L ** 2)) + pi / 2
-
-
-def f_azimuth(a1, a2, L, T_0):
-    return np.arctan2(np.sqrt(4 * L ** 2 * np.sin(T_0) ** 2 - 4 * L ** 2 * (
-                L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a1 / L)) * np.sin(
-            T_0 + np.arcsin(a2 / L)) ** 3 - L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a1 / L)) * np.sin(
-            T_0 + np.arcsin(a2 / L)) - L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 5 * np.sin(
-            T_0) - L * np.sqrt(2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-            T_0 + np.arcsin(a2 / L)) ** 3 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-            T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(T_0 + np.arcsin(a2 / L)) - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-            T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + 2 * L ** 8 * np.sin(
-            T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-            T_0 + np.arcsin(a1 / L)) * np.sin(T_0 + np.arcsin(a2 / L)) ** 3 + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-            T_0 + np.arcsin(a1 / L)) * np.sin(T_0 + np.arcsin(a2 / L)) + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-            T_0 + np.arcsin(a2 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 - L ** 8 * np.sin(
-            T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(T_0 + np.arcsin(a2 / L)) ** 4 + L ** 8 * np.sin(
-            T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8 * np.sin(
-            T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(T_0 + np.arcsin(a2 / L)) ** 4 - L ** 8 * np.sin(
-            T_0 + np.arcsin(a1 / L)) ** 2 - L ** 8 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8) * np.sin(
-            T_0 + np.arcsin(a2 / L))) ** 2 * np.sin(T_0) ** 2 / (
-                                          (-L ** 2 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 2) * (
-                                              -L ** 4 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                                          T_0 + np.arcsin(a2 / L)) ** 2 + L ** 4) ** 2) - 4 * L ** 2 * (
-                                          L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-                                      T_0 + np.arcsin(a2 / L)) - L ** 5 * np.sin(T_0) * np.sin(
-                                      T_0 + np.arcsin(a1 / L)) ** 2 - L ** 5 * np.sin(T_0) * np.sin(
-                                      T_0 + np.arcsin(a1 / L)) * np.sin(T_0 + np.arcsin(a2 / L)) + L ** 5 * np.sin(
-                                      T_0) - L * np.sqrt(
-                                      2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-                                          T_0 + np.arcsin(a2 / L)) ** 3 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                          T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-                                          T_0 + np.arcsin(a2 / L)) - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                          T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                                          T_0 + np.arcsin(a2 / L)) ** 2 + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                          T_0 + np.arcsin(a1 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                          T_0 + np.arcsin(a1 / L)) * np.sin(
-                                          T_0 + np.arcsin(a2 / L)) ** 3 + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                          T_0 + np.arcsin(a1 / L)) * np.sin(
-                                          T_0 + np.arcsin(a2 / L)) + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                          T_0 + np.arcsin(a2 / L)) ** 2 - 2 * L ** 8 * np.sin(
-                                          T_0) ** 2 - L ** 8 * np.sin(T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(
-                                          T_0 + np.arcsin(a2 / L)) ** 4 + L ** 8 * np.sin(
-                                          T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(
-                                          T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8 * np.sin(
-                                          T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                                          T_0 + np.arcsin(a2 / L)) ** 4 - L ** 8 * np.sin(
-                                          T_0 + np.arcsin(a1 / L)) ** 2 - L ** 8 * np.sin(
-                                          T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8) * np.sin(
-                                      T_0 + np.arcsin(a1 / L))) ** 2 * np.sin(T_0) ** 2 / (
-                                          (-L ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 + L ** 2) * (
-                                              -L ** 4 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                                          T_0 + np.arcsin(a2 / L)) ** 2 + L ** 4) ** 2)) * (
-                                  L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a1 / L)) * np.sin(
-                              T_0 + np.arcsin(a2 / L)) ** 3 - L ** 5 * np.sin(T_0) * np.sin(
-                              T_0 + np.arcsin(a1 / L)) * np.sin(T_0 + np.arcsin(a2 / L)) - L ** 5 * np.sin(
-                              T_0) * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 5 * np.sin(T_0) - L * np.sqrt(
-                              2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 3 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(T_0 + np.arcsin(a2 / L)) - 2 * L ** 8 * np.sin(
-                                  T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 2 + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) * np.sin(T_0 + np.arcsin(a2 / L)) ** 3 + 2 * L ** 8 * np.sin(
-                                  T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 - L ** 8 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 4 + L ** 8 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 4 - L ** 8 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) ** 2 - L ** 8 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8) * np.sin(T_0 + np.arcsin(a2 / L))) / (
-                                  L * np.sqrt(-L ** 2 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 2) * (
-                                      -L ** 4 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 2 + L ** 4) * np.sin(T_0)), np.sqrt(
-        4 * L ** 2 * np.sin(T_0) ** 2 - 4 * L ** 2 * (L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a1 / L)) * np.sin(
-            T_0 + np.arcsin(a2 / L)) ** 3 - L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a1 / L)) * np.sin(
-            T_0 + np.arcsin(a2 / L)) - L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 5 * np.sin(
-            T_0) - L * np.sqrt(2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-            T_0 + np.arcsin(a2 / L)) ** 3 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-            T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(T_0 + np.arcsin(a2 / L)) - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-            T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + 2 * L ** 8 * np.sin(
-            T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-            T_0 + np.arcsin(a1 / L)) * np.sin(T_0 + np.arcsin(a2 / L)) ** 3 + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-            T_0 + np.arcsin(a1 / L)) * np.sin(T_0 + np.arcsin(a2 / L)) + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-            T_0 + np.arcsin(a2 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 - L ** 8 * np.sin(
-            T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(T_0 + np.arcsin(a2 / L)) ** 4 + L ** 8 * np.sin(
-            T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8 * np.sin(
-            T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(T_0 + np.arcsin(a2 / L)) ** 4 - L ** 8 * np.sin(
-            T_0 + np.arcsin(a1 / L)) ** 2 - L ** 8 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8) * np.sin(
-            T_0 + np.arcsin(a2 / L))) ** 2 * np.sin(T_0) ** 2 / (
-                    (-L ** 2 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 2) * (
-                        -L ** 4 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                    T_0 + np.arcsin(a2 / L)) ** 2 + L ** 4) ** 2) - 4 * L ** 2 * (
-                    L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-                T_0 + np.arcsin(a2 / L)) - L ** 5 * np.sin(T_0) * np.sin(
-                T_0 + np.arcsin(a1 / L)) ** 2 - L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a1 / L)) * np.sin(
-                T_0 + np.arcsin(a2 / L)) + L ** 5 * np.sin(T_0) - L * np.sqrt(
-                2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-                    T_0 + np.arcsin(a2 / L)) ** 3 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                    T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(T_0 + np.arcsin(a2 / L)) - 2 * L ** 8 * np.sin(
-                    T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                    T_0 + np.arcsin(a2 / L)) ** 2 + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                    T_0 + np.arcsin(a1 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                    T_0 + np.arcsin(a1 / L)) * np.sin(T_0 + np.arcsin(a2 / L)) ** 3 + 2 * L ** 8 * np.sin(
-                    T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) * np.sin(T_0 + np.arcsin(a2 / L)) + 2 * L ** 8 * np.sin(
-                    T_0) ** 2 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 - L ** 8 * np.sin(
-                    T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(T_0 + np.arcsin(a2 / L)) ** 4 + L ** 8 * np.sin(
-                    T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8 * np.sin(
-                    T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(T_0 + np.arcsin(a2 / L)) ** 4 - L ** 8 * np.sin(
-                    T_0 + np.arcsin(a1 / L)) ** 2 - L ** 8 * np.sin(T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8) * np.sin(
-                T_0 + np.arcsin(a1 / L))) ** 2 * np.sin(T_0) ** 2 / (
-                    (-L ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 + L ** 2) * (
-                        -L ** 4 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                    T_0 + np.arcsin(a2 / L)) ** 2 + L ** 4) ** 2)) * (
-                                  L ** 5 * np.sin(T_0) * np.sin(T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-                              T_0 + np.arcsin(a2 / L)) - L ** 5 * np.sin(T_0) * np.sin(
-                              T_0 + np.arcsin(a1 / L)) ** 2 - L ** 5 * np.sin(T_0) * np.sin(
-                              T_0 + np.arcsin(a1 / L)) * np.sin(T_0 + np.arcsin(a2 / L)) + L ** 5 * np.sin(
-                              T_0) - L * np.sqrt(
-                              2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 3 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) ** 3 * np.sin(T_0 + np.arcsin(a2 / L)) - 2 * L ** 8 * np.sin(
-                                  T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 2 + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) * np.sin(T_0 + np.arcsin(a2 / L)) ** 3 + 2 * L ** 8 * np.sin(
-                                  T_0) ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) + 2 * L ** 8 * np.sin(T_0) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 2 - 2 * L ** 8 * np.sin(T_0) ** 2 - L ** 8 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 4 + L ** 8 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) ** 4 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 4 - L ** 8 * np.sin(
-                                  T_0 + np.arcsin(a1 / L)) ** 2 - L ** 8 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 2 + L ** 8) * np.sin(T_0 + np.arcsin(a1 / L))) / (
-                                  L * np.sqrt(-L ** 2 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 + L ** 2) * (
-                                      -L ** 4 * np.sin(T_0 + np.arcsin(a1 / L)) ** 2 * np.sin(
-                                  T_0 + np.arcsin(a2 / L)) ** 2 + L ** 4) * np.sin(T_0)))
-
-
-def fk(P1_z, P2_z, L, T_0):
-    """
-    From:
-    https://colab.research.google.com/drive/11faUc8pS1yWxFrnmt05VqpDsqOwEi_dg#scrollTo=za3fZw9Rq5d9&line=1&uniqifier=1
-    """
-    from numpy import sin, cos, sqrt
-
-    PE_x = 2 * L * (L ** 5 * sin(T_0) - L ** 3 * P1_z * P2_z * sin(T_0) - L ** 3 * P2_z ** 2 * sin(
-        T_0) + L * P1_z * P2_z ** 3 * sin(T_0) - P2_z * sqrt(
-        -2 * L ** 8 * sin(T_0) ** 2 + L ** 8 + 2 * L ** 6 * P1_z ** 2 * sin(
-            T_0) ** 2 - L ** 6 * P1_z ** 2 + 2 * L ** 6 * P1_z * P2_z * sin(T_0) ** 2 + 2 * L ** 6 * P2_z ** 2 * sin(
-            T_0) ** 2 - L ** 6 * P2_z ** 2 - 2 * L ** 4 * P1_z ** 3 * P2_z * sin(
-            T_0) ** 2 - 2 * L ** 4 * P1_z ** 2 * P2_z ** 2 * sin(T_0) ** 2 - 2 * L ** 4 * P1_z * P2_z ** 3 * sin(
-            T_0) ** 2 + L ** 2 * P1_z ** 4 * P2_z ** 2 + 2 * L ** 2 * P1_z ** 3 * P2_z ** 3 * sin(
-            T_0) ** 2 + L ** 2 * P1_z ** 2 * P2_z ** 4 - P1_z ** 4 * P2_z ** 4)) * sin(T_0) / (
-                       sqrt(L ** 2 - P2_z ** 2) * (L ** 4 - P1_z ** 2 * P2_z ** 2))
-    PE_y = 2 * L * (L ** 5 * sin(T_0) - L ** 3 * P1_z ** 2 * sin(T_0) - L ** 3 * P1_z * P2_z * sin(
-        T_0) + L * P1_z ** 3 * P2_z * sin(T_0) - P1_z * sqrt(
-        -2 * L ** 8 * sin(T_0) ** 2 + L ** 8 + 2 * L ** 6 * P1_z ** 2 * sin(
-            T_0) ** 2 - L ** 6 * P1_z ** 2 + 2 * L ** 6 * P1_z * P2_z * sin(T_0) ** 2 + 2 * L ** 6 * P2_z ** 2 * sin(
-            T_0) ** 2 - L ** 6 * P2_z ** 2 - 2 * L ** 4 * P1_z ** 3 * P2_z * sin(
-            T_0) ** 2 - 2 * L ** 4 * P1_z ** 2 * P2_z ** 2 * sin(T_0) ** 2 - 2 * L ** 4 * P1_z * P2_z ** 3 * sin(
-            T_0) ** 2 + L ** 2 * P1_z ** 4 * P2_z ** 2 + 2 * L ** 2 * P1_z ** 3 * P2_z ** 3 * sin(
-            T_0) ** 2 + L ** 2 * P1_z ** 2 * P2_z ** 4 - P1_z ** 4 * P2_z ** 4)) * sin(T_0) / (
-                       sqrt(L ** 2 - P1_z ** 2) * (L ** 4 - P1_z ** 2 * P2_z ** 2))
-    PE_z = 2 * L * (L * (L ** 4 - P1_z ** 2 * P2_z ** 2) * (P1_z + P2_z) * sin(T_0) + (L ** 2 + P1_z * P2_z) * sqrt(
-        L ** 2 * (L ** 2 * P1_z + L ** 2 * P2_z - P1_z ** 2 * P2_z - P1_z * P2_z ** 2) ** 2 * sin(T_0) ** 2 + (
-                    -L ** 4 + P1_z ** 2 * P2_z ** 2) * (-2 * L ** 4 * cos(T_0) ** 2 + L ** 4 + L ** 2 * P1_z ** 2 * cos(
-            T_0) ** 2 + L ** 2 * P2_z ** 2 * cos(T_0) ** 2 - P1_z ** 2 * P2_z ** 2))) * sin(T_0) / (
-                       (L ** 2 + P1_z * P2_z) * (L ** 4 - P1_z ** 2 * P2_z ** 2))
-
-    return np.array([PE_x, PE_y, PE_z])
-
-
-def fk_ori(PE_x, PE_y, L, T_0):
-    """
-    From:
-    https://colab.research.google.com/drive/11faUc8pS1yWxFrnmt05VqpDsqOwEi_dg#scrollTo=aNSv-3Ftv3ps&line=2&uniqifier=1
-    """
-    from numpy import sin, cos, sqrt
-
-    # @title Orientation vectors
-    exx = 1 - PE_x ** 2 / (2 * L ** 2 * sin(T_0) ** 2)
-    exy = -PE_x * PE_y / (2 * L ** 2 * sin(T_0) ** 2)
-    exz = -PE_x * sqrt(4 * L ** 2 * sin(T_0) ** 2 - PE_x ** 2 - PE_y ** 2) / (2 * L ** 2 * sin(T_0) ** 2)
-
-    eyx = -PE_x * PE_y / (2 * L ** 2 * sin(T_0) ** 2)
-    eyy = 1 - PE_y ** 2 / (2 * L ** 2 * sin(T_0) ** 2)
-    eyz = -PE_y * sqrt(4 * L ** 2 * sin(T_0) ** 2 - PE_x ** 2 - PE_y ** 2) / (2 * L ** 2 * sin(T_0) ** 2)
-
-    ezx = PE_x * sqrt(4 * L ** 2 * sin(T_0) ** 2 - PE_x ** 2 - PE_y ** 2) / (2 * L ** 2 * sin(T_0) ** 2)
-    ezy = PE_y * sqrt(4 * L ** 2 * sin(T_0) ** 2 - PE_x ** 2 - PE_y ** 2) / (2 * L ** 2 * sin(T_0) ** 2)
-    ezz = (2 * L ** 2 - PE_x ** 2 / sin(T_0) ** 2 - PE_y ** 2 / sin(T_0) ** 2) / (2 * L ** 2)
-
-
-    # @markdown for base change from Wrist to Base generate matrix from base vectors
-    # https://de.wikipedia.org/wiki/Basiswechsel_(Vektorraum)
-    r_wrist_to_base = np.array(
-        [[exx, eyx, ezx],
-         [exy, eyy, ezy],
-         [exz, eyz, ezz]]
-    )
-    print(f"r_wrist_to_base:\n{np.round(r_wrist_to_base, 3)}")
-
-    # @markdown since the mechanism is symmetric to the middle just z axis is inverted for Base to wrist
-    r_base_to_wrist = np.array(
-        [[ exx,  eyx,  ezx],
-         [ exy,  eyy,  ezy],
-         [-exz, -eyz, -ezz]]
-    )
-    print(f"r_base_to_wrist:\n{np.round(r_base_to_wrist, 3)}")
-
-    return r_wrist_to_base
-
 
 class Data:
 
@@ -296,20 +27,26 @@ class Data:
 
     def fk(self):
         print("-" * 50)
-        # Dummy.
-        if False:
-            eef = np.zeros(3)
-            eef += tf3d.axangles.axangle2mat((1, 0, 0), self.linear_joints[0]) @ self.links[0]
-            eef += tf3d.axangles.axangle2mat((1, 0, 0), self.linear_joints[1]) @ self.links[1]
+        pos = self.eef_pos.copy()
+        ori = self.eef_ori.copy()
 
-            self.eef_pos = eef
+        # Dummy.
+        do_revolute = False
+        if do_revolute:
+            pos = np.zeros(3)
+            pos += tf3d.axangles.axangle2mat((1, 0, 0), self.linear_joints[0]) @ self.links[0]
+            pos += tf3d.axangles.axangle2mat((1, 0, 0), self.linear_joints[1]) @ self.links[1]
 
         # KIT-Wrist constants
         lever = 1
         theta_0 = np.deg2rad(25)
         print(f"(a1, a2) = {self.linear_joints}")
 
-        if False:
+        do_azim_zenith = False
+        if do_azim_zenith:
+            from armarx.math import spherical
+            from .equations import f_azimuth, f_zenith
+
             azimuth = f_azimuth(*self.linear_joints, L=lever, T_0=theta_0)
             zenith = f_zenith(*self.linear_joints, L=lever, T_0=theta_0)
             radius = lever
@@ -318,12 +55,15 @@ class Data:
             pos = spherical.spherical2cartesian([radius, azimuth, elevation])
             print(f"(azimuth, zenith) = ({azimuth:.3f}, {zenith:.3f}) | Cartesian = {np.round(pos, 3)}")
 
-        if True:
+        do_fk = True
+        if do_fk:
+            from .equations import fk, fk_ori
+
             pos = fk(*self.linear_joints, L=lever, T_0=theta_0)
             ori = fk_ori(pos[0], pos[1], L=lever, T_0=theta_0)
             print(f"(x, y, z) = {np.round(pos, 3)}")
 
-        self.eef_pos[:] = pos
+        self.eef_pos = pos
         self.eef_ori = ori
 
     def ik(self):
@@ -379,7 +119,9 @@ class WidgetsTab(rg.Tab):
         self.visu = visu
         self.arviz = arviz or viz.Client(tag)
 
-        self.linear_joints = NdArrayWidget(data.linear_joints, row_vector=True, range_min=-1, range_max=1)
+        limit = 0.7
+        self.linear_joints = NdArrayWidget(data.linear_joints, row_vector=True,
+                                           range_min=-limit, range_max=limit)
         self.eef_pos = NdArrayWidget(data.eef_pos, row_vector=True, range_min=-100, range_max=100)
 
     def create_widget_tree(self) -> rg.GridLayout:
