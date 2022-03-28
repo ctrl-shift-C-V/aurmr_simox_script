@@ -1,6 +1,6 @@
+import enum
 import os
 import numpy as np
-import transforms3d as tf3d
 import typing as ty
 
 from armarx import arviz as viz
@@ -9,10 +9,38 @@ from armarx import remote_gui as rg
 from armarx.remote_gui.widgets.ndarray import NdArrayWidget
 
 
+def spherical2cartesian(
+        spherical: ty.Union[ty.List, np.ndarray],
+) -> np.ndarray:
+    spherical = np.array(spherical)
+
+    assert spherical.shape[-1] == 3
+    radius = spherical[..., 0]
+    azim = spherical[..., 1]
+    elev = spherical[..., 2]
+    inclination = np.pi / 2 - elev
+    sin_inclination = np.sin(inclination)
+
+    cartesian = spherical.astype(np.float).copy()
+    cartesian[..., 0] = radius * sin_inclination * np.cos(azim)  # x
+    cartesian[..., 1] = radius * sin_inclination * np.sin(azim)  # y
+    cartesian[..., 2] = radius * np.cos(inclination)  # z
+    return cartesian
+
+
 class Data:
+    class Mode(enum.IntEnum):
+        FK = 0
+        IK = 1
 
     def __init__(self):
         super().__init__()
+
+        self.lever = 1
+        self.theta_0 = np.deg2rad(25)
+        self.radius = 2 * np.sin(self.theta_0) * self.lever
+
+        self.mode = self.Mode.FK
 
         self.actuator_pos = np.zeros(2)
         self.actuator_vel = np.zeros(2)
@@ -30,33 +58,31 @@ class Data:
         a1, a2 = self.actuator_pos
 
         # KIT-Wrist constants
-        lever = 1
-        theta_0 = np.deg2rad(25)
+        lever = self.lever
+        theta_0 = self.theta_0
+        radius = self.radius
         print(f"(a1, a2) = {self.actuator_pos}")
 
-        do_azim_zenith = False
-        if do_azim_zenith:
-            from armarx.math import spherical
+        do_fk_pos_azim_zenith = False
+        if do_fk_pos_azim_zenith:
             from hemisphere_joint_demo.equations import f_azimuth, f_zenith
 
-            azimuth = f_azimuth(*self.actuator_pos, L=lever, T_0=theta_0)
-            zenith = f_zenith(*self.actuator_pos, L=lever, T_0=theta_0)
-            radius = lever
+            azimuth = f_azimuth(a1=a1, a2=a2, L=lever, T_0=theta_0)
+            zenith = f_zenith(a1=a1, a2=a2, L=lever, T_0=theta_0)
 
             elevation = np.deg2rad(90) - zenith
-            pos = spherical.spherical2cartesian([radius, azimuth, elevation])
-            print(f"(azimuth, zenith) = ({azimuth:.3f}, {zenith:.3f}) | Cartesian = {np.round(pos, 3)}")
-            self.eef_pos = pos
+            self.eef_pos = spherical2cartesian([radius, azimuth, elevation])
+            print(f"(azimuth, zenith) = ({azimuth:.3f}, {zenith:.3f})")
 
         do_fk = True
         if do_fk:
-            from hemisphere_joint_demo.equations import fk, fk_ori
+            from hemisphere_joint_demo.equations import fk
+            self.eef_pos = fk(*self.actuator_pos, L=lever, T_0=theta_0)
 
-            pos = fk(*self.actuator_pos, L=lever, T_0=theta_0)
-            ori = fk_ori(pos[0], pos[1], L=lever, T_0=theta_0)
-
-            self.eef_pos = pos
-            self.eef_ori = ori
+        do_fk_ori = True
+        if do_fk_ori:
+            from hemisphere_joint_demo.equations import fk_ori
+            self.eef_ori = fk_ori(self.eef_pos[0], self.eef_pos[1], L=lever, T_0=theta_0)
 
         do_jac = True
         if do_jac:
@@ -75,7 +101,23 @@ class Data:
         print(f"EEF rot vel = {np.round(self.eef_rot_vel, 3)} (norm = {np.linalg.norm(self.eef_rot_vel):.3f})")
 
     def ik(self):
-        pass
+        from hemisphere_joint_demo.equations import fk, ik
+
+        print("-" * 50)
+
+        eef_pos = self.radius * self.eef_pos / np.linalg.norm(self.eef_pos)
+        print(f"EEF pos = {np.round(eef_pos, 3)} (norm = {np.linalg.norm(eef_pos):.3f})")
+
+        ex, ey, ez = eef_pos
+        a1, a2 = ik(ex, ey, L=self.lever, T_0=self.theta_0)
+        self.actuator_pos[:] = [a1, a2]
+
+        fk_eef_pos = fk(a1, a2, L=self.lever, T_0=self.theta_0)
+        error = fk_eef_pos - eef_pos
+        print(f"FK(a..) = {np.round(fk_eef_pos, 3)}")
+        print(f"Error   = {np.round(error, 5)}, |E| = {np.linalg.norm(error):.5f}")
+
+        print(f"Actuator pos = {self.actuator_pos}")
 
 
 class Visu:
@@ -100,7 +142,7 @@ class Visu:
             # Position
             if pos == 0:
                 pos = 1e-3
-            angle = i * np.pi/2
+            angle = i * np.pi / 2
             start = angle_to_pos(angle)
             end = start + pos * 1 * z
             layer.add(viz.Arrow(f"actuator pos {i}", from_to=(start, end),
@@ -109,7 +151,7 @@ class Visu:
             # Velocity
             if vel == 0:
                 vel = 1e-3
-            angle += 1/32 * 2*np.pi
+            angle += 1 / 32 * 2 * np.pi
             start = angle_to_pos(angle)
             end = start + vel * 1 * z
             layer.add(viz.Arrow(f"actuator vel {i}", from_to=(start, end), width=0.02, color=(255, 32, 0)))
@@ -131,9 +173,7 @@ class Visu:
     def vis_sphere(self, layer: viz.Layer):
         layer.add(viz.Cylinder("circle", from_to=((0, 0, 0), (0, 0, 1e-3)),
                                radius=1, color=(255, 255, 0, 255)))
-        layer.add(viz.Sphere("sphere", radius=1, color=(255, 255, 0, 64)))
-
-
+        layer.add(viz.Sphere("sphere", radius=self.data.radius, color=(255, 255, 0, 64)))
 
 
 class WidgetsTab(rg.Tab):
@@ -150,18 +190,23 @@ class WidgetsTab(rg.Tab):
         self.visu = visu
         self.arviz = arviz or viz.Client(tag)
 
+        self.mode = rg.ComboBox(options=[m.name for m in Data.Mode])
+
         limit = 0.7
         self.actuator_pos = NdArrayWidget(data.actuator_pos, row_vector=True,
                                           range_min=-limit, range_max=limit)
         self.actuator_vel = NdArrayWidget(data.actuator_vel, row_vector=True,
                                           range_min=-limit, range_max=limit)
 
-        self.eef_pos = NdArrayWidget(data.eef_pos, row_vector=True, range_min=-100, range_max=100)
-        self.eef_vel = NdArrayWidget(data.eef_vel, row_vector=True, range_min=-100, range_max=100)
+        self.eef_pos = NdArrayWidget(data.eef_pos, row_vector=True, range_min=-self.data.radius, range_max=self.data.radius)
+        self.eef_vel = NdArrayWidget(data.eef_vel, row_vector=True, range_min=-1, range_max=1)
 
     def create_widget_tree(self) -> rg.GridLayout:
         layout = rg.GridLayout()
         row = 0
+
+        layout.add(rg.Label("Mode:"), (row, 0)).add(self.mode, (row, 1))
+        row += 1
 
         layout.add(rg.Label("Actuator Pos:"), (row, 0)).add(self.actuator_pos.create_tree(), (row, 1))
         row += 1
@@ -176,21 +221,31 @@ class WidgetsTab(rg.Tab):
         return layout
 
     def update(self):
+        updated = False
 
-        if self.actuator_pos.has_any_changed() or self.actuator_vel.has_any_changed():
-            self.data.actuator_pos = self.actuator_pos.get_array()
-            self.data.actuator_vel = self.actuator_vel.get_array()
-            self.data.fk()
+        if self.mode.has_value_changed():
+            self.data.mode = Data.Mode[self.mode.value]
+            updated = True
 
-        if self.eef_pos.has_any_changed():
-            self.data.eef_pos = self.eef_pos.get_array()
-            self.data.ik()
+        if self.data.mode == Data.Mode.FK:
+            if updated or self.actuator_pos.has_any_changed() or self.actuator_vel.has_any_changed():
+                self.data.actuator_pos = self.actuator_pos.get_array()
+                self.data.actuator_vel = self.actuator_vel.get_array()
+                self.data.fk()
+                updated = True
 
-        try:
-            with self.arviz.begin_stage(commit_on_exit=True) as stage:
-                self.visu.visualize(stage)
-        except np.linalg.LinAlgError as e:
-            print(e)
+        if self.data.mode == Data.Mode.IK:
+            if updated or self.eef_pos.has_any_changed():
+                self.data.eef_pos = self.eef_pos.get_array()
+                self.data.ik()
+                updated = True
+
+        if updated:
+            try:
+                with self.arviz.begin_stage(commit_on_exit=True) as stage:
+                    self.visu.visualize(stage)
+            except np.linalg.LinAlgError as e:
+                print(e)
 
 
 if __name__ == "__main__":
@@ -211,4 +266,3 @@ if __name__ == "__main__":
     rg_client.receive_updates()
 
     rg_client.update_loop(lambda: widgets_tab.update(), block=False)
-
