@@ -504,35 +504,36 @@ namespace SimDynamics
         MutexLockPtr lock = getScopedLock();
         //cout << "=== === BulletRobot: actuateJoints() 1 === " << this << std::endl;
 
-        auto  it = actuationTargets.begin();
-
         //int jointCounter = 0;
         //cout << "**** Control Values: ";
 
-        for (; it != actuationTargets.end(); it++)
+        for (auto& pair : actuationTargets)
         {
-            //cout << "it:" << it->first << ", name: " << it->first->getName() << std::endl;
-            VelocityMotorController& controller = actuationControllers[it->first];
+            VirtualRobot::RobotNodePtr const& node = pair.first;
+            robotNodeActuationTarget& target = pair.second;
 
-            if (!it->second.node->isRotationalJoint() && !it->second.node->isTranslationalJoint())
+            //cout << "it:" << it->first << ", name: " << it->first->getName() << std::endl;
+            VelocityMotorController& controller = actuationControllers[node];
+
+            if (!target.node->isRotationalJoint() && !target.node->isTranslationalJoint())
             {
                 continue;
             }
 
-            LinkInfo link = getLink(it->second.node);
+            LinkInfo link = getLink(target.node);
 
-            const ActuationMode& actuation = it->second.actuation;
+            const ActuationMode& actuation = target.actuation;
 
             // CHECK FOR DISABLED MOTORS
             if (actuation.mode == 0)
             {
-                if (it->second.node->isRotationalJoint())
+                if (target.node->isRotationalJoint())
                 {
                     std::shared_ptr<btHingeConstraint> hinge = std::dynamic_pointer_cast<btHingeConstraint>(link.joint);
                     hinge->enableMotor(false);
                     continue;
                 }
-                else if (it->second.node->isTranslationalJoint() && !ignoreTranslationalJoints)
+                else if (target.node->isTranslationalJoint() && !ignoreTranslationalJoints)
                 {
                     std::shared_ptr<btSliderConstraint> slider = std::dynamic_pointer_cast<btSliderConstraint>(link.joint);
                     slider->setPoweredLinMotor(false);
@@ -545,10 +546,10 @@ namespace SimDynamics
             {
                 // TORQUE MODES
 
-                if (it->second.node->isRotationalJoint())
+                if (target.node->isRotationalJoint())
                 {
                     std::shared_ptr<btHingeConstraint> hinge = std::dynamic_pointer_cast<btHingeConstraint>(link.joint);
-                    auto torque = it->second.jointTorqueTarget;
+                    auto torque = target.jointTorqueTarget;
                     btVector3 hingeAxisLocalA =
                         hinge->getFrameOffsetA().getBasis().getColumn(2);
                     btVector3 hingeAxisLocalB =
@@ -561,8 +562,20 @@ namespace SimDynamics
                         hingeAxisLocalB;
 
 
-                    int sign = torque > 0 ? 1 : -1;
-                    torque = std::min<double>(fabs(torque), it->first->getMaxTorque()) * sign;
+                    // node->getMaxTorque is -1 if it is not set at all
+                    // => Just ignore the torque limit in this case
+                    float maxTorque = node->getMaxTorque();
+                    if (maxTorque > 0)
+                    {
+                        if (torque < -maxTorque)
+                        {
+                            torque = -maxTorque;
+                        }
+                        if (torque > maxTorque)
+                        {
+                            torque = maxTorque;
+                        }
+                    }
 
                     btVector3 hingeTorqueA = - torque * hingeAxisWorldA;
                     btVector3 hingeTorqueB =   torque * hingeAxisWorldB;
@@ -574,7 +587,7 @@ namespace SimDynamics
                 {
                     // not yet tested!
                     std::shared_ptr<btSliderConstraint> slider = std::dynamic_pointer_cast<btSliderConstraint>(link.joint);
-                    auto torque = it->second.jointTorqueTarget;
+                    auto torque = target.jointTorqueTarget;
                     btVector3 sliderAxisLocalA =
                         slider->getFrameOffsetA().getBasis().getColumn(2);
                     btVector3 sliderAxisLocalB =
@@ -588,7 +601,7 @@ namespace SimDynamics
 
 
                     int sign = torque > 0 ? 1 : -1;
-                    torque = std::min<double>(fabs(torque), it->first->getMaxTorque()) * sign;
+                    torque = std::min<double>(fabs(torque), node->getMaxTorque()) * sign;
 
                     btVector3 sliderTorqueA = - torque * sliderAxisWorldA;
                     btVector3 sliderTorqueB =   torque * sliderAxisWorldB;
@@ -601,22 +614,22 @@ namespace SimDynamics
             {
                 // POSITION, VELOCITY OR POSITION&VELOCITY MODE
 
-                btScalar velActual = btScalar(getJointSpeed(it->first));
-                btScalar velocityTarget = btScalar(it->second.jointVelocityTarget);
+                btScalar velActual = btScalar(getJointSpeed(node));
+                btScalar velocityTarget = btScalar(target.jointVelocityTarget);
 
                 if (actuation.modes.velocity && !actuation.modes.position)
                 {
                     // bullet is buggy here and cannot reach velocity targets for some joints, use a position-velocity mode as workaround
-                    it->second.jointValueTarget += velocityTarget * dt;
+                    target.jointValueTarget += velocityTarget * dt;
                 }
 
-                btScalar posTarget = btScalar(it->second.jointValueTarget + link.jointValueOffset);
-                btScalar posActual = btScalar(getJointAngle(it->first));
-                controller.setName(it->first->getName());
+                btScalar posTarget = btScalar(target.jointValueTarget + link.jointValueOffset);
+                btScalar posActual = btScalar(getJointAngle(node));
+                controller.setName(node->getName());
 
                 double targetVelocity;
-                float deltaPos = it->second.node->getDelta(posTarget);
-                if (it->second.node->isTranslationalJoint())
+                float deltaPos = target.node->getDelta(posTarget);
+                if (target.node->isTranslationalJoint())
                 {
                     posTarget *= 0.001;
                     posActual *= 0.001;
@@ -642,9 +655,9 @@ namespace SimDynamics
 
                 btScalar maxImpulse = bulletMaxMotorImulse;
                 //                controller.setCurrentVelocity(velActual);
-                if (it->second.node->getMaxTorque() > 0)
+                if (target.node->getMaxTorque() > 0)
                 {
-                    maxImpulse = it->second.node->getMaxTorque() * btScalar(dt) * BulletObject::ScaleFactor  * BulletObject::ScaleFactor * BulletObject::ScaleFactor;
+                    maxImpulse = target.node->getMaxTorque() * btScalar(dt) * BulletObject::ScaleFactor  * BulletObject::ScaleFactor * BulletObject::ScaleFactor;
                     //cout << "node:" << it->second.node->getName() << ", max impulse: " << maxImpulse << ", dt:" << dt << ", maxImp:" << it->second.node->getMaxTorque() << std::endl;
                 }
                 if (fabs(targetVelocity) > 0.00001)
@@ -652,12 +665,12 @@ namespace SimDynamics
                     link.dynNode1->getRigidBody()->activate();
                     link.dynNode2->getRigidBody()->activate();
                 }
-                if (it->second.node->isRotationalJoint())
+                if (target.node->isRotationalJoint())
                 {
                     std::shared_ptr<btHingeConstraint> hinge = std::dynamic_pointer_cast<btHingeConstraint>(link.joint);
                     hinge->enableAngularMotor(true, btScalar(targetVelocity), maxImpulse);
                 }
-                else if (it->second.node->isTranslationalJoint() && !ignoreTranslationalJoints)
+                else if (target.node->isTranslationalJoint() && !ignoreTranslationalJoints)
                 {
                     std::shared_ptr<btSliderConstraint> slider = std::dynamic_pointer_cast<btSliderConstraint>(link.joint);
                     slider->setMaxLinMotorForce(maxImpulse * 1000); // Magic number!!!
