@@ -545,69 +545,64 @@ namespace SimDynamics
             if (actuation.modes.torque)
             {
                 // TORQUE MODES
+                double torque = target.jointTorqueTarget;
+
+                // node->getMaxTorque is -1 if it is not set at all
+                // => Just ignore the torque limit in this case
+                float maxTorque = node->getMaxTorque();
+                if (maxTorque > 0)
+                {
+                    if (torque < -maxTorque)
+                    {
+                        torque = -maxTorque;
+                    }
+                    if (torque > maxTorque)
+                    {
+                        torque = maxTorque;
+                    }
+                }
 
                 if (target.node->isRotationalJoint())
                 {
-                    std::shared_ptr<btHingeConstraint> hinge = std::dynamic_pointer_cast<btHingeConstraint>(link.joint);
-                    auto torque = target.jointTorqueTarget;
+                    btHingeConstraint& hinge = dynamic_cast<btHingeConstraint&>(*link.joint);
                     btVector3 hingeAxisLocalA =
-                        hinge->getFrameOffsetA().getBasis().getColumn(2);
+                        hinge.getFrameOffsetA().getBasis().getColumn(2);
                     btVector3 hingeAxisLocalB =
-                        hinge->getFrameOffsetB().getBasis().getColumn(2);
+                        hinge.getFrameOffsetB().getBasis().getColumn(2);
                     btVector3 hingeAxisWorldA =
-                        hinge->getRigidBodyA().getWorldTransform().getBasis() *
+                        hinge.getRigidBodyA().getWorldTransform().getBasis() *
                         hingeAxisLocalA;
                     btVector3 hingeAxisWorldB =
-                        hinge->getRigidBodyB().getWorldTransform().getBasis() *
+                        hinge.getRigidBodyB().getWorldTransform().getBasis() *
                         hingeAxisLocalB;
-
-
-                    // node->getMaxTorque is -1 if it is not set at all
-                    // => Just ignore the torque limit in this case
-                    float maxTorque = node->getMaxTorque();
-                    if (maxTorque > 0)
-                    {
-                        if (torque < -maxTorque)
-                        {
-                            torque = -maxTorque;
-                        }
-                        if (torque > maxTorque)
-                        {
-                            torque = maxTorque;
-                        }
-                    }
 
                     btVector3 hingeTorqueA = - torque * hingeAxisWorldA;
                     btVector3 hingeTorqueB =   torque * hingeAxisWorldB;
-                    hinge->enableMotor(false);
-                    hinge->getRigidBodyA().applyTorque(hingeTorqueA);
-                    hinge->getRigidBodyB().applyTorque(hingeTorqueB);
+                    hinge.enableMotor(false);
+                    hinge.getRigidBodyA().applyTorque(hingeTorqueA);
+                    hinge.getRigidBodyB().applyTorque(hingeTorqueB);
                 }
                 else
                 {
-                    // not yet tested!
-                    std::shared_ptr<btSliderConstraint> slider = std::dynamic_pointer_cast<btSliderConstraint>(link.joint);
-                    auto torque = target.jointTorqueTarget;
+                    // The slider constraint works along the local x-axis
+                    // So we have to apply force along the column 0 of the frame
+                    btSliderConstraint& slider = dynamic_cast<btSliderConstraint&>(*link.joint);
                     btVector3 sliderAxisLocalA =
-                        slider->getFrameOffsetA().getBasis().getColumn(2);
+                        slider.getFrameOffsetA().getBasis().getColumn(0);
                     btVector3 sliderAxisLocalB =
-                        slider->getFrameOffsetB().getBasis().getColumn(2);
+                        slider.getFrameOffsetB().getBasis().getColumn(0);
                     btVector3 sliderAxisWorldA =
-                        slider->getRigidBodyA().getWorldTransform().getBasis() *
+                        slider.getRigidBodyA().getWorldTransform().getBasis() *
                         sliderAxisLocalA;
                     btVector3 sliderAxisWorldB =
-                        slider->getRigidBodyB().getWorldTransform().getBasis() *
+                        slider.getRigidBodyB().getWorldTransform().getBasis() *
                         sliderAxisLocalB;
-
-
-                    int sign = torque > 0 ? 1 : -1;
-                    torque = std::min<double>(fabs(torque), node->getMaxTorque()) * sign;
 
                     btVector3 sliderTorqueA = - torque * sliderAxisWorldA;
                     btVector3 sliderTorqueB =   torque * sliderAxisWorldB;
-                    slider->setPoweredLinMotor(false);
-                    slider->btTypedConstraint::getRigidBodyA().applyCentralForce(sliderTorqueA);
-                    slider->btTypedConstraint::getRigidBodyB().applyCentralForce(sliderTorqueB);
+                    slider.setPoweredLinMotor(false);
+                    slider.btTypedConstraint::getRigidBodyA().applyCentralForce(sliderTorqueA);
+                    slider.btTypedConstraint::getRigidBodyB().applyCentralForce(sliderTorqueB);
                 }
             }
             else if (actuation.modes.position || actuation.modes.velocity)
