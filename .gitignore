@@ -3,6 +3,7 @@ build*
 !.gitkeep
 !.gitignore
 .idea
+.venv
 
 *.bak
 *#
