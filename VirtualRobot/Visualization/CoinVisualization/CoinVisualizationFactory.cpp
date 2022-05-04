@@ -3885,7 +3885,16 @@ namespace VirtualRobot
         {
             if (!renderErrorPrinted)
             {
-                VR_ERROR << "Rendering not successful! This error is printed only once." << std::endl;
+                VR_ERROR << "Rendering not successful! This error is printed only once. "
+			 << "Often, offscreen rendering does not work. "
+			 << "In Ubuntu 18.04 in /usr/share/X11/xorg.conf.d, "
+			 << "add a new file \"90-indirect.conf\" with the content:" << std::endl
+			 << std::endl
+			 << "Section \"ServerFlags\"" << std::endl
+			 << "    Option \"IndirectGLX\" \"on\"" << std::endl
+			 << "EndSection" << std::endl
+			 << std::endl
+			 << "Or refer to https://armarx.humanoids.kit.edu/ArmarXCore-FAQ.html" << std::endl;
                 renderErrorPrinted = true;
             }
             return false;
