@@ -81,6 +81,6 @@ simox::math::operator<<(std::ostream& os, const LinearRegression3D& r)
            << " + " << r.coefficients(row, 1) << " * x"
               ;
     }
-    os << " ]>";
+    os << " ] and input offset " << r.inputOffset << ">";
     return os;
 }
