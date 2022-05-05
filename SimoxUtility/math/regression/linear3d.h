@@ -7,8 +7,8 @@ namespace simox::math
 {
 
     /**
-     * @brief A linear regression model of the form a + b * x = y,
-     * or per dimension, a_i + b_i * x = y_i.
+     * @brief A linear regression model of the form y = a + b * x,
+     * or per dimension, y_i = a_i + b_i * x.
      *
      * - x is the scalar input variable (e.g. time)
      * - y is 3D vector output variable (e.g. position)

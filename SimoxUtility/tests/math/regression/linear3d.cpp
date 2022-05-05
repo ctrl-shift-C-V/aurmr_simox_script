@@ -86,8 +86,6 @@ BOOST_AUTO_TEST_CASE(test_linear_regression_3d_fit_and_predict_with_input_offset
 
     // Coefficients are different now, but prediction should be the same.
 
-    // Predict
-
     BOOST_CHECK_LE((regression.predict(xs[0]) - ys[0]).norm(), prec);
     BOOST_CHECK_LE((regression.predict(xs[1]) - ys[1]).norm(), prec);
     BOOST_CHECK_LE((regression.predict(xs[2]) - ys[2]).norm(), prec);

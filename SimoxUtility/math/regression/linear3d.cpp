@@ -76,9 +76,10 @@ simox::math::operator<<(std::ostream& os, const LinearRegression3D& r)
         {
             os << ", ";
         }
-        os << r.coefficients(row, 0)
-           << " + " << r.coefficients(row, 1) << " * x_" << row
-           << " = y_" << row;
+        os << "y_" << row
+           << " = " << r.coefficients(row, 0)
+           << " + " << r.coefficients(row, 1) << " * x"
+              ;
     }
     os << " ]";
     return os;
