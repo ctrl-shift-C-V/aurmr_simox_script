@@ -11,8 +11,7 @@
 
 #include <boost/test/included/unit_test.hpp>
 
-#include <SimoxUtility/math/regression/linear3d.h>
-
+#include <SimoxUtility/math/regression/linear.h>
 
 
 namespace SimoxMathRegressionTest
@@ -49,11 +48,11 @@ BOOST_FIXTURE_TEST_SUITE(SimoxMathRegressionTest, Fixture)
 
 BOOST_AUTO_TEST_CASE(test_linear_regression_3d_fit_and_predict)
 {
-    using simox::math::LinearRegression3D;
+    using simox::math::LinearRegression3d;
 
     // Fit
 
-    const LinearRegression3D regression = LinearRegression3D::Fit(xs, ys);
+    const LinearRegression3d regression = LinearRegression3d::Fit(xs, ys);
 
     BOOST_TEST_MESSAGE("Regression: " << regression);
 
@@ -76,10 +75,10 @@ BOOST_AUTO_TEST_CASE(test_linear_regression_3d_fit_and_predict)
 
 BOOST_AUTO_TEST_CASE(test_linear_regression_3d_fit_and_predict_with_input_offset)
 {
-    using simox::math::LinearRegression3D;
+    using simox::math::LinearRegression3d;
 
     const bool inputOffset = true;
-    const LinearRegression3D regression = LinearRegression3D::Fit(xs, ys, inputOffset);
+    const LinearRegression3d regression = LinearRegression3d::Fit(xs, ys, inputOffset);
 
     BOOST_TEST_MESSAGE("Regression: " << regression);
     BOOST_CHECK_EQUAL(regression.inputOffset, - xs[0]);
