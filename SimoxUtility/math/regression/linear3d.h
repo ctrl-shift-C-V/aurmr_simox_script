@@ -8,22 +8,24 @@ namespace simox::math
 
     /**
      * @brief A linear regression model of the form a + b * x = y,
-     * or per dimension, a_i + b_i * x_i = y_i.
+     * or per dimension, a_i + b_i * x = y_i.
      *
      * - x is the scalar input variable (e.g. time)
      * - y is 3D vector output variable (e.g. position)
      * - a is a 3D bias vector
-     * - b is a 3D coefficient vector
+     * - b is a 3D slope vector
      *
      * In matrix notation, the underlying equation system is:
      *
-     * [[ a_0  b_0 ]    [  1    1    1  ]   [ y_0 ]
-     *  [ a_1  b_1 ]  * [ x_0  x_1  x_2 ] = [ y_1 ]
-     *  [ a_2  b_2 ]]                       [ y_2 ]
+     * [[ a_0  b_0 ]    [ 1 ]   [ y_0 ]
+     *  [ a_1  b_1 ]  * [ x ] = [ y_1 ]
+     *  [ a_2  b_2 ]]           [ y_2 ]
      */
     class LinearRegression3D
     {
     public:
+
+        using CoefficientsMatrix = Eigen::Matrix<double, 3, 2>;
 
         /**
          * The coefficients of the bias term and input variable x
@@ -31,7 +33,7 @@ namespace simox::math
          *  [ a_1  b_1 ]
          *  [ a_2  b_2 ]]
          */
-        Eigen::Matrix<double, 3, 2> coefficients;
+        CoefficientsMatrix coefficients = CoefficientsMatrix::Zero();
 
 
         /**
