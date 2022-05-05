@@ -69,18 +69,18 @@ namespace simox::math
 std::ostream&
 simox::math::operator<<(std::ostream& os, const LinearRegression3D& r)
 {
-    os << "<LinearRegression3D a + b * x = y [ ";
+    os << "<LinearRegression3D y = a + b * x with [ ";
     for (Eigen::Index row = 0; row < r.coefficients.rows(); ++row)
     {
         if (row != 0)
         {
-            os << ", ";
+            os << " | ";
         }
         os << "y_" << row
            << " = " << r.coefficients(row, 0)
            << " + " << r.coefficients(row, 1) << " * x"
               ;
     }
-    os << " ]";
+    os << " ]>";
     return os;
 }
