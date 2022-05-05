@@ -15,11 +15,21 @@ namespace simox::math
      * - a is a 3D bias vector
      * - b is a 3D slope vector
      *
-     * In matrix notation, the underlying equation system is:
+     * In matrix notation, the equation system represented by the model is:
      *
      * [[ a_0  b_0 ]    [ 1 ]   [ y_0 ]
      *  [ a_1  b_1 ]  * [ x ] = [ y_1 ]
      *  [ a_2  b_2 ]]           [ y_2 ]
+     *
+     * Given data x[j] in R and y[j] \in R^3 (j = 0 .. n-1),
+     * the regression solves the following equation system(s)
+     * for [ a_i, b_i ] (i = 0 .. (3-1)):
+     *
+     * [[ 1  x[0]   ]             [  y[0]_i  ]
+     *  [   ...     ]   [ a_i ]   [   ...    ]
+     *  [ 1  x[j]   ] * [ b_i ] = [  y[j]_i  ]
+     *  [   ...     ]             [   ...    ]
+     *  [ 1  x[n-1] ]]            [ y[n-1]_i ]
      */
     class LinearRegression3D
     {
