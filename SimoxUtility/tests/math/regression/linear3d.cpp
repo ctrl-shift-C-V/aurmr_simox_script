@@ -55,6 +55,8 @@ BOOST_AUTO_TEST_CASE(test_linear_regression_3d_fit_and_predict)
 
     const LinearRegression3D regression = LinearRegression3D::Fit(xs, ys);
 
+    BOOST_TEST_MESSAGE("Regression: " << regression);
+
     BOOST_CHECK_CLOSE(regression.coefficients(0, 0), - (1 + 0), prec);
     BOOST_CHECK_CLOSE(regression.coefficients(1, 0), - (1 + 1), prec);
     BOOST_CHECK_CLOSE(regression.coefficients(2, 0), - (1 + 2), prec);
@@ -63,6 +65,26 @@ BOOST_AUTO_TEST_CASE(test_linear_regression_3d_fit_and_predict)
     BOOST_CHECK_CLOSE(regression.coefficients(1, 1), (2 * 1), prec);
     BOOST_CHECK_CLOSE(regression.coefficients(2, 1), (2 * 2), prec);
 
+
+    // Predict
+
+    BOOST_CHECK_LE((regression.predict(xs[0]) - ys[0]).norm(), prec);
+    BOOST_CHECK_LE((regression.predict(xs[1]) - ys[1]).norm(), prec);
+    BOOST_CHECK_LE((regression.predict(xs[2]) - ys[2]).norm(), prec);
+}
+
+
+BOOST_AUTO_TEST_CASE(test_linear_regression_3d_fit_and_predict_with_input_offset)
+{
+    using simox::math::LinearRegression3D;
+
+    const bool inputOffset = true;
+    const LinearRegression3D regression = LinearRegression3D::Fit(xs, ys, inputOffset);
+
+    BOOST_TEST_MESSAGE("Regression: " << regression);
+    BOOST_CHECK_EQUAL(regression.inputOffset, - xs[0]);
+
+    // Coefficients are different now, but prediction should be the same.
 
     // Predict
 
