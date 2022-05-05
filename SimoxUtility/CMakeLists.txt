@@ -40,6 +40,8 @@ SET(SOURCES
     math/pose/orthogonalize.cpp
     math/pose/interpolate.cpp
 
+    math/regression/linear3d.cpp
+
     math/statistics/Histogram1D.cpp
 
     meta/type_name.cpp
@@ -186,6 +188,8 @@ SET(INCLUDES
     math/pose/pose.h
     math/pose/transform.h
     math/pose/interpolate.h
+
+    math/regression/linear3d.h
 
     math/similarity/cosine_similarity.h
     math/similarity/angular_similarity.h
