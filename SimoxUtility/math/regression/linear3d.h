@@ -35,15 +35,21 @@ namespace simox::math
          */
         CoefficientsMatrix coefficients = CoefficientsMatrix::Zero();
 
+        /// The input offset, so the virtual input x' = x + offset.
+        double inputOffset = 0;
+
 
         /**
          * @brief Fit a linear regression model to the given data.
          * @param xs The input variables.
          * @param ys The output variables.
+         * @param offsetInput If true, the inputs are offset to x' = x - x_0.
          * @return The regression model.
          */
         static LinearRegression3D
-        Fit(const std::vector<double>& xs, const std::vector<Eigen::Vector3d>& ys);
+        Fit(const std::vector<double>& xs,
+            const std::vector<Eigen::Vector3d>& ys,
+            bool offsetInput = false);
 
         /**
          * @brief Predict the output variable of the given input variable.

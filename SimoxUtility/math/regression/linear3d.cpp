@@ -7,8 +7,24 @@ namespace simox::math
 {
 
     LinearRegression3D
-    LinearRegression3D::Fit(const std::vector<double>& xs, const std::vector<Eigen::Vector3d>& ys)
+    LinearRegression3D::Fit(
+            const std::vector<double>& xs,
+            const std::vector<Eigen::Vector3d>& ys,
+            bool offsetInput)
     {
+        if (offsetInput and xs.at(0) != 0)
+        {
+            double offset = - xs.at(0);  // Move x_0 to 0.
+            std::vector<double> virtualXs = xs;
+            for (double& x : virtualXs)
+            {
+                x = x + offset;
+            }
+            LinearRegression3D r = LinearRegression3D::Fit(virtualXs, ys, false);
+            r.inputOffset = offset;
+            return r;
+        }
+
         Eigen::Matrix3Xd ysMatrix(3, ys.size());
         for (long col = 0; col < ysMatrix.cols(); ++col)
         {
@@ -43,7 +59,7 @@ namespace simox::math
     LinearRegression3D::predict(double x) const
     {
         Eigen::Vector2d input;
-        input << 1.0, x;
+        input << 1.0, x + inputOffset;
         return coefficients * input;
     }
 
