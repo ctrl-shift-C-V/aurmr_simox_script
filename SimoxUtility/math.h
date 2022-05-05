@@ -14,6 +14,7 @@
 #include "math/periodic_clamp.h"
 #include "math/pose.h"
 #include "math/project_to_plane.h"
+#include "math/regression.h"
 #include "math/rescale.h"
 #include "math/scale_value.h"
 #include "math/similarity.h"
