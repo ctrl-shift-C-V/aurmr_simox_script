@@ -179,6 +179,7 @@ if (SimDynamics_DYNAMICSENGINE)
           MESSAGE (STATUS " ** Bullet's OpenGLSupport library not found: Skipping BulletOpenGLViewer")
       endif()
 
+  find_package(SoQt QUIET)
   if (Simox_USE_COIN_VISUALIZATION AND SoQt_FOUND)
       	SET(SOURCES
         	${SOURCES}

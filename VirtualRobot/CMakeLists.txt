@@ -65,10 +65,10 @@ if (Simox_USE_COIN_VISUALIZATION)
         #### SoQt
         # This will set SoQt_INCLUDE_DIRS and SoQt_LIBRARIES
         FIND_PACKAGE(SoQt QUIET)
-        if (SoQt_INCLUDE_DIRS AND NOT SoQt_FOUND) #fix missing variable if include dirs was found
-            set(SoQt_FOUND TRUE)
-            set(SoQt_FOUND TRUE PARENT_SCOPE)
-        endif ()
+        #if (SoQt_INCLUDE_DIRS AND NOT SoQt_FOUND) #fix missing variable if include dirs was found
+        #    set(SoQt_FOUND TRUE)
+        #    set(SoQt_FOUND TRUE PARENT_SCOPE)
+        #endif ()
 
         if (NOT SoQt_FOUND)
             MESSAGE (STATUS "Did not find SoQt. Disabling SoQt support.")
