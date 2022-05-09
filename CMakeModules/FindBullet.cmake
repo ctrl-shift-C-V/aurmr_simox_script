@@ -35,8 +35,14 @@ add_bullet_search_path("${Bullet_DIR}")
 add_bullet_search_path("$ENV{BULLET_DIR}")
 add_bullet_search_path("${BULLET_DIR}")
 
+add_bullet_search_path("$ENV{Bullet_ROOT}")
+add_bullet_search_path("${Bullet_ROOT}")
+
 add_bullet_search_path("$ENV{BULLET_ROOT}")
 add_bullet_search_path("${BULLET_ROOT}")
+
+add_bullet_search_path("$ENV{Bullet_SOURCE_DIR}")
+add_bullet_search_path("${Bullet_SOURCE_DIR}")
 
 add_bullet_search_path("$ENV{BULLET_SOURCE_DIR}")
 add_bullet_search_path("${BULLET_SOURCE_DIR}")
