@@ -80,7 +80,7 @@ if (Simox_USE_COIN_VISUALIZATION)
             set(Simox_BUILD_EXAMPLES ON CACHE BOOL "Build example applications")
 
             target_include_directories(VirtualRobot PUBLIC ${SoQt_INCLUDE_DIRS})
-            target_link_libraries(VirtualRobot PUBLIC SoQt::SoQt)
+            target_link_libraries(VirtualRobot PUBLIC ${SoQt_LIBRARY_DIR}/libSoQt.so)
             target_compile_definitions(VirtualRobot PUBLIC -DSoQt_DLL -DSIMOX_USE_SoQt)
 
             if (NOT UNIX)
