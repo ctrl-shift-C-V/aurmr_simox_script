@@ -43,13 +43,13 @@ if (Simox_USE_COIN_VISUALIZATION)
     MESSAGE(STATUS "Searching Coin3D, Qt and SoQt...")
 
     ##### Coin3D
-    FIND_PACKAGE(Coin3D REQUIRED)
-    if (COIN3D_FOUND)
-        MESSAGE (STATUS "Found Coin3D: " ${COIN3D_INCLUDE_DIRS})
+    FIND_PACKAGE(Coin REQUIRED)
+    if (COIN_FOUND)
+        MESSAGE (STATUS "Found Coin3D: " ${COIN_INCLUDE_DIRS})
         set(Simox_VISUALIZATION  TRUE CACHE BOOL "")
 
-        target_include_directories(VirtualRobot PUBLIC ${COIN3D_INCLUDE_DIRS})
-        target_link_libraries(VirtualRobot PUBLIC ${COIN3D_LIBRARIES})
+        target_include_directories(VirtualRobot PUBLIC ${COIN_INCLUDE_DIRS})
+        target_link_libraries(VirtualRobot PUBLIC ${COIN_LIBRARIES})
         target_compile_definitions(VirtualRobot PUBLIC -DCOIN_DLL)
     endif ()
 
