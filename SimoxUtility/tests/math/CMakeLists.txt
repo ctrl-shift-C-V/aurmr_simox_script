@@ -8,4 +8,4 @@ ADD_SU_TEST( SoftMinMax )
 ADD_SU_TEST( statistics )
 
 ADD_SUBDIRECTORY(pose)
-
+ADD_SUBDIRECTORY(regression)

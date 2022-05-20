@@ -717,7 +717,7 @@ namespace VirtualRobot
     {
         if (baseNode)
         {
-            return baseNode->getGlobalPose().inverse();
+            return Eigen::Isometry3f(baseNode->getGlobalPose()).inverse().matrix();
         }
         else
         {
