@@ -43,6 +43,7 @@ class Data:
         self.mode = self.Mode.FK
 
         self.actuator_pos = np.zeros(2)
+        # self.actuator_pos[:] = (0.5, 0.5)
         self.actuator_vel = np.zeros(2)
 
         self.eef_pos = np.zeros(3)
@@ -55,13 +56,13 @@ class Data:
 
     def fk(self):
         print("-" * 50)
-        a1, a2 = self.actuator_pos
+        a1, a2 = self.actuator_pos + np.arcsin(self.theta_0)
 
         # KIT-Wrist constants
         lever = self.lever
         theta_0 = self.theta_0
         radius = self.radius
-        print(f"(a1, a2) = {self.actuator_pos}")
+        print(f"(a1, a2) = ({a1}, {a2})")
 
         do_fk_pos_azim_zenith = False
         if do_fk_pos_azim_zenith:
@@ -77,7 +78,7 @@ class Data:
         do_fk = True
         if do_fk:
             from hemisphere_joint_demo.equations import fk
-            self.eef_pos = fk(*self.actuator_pos, L=lever, T_0=theta_0)
+            self.eef_pos = fk(a1, a2, L=lever, T_0=theta_0)
 
         do_fk_ori = True
         if do_fk_ori:
@@ -88,7 +89,8 @@ class Data:
         if do_jac:
             from hemisphere_joint_demo.equations import jacobian
             jac = jacobian(a1=a1, a2=a2, L=lever, T_0=theta_0)
-            print(f"Jacobian: \n{np.round(jac, 3)}")
+            print(f"Jacobian: \n{np.round(jac, 3).tolist()}")
+            # print(f"Jacobian: \n{jac}")
 
             vel = jac @ self.actuator_vel
             self.eef_vel = vel[:3]
@@ -164,6 +166,8 @@ class Visu:
         layer.add(viz.Sphere("eef pos", position=pos, radius=0.05, color=(0, 0, 255)))
         layer.add(viz.Pose("eef pose", position=pos, orientation=self.data.eef_ori, scale=3e-3))
         layer.add(viz.Arrow("eef vector", from_to=((0, 0, 0), pos), width=0.02, color=(30, 30, 70)))
+        layer.add(viz.Arrow("eef out vector", from_to=(pos, pos + .5 * self.data.eef_ori @ np.array([0, 0, 1])),
+                            color=(0, 0, 255), width=0.02))
 
         if np.linalg.norm(vel) >= 1e-3:
             speed = 1.0
