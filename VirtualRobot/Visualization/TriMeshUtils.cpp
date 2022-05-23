@@ -22,6 +22,9 @@
  *             GNU General Public License
  */
 #include "TriMeshUtils.h"
+#include "../VirtualRobotException.h"
+#include <Eigen/Geometry>
+#include <numeric>
 
 namespace VirtualRobot {
 
@@ -146,6 +149,63 @@ TriMeshModelPtr TriMeshUtils::CreateSparseBoxGrid(const Eigen::Matrix4f &globalP
         i++;
     }
     return mesh;
+}
+
+
+inline double
+uniformDeviate(int seed)
+{
+  double ran = seed * (1.0 / (RAND_MAX + 1.0));
+  return ran;
+}
+
+Eigen::Vector3f TriMeshUtils::sampleSurfacePoint(std::vector<float> *cumulativeAreas, double totalArea, const TriMeshModel& tri)
+{
+    if (tri.faces.empty())
+    {
+        return Eigen::Vector3f::Zero();
+    }
+
+    float r = static_cast<float>(uniformDeviate(rand()) * totalArea);
+    std::vector<float>::iterator low = std::lower_bound(cumulativeAreas->begin(), cumulativeAreas->end(), r);
+    auto f = tri.faces[low - cumulativeAreas->begin()];
+
+    float r1 = static_cast<float>(uniformDeviate(rand()));
+    float r2 = static_cast<float>(uniformDeviate(rand()));
+
+    float r1sqr = std::sqrt (r1);
+    float OneMinR1Sqr = (1 - r1sqr);
+    float OneMinR2 = (1 - r2);
+    Eigen::Vector3f a = tri.vertices.at(f.id1) * OneMinR1Sqr;
+    Eigen::Vector3f b = tri.vertices.at(f.id2) * OneMinR2;
+    Eigen::Vector3f c = r1sqr * (r2 * tri.vertices.at(f.id3) + b) + a;
+    return c;
+}
+
+std::vector<Eigen::Vector3f> TriMeshUtils::uniformSampling(const TriMeshModel& tri, unsigned int n) {
+    std::vector<Eigen::Vector3f> samples(n);
+
+    std::vector<float> faceAreas = tri.getFaceAreas();
+    std::vector<float> cumulativeAreas(faceAreas.size(), 0.0);
+    float totalArea = 0;
+    for (size_t i = 0; i < faceAreas.size(); i++) {
+        totalArea += faceAreas[i];
+        cumulativeAreas[i] = totalArea;
+    }
+
+    unsigned int i = 0;
+    unsigned int counter = 0;
+    while (i < n) {
+        Eigen::Vector3f sampledPoint = sampleSurfacePoint(&cumulativeAreas, totalArea, tri);
+        if (!sampledPoint.isZero()) {
+            samples[i] = sampledPoint;
+            i++;
+            counter = 0;
+        }
+        if (counter > 10)
+            throw VirtualRobotException("Sampling surface points gone wrong!");
+    }
+    return samples;
 }
 
 } // namespace VirtualRobot

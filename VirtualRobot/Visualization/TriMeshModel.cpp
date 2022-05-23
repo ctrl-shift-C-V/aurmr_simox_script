@@ -620,6 +620,16 @@ namespace VirtualRobot
         return areas;
     }
 
+    float TriMeshModel::getVolume() const
+    {
+        float volume = 0.0f;
+        for (const auto& face : faces)
+        {
+            volume += vertices.at(face.id1).dot(vertices.at(face.id2).cross(vertices.at(face.id3)));
+        }
+        return std::abs(volume);
+    }
+
     void TriMeshModel::rotate(const Eigen::Matrix3f& mx)
     {
         for (auto& vec3f : normals)
