@@ -140,8 +140,8 @@ namespace VirtualRobot
 
         RobotNodePtr& operator[](int i);
 
-        RobotNodePtr& getNode(int i);
-        RobotNodePtr& getNode(const std::string& nodeName);
+        const RobotNodePtr& getNode(int i) const;
+        const RobotNodePtr& getNode(const std::string& nodeName) const;
 
         // implement container interface for easy access
         inline auto begin()
@@ -253,4 +253,3 @@ namespace VirtualRobot
     };
 
 } // namespace VirtualRobot
-
