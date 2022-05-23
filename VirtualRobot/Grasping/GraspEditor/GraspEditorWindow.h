@@ -2,6 +2,9 @@
 #pragma once
 
 #include <VirtualRobot/VirtualRobot.h>
+#include <VirtualRobot/Nodes/RobotNodeRevolute.h>
+#include <VirtualRobot/Nodes/RobotNodePrismatic.h>
+#include <VirtualRobot/Nodes/RobotNodeFixed.h>
 #include <VirtualRobot/Robot.h>
 #include <VirtualRobot/VirtualRobotException.h>
 #include <VirtualRobot/Nodes/RobotNode.h>
@@ -21,7 +24,7 @@
 #include <Inventor/Qt/SoQt.h>
 #include <Inventor/nodes/SoSeparator.h>
 
-
+#include <filesystem>
 #include <vector>
 
 // #include "ui_GraspEditor.h"
@@ -59,6 +62,7 @@ namespace VirtualRobot
         void selectRobot();
         void selectObject(std::string file = "");
         void saveObject();
+        void selectRobotObject(int n);
         void selectEEF(int n);
         void selectGrasp(int n);
 
@@ -74,6 +78,10 @@ namespace VirtualRobot
         void sliderReleased_ObjectA();
         void sliderReleased_ObjectB();
         void sliderReleased_ObjectG();
+
+        void sampleGrasps();
+
+        void virtualJointValueChanged();
 
         void buildVisu();
 
@@ -110,22 +118,26 @@ namespace VirtualRobot
 
         VirtualRobot::RobotPtr robot;
         VirtualRobot::RobotPtr robotEEF;
-        VirtualRobot::ManipulationObjectPtr object;
+        VirtualRobot::GraspableSensorizedObjectPtr object;
+        VirtualRobot::RobotPtr robotObject;
         std::vector<VirtualRobot::EndEffectorPtr> eefs;
         VirtualRobot::EndEffectorPtr currentEEF; // the eef of robot
         VirtualRobot::EndEffectorPtr robotEEF_EEF; // the eef of robotEEF
 
         VirtualRobot::GraspSetPtr currentGraspSet;
-        VirtualRobot::GraspPtr currentGrasp;
+        VirtualRobot::ChainedGraspPtr currentGrasp;
 
         std::string robotFile;
-        std::string objectFile;
+        std::filesystem::path objectFile;
 
         SoTimerSensor* timer;
 
 
-        std::shared_ptr<VirtualRobot::CoinVisualization> visualizationRobot;
-        std::shared_ptr<VirtualRobot::CoinVisualization> visualizationObject;
+        std::shared_ptr<VirtualRobot::CoinVisualization> visualizationAll;
+
+        std::vector<RobotPtr> hands;
+
+        QSettings settings;
     };
 
 }

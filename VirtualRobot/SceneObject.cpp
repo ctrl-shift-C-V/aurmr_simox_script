@@ -6,9 +6,11 @@
 #include "Visualization/VisualizationFactory.h"
 #include "Visualization/VisualizationNode.h"
 #include "Visualization/Visualization.h"
-#include "VirtualRobotException.h"
+#include "XML/BaseIO.h"
+#include <SimoxUtility/xml/rapidxml/rapidxml.hpp>
 #include "Robot.h"
 #include "math/Helpers.h"
+#include <SimoxUtility/filesystem/make_relative.h>
 
 #include <Eigen/Dense>
 
@@ -51,6 +53,7 @@ namespace VirtualRobot
         }
 
         setGlobalPose(Eigen::Matrix4f::Identity());
+        this->scaling = 1.0f;
     }
 
 
@@ -739,7 +742,7 @@ namespace VirtualRobot
         }
 
         // check for inertia matrix determination
-        if (physics.inertiaMatrix.isZero())
+        if (physics.inertiaMatrix.isZero(1e-8))
         {
             if (physics.massKg <= 0)
             {
@@ -980,7 +983,8 @@ namespace VirtualRobot
         }
 
         result->setGlobalPose(getGlobalPose());
-
+        result->scaling = scaling;
+        result->basePath = basePath;
         return result;
     }
 
@@ -1013,7 +1017,7 @@ namespace VirtualRobot
         return getInertiaMatrix(transform.block<3, 1>(0, 3), transform.block<3, 3>(0, 0));
     }
 
-    std::string SceneObject::getSceneObjectXMLString(const std::string& basePath, int tabs)
+    std::string SceneObject::getSceneObjectXMLString(const std::string& basePath, int tabs, const std::string &modelPathRelative)
     {
         std::stringstream ss;
         std::string pre = "";
@@ -1028,7 +1032,7 @@ namespace VirtualRobot
             ss << visualizationModel->toXML(basePath, tabs);
         }
 
-        if (collisionModel && collisionModel->getVisualization())
+        if (collisionModel)
         {
             ss << collisionModel->toXML(basePath, tabs);
         }
@@ -1446,4 +1450,47 @@ namespace VirtualRobot
         return res;
     }
 
+    void SceneObject::setScaling(float scaling)
+    {
+        THROW_VR_EXCEPTION_IF(scaling <= 0, "Scaling must be >0.")
+        this->scaling = scaling;
+    }
+
+    float SceneObject::getScaling()
+    {
+        return scaling;
+    }
+
+    bool SceneObject::reloadVisualizationFromXML(bool useVisAsColModelIfMissing) {
+        bool reloaded = false;
+        if (!collisionModelXML.empty())
+        {
+            rapidxml::xml_document<> doc;
+            char* cstr = new char[collisionModelXML.size() + 1];  // Create char buffer to store string copy
+            strcpy(cstr, collisionModelXML.c_str());             // Copy string into char buffer
+            doc.parse<0>(cstr);
+            collisionModel = BaseIO::processCollisionTag(doc.first_node(), name, basePath);
+            if (collisionModel && scaling != 1.0f) collisionModel = collisionModel->clone(collisionChecker, scaling);
+            delete[] cstr;
+            reloaded = true;
+        }
+        if (!visualizationModelXML.empty())
+        {
+            rapidxml::xml_document<> doc;
+            char* cstr = new char[visualizationModelXML.size() + 1];  // Create char buffer to store string copy
+            strcpy(cstr, visualizationModelXML.c_str());             // Copy string into char buffer
+            doc.parse<0>(cstr);
+            bool useAsColModel;
+            visualizationModel = BaseIO::processVisualizationTag(doc.first_node(), name, basePath, useAsColModel);
+            if (visualizationModel && scaling != 1.0f) visualizationModel = visualizationModel->clone(true, scaling);
+            if (visualizationModel && collisionModel == nullptr && (useVisAsColModelIfMissing || useAsColModel))
+                collisionModel.reset(new CollisionModel(visualizationModel->clone(true), getName() + "_VISU_ColModel", CollisionCheckerPtr()));
+            delete[] cstr;
+            reloaded = true;
+        }
+        for (auto child : this->getChildren()) {
+            reloaded |= child->reloadVisualizationFromXML(useVisAsColModelIfMissing);
+        }
+        return reloaded;
+    }
 } // namespace

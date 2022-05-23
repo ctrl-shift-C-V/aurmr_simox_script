@@ -41,7 +41,7 @@ namespace VirtualRobot
 
 
     /*!
-        A sensor can be attached to a RobotNode.
+        A sensor can be attached to a GraspableSensorizedObject.
     */
     class VIRTUAL_ROBOT_IMPORT_EXPORT Sensor : public SceneObject
     {
@@ -53,7 +53,7 @@ namespace VirtualRobot
         /*!
             Constructor with settings.
         */
-        Sensor(RobotNodeWeakPtr robotNode,
+        Sensor(GraspableSensorizedObjectWeakPtr parentNode,
                const std::string& name,
                VisualizationNodePtr visualization = VisualizationNodePtr(),
                const Eigen::Matrix4f& rnTrafo = Eigen::Matrix4f::Identity()
@@ -63,14 +63,15 @@ namespace VirtualRobot
         */
         ~Sensor() override;
 
-
+        /*! returns the parent as robot node if it is a robot node otherwise a nullptr */
         RobotNodePtr getRobotNode() const;
 
+        GraspableSensorizedObjectPtr getParentNode() const;
 
         /*!
-            The transformation that specifies the pose of the sensor relatively to the pose of the parent RobotNode.
+            The transformation that specifies the pose of the sensor relatively to the pose of the parent node.
         */
-        virtual Eigen::Matrix4f getRobotNodeToSensorTransformation()
+        virtual Eigen::Matrix4f getParentNodeToSensorTransformation()
         {
             return rnTransformation;
         }
@@ -81,7 +82,7 @@ namespace VirtualRobot
         virtual void setRobotNodeToSensorTransformation(const Eigen::Matrix4f& t);
 
         /*!
-            Calling this SceneObject method will cause an exception, since Sensors are controlled via their RobotNode parent.
+            Calling this SceneObject method will cause an exception, since Sensors are controlled via their node parent.
         */
         void setGlobalPose(const Eigen::Matrix4f& pose) override;
 
@@ -93,13 +94,13 @@ namespace VirtualRobot
 
         /*!
             Clone this Sensor.
-            \param newRobotNode The newly created Sensor belongs to newRobotNode.
+            \param newNode The newly created Sensor belongs to newNode.
             \param scaling Scales the visualization and transformation data.
         */
-        virtual SensorPtr clone(RobotNodePtr newRobotNode, float scaling = 1.0f);
+        virtual SensorPtr clone(GraspableSensorizedObjectPtr newNode, float scaling = 1.0f);
 
 
-        //! Forbid cloning method from SceneObject. We need to know the new robotnode for cloning
+        //! Forbid cloning method from SceneObject. We need to know the new parent node for cloning
         SceneObjectPtr clone(const std::string& /*name*/, CollisionCheckerPtr /*colChecker*/ = CollisionCheckerPtr(), float /*scaling*/ = 1.0f) const
         {
             THROW_VR_EXCEPTION("Cloning not allowed this way...");
@@ -127,13 +128,13 @@ namespace VirtualRobot
 
         Eigen::Matrix4f rnTransformation;           //<! Transformation from parent's coordinate system to this sensor
 
-        RobotNodeWeakPtr robotNode;
+        GraspableSensorizedObjectWeakPtr parentNode;
 
         /*!
             Derived classes must implement their clone method here.
             The visualization is already scaled, the kinematic information (i.e. transformations) have to be scaled by derived implementations.
         */
-        virtual SensorPtr _clone(const RobotNodePtr newRobotNode, const VisualizationNodePtr visualizationModel, float scaling) = 0;
+        virtual SensorPtr _clone(const GraspableSensorizedObjectPtr newNode, const VisualizationNodePtr visualizationModel, float scaling) = 0;
 
         SceneObject* _clone(const std::string& /*name*/, CollisionCheckerPtr /*colChecker*/ = CollisionCheckerPtr(), float /*scaling*/ = 1.0f) const override
         {

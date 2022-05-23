@@ -7,7 +7,6 @@
 #include "../EndEffector/EndEffector.h"
 #include "../EndEffector/EndEffectorActor.h"
 #include "../Nodes/RobotNodeFactory.h"
-#include "../Nodes/SensorFactory.h"
 #include "../Nodes/RobotNodeFixedFactory.h"
 #include "../Nodes/RobotNodePrismatic.h"
 #include "../Transformation/DHParameter.h"
@@ -18,6 +17,7 @@
 #include "../RuntimeEnvironment.h"
 #include "VirtualRobot.h"
 #include "rapidxml.hpp"
+#include <SimoxUtility/xml/rapidxml/rapidxml_print.hpp>
 #include "mujoco/RobotMjcf.h"
 #include <VirtualRobot/Import/URDF/SimoxURDFFactory.h>
 
@@ -169,47 +169,6 @@ namespace VirtualRobot
             }
         }
 
-    }
-
-    bool RobotIO::processSensor(RobotNodePtr rn, rapidxml::xml_node<char>* sensorXMLNode, RobotDescription loadMode, const std::string& basePath)
-    {
-        if (!rn || !sensorXMLNode)
-        {
-            VR_ERROR << "NULL DATA ?!" << std::endl;
-            return false;
-        }
-
-        rapidxml::xml_attribute<>* attr;
-        std::string sensorType;
-
-        attr = sensorXMLNode->first_attribute("type", 0, false);
-
-        if (attr)
-        {
-            sensorType = getLowerCase(attr->value());
-        }
-        else
-        {
-            VR_WARNING << "No 'type' attribute for <Sensor> tag. Skipping Sensor definition of RobotNode " << rn->getName() << "!" << std::endl;
-            return false;
-        }
-
-        SensorPtr s;
-
-
-        SensorFactoryPtr sensorFactory = SensorFactory::fromName(sensorType, nullptr);
-
-        if (sensorFactory)
-        {
-            s = sensorFactory->createSensor(rn, sensorXMLNode, loadMode, basePath);
-        }
-        else
-        {
-            VR_WARNING << "No Factory found for sensor of type " << sensorType << ". Skipping Sensor definition of RobotNode " << rn->getName() << "!" << std::endl;
-            return false;
-        }
-
-        return rn->registerSensor(s);
     }
 
     RobotNodePtr RobotIO::processJointNode(rapidxml::xml_node<char>* jointXMLNode, const std::string& robotNodeName,
@@ -643,6 +602,8 @@ namespace VirtualRobot
         VisualizationNodePtr visualizationNode;
         CollisionModelPtr collisionModel;
         RobotNodePtr robotNode;
+        std::string visualizationModelXML;
+        std::string collisionModelXML;
         SceneObject::Physics physics;
         bool physicsDefined = false;
         Eigen::Matrix4f transformMatrix = Eigen::Matrix4f::Identity();
@@ -651,6 +612,7 @@ namespace VirtualRobot
         rapidxml::xml_node<>* jointNodeXML = nullptr;
 
         std::vector< rapidxml::xml_node<>* > sensorTags;
+        std::vector<GraspSetPtr> graspSets;
 
         while (node)
         {
@@ -658,7 +620,7 @@ namespace VirtualRobot
 
             if (nodeName == "visualization")
             {
-                if (loadMode == eFull)
+                if (loadMode == eFull || loadMode == eFullVisAsCol)
                 {
                     THROW_VR_EXCEPTION_IF(visuProcessed, "Two visualization tags defined in RobotNode '" << robotNodeName << "'." << endl);
                     visualizationNode = processVisualizationTag(node, robotNodeName, basePath, useAsColModel);
@@ -690,16 +652,29 @@ namespace VirtualRobot
                         collisionModel.reset(new CollisionModel(visualizationNodeCM, colModelName, CollisionCheckerPtr()));
                         colProcessed = true;
                     }
-                }// else silently ignore tag
+                }
+                else if (loadMode == eStructureStore)
+                {
+                    std::stringstream ss;
+                    ss << *node;
+                    visualizationModelXML = ss.str();
+                    //rapidxml::print(std::back_inserter(robotNode->visualizationModelXML), node, rapidxml::print_no_indenting);
+                }
             }
             else if (nodeName == "collisionmodel")
             {
-                if (loadMode == eFull || loadMode == eCollisionModel)
+                if (loadMode == eFull || loadMode == eCollisionModel || loadMode == eFullVisAsCol)
                 {
                     THROW_VR_EXCEPTION_IF(colProcessed, "Two collision tags defined in RobotNode '" << robotNodeName << "'." << endl);
                     collisionModel = processCollisionTag(node, robotNodeName, basePath);
                     colProcessed = true;
-                } // else silently ignore tag
+                }
+                else if (loadMode == eStructureStore)
+                {
+                    std::stringstream ss;
+                    ss << *node;
+                    collisionModelXML = ss.str();
+                }
             }
             else if (nodeName == "child")
             {
@@ -728,6 +703,13 @@ namespace VirtualRobot
             {
                 sensorTags.push_back(node);
             }
+            else if (nodeName == "graspset")
+            {
+                GraspSetPtr gs = processGraspSet(node, robotNodeName);
+                THROW_VR_EXCEPTION_IF(!gs, "Invalid grasp set in '" << robotNodeName << "'." << endl);
+                graspSets.push_back(gs);
+
+            }
             else
             {
                 THROW_VR_EXCEPTION("XML definition <" << nodeName << "> not supported in RobotNode <" << robotNodeName << ">." << endl);
@@ -736,15 +718,34 @@ namespace VirtualRobot
             node = node->next_sibling();
         }
 
+        if (!colProcessed && visualizationNode && loadMode == eFullVisAsCol)
+        {
+            // Use collision model as visu model if not found
+            std::string colModelName = robotNodeName;
+            colModelName += "_VISU_ColModel";
+            // clone model
+            VisualizationNodePtr visualizationNodeClone = visualizationNode->clone();
+            // todo: ID?
+            collisionModel.reset(new CollisionModel(visualizationNodeClone, colModelName, CollisionCheckerPtr()));
+        }
 
         //create joint from xml data
         robotNode = processJointNode(jointNodeXML, robotNodeName, robo, visualizationNode, collisionModel, physics, rntype, transformMatrix);
+        robotNode->basePath = basePath;
+        robotNode->visualizationModelXML = visualizationModelXML;
+        robotNode->collisionModelXML = collisionModelXML;
 
         // process sensors
         for (auto& sensorTag : sensorTags)
         {
             processSensor(robotNode, sensorTag, loadMode, basePath);
         }
+
+        for (const auto& graspSet : graspSets)
+        {
+            robotNode->addGraspSet(graspSet);
+        }
+
 
         return robotNode;
     }
@@ -1575,7 +1576,7 @@ namespace VirtualRobot
             return false;
         }
 
-        std::string xmlRob = robot->toXML(basePath, modelDir, storeEEF, storeRNS, storeSensors);
+        std::string xmlRob = robot->toXML(basePath, modelDir, storeEEF, storeRNS, storeSensors, storeModelFiles);
         f << xmlRob;
         f.close();
 

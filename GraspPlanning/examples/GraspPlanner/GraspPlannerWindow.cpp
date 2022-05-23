@@ -138,6 +138,7 @@ void GraspPlannerWindow::setupUI()
     viewer->setSceneGraph(sceneSep);
     viewer->viewAll();
 
+    connect(UI.comboBoxObject, SIGNAL(activated(int)), this, SLOT(selectRobotObject(int)));
     connect(UI.pushButtonReset, SIGNAL(clicked()), this, SLOT(resetSceneryAll()));
     connect(UI.pushButtonPlan, SIGNAL(clicked()), this, SLOT(plan()));
     connect(UI.pushButtonPlanBatch, SIGNAL(clicked()), this, SLOT(planObjectBatch()));
@@ -150,6 +151,13 @@ void GraspPlannerWindow::setupUI()
     connect(UI.checkBoxColModel, SIGNAL(clicked()), this, SLOT(colModel()));
     connect(UI.checkBoxCones, SIGNAL(clicked()), this, SLOT(frictionConeVisu()));
     connect(UI.checkBoxGrasps, SIGNAL(clicked()), this, SLOT(showGrasps()));
+}
+
+void GraspPlannerWindow::selectRobotObject(int n)
+{
+    if (!robotObject) return;
+
+    object = robotObject->getRobotNode(UI.comboBoxObject->itemText(n).toStdString());
 }
 
 
@@ -305,7 +313,36 @@ void GraspPlannerWindow::loadObject(const string& objFile)
 {
     if (!objFile.empty())
     {
-        object = ObjectIO::loadManipulationObject(objFile);
+        try
+        {
+            object = ObjectIO::loadManipulationObject(objFile);
+        }
+        catch (VirtualRobotException& e)
+        {
+            // TODO: not pretty!
+            try {
+                robotObject = RobotIO::loadRobot(objFile, RobotIO::eFullVisAsCol);
+                object = nullptr;
+            }
+            catch (VirtualRobotException& e)
+            {
+                std::cout << " ERROR while creating object" << std::endl;
+                std::cout << e.what();
+            }
+        }
+    }
+
+
+    UI.comboBoxObject->clear();
+
+    if (robotObject) {
+        for (auto robotNode : robotObject->getRobotNodes()) {
+            if (robotNode->getVisualization()) {
+                if (!object)
+                    object = robotNode;
+                UI.comboBoxObject->addItem(QString::fromStdString(robotNode->getName()));
+            }
+        }
     }
 
     if (!object)
