@@ -66,6 +66,8 @@ public:
 
     virtual Eigen::Vector3f getGlobalPosition() override;
 
+    virtual Eigen::Matrix4f getCoordinateSystem() override;
+
     Eigen::MatrixXd computeBimanualGraspMatrix();
 
     RobotNodeSetPtr getLeftRobotNodeSet();
