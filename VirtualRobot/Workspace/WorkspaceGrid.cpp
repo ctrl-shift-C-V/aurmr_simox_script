@@ -471,6 +471,8 @@ namespace VirtualRobot
 
     bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &global_T_grasp_orig, GraspPtr g, RobotNodePtr baseRobotNode, float baseOrientation, const float maxAngle, const float minCenterDistance)
     {
+        (void) maxAngle;  // Unused.
+
         if (!ws)
         {
             return false;

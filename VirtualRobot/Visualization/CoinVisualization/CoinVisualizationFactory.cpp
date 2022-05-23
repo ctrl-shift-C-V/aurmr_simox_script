@@ -277,6 +277,8 @@ namespace VirtualRobot
 
     VisualizationNodePtr CoinVisualizationFactory::getVisualizationFromFileWithAssimp(const std::string& filename, bool boundingBox, float scaleX, float scaleY, float scaleZ)
     {
+        (void) scaleX, (void) scaleY, (void) scaleZ;  // Unused.
+
         SoNode* node = AssimpReader::readFileAsSoNode(filename);
         if (!node)
         {
