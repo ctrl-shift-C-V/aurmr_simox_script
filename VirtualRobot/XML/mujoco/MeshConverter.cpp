@@ -2,6 +2,7 @@
 
 #include <VirtualRobot/VirtualRobotChecks.h>
 
+#include <fstream>
 
 namespace fs = std::filesystem;
 
@@ -139,7 +140,8 @@ Mesh MeshConverter::toMujoco(const VirtualRobot::TriMeshModel& triMeshModel, flo
 void MeshConverter::toSTL(
         const std::filesystem::path& sourceFile,
         const std::filesystem::path& _targetPath,
-        bool skipIfExists)
+        bool skipIfExists,
+        float scaling)
 {
     fs::path targetFile = _targetPath;
 
@@ -165,7 +167,7 @@ void MeshConverter::toSTL(
     }
 
     // Check if file has to be converted.
-    if (sourceFile.extension() != ".stl")
+    if (sourceFile.extension() == ".stl")
     {
         VR_INFO << "Copying: " << sourceFile << std::endl
                 << "     to: " << targetFile;
@@ -194,7 +196,7 @@ void MeshConverter::toSTL(
     }
 
     // Meshlabserver available.
-    runMeshlabserverCommand(sourceFile, targetFile);
+    runMeshlabserverCommand(sourceFile, targetFile, scaling);
 }
 
 bool MeshConverter::checkMeshlabserverAvailable()
@@ -204,15 +206,44 @@ bool MeshConverter::checkMeshlabserverAvailable()
     return system(ss.str().c_str()) == 0;
 }
 
+fs::path createScript(float scaling) {
+    fs::path path = fs::temp_directory_path() / ("meshlabserver_scaling_" + std::to_string(scaling) + ".mlx");
+    if (!fs::exists(path))
+    {
+        std::stringstream filterScript;
+        filterScript << "<!DOCTYPE FilterScript>";
+        filterScript << "<FilterScript>";
+        filterScript << "<filter name=\"Transform: Scale\">";
+        filterScript << "<Param type=\"RichDynamicFloat\" value=\"" << scaling << "\" min=\"0.1\" name=\"axisX\" max=\"10\"/>";
+        filterScript << "<Param type=\"RichDynamicFloat\" value=\"" << scaling << "\" min=\"0.1\" name=\"axisY\" max=\"10\"/>";
+        filterScript << "<Param type=\"RichDynamicFloat\"value=\"" << scaling << "\" min=\"0.1\" name=\"axisZ\" max=\"10\"/>";
+        filterScript << "<Param type=\"RichBool\" value=\"true\" name=\"uniformFlag\"/>";
+        filterScript << "<Param enum_val0=\"origin\" enum_val1=\"barycenter\" enum_cardinality=\"3\" enum_val2=\"custom point\" type=\"RichEnum\" value=\"0\" name=\"scaleCenter\"/>";
+        filterScript << "<Param x=\"0\" y=\"0\" z=\"0\" type=\"RichPoint3f\" name=\"customCenter\"/>";
+        filterScript << "<Param type=\"RichBool\" value=\"false\" name=\"unitFlag\"/>";
+        filterScript << "<Param type=\"RichBool\" value=\"true\" name=\"Freeze\"/>";
+        filterScript << "<Param type=\"RichBool\" value=\"false\" name=\"ToAll\"/>";
+        filterScript << "</filter>";
+        filterScript << "</FilterScript>";
+        std::ofstream o(path);
+        o << filterScript.str();
+        o.close();
+    }
+    return path;
+}
 
 bool MeshConverter::runMeshlabserverCommand(
         const std::filesystem::path& sourceFile,
-        const std::filesystem::path& targetFile)
+        const std::filesystem::path& targetFile,
+        float scaling)
 {
     std::stringstream convertCommand;
     convertCommand << MESHLABSERVER
                    << " -i " << sourceFile
                    << " -o " << targetFile;
+
+    if (scaling != 1.0f)
+        convertCommand << " -s " << createScript(scaling);
 
     // run command
     VR_INFO << "----------------------------------------------------------" << std::endl;

@@ -54,7 +54,8 @@ namespace VirtualRobot::mujoco
          */
         static void toSTL(const std::filesystem::path& sourceFile,
                           const std::filesystem::path& targetPath,
-                          bool skipIfExists = true);
+                          bool skipIfExists = true,
+                          float scaling = 1.0f);
 
 
     private:
@@ -67,7 +68,8 @@ namespace VirtualRobot::mujoco
          * @return True if the command returned without error, false otherwise.
          */
         static bool runMeshlabserverCommand(const std::filesystem::path& sourceFile,
-                                            const std::filesystem::path& targetFile);
+                                            const std::filesystem::path& targetFile,
+                                            float scaling = 1.0f);
 
 
         /// Command used to convert mesh files to STL.
