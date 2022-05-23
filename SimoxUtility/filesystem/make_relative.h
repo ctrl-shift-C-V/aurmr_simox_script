@@ -7,8 +7,8 @@ namespace simox::fs
     //! Return path when appended to a_From will resolve to same as a_To
     inline std::filesystem::path make_relative(std::filesystem::path a_From, std::filesystem::path a_To)
     {
-        a_From = std::filesystem::absolute(a_From);
-        a_To = std::filesystem::absolute(a_To);
+        a_From = std::filesystem::canonical(a_From);
+        a_To = std::filesystem::canonical(a_To);
         std::filesystem::path ret;
         std::filesystem::path::const_iterator itrFrom(a_From.begin()), itrTo(a_To.begin());
         // Find common base
