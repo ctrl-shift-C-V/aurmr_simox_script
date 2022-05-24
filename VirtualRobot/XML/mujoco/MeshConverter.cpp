@@ -242,8 +242,9 @@ bool MeshConverter::runMeshlabserverCommand(
                    << " -i " << sourceFile
                    << " -o " << targetFile;
 
-    if (scaling != 1.0f)
+    if (scaling != 1.0f) {
         convertCommand << " -s " << createScript(scaling);
+    }
 
     // run command
     VR_INFO << "----------------------------------------------------------" << std::endl;
