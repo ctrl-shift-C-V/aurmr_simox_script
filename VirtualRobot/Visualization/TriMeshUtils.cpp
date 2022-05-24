@@ -159,7 +159,7 @@ uniformDeviate(int seed)
   return ran;
 }
 
-Eigen::Vector3f TriMeshUtils::sampleSurfacePoint(std::vector<float> *cumulativeAreas, double totalArea, const TriMeshModel& tri)
+Eigen::Vector3f TriMeshUtils::sampleSurfacePoint(const std::vector<float>& cumulativeAreas, double totalArea, const TriMeshModel& tri)
 {
     if (tri.faces.empty())
     {
@@ -196,7 +196,7 @@ std::vector<Eigen::Vector3f> TriMeshUtils::uniformSampling(const TriMeshModel& t
     unsigned int i = 0;
     unsigned int counter = 0;
     while (i < n) {
-        Eigen::Vector3f sampledPoint = sampleSurfacePoint(&cumulativeAreas, totalArea, tri);
+        Eigen::Vector3f sampledPoint = sampleSurfacePoint(cumulativeAreas, totalArea, tri);
         if (!sampledPoint.isZero()) {
             samples[i] = sampledPoint;
             i++;
