@@ -202,8 +202,9 @@ std::vector<Eigen::Vector3f> TriMeshUtils::uniformSampling(const TriMeshModel& t
             i++;
             counter = 0;
         }
-        if (counter > 10)
+        if (counter > 10) {
             throw VirtualRobotException("Sampling surface points gone wrong!");
+        }
     }
     return samples;
 }
