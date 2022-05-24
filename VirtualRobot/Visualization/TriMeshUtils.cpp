@@ -24,6 +24,7 @@
 #include "TriMeshUtils.h"
 #include "../VirtualRobotException.h"
 #include <Eigen/Geometry>
+#include <cstddef>
 #include <numeric>
 
 namespace VirtualRobot {
@@ -167,8 +168,9 @@ Eigen::Vector3f TriMeshUtils::sampleSurfacePoint(const std::vector<float>& cumul
     }
 
     float r = static_cast<float>(uniformDeviate(rand()) * totalArea);
-    std::vector<float>::iterator low = std::lower_bound(cumulativeAreas->begin(), cumulativeAreas->end(), r);
-    auto f = tri.faces[low - cumulativeAreas->begin()];
+    const auto low = std::lower_bound(cumulativeAreas.begin(), cumulativeAreas.end(), r);
+    // const std::size_t idx = std::distance(cumulativeAreas.begin(), low);
+    auto f = tri.faces[low - cumulativeAreas.begin()];
 
     float r1 = static_cast<float>(uniformDeviate(rand()));
     float r2 = static_cast<float>(uniformDeviate(rand()));
