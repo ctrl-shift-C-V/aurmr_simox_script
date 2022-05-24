@@ -208,7 +208,7 @@ bool MeshConverter::checkMeshlabserverAvailable()
 
 fs::path createScript(float scaling) {
     fs::path path = fs::temp_directory_path() / ("meshlabserver_scaling_" + std::to_string(scaling) + ".mlx");
-    if (!fs::exists(path))
+    // if (!fs::exists(path))
     {
         std::stringstream filterScript;
         filterScript << "<!DOCTYPE FilterScript>";
