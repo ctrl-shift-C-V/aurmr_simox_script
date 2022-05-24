@@ -546,14 +546,14 @@ namespace VirtualRobot
 
 
 
-    RobotNodePtr& RobotNodeSet::getNode(int i)
+    const RobotNodePtr& RobotNodeSet::getNode(const int i) const
     {
         THROW_VR_EXCEPTION_IF((i >= (int)robotNodes.size() || i < 0), "Index out of bounds:" << i << ", (should be between 0 and " << (robotNodes.size() - 1));
 
         return robotNodes.at(i);
     }
 
-    RobotNodePtr& RobotNodeSet::getNode(const std::string& nodeName)
+    const RobotNodePtr& RobotNodeSet::getNode(const std::string& nodeName) const
     {
         return getNode(getRobotNodeIndex(nodeName));
     }

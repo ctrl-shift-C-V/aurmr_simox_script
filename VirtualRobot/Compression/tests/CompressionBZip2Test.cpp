@@ -64,6 +64,7 @@ BOOST_AUTO_TEST_CASE(testNullBlock)
 
     for (unsigned char i : blockN2)
     {
+        (void) i;
 //        BOOST_CHECK_EQUAL(i, 0);
     }
 

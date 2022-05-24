@@ -61,6 +61,7 @@ Eigen::Vector3f simox::color::rgb_to_hsv(const Eigen::Vector3f& rgb)
     return hsv;
 }
 
+
 Eigen::Vector3f simox::color::hsv_to_rgb(const Eigen::Vector3f& hsv)
 {
     // source: https://stackoverflow.com/a/6930407
@@ -124,14 +125,4 @@ Eigen::Vector3f simox::color::hsv_to_rgb(const Eigen::Vector3f& hsv)
             break;
     }
     return rgb;
-}
-
-Eigen::Vector3i simox::color::rgb_to_hsv(const Eigen::Vector3i& rgb)
-{
-    return to_byte(rgb_to_hsv(to_float(rgb)));
-}
-
-Eigen::Vector3i simox::color::hsv_to_rgb(const Eigen::Vector3i& hsv)
-{
-    return to_byte(hsv_to_rgb(to_float(hsv)));
 }

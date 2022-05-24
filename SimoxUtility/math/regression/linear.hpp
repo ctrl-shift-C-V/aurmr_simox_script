@@ -48,7 +48,7 @@ namespace simox::math
     {
     public:
 
-        static const int Dim = _Dim;
+        static constexpr int Dim = _Dim;
         using FloatT = _FloatT;
         using VectorT = typename Eigen::Matrix<FloatT, Dim, 1>;
         using CoefficientsMatrixT = typename Eigen::Matrix<FloatT, Dim, 2>;
