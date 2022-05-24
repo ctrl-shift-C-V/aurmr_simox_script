@@ -26,6 +26,7 @@
 #include <Eigen/Geometry>
 #include <cstddef>
 #include <numeric>
+#include <optional>
 
 namespace VirtualRobot {
 
@@ -160,11 +161,11 @@ uniformDeviate(int seed)
   return ran;
 }
 
-Eigen::Vector3f TriMeshUtils::sampleSurfacePoint(const std::vector<float>& cumulativeAreas, double totalArea, const TriMeshModel& tri)
+std::optional<Eigen::Vector3f> TriMeshUtils::sampleSurfacePoint(const std::vector<float>& cumulativeAreas, double totalArea, const TriMeshModel& tri)
 {
     if (tri.faces.empty())
     {
-        return Eigen::Vector3f::Zero();
+        return std::nullopt;
     }
 
     float r = static_cast<float>(uniformDeviate(rand()) * totalArea);
@@ -198,9 +199,9 @@ std::vector<Eigen::Vector3f> TriMeshUtils::uniformSampling(const TriMeshModel& t
     unsigned int i = 0;
     unsigned int counter = 0;
     while (i < n) {
-        Eigen::Vector3f sampledPoint = sampleSurfacePoint(cumulativeAreas, totalArea, tri);
-        if (!sampledPoint.isZero()) {
-            samples[i] = sampledPoint;
+        const std::optional<Eigen::Vector3f> sampledPoint = sampleSurfacePoint(cumulativeAreas, totalArea, tri);
+        if (sampledPoint.has_value()) {
+            samples[i] = sampledPoint.value();
             i++;
             counter = 0;
         }

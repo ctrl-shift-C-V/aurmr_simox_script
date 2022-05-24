@@ -39,7 +39,7 @@ public:
                                                const VisualizationFactory::Color &color = VisualizationFactory::Color::Gray(),
                                                const std::vector<VisualizationFactory::Color>& colors = {});
 
-    static Eigen::Vector3f sampleSurfacePoint(const std::vector<float>& cumulativeAreas, double totalArea, const VirtualRobot::TriMeshModel& tri);
+    static std::optional<Eigen::Vector3f> sampleSurfacePoint(const std::vector<float>& cumulativeAreas, double totalArea, const VirtualRobot::TriMeshModel& tri);
     //! Uniformly samples points on the surface of a trimesh model and can be used to create a point cloud of the model
     static std::vector<Eigen::Vector3f> uniformSampling(const VirtualRobot::TriMeshModel& tri, unsigned int n = 1000);
 };
