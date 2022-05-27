@@ -1479,7 +1479,7 @@ namespace VirtualRobot
         if (!visualizationModelXML.empty())
         {
             rapidxml::xml_document<> doc;
-            std::vector<char> cstr(collisionModelXML.size() + 1);  // Create char buffer to store string copy
+            std::vector<char> cstr(visualizationModelXML.size() + 1);  // Create char buffer to store string copy
             strcpy(cstr.data(), visualizationModelXML.c_str());             // Copy string into char buffer
             doc.parse<0>(cstr.data());
             bool useAsColModel;
