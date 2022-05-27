@@ -51,6 +51,16 @@ namespace VirtualRobot
     class VIRTUAL_ROBOT_IMPORT_EXPORT BaseIO
     {
     public:
+        enum RobotDescription
+        {
+            eFull,              // load complete robot definition
+            eCollisionModel,    // skip visualization tags and load only collision model
+            eStructure,         // load only the structure of the robot, ignore visualization and collision tags -> faster access when robot is only used for coordinate transformations
+            eStructureStore,    // load only the structure of the robot, ignore visualization and collision tags -> faster access when robot is only used for coordinate transformations. Both tags are stored in string and can be retrieved by reloadVisualizationFromXML()
+            eFullVisAsCol       // load complete robot definition - use visualization as collision model if col model not available
+        };
+
+
         static void makeAbsolutePath(const std::string& basePath, std::string& filename);
         static void makeRelativePath(const std::string& basePath, std::string& filename);
 
@@ -103,6 +113,11 @@ namespace VirtualRobot
         static std::string toXML(const Eigen::Matrix4f& m, std::string ident = "\t");
 
         static std::vector<VisualizationNodePtr> processVisuFiles(rapidxml::xml_node<char>* visualizationXMLNode, const std::string& basePath, std::string& fileType);
+
+        static GraspSetPtr processGraspSet(rapidxml::xml_node<char>* graspSetXMLNode, const std::string& objName);
+        static GraspPtr processGrasp(rapidxml::xml_node<char>* graspXMLNode, const std::string& robotType, const std::string& eef, const std::string& objName);
+
+        static bool processSensor(GraspableSensorizedObjectPtr node, rapidxml::xml_node<char>* sensorXMLNode, RobotDescription loadMode, const std::string& basePath);
     protected:
         // instantiation not allowed
         BaseIO();

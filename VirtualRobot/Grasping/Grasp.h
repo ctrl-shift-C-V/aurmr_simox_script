@@ -57,7 +57,7 @@ namespace VirtualRobot
         */
         virtual ~Grasp();
 
-        void print(bool printDecoration = true) const;
+        virtual void print(bool printDecoration = true) const;
 
         void setName(const std::string& name);
         void setPreshape(const std::string& preshapeName);
@@ -105,11 +105,11 @@ namespace VirtualRobot
             The transformation is given in the coordinate system of the tcp (whereas the tcp belongs to the eef).
             This transformation specifies the tcp to object relation (object in tcp frame).
         */
-        const Eigen::Matrix4f& getTransformation() const;
+        virtual Eigen::Matrix4f getTransformation() const;
 
         std::string toXML(int tabs = 2) const;
 
-        GraspPtr clone() const;
+        virtual GraspPtr clone() const;
 
         //! Returns the (optionally) stored configuration of the fingers / actors.
         std::map<std::string, float> getConfiguration() const;
@@ -119,6 +119,7 @@ namespace VirtualRobot
 
 
     protected:
+        virtual std::string getTransformationXML(const std::string &tabs) const;
 
         std::map< std::string, float > eefConfiguration; //!< Optional: the configuration of the actors.
 

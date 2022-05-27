@@ -8,11 +8,11 @@
 namespace VirtualRobot
 {
 
-    PositionSensor::PositionSensor(RobotNodeWeakPtr robotNode,
+    PositionSensor::PositionSensor(GraspableSensorizedObjectWeakPtr parentNode,
                                    const std::string& name,
                                    VisualizationNodePtr visualization,
                                    const Eigen::Matrix4f& rnTrafo
-                                  ) : Sensor(robotNode, name, visualization, rnTrafo)
+                                  ) : Sensor(parentNode, name, visualization, rnTrafo)
     {
 
     }
@@ -34,12 +34,12 @@ namespace VirtualRobot
     }
 
 
-    SensorPtr PositionSensor::_clone(const RobotNodePtr newRobotNode, const VisualizationNodePtr visualizationModel, float scaling)
+    SensorPtr PositionSensor::_clone(const GraspableSensorizedObjectPtr parentNode, const VisualizationNodePtr visualizationModel, float scaling)
     {
         THROW_VR_EXCEPTION_IF(scaling < 0, "Scaling must be >0");
         Eigen::Matrix4f rnt = rnTransformation;
         rnt.block(0, 3, 3, 1) *= scaling;
-        SensorPtr result(new PositionSensor(newRobotNode, name, visualizationModel, rnt));
+        SensorPtr result(new PositionSensor(parentNode, name, visualizationModel, rnt));
         return result;
     }
 

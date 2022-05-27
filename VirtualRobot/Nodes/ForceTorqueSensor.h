@@ -47,7 +47,7 @@ namespace VirtualRobot
         /*!
             Constructor with settings.
         */
-        ForceTorqueSensor(RobotNodeWeakPtr robotNode,
+        ForceTorqueSensor(GraspableSensorizedObjectWeakPtr node,
                           const std::string& name,
                           const Eigen::Matrix4f& rnTrafo = Eigen::Matrix4f::Identity()
                          );
@@ -84,7 +84,7 @@ namespace VirtualRobot
         /*!
         Derived classes must implement their clone method here.
         */
-        SensorPtr _clone(const RobotNodePtr newRobotNode, const VisualizationNodePtr visualizationModel, float scaling) override;
+        SensorPtr _clone(const GraspableSensorizedObjectPtr newParentNode, const VisualizationNodePtr visualizationModel, float scaling) override;
         Eigen::VectorXf forceTorqueValues;
     };
 

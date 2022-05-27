@@ -46,44 +46,6 @@ namespace VirtualRobot
 
         void print(bool printDecoration = true) override;
 
-        bool hasGraspSet(GraspSetPtr graspSet);
-        bool hasGraspSet(const std::string& robotType, const std::string& eef);
-
-        /*!
-            Appends a grasp set. Note, that only one grasp set per EEF is allowed.
-        */
-        void addGraspSet(GraspSetPtr graspSet);
-
-        /*!
-         * \brief includeGraspSet
-         * \param graspSet
-         */
-        void includeGraspSet(GraspSetPtr graspSet);
-
-        /*!
-            Get grasp set for the given end effector. In case multiple grasp sets for the eef are present, the first one is returned.
-            An empty GraspSetPtr is returned when no GraspSet for eef is found.
-        */
-        GraspSetPtr getGraspSet(EndEffectorPtr eef);
-
-        /*!
-            Get grasp set for the given robotType and end effector. In case multiple grasp sets for the robot/eef combination are present, the first one is returned.
-            An empty GraspSetPtr is returned when no GraspSet for robot&eef is found.
-        */
-        GraspSetPtr getGraspSet(const std::string& robotType, const std::string& eefName);
-
-        /*!
-            Get grasp set by name.
-            \param name The name of the grasp set.
-            \return An empty GraspSetPtr is returned when no GraspSet with the given name is found.
-        */
-        GraspSetPtr getGraspSet(const std::string& name);
-
-        /*!
-            Get grasp set vector
-        */
-        std::vector<GraspSetPtr> getAllGraspSets();
-
         /*!
             Creates an XML representation of this object.
             \param basePath If set, all visualization and collision model files are made relative to this path.
@@ -91,7 +53,7 @@ namespace VirtualRobot
             \param storeLinkToFile If set, the data (e.g. grasps) are not explicitly listed, but an xml tag directing to the XML file,
                     from which this instance was loaded, is set. If not set a deep description is created.
         */
-        virtual std::string toXML(const std::string& basePath = std::string(), int tabs = 0, bool storeLinkToFile = false);
+        virtual std::string toXML(const std::string& basePath = std::string(), int tabs = 0, bool storeLinkToFile = false, const std::string& modelPathRelative = "", bool storeSensors = true);
 
         /*!
             Clones this object. If no col checker is given, the one of the original object is used.
@@ -107,14 +69,6 @@ namespace VirtualRobot
         */
         static ManipulationObjectPtr createFromMesh(TriMeshModelPtr mesh, std::string visualizationType = "", CollisionCheckerPtr colChecker = CollisionCheckerPtr());
 
-    protected:
-
-        virtual ManipulationObject* _clone(const std::string& name, CollisionCheckerPtr colChecker = CollisionCheckerPtr(), bool deepVisuCopy = true) const;
-
-
-        //std::string filename;
-
-        std::vector< GraspSetPtr > graspSets;
     };
 
 } // namespace

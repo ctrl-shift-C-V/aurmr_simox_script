@@ -106,8 +106,6 @@ namespace VirtualRobot
 
         static ObstaclePtr processObstacle(rapidxml::xml_node<char>* objectXMLNode, const std::string& basePath);
         static ManipulationObjectPtr processManipulationObject(rapidxml::xml_node<char>* objectXMLNode, const std::string& basePath);
-        static GraspSetPtr processGraspSet(rapidxml::xml_node<char>* graspSetXMLNode, const std::string& objName);
-        static GraspPtr processGrasp(rapidxml::xml_node<char>* graspXMLNode, const std::string& robotType, const std::string& eef, const std::string& objName);
 
         /*!
          * \brief writeSTL Write ascii stl file.

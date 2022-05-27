@@ -23,7 +23,7 @@ namespace VirtualRobot
      *
      * \return instance of VirtualRobot::ContactSensor.
      */
-    SensorPtr ContactSensorFactory::createSensor(RobotNodePtr node, const std::string& name, VisualizationNodePtr /*visualization*/,
+    SensorPtr ContactSensorFactory::createSensor(GraspableSensorizedObjectPtr node, const std::string& name, VisualizationNodePtr /*visualization*/,
             const Eigen::Matrix4f& /*rnTrafo*/) const
     {
         SensorPtr Sensor(new ContactSensor(node, name));
@@ -31,7 +31,7 @@ namespace VirtualRobot
         return Sensor;
     }
 
-    SensorPtr ContactSensorFactory::createSensor(RobotNodePtr node, rapidxml::xml_node<char>* sensorXMLNode, RobotIO::RobotDescription /*loadMode*/, const std::string /*basePath*/) const
+    SensorPtr ContactSensorFactory::createSensor(GraspableSensorizedObjectPtr node, rapidxml::xml_node<char>* sensorXMLNode, BaseIO::RobotDescription /*loadMode*/, const std::string /*basePath*/) const
     {
         THROW_VR_EXCEPTION_IF(!sensorXMLNode, "NULL data");
         THROW_VR_EXCEPTION_IF(!node, "NULL data");
