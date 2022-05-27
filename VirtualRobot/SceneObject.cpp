@@ -1466,26 +1466,28 @@ namespace VirtualRobot
         if (!collisionModelXML.empty())
         {
             rapidxml::xml_document<> doc;
-            char* cstr = new char[collisionModelXML.size() + 1];  // Create char buffer to store string copy
-            strcpy(cstr, collisionModelXML.c_str());             // Copy string into char buffer
-            doc.parse<0>(cstr);
+            
+            std::vector<char> cstr(collisionModelXML.size() + 1);  // Create char buffer to store string copy
+            strcpy(cstr.data(), collisionModelXML.c_str());             // Copy string into char buffer
+            doc.parse<0>(cstr.data());
             collisionModel = BaseIO::processCollisionTag(doc.first_node(), name, basePath);
-            if (collisionModel && scaling != 1.0f) collisionModel = collisionModel->clone(collisionChecker, scaling);
-            delete[] cstr;
+            if (collisionModel && scaling != 1.0f) { 
+                collisionModel = collisionModel->clone(collisionChecker, scaling);
+            }
             reloaded = true;
         }
         if (!visualizationModelXML.empty())
         {
             rapidxml::xml_document<> doc;
-            char* cstr = new char[visualizationModelXML.size() + 1];  // Create char buffer to store string copy
-            strcpy(cstr, visualizationModelXML.c_str());             // Copy string into char buffer
-            doc.parse<0>(cstr);
+            std::vector<char> cstr(collisionModelXML.size() + 1);  // Create char buffer to store string copy
+            strcpy(cstr.data(), visualizationModelXML.c_str());             // Copy string into char buffer
+            doc.parse<0>(cstr.data());
             bool useAsColModel;
             visualizationModel = BaseIO::processVisualizationTag(doc.first_node(), name, basePath, useAsColModel);
             if (visualizationModel && scaling != 1.0f) visualizationModel = visualizationModel->clone(true, scaling);
-            if (visualizationModel && collisionModel == nullptr && (useVisAsColModelIfMissing || useAsColModel))
+            if (visualizationModel && collisionModel == nullptr && (useVisAsColModelIfMissing || useAsColModel)) {
                 collisionModel.reset(new CollisionModel(visualizationModel->clone(true), getName() + "_VISU_ColModel", CollisionCheckerPtr()));
-            delete[] cstr;
+            }
             reloaded = true;
         }
         for (auto child : this->getChildren()) {

@@ -245,25 +245,22 @@ namespace VirtualRobot
     VirtualRobot::ManipulationObjectPtr ObjectIO::createManipulationObjectFromString(const std::string& xmlString, const std::string& basePath /*= ""*/)
     {
         // copy string content to char array
-        char* y = new char[xmlString.size() + 1];
-        strncpy(y, xmlString.c_str(), xmlString.size() + 1);
+        std::vector<char> y(xmlString.size() + 1);
+        strncpy(y.data(), xmlString.c_str(), xmlString.size() + 1);
 
         VirtualRobot::ManipulationObjectPtr obj;
 
         try
         {
             rapidxml::xml_document<char> doc;    // character type defaults to char
-            doc.parse<0>(y);    // 0 means default parse flags
+            doc.parse<0>(y.data());    // 0 means default parse flags
             rapidxml::xml_node<char>* objectXMLNode = doc.first_node("ManipulationObject");
 
             obj = processManipulationObject(objectXMLNode, basePath);
 
-
-
         }
         catch (rapidxml::parse_error& e)
         {
-            delete[] y;
             THROW_VR_EXCEPTION("Could not parse data in xml definition" << endl
                                << "Error message:" << e.what() << endl
                                << "Position: " << endl << e.where<char>() << endl);
@@ -272,24 +269,20 @@ namespace VirtualRobot
         catch (VirtualRobot::VirtualRobotException&)
         {
             // rethrow the current exception
-            delete[] y;
             throw;
         }
         catch (std::exception& e)
         {
-            delete[] y;
             THROW_VR_EXCEPTION("Error while parsing xml definition" << endl
                                << "Error code:" << e.what() << endl);
             return ManipulationObjectPtr();
         }
         catch (...)
         {
-            delete[] y;
             THROW_VR_EXCEPTION("Error while parsing xml definition" << endl);
             return ManipulationObjectPtr();
         }
 
-        delete[] y;
         return obj;
     }
 
