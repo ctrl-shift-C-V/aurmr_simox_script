@@ -44,9 +44,10 @@ namespace VirtualRobot
         */
         enum InverseJacobiMethod
         {
-            eSVD,       //<! PseudoInverse Jacobian. Performing SVD and setting very small eigen values to zero results in a quite stable inverting of the Jacobi. (default)
-            eSVDDamped, //<! Using the damped PseudoInverse algorithm
-            eTranspose  //<! The Jacobi Transpose method is faster than SVD and works well for redundant kinematic chains.
+            eSVD,               //<! PseudoInverse Jacobian. Performing SVD and setting very small eigen values to zero results in a quite stable inverting of the Jacobi. (default)
+            eSVDDamped,         //<! Using the damped PseudoInverse algorithm
+            eSVDDampedDynamic,  //<! Using the damped PseudoInverse algorithm with a different computation of the damping factor which is dynamically calculated when near a singularity
+            eTranspose          //<! The Jacobi Transpose method is faster than SVD and works well for redundant kinematic chains.
         };
 
         /*!

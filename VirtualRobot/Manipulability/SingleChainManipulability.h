@@ -65,6 +65,8 @@ public:
 
     virtual Eigen::Vector3f getGlobalPosition() override;
 
+    virtual Eigen::Matrix4f getCoordinateSystem() override;
+
     virtual std::vector<std::string> getJointNames() override;
 
     virtual Eigen::VectorXd getJointAngles() override;
@@ -101,6 +103,8 @@ public:
     virtual Eigen::Vector3f getLocalPosition() override;
 
     virtual Eigen::Vector3f getGlobalPosition() override;
+
+    virtual Eigen::Matrix4f getCoordinateSystem() override;
 
     virtual std::vector<std::string> getJointNames() override;
 

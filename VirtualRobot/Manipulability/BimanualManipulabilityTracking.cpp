@@ -26,6 +26,8 @@
 #include <SimoxUtility/math/convert/pos_quat_to_mat4f.h>
 #include "BimanualManipulability.h"
 
+#include <VirtualRobot/MathTools.h>
+
 namespace VirtualRobot
 {
 
@@ -62,8 +64,8 @@ Eigen::VectorXf BimanualManipulabilityTracking::calculateVelocity(const Eigen::M
     }
 
     // Compute damped pseudo-inverse of manipulability Jacobian
-    double dampingFactor = getDamping(matManipJ);
-    Eigen::MatrixXd dampedLSI = dampedLeastSquaresInverse(matManipJ, dampingFactor);
+    double dampingFactor = MathTools::getDamping(matManipJ);
+    Eigen::MatrixXd dampedLSI = MathTools::getDampedLeastSquareInverse(matManipJ, dampingFactor);
     
     // Compute joint velocity
     Eigen::VectorXd dq = dampedLSI * (gainMatrix.rows() == 0 ? getDefaultGainMatrix() : gainMatrix) * manipulability_mandel;

@@ -645,6 +645,23 @@ namespace VirtualRobot
         Eigen::MatrixXf VIRTUAL_ROBOT_IMPORT_EXPORT getPseudoInverseDamped(const Eigen::MatrixXf& m, float lambda = 1.0f);
         Eigen::MatrixXd VIRTUAL_ROBOT_IMPORT_EXPORT getPseudoInverseDampedD(const Eigen::MatrixXd& m, double lambda = 1.0);
 
+        /*! Calculates damping factor for singularity avoidance */
+        double VIRTUAL_ROBOT_IMPORT_EXPORT getDamping(const Eigen::MatrixXd &matrix);
+        double VIRTUAL_ROBOT_IMPORT_EXPORT getDamping(const Eigen::MatrixXf &matrix);
+
+        /*! @brief Calculates the damped least square inverse by J^T * (JJ^T + k^2 I)^{-1}
+         * @jacobian Jacobian J
+         * @squaredDampingFactor Damping factor k^2
+         */
+        template <typename T>
+        Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> VIRTUAL_ROBOT_IMPORT_EXPORT getDampedLeastSquareInverse(const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> &jacobian, double squaredDampingFactor = 0.01f) {
+            Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> k2I = squaredDampingFactor * Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>::Identity(jacobian.rows(), jacobian.rows());
+            Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> JJT = jacobian * jacobian.transpose();
+            Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> JJT_k2I = JJT + k2I;
+            Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> dampedLeastSquaresInverse =  jacobian.transpose() * JJT_k2I.inverse();
+            return dampedLeastSquaresInverse;
+        }
+
         /*!
             Check if all entries of v are valid numbers (i.e. all entries of v are not NaN and not INF)
         */

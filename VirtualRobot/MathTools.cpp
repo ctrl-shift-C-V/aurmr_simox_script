@@ -2257,6 +2257,22 @@ namespace VirtualRobot
         pose = newGlobalPose;
     }
 
+    double MathTools::getDamping(const Eigen::MatrixXd &matrix) {
+        auto svd = Eigen::JacobiSVD(matrix, Eigen::ComputeThinU | Eigen::ComputeThinV);
+        auto sV = svd.singularValues();
+        double minEigenValue = sV(sV.rows()-1, sV.cols()-1);
+        double damping = minEigenValue < 1e-2 ? 1e-2 : 1e-8; // c++ code sets damping to min singular value if smaller
+        return damping;
+    }
+
+    double MathTools::getDamping(const Eigen::MatrixXf &matrix) {
+        auto svd = Eigen::JacobiSVD(matrix, Eigen::ComputeThinU | Eigen::ComputeThinV);
+        auto sV = svd.singularValues();
+        double minEigenValue = sV(sV.rows()-1, sV.cols()-1);
+        double damping = minEigenValue < 1e-2 ? 1e-2 : 1e-8; // c++ code sets damping to min singular value if smaller
+        return damping;
+    }
+
 
 } // namespace
 
