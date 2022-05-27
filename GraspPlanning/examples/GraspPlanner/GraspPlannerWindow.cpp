@@ -338,8 +338,9 @@ void GraspPlannerWindow::loadObject(const string& objFile)
     if (robotObject) {
         for (auto robotNode : robotObject->getRobotNodes()) {
             if (robotNode->getVisualization()) {
-                if (!object)
+                if (!object){
                     object = robotNode;
+                }
                 UI.comboBoxObject->addItem(QString::fromStdString(robotNode->getName()));
             }
         }
