@@ -34,19 +34,24 @@ void ChainedGrasp::print(bool printDecoration) const
 }
 
 RobotNodePtr ChainedGrasp::attachChain(RobotPtr robot, GraspableSensorizedObjectPtr object, bool addObjectVisualization) {
-    if (!robot || !object)
+    if (!robot || !object) {
         return nullptr;
+    }
     auto tcp = getTCP(robot);
-    if (!tcp)
+    if (!tcp) {
         return nullptr;
+    }
     auto virtual_object = getObjectNode(robot);
-    if (virtual_object)
+    if (virtual_object) {
         return virtual_object;
+    }
     return attachChain(tcp, object, addObjectVisualization);
 }
 
 void ChainedGrasp::updateChain(RobotPtr robot) {
-    if (!robot) return;
+    if (!robot) { 
+        return;
+    }
 
     update(x, robot);
     update(y, robot);
@@ -67,7 +72,9 @@ void ChainedGrasp::updateChain(RobotPtr robot) {
 void ChainedGrasp::detachChain(RobotPtr robot) {
     auto node = getObjectNode(robot);
     auto tcp = getTCP(robot);
-    if (!node || !tcp) return;
+    if (!node || !tcp) { 
+        return;
+    }
     while (node && node->getName() != tcp->getName()) {
         auto parent = node->getParent();
         parent->detachChild(node);
@@ -80,8 +87,9 @@ RobotNodePtr ChainedGrasp::getVirtualNode(RobotPtr robot, const std::string &vir
     if (robot) {
         if (robot->hasEndEffector(eef)) {
             auto name = ROBOT_NODE_NAME(virtualName);
-            if (robot->hasRobotNode(name))
+            if (robot->hasRobotNode(name)) {
                 return robot->getRobotNode(name);
+            }
         }
     }
     return nullptr;
@@ -115,8 +123,9 @@ RobotNodePtr ChainedGrasp::attach(VirtualJoint joint, RobotNodePtr robotNode) {
     RobotNodePtr virtualNode;
     if (joint.isRevolute) {
         virtualNode.reset(new RobotNodeRevolute(robot, ROBOT_NODE_NAME(joint.name), joint.min, joint.max, Eigen::Matrix4f::Identity(), joint.getAxis()));
-        if (joint.isLimitless())
+        if (joint.isLimitless()) {
             virtualNode->setLimitless(true);
+        }
     }
     else {
         virtualNode.reset(new RobotNodePrismatic(robot, ROBOT_NODE_NAME(joint.name), joint.min, joint.max, Eigen::Matrix4f::Identity(), joint.getAxis()));
@@ -130,7 +139,9 @@ RobotNodePtr ChainedGrasp::attach(VirtualJoint joint, RobotNodePtr robotNode) {
 
 bool ChainedGrasp::update(VirtualJoint joint, RobotPtr robot) {
     auto robotNode = robot->getRobotNode(ROBOT_NODE_NAME(joint.name));
-    if (!robotNode) return false;
+    if (!robotNode) { 
+        return false;
+    }
     robotNode->setJointValue(joint.value);
     robotNode->setJointLimits(joint.min, joint.max);
     if (joint.isRevolute) {
@@ -143,8 +154,9 @@ void ChainedGrasp::sampleGraspsUniform(std::vector<Eigen::Matrix4f> &grasps, Rob
 {
     if (getObjectNode(robot)) {
         auto tcp = getTCP(robot);
-        if (tcp)
+        if (tcp) {
             sampleGraspsUniform(grasps, tcp->getName(), tcp, grid);
+        }
     }
 }
 
@@ -288,17 +300,20 @@ std::string ChainedGrasp::ROBOT_NODE_NAME(const std::string &virtualJointName)
 }
 
 EndEffectorPtr ChainedGrasp::getEndEffector(RobotPtr robot) {
-    if (robot->hasEndEffector(eef))
+    if (robot->hasEndEffector(eef)) {
         return robot->getEndEffector(eef);
-    else return nullptr;
+    } 
+    
+    return nullptr;
 }
 
 RobotNodePtr ChainedGrasp::getTCP(RobotPtr robot) {
     auto endEffector = getEndEffector(robot);
-    if (endEffector)
+    if (endEffector) {
         return endEffector->getTcp();
-    else
-        return nullptr;
+    } 
+    
+    return nullptr;
 }
 
 std::vector<std::string> ChainedGrasp::getNames(bool onlyAdaptable) {
