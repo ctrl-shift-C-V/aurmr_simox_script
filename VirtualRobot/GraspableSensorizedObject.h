@@ -75,7 +75,7 @@ public:
     /*!
         Get grasp set vector
     */
-    std::vector<GraspSetPtr> getAllGraspSets();
+    const std::vector<GraspSetPtr>& getAllGraspSets();
 
     virtual SensorPtr getSensor(const std::string& name) const;
     virtual bool hasSensor(const std::string& name) const;

@@ -124,7 +124,7 @@ VirtualRobot::GraspSetPtr GraspableSensorizedObject::getGraspSet(const std::stri
     return GraspSetPtr();
 }
 
-std::vector<GraspSetPtr> GraspableSensorizedObject::getAllGraspSets()
+const std::vector<GraspSetPtr>& GraspableSensorizedObject::getAllGraspSets()
 {
     return graspSets;
 }
