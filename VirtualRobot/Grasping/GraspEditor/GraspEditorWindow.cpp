@@ -543,6 +543,8 @@ namespace VirtualRobot
 
         if (!currentGraspSet || n < 0 || n >= (int)currentGraspSet->getSize() || !robot)
         {
+            buildVisu();
+            m_pExViewer->scheduleRedraw();
             return;
         }
 
