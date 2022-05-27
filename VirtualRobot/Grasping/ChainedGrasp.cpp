@@ -150,7 +150,7 @@ bool ChainedGrasp::update(VirtualJoint joint, RobotPtr robot) {
     return true;
 }
 
-void ChainedGrasp::sampleGraspsUniform(std::vector<Eigen::Matrix4f> &grasps, RobotPtr robot, int grid)
+void ChainedGrasp::sampleGraspsUniform(std::vector<Eigen::Matrix4f> &grasps, RobotPtr robot, unsigned int grid)
 {
     if (getObjectNode(robot)) {
         auto tcp = getTCP(robot);
@@ -160,13 +160,14 @@ void ChainedGrasp::sampleGraspsUniform(std::vector<Eigen::Matrix4f> &grasps, Rob
     }
 }
 
-void ChainedGrasp::sampleGraspsUniform(std::vector<Eigen::Matrix4f> &grasps, const std::string &rootName, RobotNodePtr robotNode, int grid)
+void ChainedGrasp::sampleGraspsUniform(std::vector<Eigen::Matrix4f> &grasps, const std::string &rootName, RobotNodePtr robotNode, unsigned int grid)
 {
     float low = robotNode->getJointLimitLo();
     float high = robotNode->getJointLimitHigh();
     VR_INFO <<  robotNode->getName() << " " << low << " " << high << std::endl;
     auto children = robotNode->getChildren();
-    for (auto value = low; value <= high; value += (high - low) / grid)
+    unsigned int joint_grid = abs(high - low) > 1e-6 ? grid : 1;
+    for (unsigned int i = 0; i < joint_grid; i++)
     {
         if (children.empty())
         {
@@ -178,7 +179,8 @@ void ChainedGrasp::sampleGraspsUniform(std::vector<Eigen::Matrix4f> &grasps, con
         }
         else
         {
-            robotNode->setJointValue(value);
+            double percentage = joint_grid == 1 ? 0.5 : ((double)i / (joint_grid - 1));
+            robotNode->setJointValue(low + (high - low) * percentage);
             sampleGraspsUniform(grasps, rootName, std::dynamic_pointer_cast<RobotNode>(children[0]), grid);
         }
     }
@@ -188,7 +190,7 @@ Eigen::Matrix4f ChainedGrasp::getLocalPose() const {
     return simox::math::pos_rpy_to_mat4f(getPositionXYZ(), getOrientationRPY());
 }
 
-std::vector<RobotPtr> ChainedGrasp::sampleHandsUniform(RobotPtr robot, int grid) {
+std::vector<RobotPtr> ChainedGrasp::sampleHandsUniform(RobotPtr robot, unsigned int grid) {
     std::vector<RobotPtr> hands;
     auto virtualObject = getObjectNode(robot);
     auto endEffector = getEndEffector(robot);
@@ -198,7 +200,7 @@ std::vector<RobotPtr> ChainedGrasp::sampleHandsUniform(RobotPtr robot, int grid)
         auto exampleHand = endEffector->createEefRobot(name, name);
         detachChain(exampleHand);
         int i = 0;
-        for (auto grasp : grasps) {
+        for (const auto& grasp : grasps) {
             auto name = "grasp" + std::to_string(i++);
             auto hand = exampleHand->clone();
             auto globalPose = virtualObject->toGlobalCoordinateSystem(grasp);

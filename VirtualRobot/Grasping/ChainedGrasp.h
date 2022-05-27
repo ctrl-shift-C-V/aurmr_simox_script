@@ -92,8 +92,8 @@ public:
 
     void detachChain(RobotPtr robot);
 
-    void sampleGraspsUniform(std::vector<Eigen::Matrix4f> &grasps, RobotPtr robot, int grid);
-    std::vector<RobotPtr> sampleHandsUniform(RobotPtr robot, int grid);
+    void sampleGraspsUniform(std::vector<Eigen::Matrix4f> &grasps, RobotPtr robot, unsigned int grid);
+    std::vector<RobotPtr> sampleHandsUniform(RobotPtr robot, unsigned int grid);
 
     VirtualJoint x;
     VirtualJoint y;
@@ -141,7 +141,7 @@ private:
     RobotNodePtr attachChain(RobotNodePtr robotNode, GraspableSensorizedObjectPtr object, bool addObjectVisualization = false);
     RobotNodePtr attach(VirtualJoint joint, RobotNodePtr robotNode);
     bool update(VirtualJoint joint, RobotPtr robot);
-    void sampleGraspsUniform(std::vector<Eigen::Matrix4f> &grasps, const std::string &rootName, RobotNodePtr robotNode, int grid);
+    void sampleGraspsUniform(std::vector<Eigen::Matrix4f> &grasps, const std::string &rootName, RobotNodePtr robotNode, unsigned int grid);
 
     Eigen::Matrix4f getLocalPose() const;
 };
