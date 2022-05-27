@@ -102,6 +102,13 @@ BOOST_AUTO_TEST_CASE(capitalize_words)
     BOOST_CHECK_EQUAL_COLLECTIONS(out.begin(), out.end(), ex.begin(), ex.end());
 }
 
+BOOST_AUTO_TEST_CASE(time_conversion)
+{
+    std::string timeString = "2021-01-12";
+    std::string timeFormat = "%Y-%m-%d";
+    time_t time = simox::alg::to_time_t(timeString, timeFormat);
+    BOOST_CHECK_EQUAL(simox::alg::to_string(time, timeFormat), timeString);
+}
 
 BOOST_AUTO_TEST_CASE(remove_prefix_suffix)
 {
