@@ -601,6 +601,8 @@ public:
         declaration->append_attribute("version", "1.0");
         declaration->append_attribute("encoding", "utf-8");
         doc->append_node(declaration->node);
+
+        // ownership of doc is transferred to RapidXMLWrapperRootNode rootNode
         RapidXMLWrapperRootNodePtr rootNode = RapidXMLWrapperRootNodePtr(new RapidXMLWrapperRootNode(doc, name));
         doc->append_node(rootNode->node);
         return rootNode;
