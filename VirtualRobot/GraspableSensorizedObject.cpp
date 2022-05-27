@@ -74,7 +74,7 @@ bool GraspableSensorizedObject::hasGraspSet(GraspSetPtr graspSet)
     VR_ASSERT_MESSAGE(graspSet, "NULL data");
 
     for (const auto& i : graspSets)
-        if (i == graspSet)
+        if (*i == *graspSet)
         {
             return true;
         }
