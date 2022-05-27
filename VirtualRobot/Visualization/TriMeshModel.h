@@ -168,6 +168,9 @@ namespace VirtualRobot
         /// Get the areas of all faces.
         std::vector<float> getFaceAreas() const;
 
+        //! Computes the volume of the mesh. Works only for closed meshes
+        float getVolume() const;
+
         void rotate(const Eigen::Matrix3f& mx);
 
         // Overwrite all colors
