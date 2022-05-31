@@ -300,16 +300,12 @@ namespace VirtualRobot
             return;
         }
 
-        float x, y;
+        const Eigen::Isometry3f global_T_grasp(graspGlobal);
 
         for (auto & i : wsData)
         {
-            Eigen::Matrix4f tmpPos2 = graspGlobal * i->transformation.inverse();
-            x = tmpPos2(0, 3);
-            y = tmpPos2(1, 3);
-
-            setEntryCheckNeighbors(x, y, i->value, grasp);
-            //setEntry(x,y,vData[i].value);
+            const auto pos = global_T_grasp * Eigen::Isometry3f(i->transformation).inverse().translation();
+            setEntryCheckNeighbors(pos.x(), pos.y(), i->value, grasp);
         }
     }
 
@@ -475,6 +471,8 @@ namespace VirtualRobot
 
     bool WorkspaceGrid::fillGridData(WorkspaceRepresentationPtr ws, const Eigen::Matrix4f &global_T_grasp_orig, GraspPtr g, RobotNodePtr baseRobotNode, float baseOrientation, const float maxAngle, const float minCenterDistance)
     {
+        (void) maxAngle;  // Unused.
+
         if (!ws)
         {
             return false;

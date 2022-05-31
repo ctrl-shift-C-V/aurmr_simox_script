@@ -201,7 +201,7 @@ namespace GraspStudio
     }
 
     GraspEvaluationPoseUncertainty::PoseEvalResult GraspEvaluationPoseUncertainty::evaluatePose(
-        EndEffectorPtr eef, ObstaclePtr object, const Eigen::Matrix4f& objectPose,
+        EndEffectorPtr eef, GraspableSensorizedObjectPtr object, const Eigen::Matrix4f& objectPose,
         GraspQualityMeasurePtr qm, VirtualRobot::RobotConfigPtr preshape,
         float closingStepSize, float stepSizeSpeedFactor)
     {
@@ -246,7 +246,7 @@ namespace GraspStudio
     }
 
     GraspEvaluationPoseUncertainty::PoseEvalResults GraspEvaluationPoseUncertainty::evaluatePoses(
-        EndEffectorPtr eef, ObstaclePtr object, const std::vector<Eigen::Matrix4f>& objectPoses,
+        EndEffectorPtr eef, GraspableSensorizedObjectPtr object, const std::vector<Eigen::Matrix4f>& objectPoses,
         GraspQualityMeasurePtr qm, VirtualRobot::RobotConfigPtr preshape,
         float closingStepSize, float stepSizeSpeedFactor)
     {
@@ -320,7 +320,7 @@ namespace GraspStudio
     }
 
     GraspEvaluationPoseUncertainty::PoseEvalResults GraspEvaluationPoseUncertainty::evaluateGrasp(
-        VirtualRobot::GraspPtr grasp, VirtualRobot::EndEffectorPtr eef, VirtualRobot::ObstaclePtr object,
+        VirtualRobot::GraspPtr grasp, VirtualRobot::EndEffectorPtr eef, VirtualRobot::GraspableSensorizedObjectPtr object,
         GraspQualityMeasurePtr qm, int numPoses,
         float closingStepSize, float stepSizeSpeedFactor)
     {

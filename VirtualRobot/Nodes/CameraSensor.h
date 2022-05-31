@@ -45,7 +45,7 @@ namespace VirtualRobot
         /*!
             Constructor with settings.
         */
-        CameraSensor(RobotNodeWeakPtr robotNode,
+        CameraSensor(GraspableSensorizedObjectWeakPtr parentNode,
                      const std::string& name,
                      VisualizationNodePtr visualization = VisualizationNodePtr(),
                      const Eigen::Matrix4f& rnTrafo = Eigen::Matrix4f::Identity()
@@ -73,7 +73,7 @@ namespace VirtualRobot
         /*!
         Derived classes must implement their clone method here.
         */
-        SensorPtr _clone(const RobotNodePtr newRobotNode, const VisualizationNodePtr visualizationModel, float scaling) override;
+        SensorPtr _clone(const GraspableSensorizedObjectPtr newNode, const VisualizationNodePtr visualizationModel, float scaling) override;
 
     };
 

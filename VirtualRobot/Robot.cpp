@@ -9,6 +9,7 @@
 #include "CollisionDetection/CollisionChecker.h"
 #include "CollisionDetection/CollisionModel.h"
 #include "EndEffector/EndEffector.h"
+#include "Grasping/GraspSet.h"
 #include "math/Helpers.h"
 
 
@@ -20,7 +21,6 @@ namespace VirtualRobot
     const RobotPtr Robot::NullPtr{nullptr};
     Robot::Robot(const std::string& name, const std::string& type)
         : SceneObject(name)
-        , scaling(1.0f)
     {
         this->type = type;
         updateVisualization = true;
@@ -771,7 +771,8 @@ namespace VirtualRobot
     {
         THROW_VR_EXCEPTION_IF(!startJoint, " StartJoint is nullptr");
         THROW_VR_EXCEPTION_IF(!hasRobotNode(startJoint), " StartJoint '" + startJoint->getName() + "' is not part of this robot '" + getName() + "'");
-        THROW_VR_EXCEPTION_IF(scaling <= 0, " Scaling must be >0.");
+        //THROW_VR_EXCEPTION_IF(scaling <= 0, " Scaling must be >0.");
+        // If scaling is <= 0 this->scaling is used instead. This enables different scalings while still able to clone the robot
 
         CollisionCheckerPtr colChecker = collisionChecker;
 
@@ -786,7 +787,7 @@ namespace VirtualRobot
         RobotNodePtr rootNew = startJoint->clone(result, true, RobotNodePtr(), colChecker, scaling, preventCloningMeshesIfScalingIs1);
         THROW_VR_EXCEPTION_IF(!rootNew, "Clone failed...");
         result->setRootNode(rootNew);
-        result->setScaling(scaling);
+        result->setScaling(scaling > 0 ? scaling : this->scaling);
 
         std::vector<RobotNodePtr> rn = result->getRobotNodes();
 
@@ -843,7 +844,12 @@ namespace VirtualRobot
 
         result->propagatingJointValuesEnabled = propagatingJointValuesEnabled;
         result->applyJointValues();
+        result->basePath = basePath;
         return result;
+    }
+
+    RobotPtr Robot::cloneScaling() {
+        return clone(getName(), CollisionCheckerPtr(), -1.0f);
     }
 
     Eigen::Matrix4f Robot::getGlobalPoseForRobotNode(
@@ -1170,7 +1176,7 @@ namespace VirtualRobot
         return result;
     }
 
-    std::string Robot::toXML(const std::string& basePath,  const std::string& modelPath /*= "models"*/, bool storeEEF, bool storeRNS, bool storeSensors) const
+    std::string Robot::toXML(const std::string& basePath,  const std::string& modelPath, bool storeEEF, bool storeRNS, bool storeSensors, bool storeModelFiles) const
     {
         std::stringstream ss;
         ss << "<?xml version='1.0' encoding='UTF-8'?>" << endl << std::endl;
@@ -1180,7 +1186,7 @@ namespace VirtualRobot
 
         for (auto& node : nodes)
         {
-            ss << node->toXML(basePath, modelPath, storeSensors) << std::endl;
+            ss << node->toXML(basePath, modelPath, storeSensors, storeModelFiles) << std::endl;
         }
 
         ss << std::endl;

@@ -137,6 +137,8 @@ namespace VirtualRobot
                 case JacobiProvider::eSVDDamped:
                     JAinv_i_min1 = MathTools::getPseudoInverseDampedD(JA_i_min1, invDamped_lamba);
                     break;
+                default:
+                    THROW_VR_EXCEPTION("Inverse Jacobi Method nyi...");
             }
 
 
@@ -175,6 +177,8 @@ namespace VirtualRobot
                 case JacobiProvider::eSVDDamped:
                     Jinv_tilde_i = MathTools::getPseudoInverseDampedD(J_tilde_i, invDamped_lamba);
                     break;
+                default:
+                    THROW_VR_EXCEPTION("Inverse Jacobi Method nyi...");
             }
 
             //Eigen::MatrixXf Jinv_tilde_i = MathTools::getPseudoInverse(J_tilde_i, pinvtoler);

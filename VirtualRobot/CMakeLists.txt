@@ -167,6 +167,7 @@ ENDMACRO()
 SET(SOURCES
 
     BoundingBox.cpp
+    GraspableSensorizedObject.cpp
     KinematicChain.cpp
     LinkedCoordinate.cpp
     ManipulationObject.cpp
@@ -205,6 +206,7 @@ SET(SOURCES
     Grasping/BasicGraspQualityMeasure.cpp
     Grasping/Grasp.cpp
     Grasping/GraspSet.cpp
+    Grasping/ChainedGrasp.cpp
 
     IK/AdvancedIKSolver.cpp
     IK/CoMIK.cpp
@@ -379,6 +381,7 @@ SET(INCLUDES
 
     AbstractFactoryMethod.h
     BoundingBox.h
+    GraspableSensorizedObject.h
     KinematicChain.h
     ManipulationObject.h
     MathTools.h
@@ -423,6 +426,7 @@ SET(INCLUDES
     Grasping/Grasp.h
     Grasping/GraspSet.h
     Grasping/BasicGraspQualityMeasure.h
+    Grasping/ChainedGrasp.h
 
     IK/AdvancedIKSolver.h
     IK/CoMIK.h

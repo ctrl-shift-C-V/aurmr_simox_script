@@ -65,7 +65,7 @@ SingleRobotNodeSetManipulability::SingleRobotNodeSetManipulability(const RobotNo
 SingleRobotNodeSetManipulability::SingleRobotNodeSetManipulability(const RobotNodeSetPtr &rns, const RobotNodePtr &node, Mode mode, Type type, const RobotNodePtr &coordSystem, Eigen::MatrixXd weightMatrixInit, bool convertMMtoM)
     : AbstractSingleChainManipulability(mode, type, weightMatrixInit), rns(rns), node(node), coordSystem(coordSystem)
 {
-    ik.reset(new DifferentialIK(rns, coordSystem, JacobiProvider::eSVDDamped));
+    ik.reset(new DifferentialIK(rns, coordSystem, JacobiProvider::eSVDDampedDynamic));
     ik->convertModelScalingtoM(convertMMtoM);
 }
 
@@ -87,6 +87,10 @@ Eigen::Vector3f SingleRobotNodeSetManipulability::getLocalPosition() {
 
 Eigen::Vector3f SingleRobotNodeSetManipulability::getGlobalPosition() {
     return rns->getTCP()->getGlobalPosition();
+}
+
+Eigen::Matrix4f SingleRobotNodeSetManipulability::getCoordinateSystem() {
+    return coordSystem ? coordSystem->getGlobalPose() : Eigen::Matrix4f::Identity();
 }
 
 std::vector<std::string> SingleRobotNodeSetManipulability::getJointNames() {
@@ -151,11 +155,15 @@ SingleChainManipulability::SingleChainManipulability(const Eigen::Matrix<double,
 }
 
 Eigen::Vector3f SingleChainManipulability::getLocalPosition() {
-    return globalPosition;
+    return localPosition;
 }
 
 Eigen::Vector3f SingleChainManipulability::getGlobalPosition() {
-    return localPosition;
+    return globalPosition;
+}
+
+Eigen::Matrix4f SingleChainManipulability::getCoordinateSystem() {
+    return Eigen::Matrix4f::Identity();
 }
 
 std::vector<std::string> SingleChainManipulability::getJointNames() {

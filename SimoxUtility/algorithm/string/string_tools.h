@@ -144,4 +144,8 @@ namespace simox::alg
     {
         return multi_to_string(vector.begin(), vector.end());
     }
+
+    time_t to_time_t(const std::string &time, const std::string &time_format);
+
+    std::string to_string(time_t t, const std::string &time_format);
 }

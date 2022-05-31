@@ -161,7 +161,9 @@ namespace VirtualRobot
     class Scene;
     class RobotConfig;
     class Grasp;
+    class ChainedGrasp;
     class GraspSet;
+    class GraspableSensorizedObject;
     class ManipulationObject;
     class CDManager;
     class Reachability;
@@ -216,7 +218,10 @@ namespace VirtualRobot
     typedef std::shared_ptr<Scene> ScenePtr;
     typedef std::shared_ptr<RobotConfig> RobotConfigPtr;
     typedef std::shared_ptr<Grasp> GraspPtr;
+    typedef std::shared_ptr<ChainedGrasp> ChainedGraspPtr;
     typedef std::shared_ptr<GraspSet> GraspSetPtr;
+    typedef std::shared_ptr<GraspableSensorizedObject> GraspableSensorizedObjectPtr;
+    typedef std::weak_ptr<GraspableSensorizedObject> GraspableSensorizedObjectWeakPtr;
     typedef std::shared_ptr<ManipulationObject> ManipulationObjectPtr;
     typedef std::shared_ptr<CDManager> CDManagerPtr;
     typedef std::shared_ptr<PoseQualityMeasurement> PoseQualityMeasurementPtr;

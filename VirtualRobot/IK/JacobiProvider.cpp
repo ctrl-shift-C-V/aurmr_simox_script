@@ -226,6 +226,12 @@ namespace VirtualRobot
                 break;
             }
 
+            case eSVDDampedDynamic:
+            {
+                invJac = MathTools::getDampedLeastSquareInverse(m, MathTools::getDamping(m));
+                break;
+            }
+
             default:
                 THROW_VR_EXCEPTION("Inverse Jacobi Method nyi...");
         }
@@ -317,6 +323,12 @@ namespace VirtualRobot
                 }
 
                 invJac = MathTools::getPseudoInverseDampedD(m, pinvtoler);
+                break;
+            }
+
+            case eSVDDampedDynamic:
+            {
+                invJac = MathTools::getDampedLeastSquareInverse(m, MathTools::getDamping(m));
                 break;
             }
 

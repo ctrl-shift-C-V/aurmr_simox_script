@@ -52,7 +52,7 @@ public slots:
     void closeEvent(QCloseEvent* event) override;
 
     void resetSceneryAll();
-
+    void selectRobotObject(int n);
 
     void closeEEF();
     void openEEF();
@@ -86,7 +86,8 @@ protected:
 
     VirtualRobot::RobotPtr robot;
     VirtualRobot::RobotPtr eefCloned;
-    VirtualRobot::ObstaclePtr object;
+    VirtualRobot::RobotPtr robotObject;
+    VirtualRobot::GraspableSensorizedObjectPtr object;
     VirtualRobot::EndEffectorPtr eef;
 
     VirtualRobot::GraspSetPtr grasps;

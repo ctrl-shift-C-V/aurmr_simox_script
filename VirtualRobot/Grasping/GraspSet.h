@@ -96,6 +96,12 @@ namespace VirtualRobot
         {
             return grasps.end();
         }
+
+        bool operator==(const GraspSet& rhs) const
+        {
+            return (name == rhs.name) and (robotType == rhs.robotType) 
+                and (eef == rhs.eef) and (grasps.size() == rhs.grasps.size());
+        }
         
     protected:
         std::vector< GraspPtr > grasps;
@@ -106,4 +112,3 @@ namespace VirtualRobot
     };
 
 } // namespace
-

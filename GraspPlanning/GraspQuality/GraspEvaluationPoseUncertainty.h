@@ -156,15 +156,15 @@ namespace GraspStudio
         // Pose evaluation
 
         PoseEvalResult evaluatePose(
-            VirtualRobot::EndEffectorPtr eef, VirtualRobot::ObstaclePtr object, const Eigen::Matrix4f& objectPose,
+            VirtualRobot::EndEffectorPtr eef, VirtualRobot::GraspableSensorizedObjectPtr object, const Eigen::Matrix4f& objectPose,
             GraspQualityMeasurePtr qm, VirtualRobot::RobotConfigPtr preshape = {}, float closingStepSize = 0.02f, float stepSizeSpeedFactor = 1);
 
         PoseEvalResults evaluatePoses(
-            VirtualRobot::EndEffectorPtr eef, VirtualRobot::ObstaclePtr object, const std::vector<Eigen::Matrix4f>& objectPoses,
+            VirtualRobot::EndEffectorPtr eef, VirtualRobot::GraspableSensorizedObjectPtr object, const std::vector<Eigen::Matrix4f>& objectPoses,
             GraspQualityMeasurePtr qm, VirtualRobot::RobotConfigPtr preshape = {}, float closingStepSize = 0.02f, float stepSizeSpeedFactor = 1);
 
         PoseEvalResults evaluateGrasp(
-            VirtualRobot::GraspPtr grasp, VirtualRobot::EndEffectorPtr eef, VirtualRobot::ObstaclePtr object,
+            VirtualRobot::GraspPtr grasp, VirtualRobot::EndEffectorPtr eef, VirtualRobot::GraspableSensorizedObjectPtr object,
             GraspQualityMeasurePtr qm, int numPoses,
             float closingStepSize = 0.02f, float stepSizeSpeedFactor = 1);
 

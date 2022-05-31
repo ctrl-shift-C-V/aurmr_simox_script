@@ -717,7 +717,7 @@ namespace VirtualRobot
     {
         if (baseNode)
         {
-            return baseNode->getGlobalPose().inverse();
+            return Eigen::Isometry3f(baseNode->getGlobalPose()).inverse().matrix();
         }
         else
         {
@@ -1854,6 +1854,7 @@ namespace VirtualRobot
     std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr> WorkspaceRepresentation::createCutTransformations(WorkspaceRepresentation::WorkspaceCut2DPtr cutXY, RobotNodePtr referenceNode, const float maxAngle)
     {
         THROW_VR_EXCEPTION_IF(!cutXY, "NULL data");
+        (void) maxAngle;  // Unused.
 
         std::vector<WorkspaceRepresentation::WorkspaceCut2DTransformationPtr> result;
 

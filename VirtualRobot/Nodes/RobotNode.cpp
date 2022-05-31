@@ -1,4 +1,3 @@
-
 #include "RobotNode.h"
 
 #include <VirtualRobot/VirtualRobotException.h>
@@ -11,7 +10,6 @@
 #include <VirtualRobot/Visualization/TriMeshModel.h>
 #include <VirtualRobot/math/Helpers.h>
 #include <VirtualRobot/XML/BaseIO.h>
-
 
 #include <Eigen/Core>
 
@@ -33,7 +31,7 @@ namespace VirtualRobot
                          const SceneObject::Physics& p,
                          CollisionCheckerPtr colChecker,
                          RobotNodeType type)
-        : SceneObject(name, visualization, collisionModel, p, colChecker)
+        : GraspableSensorizedObject(name, visualization, collisionModel, p, colChecker)
 
 
     {
@@ -88,12 +86,7 @@ namespace VirtualRobot
 
         checkValidRobotNodeType();
 
-        for (size_t i = 0; i < sensors.size(); i++)
-        {
-            sensors[i]->initialize(shared_from_this());
-        }
-
-        return SceneObject::initialize(parent, children);
+        return GraspableSensorizedObject::initialize(parent, children);
     }
 
     void RobotNode::checkValidRobotNodeType()
@@ -530,6 +523,9 @@ namespace VirtualRobot
                                   float scaling,
                                   bool preventCloningMeshesIfScalingIs1)
     {
+        // If scaling is <= 0 this->scaling is used instead. This enables different scalings while still able to clone the robot
+        auto actualScaling = scaling > 0 ? scaling : this->scaling;
+
         ReadLockPtr lock = getRobot()->getReadLock();
 
         if (!newRobot)
@@ -545,22 +541,32 @@ namespace VirtualRobot
         const bool deepMeshClone = !preventCloningMeshesIfScalingIs1 || std::abs(scaling - 1) <= 0;
         if (visualizationModel)
         {
-            clonedVisualizationNode = visualizationModel->clone(deepMeshClone, scaling);
+            clonedVisualizationNode = visualizationModel->clone(deepMeshClone, actualScaling);
         }
 
         CollisionModelPtr clonedCollisionModel;
 
         if (collisionModel)
         {
-            clonedCollisionModel = collisionModel->clone(colChecker, scaling, deepMeshClone);
+            clonedCollisionModel = collisionModel->clone(colChecker, actualScaling, deepMeshClone);
         }
 
-        RobotNodePtr result = _clone(newRobot, clonedVisualizationNode, clonedCollisionModel, colChecker, scaling);
+        RobotNodePtr result = _clone(newRobot, clonedVisualizationNode, clonedCollisionModel, colChecker, scaling > 0 ? scaling : 1.0f);
 
         if (!result)
         {
             VR_ERROR << "Cloning failed.." << std::endl;
             return result;
+        }
+
+        if (!visualizationModelXML.empty())
+        {
+            result->visualizationModelXML = visualizationModelXML;
+        }
+
+        if (!collisionModelXML.empty())
+        {
+            result->collisionModelXML = collisionModelXML;
         }
 
         if (cloneChildren)
@@ -580,26 +586,9 @@ namespace VirtualRobot
                         result->attachChild(c);
                     }
                 }
-                else
-                {
-                    SensorPtr s =  std::dynamic_pointer_cast<Sensor>(children[i]);
-
-                    if (s)
-                    {
-                        // performs registering and initialization
-                        SensorPtr c = s->clone(result, scaling);
-                    }
-                    else
-                    {
-                        SceneObjectPtr so = children[i]->clone(children[i]->getName(), colChecker, scaling);
-
-                        if (so)
-                        {
-                            result->attachChild(so);
-                        }
-                    }
-                }
             }
+            appendSensorsTo(result);
+            appendGraspSetsTo(result);
         }
 
         result->setMaxVelocity(maxVelocity);
@@ -622,7 +611,8 @@ namespace VirtualRobot
         {
             result->initialize(initializeWithParent);
         }
-
+        result->basePath = basePath;
+        result->setScaling(actualScaling);
         return result;
     }
 
@@ -1009,56 +999,7 @@ namespace VirtualRobot
         }
     }
 
-    SensorPtr RobotNode::getSensor(const std::string& name) const
-    {
-        for (size_t i = 0; i < sensors.size(); i++)
-        {
-            if (sensors[i]->getName() == name)
-            {
-                return sensors[i];
-            }
-        }
-
-        THROW_VR_EXCEPTION("No sensor with name" << name << " registerd at robot node " << getName());
-        return SensorPtr();
-    }
-
-    bool RobotNode::hasSensor(const std::string& name) const
-    {
-        for (size_t i = 0; i < sensors.size(); i++)
-        {
-            if (sensors[i]->getName() == name)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    bool RobotNode::registerSensor(SensorPtr sensor)
-    {
-        if (!this->hasChild(sensor))
-        {
-            sensors.push_back(sensor);
-            this->attachChild(sensor);
-        }
-
-        // if we are already initialized, be sure the sensor is also intialized
-        if (initialized)
-        {
-            sensor->initialize(shared_from_this());
-        }
-
-        return true;
-    }
-
-    std::vector<SensorPtr> RobotNode::getSensors() const
-    {
-        return sensors;
-    }
-
-    std::string RobotNode::toXML(const std::string& basePath, const std::string& modelPathRelative /*= "models"*/, bool storeSensors)
+    std::string RobotNode::toXML(const std::string& basePath, const std::string& modelPathRelative, bool storeSensors, bool storeModelFiles)
     {
         std::stringstream ss;
         ss << "\t<RobotNode name='" << name << "'>" << std::endl;
@@ -1081,32 +1022,30 @@ namespace VirtualRobot
 
         if (visualizationModel && visualizationModel->getTriMeshModel() && visualizationModel->getTriMeshModel()->faces.size() > 0)
         {
-            std::string visuFile = getFilenameReplacementVisuModel();
+            if (storeModelFiles) {
+                std::string visuFile = getFilenameReplacementVisuModel();
 
-            std::filesystem::path pModel(modelPathRelative);
-            std::filesystem::path modelDirComplete = pBase / pModel;
-            std::filesystem::path fn(visuFile);
-            std::filesystem::path modelFileComplete = modelDirComplete / fn;
+                std::filesystem::path pModel(modelPathRelative);
+                std::filesystem::path modelDirComplete = pBase / pModel;
+                std::filesystem::path fn(visuFile);
+                std::filesystem::path modelFileComplete = modelDirComplete / fn;
 
-            ss << visualizationModel->toXML(pBase.string(), modelFileComplete.string(), 2);
+                ss << visualizationModel->toXML(pBase.string(), modelFileComplete.string(), 2);
+            }
+            else ss << visualizationModel->toXML(basePath, 2);
         }
 
         if (collisionModel && collisionModel->getTriMeshModel() && collisionModel->getTriMeshModel()->faces.size() > 0)
         {
-            std::string colFile = getFilenameReplacementColModel();
-            std::filesystem::path pModel(modelPathRelative);
-            std::filesystem::path modelDirComplete = pBase / pModel;
-            std::filesystem::path fn(colFile);
-            std::filesystem::path modelFileComplete = modelDirComplete / fn;
-            ss << collisionModel->toXML(pBase.string(), modelFileComplete.string(), 2);
-        }
-
-        if (storeSensors)
-        {
-            for (size_t i = 0; i < sensors.size(); i++)
-            {
-                ss << sensors[i]->toXML(modelPathRelative, 2);
+            if (storeModelFiles) {
+                std::string colFile = getFilenameReplacementColModel();
+                std::filesystem::path pModel(modelPathRelative);
+                std::filesystem::path modelDirComplete = pBase / pModel;
+                std::filesystem::path fn(colFile);
+                std::filesystem::path modelFileComplete = modelDirComplete / fn;
+                ss << collisionModel->toXML(pBase.string(), modelFileComplete.string(), 2);
             }
+            else ss << collisionModel->toXML(basePath, 2);
         }
 
         std::vector<SceneObjectPtr> children = this->getChildren();
@@ -1121,6 +1060,8 @@ namespace VirtualRobot
                 ss << "\t\t<Child name='" << children[i]->getName() << "'/>\n";
             }
         }
+
+        ss << getGraspableSensorizedObjectXML(modelPathRelative, storeSensors, 2);
 
         ss << "\t</RobotNode>\n\n";
         return ss.str();

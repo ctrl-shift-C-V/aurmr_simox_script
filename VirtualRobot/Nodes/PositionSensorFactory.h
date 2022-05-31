@@ -40,13 +40,13 @@ namespace VirtualRobot
         ~PositionSensorFactory() override;
 
         //! Standard init method
-        SensorPtr createSensor(RobotNodePtr node, const std::string& name, VisualizationNodePtr visualization = VisualizationNodePtr(),
+        SensorPtr createSensor(GraspableSensorizedObjectPtr node, const std::string& name, VisualizationNodePtr visualization = VisualizationNodePtr(),
                                        const Eigen::Matrix4f& rnTrafo = Eigen::Matrix4f::Identity()) const override;
 
         /*!
             Create sensor from XML tag.
         */
-        SensorPtr createSensor(RobotNodePtr node, rapidxml::xml_node<char>* sensorXMLNode, RobotIO::RobotDescription loadMode = RobotIO::eFull, const std::string basePath = std::string()) const override;
+        SensorPtr createSensor(GraspableSensorizedObjectPtr node, rapidxml::xml_node<char>* sensorXMLNode, BaseIO::RobotDescription loadMode = RobotIO::eFull, const std::string basePath = std::string()) const override;
 
         // AbstractFactoryMethod
     public:

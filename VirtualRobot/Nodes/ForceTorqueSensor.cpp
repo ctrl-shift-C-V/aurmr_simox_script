@@ -8,10 +8,10 @@ namespace VirtualRobot
     using std::cout;
     using std::endl;
 
-    ForceTorqueSensor::ForceTorqueSensor(RobotNodeWeakPtr robotNode,
+    ForceTorqueSensor::ForceTorqueSensor(GraspableSensorizedObjectWeakPtr parentNode,
                                          const std::string& name,
                                          const Eigen::Matrix4f& rnTrafo) :
-        Sensor(robotNode, name, VisualizationNodePtr(), rnTrafo),
+        Sensor(parentNode, name, VisualizationNodePtr(), rnTrafo),
         forceTorqueValues(6)
     {
         forceTorqueValues.setZero();
@@ -41,7 +41,6 @@ namespace VirtualRobot
         Eigen::Vector3f torqueVector = forceTorqueValues.tail(3);
 
         // project onto joint axis
-        //RobotNodePtr rn(robotNode);
         Eigen::Vector3f zAxis = this->globalPose.block(0, 2, 3, 1);
         Eigen::Vector3f axisTorque = (torqueVector.dot(zAxis)) * zAxis;
 
@@ -61,12 +60,12 @@ namespace VirtualRobot
     }
 
 
-    SensorPtr ForceTorqueSensor::_clone(const RobotNodePtr newRobotNode, const VisualizationNodePtr /*visualizationModel*/, float scaling)
+    SensorPtr ForceTorqueSensor::_clone(const GraspableSensorizedObjectPtr newParentNode, const VisualizationNodePtr /*visualizationModel*/, float scaling)
     {
         THROW_VR_EXCEPTION_IF(scaling < 0, "Scaling must be >0");
         Eigen::Matrix4f rnt = rnTransformation;
         rnt.block(0, 3, 3, 1) *= scaling;
-        ForceTorqueSensorPtr result(new ForceTorqueSensor(newRobotNode, name, rnt));
+        ForceTorqueSensorPtr result(new ForceTorqueSensor(newParentNode, name, rnt));
         result->updateSensors(forceTorqueValues);
         return result;
     }

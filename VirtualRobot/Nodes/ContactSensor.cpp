@@ -6,9 +6,9 @@
 namespace VirtualRobot
 {
 
-    ContactSensor::ContactSensor(RobotNodeWeakPtr robotNode,
+    ContactSensor::ContactSensor(GraspableSensorizedObjectWeakPtr parentNode,
                                  const std::string& name)
-        : Sensor(robotNode, name)
+        : Sensor(parentNode, name)
         , timestamp(0.0)
     {
     }
@@ -28,9 +28,9 @@ namespace VirtualRobot
     }
 
 
-    SensorPtr ContactSensor::_clone(const RobotNodePtr newRobotNode, const VisualizationNodePtr /*visualizationModel*/, float /*scaling*/)
+    SensorPtr ContactSensor::_clone(const GraspableSensorizedObjectPtr newParentNode, const VisualizationNodePtr /*visualizationModel*/, float /*scaling*/)
     {
-        SensorPtr result(new ContactSensor(newRobotNode, name/*, rnTransformation*/));
+        SensorPtr result(new ContactSensor(newParentNode, name/*, rnTransformation*/));
         return result;
     }
 

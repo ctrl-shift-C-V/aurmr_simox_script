@@ -48,9 +48,9 @@ BimanualManipulability::BimanualManipulability(const RobotNodeSetPtr &rnsLeft, c
     if (rnsLeft->getRobot() != rnsRight->getRobot()) {
         throw VirtualRobotException("Left and right robot node set of bimanual manipulability do not map to the same robot!");
     }
-    ikLeft.reset(new DifferentialIK(rnsLeft, coordSystem, JacobiProvider::eSVDDamped));
+    ikLeft.reset(new DifferentialIK(rnsLeft, coordSystem, JacobiProvider::eSVDDampedDynamic));
     ikLeft->convertModelScalingtoM(convertMMtoM);
-    ikRight.reset(new DifferentialIK(rnsRight, coordSystem, JacobiProvider::eSVDDamped));
+    ikRight.reset(new DifferentialIK(rnsRight, coordSystem, JacobiProvider::eSVDDampedDynamic));
     ikRight->convertModelScalingtoM(convertMMtoM);
 }
 
@@ -94,6 +94,10 @@ Eigen::Vector3f BimanualManipulability::getLocalPosition() {
 Eigen::Vector3f BimanualManipulability::getGlobalPosition() {
     if (object) return object->getCoMGlobal();
     else return (nodeLeft->getGlobalPosition() + nodeRight->getGlobalPosition()) / 2.0f;
+}
+
+Eigen::Matrix4f BimanualManipulability::getCoordinateSystem() {
+    return coordSystem ? coordSystem->getGlobalPose() : Eigen::Matrix4f::Identity();
 }
 
 Eigen::MatrixXd BimanualManipulability::computeBimanualGraspMatrix() {

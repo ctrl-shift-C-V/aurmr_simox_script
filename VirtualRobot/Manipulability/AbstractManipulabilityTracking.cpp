@@ -136,14 +136,6 @@ Eigen::MatrixXd AbstractManipulabilityTracking::getDefaultGainMatrix(){
     }
 }
 
-Eigen::MatrixXd AbstractManipulabilityTracking::dampedLeastSquaresInverse(const Eigen::MatrixXd &jacobian, double dampingFactor) {
-    Eigen::MatrixXd k2I = dampingFactor/*std::pow(dampingFactor, 2)*/ * Eigen::MatrixXd::Identity(jacobian.rows(), jacobian.rows());
-    Eigen::MatrixXd JJT = jacobian * jacobian.transpose();
-    Eigen::MatrixXd JJT_k2I = JJT + k2I;
-    Eigen::MatrixXd dampedLeastSquaresInverse =  jacobian.transpose() * JJT_k2I.inverse();
-    return dampedLeastSquaresInverse;
-}
-
 Eigen::MatrixXd AbstractManipulabilityTracking::logMap(const Eigen::MatrixXd &manipulabilityDesired, const Eigen::MatrixXd &manipulabilityCurrent) {
     Eigen::MatrixXd  m = manipulabilityCurrent.inverse() * manipulabilityDesired;
     Eigen::EigenSolver<Eigen::MatrixXd> eigenSolver(m);
@@ -154,14 +146,6 @@ Eigen::MatrixXd AbstractManipulabilityTracking::logMap(const Eigen::MatrixXd &ma
 
 double AbstractManipulabilityTracking::computeDistance(const Eigen::MatrixXd &manipulabilityDesired) {
     return logMap(manipulabilityDesired, computeCurrentManipulability()).norm();
-}
-
-double AbstractManipulabilityTracking::getDamping(const Eigen::MatrixXd &matrix) {
-    auto svd = Eigen::JacobiSVD(matrix, Eigen::ComputeThinU | Eigen::ComputeThinV);
-    auto sV = svd.singularValues();
-    double minEigenValue = sV(sV.rows()-1, sV.cols()-1);
-    double damping = minEigenValue < 1e-2 ? 1e-2 : 1e-8; // c++ code sets damping to min singular value if smaller
-    return damping;
 }
 
 Eigen::MatrixXd AbstractManipulabilityTracking::getJointsLimitsWeightMatrix(const Eigen::VectorXd &jointAngles, const Eigen::VectorXd &jointLimitsLow, const Eigen::VectorXd &jointLimitsHigh) {
