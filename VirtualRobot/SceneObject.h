@@ -396,6 +396,8 @@ namespace VirtualRobot
 
         bool reloadVisualizationFromXML(bool useVisAsColModelIfMissing = true);
 
+        const std::string& getVisualizationModelXML() const;
+
     protected:
         virtual SceneObject* _clone(const std::string& name, CollisionCheckerPtr colChecker = CollisionCheckerPtr(), float scaling = 1.0f) const;
 
