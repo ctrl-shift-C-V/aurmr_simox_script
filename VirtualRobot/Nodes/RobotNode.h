@@ -26,7 +26,7 @@
 
 #include "../VirtualRobot.h"
 #include "../VirtualRobotException.h"
-#include "../SceneObject.h"
+#include "../GraspableSensorizedObject.h"
 #include "../Transformation/DHParameter.h"
 #include "Sensor.h"
 
@@ -48,7 +48,7 @@ namespace VirtualRobot
         The visualization (of limb and/or coordinateAxis) is linked to the local coordinate sysytem of this joint: localTransformation*jointTransformation
         The global pose of this joint is the same: localTransformation*jointTransformation
     */
-    class VIRTUAL_ROBOT_IMPORT_EXPORT RobotNode : public SceneObject
+    class VIRTUAL_ROBOT_IMPORT_EXPORT RobotNode : public GraspableSensorizedObject
     {
     public:
         friend class Robot;
@@ -189,7 +189,7 @@ namespace VirtualRobot
             \p enable Show or hide coordinate system
             \p scaling Size of coordinate system
             \p text Text to display at coordinate system. If not given, the name of this robot node will be displayed.
-            \p visualizationType    This option is only needed when the current robot node does not yet own a visualization.
+            \p izationType    This option is only needed when the current robot node does not yet own a visualization.
                                     Then a visualziationNode has to be built and the \p visualizationType specifies which type of visualization should be used.
                                     If not given, the first registered visaulizationfactory is used.
         */
@@ -376,17 +376,11 @@ namespace VirtualRobot
         */
         virtual void propagateJointValue(const std::string& jointName, float factor = 1.0f);
 
-
-        virtual SensorPtr getSensor(const std::string& name) const;
-        virtual bool hasSensor(const std::string& name) const;
-        virtual std::vector<SensorPtr> getSensors() const;
-        virtual bool registerSensor(SensorPtr sensor);
-
         /*!
             Creates an XML string that defines the robotnode. Filenames of all visualization models are set to modelPath/RobotNodeName_visu and/or modelPath/RobotNodeName_colmodel.
             @see RobotIO::saveXML.
         */
-        virtual std::string toXML(const std::string& basePath, const std::string& modelPathRelative = "models", bool storeSensors = true);
+        virtual std::string toXML(const std::string& basePath, const std::string& modelPathRelative = "models", bool storeSensors = true, bool storeModelFiles = true);
 
         /*!
             Set the local transformation matrix that is used in this node.
@@ -451,8 +445,6 @@ namespace VirtualRobot
         RobotWeakPtr robot;
 
         RobotNodeType nodeType;
-
-        std::vector<SensorPtr> sensors;
 
         float jointValue;                           //< The joint value
 

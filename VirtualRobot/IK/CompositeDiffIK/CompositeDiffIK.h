@@ -177,6 +177,10 @@ namespace VirtualRobot
             float maxPosError = 10.f;
             float maxOriError = 0.05f;
             std::vector<TargetStep> ikSteps;
+
+            bool isReached() {
+                return pCtrl.reached(target, mode, maxPosError, maxOriError);
+            }
         };
         typedef std::shared_ptr<Target> TargetPtr;
 

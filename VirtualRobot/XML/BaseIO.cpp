@@ -14,6 +14,12 @@
 #include "../Transformation/DHParameter.h"
 #include "../Visualization/VisualizationFactory.h"
 #include "../Visualization/VisualizationNode.h"
+#include "../Grasping/Grasp.h"
+#include "../Grasping/ChainedGrasp.h"
+#include "../Grasping/GraspSet.h"
+#include "../Nodes/SensorFactory.h"
+#include <SimoxUtility/filesystem/make_relative.h>
+#include <SimoxUtility/algorithm/string/string_conversion.h>
 #include "rapidxml.hpp"
 
 #include <filesystem>
@@ -821,79 +827,7 @@ namespace VirtualRobot
             return;
         }
 
-#if (BOOST_VERSION>=104800)
-        // canonical needs boost version >=1.48
-        namespace fs = std::filesystem;
-
-        fs::path filepath;
-
-        if (fs::path(filename).is_absolute() && std::filesystem::exists(fs::path(basePath) / fs::path(filename)))
-        {
-            return;
-        }
-        else if (fs::path(filename).is_absolute())
-        {
-            if (std::filesystem::exists(fs::path(filename)))
-            {
-                filepath = fs::canonical(fs::path(filename));
-            }
-            else
-            {
-                filepath = fs::path(filename);
-            }
-        }
-        else
-        {
-            // combine paths
-            //  fs::path res = fs::path(basePath) / fs::path(filename).filename();
-            //  filename = res.generic_string();
-            return;
-            //THROW_VR_EXCEPTION("Could not make path " + filename + " relative to " + basePath);
-        }
-
-        fs::path basePathDir = fs::canonical(fs::path(basePath));
-        fs::path::iterator itBasePath = basePathDir.begin();
-        fs::path::iterator itFile = filepath.begin();
-        fs::path newPath;
-
-        while (itBasePath != basePathDir.end() && itFile != filepath.end() && *itBasePath == *itFile)
-        {
-            itFile++;
-            itBasePath++;
-        }
-
-        for (; itBasePath != basePathDir.end(); itBasePath++)
-        {
-            newPath /= "..";
-        }
-
-        for (; itFile != filepath.end(); itFile++)
-        {
-            newPath /= *itFile;
-        }
-
-        filename = newPath.generic_string();
-#else
-        // version compatible with boost below version 1.48,
-        // may be buggy in some cases...
-        std::filesystem::path diffpath;
-        std::filesystem::path tmppath = filename;
-
-        while (tmppath != basePath)
-        {
-            diffpath = tmppath.filename() / diffpath;
-            tmppath = tmppath.parent_path();
-
-            if (tmppath.empty())
-            {
-                // no relative path found, take complete path
-                diffpath = filename;
-                break;
-            }
-        }
-
-        filename = diffpath.generic_string();
-#endif
+        filename = simox::fs::make_relative(std::filesystem::path(basePath), std::filesystem::path(filename));
     }
 
 
@@ -1901,5 +1835,183 @@ namespace VirtualRobot
         return ss.str();
     }
 
+    GraspPtr BaseIO::processGrasp(rapidxml::xml_node<char>* graspXMLNode, const std::string& robotType, const std::string& eef, const std::string& /*objName*/)
+    {
+        THROW_VR_EXCEPTION_IF(!graspXMLNode, "No <Grasp> tag ?!");
+        // get name
+        std::string name = processNameAttribute(graspXMLNode, true);
+        std::string method = processStringAttribute("creation", graspXMLNode, true);
+        float quality = processFloatAttribute(std::string("quality"), graspXMLNode, true);
+        std::string preshapeName = processStringAttribute("preshape", graspXMLNode, true);
+        Eigen::Matrix4f pose;
+        pose.setIdentity();
+        std::vector< RobotConfig::Configuration > configDefinitions;
+        std::string configName;
+
+        rapidxml::xml_node<>* node = graspXMLNode->first_node();
+
+        rapidxml::xml_node<char>* chainedGraspNode = NULL;
+
+        while (node)
+        {
+            std::string nodeName = getLowerCase(node->name());
+
+            if (nodeName == "transform")
+            {
+                processTransformNode(node, name, pose);
+
+            }
+            else if (nodeName == "chaingrasp")
+            {
+                chainedGraspNode = node;
+            }
+            else if (nodeName == "configuration")
+            {
+                THROW_VR_EXCEPTION_IF(configDefinitions.size() > 0, "Only one configuration per grasp allowed");
+                bool cOK = processConfigurationNode(node, configDefinitions, configName);
+                THROW_VR_EXCEPTION_IF(!cOK, "Invalid configuration defined in grasp tag '" << name << "'." << endl);
+
+            }
+            else
+            {
+                THROW_VR_EXCEPTION("XML definition <" << nodeName << "> not supported in Grasp <" << name << ">." << endl);
+            }
+
+            node = node->next_sibling();
+        }
+
+        GraspPtr grasp = nullptr;
+
+        if (!chainedGraspNode)
+            grasp.reset(new Grasp(name, robotType, eef, pose, method, quality, preshapeName));
+        else {
+            ChainedGraspPtr chainedGrasp(new ChainedGrasp(name, robotType, eef, Eigen::Matrix4f::Zero(), method, quality, preshapeName));
+            node = chainedGraspNode->first_node();
+            while (node)
+            {
+                std::string nodeName = getLowerCase(node->name());
+                if (nodeName == "transform")
+                {
+                    processTransformNode(node, name, pose);
+                    chainedGrasp->setObjectTransformation(pose);
+                }
+                else if (nodeName == "virtualjoint")
+                {
+                    rapidxml::xml_attribute<>* attrName = node->first_attribute("name", 0, false);
+                    THROW_VR_EXCEPTION_IF(!attrName, "XML tag <VirtualJoint> does not contain an attribute 'name'!" << std::endl);
+                    auto joint = chainedGrasp->getVirtualJoint(attrName->value());
+                    rapidxml::xml_attribute<>* attrValue = node->first_attribute("value", 0, false);
+                    THROW_VR_EXCEPTION_IF(!attrName, "XML tag <VirtualJoint> does not contain an attribute 'value'!" << std::endl);
+                    joint->setValue(simox::alg::to_<float>(attrValue->value()));
+                    rapidxml::xml_attribute<>* attrMin = node->first_attribute("min", 0, false);
+                    rapidxml::xml_attribute<>* attrMax = node->first_attribute("max", 0, false);
+                    if (attrMin && attrMax)
+                        joint->setLimits(simox::alg::to_<float>(attrMin->value()), simox::alg::to_<float>(attrMax->value()));
+                }
+                else
+                {
+                    THROW_VR_EXCEPTION("XML definition <" << nodeName << "> not supported in Grasp <" << name << ">." << endl);
+                }
+
+                node = node->next_sibling();
+            }
+            grasp = chainedGrasp;
+        }
+
+        if (!configDefinitions.empty())
+        {
+            // create & register configs
+            std::map< std::string, float > rc;
+
+            for (auto& configDefinition : configDefinitions)
+            {
+                rc[ configDefinition.name ] = configDefinition.value;
+            }
+
+            grasp->setConfiguration(rc);
+        }
+
+        return grasp;
+    }
+
+    GraspSetPtr BaseIO::processGraspSet(rapidxml::xml_node<char>* graspSetXMLNode, const std::string& objName)
+    {
+        THROW_VR_EXCEPTION_IF(!graspSetXMLNode, "No <GraspSet> tag ?!");
+
+        // get name
+        std::string gsName = processNameAttribute(graspSetXMLNode, true);
+        std::string gsRobotType = processStringAttribute(std::string("robottype"), graspSetXMLNode, true);
+        std::string gsEEF = processStringAttribute(std::string("endeffector"), graspSetXMLNode, true);
+
+        if (gsName.empty() || gsRobotType.empty() || gsEEF.empty())
+        {
+            THROW_VR_EXCEPTION("GraspSet tags must have valid attributes 'Name', 'RobotType' and 'EndEffector'");
+        }
+
+        GraspSetPtr result(new GraspSet(gsName, gsRobotType, gsEEF));
+
+        rapidxml::xml_node<>* node = graspSetXMLNode->first_node();
+
+        while (node)
+        {
+            std::string nodeName = getLowerCase(node->name());
+
+            if (nodeName == "grasp")
+            {
+                GraspPtr grasp = processGrasp(node, gsRobotType, gsEEF, objName);
+                THROW_VR_EXCEPTION_IF(!grasp, "Invalid 'Grasp' tag in '" << objName << "'." << endl);
+                result->addGrasp(grasp);
+            }
+            else
+            {
+                THROW_VR_EXCEPTION("XML definition <" << nodeName << "> not supported in GraspSet <" << gsName << ">." << endl);
+            }
+
+            node = node->next_sibling();
+        }
+
+        return result;
+    }
+
+    bool BaseIO::processSensor(GraspableSensorizedObjectPtr rn, rapidxml::xml_node<char>* sensorXMLNode, RobotDescription loadMode, const std::string& basePath)
+    {
+        if (!rn || !sensorXMLNode)
+        {
+            VR_ERROR << "NULL DATA ?!" << std::endl;
+            return false;
+        }
+
+        rapidxml::xml_attribute<>* attr;
+        std::string sensorType;
+
+        attr = sensorXMLNode->first_attribute("type", 0, false);
+
+        if (attr)
+        {
+            sensorType = getLowerCase(attr->value());
+        }
+        else
+        {
+            VR_WARNING << "No 'type' attribute for <Sensor> tag. Skipping Sensor definition of RobotNode " << rn->getName() << "!" << std::endl;
+            return false;
+        }
+
+        SensorPtr s;
+
+
+        SensorFactoryPtr sensorFactory = SensorFactory::fromName(sensorType, nullptr);
+
+        if (sensorFactory)
+        {
+            s = sensorFactory->createSensor(rn, sensorXMLNode, loadMode, basePath);
+        }
+        else
+        {
+            VR_WARNING << "No Factory found for sensor of type " << sensorType << ". Skipping Sensor definition of RobotNode " << rn->getName() << "!" << std::endl;
+            return false;
+        }
+
+        return rn->registerSensor(s);
+    }
 
 } // namespace VirtualRobot

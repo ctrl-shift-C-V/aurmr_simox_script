@@ -57,7 +57,7 @@ namespace VirtualRobot
         /*!
           Constructor with settings.
           */
-        ContactSensor(RobotNodeWeakPtr robotNode, const std::string& name);
+        ContactSensor(GraspableSensorizedObjectWeakPtr parentNode, const std::string& name);
 
         /*!
         */
@@ -99,7 +99,7 @@ namespace VirtualRobot
         /*!
         Derived classes must implement their clone method here.
         */
-        SensorPtr _clone(const RobotNodePtr newRobotNode, const VisualizationNodePtr visualizationModel, float scaling) override;
+        SensorPtr _clone(const GraspableSensorizedObjectPtr newParentNode, const VisualizationNodePtr visualizationModel, float scaling) override;
 
         ContactFrame frame;
         double timestamp;

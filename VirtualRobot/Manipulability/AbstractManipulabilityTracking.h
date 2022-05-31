@@ -68,18 +68,9 @@ public:
 
     Eigen::MatrixXd getDefaultGainMatrix();
 
-    /*! @brief Calculates the damped least square inverse by J^T * (JJ^T + k^2 I)^{-1}
-     * @jacobian Jacobian J
-     * @dampingFactor Damping factor k
-     */
-    Eigen::MatrixXd dampedLeastSquaresInverse(const Eigen::MatrixXd &jacobian, double dampingFactor = 0.01);
-
     Eigen::MatrixXd logMap(const Eigen::MatrixXd &manipulabilityDesired, const Eigen::MatrixXd &manipulabilityCurrent);
 
-    double computeDistance(const Eigen::MatrixXd &manipulabilityDesired);
-
-    /*! Calculates damping factor for singularity avoidance */
-    double getDamping(const Eigen::MatrixXd &matrix);
+    double computeDistance(const Eigen::MatrixXd &manipulabilityDesired);   
 
     /* Calculate weight matrix for joint limits avoidance */
     Eigen::MatrixXd getJointsLimitsWeightMatrix(const Eigen::VectorXd &jointAngles, const Eigen::VectorXd &jointLimitsLow, const Eigen::VectorXd &jointLimitsHigh);

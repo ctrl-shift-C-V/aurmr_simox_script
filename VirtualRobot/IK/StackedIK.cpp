@@ -97,6 +97,8 @@ namespace VirtualRobot
             case JacobiProvider::eSVDDamped:
                 J_inv = MathTools::getPseudoInverseDamped(jacobian, 1.0);
                 break;
+            default:
+                THROW_VR_EXCEPTION("Inverse Jacobi Method nyi...");
         }
 
         // Compute IK step

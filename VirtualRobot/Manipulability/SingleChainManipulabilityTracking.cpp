@@ -25,6 +25,8 @@
 
 #include "SingleChainManipulability.h"
 
+#include <VirtualRobot/MathTools.h>
+
 namespace VirtualRobot
 {
 
@@ -94,13 +96,13 @@ Eigen::VectorXf SingleChainManipulabilityTracking::calculateVelocity(const Eigen
         Eigen::MatrixXd jointsWeightMatrix = getJointsLimitsWeightMatrix(manipulability->getJointAngles(), manipulability->getJointLimitsLow(), manipulability->getJointLimitsHigh());
         matManipJ = matManipJ * jointsWeightMatrix;
         // Compute pseudo-inverse of weighted manipulability Jacobian
-        double dampingFactor = getDamping(matManipJ);
-        dampedLSI = jointsWeightMatrix * dampedLeastSquaresInverse(matManipJ, dampingFactor);
+        double dampingFactor = MathTools::getDamping(matManipJ);
+        dampedLSI = jointsWeightMatrix * MathTools::getDampedLeastSquareInverse(matManipJ, dampingFactor);
     }
     else{
         // Compute pseudo-inverse of manipulability Jacobian
-        double dampingFactor = getDamping(matManipJ);
-        dampedLSI = dampedLeastSquaresInverse(matManipJ, dampingFactor);
+        double dampingFactor = MathTools::getDamping(matManipJ);
+        dampedLSI = MathTools::getDampedLeastSquareInverse(matManipJ, dampingFactor);
     }
     
     Eigen::MatrixXd manipulability_mandel = symMatrixToVector(manipulability_velocity);

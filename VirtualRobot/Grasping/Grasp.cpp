@@ -24,7 +24,7 @@ namespace VirtualRobot
     Grasp::~Grasp()
         = default;
 
-    void Grasp::print(bool printDecoration /*= true*/) const
+    void Grasp::print(bool printDecoration) const
     {
         if (printDecoration)
         {
@@ -41,7 +41,7 @@ namespace VirtualRobot
             // scope
             std::ostringstream sos;
             sos << std::setiosflags(std::ios::fixed);
-            sos << " * Pose in EEF-TCP coordinate system:" << endl << poseTcp << std::endl;
+            sos << " * Pose in EEF-TCP coordinate system:" << endl << getTransformation() << std::endl;
             std::cout << sos.str() << std::endl;
         } // scope
 
@@ -81,7 +81,7 @@ namespace VirtualRobot
             return Eigen::Matrix4f::Identity();
         }
 
-        return tcpNode->toGlobalCoordinateSystem(poseTcp);
+        return tcpNode->toGlobalCoordinateSystem(getTransformation());
     }
 
     std::string Grasp::getName() const
@@ -94,7 +94,7 @@ namespace VirtualRobot
         return preshape;
     }
 
-    const Eigen::Matrix4f& Grasp::getTransformation() const
+    Eigen::Matrix4f Grasp::getTransformation() const
     {
         return poseTcp;
     }
@@ -129,9 +129,7 @@ namespace VirtualRobot
             ss << "' Preshape='" << preshape << "'>\n";
         }
 
-        ss << tt << "<Transform>\n";
-        ss << MathTools::getTransformXMLString(poseTcp, ttt);
-        ss << tt << "</Transform>\n";
+        ss << getTransformationXML(tt);
 
         if (eefConfiguration.size() > 0)
         {
@@ -144,6 +142,14 @@ namespace VirtualRobot
         return ss.str();
     }
 
+    std::string Grasp::getTransformationXML(const std::string &tabs) const {
+        std::stringstream ss;
+        ss << tabs << "<Transform>\n";
+        ss << MathTools::getTransformXMLString(poseTcp, tabs + "\t");
+        ss << tabs << "</Transform>\n";
+        return ss.str();
+    }
+
     void Grasp::setTransformation(const Eigen::Matrix4f& tcp2Object)
     {
         poseTcp = tcp2Object;
@@ -151,7 +157,7 @@ namespace VirtualRobot
 
     Eigen::Matrix4f Grasp::getTcpPoseGlobal(const Eigen::Matrix4f& objectPose) const
     {
-        Eigen::Matrix4f result = objectPose * poseTcp.inverse();
+        Eigen::Matrix4f result = objectPose * getTransformation().inverse();
         return result;
     }
 
@@ -162,13 +168,13 @@ namespace VirtualRobot
 
     Eigen::Matrix4f Grasp::getObjectTargetPoseGlobal(const Eigen::Matrix4f& graspingPose) const
     {
-        Eigen::Matrix4f result = graspingPose * poseTcp;
+        Eigen::Matrix4f result = graspingPose * getTransformation();
         return result;
     }
 
     VirtualRobot::GraspPtr Grasp::clone() const
     {
-        GraspPtr result(new Grasp(name, robotType, eef, poseTcp, creation, quality, preshape));
+        GraspPtr result(new Grasp(name, robotType, eef, getTransformation(), creation, quality, preshape));
         result->setConfiguration(eefConfiguration);
         return result;
     }

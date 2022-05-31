@@ -25,7 +25,7 @@
 #include "VirtualRobot.h"
 #include "CollisionDetection/CollisionModel.h"
 #include "Visualization/VisualizationFactory.h"
-#include "SceneObject.h"
+#include "GraspableSensorizedObject.h"
 
 #include <string>
 #include <vector>
@@ -37,7 +37,7 @@ namespace VirtualRobot
         An obstacle is an object that owns a visualization and a collision model.
         It can be moved around and used for collision detection.
     */
-    class VIRTUAL_ROBOT_IMPORT_EXPORT Obstacle : public SceneObject
+    class VIRTUAL_ROBOT_IMPORT_EXPORT Obstacle : public GraspableSensorizedObject
     {
     public:
 
@@ -61,10 +61,7 @@ namespace VirtualRobot
         /*!
             Clones this object. If no col checker is given, the one of the original object is used.
         */
-        ObstaclePtr clone(const std::string& name, CollisionCheckerPtr colChecker = {})  const
-        {
-            return ObstaclePtr(_clone(name, colChecker));
-        }
+        ObstaclePtr clone(const std::string& name, CollisionCheckerPtr colChecker = {}, float scaling = 1.0) const;
 
         int getID();
 
@@ -111,14 +108,12 @@ namespace VirtualRobot
         static ObstaclePtr createFromMesh(TriMeshModelPtr mesh,
                                           std::string visualizationType = "", CollisionCheckerPtr colChecker = {});
 
-        virtual std::string toXML(const std::string& basePath, int tabs = 0);
+        virtual std::string toXML(const std::string& basePath, int tabs = 0, const std::string& modelPathRelative = "", bool storeSensors = true);
 
         void setFilename(const std::string& filename);
         std::string getFilename() const;
 
     protected:
-
-        Obstacle* _clone(const std::string& name, CollisionCheckerPtr colChecker = {}, float scaling = 1.0f) const override;
 
         std::string filename;
 

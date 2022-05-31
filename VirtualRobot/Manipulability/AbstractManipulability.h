@@ -80,6 +80,8 @@ public:
 
     virtual Eigen::Vector3f getGlobalPosition() = 0;
 
+    virtual Eigen::Matrix4f getCoordinateSystem() = 0;
+
     virtual Eigen::Vector3f getLocalPosition() = 0;
 
     virtual std::vector<std::string> getJointNames() = 0;

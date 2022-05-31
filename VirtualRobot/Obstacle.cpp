@@ -16,7 +16,7 @@ namespace VirtualRobot
     int Obstacle::idCounter = 20000;
 
     Obstacle::Obstacle(const std::string& name, VisualizationNodePtr visualization, CollisionModelPtr collisionModel, const SceneObject::Physics& p, CollisionCheckerPtr colChecker)
-        : SceneObject(name, visualization, collisionModel, p, colChecker)
+        : GraspableSensorizedObject(name, visualization, collisionModel, p, colChecker)
     {
         if (name == "")
         {
@@ -274,13 +274,15 @@ namespace VirtualRobot
         SceneObject::print(false);
         std::cout << " * id: " << id << std::endl;
 
+        printGrasps();
+
         if (printDecoration)
         {
             std::cout << std::endl;
         }
     }
 
-    Obstacle* Obstacle::_clone(const std::string& name, CollisionCheckerPtr colChecker, float scaling) const
+    ObstaclePtr Obstacle::clone(const std::string& name, CollisionCheckerPtr colChecker, float scaling) const
     {
         VisualizationNodePtr clonedVisualizationNode;
 
@@ -296,20 +298,17 @@ namespace VirtualRobot
             clonedCollisionModel = collisionModel->clone(colChecker, scaling);
         }
 
-        Obstacle* result = new Obstacle(name, clonedVisualizationNode, clonedCollisionModel, physics, colChecker);
-
-        if (!result)
-        {
-            VR_ERROR << "Cloning failed.." << std::endl;
-            return result;
-        }
+        ObstaclePtr result(new Obstacle(name, clonedVisualizationNode, clonedCollisionModel, physics, colChecker));
 
         result->setGlobalPose(getGlobalPose());
+
+        appendSensorsTo(result);
+        appendGraspSetsTo(result);
 
         return result;
     }
 
-    std::string Obstacle::toXML(const std::string& basePath, int tabs)
+    std::string Obstacle::toXML(const std::string& basePath, int tabs, const std::string& modelPathRelative, bool storeSensors)
     {
         std::stringstream ss;
         std::string t = "\t";
@@ -322,7 +321,9 @@ namespace VirtualRobot
 
         ss << pre << "<Obstacle name='" << name << "'>\n";
 
-        ss << getSceneObjectXMLString(basePath, tabs);
+
+        ss << getSceneObjectXMLString(basePath, tabs, modelPathRelative);
+        ss << getGraspableSensorizedObjectXML(modelPathRelative, storeSensors, tabs + 1);
 
         ss << pre << "</Obstacle>\n";
 

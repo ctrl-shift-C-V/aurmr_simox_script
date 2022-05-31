@@ -24,7 +24,7 @@
 #include "AbstractManipulability.h"
 
 #include <Eigen/Dense>
-#include <SimoxUtility/math/convert/pos_quat_to_mat4f.h>
+#include <SimoxUtility/math/convert.h>
 #include "VirtualRobot/Visualization/VisualizationFactory.h"
 #include "VirtualRobot/Visualization/VisualizationNode.h"
 
@@ -102,7 +102,9 @@ VisualizationNodePtr AbstractManipulability::getManipulabilityVis(const Eigen::M
     getEllipsoidOrientationAndScale(manipulability, orientation, scale);
     scale *= scaling;
     auto vis = visualizationFactory->createEllipse(scale(0), scale(1), scale(2), false);
-    vis->setGlobalPose(simox::math::pos_quat_to_mat4f(position, orientation));
+    Eigen::Matrix4f pose = simox::math::pos_mat3f_to_mat4f(position, simox::math::mat4f_to_mat3f(getCoordinateSystem()).inverse() * simox::math::quat_to_mat3f(orientation));
+    vis->setUpdateVisualization(true);
+    vis->setGlobalPose(pose);
     return vis;
 }
 

@@ -29,7 +29,7 @@ namespace VirtualRobot {
 CompositeDiffIK::CompositeDiffIK(const RobotNodeSetPtr& rns)
     : rns(rns), robot(rns->getRobot())
 {
-    ik.reset(new DifferentialIK(rns, rns->getRobot()->getRootNode(), JacobiProvider::eSVDDamped));
+    ik.reset(new DifferentialIK(rns, rns->getRobot()->getRootNode(), JacobiProvider::eSVDDampedDynamic));
 }
 
 void CompositeDiffIK::addTarget(const TargetPtr& target)
@@ -121,7 +121,7 @@ CompositeDiffIK::Result CompositeDiffIK::getLastResult() {
     bool allReached = true;
     for (const TargetPtr& target : targets)
     {
-        allReached = allReached && target->pCtrl.reached(target->target, target->mode, target->maxPosError, target->maxOriError);
+        allReached = allReached && target->isReached();
     }
 
     Result result;

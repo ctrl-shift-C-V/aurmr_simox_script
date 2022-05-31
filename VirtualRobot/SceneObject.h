@@ -29,6 +29,7 @@
 #include <type_traits>
 #include <string>
 #include <vector>
+#include <filesystem>
 
 
 namespace VirtualRobot
@@ -390,6 +391,11 @@ namespace VirtualRobot
         */
         virtual bool saveModelFiles(const std::string& modelPath, bool replaceFilenames);
 
+        void setScaling(float scaling);
+        float getScaling();
+
+        bool reloadVisualizationFromXML(bool useVisAsColModelIfMissing = true);
+
     protected:
         virtual SceneObject* _clone(const std::string& name, CollisionCheckerPtr colChecker = CollisionCheckerPtr(), float scaling = 1.0f) const;
 
@@ -408,7 +414,7 @@ namespace VirtualRobot
         SceneObject() {}
 
         //! basic data, used by Obstacle and ManipulationObject
-        std::string getSceneObjectXMLString(const std::string& basePath, int tabs);
+        std::string getSceneObjectXMLString(const std::string& basePath, int tabs, const std::string &modelPathRelative = "");
 
         ///////////////////////// SETUP ////////////////////////////////////
         std::string name;
@@ -423,8 +429,12 @@ namespace VirtualRobot
         SceneObjectWeakPtr parent;
 
         CollisionModelPtr collisionModel;
+        std::string collisionModelXML;
         //< This is the main visualization
         VisualizationNodePtr visualizationModel;
+        std::string visualizationModelXML;
+
+        std::filesystem::path basePath;
 
         bool updateVisualization;
         bool updateCollisionModel;
@@ -433,6 +443,8 @@ namespace VirtualRobot
         Physics physics;
 
         CollisionCheckerPtr collisionChecker;
+
+        float scaling = 1.0f;
     };
 
 

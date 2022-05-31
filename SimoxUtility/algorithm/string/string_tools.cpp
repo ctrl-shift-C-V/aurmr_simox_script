@@ -176,6 +176,25 @@ bool alg::contains(const std::string& haystack, const std::string& needle)
     return boost::algorithm::contains(haystack, needle);
 }
 
+time_t alg::to_time_t(const std::string &time, const std::string &time_format)
+{
+    std::tm tm = {};
+    std::istringstream ss(time);
+    ss.imbue(std::locale());
+    ss >> std::get_time(&tm, time_format.c_str());
+    if (ss.fail())
+        throw error::SimoxError("Failed converting string '" + time + "' to time with time format " + time_format);
+    else return mktime(&tm);
+}
+
+std::string alg::to_string(time_t t, const std::string &time_format)
+{
+    char mbstr[100];
+    std::strftime(mbstr, 100, time_format.c_str(), std::localtime(&t));
+    return std::string(mbstr);
+}
+
+
 unsigned long alg::count(const std::string& input, const std::string& search)
 {
     auto start = 0U;

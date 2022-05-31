@@ -10,6 +10,7 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <map>
 
 #include "SimoxUtility/algorithm/string.h"
 
@@ -23,8 +24,16 @@ class RapidXMLWrapperNode : public std::enable_shared_from_this<RapidXMLWrapperN
 
     friend class RapidXMLWrapperRootNode;
 
+public:
+    RapidXMLWrapperNode(rapidxml::xml_node<>* node)
+        : doc(node->document()), node(node), parent(nullptr)
+    { }
+
+    virtual ~RapidXMLWrapperNode()
+    { }
+
 protected:
-    std::shared_ptr<rapidxml::xml_document<> > doc;
+    rapidxml::xml_document<>* doc;
     rapidxml::xml_node<>* node;
     RapidXMLWrapperNodePtr parent;
 
@@ -32,15 +41,15 @@ protected:
         return doc->allocate_string(str.c_str());
     }
 
-    RapidXMLWrapperNode(std::shared_ptr<rapidxml::xml_document<> > doc, rapidxml::xml_node<>* node, RapidXMLWrapperNodePtr parent)
+    RapidXMLWrapperNode(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node, RapidXMLWrapperNodePtr parent)
         : doc(doc), node(node), parent(parent)
     { }
 
-    RapidXMLWrapperNode(std::shared_ptr<rapidxml::xml_document<> > doc, rapidxml::node_type node_type, RapidXMLWrapperNodePtr parent) : doc(doc), parent(parent) {
+    RapidXMLWrapperNode(rapidxml::xml_document<>* doc, rapidxml::node_type node_type, RapidXMLWrapperNodePtr parent) : doc(doc), parent(parent) {
         node = doc->allocate_node(node_type);
     }
 
-    RapidXMLWrapperNode(std::shared_ptr<rapidxml::xml_document<> > doc, rapidxml::node_type node_type, RapidXMLWrapperNodePtr parent, const std::string& name) : doc(doc), parent(parent) {
+    RapidXMLWrapperNode(rapidxml::xml_document<>* doc, rapidxml::node_type node_type, RapidXMLWrapperNodePtr parent, const std::string& name) : doc(doc), parent(parent) {
         node = doc->allocate_node(node_type, cloneString(name));
     }
 
@@ -69,7 +78,7 @@ protected:
 
 public:
     static RapidXMLWrapperNodePtr NullNode() {
-        RapidXMLWrapperNodePtr wrapper(new RapidXMLWrapperNode(std::shared_ptr<rapidxml::xml_document<> >(), NULL, nullptr));
+        RapidXMLWrapperNodePtr wrapper(new RapidXMLWrapperNode(new rapidxml::xml_document<>(), NULL, nullptr));
         return wrapper;
     }
 
@@ -144,6 +153,24 @@ public:
         try { return alg::to_<T>(attribute_value(attribute.attributeName.c_str())); } catch (...) { rethrowXMLFormatError(); };
     }
 
+    std::string attribute_value(const std::vector<std::string> &attrNames, bool throwException = false) const {
+        check();
+
+        for (const auto attrName : attrNames) {
+            rapidxml::xml_attribute<>* attrib = node->first_attribute(attrName.c_str(), 0, false);
+            if (attrib)
+            {
+                return std::string(attrib->value());
+            }
+        }
+
+        if (throwException) {
+            throw error::XMLFormatError(std::string("Attributes do not exist in node " + getPath()));
+        }
+
+        return std::string();
+    }
+
     std::vector<std::string> attribute_value_vec_str(const char* attrName, const std::string &delimiter = ";") {
         try { return alg::split(attribute_value(attrName), delimiter); } catch (...) { rethrowXMLFormatError(); };
     }
@@ -184,10 +211,17 @@ public:
         return std::string(attrib->value());
     }
 
-    std::vector<std::pair<std::string, std::string> > get_all_attributes()
+    std::map<std::string, std::string> get_all_attributes()
     {
         check();
-        std::vector<std::pair<std::string, std::string> > attributes;
+
+        return get_all_attributes(node);
+    }
+
+
+    static std::map<std::string, std::string> get_all_attributes(rapidxml::xml_node<>* node)
+    {
+        std::map<std::string, std::string> attributes;
 
         rapidxml::xml_attribute<>* attrib = node->first_attribute(0, 0, false);
 
@@ -195,12 +229,31 @@ public:
         {
             std::string name = std::string(attrib->name());
             std::string value = std::string(attrib->value());
-            std::pair<std::string, std::string> attrPair(name, value);
-            attributes.push_back(attrPair);
+            attributes.insert( { name, value });
             attrib = attrib->next_attribute();
         }
 
         return attributes;
+    }
+
+    /**
+     * @brief getUnitsScalingToMeter
+     * @return a scaling modifier for meter, if no unit attribute is specified the scaling modifier for millimeter is returned
+     */
+    float getUnitsScalingToMeter() {
+        std::string unit = simox::alg::to_lower(attribute_value({"units", "unit", "unitslength"}, false));
+        if (unit=="mm" || unit=="millimeter" || unit.empty())
+            return 0.001f;
+        else if (unit == "cm" || unit == "centimeter")
+            return 0.01f;
+        else if (unit == "dm" || unit == "decimeter")
+            return 0.1f;
+        else if (unit == "m" || unit == "meter")
+            return 1.0f;
+        else if (unit == "km" || unit == "kilometer")
+            return 1000.0f;
+        else
+            throw error::XMLFormatError(std::string("Unknown meter unit " + unit + " in node " + getPath()));
     }
 
     /*! Returns the content of an xml node.*/
@@ -296,6 +349,7 @@ public:
 
         return std::string(childNode->value());
     }
+
     RapidXMLWrapperNodePtr next_sibling(const char* name = 0)
     {
         check();
@@ -308,15 +362,29 @@ public:
         return node != NULL;
     }
 
-    std::string getPath() const
+    std::string getPath(bool withAttributes = true) const
     {
         check();
-        std::string result = name();
-        rapidxml::xml_node<>* p = node->parent();
+        rapidxml::xml_node<>* p = node;
+        std::string result = std::string();
 
         while (p)
         {
-            result = std::string(p->name()) + "/" + result;
+            std::stringstream att;
+            if (withAttributes)
+            {
+                std::map<std::string, std::string> attributes = get_all_attributes(p);
+                for (const auto &attribute : attributes)
+                {
+                    att << " ";
+                    att << attribute.first;
+                    att << "='";
+                    att << attribute.second;
+                    att << "'";
+                }
+            }
+
+            result = std::string(p->name()) + att.str().c_str() + "/" + result;
             p = p->parent();
         }
 
@@ -350,6 +418,11 @@ public:
         RapidXMLWrapperNodePtr node(new RapidXMLWrapperNode(doc, rapidxml::node_element, shared_from_this(), name));
         this->node->append_node(node->node);
         return node;
+    }
+
+    //! Appends a new node on the current node.
+    void append_node(const RapidXMLWrapperNode& node) {
+        this->node->append_node(doc->clone_node(node.node));
     }
 
     /*! Appends a new node on the current node and deletes the first node with the same name
@@ -421,9 +494,9 @@ public:
 
     /*! Creates an xml std::string representation of this xml nodes' structure
     @param indent Usage of tabs in the std::string representation for better readability. */
-    std::string print(bool indent = true) {
+    std::string print(bool indenting = true, int indents = 0) {
         std::string s;
-        rapidxml::print(std::back_inserter(s), *node, indent ? 0 : rapidxml::print_no_indenting);
+        rapidxml::internal::print_node(std::back_inserter(s), node, indenting ? 0 : rapidxml::print_no_indenting, indents);
         return s;
     }
 
@@ -445,43 +518,43 @@ public:
 //! @brief Helper class for reading information from an xml format via Rapid XML
 class RapidXMLWrapperRootNode : public RapidXMLWrapperNode
 {
-private:
+protected:
     char* cstr; // The string must persist for the lifetime of the document.
     std::filesystem::path path;
 
-    RapidXMLWrapperRootNode(const std::string& xml, const  std::filesystem::path &path =  std::filesystem::path())
-        : RapidXMLWrapperNode(getDocument(xml), NULL, nullptr), path(path)
-    {
-        node = doc->first_node();
-    }
-
-    RapidXMLWrapperRootNode(std::shared_ptr<rapidxml::xml_document<> > doc, const std::string &name)
+    RapidXMLWrapperRootNode(rapidxml::xml_document<>* doc, const std::string &name)
         : RapidXMLWrapperNode(doc, rapidxml::node_element, nullptr, name), path(std::filesystem::path())
     {
         cstr = new char[0];
     }
 
-    std::shared_ptr<rapidxml::xml_document<> > getDocument(const std::string& xml) {
+    rapidxml::xml_document<>* getDocument(const std::string& xml) {
         if (xml.empty()) throw error::XMLFormatError(std::string("Empty xml!"));
         cstr = new char[xml.size() + 1];        // Create char buffer to store std::string copy
         strcpy(cstr, xml.c_str());              // Copy std::string into char buffer
         try {
-            std::shared_ptr<rapidxml::xml_document<> > doc(new rapidxml::xml_document<>());
+            rapidxml::xml_document<>* doc(new rapidxml::xml_document<>());
             doc->parse<0>(cstr);                    // Pass the non-const char* to parse()
             return doc;
         }
-        catch (rapidxml::parse_error e) {
+        catch (rapidxml::parse_error &e) {
             std::string msg = e.what();
             throw error::XMLFormatError(std::string("No valid xml format! " + msg));
         }
     }
 
 public:
-    ~RapidXMLWrapperRootNode() {
-        delete[] cstr;                          // free buffer memory when all is finished
+    RapidXMLWrapperRootNode(const std::string& xml, const  std::filesystem::path &path =  std::filesystem::path())
+        : RapidXMLWrapperNode(getDocument(xml), NULL, nullptr), path(path)
+    {
+        node = doc->first_node();
     }
 
-public:
+    virtual ~RapidXMLWrapperRootNode() {
+        delete[] cstr;                          // free buffer memory when all is finished
+        delete doc;
+    }
+
     static std::string ReadFileContents(const std::string& path) {
         try {
             std::ifstream in(path.c_str());
@@ -508,8 +581,7 @@ public:
         @return The RapidXMLWrapper for the xml string.
     */
     static RapidXMLWrapperRootNodePtr FromXmlString(const std::string& xml, const std::string &path = std::string()) {
-        RapidXMLWrapperRootNodePtr wrapper(new RapidXMLWrapperRootNode(xml, path));
-        return wrapper;
+        return std::make_shared<RapidXMLWrapperRootNode>(xml, path);
     }
 
     /*!
@@ -524,11 +596,13 @@ public:
     /*! Creates a root node with the given name.
     @return The root Node. */
     static RapidXMLWrapperRootNodePtr createRootNode(const std::string& name) {
-        std::shared_ptr<rapidxml::xml_document<> > doc(new rapidxml::xml_document<>());
+        rapidxml::xml_document<>* doc(new rapidxml::xml_document<>());
         RapidXMLWrapperNodePtr declaration(new RapidXMLWrapperNode(doc, rapidxml::node_declaration, nullptr));
         declaration->append_attribute("version", "1.0");
         declaration->append_attribute("encoding", "utf-8");
         doc->append_node(declaration->node);
+
+        // ownership of doc is transferred to RapidXMLWrapperRootNode rootNode
         RapidXMLWrapperRootNodePtr rootNode = RapidXMLWrapperRootNodePtr(new RapidXMLWrapperRootNode(doc, name));
         doc->append_node(rootNode->node);
         return rootNode;

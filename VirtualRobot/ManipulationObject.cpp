@@ -2,7 +2,7 @@
 #include "ManipulationObject.h"
 #include "VirtualRobotException.h"
 #include "Visualization/VisualizationNode.h"
-#include "Grasping/GraspSet.h"
+#include "GraspableSensorizedObject.h"
 #include "XML/BaseIO.h"
 
 namespace VirtualRobot
@@ -33,108 +33,14 @@ namespace VirtualRobot
 
         Obstacle::print(false);
 
-        for (size_t i = 0; i < graspSets.size(); i++)
-        {
-            std::cout << "* Grasp set " << i << ":" << std::endl;
-            graspSets[i]->print();
-        }
-
         if (printDecoration)
         {
             std::cout << std::endl;
         }
     }
 
-    void ManipulationObject::addGraspSet(GraspSetPtr graspSet)
-    {
-        THROW_VR_EXCEPTION_IF(!graspSet, "NULL data");
-        THROW_VR_EXCEPTION_IF(hasGraspSet(graspSet), "Grasp set already added");
-        // don't be too strict
-        //THROW_VR_EXCEPTION_IF(hasGraspSet(graspSet->getRobotType(), graspSet->getEndEffector()), "Only one GraspSet per EEF allowed.");
-        this->graspSets.push_back(graspSet);
-    }
 
-    void ManipulationObject::includeGraspSet(GraspSetPtr toBeIncludedGraspSet)  //maybe delete
-    {
-        THROW_VR_EXCEPTION_IF(!toBeIncludedGraspSet, "NULL data");
-        std::string robotType = toBeIncludedGraspSet->getRobotType();
-        std::string eef = toBeIncludedGraspSet->getEndEffector();
-
-        //include new Grasps
-        //check if grasp is existing
-        int index = -1;
-        for (size_t i = 0 ; i < graspSets.size(); i++)
-        {
-            if (graspSets.at(i)->getRobotType() == robotType && graspSets.at(i)->getEndEffector() == eef)
-            {
-                index = i;
-            }
-        }
-        THROW_VR_EXCEPTION_IF(index == -1, "Index wrong defined");
-        graspSets.at(index)->includeGraspSet(toBeIncludedGraspSet);
-    }
-
-    bool ManipulationObject::hasGraspSet(GraspSetPtr graspSet)
-    {
-        VR_ASSERT_MESSAGE(graspSet, "NULL data");
-
-        for (const auto& i : graspSets)
-            if (i == graspSet)
-            {
-                return true;
-            }
-
-        return false;
-    }
-
-    bool ManipulationObject::hasGraspSet(const std::string& robotType, const std::string& eef)
-    {
-        for (auto& graspSet : graspSets)
-            if (graspSet->getRobotType() == robotType && graspSet->getEndEffector() == eef)
-            {
-                return true;
-            }
-
-        return false;
-    }
-
-    VirtualRobot::GraspSetPtr ManipulationObject::getGraspSet(EndEffectorPtr eef)
-    {
-        THROW_VR_EXCEPTION_IF(!eef, "NULL data");
-
-        return getGraspSet(eef->getRobotType(), eef->getName());
-
-
-    }
-
-    VirtualRobot::GraspSetPtr ManipulationObject::getGraspSet(const std::string& robotType, const std::string& eefName)
-    {
-        for (auto& graspSet : graspSets)
-            if (graspSet->getRobotType() == robotType && graspSet->getEndEffector() == eefName)
-            {
-                return graspSet;
-            }
-
-        return GraspSetPtr();
-    }
-
-    VirtualRobot::GraspSetPtr ManipulationObject::getGraspSet(const std::string& name)
-    {
-        for (auto& graspSet : graspSets)
-            if (graspSet->getName() == name)
-            {
-                return graspSet;
-            }
-
-        return GraspSetPtr();
-    }
-
-    std::vector<GraspSetPtr> ManipulationObject::getAllGraspSets()
-    {
-        return graspSets;
-    }
-
-    std::string ManipulationObject::toXML(const std::string& basePath, int tabs, bool storeLinkToFile)
+    std::string ManipulationObject::toXML(const std::string& basePath, int tabs, bool storeLinkToFile, const std::string& modelPathRelative, bool storeSensors)
     {
         std::stringstream ss;
         std::string t = "\t";
@@ -170,13 +76,8 @@ namespace VirtualRobot
         }
         else
         {
-
-            ss << getSceneObjectXMLString(basePath, tabs + 1);
-
-            for (auto& graspSet : graspSets)
-            {
-                ss << graspSet->getXMLString(tabs + 1) << "\n";
-            }
+            ss << getSceneObjectXMLString(basePath, tabs + 1, modelPathRelative);
+            ss << getGraspableSensorizedObjectXML(modelPathRelative, storeSensors, tabs + 1);
         }
 
         ss << pre << "</ManipulationObject>\n";
@@ -184,17 +85,12 @@ namespace VirtualRobot
         return ss.str();
     }
 
-    ManipulationObjectPtr ManipulationObject::clone(const std::string& name, CollisionCheckerPtr colChecker, bool deepVisuCopy) const
-    {
-        return ManipulationObjectPtr(_clone(name, colChecker, deepVisuCopy));
-    }
-
     ManipulationObjectPtr ManipulationObject::clone(CollisionCheckerPtr colChecker, bool deepVisuCopy) const
     {
         return clone(getName(), colChecker, deepVisuCopy);
     }
 
-    ManipulationObject* ManipulationObject::_clone(const std::string& name, CollisionCheckerPtr colChecker, bool deepVisuCopy) const
+    ManipulationObjectPtr ManipulationObject::clone(const std::string& name, CollisionCheckerPtr colChecker, bool deepVisuCopy) const
     {
         VisualizationNodePtr clonedVisualizationNode;
 
@@ -210,20 +106,12 @@ namespace VirtualRobot
             clonedCollisionModel = collisionModel->clone(colChecker, 1.0, deepVisuCopy);
         }
 
-        ManipulationObject* result = new ManipulationObject(name, clonedVisualizationNode, clonedCollisionModel, physics, colChecker);
-
-        if (!result)
-        {
-            VR_ERROR << "Cloning failed.." << std::endl;
-            return result;
-        }
+        ManipulationObjectPtr result(new ManipulationObject(name, clonedVisualizationNode, clonedCollisionModel, physics, colChecker));
 
         result->setGlobalPose(getGlobalPose());
 
-        for (const auto& graspSet : graspSets)
-        {
-            result->addGraspSet(graspSet->clone());
-        }
+        appendSensorsTo(result);
+        appendGraspSetsTo(result);
 
         return result;
     }
