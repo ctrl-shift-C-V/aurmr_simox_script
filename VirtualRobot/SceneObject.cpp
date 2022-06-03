@@ -1495,4 +1495,8 @@ namespace VirtualRobot
         }
         return reloaded;
     }
+
+    const std::string &SceneObject::getVisualizationModelXML() const {
+        return visualizationModelXML;
+    }
 } // namespace
