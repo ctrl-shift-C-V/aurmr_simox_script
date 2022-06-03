@@ -51,11 +51,9 @@ int main(int argc, char* argv[])
 
 
     using time_point = std::chrono::system_clock::time_point;
-    using duration = std::chrono::nanoseconds;
-    const std::string unit = " ns";
 
-    std::vector<double> durations;
-    durations.reserve(a1s.size() * a2s.size());
+    std::vector<double> durationsUs;
+    durationsUs.reserve(a1s.size() * a2s.size());
 
     for (double a1 : a1s)
     {
@@ -74,8 +72,17 @@ int main(int argc, char* argv[])
                    expr.exy, expr.eyy, expr.ezy,
                    expr.exz, expr.eyz, expr.ezz;
 
+            Eigen::Matrix<double, 6, 2> jacobian;
+            jacobian << expr.jx1, expr.jx2,
+                        expr.jy1, expr.jy2,
+                        expr.jz1, expr.jz2,
+                        expr.jrx1, expr.jrx2,
+                        expr.jry1, expr.jry2,
+                        expr.jrz1, expr.jrz2;
+
             const time_point end = std::chrono::system_clock::now();
-            durations.push_back(std::chrono::duration_cast<duration>(end - start).count());
+            using duration = std::chrono::nanoseconds;
+            durationsUs.push_back(std::chrono::duration_cast<duration>(end - start).count() / 1000.f);
 
             if (verbose)
             {
@@ -85,11 +92,12 @@ int main(int argc, char* argv[])
         }
     }
 
-    double mean = simox::math::mean(durations);
-    double stddev = simox::math::stddev(durations, mean);
-    double min = simox::math::min(durations);
-    double max = simox::math::max(durations);
+    double mean = simox::math::mean(durationsUs);
+    double stddev = simox::math::stddev(durationsUs, mean);
+    double min = simox::math::min(durationsUs);
+    double max = simox::math::max(durationsUs);
 
+    const std::string unit = " us";
     std::cout << "Durations:"
               << " " << mean << " +- " << stddev << unit
               << ", range: [" << min << unit << " to " << max << unit <<"]"

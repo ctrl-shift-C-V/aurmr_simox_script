@@ -26,6 +26,7 @@ class Line:
                .replace("-", "_add_")
                .replace("*", "_mul_")
                .replace("/", "_div_")
+               .replace(".", "_dot_")
                .replace("(", "__lpar_")
                .replace(")", "_rpar__")
                )
