@@ -6,10 +6,14 @@ authors = ["Rainer Kartmann <rainer dot kartmann at kit dot edu>"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
-armarx-dev = { path = "../../../armarx/python3-armarx/", develop=true} # "^0.16.4"
+# armarx-dev = { path = "../../../armarx/python3-armarx/", develop=true} # "^0.16.4"
 zeroc-ice = "3.7.0"
 numpy = "^1.19.5"
 jupyter = "^1.0.0"
+plotly = "*"
+matplotlib = "*"
+scipy = "*"
+sympy = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
