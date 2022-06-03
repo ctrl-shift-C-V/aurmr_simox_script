@@ -77,8 +77,8 @@ class Data:
 
         do_fk = True
         if do_fk:
-            from hemisphere_joint_demo.equations import fk
-            self.eef_pos = fk(a1, a2, L=lever, T_0=theta_0)
+            from hemisphere_joint_demo.equations import fk_pos
+            self.eef_pos = fk_pos(a1, a2, L=lever, T_0=theta_0)
 
         do_fk_ori = True
         if do_fk_ori:
@@ -103,7 +103,7 @@ class Data:
         print(f"EEF rot vel = {np.round(self.eef_rot_vel, 3)} (norm = {np.linalg.norm(self.eef_rot_vel):.3f})")
 
     def ik(self):
-        from hemisphere_joint_demo.equations import fk, ik
+        from hemisphere_joint_demo.equations import fk_pos, ik
 
         print("-" * 50)
 
@@ -114,7 +114,7 @@ class Data:
         a1, a2 = ik(ex, ey, L=self.lever, T_0=self.theta_0)
         self.actuator_pos[:] = [a1, a2]
 
-        fk_eef_pos = fk(a1, a2, L=self.lever, T_0=self.theta_0)
+        fk_eef_pos = fk_pos(a1, a2, L=self.lever, T_0=self.theta_0)
         error = fk_eef_pos - eef_pos
         print(f"FK(a..) = {np.round(fk_eef_pos, 3)}")
         print(f"Error   = {np.round(error, 5)}, |E| = {np.linalg.norm(error):.5f}")
