@@ -1,5 +1,4 @@
 import dataclasses as dc
-import os.path
 
 import sympy as sp
 import typing as ty
@@ -33,9 +32,9 @@ class Line:
         return lhs
 
     @classmethod
-    def rhs_from_expr(cls, expr: sp.Basic, ctx: "Context") -> str:
+    def rhs_from_expr(cls, expr: sp.Basic, cpp: "SympyToCpp") -> str:
         # Recurse.
-        code_args = [expr_to_cpp(arg, ctx) for arg in expr.args]
+        code_args = [expr_to_cpp(arg, cpp) for arg in expr.args]
 
         def par(code: str) -> str:
             return f"({code})"
@@ -77,14 +76,14 @@ class Line:
 
 
     @classmethod
-    def from_expr(cls, expr: sp.Basic, ctx: "Context"):
+    def from_expr(cls, expr: sp.Basic, cpp: "SympyToCpp"):
         lhs = Line.lhs_from_expr(expr)
-        rhs = Line.rhs_from_expr(expr, ctx=ctx)
+        rhs = Line.rhs_from_expr(expr, cpp=cpp)
         return cls(lhs=lhs, rhs=rhs)
 
 
 @dc.dataclass
-class Context:
+class SympyToCpp:
 
     name = "Expressions"
 
@@ -197,9 +196,9 @@ class Context:
 
 def expr_to_cpp(
         expr: sp.Basic,
-        ctx: Context,
+        cpp: SympyToCpp,
 ) -> str:
-    indent = "  " * ctx.depth
+    indent = "  " * cpp.depth
 
     if len(expr.args) == 0:
         # Leaf.
@@ -207,7 +206,7 @@ def expr_to_cpp(
 
         if isinstance(expr, sp.Symbol):
             # Must be part of local variables.
-            assert expr in ctx.function_args
+            assert expr in cpp.function_args
 
         elif isinstance(expr, sp.Number):
             # Will be turned into a literal.
@@ -221,58 +220,11 @@ def expr_to_cpp(
     else:
         # Non-leaf
         print(f"{indent}Node: {expr}")
-        ctx.depth += 1
+        cpp.depth += 1
 
-        line = Line.from_expr(expr, ctx=ctx)
-        ctx.named_expressions[expr] = line
+        line = Line.from_expr(expr, cpp=cpp)
+        cpp.named_expressions[expr] = line
 
-        ctx.depth -= 1
+        cpp.depth -= 1
 
         return line.lhs
-
-
-
-if __name__ == '__main__':
-    from sympy import sin, cos, sqrt
-
-    # Actuation
-    a1, a2 = sp.symbols('a1 a2')
-    # Constants defining deometry
-    lever, theta0 = sp.symbols('lever theta0')
-    # P1_z=f(motor1)
-    # P1_z=f(motor2)
-
-    # for 90°
-    ex = 2 * lever * (lever ** 5 * sin(theta0) - lever ** 3 * a1 * a2 * sin(theta0) - lever ** 3 * a2 ** 2 * sin(theta0) + lever * a1 * a2 ** 3 * sin(theta0) - a2 * sqrt(-2 * lever ** 8 * sin(theta0) ** 2 + lever ** 8 + 2 * lever ** 6 * a1 ** 2 * sin(theta0) ** 2 - lever ** 6 * a1 ** 2 + 2 * lever ** 6 * a1 * a2 * sin(theta0) ** 2 + 2 * lever ** 6 * a2 ** 2 * sin(theta0) ** 2 - lever ** 6 * a2 ** 2 - 2 * lever ** 4 * a1 ** 3 * a2 * sin(theta0) ** 2 - 2 * lever ** 4 * a1 ** 2 * a2 ** 2 * sin(theta0) ** 2 - 2 * lever ** 4 * a1 * a2 ** 3 * sin(theta0) ** 2 + lever ** 2 * a1 ** 4 * a2 ** 2 + 2 * lever ** 2 * a1 ** 3 * a2 ** 3 * sin(theta0) ** 2 + lever ** 2 * a1 ** 2 * a2 ** 4 - a1 ** 4 * a2 ** 4)) * sin(theta0) / (sqrt(lever ** 2 - a2 ** 2) * (lever ** 4 - a1 ** 2 * a2 ** 2))
-    ey = 2 * lever * (lever ** 5 * sin(theta0) - lever ** 3 * a1 ** 2 * sin(theta0) - lever ** 3 * a1 * a2 * sin(theta0) + lever * a1 ** 3 * a2 * sin(theta0) - a1 * sqrt(-2 * lever ** 8 * sin(theta0) ** 2 + lever ** 8 + 2 * lever ** 6 * a1 ** 2 * sin(theta0) ** 2 - lever ** 6 * a1 ** 2 + 2 * lever ** 6 * a1 * a2 * sin(theta0) ** 2 + 2 * lever ** 6 * a2 ** 2 * sin(theta0) ** 2 - lever ** 6 * a2 ** 2 - 2 * lever ** 4 * a1 ** 3 * a2 * sin(theta0) ** 2 - 2 * lever ** 4 * a1 ** 2 * a2 ** 2 * sin(theta0) ** 2 - 2 * lever ** 4 * a1 * a2 ** 3 * sin(theta0) ** 2 + lever ** 2 * a1 ** 4 * a2 ** 2 + 2 * lever ** 2 * a1 ** 3 * a2 ** 3 * sin(theta0) ** 2 + lever ** 2 * a1 ** 2 * a2 ** 4 - a1 ** 4 * a2 ** 4)) * sin(theta0) / (sqrt(lever ** 2 - a1 ** 2) * (lever ** 4 - a1 ** 2 * a2 ** 2))
-    ez = 2 * lever * (lever * (lever ** 4 - a1 ** 2 * a2 ** 2) * (a1 + a2) * sin(theta0) + (lever ** 2 + a1 * a2) * sqrt(lever ** 2 * (lever ** 2 * a1 + lever ** 2 * a2 - a1 ** 2 * a2 - a1 * a2 ** 2) ** 2 * sin(theta0) ** 2 + (-lever ** 4 + a1 ** 2 * a2 ** 2) * (-2 * lever ** 4 * cos(theta0) ** 2 + lever ** 4 + lever ** 2 * a1 ** 2 * cos(theta0) ** 2 + lever ** 2 * a2 ** 2 * cos(theta0) ** 2 - a1 ** 2 * a2 ** 2))) * sin(theta0) / ((lever ** 2 + a1 * a2) * (lever ** 4 - a1 ** 2 * a2 ** 2))
-
-    ctx = Context(
-        function_args=[a1, a2, lever, theta0],
-        function_results={
-            "ex": ex,
-            "ey": ey,
-            "ez": ez,
-        }
-    )
-    ctx.build()
-
-    output_dir = "/home/rkartmann/code/simox/VirtualRobot/examples/HemisphereJoint/"
-    header_path = os.path.join(output_dir, ctx.name + ".h")
-    source_path = os.path.join(output_dir, ctx.name + ".cpp")
-
-    header_lines = ctx.make_header_lines()
-    source_lines = ctx.make_source_lines()
-
-    print("Declaration:")
-    print(ctx.format_lines(header_lines, line_numbers=True))
-    print("Implementation:")
-    print(ctx.format_lines(source_lines, line_numbers=True))
-
-    print("Writing files...")
-    print(f"- {header_path}")
-    print(ctx.write_lines(header_lines, header_path))
-    print(f"- {source_path}")
-    print(ctx.write_lines(source_lines, source_path))
-
-    print("Done.")
