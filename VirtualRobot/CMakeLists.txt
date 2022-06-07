@@ -336,6 +336,7 @@ SET(SOURCES
     Nodes/RobotNodeRevoluteFactory.cpp
     Nodes/Sensor.cpp
     Nodes/HemisphereJoint/Expressions.cpp
+    Nodes/HemisphereJoint/operations.cpp
 
     TimeOptimalTrajectory/Path.cpp
     TimeOptimalTrajectory/TimeOptimalTrajectory.cpp
@@ -578,6 +579,7 @@ SET(INCLUDES
     Nodes/Sensor.h
     Nodes/SensorFactory.h
     Nodes/HemisphereJoint/Expressions.h
+    Nodes/HemisphereJoint/operations.h
 
     TimeOptimalTrajectory/Path.h
     TimeOptimalTrajectory/TimeOptimalTrajectory.h

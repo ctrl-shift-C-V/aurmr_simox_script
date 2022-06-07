@@ -7,6 +7,7 @@
 
 #include <VirtualRobot/RuntimeEnvironment.h>
 #include <VirtualRobot/Nodes/HemisphereJoint/Expressions.h>
+#include <VirtualRobot/Nodes/HemisphereJoint/operations.h>
 
 
 using VirtualRobot::RuntimeEnvironment;
@@ -63,21 +64,9 @@ int main(int argc, char* argv[])
             VirtualRobot::hemisphere::Expressions expr;
             expr.compute(a1, a2, lever, theta0);
 
-            Eigen::Vector3d pos {expr.ex, expr.ey, expr.ez};
-
-            // r_wrist_to_base = np.array([[exx, eyx, ezx], [exy, eyy, ezy], [exz, eyz, ezz]])
-            Eigen::Matrix3d ori;
-            ori << expr.exx, expr.eyx, expr.ezx,
-                   expr.exy, expr.eyy, expr.ezy,
-                   expr.exz, expr.eyz, expr.ezz;
-
-            Eigen::Matrix<double, 6, 2> jacobian;
-            jacobian << expr.jx1, expr.jx2,
-                        expr.jy1, expr.jy2,
-                        expr.jz1, expr.jz2,
-                        expr.jrx1, expr.jrx2,
-                        expr.jry1, expr.jry2,
-                        expr.jrz1, expr.jrz2;
+            const Eigen::Vector3d pos = VirtualRobot::hemisphere::getEndEffectorPosition(expr);
+            const Eigen::Matrix3d ori = VirtualRobot::hemisphere::getEndEffectorOrientation(expr);
+            const Eigen::Matrix<double, 6, 2> jacobian = VirtualRobot::hemisphere::getJacobian(expr);
 
             const time_point end = std::chrono::system_clock::now();
             using duration = std::chrono::nanoseconds;
@@ -85,8 +74,13 @@ int main(int argc, char* argv[])
 
             if (verbose)
             {
-                std::cout << "(a1, a2) = (" << a1 << ", " << a2 << ") \t ->  "
-                          << "pos = (" << pos.transpose() << ")" << std::endl;
+                Eigen::IOFormat iof(5, 0, " ", "\n", "    [", "]", "", "");
+                std::cout << "(a1, a2) = (" << a1 << ", " << a2 << ")"
+                          << "\n ->"
+                          << "\n  pos = \n" << pos.transpose().format(iof)
+                          << "\n  ori = \n" << ori.format(iof)
+                          << "\n  jac = \n" << jacobian.format(iof)
+                          << std::endl;
             }
         }
     }
