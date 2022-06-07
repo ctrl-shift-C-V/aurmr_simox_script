@@ -1,4 +1,5 @@
 import os
+import os.path
 
 from sympy import symbols, sin, cos, sqrt, Integer
 
@@ -79,12 +80,17 @@ def jacobian_ori():
 
 if __name__ == '__main__':
 
+    output_dir = os.path.expandvars("$simox__PATH/VirtualRobot/Nodes/HemisphereJoint/")
+    assert os.path.isdir(output_dir)
+    name = "Expressions"
+
     ex, ey, ez = fk_pos()
     exx, exy, exz, eyx, eyy, eyz, ezx, ezy, ezz = fk_ori()
     jx1, jx2, jy1, jy2, jz1, jz2 = jacobian_pos()
     jrx1, jrx2, jry1, jry2, jrz1, jrz2 = jacobian_ori()
 
     cpp = SympyToCpp(
+        name=name,
         function_args=[a1, a2, lever, theta0],
         function_results=dict(
             ex=ex, ey=ey, ez=ez,
@@ -104,7 +110,6 @@ if __name__ == '__main__':
     )
     cpp.build()
 
-    output_dir = "/home/rkartmann/code/simox/VirtualRobot/examples/HemisphereJoint/"
     header_path = os.path.join(output_dir, cpp.name + ".h")
     source_path = os.path.join(output_dir, cpp.name + ".cpp")
 

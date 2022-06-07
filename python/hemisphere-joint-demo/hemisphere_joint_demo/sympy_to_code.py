@@ -86,10 +86,11 @@ class Line:
 @dc.dataclass
 class SympyToCpp:
 
-    name = "Expressions"
+    name: str = "Expressions"
+    namespace: str = "VirtualRobot::hemisphere"
 
     function_args: ty.List[sp.Symbol] = dc.field(default_factory=list)
-    named_expressions: ty.OrderedDict[sp.Basic, Line] = dc.field(default_factory=OrderedDict)
+    named_expressions: "ty.OrderedDict[sp.Basic, Line]" = dc.field(default_factory=OrderedDict)
     function_results: ty.Dict[str, sp.Basic] = dc.field(default_factory=list)
 
     depth = 0
@@ -103,6 +104,30 @@ class SympyToCpp:
 
     def make_compute_signature_impl(self):
         return f"void {self.name}::compute({self.make_compute_args()})"
+
+    def make_namespace_begin_end(self):
+        begin = [
+            f"namespace {self.namespace}",
+            "{",
+            "",
+        ]
+        end = [
+            "",
+            "}"
+        ]
+        return begin, end
+
+    def make_generation_note(self):
+        import datetime
+        now = datetime.datetime.now()
+        now = now.strftime("%Y-%m-%d %H:%M")
+        return [
+            f"/*",
+            f" * This file was generated automatically on {now}.",
+            f" */"
+            "",
+            "",
+        ]
 
     def make_decl_lines(self) -> ty.List[str]:
         lines = self._line_sum(
@@ -133,7 +158,6 @@ class SympyToCpp:
         )
         return lines
 
-
     def make_impl_lines(self) -> ty.List[str]:
         lines = self._line_sum(
             [
@@ -157,21 +181,29 @@ class SympyToCpp:
         return lines
 
     def make_header_lines(self):
+        ns_begin, ns_end = self.make_namespace_begin_end()
         lines = self._line_sum(
+            self.make_generation_note(),
             ["#pragma once"],
             [""] * 2,
+            ns_begin,
             self.make_decl_lines(),
+            ns_end,
             [""] * 1,
         )
         return lines
 
     def make_source_lines(self):
+        ns_begin, ns_end = self.make_namespace_begin_end()
         lines = self._line_sum(
+            self.make_generation_note(),
             [f'#include "{self.name}.h"'],
             [""] * 1,
             ["#include <cmath>"],
             [""] * 2,
+            ns_begin,
             self.make_impl_lines(),
+            ns_end,
             [""] * 1,
         )
         return lines
