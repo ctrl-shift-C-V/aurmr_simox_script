@@ -5,10 +5,8 @@ find_package(Boost ${Simox_BOOST_VERSION} EXACT COMPONENTS system REQUIRED)
 if (Boost_FOUND)
     set(SOURCES
         main.cpp
-        Expressions.cpp
     )
     set(HEADERS
-        Expressions.h
     )
 
     set(LIBS

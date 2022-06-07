@@ -1,5 +1,3 @@
-#include "Expressions.h"
-
 #include <chrono>
 #include <iostream>
 
@@ -8,6 +6,7 @@
 #include <SimoxUtility/math/statistics/measures.h>
 
 #include <VirtualRobot/RuntimeEnvironment.h>
+#include <VirtualRobot/Nodes/HemisphereJoint/Expressions.h>
 
 
 using VirtualRobot::RuntimeEnvironment;
@@ -61,7 +60,7 @@ int main(int argc, char* argv[])
         {
             const time_point start = std::chrono::system_clock::now();
 
-            Expressions expr;
+            VirtualRobot::hemisphere::Expressions expr;
             expr.compute(a1, a2, lever, theta0);
 
             Eigen::Vector3d pos {expr.ex, expr.ey, expr.ez};

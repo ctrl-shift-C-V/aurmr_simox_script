@@ -1,7 +1,14 @@
+/*
+ * This file was generated automatically on 2022-06-07 17:00.
+ */
+
 #include "Expressions.h"
 
 #include <cmath>
 
+
+namespace VirtualRobot::hemisphere
+{
 
 void Expressions::compute(double a1, double a2, double lever, double theta0)
 {
@@ -233,5 +240,7 @@ void Expressions::compute(double a1, double a2, double lever, double theta0)
     jry2 = _lever_pow_2;
     jrz1 = _lever_pow_2;
     jrz2 = _lever_pow_2;
+}
+
 }
 
