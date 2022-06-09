@@ -463,7 +463,7 @@ namespace VirtualRobot
             processTransformNode(prejointTransformNode, robotNodeName, preJointTransform);
             processTransformNode(postjointTransformNode, robotNodeName, postJointTransform);
             */
-        if (jointType == "revolute" || jointType == "cornelius")
+        if (jointType == "revolute" || jointType == "hemisphere")
         {
             if (scaleVisu)
             {

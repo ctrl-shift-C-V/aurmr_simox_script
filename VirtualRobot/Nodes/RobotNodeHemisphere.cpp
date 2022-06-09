@@ -1,4 +1,4 @@
-#include "RobotNodeCornelius.h"
+#include "RobotNodeHemisphere.h"
 #include "Nodes/Sensor.h"
 #include "Robot.h"
 #include "VirtualRobotException.h"
@@ -15,12 +15,12 @@ namespace VirtualRobot
 {
 
 
-    VirtualRobot::RobotNodeCornelius::RobotNodeCornelius()
+    VirtualRobot::RobotNodeHemisphere::RobotNodeHemisphere()
     {
     }
 
 
-    RobotNodeCornelius::RobotNodeCornelius(
+    RobotNodeHemisphere::RobotNodeHemisphere(
             RobotWeakPtr rob,
             const std::string& name,
             float jointLimitLo,
@@ -48,7 +48,7 @@ namespace VirtualRobot
     }
 
 
-    RobotNodeCornelius::RobotNodeCornelius(
+    RobotNodeHemisphere::RobotNodeHemisphere(
             RobotWeakPtr rob,
             const std::string& name,
             float jointLimitLo,
@@ -94,11 +94,11 @@ namespace VirtualRobot
     }
 
 
-    RobotNodeCornelius::~RobotNodeCornelius()
+    RobotNodeHemisphere::~RobotNodeHemisphere()
     = default;
 
 
-    bool RobotNodeCornelius::initialize(
+    bool RobotNodeHemisphere::initialize(
             SceneObjectPtr parent,
             const std::vector<SceneObjectPtr>& children)
     {
@@ -106,7 +106,7 @@ namespace VirtualRobot
         if (not isSub)
         {
             const bool isSub = true;
-            RobotNodeCorneliusPtr sub = std::make_shared<RobotNodeCornelius>(
+            RobotNodeHemispherePtr sub = std::make_shared<RobotNodeHemisphere>(
                         robot,
                         name + "_sub",
                         jointLimitLo,
@@ -133,7 +133,7 @@ namespace VirtualRobot
     }
 
 
-    void RobotNodeCornelius::updateTransformationMatrices(
+    void RobotNodeHemisphere::updateTransformationMatrices(
             const Eigen::Matrix4f& parentPose)
     {
         const Eigen::Matrix4f rot = simox::math::pose(
@@ -150,13 +150,13 @@ namespace VirtualRobot
     }
 
 
-    void RobotNodeCornelius::print(bool printChildren, bool printDecoration) const
+    void RobotNodeHemisphere::print(bool printChildren, bool printDecoration) const
     {
         ReadLockPtr lock = getRobot()->getReadLock();
 
         if (printDecoration)
         {
-            std::cout << "******** RobotNodeCornelius ********" << std::endl;
+            std::cout << "******** RobotNodeHemisphere ********" << std::endl;
         }
 
         RobotNode::print(false, false);
@@ -165,7 +165,7 @@ namespace VirtualRobot
 
         if (printDecoration)
         {
-            std::cout << "******** End RobotNodeCornelius ********" << std::endl;
+            std::cout << "******** End RobotNodeHemisphere ********" << std::endl;
         }
 
         if (printChildren)
@@ -178,7 +178,7 @@ namespace VirtualRobot
     }
 
 
-    RobotNodePtr RobotNodeCornelius::_clone(
+    RobotNodePtr RobotNodeHemisphere::_clone(
             const RobotPtr newRobot,
             const VisualizationNodePtr visualizationModel,
             const CollisionModelPtr collisionModel,
@@ -192,38 +192,38 @@ namespace VirtualRobot
 
         if (optionalDHParameter.isSet)
         {
-            result.reset(new RobotNodeCornelius(newRobot, name, jointLimitLo, jointLimitHi, optionalDHParameter.aMM()*scaling, optionalDHParameter.dMM()*scaling, optionalDHParameter.alphaRadian(), optionalDHParameter.thetaRadian(), visualizationModel, collisionModel, jointValueOffset, p, colChecker, nodeType));
+            result.reset(new RobotNodeHemisphere(newRobot, name, jointLimitLo, jointLimitHi, optionalDHParameter.aMM()*scaling, optionalDHParameter.dMM()*scaling, optionalDHParameter.alphaRadian(), optionalDHParameter.thetaRadian(), visualizationModel, collisionModel, jointValueOffset, p, colChecker, nodeType));
         }
         else
         {
             Eigen::Matrix4f lt = getLocalTransformation();
             simox::math::position(lt) *= scaling;
-            result.reset(new RobotNodeCornelius(newRobot, name, jointLimitLo, jointLimitHi, lt, jointRotationAxis, visualizationModel, collisionModel, jointValueOffset, p, colChecker, nodeType));
+            result.reset(new RobotNodeHemisphere(newRobot, name, jointLimitLo, jointLimitHi, lt, jointRotationAxis, visualizationModel, collisionModel, jointValueOffset, p, colChecker, nodeType));
         }
 
         return result;
     }
 
 
-    bool RobotNodeCornelius::isRotationalJoint() const
+    bool RobotNodeHemisphere::isRotationalJoint() const
     {
         return true;
     }
 
 
-    Eigen::Vector3f RobotNodeCornelius::getJointRotationAxisInJointCoordSystem() const
+    Eigen::Vector3f RobotNodeHemisphere::getJointRotationAxisInJointCoordSystem() const
     {
         return jointRotationAxis;
     }
 
 
-    void RobotNodeCornelius::setJointRotationAxis(const Eigen::Vector3f& newAxis)
+    void RobotNodeHemisphere::setJointRotationAxis(const Eigen::Vector3f& newAxis)
     {
         this->jointRotationAxis = newAxis;
     }
 
 
-    Eigen::Vector3f RobotNodeCornelius::getJointRotationAxis(const SceneObjectPtr coordSystem) const
+    Eigen::Vector3f RobotNodeHemisphere::getJointRotationAxis(const SceneObjectPtr coordSystem) const
     {
         ReadLockPtr lock = getRobot()->getReadLock();
         Eigen::Vector4f result4f = Eigen::Vector4f::Zero();
@@ -238,17 +238,17 @@ namespace VirtualRobot
         return result4f.head<3>();
     }
 
-    void RobotNodeCornelius::checkValidRobotNodeType()
+    void RobotNodeHemisphere::checkValidRobotNodeType()
     {
         RobotNode::checkValidRobotNodeType();
-        THROW_VR_EXCEPTION_IF(nodeType == Body || nodeType == Transform, "RobotNodeCornelius must be a JointNode or a GenericNode");
+        THROW_VR_EXCEPTION_IF(nodeType == Body || nodeType == Transform, "RobotNodeHemisphere must be a JointNode or a GenericNode");
     }
 
 
-    std::string RobotNodeCornelius::_toXML(const std::string& /*modelPath*/)
+    std::string RobotNodeHemisphere::_toXML(const std::string& /*modelPath*/)
     {
         std::stringstream ss;
-        ss << "\t\t<Joint type='Cornelius'>" << std::endl;
+        ss << "\t\t<Joint type='Hemisphere'>" << std::endl;
         ss << "\t\t\t<axis x='" << jointRotationAxis[0] << "' y='" << jointRotationAxis[1] << "' z='" << jointRotationAxis[2] << "'/>" << std::endl;
         ss << "\t\t\t<limits lo='" << jointLimitLo << "' hi='" << jointLimitHi << "' units='radian'/>" << std::endl;
         ss << "\t\t\t<MaxAcceleration value='" << maxAcceleration << "'/>" << std::endl;
@@ -267,13 +267,13 @@ namespace VirtualRobot
     }
 
 
-    float RobotNodeCornelius::getLMTC(float angle)
+    float RobotNodeHemisphere::getLMTC(float angle)
     {
         return std::sqrt(2 - 2 * std::cos(angle));
     }
 
 
-    float RobotNodeCornelius::getLMomentArm(float angle)
+    float RobotNodeHemisphere::getLMomentArm(float angle)
     {
         float b = getLMTC(angle);
         return std::sqrt(4 * std::pow(b, 2) - std::pow(b, 4)) / (2 * b);

@@ -34,9 +34,9 @@
 namespace VirtualRobot
 {
 
-    using RobotNodeCorneliusPtr = std::shared_ptr<class RobotNodeCornelius>;
+    using RobotNodeHemispherePtr = std::shared_ptr<class RobotNodeHemisphere>;
 
-    class VIRTUAL_ROBOT_IMPORT_EXPORT RobotNodeCornelius : public RobotNode
+    class VIRTUAL_ROBOT_IMPORT_EXPORT RobotNodeHemisphere : public RobotNode
     {
     public:
 
@@ -45,7 +45,7 @@ namespace VirtualRobot
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
 
-        RobotNodeCornelius(
+        RobotNodeHemisphere(
                 RobotWeakPtr rob,                                   ///< The robot
                 const std::string& name,                            ///< The name
                 float jointLimitLo,                                 ///< lower joint limit
@@ -58,10 +58,10 @@ namespace VirtualRobot
                 const SceneObject::Physics& p = {},                 ///< physics information
                 CollisionCheckerPtr colChecker = nullptr,           ///< A collision checker instance (if not set, the global col checker is used)
                 RobotNodeType type = Generic,
-                bool isSub = false  ///< Whether this node is a sub node of the top-cornelius node.
+                bool isSub = false  ///< Whether this node is a sub node of the top-hemisphere node.
                 );
 
-        RobotNodeCornelius(
+        RobotNodeHemisphere(
                 RobotWeakPtr rob,                                   ///< The robot
                 const std::string& name,                            ///< The name
                 float jointLimitLo,                                 ///< lower joint limit
@@ -78,7 +78,7 @@ namespace VirtualRobot
                 RobotNodeType type = Generic
                 );
 
-        ~RobotNodeCornelius() override;
+        ~RobotNodeHemisphere() override;
 
 
         bool
@@ -116,12 +116,12 @@ namespace VirtualRobot
 
 
         /**
-         * \brief getLMTC Calculates the spatial distance between the parent of a Cornelius joint
+         * \brief getLMTC Calculates the spatial distance between the parent of a Hemisphere joint
          * and a given child with the joint set to a given angle (e.g. the length of a
          * muscle-tendon complex attached to the parent and the given child).
          *
          * \param child The child node
-         * \param angle The angle of the Cornelius joint in radians
+         * \param angle The angle of the Hemisphere joint in radians
          * \return The spatial distance between parent and given child at given angle
          */
         virtual float
@@ -130,10 +130,10 @@ namespace VirtualRobot
         /**
          * \brief Calculates the spatial length of a moment arm defined through the triangle
          * given by the node's parent, the specified child and the specified angle at the
-         * Cornelius joint.
+         * Hemisphere joint.
          *
          * \param child The child node
-         * \param angle The angle of the Cornelius joint in radians
+         * \param angle The angle of the Hemisphere joint in radians
          * \return The spatial length of the moment arm
          */
         virtual float
@@ -142,7 +142,7 @@ namespace VirtualRobot
 
     protected:
 
-        RobotNodeCornelius();
+        RobotNodeHemisphere();
 
 
         /// Derived classes add custom XML tags here

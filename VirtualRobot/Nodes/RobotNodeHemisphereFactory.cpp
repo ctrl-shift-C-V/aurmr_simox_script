@@ -4,29 +4,29 @@
 * @copyright  2022 Rainer Kartmann
 */
 
-#include "RobotNodeCorneliusFactory.h"
+#include "RobotNodeHemisphereFactory.h"
 #include "RobotNode.h"
-#include "RobotNodeCornelius.h"
+#include "RobotNodeHemisphere.h"
 #include "../CollisionDetection/CollisionModel.h"
 
 
 namespace VirtualRobot
 {
 
-    RobotNodeCorneliusFactory::RobotNodeCorneliusFactory()
+    RobotNodeHemisphereFactory::RobotNodeHemisphereFactory()
     = default;
 
 
-    RobotNodeCorneliusFactory::~RobotNodeCorneliusFactory()
+    RobotNodeHemisphereFactory::~RobotNodeHemisphereFactory()
     = default;
 
 
     /**
-     * This method creates a VirtualRobot::RobotNodeCornelius.
+     * This method creates a VirtualRobot::RobotNodeHemisphere.
      *
-     * \return instance of VirtualRobot::RobotNodeCornelius.
+     * \return instance of VirtualRobot::RobotNodeHemisphere.
      */
-    RobotNodePtr RobotNodeCorneliusFactory::createRobotNode(
+    RobotNodePtr RobotNodeHemisphereFactory::createRobotNode(
             RobotPtr robot,
             const std::string& nodeName,
             VisualizationNodePtr visualizationModel,
@@ -40,8 +40,8 @@ namespace VirtualRobot
             const SceneObject::Physics& physics,
             RobotNode::RobotNodeType rntype) const
     {
-        std::cout << "CREATE NEW CORNELIUS JOINT" << std::endl;
-        return std::make_shared<RobotNodeCornelius>(
+        std::cout << "CREATE NEW HEMISPHERE JOINT" << std::endl;
+        return std::make_shared<RobotNodeHemisphere>(
                     robot,
                     nodeName,
                     limitLow,
@@ -58,11 +58,11 @@ namespace VirtualRobot
 
 
     /**
-     * This method creates a VirtualRobot::RobotNodeCornelius from DH parameters.
+     * This method creates a VirtualRobot::RobotNodeHemisphere from DH parameters.
      *
-     * \return instance of VirtualRobot::RobotNodeCornelius.
+     * \return instance of VirtualRobot::RobotNodeHemisphere.
      */
-    RobotNodePtr RobotNodeCorneliusFactory::createRobotNodeDH(
+    RobotNodePtr RobotNodeHemisphereFactory::createRobotNodeDH(
             RobotPtr robot,
             const std::string& nodeName,
             VisualizationNodePtr visualizationModel,
@@ -74,8 +74,8 @@ namespace VirtualRobot
             const SceneObject::Physics& physics,
             RobotNode::RobotNodeType rntype) const
     {
-        std::cout << "CREATE NEW CORNELIUS JOINT DH" << std::endl;
-        return std::make_shared<RobotNodeCornelius>(
+        std::cout << "CREATE NEW HEMISPHERE JOINT DH" << std::endl;
+        return std::make_shared<RobotNodeHemisphere>(
                     robot,
                     nodeName,
                     limitLow,
@@ -96,21 +96,21 @@ namespace VirtualRobot
     /**
      * register this class in the super class factory
      */
-    RobotNodeFactory::SubClassRegistry RobotNodeCorneliusFactory::registry(RobotNodeCorneliusFactory::getName(), &RobotNodeCorneliusFactory::createInstance);
+    RobotNodeFactory::SubClassRegistry RobotNodeHemisphereFactory::registry(RobotNodeHemisphereFactory::getName(), &RobotNodeHemisphereFactory::createInstance);
 
 
-    std::string RobotNodeCorneliusFactory::getName()
+    std::string RobotNodeHemisphereFactory::getName()
     {
-        return "cornelius";
+        return "hemisphere";
     }
 
 
     /**
-     * \return new instance of RobotNodeCorneliusFactory.
+     * \return new instance of RobotNodeHemisphereFactory.
      */
-    std::shared_ptr<RobotNodeFactory> RobotNodeCorneliusFactory::createInstance(void*)
+    std::shared_ptr<RobotNodeFactory> RobotNodeHemisphereFactory::createInstance(void*)
     {
-        return std::make_shared<RobotNodeCorneliusFactory>();
+        return std::make_shared<RobotNodeHemisphereFactory>();
     }
 
 } // namespace VirtualRobot
