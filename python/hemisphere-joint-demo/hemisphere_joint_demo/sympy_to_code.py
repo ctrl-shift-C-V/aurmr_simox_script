@@ -19,17 +19,30 @@ class Line:
 
     @classmethod
     def lhs_from_expr(cls, expr: sp.Basic) -> str:
-        lhs = ("_" + str(expr)
-               .replace(" ", "")
-               .replace("**", "_pow_")
-               .replace("+", "_add_")
-               .replace("-", "_add_")
-               .replace("*", "_mul_")
-               .replace("/", "_div_")
-               .replace(".", "_dot_")
-               .replace("(", "__lpar_")
-               .replace(")", "_rpar__")
-               )
+        lhs = "_" + str(expr)
+        long = False
+        if long:
+            lhs = (lhs.replace(" ", "")
+                   .replace("**", "_pow_")
+                   .replace("+", "_add_")
+                   .replace("-", "_sub_")
+                   .replace("*", "_mul_")
+                   .replace("/", "_div_")
+                   .replace(".", "_dot_")
+                   .replace("(", "__lpar_")
+                   .replace(")", "_rpar__")
+                   )
+        else:
+            lhs = (lhs.replace(" ", "")
+                   .replace("**", "_p_")
+                   .replace("+", "_a_")
+                   .replace("-", "_s_")
+                   .replace("*", "_m_")
+                   .replace("/", "_d_")
+                   .replace(".", "_t_")
+                   .replace("(", "_l_")
+                   .replace(")", "_r_")
+                   )
         return lhs
 
     @classmethod
