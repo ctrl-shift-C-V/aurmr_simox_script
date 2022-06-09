@@ -18,10 +18,14 @@ using VirtualRobot::RuntimeEnvironment;
  */
 int main(int argc, char* argv[])
 {
+    const Eigen::IOFormat iof(5, 0, " ", "\n", "    [", "]", "", "");
+
     RuntimeEnvironment::setCaption("Convert .iv to .wrl files");
 
     RuntimeEnvironment::considerFlag(
                 "verbose", "Enable verbose output.");
+    RuntimeEnvironment::considerFlag(
+                "debug", "Branch to debug code.");
 
     RuntimeEnvironment::processCommandLine(argc, argv);
 
@@ -35,66 +39,85 @@ int main(int argc, char* argv[])
     }
 
     const bool verbose = RuntimeEnvironment::hasFlag("verbose");
+    const bool debug = RuntimeEnvironment::hasFlag("debug");
 
     const double lever = 1, theta0 = simox::math::deg_to_rad(25.);
     std::cout << "(lever, theta0) = (" << lever << ", " << theta0 << ") " << std::endl;
 
-    std::vector<double> a1s, a2s;
-    int num = 100;
-    double aMin = -0.7, aMax=0.7;
-    for (int i = 0; i < num; ++i)
+    if (not debug)
     {
-        double value = simox::math::rescale(double(i), double(0), double(num), aMin, aMax);
-        a1s.push_back(value);
-        a2s.push_back(value);
-    }
-
-
-    using time_point = std::chrono::system_clock::time_point;
-
-    std::vector<double> durationsUs;
-    durationsUs.reserve(a1s.size() * a2s.size());
-
-    for (double a1 : a1s)
-    {
-        for (double a2 : a2s)
+        std::vector<double> a1s, a2s;
+        int num = 100;
+        double aMin = -0.7, aMax=0.7;
+        for (int i = 0; i < num; ++i)
         {
-            const time_point start = std::chrono::system_clock::now();
+            double value = simox::math::rescale(double(i), double(0), double(num), aMin, aMax);
+            a1s.push_back(value);
+            a2s.push_back(value);
+        }
 
-            VirtualRobot::hemisphere::Expressions expr;
-            expr.compute(a1, a2, lever, theta0);
 
-            const Eigen::Vector3d pos = VirtualRobot::hemisphere::getEndEffectorPosition(expr);
-            const Eigen::Matrix3d ori = VirtualRobot::hemisphere::getEndEffectorOrientation(expr);
-            const Eigen::Matrix<double, 6, 2> jacobian = VirtualRobot::hemisphere::getJacobian(expr);
+        using time_point = std::chrono::system_clock::time_point;
 
-            const time_point end = std::chrono::system_clock::now();
-            using duration = std::chrono::nanoseconds;
-            durationsUs.push_back(std::chrono::duration_cast<duration>(end - start).count() / 1000.f);
+        std::vector<double> durationsUs;
+        durationsUs.reserve(a1s.size() * a2s.size());
 
-            if (verbose)
+        for (double a1 : a1s)
+        {
+            for (double a2 : a2s)
             {
-                Eigen::IOFormat iof(5, 0, " ", "\n", "    [", "]", "", "");
-                std::cout << "(a1, a2) = (" << a1 << ", " << a2 << ")"
-                          << "\n ->"
-                          << "\n  pos = \n" << pos.transpose().format(iof)
-                          << "\n  ori = \n" << ori.format(iof)
-                          << "\n  jac = \n" << jacobian.format(iof)
-                          << std::endl;
+                const time_point start = std::chrono::system_clock::now();
+
+                VirtualRobot::hemisphere::Expressions expr;
+                expr.compute(a1, a2, lever, theta0);
+
+                const Eigen::Vector3d pos = VirtualRobot::hemisphere::getEndEffectorPosition(expr);
+                const Eigen::Matrix3d ori = VirtualRobot::hemisphere::getEndEffectorOrientation(expr);
+                const Eigen::Matrix<double, 6, 2> jacobian = VirtualRobot::hemisphere::getJacobian(expr);
+
+                const time_point end = std::chrono::system_clock::now();
+                using duration = std::chrono::nanoseconds;
+                durationsUs.push_back(std::chrono::duration_cast<duration>(end - start).count() / 1000.f);
+
+                if (verbose)
+                {
+                    std::cout << "(a1, a2) = (" << a1 << ", " << a2 << ")"
+                              << "\n ->"
+                              << "\n  pos = \n" << pos.transpose().format(iof)
+                              << "\n  ori = \n" << ori.format(iof)
+                              << "\n  jac = \n" << jacobian.format(iof)
+                              << std::endl;
+                }
             }
         }
+
+        double mean = simox::math::mean(durationsUs);
+        double stddev = simox::math::stddev(durationsUs, mean);
+        double min = simox::math::min(durationsUs);
+        double max = simox::math::max(durationsUs);
+
+        const std::string unit = " us";
+        std::cout << "Durations:"
+                  << " " << mean << " +- " << stddev << unit
+                  << ", range: [" << min << unit << " to " << max << unit <<"]"
+                  << std::endl;
     }
+    else
+    {
+        double offset = std::asin(theta0);
 
-    double mean = simox::math::mean(durationsUs);
-    double stddev = simox::math::stddev(durationsUs, mean);
-    double min = simox::math::min(durationsUs);
-    double max = simox::math::max(durationsUs);
+        double a1 = 0, a2 = 0;
+        a1 += offset;
+        a2 += offset;
 
-    const std::string unit = " us";
-    std::cout << "Durations:"
-              << " " << mean << " +- " << stddev << unit
-              << ", range: [" << min << unit << " to " << max << unit <<"]"
-              << std::endl;
+        VirtualRobot::hemisphere::Expressions expr;
+        expr.compute(a1, a2, lever, theta0);
+
+        const Eigen::Vector3d pos = VirtualRobot::hemisphere::getEndEffectorPosition(expr);
+        std::cout << "\n  pos = \n" << pos.transpose().format(iof)
+                  << std::endl;
+
+    }
 
     return 0;
 }

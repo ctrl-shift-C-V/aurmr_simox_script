@@ -6,8 +6,13 @@ namespace VirtualRobot
 
     Eigen::Vector3d hemisphere::getEndEffectorPosition(const Expressions& expr)
     {
-        return Eigen::Vector3d {expr.ex, expr.ey, expr.ez};
+        return Eigen::Vector3d {
+            expr.ex,
+            expr.ey,
+            expr.ez
+        };
     }
+
 
     Eigen::Matrix3d hemisphere::getEndEffectorOrientation(const Expressions& expr)
     {
@@ -18,6 +23,7 @@ namespace VirtualRobot
                 expr.exz, expr.eyz, expr.ezz;
         return ori;
     }
+
 
     Eigen::Matrix<double, 6, 2> hemisphere::getJacobian(const Expressions& expr)
     {
