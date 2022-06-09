@@ -96,6 +96,10 @@ class SympyToCpp:
     depth = 0
     indent = " " * 4
 
+    def build(self):
+        for name, expr in self.function_results.items():
+            expr_to_cpp(expr, self)
+
     def make_compute_args(self):
         return ", ".join(f"double {arg}" for arg in self.function_args)
 
@@ -221,10 +225,6 @@ class SympyToCpp:
 
     def _line_sum(self, *args):
         return sum(args, [])
-
-    def build(self):
-        for name, expr in self.function_results.items():
-            expr_to_cpp(expr, self)
 
 
 def expr_to_cpp(
