@@ -253,15 +253,16 @@ def expr_to_cpp(
         if isinstance(expr, sp.Symbol):
             # Must be part of local variables.
             assert expr in cpp.function_args
+            return str(expr)
 
         elif isinstance(expr, sp.Number):
             # Will be turned into a literal.
-            pass
+            # The number can also be something like (1/2), where "1 / 2" would be 0 in C++.
+            # So we pre-evaluate these constants in Python, and pass the result literal to C++.
+            return str(eval(str(expr)))
 
         else:
             raise TypeError(f"Got expr {expr} of type {type(expr)}")
-
-        return str(expr)
 
     else:
         # Non-leaf
