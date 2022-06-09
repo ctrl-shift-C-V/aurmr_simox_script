@@ -39,6 +39,7 @@ class Data:
         self.lever = 1
         self.theta_0 = np.deg2rad(25)
         self.radius = 2 * np.sin(self.theta_0) * self.lever
+        self.actuator_offset = np.arcsin(self.theta_0)
 
         self.mode = self.Mode.FK
 
@@ -56,12 +57,16 @@ class Data:
 
     def fk(self):
         print("-" * 50)
-        a1, a2 = self.actuator_pos + np.arcsin(self.theta_0)
+        a1, a2 = self.actuator_pos + self.actuator_offset
 
         # KIT-Wrist constants
         lever = self.lever
         theta_0 = self.theta_0
         radius = self.radius
+        print(f"Lever: {lever}")
+        print(f"theta0: {theta_0}")
+        print(f"radius: {radius}")
+        print(f"actuator_offset: {self.actuator_offset}")
         print(f"(a1, a2) = ({a1}, {a2})")
 
         do_fk_pos_azim_zenith = False

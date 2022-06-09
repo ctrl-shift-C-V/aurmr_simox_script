@@ -5,7 +5,7 @@ from numpy import pi, sin, cos, sqrt, arcsin, arctan2
 from .terms import CommonTerms
 
 
-def fk(a1, a2, L, T_0):
+def fk_pos(a1, a2, L, T_0):
     """
     From:
     https://colab.research.google.com/drive/11faUc8pS1yWxFrnmt05VqpDsqOwEi_dg#scrollTo=za3fZw9Rq5d9&line=1&uniqifier=1
