@@ -71,8 +71,8 @@ int main(int argc, char* argv[])
                 VirtualRobot::hemisphere::Expressions expr;
                 expr.compute(a1, a2, lever, theta0);
 
-                const Eigen::Vector3d pos = VirtualRobot::hemisphere::getEndEffectorPosition(expr);
-                const Eigen::Matrix3d ori = VirtualRobot::hemisphere::getEndEffectorOrientation(expr);
+                const Eigen::Vector3d pos = VirtualRobot::hemisphere::getEndEffectorTranslation(expr);
+                const Eigen::Matrix3d ori = VirtualRobot::hemisphere::getEndEffectorRotation(expr);
                 const Eigen::Matrix<double, 6, 2> jacobian = VirtualRobot::hemisphere::getJacobian(expr);
 
                 const time_point end = std::chrono::system_clock::now();
@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
         VirtualRobot::hemisphere::Expressions expr;
         expr.compute(a1, a2, lever, theta0);
 
-        const Eigen::Vector3d pos = VirtualRobot::hemisphere::getEndEffectorPosition(expr);
+        const Eigen::Vector3d pos = VirtualRobot::hemisphere::getEndEffectorTranslation(expr);
         std::cout << "\n  pos = \n" << pos.transpose().format(iof)
                   << std::endl;
 

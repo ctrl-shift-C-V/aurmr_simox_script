@@ -4,7 +4,7 @@
 namespace VirtualRobot
 {
 
-    Eigen::Vector3d hemisphere::getEndEffectorPosition(const Expressions& expr)
+    Eigen::Vector3d hemisphere::getEndEffectorTranslation(const Expressions& expr)
     {
         return Eigen::Vector3d {
             expr.ex,
@@ -14,7 +14,7 @@ namespace VirtualRobot
     }
 
 
-    Eigen::Matrix3d hemisphere::getEndEffectorOrientation(const Expressions& expr)
+    Eigen::Matrix3d hemisphere::getEndEffectorRotation(const Expressions& expr)
     {
         // r_wrist_to_base = np.array([[exx, eyx, ezx], [exy, eyy, ezy], [exz, eyz, ezz]])
         Eigen::Matrix3d ori;
