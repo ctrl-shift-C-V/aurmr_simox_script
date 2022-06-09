@@ -20,7 +20,60 @@ def fk_pos():
     """
     ex = 2 * lever * (lever ** 5 * sin(theta0) - lever ** 3 * a1 * a2 * sin(theta0) - lever ** 3 * a2 ** 2 * sin(theta0) + lever * a1 * a2 ** 3 * sin(theta0) - a2 * sqrt(-2 * lever ** 8 * sin(theta0) ** 2 + lever ** 8 + 2 * lever ** 6 * a1 ** 2 * sin(theta0) ** 2 - lever ** 6 * a1 ** 2 + 2 * lever ** 6 * a1 * a2 * sin(theta0) ** 2 + 2 * lever ** 6 * a2 ** 2 * sin(theta0) ** 2 - lever ** 6 * a2 ** 2 - 2 * lever ** 4 * a1 ** 3 * a2 * sin(theta0) ** 2 - 2 * lever ** 4 * a1 ** 2 * a2 ** 2 * sin(theta0) ** 2 - 2 * lever ** 4 * a1 * a2 ** 3 * sin(theta0) ** 2 + lever ** 2 * a1 ** 4 * a2 ** 2 + 2 * lever ** 2 * a1 ** 3 * a2 ** 3 * sin(theta0) ** 2 + lever ** 2 * a1 ** 2 * a2 ** 4 - a1 ** 4 * a2 ** 4)) * sin(theta0) / (sqrt(lever ** 2 - a2 ** 2) * (lever ** 4 - a1 ** 2 * a2 ** 2))
     ey = 2 * lever * (lever ** 5 * sin(theta0) - lever ** 3 * a1 ** 2 * sin(theta0) - lever ** 3 * a1 * a2 * sin(theta0) + lever * a1 ** 3 * a2 * sin(theta0) - a1 * sqrt(-2 * lever ** 8 * sin(theta0) ** 2 + lever ** 8 + 2 * lever ** 6 * a1 ** 2 * sin(theta0) ** 2 - lever ** 6 * a1 ** 2 + 2 * lever ** 6 * a1 * a2 * sin(theta0) ** 2 + 2 * lever ** 6 * a2 ** 2 * sin(theta0) ** 2 - lever ** 6 * a2 ** 2 - 2 * lever ** 4 * a1 ** 3 * a2 * sin(theta0) ** 2 - 2 * lever ** 4 * a1 ** 2 * a2 ** 2 * sin(theta0) ** 2 - 2 * lever ** 4 * a1 * a2 ** 3 * sin(theta0) ** 2 + lever ** 2 * a1 ** 4 * a2 ** 2 + 2 * lever ** 2 * a1 ** 3 * a2 ** 3 * sin(theta0) ** 2 + lever ** 2 * a1 ** 2 * a2 ** 4 - a1 ** 4 * a2 ** 4)) * sin(theta0) / (sqrt(lever ** 2 - a1 ** 2) * (lever ** 4 - a1 ** 2 * a2 ** 2))
-    ez = 2 * lever * (lever * (lever ** 4 - a1 ** 2 * a2 ** 2) * (a1 + a2) * sin(theta0) + (lever ** 2 + a1 * a2) * sqrt(lever ** 2 * (lever ** 2 * a1 + lever ** 2 * a2 - a1 ** 2 * a2 - a1 * a2 ** 2) ** 2 * sin(theta0) ** 2 + (-lever ** 4 + a1 ** 2 * a2 ** 2) * (-2 * lever ** 4 * cos(theta0) ** 2 + lever ** 4 + lever ** 2 * a1 ** 2 * cos(theta0) ** 2 + lever ** 2 * a2 ** 2 * cos(theta0) ** 2 - a1 ** 2 * a2 ** 2))) * sin(theta0) / ((lever ** 2 + a1 * a2) * (lever ** 4 - a1 ** 2 * a2 ** 2))
+    ez = (
+            2
+            * lever
+            * (
+                lever
+                * (
+                    lever ** 4
+                    - a1 ** 2 * a2 ** 2
+                )
+                * (a1 + a2)
+                * sin(theta0)
+                + (  # _a1_m_a2_a_lever_p_2
+                    lever ** 2  # _lever_p_2
+                    + a1 * a2   # _a1_m_a2
+                )
+                * sqrt(
+                    lever ** 2
+                    * (
+                        lever ** 2 * a1
+                        + lever ** 2 * a2
+                        - a1 ** 2 * a2
+                        - a1 * a2 ** 2
+                    ) ** 2
+                    * sin(theta0) ** 2
+                    + (-lever ** 4 + a1 ** 2 * a2 ** 2)
+                    * (
+                        -2
+                        * lever ** 4
+                        * cos(theta0) ** 2
+                        + lever ** 4
+                        + lever ** 2
+                        * a1 ** 2
+                        * cos(theta0) ** 2
+                        + lever ** 2
+                        * a2 ** 2
+                        * cos(theta0) ** 2
+                        - a1 ** 2
+                        * a2 ** 2
+                    )
+                )
+            )
+            * sin(theta0)  # _sin_l_theta0_r_
+            / (
+                (  # _1_d__l_a1_m_a2_a_lever_p_2_r_
+                    lever ** 2
+                    + a1 * a2
+                )
+                * (  # _1_d__l__s_a1_p_2_m_a2_p_2_a_lever_p_4_r_
+                    lever ** 4
+                    - a1 ** 2
+                    * a2 ** 2
+                )
+            )
+    )
     return dict(ex=ex, ey=ey, ez=ez,)
 
 
@@ -136,3 +189,20 @@ if not test_mode and __name__ == '__main__':
     print(cpp.write_lines(source_lines, source_path))
 
     print("Done.")
+
+
+if test_mode and __name__ == '__main__':
+    import numpy as np
+    from numpy import sin, cos, sqrt
+
+    lever = 1
+    theta0 = np.deg2rad(25)
+    actuator_offset = np.arcsin(theta0)
+
+    a = np.array([0., 0.])
+    a = a + actuator_offset
+    a1, a2 = a
+
+    pos = fk_pos()
+    print(pos)
+
