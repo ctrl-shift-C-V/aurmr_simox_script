@@ -50,3 +50,4 @@ moc_*
 
 # clangd
 .cache
+.clang-format
