@@ -51,3 +51,4 @@ moc_*
 # clangd
 .cache
 .clang-format
+.clang-tidy
