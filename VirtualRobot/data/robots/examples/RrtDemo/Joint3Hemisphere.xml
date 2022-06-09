@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Robot Type="Simple3DoFRobotWithCorneliusJoint" StandardName="Simple3DoFRobotWithCorneliusJoint" RootNode="Start">
+<Robot Type="Simple3DoFRobotWithHemisphereJoint" StandardName="Simple3DoFRobotWithHemisphereJoint" RootNode="Start">
 	
 	<RobotNode name="Start">
 		<Visualization enable="false">
@@ -18,14 +18,14 @@
 			 <File type="Inventor">joint_rot_sphere.iv</File>
 			 <UseAsCollisionModel/>
 		</Visualization>
-        <Child name="Joint2Cornelius"/>
+        <Child name="Joint2Hemisphere"/>
 	</RobotNode>
 
-    <RobotNode name="Joint2Cornelius">
+    <RobotNode name="Joint2Hemisphere">
 		<Transform>
 			<DH a="300" d="0" theta="0" alpha="90" units="degree"/>
 		</Transform>
-        <Joint type="cornelius">
+        <Joint type="hemisphere">
 			<Limits unit="degree" lo="0" hi="360"/>
             <!--DH a="300" d="0" theta="0" alpha="0" units="degree"/-->
         </Joint>
@@ -62,13 +62,13 @@
 
 	<RobotNodeSet name="AllJoints" kinematicRoot="Joint1">
 		<Node name="Joint1"/>
-        <Node name="Joint2Cornelius"/>
+        <Node name="Joint2Hemisphere"/>
         <Node name="Joint3"/>
 	</RobotNodeSet>
 
 	<RobotNodeSet name="CollisionModel">
 		<Node name="Joint1"/>
-        <Node name="Joint2Cornelius"/>
+        <Node name="Joint2Hemisphere"/>
         <Node name="Joint3"/>
   	<Node name="EndPoint"/>
 	</RobotNodeSet>
