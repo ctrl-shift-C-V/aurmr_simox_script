@@ -1,7 +1,7 @@
 import os
 import os.path
 
-from sympy import symbols, sin, cos, sqrt, Integer
+from sympy import symbols, sin, cos, sqrt
 
 from hemisphere_joint_demo.sympy_to_code import SympyToCpp
 
@@ -21,14 +21,16 @@ def fk_pos():
     ex = 2 * lever * (lever ** 5 * sin(theta0) - lever ** 3 * a1 * a2 * sin(theta0) - lever ** 3 * a2 ** 2 * sin(theta0) + lever * a1 * a2 ** 3 * sin(theta0) - a2 * sqrt(-2 * lever ** 8 * sin(theta0) ** 2 + lever ** 8 + 2 * lever ** 6 * a1 ** 2 * sin(theta0) ** 2 - lever ** 6 * a1 ** 2 + 2 * lever ** 6 * a1 * a2 * sin(theta0) ** 2 + 2 * lever ** 6 * a2 ** 2 * sin(theta0) ** 2 - lever ** 6 * a2 ** 2 - 2 * lever ** 4 * a1 ** 3 * a2 * sin(theta0) ** 2 - 2 * lever ** 4 * a1 ** 2 * a2 ** 2 * sin(theta0) ** 2 - 2 * lever ** 4 * a1 * a2 ** 3 * sin(theta0) ** 2 + lever ** 2 * a1 ** 4 * a2 ** 2 + 2 * lever ** 2 * a1 ** 3 * a2 ** 3 * sin(theta0) ** 2 + lever ** 2 * a1 ** 2 * a2 ** 4 - a1 ** 4 * a2 ** 4)) * sin(theta0) / (sqrt(lever ** 2 - a2 ** 2) * (lever ** 4 - a1 ** 2 * a2 ** 2))
     ey = 2 * lever * (lever ** 5 * sin(theta0) - lever ** 3 * a1 ** 2 * sin(theta0) - lever ** 3 * a1 * a2 * sin(theta0) + lever * a1 ** 3 * a2 * sin(theta0) - a1 * sqrt(-2 * lever ** 8 * sin(theta0) ** 2 + lever ** 8 + 2 * lever ** 6 * a1 ** 2 * sin(theta0) ** 2 - lever ** 6 * a1 ** 2 + 2 * lever ** 6 * a1 * a2 * sin(theta0) ** 2 + 2 * lever ** 6 * a2 ** 2 * sin(theta0) ** 2 - lever ** 6 * a2 ** 2 - 2 * lever ** 4 * a1 ** 3 * a2 * sin(theta0) ** 2 - 2 * lever ** 4 * a1 ** 2 * a2 ** 2 * sin(theta0) ** 2 - 2 * lever ** 4 * a1 * a2 ** 3 * sin(theta0) ** 2 + lever ** 2 * a1 ** 4 * a2 ** 2 + 2 * lever ** 2 * a1 ** 3 * a2 ** 3 * sin(theta0) ** 2 + lever ** 2 * a1 ** 2 * a2 ** 4 - a1 ** 4 * a2 ** 4)) * sin(theta0) / (sqrt(lever ** 2 - a1 ** 2) * (lever ** 4 - a1 ** 2 * a2 ** 2))
     ez = 2 * lever * (lever * (lever ** 4 - a1 ** 2 * a2 ** 2) * (a1 + a2) * sin(theta0) + (lever ** 2 + a1 * a2) * sqrt(lever ** 2 * (lever ** 2 * a1 + lever ** 2 * a2 - a1 ** 2 * a2 - a1 * a2 ** 2) ** 2 * sin(theta0) ** 2 + (-lever ** 4 + a1 ** 2 * a2 ** 2) * (-2 * lever ** 4 * cos(theta0) ** 2 + lever ** 4 + lever ** 2 * a1 ** 2 * cos(theta0) ** 2 + lever ** 2 * a2 ** 2 * cos(theta0) ** 2 - a1 ** 2 * a2 ** 2))) * sin(theta0) / ((lever ** 2 + a1 * a2) * (lever ** 4 - a1 ** 2 * a2 ** 2))
-    return ex, ey, ez
+    return dict(ex=ex, ey=ey, ez=ez,)
 
 
-def fk_ori():
+def fk_ori(pos):
     """
     EEF orientation
     From https://colab.research.google.com/drive/11faUc8pS1yWxFrnmt05VqpDsqOwEi_dg#scrollTo=aNSv-3Ftv3ps&line=2&uniqifier=1
     """
+    ex, ey, ez = pos["ex"], pos["ey"], pos["ez"]
+
     exx = 1 - ex ** 2 / (2 * lever ** 2 * sin(theta0) ** 2)
     exy = -ex * ey / (2 * lever ** 2 * sin(theta0) ** 2)
     exz = -ex * sqrt(4 * lever ** 2 * sin(theta0) ** 2 - ex ** 2 - ey ** 2) / (2 * lever ** 2 * sin(theta0) ** 2)
@@ -41,7 +43,11 @@ def fk_ori():
     ezy = ey * sqrt(4 * lever ** 2 * sin(theta0) ** 2 - ex ** 2 - ey ** 2) / (2 * lever ** 2 * sin(theta0) ** 2)
     ezz = (2 * lever ** 2 - ex ** 2 / sin(theta0) ** 2 - ey ** 2 / sin(theta0) ** 2) / (2 * lever ** 2)
 
-    return exx, exy, exz, eyx, eyy, eyz, ezx, ezy, ezz
+    return dict(
+        exx=exx, exy=exy, exz=exz,
+        eyx=eyx, eyy=eyy, eyz=eyz,
+        ezx=ezx, ezy=ezy, ezz=ezz,
+    )
 
 
 def jacobian_pos():
@@ -58,7 +64,11 @@ def jacobian_pos():
     jz1 = 4*lever*a1*a2**2*(lever*(lever**4 - a1**2*a2**2)*(a1 + a2)*sin(theta0) + (lever**2 + a1*a2)*sqrt(lever**2*(lever**2*a1 + lever**2*a2 - a1**2*a2 - a1*a2**2)**2*sin(theta0)**2 + (-lever**4 + a1**2*a2**2)*(-2*lever**4*cos(theta0)**2 + lever**4 + lever**2*a1**2*cos(theta0)**2 + lever**2*a2**2*cos(theta0)**2 - a1**2*a2**2)))*sin(theta0)/((lever**2 + a1*a2)*(lever**4 - a1**2*a2**2)**2) - 2*lever*a2*(lever*(lever**4 - a1**2*a2**2)*(a1 + a2)*sin(theta0) + (lever**2 + a1*a2)*sqrt(lever**2*(lever**2*a1 + lever**2*a2 - a1**2*a2 - a1*a2**2)**2*sin(theta0)**2 + (-lever**4 + a1**2*a2**2)*(-2*lever**4*cos(theta0)**2 + lever**4 + lever**2*a1**2*cos(theta0)**2 + lever**2*a2**2*cos(theta0)**2 - a1**2*a2**2)))*sin(theta0)/((lever**2 + a1*a2)**2*(lever**4 - a1**2*a2**2)) + 2*lever*(-2*lever*a1*a2**2*(a1 + a2)*sin(theta0) + lever*(lever**4 - a1**2*a2**2)*sin(theta0) + a2*sqrt(lever**2*(lever**2*a1 + lever**2*a2 - a1**2*a2 - a1*a2**2)**2*sin(theta0)**2 + (-lever**4 + a1**2*a2**2)*(-2*lever**4*cos(theta0)**2 + lever**4 + lever**2*a1**2*cos(theta0)**2 + lever**2*a2**2*cos(theta0)**2 - a1**2*a2**2)) + (lever**2 + a1*a2)*(lever**2*(2*lever**2 - 4*a1*a2 - 2*a2**2)*(lever**2*a1 + lever**2*a2 - a1**2*a2 - a1*a2**2)*sin(theta0)**2/2 + a1*a2**2*(-2*lever**4*cos(theta0)**2 + lever**4 + lever**2*a1**2*cos(theta0)**2 + lever**2*a2**2*cos(theta0)**2 - a1**2*a2**2) + (-lever**4 + a1**2*a2**2)*(2*lever**2*a1*cos(theta0)**2 - 2*a1*a2**2)/2)/sqrt(lever**2*(lever**2*a1 + lever**2*a2 - a1**2*a2 - a1*a2**2)**2*sin(theta0)**2 + (-lever**4 + a1**2*a2**2)*(-2*lever**4*cos(theta0)**2 + lever**4 + lever**2*a1**2*cos(theta0)**2 + lever**2*a2**2*cos(theta0)**2 - a1**2*a2**2)))*sin(theta0)/((lever**2 + a1*a2)*(lever**4 - a1**2*a2**2))
     jz2 = 4*lever*a1**2*a2*(lever*(lever**4 - a1**2*a2**2)*(a1 + a2)*sin(theta0) + (lever**2 + a1*a2)*sqrt(lever**2*(lever**2*a1 + lever**2*a2 - a1**2*a2 - a1*a2**2)**2*sin(theta0)**2 + (-lever**4 + a1**2*a2**2)*(-2*lever**4*cos(theta0)**2 + lever**4 + lever**2*a1**2*cos(theta0)**2 + lever**2*a2**2*cos(theta0)**2 - a1**2*a2**2)))*sin(theta0)/((lever**2 + a1*a2)*(lever**4 - a1**2*a2**2)**2) - 2*lever*a1*(lever*(lever**4 - a1**2*a2**2)*(a1 + a2)*sin(theta0) + (lever**2 + a1*a2)*sqrt(lever**2*(lever**2*a1 + lever**2*a2 - a1**2*a2 - a1*a2**2)**2*sin(theta0)**2 + (-lever**4 + a1**2*a2**2)*(-2*lever**4*cos(theta0)**2 + lever**4 + lever**2*a1**2*cos(theta0)**2 + lever**2*a2**2*cos(theta0)**2 - a1**2*a2**2)))*sin(theta0)/((lever**2 + a1*a2)**2*(lever**4 - a1**2*a2**2)) + 2*lever*(-2*lever*a1**2*a2*(a1 + a2)*sin(theta0) + lever*(lever**4 - a1**2*a2**2)*sin(theta0) + a1*sqrt(lever**2*(lever**2*a1 + lever**2*a2 - a1**2*a2 - a1*a2**2)**2*sin(theta0)**2 + (-lever**4 + a1**2*a2**2)*(-2*lever**4*cos(theta0)**2 + lever**4 + lever**2*a1**2*cos(theta0)**2 + lever**2*a2**2*cos(theta0)**2 - a1**2*a2**2)) + (lever**2 + a1*a2)*(lever**2*(2*lever**2 - 2*a1**2 - 4*a1*a2)*(lever**2*a1 + lever**2*a2 - a1**2*a2 - a1*a2**2)*sin(theta0)**2/2 + a1**2*a2*(-2*lever**4*cos(theta0)**2 + lever**4 + lever**2*a1**2*cos(theta0)**2 + lever**2*a2**2*cos(theta0)**2 - a1**2*a2**2) + (-lever**4 + a1**2*a2**2)*(2*lever**2*a2*cos(theta0)**2 - 2*a1**2*a2)/2)/sqrt(lever**2*(lever**2*a1 + lever**2*a2 - a1**2*a2 - a1*a2**2)**2*sin(theta0)**2 + (-lever**4 + a1**2*a2**2)*(-2*lever**4*cos(theta0)**2 + lever**4 + lever**2*a1**2*cos(theta0)**2 + lever**2*a2**2*cos(theta0)**2 - a1**2*a2**2)))*sin(theta0)/((lever**2 + a1*a2)*(lever**4 - a1**2*a2**2))
 
-    return jx1, jx2, jy1, jy2, jz1, jz2
+    return dict(
+        jx1=jx1, jx2=jx2,
+        jy1=jy1, jy2=jy2,
+        jz1=jz1, jz2=jz2,
+    )
 
 
 def jacobian_ori():
@@ -75,37 +85,35 @@ def jacobian_ori():
     jrz1 = lever ** 2
     jrz2 = lever ** 2
 
-    return jrx1, jrx2, jry1, jry2, jrz1, jrz2
+    return dict(
+        jrx1=jrx1, jrx2=jrx2,
+        jry1=jry1, jry2=jry2,
+        jrz1=jrz1, jrz2=jrz2,
+    )
 
 
-if __name__ == '__main__':
+test_mode = False
+
+if not test_mode and __name__ == '__main__':
 
     output_dir = os.path.expandvars("$simox__PATH/VirtualRobot/Nodes/HemisphereJoint/")
     assert os.path.isdir(output_dir)
     name = "Expressions"
 
-    ex, ey, ez = fk_pos()
-    exx, exy, exz, eyx, eyy, eyz, ezx, ezy, ezz = fk_ori()
-    jx1, jx2, jy1, jy2, jz1, jz2 = jacobian_pos()
-    jrx1, jrx2, jry1, jry2, jrz1, jrz2 = jacobian_ori()
+    pos = fk_pos()
+    ori = fk_ori(pos)
+    jac_pos = jacobian_pos()
+    jac_ori = jacobian_ori()
 
     cpp = SympyToCpp(
         name=name,
         function_args=[a1, a2, lever, theta0],
         function_results=dict(
-            ex=ex, ey=ey, ez=ez,
-
-            exx=exx, exy=exy, exz=exz,
-            eyx=eyx, eyy=eyy, eyz=eyz,
-            ezx=ezx, ezy=ezy, ezz=ezz,
-
-            jx1=jx1, jx2=jx2,
-            jy1=jy1, jy2=jy2,
-            jz1=jz1, jz2=jz2,
-
-            jrx1=jrx1, jrx2=jrx2,
-            jry1=jry1, jry2=jry2,
-            jrz1=jrz1, jrz2=jrz2,
+            # ez=pos["ez"],
+            **pos,
+            **ori,
+            **jac_pos,
+            **jac_ori,
         )
     )
     cpp.build()
