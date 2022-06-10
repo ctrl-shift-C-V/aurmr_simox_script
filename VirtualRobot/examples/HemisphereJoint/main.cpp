@@ -6,8 +6,7 @@
 #include <SimoxUtility/math/statistics/measures.h>
 
 #include <VirtualRobot/RuntimeEnvironment.h>
-#include <VirtualRobot/Nodes/HemisphereJoint/Expressions.h>
-#include <VirtualRobot/Nodes/HemisphereJoint/operations.h>
+#include <VirtualRobot/Nodes/HemisphereJoint/Joint.h>
 
 
 using VirtualRobot::RuntimeEnvironment;
@@ -68,12 +67,12 @@ int main(int argc, char* argv[])
             {
                 const time_point start = std::chrono::system_clock::now();
 
-                VirtualRobot::hemisphere::Expressions expr;
-                expr.compute(a1, a2, lever, theta0);
+                VirtualRobot::hemisphere::Joint joint;
+                joint.computeFK(a1, a2);
 
-                const Eigen::Vector3d pos = VirtualRobot::hemisphere::getEndEffectorTranslation(expr);
-                const Eigen::Matrix3d ori = VirtualRobot::hemisphere::getEndEffectorRotation(expr);
-                const Eigen::Matrix<double, 6, 2> jacobian = VirtualRobot::hemisphere::getJacobian(expr);
+                const Eigen::Vector3d pos = joint.getEndEffectorTranslation();
+                const Eigen::Matrix3d ori = joint.getEndEffectorRotation();
+                const Eigen::Matrix<double, 6, 2> jacobian = joint.getJacobian();
 
                 const time_point end = std::chrono::system_clock::now();
                 using duration = std::chrono::nanoseconds;
@@ -110,10 +109,10 @@ int main(int argc, char* argv[])
         a1 += offset;
         a2 += offset;
 
-        VirtualRobot::hemisphere::Expressions expr;
-        expr.compute(a1, a2, lever, theta0);
+        VirtualRobot::hemisphere::Joint joint;
+        joint.computeFK(a1, a2);
 
-        const Eigen::Vector3d pos = VirtualRobot::hemisphere::getEndEffectorTranslation(expr);
+        const Eigen::Vector3d pos = joint.getEndEffectorTranslation();
         std::cout << "\n  pos = \n" << pos.transpose().format(iof)
                   << std::endl;
 
