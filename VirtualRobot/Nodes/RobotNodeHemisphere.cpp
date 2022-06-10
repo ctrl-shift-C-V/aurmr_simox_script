@@ -14,11 +14,12 @@
 namespace VirtualRobot
 {
 
+    static const float limit = 0.6;
+
 
     VirtualRobot::RobotNodeHemisphere::RobotNodeHemisphere()
     {
     }
-
 
     RobotNodeHemisphere::RobotNodeHemisphere(
             RobotWeakPtr rob,
@@ -30,20 +31,29 @@ namespace VirtualRobot
             VisualizationNodePtr visualization,
             CollisionModelPtr collisionModel,
             float jointValueOffset,
-            const SceneObject::Physics& p,
+            const SceneObject::Physics& physics,
             CollisionCheckerPtr colChecker,
             RobotNodeType type,
-            bool isSub
+            bool isTail
             ) :
-        RobotNode(rob, name, jointLimitLo, jointLimitHi, visualization, collisionModel,
-                  jointValueOffset, p, colChecker, type),
-        isSub(isSub)
+        RobotNode(rob, name, -limit, limit, visualization, collisionModel,
+                  jointValueOffset, physics, colChecker, type)
     {
+        (void) axis;
+        (void) jointLimitLo, (void) jointLimitHi;
+
+        if (isTail)
+        {
+            tail.emplace(Tail{});
+        }
+        else
+        {
+            head.emplace(Head{});
+        }
+
         initialized = false;
         optionalDHParameter.isSet = false;
-        this->localTransformation = preJointTransform;
-        this->jointRotationAxis = axis;
-        this->jointRotationAxis.normalize();
+        localTransformation = preJointTransform;
         checkValidRobotNodeType();
     }
 
@@ -62,8 +72,8 @@ namespace VirtualRobot
             RobotNodeType type
             ) :
         RobotNode(rob, name, jointLimitLo, jointLimitHi, visualization, collisionModel,
-                  jointValueOffset, physics, colChecker, type)
-
+                  jointValueOffset, physics, colChecker, type),
+        tail(Tail{})
     {
         initialized = false;
         optionalDHParameter.isSet = true;
@@ -88,9 +98,20 @@ namespace VirtualRobot
         RotAlpha(2, 1) = sin(alpha);
         RotAlpha(2, 2) = cos(alpha);
 
-        this->localTransformation = RotTheta * TransD * TransA * RotAlpha;
-        this->jointRotationAxis = Eigen::Vector3f::UnitZ();  // rotation around z axis
+        localTransformation = RotTheta * TransD * TransA * RotAlpha;
         checkValidRobotNodeType();
+    }
+
+
+    RobotNodeHemispherePtr RobotNodeHemisphere::MakeHead(
+            RobotWeakPtr robot, const std::string& name, RobotNodeType type)
+    {
+        bool isTail = false;
+        return std::make_shared<RobotNodeHemisphere>(
+                    robot, name, -limit, limit,
+                    Eigen::Matrix4f::Identity(), Eigen::Vector3f::Zero(),
+                    nullptr, nullptr, 0.0, Physics{}, nullptr, type,
+                    isTail);
     }
 
 
@@ -100,31 +121,41 @@ namespace VirtualRobot
 
     bool RobotNodeHemisphere::initialize(
             SceneObjectPtr parent,
-            const std::vector<SceneObjectPtr>& children)
+            const std::vector<SceneObjectPtr>& _children)
     {
-        // Create a sub joint as a child.
-        if (not isSub)
-        {
-            const bool isSub = true;
-            RobotNodeHemispherePtr sub = std::make_shared<RobotNodeHemisphere>(
-                        robot,
-                        name + "_sub",
-                        jointLimitLo,
-                        jointLimitHi,
-                        localTransformation,  // const Eigen::Matrix4f& preJointTransform,
-                        jointRotationAxis,  // const Eigen::Vector3f& axis,
-                        nullptr,  // visualizationModel,
-                        nullptr,  // collisionModel
-                        jointValueOffset,
-                        Physics{},  //physics,
-                        nullptr,  // collisionChecker,
-                        nodeType,
-                        isSub
-                        );
-            sub->initialize(shared_from_this(), children);
+        (void) _children;
+        VR_ASSERT_MESSAGE(head xor sub, head.has_value() << " / " sub.has_value());
 
-            bool success = RobotNode::initialize(parent, {sub});
-            return success;
+        if (tail)
+        {
+            if (not tail->head)
+            {
+                // Create a head joint as a child of parent.
+                RobotNodeHemispherePtr headNode = RobotNodeHemisphere::MakeHead(
+                            robot, name + "_head", nodeType
+                            );
+
+                headNode->setLocalTransformation(this->localTransformation);
+                this->localTransformation.setIdentity();
+
+                // Start:  parent -> tail
+                // Goal:   parent -> head -> tail
+                SceneObjectPtr tailNode = shared_from_this();
+                parent->detachChild(tailNode);
+                headNode->attachChild(tailNode);
+                parent->attachChild(headNode);
+
+                tail->head = headNode;
+
+                headNode->initialize(parent, {tailNode});
+                // Stop here, recurse when the head node initializes this node (its child).
+                return true;
+            }
+            else
+            {
+                // Recurse.
+                return RobotNode::initialize(parent, children);
+            }
         }
         else
         {
@@ -136,23 +167,51 @@ namespace VirtualRobot
     void RobotNodeHemisphere::updateTransformationMatrices(
             const Eigen::Matrix4f& parentPose)
     {
-        const Eigen::Matrix4f rot = simox::math::pose(
-                    Eigen::AngleAxisf(jointValue + jointValueOffset, jointRotationAxis));
-        globalPose = parentPose * localTransformation * rot;
+        VR_ASSERT_MESSAGE(head xor sub, head.has_value() << " / " sub.has_value());
 
-        std::cout << __FUNCTION__ << "() with "
-                  << "joint value = " << jointValue
-                  << ", joint vaue offset = " << jointValueOffset
-                  << ", joint rotation axis = " << jointRotationAxis.transpose()
-                  << ", | joint rotation axis | = " << jointRotationAxis.norm()
-                  << ", rot matrix: \n" << rot
-                  << std::endl;
+        const double maxNorm = 1;
+
+        if (head)
+        {
+            globalPose = parentPose * localTransformation;
+        }
+        else if (tail)
+        {
+            Eigen::Vector2d a(tail->head->getJointValue(), this->getJointValue());
+            double norm = a.norm();
+            if (norm > maxNorm)
+            {
+                a = a / norm * maxNorm;
+            }
+            tail->joint.computeFK(a(0), a(1));
+
+            Eigen::Vector3d translation = tail->joint.getEndEffectorTranslation();
+            translation = translation.normalized() * tail->joint.radius;
+            const Eigen::Matrix3d rotation = tail->joint.getEndEffectorRotation();
+            const Eigen::Matrix4d transform = simox::math::pose(translation, rotation);
+
+            globalPose = parentPose * localTransformation * transform.cast<float>();
+
+            Eigen::IOFormat iof(5, 0, " ", "\n", "    [", "]");
+            std::cout << __FUNCTION__ << "() with "
+                      << "\n  lever = " << tail->joint.lever
+                      << "\n  theta0 = " << tail->joint.theta0
+                      << "\n  radius = " << tail->joint.radius
+                      << "\n  actuator offset = " << tail->joint.actuatorOffset
+                      << "\n  joint value = " << jointValue
+                      << "\n  joint vaue offset = " << jointValueOffset
+                      << "\n  actuator = \n" << a.transpose().format(iof)
+                      << "\n  local transform = \n" << localTransformation.format(iof)
+                      << "\n  transform = \n" << transform.format(iof)
+                      << std::endl;
+        }
     }
 
 
     void RobotNodeHemisphere::print(bool printChildren, bool printDecoration) const
     {
         ReadLockPtr lock = getRobot()->getReadLock();
+        VR_ASSERT_MESSAGE(head xor sub, head.has_value() << " / " sub.has_value());
 
         if (printDecoration)
         {
@@ -161,7 +220,15 @@ namespace VirtualRobot
 
         RobotNode::print(false, false);
 
-        std::cout << "* JointRotationAxis: " << jointRotationAxis.transpose() << std::endl;
+        if (head)
+        {
+            std::cout << "* Hemisphere joint head node";
+        }
+        else if (tail)
+        {
+            std::cout << "* Hemisphere joint tail node";
+            std::cout << "* Transform: \n" << tail->joint.getEndEffectorTransform() << std::endl;
+        }
 
         if (printDecoration)
         {
@@ -196,46 +263,29 @@ namespace VirtualRobot
         }
         else
         {
-            Eigen::Matrix4f lt = getLocalTransformation();
-            simox::math::position(lt) *= scaling;
-            result.reset(new RobotNodeHemisphere(newRobot, name, jointLimitLo, jointLimitHi, lt, jointRotationAxis, visualizationModel, collisionModel, jointValueOffset, p, colChecker, nodeType));
+            Eigen::Matrix4f localTransform = getLocalTransformation();
+            simox::math::position(localTransform) *= scaling;
+            result.reset(new RobotNodeHemisphere(
+                             newRobot, name,
+                             jointLimitLo, jointLimitHi,
+                             localTransform, Eigen::Vector3f::Zero(),
+                             visualizationModel, collisionModel,
+                             jointValueOffset, p, colChecker, nodeType));
         }
 
         return result;
     }
 
 
-    bool RobotNodeHemisphere::isRotationalJoint() const
+    bool RobotNodeHemisphere::isHemisphereJoint() const
     {
         return true;
     }
 
-
-    Eigen::Vector3f RobotNodeHemisphere::getJointRotationAxisInJointCoordSystem() const
+    void RobotNodeHemisphere::setConstants(double lever, double theta0)
     {
-        return jointRotationAxis;
-    }
-
-
-    void RobotNodeHemisphere::setJointRotationAxis(const Eigen::Vector3f& newAxis)
-    {
-        this->jointRotationAxis = newAxis;
-    }
-
-
-    Eigen::Vector3f RobotNodeHemisphere::getJointRotationAxis(const SceneObjectPtr coordSystem) const
-    {
-        ReadLockPtr lock = getRobot()->getReadLock();
-        Eigen::Vector4f result4f = Eigen::Vector4f::Zero();
-        result4f.segment(0, 3) = jointRotationAxis;
-        result4f = globalPose * result4f;
-
-        if (coordSystem)
-        {
-            result4f = coordSystem->getGlobalPose().inverse() * result4f;
-        }
-
-        return result4f.head<3>();
+        VR_ASSERT(tail);
+        tail->joint.setConstants(lever, theta0);
     }
 
     void RobotNodeHemisphere::checkValidRobotNodeType()
@@ -247,23 +297,33 @@ namespace VirtualRobot
 
     std::string RobotNodeHemisphere::_toXML(const std::string& /*modelPath*/)
     {
-        std::stringstream ss;
-        ss << "\t\t<Joint type='Hemisphere'>" << std::endl;
-        ss << "\t\t\t<axis x='" << jointRotationAxis[0] << "' y='" << jointRotationAxis[1] << "' z='" << jointRotationAxis[2] << "'/>" << std::endl;
-        ss << "\t\t\t<limits lo='" << jointLimitLo << "' hi='" << jointLimitHi << "' units='radian'/>" << std::endl;
-        ss << "\t\t\t<MaxAcceleration value='" << maxAcceleration << "'/>" << std::endl;
-        ss << "\t\t\t<MaxVelocity value='" << maxVelocity << "'/>" << std::endl;
-        ss << "\t\t\t<MaxTorque value='" << maxTorque << "'/>" << std::endl;
-        std::map< std::string, float >::iterator propIt = propagatedJointValues.begin();
+        VR_ASSERT_MESSAGE(head xor sub, head.has_value() << " / " sub.has_value());
 
-        while (propIt != propagatedJointValues.end())
+        if (head)
         {
-            ss << "\t\t\t<PropagateJointValue name='" << propIt->first << "' factor='" << propIt->second << "'/>" << std::endl;
-            propIt++;
+            // Hidden, not part of xml.
+            return "";
         }
+        else
+        {
+            std::stringstream ss;
+            ss << "\t\t<Joint type='Hemisphere'>" << std::endl;
+            ss << "\t\t\t<hemisphere lever='" << tail->joint.lever << "' theta0='" << tail->joint.theta0 << "' />" << std::endl;
+            ss << "\t\t\t<limits lo='" << jointLimitLo << "' hi='" << jointLimitHi << "' units='radian'/>" << std::endl;
+            ss << "\t\t\t<MaxAcceleration value='" << maxAcceleration << "'/>" << std::endl;
+            ss << "\t\t\t<MaxVelocity value='" << maxVelocity << "'/>" << std::endl;
+            ss << "\t\t\t<MaxTorque value='" << maxTorque << "'/>" << std::endl;
+            std::map< std::string, float >::iterator propIt = propagatedJointValues.begin();
 
-        ss << "\t\t</Joint>" << std::endl;
-        return ss.str();
+            while (propIt != propagatedJointValues.end())
+            {
+                ss << "\t\t\t<PropagateJointValue name='" << propIt->first << "' factor='" << propIt->second << "'/>" << std::endl;
+                propIt++;
+            }
+
+            ss << "\t\t</Joint>" << std::endl;
+            return ss.str();
+        }
     }
 
 

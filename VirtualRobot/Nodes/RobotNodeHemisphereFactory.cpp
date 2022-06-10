@@ -21,11 +21,6 @@ namespace VirtualRobot
     = default;
 
 
-    /**
-     * This method creates a VirtualRobot::RobotNodeHemisphere.
-     *
-     * \return instance of VirtualRobot::RobotNodeHemisphere.
-     */
     RobotNodePtr RobotNodeHemisphereFactory::createRobotNode(
             RobotPtr robot,
             const std::string& nodeName,
@@ -57,11 +52,6 @@ namespace VirtualRobot
     }
 
 
-    /**
-     * This method creates a VirtualRobot::RobotNodeHemisphere from DH parameters.
-     *
-     * \return instance of VirtualRobot::RobotNodeHemisphere.
-     */
     RobotNodePtr RobotNodeHemisphereFactory::createRobotNodeDH(
             RobotPtr robot,
             const std::string& nodeName,
@@ -93,9 +83,6 @@ namespace VirtualRobot
     }
 
 
-    /**
-     * register this class in the super class factory
-     */
     RobotNodeFactory::SubClassRegistry RobotNodeHemisphereFactory::registry(RobotNodeHemisphereFactory::getName(), &RobotNodeHemisphereFactory::createInstance);
 
 
@@ -105,9 +92,6 @@ namespace VirtualRobot
     }
 
 
-    /**
-     * \return new instance of RobotNodeHemisphereFactory.
-     */
     std::shared_ptr<RobotNodeFactory> RobotNodeHemisphereFactory::createInstance(void*)
     {
         return std::make_shared<RobotNodeHemisphereFactory>();

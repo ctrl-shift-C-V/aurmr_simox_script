@@ -24,6 +24,7 @@
 #include "../VirtualRobot.h"
 
 #include "RobotNode.h"
+#include "HemisphereJoint/Joint.h"
 
 #include <Eigen/Core>
 
@@ -58,7 +59,7 @@ namespace VirtualRobot
                 const SceneObject::Physics& p = {},                 ///< physics information
                 CollisionCheckerPtr colChecker = nullptr,           ///< A collision checker instance (if not set, the global col checker is used)
                 RobotNodeType type = Generic,
-                bool isSub = false  ///< Whether this node is a sub node of the top-hemisphere node.
+                bool isTail = true
                 );
 
         RobotNodeHemisphere(
@@ -78,6 +79,8 @@ namespace VirtualRobot
                 RobotNodeType type = Generic
                 );
 
+    public:
+
         ~RobotNodeHemisphere() override;
 
 
@@ -95,25 +98,9 @@ namespace VirtualRobot
                 ) const override;
 
         bool
-        isRotationalJoint() const override;
+        isHemisphereJoint() const override;
 
-
-        /**
-         * Standard: In global coordinate system.
-         * \param coordSystem
-         *      When not set, the axis is transformed to global coordinate system.
-         *      Otherwise any scene object can be used as coordinate system.
-        */
-        Eigen::Vector3f
-        getJointRotationAxis(const SceneObjectPtr coordSystem = nullptr) const;
-
-        /// This is the original joint axis, without any transformations applied.
-        Eigen::Vector3f
-        getJointRotationAxisInJointCoordSystem() const;
-
-        void
-        setJointRotationAxis(const Eigen::Vector3f& newAxis);
-
+        void setConstants(double lever, double theta0);
 
         /**
          * \brief getLMTC Calculates the spatial distance between the parent of a Hemisphere joint
@@ -144,6 +131,14 @@ namespace VirtualRobot
 
         RobotNodeHemisphere();
 
+        // Head node constructor.
+        static RobotNodeHemispherePtr MakeHead(
+                RobotWeakPtr robot,                                   ///< The robot
+                const std::string& name,                            ///< The name
+                RobotNodeType type = Generic
+                );
+
+
 
         /// Derived classes add custom XML tags here
         std::string
@@ -173,8 +168,19 @@ namespace VirtualRobot
 
     protected:
 
-        bool isSub = false;
-        Eigen::Vector3f jointRotationAxis;  // (given in local joint coord system)
+        struct Head
+        {
+        };
+        std::optional<Head> head;
+        struct Tail
+        {
+            /// The second actuator node.
+            RobotNodeHemispherePtr head = nullptr;
+
+            /// The joint math.
+            hemisphere::Joint joint;
+        };
+        std::optional<Tail> tail;
 
     };
 

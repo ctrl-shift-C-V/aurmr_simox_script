@@ -7,6 +7,7 @@
 #include "../EndEffector/EndEffector.h"
 #include "../EndEffector/EndEffectorActor.h"
 #include "../Nodes/RobotNodeFactory.h"
+#include "../Nodes/RobotNodeHemisphere.h"
 #include "../Nodes/RobotNodeFixedFactory.h"
 #include "../Nodes/RobotNodePrismatic.h"
 #include "../Transformation/DHParameter.h"
@@ -17,11 +18,12 @@
 #include "../RuntimeEnvironment.h"
 #include "VirtualRobot.h"
 #include "rapidxml.hpp"
-#include <SimoxUtility/xml/rapidxml/rapidxml_print.hpp>
 #include "mujoco/RobotMjcf.h"
 #include <VirtualRobot/Import/URDF/SimoxURDFFactory.h>
 
+#include <SimoxUtility/xml/rapidxml/rapidxml_print.hpp>
 #include <SimoxUtility/filesystem/remove_trailing_separator.h>
+#include <SimoxUtility/math/convert/deg_to_rad.h>
 
 #include <vector>
 #include <fstream>
@@ -194,44 +196,43 @@ namespace VirtualRobot
         rapidxml::xml_attribute<>* attr;
         float jointOffset = 0.0f;
         float initialvalue = 0.0f;
-        std::string jointType;
-
-        RobotNodePtr robotNode;
 
         if (!jointXMLNode)
         {
             // no <Joint> tag -> fixed joint
+            RobotNodePtr robotNode;
             RobotNodeFactoryPtr fixedNodeFactory = RobotNodeFactory::fromName(RobotNodeFixedFactory::getName(), nullptr);
-
             if (fixedNodeFactory)
             {
-                robotNode = fixedNodeFactory->createRobotNode(robot, robotNodeName, visualizationNode, collisionModel, jointLimitLow, jointLimitHigh, jointOffset, preJointTransform, axis, translationDir, physics, rntype);
+                robotNode = fixedNodeFactory->createRobotNode(
+                            robot, robotNodeName, visualizationNode, collisionModel,
+                            jointLimitLow, jointLimitHigh, jointOffset,
+                            preJointTransform, axis, translationDir,
+                            physics, rntype);
             }
-
             return robotNode;
         }
 
+        std::string jointType;
         attr = jointXMLNode->first_attribute("type", 0, false);
-
         if (attr)
         {
             jointType = getLowerCase(attr->value());
         }
         else
         {
-            VR_WARNING << "No 'type' attribute for <Joint> tag. Assuming fixed joint for RobotNode " << robotNodeName << "!" << std::endl;
+            VR_WARNING << "No 'type' attribute for <Joint> tag. "
+                       << "Assuming fixed joint for RobotNode " << robotNodeName << "!" << std::endl;
             jointType = RobotNodeFixedFactory::getName();
         }
 
         attr = jointXMLNode->first_attribute("offset", 0, false);
-
         if (attr)
         {
             jointOffset = convertToFloat(attr->value());
         }
 
         attr = jointXMLNode->first_attribute("initialvalue", 0, false);
-
         if (attr)
         {
             initialvalue = convertToFloat(attr->value());
@@ -248,14 +249,21 @@ namespace VirtualRobot
         bool scaleVisu = false;
         Eigen::Vector3f scaleVisuFactor = Eigen::Vector3f::Zero();
 
+        struct Hemisphere
+        {
+            float lever;
+            float theta0;
+        };
+        std::optional<Hemisphere> hemisphere;
+
         while (node)
         {
-            std::string nodeName = getLowerCase(node->name());
+            const std::string nodeName = getLowerCase(node->name());
 
             if (nodeName == "dh")
             {
-                THROW_VR_EXCEPTION("DH specification in Joint tag is DEPRECATED! Use <RobotNode><Transform><DH>...</DH></Transform><Joint>...</Joint></RobotNode> structure")
-
+                THROW_VR_EXCEPTION("DH specification in Joint tag is DEPRECATED! "
+                                   "Use <RobotNode><Transform><DH>...</DH></Transform><Joint>...</Joint></RobotNode> structure.")
                 //THROW_VR_EXCEPTION_IF(dhXMLNode, "Multiple DH definitions in <Joint> tag of robot node <" << robotNodeName << ">." << endl);
                 //dhXMLNode = node;
             }
@@ -267,7 +275,8 @@ namespace VirtualRobot
             }
             else if (nodeName == "prejointtransform")
             {
-                THROW_VR_EXCEPTION("PreJointTransform is DEPRECATED! Use <RobotNode><Transform>...</Transform><Joint>...</Joint></RobotNode> structure")
+                THROW_VR_EXCEPTION("PreJointTransform is DEPRECATED! "
+                                   "Use <RobotNode><Transform>...</Transform><Joint>...</Joint></RobotNode> structure")
                 //THROW_VR_EXCEPTION_IF(prejointTransformNode, "Multiple preJoint definitions in <Joint> tag of robot node <" << robotNodeName << ">." << endl);
                 //prejointTransformNode = node;
             }
@@ -283,7 +292,8 @@ namespace VirtualRobot
             }
             else if (nodeName == "postjointtransform")
             {
-                THROW_VR_EXCEPTION("postjointtransform is DEPRECATED and not longer allowed! Use <RobotNode><Transform>...</Transform><Joint>...</Joint></RobotNode> structure")
+                THROW_VR_EXCEPTION("postjointtransform is DEPRECATED and not longer allowed! "
+                                   "Use <RobotNode><Transform>...</Transform><Joint>...</Joint></RobotNode> structure")
                 //THROW_VR_EXCEPTION_IF(postjointTransformNode, "Multiple postjointtransform definitions in <Joint> tag of robot node <" << robotNodeName << ">." << endl);
                 //postjointTransformNode = node;
             }
@@ -442,6 +452,13 @@ namespace VirtualRobot
                 scaleVisuFactor[1] = getFloatByAttributeName(node, "y");
                 scaleVisuFactor[2] = getFloatByAttributeName(node, "z");
             }
+            else if (nodeName == "hemisphere")
+            {
+                hemisphere = Hemisphere {
+                        .lever = getFloatByAttributeName(node, "lever"),
+                        .theta0 = simox::math::deg_to_rad(getFloatByAttributeName(node, "theta0")),
+                };
+            }
             else
             {
                 THROW_VR_EXCEPTION("XML definition <" << nodeName << "> not supported in <Joint> tag of RobotNode <" << robotNodeName << ">." << endl);
@@ -463,7 +480,7 @@ namespace VirtualRobot
             processTransformNode(prejointTransformNode, robotNodeName, preJointTransform);
             processTransformNode(postjointTransformNode, robotNodeName, postJointTransform);
             */
-        if (jointType == "revolute" || jointType == "hemisphere")
+        if (jointType == "revolute")
         {
             if (scaleVisu)
             {
@@ -501,14 +518,16 @@ namespace VirtualRobot
             if (scaleVisu)
             {
                 THROW_VR_EXCEPTION_IF(scaleVisuFactor.norm() == 0.0f, "Zero scale factor");
-
             }
+        }
+        else if (jointType == "hemisphere")
+        {
         }
 
         //}
 
+        RobotNodePtr robotNode;
         RobotNodeFactoryPtr robotNodeFactory = RobotNodeFactory::fromName(jointType, nullptr);
-
         if (robotNodeFactory)
         {
             /*if (dh.isSet)
@@ -517,7 +536,12 @@ namespace VirtualRobot
             } else
             {*/
             // create nodes that are not defined via DH parameters
-            robotNode = robotNodeFactory->createRobotNode(robot, robotNodeName, visualizationNode, collisionModel, jointLimitLow, jointLimitHigh, jointOffset, preJointTransform, axis, translationDir, physics, rntype);
+            robotNode = robotNodeFactory->createRobotNode(
+                        robot, robotNodeName, visualizationNode, collisionModel,
+                        jointLimitLow, jointLimitHigh, jointOffset,
+                        preJointTransform, axis, translationDir,
+                        physics, rntype
+                        );
             //}
         }
         else
@@ -532,7 +556,7 @@ namespace VirtualRobot
 
         robotNode->jointValue = initialvalue;
 
-        if (robotNode->isRotationalJoint() || robotNode->isTranslationalJoint())
+        if (robotNode->isJoint())
         {
             if (robotNode->jointValue < robotNode->jointLimitLo)
             {
@@ -543,11 +567,15 @@ namespace VirtualRobot
                 robotNode->jointValue = robotNode->jointLimitHi;
             }
         }
+        if (robotNode->isHemisphereJoint() and hemisphere.has_value())
+        {
+            RobotNodeHemispherePtr node = std::dynamic_pointer_cast<RobotNodeHemisphere>(robotNode);
+            node->setConstants(hemisphere->lever, hemisphere->theta0);
+        }
 
         if (scaleVisu)
         {
-            std::shared_ptr<RobotNodePrismatic> rnPM = std::dynamic_pointer_cast<RobotNodePrismatic>(robotNode);
-
+            RobotNodePrismaticPtr rnPM = std::dynamic_pointer_cast<RobotNodePrismatic>(robotNode);
             if (rnPM)
             {
                 rnPM->setVisuScaleFactor(scaleVisuFactor);
