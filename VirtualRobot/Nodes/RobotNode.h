@@ -224,8 +224,10 @@ namespace VirtualRobot
         */
         virtual void setJointLimits(float lo, float hi);
 
+        bool isJoint() const;
         virtual bool isTranslationalJoint() const;
         virtual bool isRotationalJoint() const;
+        virtual bool isHemisphereJoint() const;
 
         /**
          * @param limitless wheter this node has joint limits or not.
