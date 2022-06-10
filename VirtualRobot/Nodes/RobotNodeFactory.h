@@ -34,25 +34,56 @@
 namespace VirtualRobot
 {
 
-    class VIRTUAL_ROBOT_IMPORT_EXPORT RobotNodeFactory  : public AbstractFactoryMethod<RobotNodeFactory, void*>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT RobotNodeFactory :
+            public AbstractFactoryMethod<RobotNodeFactory, void*>
     {
     public:
         RobotNodeFactory()
         {
-            ;
         }
         virtual ~RobotNodeFactory()
         {
-            ;
         }
 
-        virtual RobotNodePtr createRobotNode(RobotPtr /*robot*/, const std::string& /*nodeName*/, VisualizationNodePtr /*visualizationModel*/, CollisionModelPtr /*collisionModel*/, float /*limitLow*/, float /*limitHigh*/, float /*jointValueOffset*/, const Eigen::Matrix4f& /*preJointTransform*/, const Eigen::Vector3f& /*axis*/, const Eigen::Vector3f& /*translationDirection*/, const SceneObject::Physics& /*p*/ = SceneObject::Physics(), RobotNode::RobotNodeType /*rntype*/ = RobotNode::Generic) const
+        virtual RobotNodePtr createRobotNode(
+                RobotPtr robot,
+                const std::string& nodeName,
+                VisualizationNodePtr visualizationModel,
+                CollisionModelPtr collisionModel,
+                float limitLow,
+                float limitHigh,
+                float jointValueOffset,
+                const Eigen::Matrix4f& preJointTransform,
+                const Eigen::Vector3f& axis,
+                const Eigen::Vector3f& translationDirection,
+                const SceneObject::Physics& physics = SceneObject::Physics(),
+                RobotNode::RobotNodeType rntype = RobotNode::Generic
+                ) const
         {
-            return RobotNodePtr();
+            (void) robot, (void) nodeName, (void) visualizationModel, (void) collisionModel;
+            (void) limitLow, (void) limitHigh, (void) jointValueOffset;
+            (void) preJointTransform, (void) axis, (void) translationDirection;
+            (void) physics, (void) rntype;
+            return nullptr;
         }
-        virtual RobotNodePtr createRobotNodeDH(RobotPtr /*robot*/, const std::string& /*nodeName*/, VisualizationNodePtr /*visualizationModel*/, CollisionModelPtr /*collisionModel*/, float /*limitLow*/, float /*limitHigh*/, float /*jointValueOffset*/, const DHParameter& /*dhParameters*/, const SceneObject::Physics& /*p*/ = SceneObject::Physics(), RobotNode::RobotNodeType /*rntype*/ = RobotNode::Generic) const
+
+        virtual RobotNodePtr createRobotNodeDH(
+                RobotPtr robot,
+                const std::string& nodeName,
+                VisualizationNodePtr visualizationModel,
+                CollisionModelPtr collisionModel,
+                float limitLow,
+                float limitHigh,
+                float jointValueOffset,
+                const DHParameter& dhParameters,
+                const SceneObject::Physics& physics = SceneObject::Physics(),
+                RobotNode::RobotNodeType rntype = RobotNode::Generic) const
         {
-            return RobotNodePtr();
+            (void) robot, (void) nodeName, (void) visualizationModel, (void) collisionModel;
+            (void) limitLow, (void) limitHigh, (void) jointValueOffset;
+            (void) dhParameters;
+            (void) physics, (void) rntype;
+            return nullptr;
         }
     };
 
