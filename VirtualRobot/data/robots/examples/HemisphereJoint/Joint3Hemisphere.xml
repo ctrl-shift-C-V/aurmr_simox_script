@@ -3,8 +3,9 @@
 <Robot Type="Simple3DoFRobotWithHemisphereJoint" StandardName="Simple3DoFRobotWithHemisphereJoint" RootNode="Start">
 	
 	<RobotNode name="Start">
-		<Visualization enable="false">
+        <Visualization enable="true">
 			<CoordinateAxis enable="true" scaling="1" text="Root"/>
+            <File type="Inventor">end.iv</File>
 		</Visualization>
 		<Child name="Joint1"/>
 	</RobotNode>
@@ -12,39 +13,39 @@
 	<RobotNode name="Joint1">
 		<Joint type="revolute">
 			<Limits unit="degree" lo="-90" hi="90"/>
-            <!--DH a="300" d="0" theta="0" alpha="90" units="degree"/-->
+            <Axis x="1" y="0" z="0"/>
         </Joint>
 		<Visualization enable="true">
-			 <File type="Inventor">joint_rot_sphere.iv</File>
+             <File type="Inventor">joint_01_base.iv</File>
 			 <UseAsCollisionModel/>
 		</Visualization>
         <Child name="Joint2Hemisphere"/>
 	</RobotNode>
 
     <RobotNode name="Joint2Hemisphere">
-		<Transform>
-			<DH a="300" d="0" theta="0" alpha="90" units="degree"/>
-		</Transform>
+        <Transform>
+            <Translation x="0" y="0" z="300" />
+        </Transform>
         <Joint type="hemisphere">
-			<Limits unit="degree" lo="0" hi="360"/>
-            <!--DH a="300" d="0" theta="0" alpha="0" units="degree"/-->
+            <hemisphere lever="40" theta0="25" />
         </Joint>
-		<Visualization enable="true">
-             <File type="Inventor">joint_rot_cube.iv</File>
+        <Visualization enable="true">
+             <File type="Inventor">joint_02_hemisphere.iv</File>
 			 <UseAsCollisionModel/>
-		</Visualization>
+        </Visualization>
         <Child name="Joint3"/>
 	</RobotNode>
 
     <RobotNode name="Joint3">
 		<Transform>
-			<DH a="300" d="0" theta="0" alpha="0" units="degree"/>
+            <Translation x="0" y="0" z="50" />
 		</Transform>
         <Joint type="revolute">
+            <Axis x="1" y="0" z="0"/>
 			<Limits unit="degree" lo="-90" hi="90"/>
         </Joint>
 		<Visualization enable="true">
-			 <File type="Inventor">joint_rot_sphere.iv</File>
+             <File type="Inventor">joint_03_finger.iv</File>
 			 <UseAsCollisionModel/>
 		</Visualization>
 		<Child name="EndPoint"/>
@@ -52,10 +53,10 @@
 
 	<RobotNode name="EndPoint">
 		<Transform>
-			<DH a="300" d="0" theta="0" alpha="0" units="degree"/>
+            <Translation x="0" y="0" z="300" />
 		</Transform>
 		<Visualization enable="true">
-             <File type="Inventor">cube.iv</File>
+             <File type="Inventor">end.iv</File>
 			 <UseAsCollisionModel/>
 		</Visualization>
 	</RobotNode>
