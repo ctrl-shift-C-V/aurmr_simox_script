@@ -79,6 +79,8 @@ FIND_PACKAGE(Boost ${Simox_BOOST_VERSION} EXACT COMPONENTS
     REQUIRED)
 MESSAGE (STATUS "Boost found at: ${Boost_INCLUDE_DIR}")
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 #flags
 add_compile_options(-Wall)
 add_compile_options(-Wextra)
