@@ -19,14 +19,17 @@ namespace VirtualRobot::hemisphere
         Joint();
         Joint(double lever, double theta0);
 
+
+        void setConstants(double lever, double theta0);
+
+
         void computeFK(double a1, double a2);
+
 
         Eigen::Vector3d getEndEffectorTranslation() const;
         Eigen::Matrix3d getEndEffectorRotation() const;
         Eigen::Matrix4d getEndEffectorTransform() const;
         Jacobian getJacobian() const;
-
-        void setConstants(double lever, double theta0);
 
 
     public:

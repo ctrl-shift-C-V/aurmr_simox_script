@@ -14,7 +14,7 @@
 namespace VirtualRobot
 {
 
-    static const float limit = 0.6;
+    static const float limit = 1.0;
 
 
     VirtualRobot::RobotNodeHemisphere::RobotNodeHemisphere()
@@ -135,8 +135,28 @@ namespace VirtualRobot
                             robot, name + "_head", nodeType
                             );
 
-                headNode->setLocalTransformation(this->localTransformation);
-                this->localTransformation.setIdentity();
+                // Move robot node up parameters.
+                {
+                    headNode->setLocalTransformation(this->localTransformation);
+                    this->localTransformation.setIdentity();
+                }
+
+                // Set robot node up parameters.
+                {
+                    const hemisphere::Joint& joint = tail->joint;
+
+                    // (actuator + offset) must be in [-1, 1]
+                    // => low: actuator = -1 - offset
+                    // => hi: actuator = 1 - offset
+                    double lo = -1 - joint.actuatorOffset;
+                    double hi = +1 - joint.actuatorOffset;
+
+                    this->jointLimitLo = lo;
+                    headNode->jointLimitLo = lo;
+
+                    this->jointLimitHi = hi;
+                    headNode->jointLimitHi = hi;
+                }
 
                 // Start:  parent -> tail
                 // Goal:   parent -> head -> tail
@@ -178,11 +198,14 @@ namespace VirtualRobot
         else if (tail)
         {
             Eigen::Vector2d a(tail->head->getJointValue(), this->getJointValue());
+            a = a.array() + tail->joint.actuatorOffset;
+
             double norm = a.norm();
             if (norm > maxNorm)
             {
-                a = a / norm * maxNorm;
+                a *= (maxNorm / norm);
             }
+
             tail->joint.computeFK(a(0), a(1));
 
             Eigen::Vector3d translation = tail->joint.getEndEffectorTranslation();
@@ -199,8 +222,9 @@ namespace VirtualRobot
                       << "\n  radius = " << tail->joint.radius
                       << "\n  actuator offset = " << tail->joint.actuatorOffset
                       << "\n  joint value = " << jointValue
-                      << "\n  joint vaue offset = " << jointValueOffset
+                      << "\n  joint value offset = " << jointValueOffset
                       << "\n  actuator = \n" << a.transpose().format(iof)
+                      << "\n  actuator + offset = \n" << (a.array() + tail->joint.actuatorOffset).transpose().format(iof)
                       << "\n  local transform = \n" << localTransformation.format(iof)
                       << "\n  transform = \n" << transform.format(iof)
                       << std::endl;

@@ -21,10 +21,18 @@ namespace VirtualRobot::hemisphere
     }
 
 
+    void Joint::setConstants(double lever, double theta0)
+    {
+        this->lever = lever;
+        this->theta0 = theta0;
+        this->radius = 2 * std::sin(theta0) * lever;
+        this->actuatorOffset = std::asin(theta0);
+        this->lever = 1;
+    }
+
+
     void Joint::computeFK(double a1, double a2)
     {
-        a1 += actuatorOffset;
-        a2 += actuatorOffset;
         fk.compute(a1, a2, lever, theta0);
     }
 
@@ -66,16 +74,6 @@ namespace VirtualRobot::hemisphere
                     fk.jry1, fk.jry2,
                     fk.jrz1, fk.jrz2;
         return jacobian;
-    }
-
-
-    void Joint::setConstants(double lever, double theta0)
-    {
-        this->lever = lever;
-        this->theta0 = theta0;
-        this->radius = 2 * std::sin(theta0) * lever;
-        this->actuatorOffset = std::asin(theta0);
-        this->lever = 1;
     }
 
 }

@@ -133,8 +133,8 @@ namespace VirtualRobot
 
         // Head node constructor.
         static RobotNodeHemispherePtr MakeHead(
-                RobotWeakPtr robot,                                   ///< The robot
-                const std::string& name,                            ///< The name
+                RobotWeakPtr robot,
+                const std::string& name,
                 RobotNodeType type = Generic
                 );
 
@@ -172,6 +172,7 @@ namespace VirtualRobot
         {
         };
         std::optional<Head> head;
+
         struct Tail
         {
             /// The second actuator node.
