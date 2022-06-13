@@ -1,7 +1,7 @@
 import os
 import os.path
 
-from sympy import symbols, sin, cos, sqrt
+from sympy import symbols, sin, cos, sqrt, asin
 
 from hemisphere_joint_demo.sympy_to_code import SympyToCpp
 
@@ -145,6 +145,14 @@ def jacobian_ori():
     )
 
 
+def radius():
+    return dict(radius=2 * sin(theta0) * lever)
+
+
+def actuator_offset():
+    return dict(actuator_offset=asin(theta0))
+
+
 test_mode = False
 
 if not test_mode and __name__ == '__main__':
@@ -167,6 +175,9 @@ if not test_mode and __name__ == '__main__':
             **ori,
             **jac_pos,
             **jac_ori,
+            # No need to re-evaluate these each time.
+            # **radius(),
+            # **actuator_offset(),
         )
     )
     cpp.build()

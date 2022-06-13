@@ -85,6 +85,15 @@ class Line:
         elif isinstance(expr, sp.cos):
             return fn("std::cos")
 
+        elif isinstance(expr, sp.asin):
+            return fn("std::asin")
+
+        elif isinstance(expr, sp.acos):
+            return fn("std::acos")
+
+        elif isinstance(expr, sp.exp):
+            return fn("std::exp")
+
         else:
             raise TypeError(f"{expr.__class__}, {expr.func}({expr.args}) = {sp.srepr(expr)}")
 
