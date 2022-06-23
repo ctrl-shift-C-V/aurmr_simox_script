@@ -117,30 +117,6 @@ namespace VirtualRobot
         bool
         isHemisphereJoint() const override;
 
-        /**
-         * \brief getLMTC Calculates the spatial distance between the parent of a Hemisphere joint
-         * and a given child with the joint set to a given angle (e.g. the length of a
-         * muscle-tendon complex attached to the parent and the given child).
-         *
-         * \param child The child node
-         * \param angle The angle of the Hemisphere joint in radians
-         * \return The spatial distance between parent and given child at given angle
-         */
-        virtual float
-        getLMTC(float angle);
-
-        /**
-         * \brief Calculates the spatial length of a moment arm defined through the triangle
-         * given by the node's parent, the specified child and the specified angle at the
-         * Hemisphere joint.
-         *
-         * \param child The child node
-         * \param angle The angle of the Hemisphere joint in radians
-         * \return The spatial length of the moment arm
-         */
-        virtual float
-        getLMomentArm(float angle);
-
 
     protected:
 

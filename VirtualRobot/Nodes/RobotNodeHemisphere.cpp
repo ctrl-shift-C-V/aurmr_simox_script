@@ -281,13 +281,20 @@ namespace VirtualRobot
             float scaling)
     {
         ReadLockPtr lock = getRobot()->getReadLock();
+        Physics physics = this->physics.scale(scaling);
+
         RobotNodePtr result;
-
-        Physics p = physics.scale(scaling);
-
         if (optionalDHParameter.isSet)
         {
-            result.reset(new RobotNodeHemisphere(newRobot, name, jointLimitLo, jointLimitHi, optionalDHParameter.aMM()*scaling, optionalDHParameter.dMM()*scaling, optionalDHParameter.alphaRadian(), optionalDHParameter.thetaRadian(), visualizationModel, collisionModel, jointValueOffset, p, colChecker, nodeType));
+            result.reset(new RobotNodeHemisphere(
+                             newRobot, name, jointLimitLo, jointLimitHi,
+                             optionalDHParameter.aMM() * scaling,
+                             optionalDHParameter.dMM() * scaling,
+                             optionalDHParameter.alphaRadian(),
+                             optionalDHParameter.thetaRadian(),
+                             visualizationModel, collisionModel,
+                             jointValueOffset,
+                             physics, colChecker, nodeType));
         }
         else
         {
@@ -298,7 +305,7 @@ namespace VirtualRobot
                              jointLimitLo, jointLimitHi,
                              localTransform, Eigen::Vector3f::Zero(),
                              visualizationModel, collisionModel,
-                             jointValueOffset, p, colChecker, nodeType));
+                             jointValueOffset, physics, colChecker, nodeType));
         }
 
         return result;
@@ -350,19 +357,5 @@ namespace VirtualRobot
             return ss.str();
         }
     }
-
-    float RobotNodeHemisphere::getLMTC(float angle)
-    {
-        return std::sqrt(2 - 2 * std::cos(angle));
-    }
-
-
-    float RobotNodeHemisphere::getLMomentArm(float angle)
-    {
-        float b = getLMTC(angle);
-        return std::sqrt(4 * std::pow(b, 2) - std::pow(b, 4)) / (2 * b);
-    }
-
-
 
 }
