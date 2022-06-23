@@ -46,6 +46,13 @@ namespace VirtualRobot::hemisphere
         };
     }
 
+    Eigen::Vector3d Joint::getCorrectedEndEffectorTranslation() const
+    {
+        Eigen::Vector3d translation = getEndEffectorTranslation();
+        translation = translation.normalized() * radius;
+        return translation;
+    }
+
 
     Eigen::Matrix3d Joint::getEndEffectorRotation() const
     {

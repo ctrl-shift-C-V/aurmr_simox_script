@@ -27,6 +27,7 @@ namespace VirtualRobot::hemisphere
 
 
         Eigen::Vector3d getEndEffectorTranslation() const;
+        Eigen::Vector3d getCorrectedEndEffectorTranslation() const;
         Eigen::Matrix3d getEndEffectorRotation() const;
         Eigen::Matrix4d getEndEffectorTransform() const;
         Jacobian getJacobian() const;

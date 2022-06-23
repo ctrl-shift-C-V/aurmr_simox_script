@@ -9,6 +9,7 @@
 #include <Eigen/Geometry>
 
 #include <SimoxUtility/math/pose/pose.h>
+#include <SimoxUtility/meta/enum/EnumNames.hpp>
 
 
 namespace VirtualRobot
@@ -16,9 +17,19 @@ namespace VirtualRobot
 
     static const float limit = 1.0;
 
+    extern const simox::meta::EnumNames<RobotNodeHemisphere::Role> RoleNames =
+    {
+        { RobotNodeHemisphere::Role::FIRST, "first" },
+        { RobotNodeHemisphere::Role::SECOND, "second" },
+    };
 
     VirtualRobot::RobotNodeHemisphere::RobotNodeHemisphere()
     {
+    }
+
+    RobotNodeHemisphere::Role RobotNodeHemisphere::RoleFromString(const std::string& string)
+    {
+        return RoleNames.from_name(string);
     }
 
     RobotNodeHemisphere::RobotNodeHemisphere(
@@ -33,23 +44,13 @@ namespace VirtualRobot
             float jointValueOffset,
             const SceneObject::Physics& physics,
             CollisionCheckerPtr colChecker,
-            RobotNodeType type,
-            bool isTail
+            RobotNodeType type
             ) :
         RobotNode(rob, name, -limit, limit, visualization, collisionModel,
                   jointValueOffset, physics, colChecker, type)
     {
         (void) axis;
         (void) jointLimitLo, (void) jointLimitHi;
-
-        if (isTail)
-        {
-            tail.emplace(Tail{});
-        }
-        else
-        {
-            head.emplace(Head{});
-        }
 
         initialized = false;
         optionalDHParameter.isSet = false;
@@ -72,8 +73,7 @@ namespace VirtualRobot
             RobotNodeType type
             ) :
         RobotNode(rob, name, jointLimitLo, jointLimitHi, visualization, collisionModel,
-                  jointValueOffset, physics, colChecker, type),
-        tail(Tail{})
+                  jointValueOffset, physics, colChecker, type)
     {
         initialized = false;
         optionalDHParameter.isSet = true;
@@ -103,102 +103,82 @@ namespace VirtualRobot
     }
 
 
-    RobotNodeHemispherePtr RobotNodeHemisphere::MakeHead(
-            RobotWeakPtr robot, const std::string& name, RobotNodeType type)
-    {
-        bool isTail = false;
-        return std::make_shared<RobotNodeHemisphere>(
-                    robot, name, -limit, limit,
-                    Eigen::Matrix4f::Identity(), Eigen::Vector3f::Zero(),
-                    nullptr, nullptr, 0.0, Physics{}, nullptr, type,
-                    isTail);
-    }
-
-
     RobotNodeHemisphere::~RobotNodeHemisphere()
     = default;
 
 
-    bool RobotNodeHemisphere::initialize(
-            SceneObjectPtr parent,
-            const std::vector<SceneObjectPtr>& _children)
+    void RobotNodeHemisphere::setXmlInfo(const XmlInfo& info)
     {
-        (void) _children;
-        VR_ASSERT_MESSAGE(head xor sub, head.has_value() << " / " sub.has_value());
-
-        if (tail)
+        VR_ASSERT(second.has_value());
+        switch (info.role)
         {
-            if (not tail->head)
-            {
-                // Create a head joint as a child of parent.
-                RobotNodeHemispherePtr headNode = RobotNodeHemisphere::MakeHead(
-                            robot, name + "_head", nodeType
-                            );
+        case Role::FIRST:
+            first.emplace(First{});
+            first->math.joint.setConstants(info.lever, info.theta0);
+            break;
 
-                // Move robot node up parameters.
-                {
-                    headNode->setLocalTransformation(this->localTransformation);
-                    this->localTransformation.setIdentity();
-                }
-
-                // Set robot node up parameters.
-                {
-                    const hemisphere::Joint& joint = tail->joint;
-
-                    // (actuator + offset) must be in [-1, 1]
-                    // => low: actuator = -1 - offset
-                    // => hi: actuator = 1 - offset
-                    double lo = -1 - joint.actuatorOffset;
-                    double hi = +1 - joint.actuatorOffset;
-
-                    this->jointLimitLo = lo;
-                    headNode->jointLimitLo = lo;
-
-                    this->jointLimitHi = hi;
-                    headNode->jointLimitHi = hi;
-                }
-
-                // Start:  parent -> tail
-                // Goal:   parent -> head -> tail
-                SceneObjectPtr tailNode = shared_from_this();
-                parent->detachChild(tailNode);
-                headNode->attachChild(tailNode);
-                parent->attachChild(headNode);
-
-                tail->head = headNode;
-
-                headNode->initialize(parent, {tailNode});
-                // Stop here, recurse when the head node initializes this node (its child).
-                return true;
-            }
-            else
-            {
-                // Recurse.
-                return RobotNode::initialize(parent, children);
-            }
-        }
-        else
-        {
-            return RobotNode::initialize(parent, children);
+        case Role::SECOND:
+            second.emplace(Second{});
+            break;
         }
     }
 
 
-    void RobotNodeHemisphere::updateTransformationMatrices(
-            const Eigen::Matrix4f& parentPose)
+    bool RobotNodeHemisphere::initialize(
+            SceneObjectPtr parent,
+            const std::vector<SceneObjectPtr>& children)
     {
-        VR_ASSERT_MESSAGE(head xor sub, head.has_value() << " / " sub.has_value());
+        VR_ASSERT_MESSAGE(first xor sub, first.has_value() << " / " sub.has_value());
 
+        // The second node needs to store a reference to the first node.
+        if (second)
+        {
+            VR_ASSERT_MESSAGE(not second->first, "Second must not be initialized yet.");
+
+            RobotNodeHemisphere* firstNode = dynamic_cast<RobotNodeHemisphere*>(parent.get());
+            RobotNodeHemisphere* secondNode = this;
+
+            if (not (firstNode and firstNode->first))
+            {
+                std::stringstream ss;
+                ss << "The parent of a hemisphere joint with role '" << RoleNames.to_name(Role::SECOND) << "' "
+                   << "must have be a hemisphere joint with role '" << RoleNames.to_name(Role::FIRST) << "' ";
+                THROW_VR_EXCEPTION(ss.str());
+            }
+
+            // Save pointer to firstNode
+            second->first = firstNode;
+
+            // Set up robot node parameters.
+            {
+                const hemisphere::Joint& joint = second->math().joint;
+
+                // (actuator + offset) must be in [-1, 1]
+                // => low: actuator = -1 - offset
+                // => hi: actuator = 1 - offset
+                double lo = -1 - joint.actuatorOffset;
+                double hi = +1 - joint.actuatorOffset;
+
+                firstNode->jointLimitLo = lo;
+                secondNode->jointLimitLo = lo;
+
+                firstNode->jointLimitHi = hi;
+                secondNode->jointLimitHi = hi;
+            }
+        }
+
+        return RobotNode::initialize(parent, children);
+    }
+
+
+    void RobotNodeHemisphere::JointMath::update(const Eigen::Vector2f& actuators)
+    {
         const double maxNorm = 1;
 
-        if (head)
+        if (actuators != this->actuators)
         {
-            globalPose = parentPose * localTransformation;
-        }
-        else if (tail)
-        {
-            Eigen::Vector2d a(tail->head->getJointValue(), this->getJointValue());
-            a = a.array() + tail->joint.actuatorOffset;
+            Eigen::Vector2f a = actuators;
+            a = a.array() + joint.actuatorOffset;
 
             double norm = a.norm();
             if (norm > maxNorm)
@@ -206,28 +186,52 @@ namespace VirtualRobot
                 a *= (maxNorm / norm);
             }
 
-            tail->joint.computeFK(a(0), a(1));
+            this->actuators = actuators;
+            joint.computeFK(a(0), a(1));
+        }
+    }
 
-            Eigen::Vector3d translation = tail->joint.getEndEffectorTranslation();
-            translation = translation.normalized() * tail->joint.radius;
-            const Eigen::Matrix3d rotation = tail->joint.getEndEffectorRotation();
+
+    void RobotNodeHemisphere::updateTransformationMatrices(
+            const Eigen::Matrix4f& parentPose)
+    {
+        VR_ASSERT_MESSAGE(first xor sub, first.has_value() << " / " sub.has_value());
+
+        if (first)
+        {
+            globalPose = parentPose * localTransformation;
+        }
+        else if (second)
+        {
+            VR_ASSERT_MESSAGE(second->first, "First node must be known to second node.");
+
+            JointMath& math = second->math();
+            Eigen::Vector2f actuators(second->first->getJointValue(), this->getJointValue());
+
+            math.update(actuators);
+
+            Eigen::Vector3d translation = math.joint.getCorrectedEndEffectorTranslation();
+            const Eigen::Matrix3d rotation = math.joint.getEndEffectorRotation();
             const Eigen::Matrix4d transform = simox::math::pose(translation, rotation);
 
-            globalPose = parentPose * localTransformation * transform.cast<float>();
+            // Update Second
+            {
+                this->globalPose = parentPose * localTransformation * transform.cast<float>();
 
-            Eigen::IOFormat iof(5, 0, " ", "\n", "    [", "]");
-            std::cout << __FUNCTION__ << "() with "
-                      << "\n  lever = " << tail->joint.lever
-                      << "\n  theta0 = " << tail->joint.theta0
-                      << "\n  radius = " << tail->joint.radius
-                      << "\n  actuator offset = " << tail->joint.actuatorOffset
-                      << "\n  joint value = " << jointValue
-                      << "\n  joint value offset = " << jointValueOffset
-                      << "\n  actuator = \n" << a.transpose().format(iof)
-                      << "\n  actuator + offset = \n" << (a.array() + tail->joint.actuatorOffset).transpose().format(iof)
-                      << "\n  local transform = \n" << localTransformation.format(iof)
-                      << "\n  transform = \n" << transform.format(iof)
-                      << std::endl;
+                Eigen::IOFormat iof(5, 0, " ", "\n", "    [", "]");
+                std::cout << __FUNCTION__ << "() of second actuator with "
+                          << "\n  lever = " << math.joint.lever
+                          << "\n  theta0 = " << math.joint.theta0
+                          << "\n  radius = " << math.joint.radius
+                          << "\n  actuator offset = " << math.joint.actuatorOffset
+                          << "\n  joint value = " << jointValue
+                          << "\n  joint value offset = " << jointValueOffset
+                          << "\n  actuator = \n" << actuators.transpose().format(iof)
+                          << "\n  actuator + offset = \n" << (actuators.array() + math.joint.actuatorOffset).transpose().format(iof)
+                          << "\n  local transform = \n" << localTransformation.format(iof)
+                          << "\n  joint transform = \n" << transform.format(iof)
+                          << std::endl;
+            }
         }
     }
 
@@ -235,7 +239,7 @@ namespace VirtualRobot
     void RobotNodeHemisphere::print(bool printChildren, bool printDecoration) const
     {
         ReadLockPtr lock = getRobot()->getReadLock();
-        VR_ASSERT_MESSAGE(head xor sub, head.has_value() << " / " sub.has_value());
+        VR_ASSERT_MESSAGE(first xor sub, first.has_value() << " / " sub.has_value());
 
         if (printDecoration)
         {
@@ -244,14 +248,14 @@ namespace VirtualRobot
 
         RobotNode::print(false, false);
 
-        if (head)
+        if (first)
         {
-            std::cout << "* Hemisphere joint head node";
+            std::cout << "* Hemisphere joint first node";
         }
-        else if (tail)
+        else if (second)
         {
-            std::cout << "* Hemisphere joint tail node";
-            std::cout << "* Transform: \n" << tail->joint.getEndEffectorTransform() << std::endl;
+            std::cout << "* Hemisphere joint second node";
+            std::cout << "* Transform: \n" << second->math().joint.getEndEffectorTransform() << std::endl;
         }
 
         if (printDecoration)
@@ -306,11 +310,6 @@ namespace VirtualRobot
         return true;
     }
 
-    void RobotNodeHemisphere::setConstants(double lever, double theta0)
-    {
-        VR_ASSERT(tail);
-        tail->joint.setConstants(lever, theta0);
-    }
 
     void RobotNodeHemisphere::checkValidRobotNodeType()
     {
@@ -321,18 +320,20 @@ namespace VirtualRobot
 
     std::string RobotNodeHemisphere::_toXML(const std::string& /*modelPath*/)
     {
-        VR_ASSERT_MESSAGE(head xor sub, head.has_value() << " / " sub.has_value());
+        VR_ASSERT_MESSAGE(first xor sub, first.has_value() << " / " sub.has_value());
 
-        if (head)
+        if (first)
         {
-            // Hidden, not part of xml.
+            // TODO
             return "";
         }
         else
         {
+            JointMath& math = second->math();
+
             std::stringstream ss;
             ss << "\t\t<Joint type='Hemisphere'>" << std::endl;
-            ss << "\t\t\t<hemisphere lever='" << tail->joint.lever << "' theta0='" << tail->joint.theta0 << "' />" << std::endl;
+            ss << "\t\t\t<hemisphere lever='" << math.joint.lever << "' theta0='" << math.joint.theta0 << "' />" << std::endl;
             ss << "\t\t\t<limits lo='" << jointLimitLo << "' hi='" << jointLimitHi << "' units='radian'/>" << std::endl;
             ss << "\t\t\t<MaxAcceleration value='" << maxAcceleration << "'/>" << std::endl;
             ss << "\t\t\t<MaxVelocity value='" << maxVelocity << "'/>" << std::endl;
@@ -350,7 +351,6 @@ namespace VirtualRobot
         }
     }
 
-
     float RobotNodeHemisphere::getLMTC(float angle)
     {
         return std::sqrt(2 - 2 * std::cos(angle));
@@ -362,5 +362,7 @@ namespace VirtualRobot
         float b = getLMTC(angle);
         return std::sqrt(4 * std::pow(b, 2) - std::pow(b, 4)) / (2 * b);
     }
+
+
 
 }

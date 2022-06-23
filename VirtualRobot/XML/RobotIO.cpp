@@ -24,6 +24,7 @@
 #include <SimoxUtility/xml/rapidxml/rapidxml_print.hpp>
 #include <SimoxUtility/filesystem/remove_trailing_separator.h>
 #include <SimoxUtility/math/convert/deg_to_rad.h>
+#include <SimoxUtility/algorithm/string/string_tools.h>
 
 #include <vector>
 #include <fstream>
@@ -249,12 +250,7 @@ namespace VirtualRobot
         bool scaleVisu = false;
         Eigen::Vector3f scaleVisuFactor = Eigen::Vector3f::Zero();
 
-        struct Hemisphere
-        {
-            float lever;
-            float theta0;
-        };
-        std::optional<Hemisphere> hemisphere;
+        std::optional<RobotNodeHemisphere::XmlInfo> hemisphere;
 
         while (node)
         {
@@ -454,10 +450,28 @@ namespace VirtualRobot
             }
             else if (nodeName == "hemisphere")
             {
-                hemisphere = Hemisphere {
-                        .lever = getFloatByAttributeName(node, "lever"),
-                        .theta0 = simox::math::deg_to_rad(getFloatByAttributeName(node, "theta0")),
-                };
+                hemisphere.emplace();
+
+                std::string roleString = processStringAttribute("role", node, true);
+                roleString = simox::alg::to_lower(roleString);
+                try
+                {
+                    hemisphere->role = RobotNodeHemisphere::RoleFromString(roleString);
+                }
+                catch (const std::out_of_range& e)
+                {
+                    THROW_VR_EXCEPTION("Invalid role in hemisphere joint: " << e.what())
+                }
+
+                switch (hemisphere->role)
+                {
+                case RobotNodeHemisphere::Role::FIRST:
+                    hemisphere->lever = getFloatByAttributeName(node, "lever");
+                    hemisphere->theta0 = simox::math::deg_to_rad(getFloatByAttributeName(node, "theta0"));
+                    break;
+                case RobotNodeHemisphere::Role::SECOND:
+                    break;
+                }
             }
             else
             {
@@ -570,7 +584,7 @@ namespace VirtualRobot
         if (robotNode->isHemisphereJoint() and hemisphere.has_value())
         {
             RobotNodeHemispherePtr node = std::dynamic_pointer_cast<RobotNodeHemisphere>(robotNode);
-            node->setConstants(hemisphere->lever, hemisphere->theta0);
+            node->setXmlInfo(hemisphere.value());
         }
 
         if (scaleVisu)

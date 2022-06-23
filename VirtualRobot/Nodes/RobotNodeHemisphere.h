@@ -41,6 +41,22 @@ namespace VirtualRobot
     {
     public:
 
+        enum class Role
+        {
+            FIRST,
+            SECOND,
+        };
+        static Role RoleFromString(const std::string& string);
+
+        struct XmlInfo
+        {
+            Role role;
+
+            // Only set for first:
+            double theta0 = -1;
+            double lever = -1;
+        };
+
         friend class RobotFactory;
 
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -58,8 +74,7 @@ namespace VirtualRobot
                 float jointValueOffset = 0.0f,                      ///< An offset that is internally added to the joint value
                 const SceneObject::Physics& p = {},                 ///< physics information
                 CollisionCheckerPtr colChecker = nullptr,           ///< A collision checker instance (if not set, the global col checker is used)
-                RobotNodeType type = Generic,
-                bool isTail = true
+                RobotNodeType type = Generic
                 );
 
         RobotNodeHemisphere(
@@ -84,6 +99,8 @@ namespace VirtualRobot
         ~RobotNodeHemisphere() override;
 
 
+        void setXmlInfo(const XmlInfo& info);
+
         bool
         initialize(
                 SceneObjectPtr parent = nullptr,
@@ -99,8 +116,6 @@ namespace VirtualRobot
 
         bool
         isHemisphereJoint() const override;
-
-        void setConstants(double lever, double theta0);
 
         /**
          * \brief getLMTC Calculates the spatial distance between the parent of a Hemisphere joint
@@ -131,15 +146,6 @@ namespace VirtualRobot
 
         RobotNodeHemisphere();
 
-        // Head node constructor.
-        static RobotNodeHemispherePtr MakeHead(
-                RobotWeakPtr robot,
-                const std::string& name,
-                RobotNodeType type = Generic
-                );
-
-
-
         /// Derived classes add custom XML tags here
         std::string
         _toXML(
@@ -168,20 +174,37 @@ namespace VirtualRobot
 
     protected:
 
-        struct Head
+        struct JointMath
         {
-        };
-        std::optional<Head> head;
-
-        struct Tail
-        {
-            /// The second actuator node.
-            RobotNodeHemispherePtr head = nullptr;
-
+            /// The actuator values that were used to compute the joint math.
+            Eigen::Vector2f actuators = Eigen::Vector2f::Constant(std::numeric_limits<float>::min());
             /// The joint math.
             hemisphere::Joint joint;
+
+            void update(const Eigen::Vector2f& actuators);
         };
-        std::optional<Tail> tail;
+
+        struct First
+        {
+            JointMath math;
+        };
+        std::optional<First> first;
+
+        struct Second
+        {
+            /// The first actuator node.
+            RobotNodeHemisphere* first = nullptr;
+
+            JointMath& math()
+            {
+                return first->first->math;
+            }
+            const JointMath& math() const
+            {
+                return first->first->math;
+            }
+        };
+        std::optional<Second> second;
 
     };
 
