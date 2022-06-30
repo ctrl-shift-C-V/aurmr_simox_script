@@ -70,6 +70,10 @@ namespace simox::math
 
         /**
          * @brief Fit a linear regression model to the given data.
+         *
+         * xs and ys must not be empty. All vectors in ys must have the same size
+         * even if Dim == Eigen::Dynamic.
+         *
          * @param xs The input variables.
          * @param ys The output variables.
          * @param offsetInput If true, the inputs are offset to x' = x - x_0.
@@ -97,7 +101,7 @@ namespace simox::math
                 return r;
             }
 
-            MatrixDX ysMatrix(Dim, ys.size());
+            MatrixDX ysMatrix(ys.at(0).size(), ys.size());
             for (long col = 0; col < ysMatrix.cols(); ++col)
             {
                 ysMatrix.col(col) = ys.at(col);
@@ -111,13 +115,13 @@ namespace simox::math
             linFuncMatrix.col(1) = Eigen::Map<const VectorX>(xs.data(), xs.size());
 
             // `linFuncMatrix` is poorly conditioned for xs that are close together
-            // (e.g. time stamps), so the normal equation would loose a lot of precision.
+            // (e.g. time stamps), so the normal equation would lose a lot of precision.
             auto qrDecomp = linFuncMatrix.colPivHouseholderQr();
 
             // Each coordinate can be treated individually (general multivariate regression).
             // `coeffs` contains a_i and b_i in a_0 + b_0 * t = x, a_1 + b_1 * t = y, etc.
-            CoefficientsMatrixT coeffs;
-            for (int dim = 0; dim < 3; ++dim)
+            CoefficientsMatrixT coeffs(ysMatrix.rows(), 2);
+            for (int dim = 0; dim < ysMatrix.rows(); ++dim)
             {
                 VectorX coords = ysMatrix.row(dim).transpose();
                 coeffs.row(dim) = qrDecomp.solve(coords);
