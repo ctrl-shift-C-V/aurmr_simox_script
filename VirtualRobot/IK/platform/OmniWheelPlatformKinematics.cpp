@@ -46,7 +46,13 @@ namespace VirtualRobot
     {
         Eigen::Matrix3f r = Eigen::Vector3f{-1, 1, 1}.asDiagonal();
 
-        return r * B().transpose().inverse() * R / n;
+        // Rotation around platform center to define which direction is front
+        // For ARMAR-7, this is 60 degrees (between the two "front" wheels).
+        float relativeAngle = M_PI / 3.0f;
+        Eigen::Matrix3f relativeRotation = Eigen::Matrix3f::Identity();
+        relativeRotation.block<2, 2>(0, 0) = Eigen::Rotation2Df(relativeAngle).toRotationMatrix();
+
+        return relativeRotation * r * B().transpose().inverse() * R / n;
     }
 
     // OmniWheelPlatformKinematics
