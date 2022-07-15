@@ -179,7 +179,8 @@ if (SimDynamics_DYNAMICSENGINE)
           MESSAGE (STATUS " ** Bullet's OpenGLSupport library not found: Skipping BulletOpenGLViewer")
       endif()
 
-  if (Simox_USE_COIN_VISUALIZATION AND SOQT_FOUND)
+  find_package(SoQt QUIET)
+  if (Simox_USE_COIN_VISUALIZATION AND SoQt_FOUND)
       	SET(SOURCES
         	${SOURCES}
         	DynamicsEngine/BulletEngine/BulletCoinQtViewer.cpp
@@ -190,7 +191,7 @@ if (SimDynamics_DYNAMICSENGINE)
         	DynamicsEngine/BulletEngine/BulletCoinQtViewer.h
       	)
       else()
-          MESSAGE (STATUS "SOQT_FOUND                  : ${SOQT_FOUND}")
+          MESSAGE (STATUS "SoQt_FOUND                  : ${SoQt_FOUND}")
           MESSAGE (STATUS "Simox_USE_COIN_VISUALIZATION: ${Simox_USE_COIN_VISUALIZATION}")
           MESSAGE (STATUS " ** Qt/Coin3D disabled: Skipping BulletCoinQtViewer")
       endif()
