@@ -16,7 +16,8 @@ function(VirtualRobotQtApplication name srcs incs mocFiles uiFiles)
     ################################## EXECUTABLE ##############################
     ADD_EXECUTABLE(${name} ${srcs} ${incs} ${generatedUiFiles} ${generatedMocFiles})
     target_include_directories(${name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-    TARGET_LINK_LIBRARIES(${name} PUBLIC VirtualRobot)
+    FIND_PACKAGE(SoQt REQUIRED)
+    TARGET_LINK_LIBRARIES(${name} PUBLIC VirtualRobot SoQt::SoQt)
 endfunction()
 
 
