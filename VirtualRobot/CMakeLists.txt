@@ -64,12 +64,8 @@ if (Simox_USE_COIN_VISUALIZATION)
     if (Qt5_FOUND AND Coin_FOUND)
         #### SoQt
         # This will set SoQt_INCLUDE_DIRS and SoQt_LIBRARIES
-        FIND_PACKAGE(SoQt QUIET)
-        #if (SoQt_INCLUDE_DIRS AND NOT SoQt_FOUND) #fix missing variable if include dirs was found
-        #    set(SoQt_FOUND TRUE)
-        #    set(SoQt_FOUND TRUE PARENT_SCOPE)
-        #endif ()
-
+        FIND_PACKAGE(SoQt REQUIRED)
+        
         if (NOT SoQt_FOUND)
             MESSAGE (STATUS "Did not find SoQt. Disabling SoQt support.")
         else ()
@@ -79,8 +75,7 @@ if (Simox_USE_COIN_VISUALIZATION)
             set(Simox_VISUALIZATION  TRUE CACHE BOOL "")
             set(Simox_BUILD_EXAMPLES ON CACHE BOOL "Build example applications")
 
-            target_include_directories(VirtualRobot PUBLIC ${SoQt_INCLUDE_DIRS})
-            target_link_libraries(VirtualRobot PUBLIC ${SoQt_LIBRARY_PATH})
+            target_link_libraries(VirtualRobot PUBLIC SoQt::SoQt)
             target_compile_definitions(VirtualRobot PUBLIC -DSoQt_DLL -DSIMOX_USE_SoQt)
 
             if (NOT UNIX)
