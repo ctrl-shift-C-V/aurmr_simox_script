@@ -278,10 +278,11 @@ namespace VirtualRobot
 
     int GraspEditorWindow::main()
     {
+        // initialize QCoreApp
         QCoreApplication::setOrganizationName("H2T");
         QCoreApplication::setOrganizationDomain("h2t.anthropomatik.kit.edu");
-        QCoreApplication::setApplicationName("GraspEditor");
         QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
+        QCoreApplication::setApplicationName("GraspEditor");
         QSettings settings;
 
         SoQt::show(this);
