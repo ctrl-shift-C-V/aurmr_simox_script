@@ -77,47 +77,49 @@ namespace VirtualRobot
         static bool isTrue(const char* s);
         static float convertToFloat(const char* s);
         static int convertToInt(const char* s);
-        static void processNodeList(rapidxml::xml_node<char>* parentNode, RobotPtr robot, std::vector<RobotNodePtr>& nodeList, bool clearList = true);
-        static void processLimitsNode(rapidxml::xml_node<char>* limitsXMLNode, float& jointLimitLo, float& jointLimitHi);
-        static std::string processFileNode(rapidxml::xml_node<char>* fileNode, const std::string& basePath);
-        static void processTransformNode(rapidxml::xml_node<char>* transformXMLNode, const std::string& nodeName, Eigen::Matrix4f& transform);
-        static Units getUnitsAttribute(rapidxml::xml_node<char>* node, Units::UnitsType u);
-        static std::string processNameAttribute(rapidxml::xml_node<char>* node, bool allowOtherAttributes = false);
-        static float processFloatAttribute(const std::string& attributeName, rapidxml::xml_node<char>* node, bool allowOtherAttributes = false);
-        static int processIntAttribute(const std::string& attributeName, rapidxml::xml_node<char>* node, bool allowOtherAttributes = false);
-        static float getFloatByAttributeName(rapidxml::xml_node<char>* xmlNode, const std::string& attributeName);
-        static float getOptionalFloatByAttributeName(rapidxml::xml_node<char>* xmlNode, const std::string& attributeName, float standardValue);
+        static void processNodeList(const rapidxml::xml_node<char>* parentNode, RobotPtr robot, std::vector<RobotNodePtr>& nodeList, bool clearList = true);
+        static void processLimitsNode(const rapidxml::xml_node<char>* limitsXMLNode, float& jointLimitLo, float& jointLimitHi);
+        static std::string processFileNode(const rapidxml::xml_node<char>* fileNode, const std::string& basePath);
+        static void processTransformNode(const rapidxml::xml_node<char>* transformXMLNode, const std::string& nodeName, Eigen::Matrix4f& transform);
+        static Units getUnitsAttribute(const rapidxml::xml_node<char>* node, Units::UnitsType u);
+        static std::string processNameAttribute(const rapidxml::xml_node<char>* node, bool allowOtherAttributes = false);
+        static float processFloatAttribute(const std::string& attributeName, const rapidxml::xml_node<char>* node, bool allowOtherAttributes = false);
+        static int processIntAttribute(const std::string& attributeName, const rapidxml::xml_node<char>* node, bool allowOtherAttributes = false);
+        static bool processOptionalBoolAttribute(const std::string& attributeName, const rapidxml::xml_node<char>* node, bool defaultValue);
+        static float getFloatByAttributeName(const rapidxml::xml_node<char>* xmlNode, const std::string& attributeName);
+        static float getOptionalFloatByAttributeName(const rapidxml::xml_node<char>* xmlNode, const std::string& attributeName, float standardValue);
 
-        static bool processConfigurationNode(rapidxml::xml_node<char>* configXMLNode, std::vector< RobotConfig::Configuration >& storeConfigDefinitions, std::string&  storeConfigName);
-        static bool processConfigurationNodeList(rapidxml::xml_node<char>* configXMLNode, std::vector< std::vector< RobotConfig::Configuration > >& configDefinitions, std::vector< std::string >& configNames, std::vector< std::string >& tcpNames);
+        static bool processConfigurationNode(const rapidxml::xml_node<char>* configXMLNode, std::vector< RobotConfig::Configuration >& storeConfigDefinitions, std::string&  storeConfigName);
+        static bool processConfigurationNodeList(const rapidxml::xml_node<char>* configXMLNode, std::vector< std::vector< RobotConfig::Configuration > >& configDefinitions, std::vector< std::string >& configNames, std::vector< std::string >& tcpNames);
 
         static std::string getLowerCase(const char* c);
         static void getLowerCase(std::string& aString);
-        static std::string processStringAttribute(const std::string& attributeName, rapidxml::xml_node<char>* node, bool allowOtherAttributes = false);
+        static std::string processStringAttribute(const std::string& attributeName, const rapidxml::xml_node<char>* node, bool allowOtherAttributes = false);
 
-        static VisualizationNodePtr processVisualizationTag(rapidxml::xml_node<char>* visuXMLNode, const std::string& tagName, const std::string& basePath, bool& useAsColModel);
-        static CollisionModelPtr processCollisionTag(rapidxml::xml_node<char>* colXMLNode, const std::string& tagName, const std::string& basePath);
-        static std::vector<Primitive::PrimitivePtr> processPrimitives(rapidxml::xml_node<char>* primitivesXMLNode);
-        static void processPhysicsTag(rapidxml::xml_node<char>* physicsXMLNode, const std::string& nodeName, SceneObject::Physics& physics);
-        static RobotNodeSetPtr processRobotNodeSet(rapidxml::xml_node<char>* setXMLNode, RobotPtr robo, const std::string& robotRootNode, int& robotNodeSetCounter);
-        static TrajectoryPtr processTrajectory(rapidxml::xml_node<char>* trajectoryXMLNode, std::vector<RobotPtr>& robots);
-        static Eigen::Matrix3f process3x3Matrix(rapidxml::xml_node<char>* matrixXMLNode);
-        static bool processFloatValueTags(rapidxml::xml_node<char>* XMLNode, int dim, Eigen::VectorXf& stroreResult);
-        static bool hasUnitsAttribute(rapidxml::xml_node<char>* node);
-        static std::vector< Units > getUnitsAttributes(rapidxml::xml_node<char>* node);
-        static void getAllAttributes(rapidxml::xml_node<char>* node, const std::string& attrString, std::vector<std::string>& storeValues);
-        static void processDHNode(rapidxml::xml_node<char>* dhXMLNode, DHParameter& dh);
+        static VisualizationNodePtr processVisualizationTag(const rapidxml::xml_node<char>* visuXMLNode, const std::string& tagName, const std::string& basePath, bool& useAsColModel);
+        static CollisionModelPtr processCollisionTag(const rapidxml::xml_node<char>* colXMLNode, const std::string& tagName, const std::string& basePath);
+        static std::vector<Primitive::PrimitivePtr> processPrimitives(const rapidxml::xml_node<char>* primitivesXMLNode);
+        static void processPhysicsTag(const rapidxml::xml_node<char>* physicsXMLNode, const std::string& nodeName, SceneObject::Physics& physics);
+        static RobotNodeSetPtr processRobotNodeSet(const rapidxml::xml_node<char>* setXMLNode, RobotPtr robo, const std::string& robotRootNode, int& robotNodeSetCounter);
+        static TrajectoryPtr processTrajectory(const rapidxml::xml_node<char>* trajectoryXMLNode, std::vector<RobotPtr>& robots);
+        static Eigen::Matrix3f process3x3Matrix(const rapidxml::xml_node<char>* matrixXMLNode);
+        static bool processFloatValueTags(const rapidxml::xml_node<char>* XMLNode, int dim, Eigen::VectorXf& stroreResult);
+        static bool hasUnitsAttribute(const rapidxml::xml_node<char>* node);
+        static std::vector< Units > getUnitsAttributes(const rapidxml::xml_node<char>* node);
+        static void getAllAttributes(const rapidxml::xml_node<char>* node, const std::string& attrString, std::vector<std::string>& storeValues);
+        static void processDHNode(const rapidxml::xml_node<char>* dhXMLNode, DHParameter& dh);
 
-        static NodeMapping processNodeMapping(rapidxml::xml_node<char>* XMLNode, RobotPtr robot);
+        static NodeMapping processNodeMapping(const rapidxml::xml_node<char>* XMLNode, RobotPtr robot);
+        static HumanMapping processHumanMapping(const rapidxml::xml_node<char>* XMLNode, const RobotPtr& robot);
 
         static std::string toXML(const Eigen::Matrix4f& m, std::string ident = "\t");
 
-        static std::vector<VisualizationNodePtr> processVisuFiles(rapidxml::xml_node<char>* visualizationXMLNode, const std::string& basePath, std::string& fileType);
+        static std::vector<VisualizationNodePtr> processVisuFiles(const rapidxml::xml_node<char>* visualizationXMLNode, const std::string& basePath, std::string& fileType);
 
-        static GraspSetPtr processGraspSet(rapidxml::xml_node<char>* graspSetXMLNode, const std::string& objName);
-        static GraspPtr processGrasp(rapidxml::xml_node<char>* graspXMLNode, const std::string& robotType, const std::string& eef, const std::string& objName);
+        static GraspSetPtr processGraspSet(const rapidxml::xml_node<char>* graspSetXMLNode, const std::string& objName);
+        static GraspPtr processGrasp(const rapidxml::xml_node<char>* graspXMLNode, const std::string& robotType, const std::string& eef, const std::string& objName);
 
-        static bool processSensor(GraspableSensorizedObjectPtr node, rapidxml::xml_node<char>* sensorXMLNode, RobotDescription loadMode, const std::string& basePath);
+        static bool processSensor(GraspableSensorizedObjectPtr node, const rapidxml::xml_node<char>* sensorXMLNode, RobotDescription loadMode, const std::string& basePath);
     protected:
         // instantiation not allowed
         BaseIO();
@@ -128,4 +130,3 @@ namespace VirtualRobot
     };
 
 }
-
