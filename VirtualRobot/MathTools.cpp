@@ -14,7 +14,6 @@
 #include <Eigen/Geometry>
 
 #define MIN_TO_ZERO (1e-6f)
-#define M_PIf (static_cast<float>(M_PI))
 
 namespace VirtualRobot
 {
@@ -97,12 +96,12 @@ namespace VirtualRobot
             double alpha, beta, gamma;
             beta = std::atan2(-res(3, 1), sqrt(res(1, 1) * res(1, 1) + res(2, 1) * res(2, 1)));
 
-            if (std::abs(beta - M_PIf_2) < 1e-4)
+            if (std::abs(beta - M_PIf32_2) < 1e-4)
             {
                 alpha = 0;
                 gamma = std::atan2(res(1, 2), res(2, 2));
             }
-            else if (std::abs(beta - (-M_PIf_2)) < 1e-4)
+            else if (std::abs(beta - (-M_PIf32_2)) < 1e-4)
             {
                 alpha = 0;
                 gamma = -atan2(res(1, 2), res(2, 2));
@@ -144,7 +143,7 @@ namespace VirtualRobot
             } else
             {
                 storeResult[3] = -atan2(-A[0][1], A[0][0]);
-                storeResult[4] = (float)M_PIf;
+                storeResult[4] = (float)M_PIf32;
                 storeResult[5] = 0;
             }
         } else
@@ -203,12 +202,12 @@ namespace VirtualRobot
         float alpha, beta, gamma;
         beta = std::atan2(-m(2, 0), sqrtf(m(0, 0) * m(0, 0) + m(1, 0) * m(1, 0)));
 
-        if (std::abs(beta - M_PIf * 0.5f) < 1e-10f)
+        if (std::abs(beta - M_PIf32 * 0.5f) < 1e-10f)
         {
             alpha = 0;
             gamma = std::atan2(m(0, 1), m(1, 1));
         }
-        else if (std::abs(beta + M_PIf * 0.5f) < 1e-10f)
+        else if (std::abs(beta + M_PIf32 * 0.5f) < 1e-10f)
         {
             alpha = 0;
             gamma = - std::atan2(m(0, 1), m(1, 1));
@@ -1384,8 +1383,8 @@ namespace VirtualRobot
         Eigen::AngleAxisf aa(qe);
         float angle = aa.angle();
         // sometimes angle is >PI?!
-        if (angle > float(M_PIf))
-            angle = float(2.0f*M_PIf) - angle;
+        if (angle > float(M_PIf32))
+            angle = float(2.0f*M_PIf32) - angle;
         return angle;
         /*
         float n = sqrtf(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
@@ -1633,13 +1632,13 @@ namespace VirtualRobot
 
     float VIRTUAL_ROBOT_IMPORT_EXPORT MathTools::rad2deg(float rad)
     {
-        static const float c = 180.0f / M_PIf;
+        constexpr float c = 180.0f / M_PIf32;
         return rad * c;
     }
 
     float VIRTUAL_ROBOT_IMPORT_EXPORT MathTools::deg2rad(float deg)
     {
-        static const float c = M_PIf / 180.0f;
+        constexpr float c = M_PIf32 / 180.0f;
         return deg * c;
     }
 
@@ -1991,18 +1990,18 @@ namespace VirtualRobot
         double p = sqrt(double(q.y)*double(q.y) + double(q.x)*double(q.x));
 
         if (std::abs(p-1) < 1e-6)
-            resF(2) = M_PIf * 0.5f;
+            resF(2) = M_PIf32 * 0.5f;
         else if (std::abs(p+1) < 1e-6)
-            resF(2) = - M_PIf * 0.5f;
+            resF(2) = - M_PIf32 * 0.5f;
         else
             resF(2) = static_cast<float>(std::asin(p));
 
         VR_ASSERT (!std::isnan(resF(2)));
 
         if (resF(0)<0)
-            resF(0) = 2.0f * M_PIf + resF(0); // -2PI,2PI -> 0,2PI
+            resF(0) = 2.0f * M_PIf32 + resF(0); // -2PI,2PI -> 0,2PI
         if (resF(1)<0)
-            resF(1) = 2.0f * M_PIf + resF(1); // -2PI,2PI -> 0,2PI
+            resF(1) = 2.0f * M_PIf32 + resF(1); // -2PI,2PI -> 0,2PI
 
         return resF;
        /* Eigen::Matrix4f m4 = quat2eigen4f(q);
@@ -2016,15 +2015,15 @@ namespace VirtualRobot
         resF(0) = ea(0)-resF(2);
 
         // from -PI,2PI to -PI,PI
-        if (resF(0)>M_PIf)
-            resF(0) -= 2*M_PIf;
+        if (resF(0)>M_PIf32)
+            resF(0) -= 2*M_PIf32;
 
         if (resF(0)<0)
-            resF(0) = 2*M_PIf + resF(0); // -PI,PI -> 0,2PI
+            resF(0) = 2*M_PIf32 + resF(0); // -PI,PI -> 0,2PI
         if (resF(1)<0)
-            resF(1) = 2*M_PIf + resF(1); // -PI,PI -> 0,2PI
+            resF(1) = 2*M_PIf32 + resF(1); // -PI,PI -> 0,2PI
         if (resF(2)<0)
-            resF(2) = 2*M_PIf + resF(2); // -PI,PI -> 0,2PI
+            resF(2) = 2*M_PIf32 + resF(2); // -PI,PI -> 0,2PI
 
         return resF;*/
     }
@@ -2045,12 +2044,12 @@ namespace VirtualRobot
         q.z = sin(hopf(0)*0.5f) * sin(hopf(1) + hopf(2)*0.5f);*/
         /*
         Eigen::Vector3f h2 = hopf;
-        if (h2(0)>M_PIf)
-            h2(0) = h2(0) - 2*M_PIf ; // 0,2PI -> -PI,PI
-        if (h2(1)>M_PIf)
-            h2(1) = h2(1) - 2*M_PIf ; // 0,2PI -> -PI,PI
-        if (h2(0)>M_PIf)
-            h2(2) = h2(2) - 2*M_PIf ; // 0,2PI -> -PI,PI
+        if (h2(0)>M_PIf32)
+            h2(0) = h2(0) - 2*M_PIf32 ; // 0,2PI -> -PI,PI
+        if (h2(1)>M_PIf32)
+            h2(1) = h2(1) - 2*M_PIf32 ; // 0,2PI -> -PI,PI
+        if (h2(0)>M_PIf32)
+            h2(2) = h2(2) - 2*M_PIf32 ; // 0,2PI -> -PI,PI
 
         // formular form
         // Open-source code for manifold-based 3D rotation recovery of X-ray scattering patterns
@@ -2089,17 +2088,17 @@ namespace VirtualRobot
 
     float MathTools::angleMod2PI(float value)
     {
-        return fmod(value, 0, 2 * M_PIf);
+        return fmod(value, 0, 2 * M_PIf32);
     }
 
     float MathTools::angleModPI(float value)
     {
-        return angleMod2PI(value + M_PIf) - M_PIf;
+        return angleMod2PI(value + M_PIf32) - M_PIf32;
     }
 
     float MathTools::angleModX(float value, float center)
     {
-        return angleMod2PI(value + M_PIf - center) - M_PIf + center;
+        return angleMod2PI(value + M_PIf32 - center) - M_PIf32 + center;
     }
 
     float MathTools::Lerp(float a, float b, float f)
@@ -2114,7 +2113,7 @@ namespace VirtualRobot
 
     float MathTools::AngleLerp(float a, float b, float f)
     {
-        b = fmod(b, a - M_PIf, a + M_PIf);
+        b = fmod(b, a - M_PIf32, a + M_PIf32);
         return Lerp(a, b, f);
     }
 
@@ -2275,4 +2274,3 @@ namespace VirtualRobot
 
 
 } // namespace
-
