@@ -30,6 +30,7 @@
 
 #include <type_traits>
 #include <string>
+#include <unordered_map>
 #include <vector>
 #include <map>
 
@@ -49,6 +50,47 @@ namespace VirtualRobot
     };
 
     using NodeMapping = std::unordered_map<std::string, NodeMappingElement>;
+
+    struct HumanMapping
+    {
+        struct ArmDescription
+        {
+            struct Locations
+            {
+                std::string shoulder;
+                std::string elbow;
+                std::string wrist;
+                std::string tcp;
+            } location;
+
+            struct NodeDescription
+            {
+                std::string name;
+                float offset;
+                bool inverted; 
+            };
+
+            // mapping: "location" -> "movement" -> "node name"
+            using JointMapping =             
+                std::unordered_map<std::string, std::unordered_map<std::string, NodeDescription>>;
+
+            JointMapping jointMapping;
+
+            std::string nodeSet;
+        };
+
+        struct HandDescription
+        {
+            std::string palm;
+            std::string tcp;
+        };
+
+        ArmDescription leftArm;
+        ArmDescription rightArm;
+
+        HandDescription leftHand;
+        HandDescription rightHand;
+    };
 
     /*!
         This is the main object defining the kinematic structure of a robot.
@@ -184,6 +226,7 @@ namespace VirtualRobot
         * Node mapping
         */
         const NodeMapping& getNodeMapping() const;
+        const std::optional<HumanMapping>& getHumanMapping() const;
 
         /**
          *
@@ -454,11 +497,14 @@ namespace VirtualRobot
 
         void registerNodeMapping(const NodeMapping& nodeMapping);
 
+        void registerHumanMapping(const HumanMapping& humanMapping);
+
 
     protected:
         Robot();
 
         void validateNodeMapping(const NodeMapping& nodeMapping) const;
+        void validateHumanMapping(const HumanMapping& humanMapping) const;
 
 
         /*!
@@ -486,6 +532,7 @@ namespace VirtualRobot
 
     private:
         NodeMapping nodeMapping;
+        std::optional<HumanMapping> humanMapping;
 
     };
 
@@ -568,4 +615,3 @@ namespace VirtualRobot
 
 
 } // namespace VirtualRobot
-
