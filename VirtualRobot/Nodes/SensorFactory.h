@@ -65,7 +65,7 @@ namespace VirtualRobot
         /*!
             Create sensor from XML tag. Factories of custom sensors can initialize with this method.
         */
-        virtual SensorPtr createSensor(GraspableSensorizedObjectPtr /*node*/, rapidxml::xml_node<char>* /*sensorXMLNode*/, BaseIO::RobotDescription /*loadMode*/ = RobotIO::eFull, const std::string /*basePath*/ = std::string()) const
+        virtual SensorPtr createSensor(GraspableSensorizedObjectPtr /*node*/, const rapidxml::xml_node<char>* /*sensorXMLNode*/, BaseIO::RobotDescription /*loadMode*/ = RobotIO::eFull, const std::string /*basePath*/ = std::string()) const
         {
             return SensorPtr();
         }
@@ -74,4 +74,3 @@ namespace VirtualRobot
     typedef std::shared_ptr<SensorFactory> SensorFactoryPtr;
 
 } // namespace VirtualRobot
-
