@@ -20,10 +20,13 @@
 #include "../Nodes/SensorFactory.h"
 #include <SimoxUtility/filesystem/make_relative.h>
 #include <SimoxUtility/algorithm/string/string_conversion.h>
+#include "VirtualRobot.h"
 #include "rapidxml.hpp"
 
 #include <filesystem>
 #include <fstream>
+#include <stdexcept>
+#include <string>
 
 namespace VirtualRobot
 {
@@ -671,6 +674,144 @@ namespace VirtualRobot
         return nodeMapping;
     }
 
+    HumanMapping BaseIO::processHumanMapping(const rapidxml::xml_node<char>* XMLNode, const RobotPtr& robot)
+    {
+        (void) robot;
+
+        HumanMapping humanMapping;
+
+        enum class Side
+        {
+            LEFT,
+            RIGHT
+        };
+
+        const auto getSide = [&](const auto node){
+            VR_ASSERT(node != nullptr);
+            const std::string side = processStringAttribute("side", node, true);
+
+            if(side == "left")
+            {
+                return Side::LEFT;
+            }
+
+            if(side == "right")
+            {
+                return Side::RIGHT;
+            }
+
+            VR_ERROR << "Unknown side `" << side <<  "`";
+            throw std::invalid_argument("Unknown side `" + side + "`");
+        };
+
+        {
+            rapidxml::xml_node<>* armNode = XMLNode->first_node("arm", 0, false);
+            while (armNode != nullptr)
+            {
+                VR_INFO << "arm node";
+
+                const auto side = getSide(armNode);
+
+                const rapidxml::xml_node<char> *locationNode =
+                    armNode->first_node("locations", 0, false);
+                VR_ASSERT(locationNode != nullptr);
+
+                const std::string shoulder = processStringAttribute("shoulder", locationNode, true);
+                const std::string elbow = processStringAttribute("elbow", locationNode, true);
+                const std::string wrist = processStringAttribute("wrist", locationNode, true);
+                const std::string tcp = processStringAttribute("tcp", locationNode, true);
+                const std::string nodeSet = processStringAttribute("nodeset", locationNode, true);
+
+                const HumanMapping::ArmDescription::Locations locations
+                {
+                    .shoulder = shoulder,
+                    .elbow = elbow,
+                    .wrist = wrist,
+                    .tcp = tcp
+                };
+
+                const rapidxml::xml_node<char>* armJointsNode = armNode->first_node("joints", 0, false);
+                VR_ASSERT(armJointsNode != nullptr);
+
+                HumanMapping::ArmDescription::JointMapping jointMapping;
+                const rapidxml::xml_node<char>* jointNode = armJointsNode->first_node("joint", 0, false);
+                VR_ASSERT(jointNode != nullptr);
+
+                while(jointNode != nullptr)
+                {
+                    const std::string location = processStringAttribute("location", jointNode, true);
+                    const std::string movement = processStringAttribute("movement", jointNode, true);
+                    const std::string node = processStringAttribute("node", jointNode, true);
+                    const bool inverted = processOptionalBoolAttribute("inverted", jointNode, false);
+                    const float offset = processFloatAttribute("offset", jointNode, true);
+
+                    VR_INFO << location << "/" << movement;
+
+                    jointMapping[location][movement] = {node, offset, inverted};
+
+                    // advance to next sibling
+                    jointNode = jointNode->next_sibling("joint", 0, false);
+                }
+
+                const HumanMapping::ArmDescription armDescription
+                {
+                    .location = locations,
+                    .jointMapping = jointMapping,
+                    .nodeSet = nodeSet  
+                };
+
+                switch(side)
+                {
+                    case Side::LEFT:
+                        humanMapping.leftArm = armDescription;
+                        break;
+                    case Side::RIGHT:
+                        humanMapping.rightArm = armDescription;
+                        break;
+                }
+
+                armNode = armNode->next_sibling("arm", 0, false);
+
+            }
+        }
+
+
+        {
+            rapidxml::xml_node<>* handNode = XMLNode->first_node("hand", 0, false);
+            while (handNode != nullptr)
+            {
+                VR_INFO << "hand node";
+
+                const auto side = getSide(handNode);
+
+                const std::string palm = processStringAttribute("palm", handNode, true);
+                const std::string tcp = processStringAttribute("tcp", handNode, true);
+
+                const HumanMapping::HandDescription handDescription
+                {
+                    .palm = palm,
+                    .tcp = tcp
+                };
+
+                switch(side)
+                {
+                    case Side::LEFT:
+                        humanMapping.leftHand = handDescription;
+                        break;
+                    case Side::RIGHT:
+                        humanMapping.rightHand = handDescription;
+                        break;
+                }
+
+
+                handNode = handNode->next_sibling("hand", 0, false);
+            }
+        }
+
+
+        return humanMapping;
+    }
+
 
     /**
     * This method takes a rapidxml::xml_node and returns the value of the
@@ -760,6 +901,22 @@ namespace VirtualRobot
 
         return value;
     }
+
+
+    bool BaseIO::processOptionalBoolAttribute(const std::string& attributeName, const rapidxml::xml_node<char>* node, bool defaultValue)
+    {
+        THROW_VR_EXCEPTION_IF(!node, "Can not process name attribute of NULL node" << endl);
+
+        rapidxml::xml_attribute<char>* attr = node->first_attribute(attributeName.c_str(), 0, false);
+
+        if(attr == nullptr)
+        {
+            return defaultValue;
+        }
+
+        return isTrue(attr->value());
+    }
+    
 
     /**
         * This method takes a rapidxml::xml_node and returns the value of the

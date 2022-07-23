@@ -110,6 +110,7 @@ namespace VirtualRobot
                                            std::vector<rapidxml::xml_node<char>* >& robotNodeSetNodes,
                                            std::vector<rapidxml::xml_node<char>* >& endeffectorNodes,
                                            NodeMapping& nodeMapping,
+                                           std::optional<HumanMapping>& humanMapping,
                                            RobotDescription loadMode = eFull);
         static RobotNodePtr processRobotNode(rapidxml::xml_node<char>* robotNodeXMLNode,
                                              RobotPtr robo,
@@ -136,4 +137,3 @@ namespace VirtualRobot
     };
 
 }
-
