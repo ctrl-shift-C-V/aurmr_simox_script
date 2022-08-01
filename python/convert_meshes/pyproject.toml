@@ -6,7 +6,7 @@ authors = ["Rainer Kartmann <rainer dot kartmann at kit dot edu>"]
 
 [tool.poetry.dependencies]
 python = "^3.6.2"
-ipython = "5.5"
+ipython = "*"
 pymeshlab = "^2021.10"
 click = "^8.0.4"
 rich = "^11.2.0"
