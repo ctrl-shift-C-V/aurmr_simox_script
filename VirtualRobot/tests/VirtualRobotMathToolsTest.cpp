@@ -14,8 +14,6 @@
 
 #include <string>
 
-#define M_PIf (static_cast<float>(M_PI))
-
 BOOST_AUTO_TEST_SUITE(MathTools)
 
 
