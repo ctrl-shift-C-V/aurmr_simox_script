@@ -14,10 +14,10 @@ namespace simox
 
     void color::from_json(const nlohmann::json& j, Color& color)
     {
-        color.r = j.at("r");
-        color.g = j.at("g");
-        color.b = j.at("b");
-        color.a = j.at("a");
+        j.at("r").get_to(color.r);
+        j.at("g").get_to(color.g);
+        j.at("b").get_to(color.b);
+        j.at("a").get_to(color.a);
     }
 
 }
