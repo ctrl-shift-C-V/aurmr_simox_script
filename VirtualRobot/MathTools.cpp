@@ -14,7 +14,9 @@
 #include <Eigen/Geometry>
 
 #define MIN_TO_ZERO (1e-6f)
+#ifndef M_PIf
 #define M_PIf (static_cast<float>(M_PI))
+#endif
 
 namespace VirtualRobot
 {
