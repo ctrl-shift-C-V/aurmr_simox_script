@@ -77,7 +77,7 @@
 #endif
 #include <GL/gl.h>
 
-#ifdef SIMOX_USE_SOQT
+#ifdef SIMOX_USE_SoQt
 #include <Inventor/Qt/SoQt.h>
 #endif
 
@@ -113,7 +113,7 @@ namespace VirtualRobot
         {
             SoDB::init();
         }
-#ifdef SIMOX_USE_SOQT
+#ifdef SIMOX_USE_SoQt
         SoQt::init(argc, argv, appName.c_str());
 #endif
         // enable Coin3D extension: transparent settings without color

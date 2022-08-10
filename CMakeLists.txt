@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 MESSAGE (STATUS "cmake version: ${CMAKE_VERSION}")
+
 # If OS is Ubuntu 20 we nned to change some things
 execute_process(COMMAND lsb_release -cs
     OUTPUT_VARIABLE RELEASE_CODENAME
@@ -95,6 +96,10 @@ if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0)
     add_compile_options(-Wno-error=unused-parameter)
     add_compile_options(-Wno-error=deprecated-declarations)
     add_compile_options(-Wno-error=sign-compare)
+endif()
+
+if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
+    add_compile_options(-Wno-error=deprecated-copy)
 endif()
 
 #######################################################################################
