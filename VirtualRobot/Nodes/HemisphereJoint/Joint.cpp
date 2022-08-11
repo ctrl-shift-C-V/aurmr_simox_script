@@ -26,14 +26,27 @@ namespace VirtualRobot::hemisphere
         this->lever = lever;
         this->theta0 = theta0;
         this->radius = 2 * std::sin(theta0) * lever;
-        this->actuatorOffset = std::asin(theta0);
-        this->lever = 1;
+
+        this->limitHi =   simox::math::deg_to_rad(45 - 6.0);
+        this->limitLo = - simox::math::deg_to_rad(45 - 14.0);
     }
 
 
-    void Joint::computeFK(double a1, double a2)
+    void Joint::computeFkOfPosition(double p1, double p2)
     {
-        fk.compute(a1, a2, lever, theta0);
+        fk.compute(p1, p2, lever, theta0);
+    }
+
+
+    void Joint::computeFkOfPosition(const Eigen::Vector2d& p12)
+    {
+        computeFkOfPosition(p12(0), p12(1));
+    }
+
+
+    void Joint::computeFkOfAngle(const Eigen::Vector2d& alpha12)
+    {
+        computeFkOfPosition(angleToPosition(alpha12));
     }
 
 
@@ -44,13 +57,6 @@ namespace VirtualRobot::hemisphere
             fk.ey,
             fk.ez
         };
-    }
-
-    Eigen::Vector3d Joint::getCorrectedEndEffectorTranslation() const
-    {
-        Eigen::Vector3d translation = getEndEffectorTranslation();
-        translation = translation.normalized() * radius;
-        return translation;
     }
 
 
@@ -81,6 +87,11 @@ namespace VirtualRobot::hemisphere
                     fk.jry1, fk.jry2,
                     fk.jrz1, fk.jrz2;
         return jacobian;
+    }
+
+    Eigen::Vector2d Joint::angleToPosition(const Eigen::Vector2d& alpha) const
+    {
+        return lever * Eigen::sin((alpha + Eigen::Vector2d::Constant(theta0)).array());
     }
 
 }

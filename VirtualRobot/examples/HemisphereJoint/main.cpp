@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
                 const time_point start = std::chrono::system_clock::now();
 
                 VirtualRobot::hemisphere::Joint joint;
-                joint.computeFK(a1, a2);
+                joint.computeFkOfPosition(a1, a2);
 
                 const Eigen::Vector3d pos = joint.getEndEffectorTranslation();
                 const Eigen::Matrix3d ori = joint.getEndEffectorRotation();
@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
         a2 += offset;
 
         VirtualRobot::hemisphere::Joint joint;
-        joint.computeFK(a1, a2);
+        joint.computeFkOfPosition(a1, a2);
 
         const Eigen::Vector3d pos = joint.getEndEffectorTranslation();
         std::cout << "\n  pos = \n" << pos.transpose().format(iof)

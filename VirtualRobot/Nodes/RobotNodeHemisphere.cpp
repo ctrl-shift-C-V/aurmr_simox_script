@@ -8,8 +8,8 @@
 
 #include <Eigen/Geometry>
 
-#include <SimoxUtility/math/pose/pose.h>
 #include <SimoxUtility/meta/enum/EnumNames.hpp>
+#include <SimoxUtility/math/pose/pose.h>
 
 
 namespace VirtualRobot
@@ -142,7 +142,7 @@ namespace VirtualRobot
             {
                 std::stringstream ss;
                 ss << "The parent of a hemisphere joint with role '" << RoleNames.to_name(Role::SECOND) << "' "
-                   << "must have be a hemisphere joint with role '" << RoleNames.to_name(Role::FIRST) << "' ";
+                   << "must be a hemisphere joint with role '" << RoleNames.to_name(Role::FIRST) << "' ";
                 THROW_VR_EXCEPTION(ss.str());
             }
 
@@ -153,17 +153,11 @@ namespace VirtualRobot
             {
                 const hemisphere::Joint& joint = second->math().joint;
 
-                // (actuator + offset) must be in [-1, 1]
-                // => low: actuator = -1 - offset
-                // => hi: actuator = 1 - offset
-                double lo = -1 - joint.actuatorOffset;
-                double hi = +1 - joint.actuatorOffset;
+                firstNode->jointLimitLo = joint.limitLo;
+                secondNode->jointLimitLo = joint.limitLo;
 
-                firstNode->jointLimitLo = lo;
-                secondNode->jointLimitLo = lo;
-
-                firstNode->jointLimitHi = hi;
-                secondNode->jointLimitHi = hi;
+                firstNode->jointLimitHi = joint.limitHi;
+                secondNode->jointLimitHi = joint.limitHi;
             }
         }
 
@@ -173,21 +167,9 @@ namespace VirtualRobot
 
     void RobotNodeHemisphere::JointMath::update(const Eigen::Vector2f& actuators)
     {
-        const double maxNorm = 1;
-
         if (actuators != this->actuators)
         {
-            Eigen::Vector2f a = actuators;
-            a = a.array() + joint.actuatorOffset;
-
-            double norm = a.norm();
-            if (norm > maxNorm)
-            {
-                a *= (maxNorm / norm);
-            }
-
-            this->actuators = actuators;
-            joint.computeFK(a(0), a(1));
+            joint.computeFkOfAngle(actuators.cast<double>());
         }
     }
 
@@ -210,7 +192,7 @@ namespace VirtualRobot
 
             math.update(actuators);
 
-            Eigen::Vector3d translation = math.joint.getCorrectedEndEffectorTranslation();
+            Eigen::Vector3d translation = math.joint.getEndEffectorTranslation();
             const Eigen::Matrix3d rotation = math.joint.getEndEffectorRotation();
             const Eigen::Matrix4d transform = simox::math::pose(translation, rotation);
 
@@ -223,11 +205,9 @@ namespace VirtualRobot
                           << "\n  lever = " << math.joint.lever
                           << "\n  theta0 = " << math.joint.theta0
                           << "\n  radius = " << math.joint.radius
-                          << "\n  actuator offset = " << math.joint.actuatorOffset
                           << "\n  joint value = " << jointValue
-                          << "\n  joint value offset = " << jointValueOffset
-                          << "\n  actuator = \n" << actuators.transpose().format(iof)
-                          << "\n  actuator + offset = \n" << (actuators.array() + math.joint.actuatorOffset).transpose().format(iof)
+                          << "\n  actuator (angle) = \n" << actuators.transpose().format(iof)
+                          << "\n  actuator (pos) =  \n" << math.joint.angleToPosition(actuators.cast<double>()).transpose().format(iof)
                           << "\n  local transform = \n" << localTransformation.format(iof)
                           << "\n  joint transform = \n" << transform.format(iof)
                           << std::endl;
