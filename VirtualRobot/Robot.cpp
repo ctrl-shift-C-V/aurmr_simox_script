@@ -1284,6 +1284,12 @@ namespace VirtualRobot
     {
         return nodeMapping;
     }
+
+    const std::optional<HumanMapping>& Robot::getHumanMapping() const
+    {
+        return humanMapping;
+    }
+
     
 
 } // namespace VirtualRobot

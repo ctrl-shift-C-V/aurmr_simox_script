@@ -747,7 +747,7 @@ namespace VirtualRobot
 
                     VR_INFO << location << "/" << movement;
 
-                    jointMapping[location][movement] = {node, offset, inverted};
+                    jointMapping[node] = HumanMapping::ArmDescription::HumanJointDescription{.location = location, .movement = movement, .offset = offset, .inverted = inverted};
 
                     // advance to next sibling
                     jointNode = jointNode->next_sibling("joint", 0, false);

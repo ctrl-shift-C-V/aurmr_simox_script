@@ -63,16 +63,20 @@ namespace VirtualRobot
                 std::string tcp;
             } location;
 
-            struct NodeDescription
+            struct HumanJointDescription
             {
-                std::string name;
+                std::string location;
+                std::string movement;
+
+                /// an offset that needs to be applied to the robot's node to match the human
                 float offset;
+
+                /// indicates whether the joint rotates into the opposite direction
                 bool inverted; 
             };
 
-            // mapping: "location" -> "movement" -> "node name"
-            using JointMapping =             
-                std::unordered_map<std::string, std::unordered_map<std::string, NodeDescription>>;
+            // key: "NodeName" 
+            using JointMapping = std::unordered_map<std::string, HumanJointDescription>;
 
             JointMapping jointMapping;
 
