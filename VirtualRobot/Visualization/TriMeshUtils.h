@@ -23,6 +23,7 @@
  */
 #pragma once
 
+#include <optional>
 #include "TriMeshModel.h"
 
 #include <optional>
