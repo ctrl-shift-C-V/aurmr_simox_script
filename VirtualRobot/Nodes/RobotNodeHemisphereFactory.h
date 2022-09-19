@@ -15,37 +15,33 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 * @package    VirtualRobot
-* @author     Manfred Kroehnert, Nikolaus Vahrenkamp
-* @copyright  2010,2011 Manfred Kroehnert, Nikolaus Vahrenkamp
+* @author     Rainer Kartmann
+* @copyright  2022 Rainer Kartmann
 *             GNU Lesser General Public License
-*
 */
 #pragma once
 
 #include "../VirtualRobot.h"
-#include "../AbstractFactoryMethod.h"
-#include "../Transformation/DHParameter.h"
-#include "RobotNode.h"
-
-#include <Eigen/Core>
-
+#include "../SceneObject.h"
+#include "RobotNodeFactory.h"
 
 
 namespace VirtualRobot
 {
+    class RobotNode;
 
-    class VIRTUAL_ROBOT_IMPORT_EXPORT RobotNodeFactory :
-            public AbstractFactoryMethod<RobotNodeFactory, void*>
+    class VIRTUAL_ROBOT_IMPORT_EXPORT RobotNodeHemisphereFactory  : public RobotNodeFactory
     {
     public:
-        RobotNodeFactory()
-        {
-        }
-        virtual ~RobotNodeFactory()
-        {
-        }
+        RobotNodeHemisphereFactory();
+        ~RobotNodeHemisphereFactory() override;
 
-        virtual RobotNodePtr createRobotNode(
+        /**
+         * Create a VirtualRobot::RobotNodeHemisphere.
+         *
+         * \return instance of VirtualRobot::RobotNodeHemisphere.
+         */
+        RobotNodePtr createRobotNode(
                 RobotPtr robot,
                 const std::string& nodeName,
                 VisualizationNodePtr visualizationModel,
@@ -56,18 +52,16 @@ namespace VirtualRobot
                 const Eigen::Matrix4f& preJointTransform,
                 const Eigen::Vector3f& axis,
                 const Eigen::Vector3f& translationDirection,
-                const SceneObject::Physics& physics = SceneObject::Physics(),
+                const SceneObject::Physics& p = SceneObject::Physics(),
                 RobotNode::RobotNodeType rntype = RobotNode::Generic
-                ) const
-        {
-            (void) robot, (void) nodeName, (void) visualizationModel, (void) collisionModel;
-            (void) limitLow, (void) limitHigh, (void) jointValueOffset;
-            (void) preJointTransform, (void) axis, (void) translationDirection;
-            (void) physics, (void) rntype;
-            return nullptr;
-        }
+                ) const override;
 
-        virtual RobotNodePtr createRobotNodeDH(
+        /**
+         * Create a VirtualRobot::RobotNodeHemisphere from DH parameters.
+         *
+         * \return instance of VirtualRobot::RobotNodeHemisphere.
+         */
+        RobotNodePtr createRobotNodeDH(
                 RobotPtr robot,
                 const std::string& nodeName,
                 VisualizationNodePtr visualizationModel,
@@ -76,15 +70,18 @@ namespace VirtualRobot
                 float limitHigh,
                 float jointValueOffset,
                 const DHParameter& dhParameters,
-                const SceneObject::Physics& physics = SceneObject::Physics(),
-                RobotNode::RobotNodeType rntype = RobotNode::Generic) const
-        {
-            (void) robot, (void) nodeName, (void) visualizationModel, (void) collisionModel;
-            (void) limitLow, (void) limitHigh, (void) jointValueOffset;
-            (void) dhParameters;
-            (void) physics, (void) rntype;
-            return nullptr;
-        }
+                const SceneObject::Physics& p = SceneObject::Physics(),
+                RobotNode::RobotNodeType rntype = RobotNode::Generic
+                ) const override;
+
+        // AbstractFactoryMethod
+    public:
+        static std::string getName();
+        static std::shared_ptr<RobotNodeFactory> createInstance(void*);
+
+    private:
+        static SubClassRegistry registry;
+
     };
 
 } // namespace VirtualRobot
