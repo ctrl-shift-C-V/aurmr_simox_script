@@ -128,7 +128,7 @@ namespace VirtualRobot
             SceneObjectPtr parent,
             const std::vector<SceneObjectPtr>& children)
     {
-        VR_ASSERT_MESSAGE(first xor sub, first.has_value() << " / " sub.has_value());
+        VR_ASSERT_MESSAGE(first xor sub, first.has_value() << " / " << sub.has_value());
 
         // The second node needs to store a reference to the first node.
         if (second)
