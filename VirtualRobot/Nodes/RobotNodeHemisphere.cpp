@@ -128,7 +128,7 @@ namespace VirtualRobot
             SceneObjectPtr parent,
             const std::vector<SceneObjectPtr>& children)
     {
-        VR_ASSERT_MESSAGE(first xor second, first.has_value() << " / " << second.has_value());
+        VR_ASSERT_MESSAGE(first.has_value() xor second.has_value(), std::stringstream() << first.has_value() << " / " << second.has_value());
 
         // The second node needs to store a reference to the first node.
         if (second)
@@ -177,7 +177,7 @@ namespace VirtualRobot
     void RobotNodeHemisphere::updateTransformationMatrices(
             const Eigen::Matrix4f& parentPose)
     {
-        VR_ASSERT_MESSAGE(first xor second, first.has_value() << " / " second.has_value());
+        VR_ASSERT_MESSAGE(first.has_value() xor second.has_value(), std::stringstream() << first.has_value() << " / " << second.has_value());
 
         if (first)
         {
@@ -219,7 +219,7 @@ namespace VirtualRobot
     void RobotNodeHemisphere::print(bool printChildren, bool printDecoration) const
     {
         ReadLockPtr lock = getRobot()->getReadLock();
-        VR_ASSERT_MESSAGE(first xor second, first.has_value() << " / " second.has_value());
+        VR_ASSERT_MESSAGE(first.has_value() xor second.has_value(), std::stringstream() << first.has_value() << " / " << second.has_value());
 
         if (printDecoration)
         {
@@ -307,7 +307,7 @@ namespace VirtualRobot
 
     std::string RobotNodeHemisphere::_toXML(const std::string& /*modelPath*/)
     {
-        VR_ASSERT_MESSAGE(first xor second, first.has_value() << " / " second.has_value());
+        VR_ASSERT_MESSAGE(first.has_value() xor second.has_value(), std::stringstream() << first.has_value() << " / " << second.has_value());
 
         if (first)
         {
