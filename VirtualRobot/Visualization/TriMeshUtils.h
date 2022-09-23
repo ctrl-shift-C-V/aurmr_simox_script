@@ -26,6 +26,8 @@
 #include <optional>
 #include "TriMeshModel.h"
 
+#include <optional>
+
 namespace VirtualRobot {
 
 class TriMeshUtils
