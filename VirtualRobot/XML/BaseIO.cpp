@@ -20,6 +20,7 @@
 #include "../Nodes/SensorFactory.h"
 #include <SimoxUtility/filesystem/make_relative.h>
 #include <SimoxUtility/algorithm/string/string_conversion.h>
+#include "SimoxUtility/algorithm/string/string_tools.h"
 #include "VirtualRobot.h"
 #include "rapidxml.hpp"
 
@@ -411,6 +412,8 @@ namespace VirtualRobot
             dh.setThetaRadian(convertToFloat(attr->value()), isRadian);
         }
     }
+    
+    
 
     bool BaseIO::hasUnitsAttribute(const rapidxml::xml_node<char>* node)
     {
@@ -705,57 +708,117 @@ namespace VirtualRobot
         };
 
         {
-            rapidxml::xml_node<>* armNode = XMLNode->first_node("arm", 0, false);
+            if(XMLNode == nullptr)
+            {
+                VR_ERROR << "XMLNode must not be null!";
+            }
+
+            rapidxml::xml_node<>* armNode = XMLNode->first_node("humanmapping", 0, false);
+            if(armNode == nullptr)
+            {
+                VR_ERROR << "No humanmapping found!";
+            }
+
             while (armNode != nullptr)
             {
                 VR_INFO << "arm node";
 
                 const auto side = getSide(armNode);
 
-                const rapidxml::xml_node<char> *locationNode =
-                    armNode->first_node("locations", 0, false);
-                VR_ASSERT(locationNode != nullptr);
+                const rapidxml::xml_node<char> *segmentsNode =
+                    armNode->first_node("segmentnodes", 0, false);
 
-                const std::string shoulder = processStringAttribute("shoulder", locationNode, true);
-                const std::string elbow = processStringAttribute("elbow", locationNode, true);
-                const std::string wrist = processStringAttribute("wrist", locationNode, true);
-                const std::string tcp = processStringAttribute("tcp", locationNode, true);
-                const std::string nodeSet = processStringAttribute("nodeset", locationNode, true);
+                if(segmentsNode == nullptr)
+                {
+                    VR_ERROR << "SegmentNodes missing for side " << static_cast<int>(side) << "!";
+                }
 
-                const HumanMapping::ArmDescription::Locations locations
+                const auto findSegmentNode = [&segmentsNode](const std::string& type) -> rapidxml::xml_node<char>*
+                {
+
+                    auto* jointNode = segmentsNode->first_node("SegmentNode");
+
+                    while(jointNode != nullptr)
+                    {
+                        const std::string nodeType = processStringAttribute("type", jointNode, true);
+
+                        if(simox::alg::to_lower(type) == simox::alg::to_lower(nodeType))
+                        {
+                            return jointNode;
+                        }
+
+                        // advance to next sibling
+                        jointNode = jointNode->next_sibling("SegmentNode", 0, false);
+                    }
+
+                    VR_ERROR << "Failed to find SegmentNode with type `" << type << "`!";
+                    return nullptr;
+                };
+
+                const auto processSegmentNode = [&segmentsNode, &findSegmentNode](const std::string& type)
+                {
+                    // find the segment node with the correct type
+                    const auto* node = findSegmentNode(type);
+                    if(node == nullptr)
+                    {
+                        VR_ERROR << "SegmentNode missing for type " << type << "!";
+                    }
+
+                    const std::string name = processStringAttribute("name", node, true);
+
+                    Eigen::Matrix4f transform;
+                    processTransformNode(segmentsNode->first_node("transform", 0, false), "transform", transform);
+
+                    return HumanMapping::ArmDescription::Segment
+                    {
+                        .nodeName = name,
+                        .offset = transform
+                    };
+                };
+
+                const HumanMapping::ArmDescription::Segment shoulder = processSegmentNode("shoulder");
+                const HumanMapping::ArmDescription::Segment elbow = processSegmentNode("elbow");
+                const HumanMapping::ArmDescription::Segment wrist = processSegmentNode("wrist");
+                const HumanMapping::ArmDescription::Segment palm = processSegmentNode("palm");
+                const HumanMapping::ArmDescription::Segment tcp = processSegmentNode("tcp");
+
+                const std::string nodeSet = processStringAttribute("name", armNode, true);
+
+                const HumanMapping::ArmDescription::Segments segments
                 {
                     .shoulder = shoulder,
                     .elbow = elbow,
                     .wrist = wrist,
+                    .palm = palm,
                     .tcp = tcp
                 };
 
-                const rapidxml::xml_node<char>* armJointsNode = armNode->first_node("joints", 0, false);
+                const rapidxml::xml_node<char>* armJointsNode = armNode->first_node("JointNodes", 0, false);
                 VR_ASSERT(armJointsNode != nullptr);
 
                 HumanMapping::ArmDescription::JointMapping jointMapping;
-                const rapidxml::xml_node<char>* jointNode = armJointsNode->first_node("joint", 0, false);
+                const rapidxml::xml_node<char>* jointNode = armJointsNode->first_node("JointNode", 0, false);
                 VR_ASSERT(jointNode != nullptr);
 
                 while(jointNode != nullptr)
                 {
-                    const std::string location = processStringAttribute("location", jointNode, true);
-                    const std::string movement = processStringAttribute("movement", jointNode, true);
+                    const std::string type = processStringAttribute("type", jointNode, true);
+                    const std::string motion = processStringAttribute("motion", jointNode, true);
                     const std::string node = processStringAttribute("node", jointNode, true);
                     const bool inverted = processOptionalBoolAttribute("inverted", jointNode, false);
                     const float offset = processFloatAttribute("offset", jointNode, true);
 
-                    VR_INFO << location << "/" << movement;
+                    VR_INFO << type << "/" << motion;
 
-                    jointMapping[node] = HumanMapping::ArmDescription::HumanJointDescription{.location = location, .movement = movement, .offset = offset, .inverted = inverted};
+                    jointMapping[node] = HumanMapping::ArmDescription::HumanJointDescription{.type = type, .motion = motion, .offset = offset, .inverted = inverted};
 
                     // advance to next sibling
-                    jointNode = jointNode->next_sibling("joint", 0, false);
+                    jointNode = jointNode->next_sibling("JointNode", 0, false);
                 }
 
                 const HumanMapping::ArmDescription armDescription
                 {
-                    .location = locations,
+                    .segments = segments,
                     .jointMapping = jointMapping,
                     .nodeSet = nodeSet  
                 };
@@ -775,40 +838,6 @@ namespace VirtualRobot
             }
         }
 
-
-        {
-            rapidxml::xml_node<>* handNode = XMLNode->first_node("hand", 0, false);
-            while (handNode != nullptr)
-            {
-                VR_INFO << "hand node";
-
-                const auto side = getSide(handNode);
-
-                const std::string palm = processStringAttribute("palm", handNode, true);
-                const std::string tcp = processStringAttribute("tcp", handNode, true);
-
-                const HumanMapping::HandDescription handDescription
-                {
-                    .palm = palm,
-                    .tcp = tcp
-                };
-
-                switch(side)
-                {
-                    case Side::LEFT:
-                        humanMapping.leftHand = handDescription;
-                        break;
-                    case Side::RIGHT:
-                        humanMapping.rightHand = handDescription;
-                        break;
-                }
-
-
-                handNode = handNode->next_sibling("hand", 0, false);
-            }
-        }
-
-
         return humanMapping;
     }
 
@@ -826,7 +855,7 @@ namespace VirtualRobot
     */
     float BaseIO::processFloatAttribute(const std::string& attributeName, const rapidxml::xml_node<char>* node, bool allowOtherAttributes /* = false */)
     {
-        THROW_VR_EXCEPTION_IF(!node, "Can not process name attribute of NULL node" << endl);
+        THROW_VR_EXCEPTION_IF(!node, "Can not process name attribute `" << attributeName << "` of NULL node" << endl);
 
         bool result = false;
         float value = 0.0f;
@@ -871,7 +900,7 @@ namespace VirtualRobot
     */
     int BaseIO::processIntAttribute(const std::string& attributeName, const rapidxml::xml_node<char>* node, bool allowOtherAttributes /* = false */)
     {
-        THROW_VR_EXCEPTION_IF(!node, "Can not process name attribute of NULL node" << endl);
+        THROW_VR_EXCEPTION_IF(!node, "Can not process name attribute `" << attributeName << "` of NULL node" << endl);
 
         bool result = false;
         int value = 0;
@@ -905,7 +934,7 @@ namespace VirtualRobot
 
     bool BaseIO::processOptionalBoolAttribute(const std::string& attributeName, const rapidxml::xml_node<char>* node, bool defaultValue)
     {
-        THROW_VR_EXCEPTION_IF(!node, "Can not process name attribute of NULL node" << endl);
+        THROW_VR_EXCEPTION_IF(!node, "Can not process name attribute `" << attributeName << "` of NULL node" << endl);
 
         rapidxml::xml_attribute<char>* attr = node->first_attribute(attributeName.c_str(), 0, false);
 
@@ -932,7 +961,7 @@ namespace VirtualRobot
         */
     std::string BaseIO::processStringAttribute(const std::string& attributeName, const rapidxml::xml_node<char>* node, bool allowOtherAttributes /* = false */)
     {
-        THROW_VR_EXCEPTION_IF(!node, "Can not process name attribute of NULL node" << endl);
+        THROW_VR_EXCEPTION_IF(!node, "Can not process name attribute `" << attributeName << "` of NULL node" << endl);
 
         bool result = false;
         std::string value;

@@ -1125,9 +1125,9 @@ namespace VirtualRobot
                 VR_INFO << "Found robot node mapping";
                 nodeMapping = processNodeMapping(XMLNode, robo);
             }
-            else if ("humanmapping" == nodeName)
+            else if ("humanmappings" == nodeName)
             {
-                VR_INFO << "Found human mapping";
+                VR_INFO << "Found human mappings";
                 humanMapping = processHumanMapping(XMLNode, robo);
             }
             else

@@ -55,18 +55,25 @@ namespace VirtualRobot
     {
         struct ArmDescription
         {
-            struct Locations
+            struct Segment
             {
-                std::string shoulder;
-                std::string elbow;
-                std::string wrist;
-                std::string tcp;
-            } location;
+                std::string nodeName;
+                Eigen::Matrix4f offset;
+            };
+
+            struct Segments
+            {
+                Segment shoulder;
+                Segment elbow;
+                Segment wrist;
+                Segment palm;
+                Segment tcp;
+            } segments;
 
             struct HumanJointDescription
             {
-                std::string location;
-                std::string movement;
+                std::string type;
+                std::string motion;
 
                 /// an offset that needs to be applied to the robot's node to match the human
                 float offset;
@@ -83,17 +90,8 @@ namespace VirtualRobot
             std::string nodeSet;
         };
 
-        struct HandDescription
-        {
-            std::string palm;
-            std::string tcp;
-        };
-
         ArmDescription leftArm;
         ArmDescription rightArm;
-
-        HandDescription leftHand;
-        HandDescription rightHand;
     };
 
     /*!

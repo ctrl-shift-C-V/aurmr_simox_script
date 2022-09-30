@@ -1017,7 +1017,7 @@ namespace VirtualRobot
         return getInertiaMatrix(transform.block<3, 1>(0, 3), transform.block<3, 3>(0, 0));
     }
 
-    std::string SceneObject::getSceneObjectXMLString(const std::string& basePath, int tabs, const std::string &modelPathRelative)
+    std::string SceneObject::getSceneObjectXMLString(const std::string& basePath, int tabs, const std::string &/*modelPathRelative*/)
     {
         std::stringstream ss;
         std::string pre = "";
