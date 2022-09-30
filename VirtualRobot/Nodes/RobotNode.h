@@ -78,15 +78,13 @@ namespace VirtualRobot
                   const std::string& name,
                   float jointLimitLo,
                   float jointLimitHi,
-                  VisualizationNodePtr visualization = VisualizationNodePtr(),
-                  CollisionModelPtr collisionModel = CollisionModelPtr(),
+                  VisualizationNodePtr visualization = nullptr,
+                  CollisionModelPtr collisionModel = nullptr,
                   float jointValueOffset = 0.0f,
-                  const SceneObject::Physics& p = SceneObject::Physics(),
-                  CollisionCheckerPtr colChecker = CollisionCheckerPtr(),
+                  const SceneObject::Physics& physics = {},
+                  CollisionCheckerPtr colChecker = nullptr,
                   RobotNodeType type = Generic);
 
-        /*!
-        */
         ~RobotNode() override;
 
 
@@ -226,8 +224,10 @@ namespace VirtualRobot
         */
         virtual void setJointLimits(float lo, float hi);
 
+        bool isJoint() const;
         virtual bool isTranslationalJoint() const;
         virtual bool isRotationalJoint() const;
+        virtual bool isHemisphereJoint() const;
 
         /**
          * @param limitless wheter this node has joint limits or not.

@@ -947,7 +947,7 @@ namespace VirtualRobot
         }
     }
 
-    VirtualRobot::RobotConfigPtr Robot::getConfig()
+    VirtualRobot::RobotConfigPtr Robot::getConfig() const
     {
         RobotConfigPtr r(new RobotConfig(shared_from_this(), getName()));
 

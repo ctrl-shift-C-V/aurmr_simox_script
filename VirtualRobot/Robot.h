@@ -194,7 +194,7 @@ namespace VirtualRobot
         /*!
             get the complete setup of all robot nodes
         */
-        virtual RobotConfigPtr getConfig();
+        virtual RobotConfigPtr getConfig() const;
         /*!
             Sets the configuration according to the RobotNodes, defined in c. All other nodes are not affected.
         */

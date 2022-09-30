@@ -43,8 +43,6 @@ namespace VirtualRobot
 
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-        /*!
-        */
 
         RobotNodeRevolute(RobotWeakPtr rob,                                      //!< The robot
                           const std::string& name,                            //!< The name
@@ -72,15 +70,12 @@ namespace VirtualRobot
                           const SceneObject::Physics& p = SceneObject::Physics(),     //!< physics information
                           CollisionCheckerPtr colChecker = CollisionCheckerPtr(),     //!< A collision checker instance (if not set, the global col checker is used)
                           RobotNodeType type = Generic);
-        /*!
-        */
+
         ~RobotNodeRevolute() override;
 
-        bool initialize(SceneObjectPtr parent = SceneObjectPtr(), const std::vector<SceneObjectPtr>& children = std::vector<SceneObjectPtr>()) override;
+        bool initialize(SceneObjectPtr parent = nullptr, const std::vector<SceneObjectPtr>& children = {}) override;
 
-        /*!
-        Print status information.
-        */
+        //! Print status information.
         void print(bool printChildren = false, bool printDecoration = true) const override;
 
         bool isRotationalJoint() const override;
@@ -88,11 +83,9 @@ namespace VirtualRobot
             Standard: In global coordinate system.
             \param coordSystem When not set the axis is transformed to global coordinate system. Otherwise any scene object can be used as coord system.
         */
-        Eigen::Vector3f getJointRotationAxis(const SceneObjectPtr coordSystem = SceneObjectPtr()) const;
+        Eigen::Vector3f getJointRotationAxis(const SceneObjectPtr coordSystem = nullptr) const;
 
-        /*!
-            This is the original joint axis, without any transformations applied.
-        */
+        //! This is the original joint axis, without any transformations applied.
         Eigen::Vector3f getJointRotationAxisInJointCoordSystem() const;
 
         /*!
@@ -112,7 +105,15 @@ namespace VirtualRobot
         virtual float getLMomentArm(float angle);
 
         void setJointRotationAxis(Eigen::Vector3f newAxis);
+
+
     protected:
+
+        RobotNodeRevolute() {};
+
+        //! Derived classes add custom XML tags here
+        std::string _toXML(const std::string& modelPath) override;
+
         /*!
             Can be called by a RobotNodeActuator in order to set the pose of this node.
             This is useful, if the node is actuated externally, i.e. via a physics engine.
@@ -124,19 +125,18 @@ namespace VirtualRobot
         //! Checks if nodeType constraints are fulfilled. Otherwise an exception is thrown. Called on initialization.
         void checkValidRobotNodeType() override;
 
-        RobotNodeRevolute() {};
-
         void updateTransformationMatrices(const Eigen::Matrix4f& parentPose) override;
 
-        Eigen::Vector3f jointRotationAxis;          // eRevoluteJoint  (given in local joint coord system)
+        RobotNodePtr _clone(const RobotPtr newRobot, const VisualizationNodePtr visualizationModel,
+                            const CollisionModelPtr collisionModel, CollisionCheckerPtr colChecker,
+                            float scaling) override;
 
-        RobotNodePtr _clone(const RobotPtr newRobot, const VisualizationNodePtr visualizationModel, const CollisionModelPtr collisionModel, CollisionCheckerPtr colChecker, float scaling) override;
-        /*!
-            Derived classes add custom XML tags here
-        */
-        std::string _toXML(const std::string& modelPath) override;
 
+    protected:
+
+        Eigen::Vector3f jointRotationAxis;  // eRevoluteJoint  (given in local joint coord system)
         Eigen::Matrix4f tmpRotMat;
+
     };
 
     typedef std::shared_ptr<RobotNodeRevolute> RobotNodeRevolutePtr;

@@ -1,0 +1,39 @@
+#Inventor V2.0 ascii
+
+Separator
+{
+    
+    Units
+    {
+        units MILLIMETERS
+    }
+        Material {
+        diffuseColor .5 1 .5
+    }
+
+    Rotation
+    {
+        rotation 1 0 0  1.57
+    }
+    Sphere
+    {
+        radius 16.90475
+    }
+    Cube
+    {
+        width 60
+        height 1
+        depth 60
+    }
+
+    Translation
+    {
+        translation 0 25 0
+    }
+    Cylinder {
+        radius 5
+        height 50
+        parts (SIDES | TOP | BOTTOM)
+    }
+
+}

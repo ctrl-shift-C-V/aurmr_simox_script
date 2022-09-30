@@ -1,0 +1,15 @@
+#Inventor V2.0 ascii
+
+Separator {
+    
+    Units {
+        units MILLIMETERS
+    }
+    Material {
+        diffuseColor .5 .5 1
+    }
+    Sphere
+    {
+        radius 16.90475
+    }
+}

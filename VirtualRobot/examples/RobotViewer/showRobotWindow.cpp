@@ -498,7 +498,7 @@ void showRobotWindow::selectRNS(int nr)
     {
         nr--;
 
-        if (nr >= (int)robotNodeSets.size())
+        if (nr >= static_cast<int>(robotNodeSets.size()))
         {
             return;
         }
@@ -547,12 +547,12 @@ void showRobotWindow::selectJoint(int nr)
     UI.labelMinPos->setText(qMin);
     UI.labelMaxPos->setText(qMax);
     float j = currentRobotNode->getJointValue();
-    UI.lcdNumberJointValue->display((double)j);
+    UI.lcdNumberJointValue->display(static_cast<double>(j));
 
-    if (fabs(ma - mi) > 0 && (currentRobotNode->isTranslationalJoint() || currentRobotNode->isRotationalJoint()))
+    if (std::fabs(ma - mi) > 0 && (currentRobotNode->isJoint()))
     {
         UI.horizontalSliderPos->setEnabled(true);
-        int pos = (int)((j - mi) / (ma - mi) * 1000.0f);
+        int pos = static_cast<int>((j - mi) / (ma - mi) * 1000.0f);
         UI.horizontalSliderPos->setValue(pos);
     }
     else
@@ -585,14 +585,17 @@ void showRobotWindow::jointValueChanged(int pos)
 {
     int nr = UI.comboBoxJoint->currentIndex();
 
-    if (nr < 0 || nr >= (int)currentRobotNodes.size())
+    if (nr < 0 || nr >= static_cast<int>(currentRobotNodes.size()))
     {
         return;
     }
 
-    float fPos = currentRobotNodes[nr]->getJointLimitLo() + (float)pos / 1000.0f * (currentRobotNodes[nr]->getJointLimitHi() - currentRobotNodes[nr]->getJointLimitLo());
+    float fPos = currentRobotNodes[nr]->getJointLimitLo()
+            + static_cast<float>(pos) / 1000.0f
+            * (currentRobotNodes[nr]->getJointLimitHi()
+               - currentRobotNodes[nr]->getJointLimitLo());
     robot->setJointValue(currentRobotNodes[nr], fPos);
-    UI.lcdNumberJointValue->display((double)fPos);
+    UI.lcdNumberJointValue->display(static_cast<double>(fPos));
 
     DiffIKWidget::update(robot);
     updatePointDistanceVisu();
@@ -603,7 +606,7 @@ void showRobotWindow::showCoordSystem()
     float size = 0.75f;
     int nr = UI.comboBoxJoint->currentIndex();
 
-    if (nr < 0 || nr >= (int)currentRobotNodes.size())
+    if (nr < 0 || nr >= static_cast<int>(currentRobotNodes.size()))
     {
         return;
     }
@@ -678,8 +681,8 @@ void showRobotWindow::testPerformance(RobotPtr robot, RobotNodeSetPtr rns)
         rns->setJointValues(v);
     }
     clock_t end = clock();
-    float timeMS = (float)(end - start) / (float)CLOCKS_PER_SEC * 1000.0f;
-    VR_INFO << "Time (visu on, thread on): " << timeMS / (float)loops << std::endl;
+    float timeMS = static_cast<float>(end - start) / static_cast<float>(CLOCKS_PER_SEC) * 1000.0f;
+    VR_INFO << "Time (visu on, thread on): " << timeMS / static_cast<float>(loops) << std::endl;
 
     start = clock();
     robot->setupVisualization(false, false);
@@ -699,8 +702,8 @@ void showRobotWindow::testPerformance(RobotPtr robot, RobotNodeSetPtr rns)
         rns->setJointValues(v);
     }
     end = clock();
-    timeMS = (float)(end - start) / (float)CLOCKS_PER_SEC * 1000.0f;
-    VR_INFO << "Time (visu off, thread on): " << timeMS / (float)loops << std::endl;
+    timeMS = static_cast<float>(end - start) / static_cast<float>CLOCKS_PER_SEC * 1000.0f;
+    VR_INFO << "Time (visu off, thread on): " << timeMS / static_cast<float>(loops) << std::endl;
 
     start = clock();
     robot->setupVisualization(true, false);
@@ -717,8 +720,8 @@ void showRobotWindow::testPerformance(RobotPtr robot, RobotNodeSetPtr rns)
         rns->setJointValues(v);
     }
     end = clock();
-    timeMS = (float)(end - start) / (float)CLOCKS_PER_SEC * 1000.0f;
-    VR_INFO << "Time (visu on, thread off): " << timeMS / (float)loops << std::endl;
+    timeMS = static_cast<float>(end - start) / static_cast<float>CLOCKS_PER_SEC * 1000.0f;
+    VR_INFO << "Time (visu on, thread off): " << timeMS / static_cast<float>(loops) << std::endl;
 
 
     start = clock();
@@ -736,9 +739,8 @@ void showRobotWindow::testPerformance(RobotPtr robot, RobotNodeSetPtr rns)
         rns->setJointValues(v);
     }
     end = clock();
-    timeMS = (float)(end - start) / (float)CLOCKS_PER_SEC * 1000.0f;
-    VR_INFO << "Time (visu off, thread off): " << timeMS / (float)loops << std::endl;
-
+    timeMS = static_cast<float>(end - start) / static_cast<float>CLOCKS_PER_SEC * 1000.0f;
+    VR_INFO << "Time (visu off, thread off): " << timeMS / static_cast<float>(loops) << std::endl;
 }
 
 void showRobotWindow::loadRobot()
@@ -884,7 +886,7 @@ void showRobotWindow::selectEEF(int nr)
     UI.comboBoxEndEffectorPS->clear();
     currentEEF.reset();
 
-    if (nr < 0 || nr >= (int)eefs.size())
+    if (nr < 0 || nr >= static_cast<int>(eefs.size()))
     {
         return;
     }

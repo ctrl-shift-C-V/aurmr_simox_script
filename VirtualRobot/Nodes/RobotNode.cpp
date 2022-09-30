@@ -21,19 +21,19 @@
 
 namespace VirtualRobot
 {
-    RobotNode::RobotNode(RobotWeakPtr rob,
-                         const std::string& name,
-                         float jointLimitLo,
-                         float jointLimitHi,
-                         VisualizationNodePtr visualization,
-                         CollisionModelPtr collisionModel,
-                         float jointValueOffset,
-                         const SceneObject::Physics& p,
-                         CollisionCheckerPtr colChecker,
-                         RobotNodeType type)
-        : GraspableSensorizedObject(name, visualization, collisionModel, p, colChecker)
 
-
+    RobotNode::RobotNode(
+            RobotWeakPtr rob,
+            const std::string& name,
+            float jointLimitLo,
+            float jointLimitHi,
+            VisualizationNodePtr visualization,
+            CollisionModelPtr collisionModel,
+            float jointValueOffset,
+            const SceneObject::Physics& physics,
+            CollisionCheckerPtr colChecker,
+            RobotNodeType type) :
+        GraspableSensorizedObject(name, visualization, collisionModel, physics, colChecker)
     {
         nodeType = type;
         maxVelocity = -1.0f;
@@ -116,9 +116,7 @@ namespace VirtualRobot
 
             default:
                 VR_ERROR << "RobotNodeType nyi..." << std::endl;
-
         }
-
     }
 
     bool RobotNode::getEnforceJointLimits() const
@@ -639,6 +637,11 @@ namespace VirtualRobot
         return false;
     }
 
+    bool RobotNode::isHemisphereJoint() const
+    {
+        return false;
+    }
+
     void RobotNode::setLimitless(bool limitless)
     {
         this->limitless = limitless;
@@ -860,6 +863,11 @@ namespace VirtualRobot
     {
         jointLimitLo = lo;
         jointLimitHi = hi;
+    }
+
+    bool RobotNode::isJoint() const
+    {
+        return isRotationalJoint() or isTranslationalJoint() or isHemisphereJoint();
     }
 
     void RobotNode::setMaxTorque(float maxTo)
