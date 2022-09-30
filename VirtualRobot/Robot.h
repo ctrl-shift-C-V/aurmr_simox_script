@@ -30,6 +30,7 @@
 
 #include <type_traits>
 #include <string>
+#include <unordered_map>
 #include <vector>
 #include <map>
 
@@ -49,6 +50,49 @@ namespace VirtualRobot
     };
 
     using NodeMapping = std::unordered_map<std::string, NodeMappingElement>;
+
+    struct HumanMapping
+    {
+        struct ArmDescription
+        {
+            struct Segment
+            {
+                std::string nodeName;
+                Eigen::Matrix4f offset;
+            };
+
+            struct Segments
+            {
+                Segment shoulder;
+                Segment elbow;
+                Segment wrist;
+                Segment palm;
+                Segment tcp;
+            } segments;
+
+            struct HumanJointDescription
+            {
+                std::string type;
+                std::string motion;
+
+                /// an offset that needs to be applied to the robot's node to match the human
+                float offset;
+
+                /// indicates whether the joint rotates into the opposite direction
+                bool inverted; 
+            };
+
+            // key: "NodeName" 
+            using JointMapping = std::unordered_map<std::string, HumanJointDescription>;
+
+            JointMapping jointMapping;
+
+            std::string nodeSet;
+        };
+
+        ArmDescription leftArm;
+        ArmDescription rightArm;
+    };
 
     /*!
         This is the main object defining the kinematic structure of a robot.
@@ -184,6 +228,7 @@ namespace VirtualRobot
         * Node mapping
         */
         const NodeMapping& getNodeMapping() const;
+        const std::optional<HumanMapping>& getHumanMapping() const;
 
         /**
          *
@@ -454,11 +499,14 @@ namespace VirtualRobot
 
         void registerNodeMapping(const NodeMapping& nodeMapping);
 
+        void registerHumanMapping(const HumanMapping& humanMapping);
+
 
     protected:
         Robot();
 
         void validateNodeMapping(const NodeMapping& nodeMapping) const;
+        void validateHumanMapping(const HumanMapping& humanMapping) const;
 
 
         /*!
@@ -486,6 +534,7 @@ namespace VirtualRobot
 
     private:
         NodeMapping nodeMapping;
+        std::optional<HumanMapping> humanMapping;
 
     };
 
@@ -568,4 +617,3 @@ namespace VirtualRobot
 
 
 } // namespace VirtualRobot
-

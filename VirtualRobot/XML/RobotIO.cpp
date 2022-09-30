@@ -865,8 +865,9 @@ namespace VirtualRobot
         std::vector<rapidxml::xml_node<char>* > endeffectorNodes;
 
         NodeMapping nodeMapping;
+        std::optional<HumanMapping> humanMapping;
 
-        processRobotChildNodes(robotXMLNode, robo, robotRoot, basePath, childrenFromRobotFilesMap, robotNodeSetNodes, endeffectorNodes, nodeMapping, loadMode);
+        processRobotChildNodes(robotXMLNode, robo, robotRoot, basePath, childrenFromRobotFilesMap, robotNodeSetNodes, endeffectorNodes, nodeMapping, humanMapping, loadMode);
 
         // process childfromrobot tags
         std::map< RobotNodePtr, std::vector< ChildFromRobotDef > >::iterator iter = childrenFromRobotFilesMap.begin();
@@ -953,6 +954,12 @@ namespace VirtualRobot
         }
 
         robo->registerNodeMapping(nodeMapping);
+
+        if(humanMapping.has_value())
+        {
+            robo->registerHumanMapping(humanMapping.value());
+        }
+        
 
         return robo;
     }
@@ -1072,6 +1079,7 @@ namespace VirtualRobot
                                          std::vector<rapidxml::xml_node<char>* >& robotNodeSetNodes,
                                          std::vector<rapidxml::xml_node<char>* >& endeffectorNodes,
                                          NodeMapping& nodeMapping,
+                                         std::optional<HumanMapping>& humanMapping,
                                          RobotDescription loadMode)
     {
         std::vector<RobotNodePtr> robotNodes;
@@ -1158,6 +1166,11 @@ namespace VirtualRobot
             {
                 VR_INFO << "Found robot node mapping";
                 nodeMapping = processNodeMapping(XMLNode, robo);
+            }
+            else if ("humanmappings" == nodeName)
+            {
+                VR_INFO << "Found human mappings";
+                humanMapping = processHumanMapping(XMLNode, robo);
             }
             else
             {

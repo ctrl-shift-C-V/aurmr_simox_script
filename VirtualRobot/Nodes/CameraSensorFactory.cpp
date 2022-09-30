@@ -32,7 +32,7 @@ namespace VirtualRobot
         return Sensor;
     }
 
-    SensorPtr CameraSensorFactory::createSensor(GraspableSensorizedObjectPtr node, rapidxml::xml_node<char>* sensorXMLNode, BaseIO::RobotDescription loadMode, const std::string basePath) const
+    SensorPtr CameraSensorFactory::createSensor(GraspableSensorizedObjectPtr node, const rapidxml::xml_node<char>* sensorXMLNode, BaseIO::RobotDescription loadMode, const std::string basePath) const
     {
         THROW_VR_EXCEPTION_IF(!sensorXMLNode, "NULL data");
         THROW_VR_EXCEPTION_IF(!node, "NULL data");

@@ -1274,11 +1274,22 @@ namespace VirtualRobot
         this->nodeMapping = nodeMapping;
     }
 
+    void Robot::registerHumanMapping(const HumanMapping& humanMapping)
+    {
+        this->humanMapping = humanMapping;
+    }
+
+
     const NodeMapping& Robot::getNodeMapping() const
     {
         return nodeMapping;
     }
+
+    const std::optional<HumanMapping>& Robot::getHumanMapping() const
+    {
+        return humanMapping;
+    }
+
     
 
 } // namespace VirtualRobot
-

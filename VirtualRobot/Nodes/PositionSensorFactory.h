@@ -46,7 +46,7 @@ namespace VirtualRobot
         /*!
             Create sensor from XML tag.
         */
-        SensorPtr createSensor(GraspableSensorizedObjectPtr node, rapidxml::xml_node<char>* sensorXMLNode, BaseIO::RobotDescription loadMode = RobotIO::eFull, const std::string basePath = std::string()) const override;
+        SensorPtr createSensor(GraspableSensorizedObjectPtr node, const rapidxml::xml_node<char>* sensorXMLNode, BaseIO::RobotDescription loadMode = RobotIO::eFull, const std::string basePath = std::string()) const override;
 
         // AbstractFactoryMethod
     public:
@@ -57,4 +57,3 @@ namespace VirtualRobot
     };
 
 } // namespace VirtualRobot
-
