@@ -800,21 +800,28 @@ namespace VirtualRobot
                 const rapidxml::xml_node<char>* jointNode = armJointsNode->first_node("JointNode", 0, false);
                 VR_ASSERT(jointNode != nullptr);
 
+                if(jointNode == nullptr)
+                {
+                    VR_ERROR << "No JointNode available!";
+                }
+
                 while(jointNode != nullptr)
                 {
-                    const std::string type = processStringAttribute("type", jointNode, true);
-                    const std::string motion = processStringAttribute("motion", jointNode, true);
+                    const std::string type = simox::alg::to_lower(processStringAttribute("type", jointNode, true));
+                    const std::string motion = simox::alg::to_lower(processStringAttribute("motion", jointNode, true));
                     const std::string node = processStringAttribute("node", jointNode, true);
                     const bool inverted = processOptionalBoolAttribute("inverted", jointNode, false);
                     const float offset = processFloatAttribute("offset", jointNode, true);
 
-                    VR_INFO << type << "/" << motion;
+                    // VR_INFO << type << "/" << motion << std::endl;
 
                     jointMapping[node] = HumanMapping::ArmDescription::HumanJointDescription{.type = type, .motion = motion, .offset = offset, .inverted = inverted};
 
                     // advance to next sibling
                     jointNode = jointNode->next_sibling("JointNode", 0, false);
                 }
+
+                // VR_INFO << "Joint mapping size: " << jointMapping.size() << std::endl;
 
                 const HumanMapping::ArmDescription armDescription
                 {
@@ -833,7 +840,7 @@ namespace VirtualRobot
                         break;
                 }
 
-                armNode = armNode->next_sibling("arm", 0, false);
+                armNode = armNode->next_sibling("humanmapping", 0, false);
 
             }
         }
