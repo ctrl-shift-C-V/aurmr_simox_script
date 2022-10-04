@@ -918,6 +918,12 @@ namespace VirtualRobot
         result->filename = filename;
         result->type = type;
         //result->radianToMMfactor = radianToMMfactor;
+
+        if(getHumanMapping().has_value())
+        {
+            result->registerHumanMapping(getHumanMapping().value());
+        }
+
         return result;
     }
 
