@@ -445,11 +445,13 @@ namespace VirtualRobot
                 break;
 
             case urdf::Joint::PRISMATIC:
-                result = prismaticNodeFactory->createRobotNode(robo, name, rnVisu, rnCol, limitLo, limitHi, 0, preJointTransform, idVec3, axis, physics);
+                // here, we need to convert [m] to [mm] for joint limits
+                result = prismaticNodeFactory->createRobotNode(robo, name, rnVisu, rnCol, limitLo * 1000, limitHi * 1000, 0, preJointTransform, idVec3, axis, physics);
                 break;
 
             case urdf::Joint::FIXED:
-                result = prismaticNodeFactory->createRobotNode(robo, name, rnVisu, rnCol, limitLo, limitHi, 0, preJointTransform, axis, idVec3, physics);
+                // here, we need to convert [m] to [mm] for joint limits
+                result = prismaticNodeFactory->createRobotNode(robo, name, rnVisu, rnCol, limitLo * 1000, limitHi * 1000, 0, preJointTransform, axis, idVec3, physics);
                 break;
 
             default:
