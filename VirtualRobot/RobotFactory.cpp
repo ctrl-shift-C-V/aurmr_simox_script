@@ -961,6 +961,10 @@ namespace VirtualRobot
         }
 
         result->setGlobalPose(robot->getGlobalPose());
+        if(robot->getHumanMapping().has_value())
+        {
+            result->registerHumanMapping(robot->getHumanMapping().value());
+        }
         return result;
     }
 
