@@ -867,7 +867,9 @@ namespace VirtualRobot
         NodeMapping nodeMapping;
         std::optional<HumanMapping> humanMapping;
 
-        processRobotChildNodes(robotXMLNode, robo, robotRoot, basePath, childrenFromRobotFilesMap, robotNodeSetNodes, endeffectorNodes, nodeMapping, humanMapping, loadMode);
+        std::map<std::string, std::vector<std::string>> attachments;
+
+        processRobotChildNodes(robotXMLNode, robo, robotRoot, basePath, childrenFromRobotFilesMap, robotNodeSetNodes, endeffectorNodes, nodeMapping, humanMapping, attachments, loadMode);
 
         // process childfromrobot tags
         std::map< RobotNodePtr, std::vector< ChildFromRobotDef > >::iterator iter = childrenFromRobotFilesMap.begin();
@@ -924,6 +926,33 @@ namespace VirtualRobot
             }
 
             iter++;
+        }
+
+        { // handle attachments
+
+            const auto robotNodes = robo->getRobotNodes();
+
+            // extend children map with attachments
+            for(const auto& [parentNodeName, childrenNodeNames]: attachments)
+            {
+                // find parent node
+                const auto parentNodeIt = std::find_if(robotNodes.begin(), robotNodes.end(), [&](const auto& robotNode){
+                    return robotNode->getName() == parentNodeName;
+                });
+
+                if(parentNodeIt == robotNodes.end())
+                {
+                    THROW_VR_EXCEPTION("Robot node `" << parentNodeName << "` was defined as as parent node but is is not known!" << std::endl);
+                }
+
+                // add all children to the mapping
+                const auto& parentNode = *parentNodeIt;
+
+                for(const auto& childName : childrenNodeNames)
+                {
+                    robo->getRobotNode(childName)->initialize(parentNode);
+                }
+            }
         }
 
         //std::vector<RobotNodeSetPtr> robotNodeSets
@@ -1080,6 +1109,7 @@ namespace VirtualRobot
                                          std::vector<rapidxml::xml_node<char>* >& endeffectorNodes,
                                          NodeMapping& nodeMapping,
                                          std::optional<HumanMapping>& humanMapping,
+                                         std::map<std::string, std::vector<std::string>>& attachments,
                                          RobotDescription loadMode)
     {
         std::vector<RobotNodePtr> robotNodes;
@@ -1090,6 +1120,8 @@ namespace VirtualRobot
         //std::vector<rapidxml::xml_node<>* > robotNodeSetNodes;
         //std::vector<rapidxml::xml_node<>* > endeffectorNodes;
         rapidxml::xml_node<>* XMLNode = robotXMLNode->first_node(nullptr, 0, false);
+
+        // allow nodes to be registered to parents
 
         while (XMLNode)
         {
@@ -1164,13 +1196,24 @@ namespace VirtualRobot
             }
             else if ("nodemapping" == nodeName)
             {
-                VR_INFO << "Found robot node mapping";
+                // VR_INFO << "Found robot node mapping";
                 nodeMapping = processNodeMapping(XMLNode, robo);
             }
             else if ("humanmappings" == nodeName)
             {
-                VR_INFO << "Found human mappings";
+                // VR_INFO << "Found human mappings";
                 humanMapping = processHumanMapping(XMLNode, robo);
+            }
+            else if (nodeName == "attachment")
+            {
+                rapidxml::xml_node<>* parentNode = XMLNode->first_node("parent", 0, false);
+                rapidxml::xml_node<>* childNode = XMLNode->first_node("child", 0, false);
+
+                const std::string parent = processStringAttribute("name", parentNode, false);
+                const std::string child = processStringAttribute("name", childNode, false);
+
+                // implicit vector instantiation
+                attachments[parent].push_back(child);
             }
             else
             {
