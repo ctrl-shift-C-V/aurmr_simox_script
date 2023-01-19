@@ -206,7 +206,7 @@
     <child link="coupling"/>
   </joint>
   <joint name="coupling_link_gripper_robotiq_arg2f_base_link_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0 -0.034"/>
+    <origin rpy="0 0 0" xyz="0 0 0.017"/>
     <parent link="coupling"/>
     <child link="gripper_base_link"/>
   </joint>
@@ -800,7 +800,7 @@
       <inertia ixx="0.003084" ixy="0.0" ixz="0.0" iyy="0.002999" iyz="0.0" izz="0.000546"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 1.5707963267948966" xyz="0 0 0.0485"/>
+      <origin rpy="0 0 1.5707963267948966" xyz="0 0 -0.005"/>
       <geometry>
         <mesh filename="package://robotiq_epick_visualization/meshes/visual/robotiq_epick_std.dae" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -809,7 +809,7 @@
       </material>
     </visual>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0.1935"/>
+      <origin rpy="0 0 0" xyz="0 0 0.137"/>
       <geometry>
         <cylinder length="0.08" radius="0.006"/>
       </geometry>
@@ -832,7 +832,7 @@
       </geometry>
     </collision>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0.1935"/>
+      <origin rpy="0 0 0" xyz="0 0 0.137"/>
       <geometry>
         <cylinder length="0.08" radius="0.006"/>
       </geometry>
@@ -851,18 +851,18 @@
   <link name="epick_end_effector">
     <gravity>0</gravity>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 .005"/>
+      <origin rpy="0 0 0" xyz="0 0 -0.002"/>
       <geometry>
-        <cylinder length="0.01" radius="0.0225"/>
+        <cylinder length="0.017" radius="0.0225"/>
       </geometry>
       <material name="transparent">
         <color rgba="0 0 1 1"/>
       </material>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 .005"/>
+      <origin rpy="0 0 0" xyz="0 0 -0.002"/>
       <geometry>
-        <cylinder length="0.01" radius="0.0225"/>
+        <cylinder length="0.017" radius="0.0225"/>
       </geometry>
       <material name="transparent">
         <color rgba="0 0 1 1"/>
