@@ -1,0 +1,4255 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<Robot Type='pod1' RootNode='pod_base_link'>
+
+	<RobotNode name='pod_base_link'>
+		<Physics>
+			<Mass unit='kg' value='30'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_base_link_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_base_link_col.stl</File>
+		</CollisionModel>
+		<Child name='pod_base_link_pod_brace_joint'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_base_link_pod_brace_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='294' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_brace'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1e'>
+		<Child name='pod_bin_1e_pod_bin_1e_back'/>
+		<Child name='pod_bin_1e_pod_bin_1e_bottom'/>
+		<Child name='pod_bin_1e_pod_bin_1e_flap'/>
+		<Child name='pod_bin_1e_pod_bin_1e_left'/>
+		<Child name='pod_bin_1e_pod_bin_1e_right'/>
+		<Child name='pod_bin_1e_pod_bin_1e_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1e_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1e_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1e_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1e_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1e_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1e_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1e_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1e_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1e_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1e_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1e_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1e_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1e_pod_bin_1e_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1e_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1e_pod_bin_1e_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1e_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1e_pod_bin_1e_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1e_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1e_pod_bin_1e_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1e_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1e_pod_bin_1e_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1e_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1e_pod_bin_1e_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='114.3' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1e_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1e_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1e_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1e_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1e_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1e_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1e_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1f'>
+		<Child name='pod_bin_1f_pod_bin_1f_back'/>
+		<Child name='pod_bin_1f_pod_bin_1f_bottom'/>
+		<Child name='pod_bin_1f_pod_bin_1f_flap'/>
+		<Child name='pod_bin_1f_pod_bin_1f_left'/>
+		<Child name='pod_bin_1f_pod_bin_1f_right'/>
+		<Child name='pod_bin_1f_pod_bin_1f_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1f_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1f_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1f_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1f_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1f_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1f_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1f_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1f_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1f_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1f_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1f_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1f_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1f_pod_bin_1f_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1f_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1f_pod_bin_1f_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1f_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1f_pod_bin_1f_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1f_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1f_pod_bin_1f_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1f_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1f_pod_bin_1f_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1f_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1f_pod_bin_1f_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='222.25' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1f_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1f_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1f_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1f_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1f_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1f_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1f_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1g'>
+		<Child name='pod_bin_1g_pod_bin_1g_back'/>
+		<Child name='pod_bin_1g_pod_bin_1g_bottom'/>
+		<Child name='pod_bin_1g_pod_bin_1g_flap'/>
+		<Child name='pod_bin_1g_pod_bin_1g_left'/>
+		<Child name='pod_bin_1g_pod_bin_1g_right'/>
+		<Child name='pod_bin_1g_pod_bin_1g_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1g_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1g_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1g_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1g_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1g_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1g_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1g_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1g_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1g_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1g_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1g_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1g_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1g_pod_bin_1g_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1g_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1g_pod_bin_1g_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1g_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1g_pod_bin_1g_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1g_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1g_pod_bin_1g_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1g_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1g_pod_bin_1g_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1g_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1g_pod_bin_1g_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='127' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1g_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1g_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1g_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1g_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1g_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1g_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1g_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1h'>
+		<Child name='pod_bin_1h_pod_bin_1h_back'/>
+		<Child name='pod_bin_1h_pod_bin_1h_bottom'/>
+		<Child name='pod_bin_1h_pod_bin_1h_flap'/>
+		<Child name='pod_bin_1h_pod_bin_1h_left'/>
+		<Child name='pod_bin_1h_pod_bin_1h_right'/>
+		<Child name='pod_bin_1h_pod_bin_1h_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1h_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1h_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1h_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1h_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1h_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1h_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1h_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1h_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1h_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1h_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1h_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1h_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1h_pod_bin_1h_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1h_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1h_pod_bin_1h_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1h_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1h_pod_bin_1h_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1h_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1h_pod_bin_1h_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1h_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1h_pod_bin_1h_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1h_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1h_pod_bin_1h_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='152.4' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1h_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1h_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1h_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1h_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_1h_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_1h_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_1h_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2e'>
+		<Child name='pod_bin_2e_pod_bin_2e_back'/>
+		<Child name='pod_bin_2e_pod_bin_2e_bottom'/>
+		<Child name='pod_bin_2e_pod_bin_2e_flap'/>
+		<Child name='pod_bin_2e_pod_bin_2e_left'/>
+		<Child name='pod_bin_2e_pod_bin_2e_right'/>
+		<Child name='pod_bin_2e_pod_bin_2e_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2e_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2e_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2e_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2e_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2e_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2e_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2e_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2e_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2e_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2e_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2e_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2e_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2e_pod_bin_2e_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2e_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2e_pod_bin_2e_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2e_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2e_pod_bin_2e_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2e_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2e_pod_bin_2e_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2e_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2e_pod_bin_2e_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2e_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2e_pod_bin_2e_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='114.3' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2e_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2e_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2e_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2e_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2e_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2e_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2e_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2f'>
+		<Child name='pod_bin_2f_pod_bin_2f_back'/>
+		<Child name='pod_bin_2f_pod_bin_2f_bottom'/>
+		<Child name='pod_bin_2f_pod_bin_2f_flap'/>
+		<Child name='pod_bin_2f_pod_bin_2f_left'/>
+		<Child name='pod_bin_2f_pod_bin_2f_right'/>
+		<Child name='pod_bin_2f_pod_bin_2f_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2f_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2f_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2f_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2f_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2f_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2f_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2f_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2f_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2f_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2f_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2f_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2f_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2f_pod_bin_2f_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2f_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2f_pod_bin_2f_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2f_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2f_pod_bin_2f_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2f_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2f_pod_bin_2f_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2f_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2f_pod_bin_2f_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2f_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2f_pod_bin_2f_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='222.25' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2f_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2f_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2f_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2f_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2f_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2f_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2f_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2g'>
+		<Child name='pod_bin_2g_pod_bin_2g_back'/>
+		<Child name='pod_bin_2g_pod_bin_2g_bottom'/>
+		<Child name='pod_bin_2g_pod_bin_2g_flap'/>
+		<Child name='pod_bin_2g_pod_bin_2g_left'/>
+		<Child name='pod_bin_2g_pod_bin_2g_right'/>
+		<Child name='pod_bin_2g_pod_bin_2g_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2g_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2g_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2g_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2g_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2g_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2g_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2g_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2g_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2g_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2g_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2g_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2g_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2g_pod_bin_2g_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2g_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2g_pod_bin_2g_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2g_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2g_pod_bin_2g_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2g_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2g_pod_bin_2g_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2g_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2g_pod_bin_2g_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2g_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2g_pod_bin_2g_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='127' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2g_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2g_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2g_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2g_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2g_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2g_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2g_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2h'>
+		<Child name='pod_bin_2h_pod_bin_2h_back'/>
+		<Child name='pod_bin_2h_pod_bin_2h_bottom'/>
+		<Child name='pod_bin_2h_pod_bin_2h_flap'/>
+		<Child name='pod_bin_2h_pod_bin_2h_left'/>
+		<Child name='pod_bin_2h_pod_bin_2h_right'/>
+		<Child name='pod_bin_2h_pod_bin_2h_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2h_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2h_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2h_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2h_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2h_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2h_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2h_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2h_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2h_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2h_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2h_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2h_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2h_pod_bin_2h_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2h_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2h_pod_bin_2h_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2h_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2h_pod_bin_2h_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2h_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2h_pod_bin_2h_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2h_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2h_pod_bin_2h_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2h_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2h_pod_bin_2h_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='152.4' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2h_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2h_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2h_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2h_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_2h_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_2h_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_2h_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3e'>
+		<Child name='pod_bin_3e_pod_bin_3e_back'/>
+		<Child name='pod_bin_3e_pod_bin_3e_bottom'/>
+		<Child name='pod_bin_3e_pod_bin_3e_flap'/>
+		<Child name='pod_bin_3e_pod_bin_3e_left'/>
+		<Child name='pod_bin_3e_pod_bin_3e_right'/>
+		<Child name='pod_bin_3e_pod_bin_3e_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3e_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3e_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3e_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3e_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3e_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3e_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3e_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3e_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3e_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3e_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3e_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3e_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3e_pod_bin_3e_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3e_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3e_pod_bin_3e_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3e_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3e_pod_bin_3e_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3e_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3e_pod_bin_3e_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3e_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3e_pod_bin_3e_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3e_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3e_pod_bin_3e_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='114.3' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3e_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3e_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3e_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3e_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3e_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3e_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3e_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3f'>
+		<Child name='pod_bin_3f_pod_bin_3f_back'/>
+		<Child name='pod_bin_3f_pod_bin_3f_bottom'/>
+		<Child name='pod_bin_3f_pod_bin_3f_flap'/>
+		<Child name='pod_bin_3f_pod_bin_3f_left'/>
+		<Child name='pod_bin_3f_pod_bin_3f_right'/>
+		<Child name='pod_bin_3f_pod_bin_3f_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3f_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3f_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3f_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3f_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3f_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3f_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3f_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3f_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3f_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3f_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3f_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3f_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3f_pod_bin_3f_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3f_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3f_pod_bin_3f_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3f_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3f_pod_bin_3f_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3f_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3f_pod_bin_3f_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3f_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3f_pod_bin_3f_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3f_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3f_pod_bin_3f_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='222.25' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3f_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3f_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3f_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3f_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3f_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3f_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3f_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3g'>
+		<Child name='pod_bin_3g_pod_bin_3g_back'/>
+		<Child name='pod_bin_3g_pod_bin_3g_bottom'/>
+		<Child name='pod_bin_3g_pod_bin_3g_flap'/>
+		<Child name='pod_bin_3g_pod_bin_3g_left'/>
+		<Child name='pod_bin_3g_pod_bin_3g_right'/>
+		<Child name='pod_bin_3g_pod_bin_3g_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3g_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3g_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3g_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3g_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3g_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3g_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3g_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3g_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3g_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3g_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3g_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3g_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3g_pod_bin_3g_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3g_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3g_pod_bin_3g_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3g_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3g_pod_bin_3g_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3g_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3g_pod_bin_3g_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3g_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3g_pod_bin_3g_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3g_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3g_pod_bin_3g_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='127' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3g_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3g_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3g_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3g_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3g_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3g_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3g_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3h'>
+		<Child name='pod_bin_3h_pod_bin_3h_back'/>
+		<Child name='pod_bin_3h_pod_bin_3h_bottom'/>
+		<Child name='pod_bin_3h_pod_bin_3h_flap'/>
+		<Child name='pod_bin_3h_pod_bin_3h_left'/>
+		<Child name='pod_bin_3h_pod_bin_3h_right'/>
+		<Child name='pod_bin_3h_pod_bin_3h_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3h_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3h_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3h_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3h_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3h_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3h_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3h_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3h_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3h_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3h_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3h_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3h_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3h_pod_bin_3h_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3h_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3h_pod_bin_3h_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3h_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3h_pod_bin_3h_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3h_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3h_pod_bin_3h_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3h_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3h_pod_bin_3h_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3h_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3h_pod_bin_3h_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='152.4' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3h_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3h_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3h_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3h_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_3h_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_3h_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_3h_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4e'>
+		<Child name='pod_bin_4e_pod_bin_4e_back'/>
+		<Child name='pod_bin_4e_pod_bin_4e_bottom'/>
+		<Child name='pod_bin_4e_pod_bin_4e_flap'/>
+		<Child name='pod_bin_4e_pod_bin_4e_left'/>
+		<Child name='pod_bin_4e_pod_bin_4e_right'/>
+		<Child name='pod_bin_4e_pod_bin_4e_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4e_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4e_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4e_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4e_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4e_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4e_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4e_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4e_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4e_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4e_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4e_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4e_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4e_pod_bin_4e_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4e_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4e_pod_bin_4e_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4e_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4e_pod_bin_4e_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4e_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4e_pod_bin_4e_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4e_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4e_pod_bin_4e_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4e_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4e_pod_bin_4e_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='114.3' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4e_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4e_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4e_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4e_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4e_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4e_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4e_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4f'>
+		<Child name='pod_bin_4f_pod_bin_4f_back'/>
+		<Child name='pod_bin_4f_pod_bin_4f_bottom'/>
+		<Child name='pod_bin_4f_pod_bin_4f_flap'/>
+		<Child name='pod_bin_4f_pod_bin_4f_left'/>
+		<Child name='pod_bin_4f_pod_bin_4f_right'/>
+		<Child name='pod_bin_4f_pod_bin_4f_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4f_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4f_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4f_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4f_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4f_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4f_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4f_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4f_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4f_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4f_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4f_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4f_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4f_pod_bin_4f_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4f_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4f_pod_bin_4f_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4f_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4f_pod_bin_4f_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4f_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4f_pod_bin_4f_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4f_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4f_pod_bin_4f_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4f_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4f_pod_bin_4f_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='222.25' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4f_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4f_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4f_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4f_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4f_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4f_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4f_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4g'>
+		<Child name='pod_bin_4g_pod_bin_4g_back'/>
+		<Child name='pod_bin_4g_pod_bin_4g_bottom'/>
+		<Child name='pod_bin_4g_pod_bin_4g_flap'/>
+		<Child name='pod_bin_4g_pod_bin_4g_left'/>
+		<Child name='pod_bin_4g_pod_bin_4g_right'/>
+		<Child name='pod_bin_4g_pod_bin_4g_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4g_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4g_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4g_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4g_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4g_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4g_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4g_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4g_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4g_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4g_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4g_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4g_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4g_pod_bin_4g_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4g_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4g_pod_bin_4g_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4g_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4g_pod_bin_4g_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4g_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4g_pod_bin_4g_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4g_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4g_pod_bin_4g_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4g_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4g_pod_bin_4g_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='127' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4g_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4g_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4g_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4g_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4g_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4g_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4g_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4h'>
+		<Child name='pod_bin_4h_pod_bin_4h_back'/>
+		<Child name='pod_bin_4h_pod_bin_4h_bottom'/>
+		<Child name='pod_bin_4h_pod_bin_4h_flap'/>
+		<Child name='pod_bin_4h_pod_bin_4h_left'/>
+		<Child name='pod_bin_4h_pod_bin_4h_right'/>
+		<Child name='pod_bin_4h_pod_bin_4h_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4h_back'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4h_back_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4h_back_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4h_bottom'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4h_bottom_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4h_bottom_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4h_flap'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4h_flap_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4h_flap_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4h_left'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4h_left_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4h_left_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4h_pod_bin_4h_back'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='152.4' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4h_back'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4h_pod_bin_4h_bottom'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4h_bottom'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4h_pod_bin_4h_flap'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='5.96046e-08' c3='-1' c4='0' />
+				<row3 c1='0' c2='1' c3='5.96046e-08' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4h_flap'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4h_pod_bin_4h_left'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4h_left'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4h_pod_bin_4h_right'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='228.6' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4h_right'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4h_pod_bin_4h_top'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='152.4' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4h_top'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4h_right'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4h_right_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4h_right_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_4h_top'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_4h_top_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_4h_top_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_brace'>
+		<Child name='pod_brace_pod_fabric_base'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_brace_pod_fabric_base'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='10' />
+				<row2 c1='0' c2='1' c3='0' c4='10' />
+				<row3 c1='0' c2='0' c3='1' c4='45' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_fabric_base'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_fabric_base'>
+		<Child name='pod_fabric_base_pod_shelf_e_joint'/>
+		<Child name='pod_fabric_base_pod_shelf_f_joint'/>
+		<Child name='pod_fabric_base_pod_shelf_g_joint'/>
+		<Child name='pod_fabric_base_pod_shelf_h_joint'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_fabric_base_pod_shelf_e_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='704.85' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_shelf_e'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_fabric_base_pod_shelf_f_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='819.15' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_shelf_f'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_fabric_base_pod_shelf_g_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='1041.4' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_shelf_g'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_fabric_base_pod_shelf_h_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='1168.4' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_shelf_h'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_e'>
+		<Child name='pod_shelf_e_pod_bin_1e_joint'/>
+		<Child name='pod_shelf_e_pod_bin_2e_joint'/>
+		<Child name='pod_shelf_e_pod_bin_3e_joint'/>
+		<Child name='pod_shelf_e_pod_bin_4e_joint'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_e_pod_bin_1e_joint'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1e'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_e_pod_bin_2e_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='228.6' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2e'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_e_pod_bin_3e_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='457.2' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3e'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_e_pod_bin_4e_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='685.8' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4e'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_f'>
+		<Child name='pod_shelf_f_pod_bin_1f_joint'/>
+		<Child name='pod_shelf_f_pod_bin_2f_joint'/>
+		<Child name='pod_shelf_f_pod_bin_3f_joint'/>
+		<Child name='pod_shelf_f_pod_bin_4f_joint'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_f_pod_bin_1f_joint'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1f'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_f_pod_bin_2f_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='228.6' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2f'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_f_pod_bin_3f_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='457.2' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3f'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_f_pod_bin_4f_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='685.8' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4f'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_g'>
+		<Child name='pod_shelf_g_pod_bin_1g_joint'/>
+		<Child name='pod_shelf_g_pod_bin_2g_joint'/>
+		<Child name='pod_shelf_g_pod_bin_3g_joint'/>
+		<Child name='pod_shelf_g_pod_bin_4g_joint'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_g_pod_bin_1g_joint'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1g'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_g_pod_bin_2g_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='228.6' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2g'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_g_pod_bin_3g_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='457.2' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3g'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_g_pod_bin_4g_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='685.8' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4g'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_h'>
+		<Child name='pod_shelf_h_pod_bin_1h_joint'/>
+		<Child name='pod_shelf_h_pod_bin_2h_joint'/>
+		<Child name='pod_shelf_h_pod_bin_3h_joint'/>
+		<Child name='pod_shelf_h_pod_bin_4h_joint'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_h_pod_bin_1h_joint'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_1h'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_h_pod_bin_2h_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='228.6' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_2h'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_h_pod_bin_3h_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='457.2' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_3h'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_shelf_h_pod_bin_4h_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='685.8' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_4h'/>
+	</RobotNode>
+
+
+
+</Robot>

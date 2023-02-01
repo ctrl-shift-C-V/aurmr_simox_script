@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Robot Type="tahoma_arm" RootNode="arm_base_link">
+    <RobotNode name='arm_base_link'>
+		<Child name='arm_base_link-base_fixed_joint'/>
+		<Child name='arm_base_link-base_link_inertia'/>
+	</RobotNode>
+
+    <RobotNode name='arm_base_link-base_fixed_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='-1' c2='-1.22465e-16' c3='0' c4='0' />
+				<row2 c1='1.22465e-16' c2='-1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='arm_base'/>
+	</RobotNode>
+
+    <RobotNode name='arm_base_link-base_link_inertia'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='-1' c2='-1.22465e-16' c3='0' c4='0' />
+				<row2 c1='1.22465e-16' c2='-1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='arm_base_link_inertia'/>
+	</RobotNode>
+
+    <RobotNode name='arm_base'>
+	</RobotNode>
+
+    <RobotNode name='arm_base_link_inertia'>
+		<Physics>
+			<Mass unit='kg' value='4'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.00610633' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.00610633' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.01125'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/arm_base_link_inertia_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/arm_base_link_inertia_col.stl</File>
+		</CollisionModel>
+		<Child name='arm_shoulder_pan_joint'/>
+	</RobotNode>
+
+    <RobotNode name='arm_shoulder_pan_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='5.22636e-07' c3='0' c4='0' />
+				<row2 c1='-5.22636e-07' c2='1' c3='-0' c4='0' />
+				<row3 c1='-0' c2='0' c3='1' c4='180.858' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='revolute'>
+			<axis x='0' y='0' z='1'/>
+			<!-- <limits lo='-6.28319' hi='6.28319' units='radian'/> -->
+			<limits lo='-110' hi='110' units='degree'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='2.0944'/>
+			<MaxTorque value='330'/>
+		</Joint>
+		<Child name='arm_shoulder_link'/>
+	</RobotNode>
+
+    <RobotNode name='arm_shoulder_link'>
+		<Physics>
+			<Mass unit='kg' value='7.369'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0298193' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0298193' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.0207253'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/arm_shoulder_link_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/arm_shoulder_link_col.stl</File>
+		</CollisionModel>
+		<Child name='arm_shoulder_lift_joint'/>
+	</RobotNode>
+
+    <RobotNode name='arm_shoulder_lift_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='-1.00249e-09' c3='-2.84216e-06' c4='0.114649' />
+				<row2 c1='-2.84216e-06' c2='-0.00035274' c3='-1' c4='0' />
+				<row3 c1='1.13687e-13' c2='1' c3='-0.00035274' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='revolute'>
+			<axis x='0' y='0' z='1'/>
+			<!-- <limits lo='-6.28319' hi='6.28319' units='radian'/> -->
+			<limits lo='-270' hi='270' units='degree'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='2.0944'/>
+			<MaxTorque value='330'/>
+		</Joint>
+		<Child name='arm_upper_arm_link'/>
+	</RobotNode>
+
+    <RobotNode name='arm_upper_arm_link'>
+		<Physics>
+			<Mass unit='kg' value='10.45'/>
+			<CoM location='Custom' x='-239.2' y='0' z='175'/>
+			<InertiaMatrix>
+					<row1 c1='0.214' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.214' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.0293906'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/arm_upper_arm_link_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/arm_upper_arm_link_col.stl</File>
+		</CollisionModel>
+		<Child name='arm_elbow_joint'/>
+	</RobotNode>
+
+    <RobotNode name='arm_elbow_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='7.854e-06' c3='0.000153993' c4='-478.26' />
+				<row2 c1='-7.95047e-06' c2='1' c3='0.000626447' c4='0' />
+				<row3 c1='-0.000153988' c2='-0.000626448' c3='1' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='revolute'>
+			<axis x='0' y='0' z='1'/>
+			<limits lo='-3.14159' hi='3.14159' units='radian'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='3.14159'/>
+			<MaxTorque value='150'/>
+		</Joint>
+		<Child name='arm_forearm_link'/>
+	</RobotNode>
+
+    <RobotNode name='arm_forearm_link'>
+		<Physics>
+			<Mass unit='kg' value='4.321'/>
+			<CoM location='Custom' x='-180' y='0' z='40'/>
+			<InertiaMatrix>
+					<row1 c1='0.0527432' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0527432' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.0121528'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/arm_forearm_link_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/arm_forearm_link_col.stl</File>
+		</CollisionModel>
+		<Child name='arm_wrist_1_joint'/>
+	</RobotNode>
+
+    <RobotNode name='arm_wrist_1_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='4.65155e-06' c3='0.000933992' c4='-360.03' />
+				<row2 c1='1.22998e-06' c2='0.99998' c3='-0.00629709' c4='-1.09675' />
+				<row3 c1='-0.000934003' c2='0.00629709' c3='0.99998' c4='174.165' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='revolute'>
+			<axis x='0' y='0' z='1'/>
+			<limits lo='-6.28319' hi='6.28319' units='radian'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='3.14159'/>
+			<MaxTorque value='56'/>
+		</Joint>
+		<Child name='arm_wrist_1_link'/>
+	</RobotNode>
+
+    <RobotNode name='arm_wrist_1_link'>
+		<Physics>
+			<Mass unit='kg' value='2.18'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.00568162' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.00568162' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.00613125'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/arm_wrist_1_link_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/arm_wrist_1_link_col.stl</File>
+		</CollisionModel>
+		<Child name='arm_wrist_2_joint'/>
+	</RobotNode>
+
+    <RobotNode name='arm_wrist_2_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='-3.31443e-09' c3='1.76182e-06' c4='0.0590031' />
+				<row2 c1='1.76183e-06' c2='0.00188124' c3='-0.999998' c4='-119.778' />
+				<row3 c1='0' c2='0.999998' c3='0.00188124' c4='0.225335' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='revolute'>
+			<axis x='0' y='0' z='1'/>
+			<limits lo='-6.28319' hi='6.28319' units='radian'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='3.14159'/>
+			<MaxTorque value='56'/>
+		</Joint>
+		<Child name='arm_wrist_2_link'/>
+	</RobotNode>
+
+    <RobotNode name='arm_wrist_2_link'>
+		<Physics>
+			<Mass unit='kg' value='2.033'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0052985' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0052985' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.00571781'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/arm_wrist_2_link_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/arm_wrist_2_link_col.stl</File>
+		</CollisionModel>
+		<Child name='arm_wrist_3_joint'/>
+	</RobotNode>
+
+    <RobotNode name='arm_wrist_3_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='3.06088e-10' c3='-4.5545e-07' c4='0.095103' />
+				<row2 c1='4.5545e-07' c2='-0.000672102' c3='1' c4='115.764' />
+				<row3 c1='-1.42109e-14' c2='-1' c3='-0.000672102' c4='-0.0778035' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='revolute'>
+			<axis x='0' y='0' z='1'/>
+			<limits lo='-6.28319' hi='6.28319' units='radian'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='3.14159'/>
+			<MaxTorque value='56'/>
+		</Joint>
+		<Child name='arm_wrist_3_link'/>
+	</RobotNode>
+
+    <RobotNode name='arm_wrist_3_link'>
+		<Physics>
+			<Mass unit='kg' value='0.907'/>
+			<CoM location='Custom' x='0' y='0' z='-25'/>
+			<InertiaMatrix>
+					<row1 c1='0.000648127' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.000648127' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000918337'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/arm_wrist_3_link_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/arm_wrist_3_link_col.stl</File>
+		</CollisionModel>
+		<Child name='arm_wrist_3-flange'/>
+	</RobotNode>
+
+    <RobotNode name='arm_wrist_3-flange'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='1' c3='0' c4='0' />
+				<row2 c1='0' c2='0' c3='1' c4='0' />
+				<row3 c1='1' c2='0' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='arm_flange'/>
+	</RobotNode>
+
+    <RobotNode name='arm_flange'>
+		<Child name='arm_flange-tool0'/>
+	</RobotNode>
+
+    <RobotNode name='arm_flange-tool0'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='0' c2='0' c3='1' c4='0' />
+				<row2 c1='1' c2='0' c3='0' c4='0' />
+				<row3 c1='0' c2='1' c3='0' c4='0' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='arm_tool0'/>
+	</RobotNode>
+
+    <RobotNode name='arm_tool0'>
+		<Child name='arm_tool0-coupling_joint'/>
+	</RobotNode>
+
+    <RobotNode name='arm_tool0-coupling_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='5.96046e-08' c2='1' c3='-0' c4='0' />
+				<row2 c1='-1' c2='5.96046e-08' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='-3' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='coupling'/>
+	</RobotNode>
+
+    <RobotNode name='coupling'>
+		<Visualization>
+			<File type='inventor'>models/coupling_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/coupling_col.stl</File>
+		</CollisionModel>
+		<Child name='coupling_link_gripper_robotiq_arg2f_base_link_joint'/>
+	</RobotNode>
+
+    <RobotNode name='coupling_link_gripper_robotiq_arg2f_base_link_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='17' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='gripper_base_link'/>
+	</RobotNode>
+
+    <RobotNode name='gripper_base_link'>
+		<Physics>
+			<Mass unit='kg' value='0.745'/>
+			<CoM location='Custom' x='0' y='0' z='55'/>
+			<InertiaMatrix>
+					<row1 c1='0.003084' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.002999' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000546'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/gripper_base_link_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/gripper_base_link_col.stl</File>
+		</CollisionModel>
+		<Child name='$hand__end_effector_joint'/>
+	</RobotNode>
+
+    <RobotNode name='$hand__end_effector_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='187' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='epick_end_effector'/>
+	</RobotNode>
+
+    <RobotNode name='epick_end_effector'>
+		<Physics>
+			<Mass unit='kg' value='0.0001'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='1.92833e-08' c2='0' c3='0'/>
+					<row2 c1='0' c2='1.92833e-08' c3='0'/>
+					<row3 c1='0' c2='0' c3='3.375e-08'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/epick_end_effector_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/epick_end_effector_col.stl</File>
+		</CollisionModel>
+		<Child name='gripper_base_link_gripper_equilibrium_grasp'/>
+	</RobotNode>
+
+    <RobotNode name='gripper_base_link_gripper_equilibrium_grasp'>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='gripper_equilibrium_grasp'/>
+	</RobotNode>
+
+    <RobotNode name='gripper_equilibrium_grasp'>
+	</RobotNode>
+
+    <RobotNodeSet name="Arm" kinematicRoot="arm_base_link" tcp="epick_end_effector">
+	 <!-- <Node name="arm_base_link_inertia"/> -->
+     <Node name="arm_shoulder_pan_joint"/>
+     <Node name="arm_shoulder_link"/>
+     <Node name="arm_shoulder_lift_joint"/>
+	 <Node name="arm_upper_arm_link" />
+	 <Node name="arm_elbow_joint" />
+	 <Node name="arm_forearm_link" />
+	 <Node name="arm_wrist_1_joint" />
+	 <Node name="arm_wrist_1_link" />
+	 <Node name="arm_wrist_2_joint" />
+	 <Node name="arm_wrist_2_link" />
+	 <Node name="arm_wrist_3_joint" />
+	 <Node name="arm_wrist_3_link" />
+	 <Node name="arm_wrist_3-flange" />
+	 <Node name="arm_flange" />
+	 <Node name="arm_flange-tool0" />
+	 <Node name="arm_tool0" />
+	 <Node name="arm_tool0-coupling_joint" />
+	 <Node name="coupling" />
+	 <Node name="coupling_link_gripper_robotiq_arg2f_base_link_joint" />
+	 <Node name="gripper_base_link" />
+	 <Node name="$hand__end_effector_joint" />
+	 <Node name="epick_end_effector" />
+	 <Node name="gripper_base_link_gripper_equilibrium_grasp" />
+	 <Node name="gripper_equilibrium_grasp" />
+   </RobotNodeSet>
+</Robot>
