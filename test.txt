@@ -1,0 +1,211 @@
+-- cmake version: 3.10.2
+-- The CXX compiler identification is GNU 8.4.0
+-- Check for working CXX compiler: /usr/bin/g++-8
+-- Check for working CXX compiler: /usr/bin/g++-8 -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- ** Simox version: 2.3.74.0
+-- Using Boost Version 1.65.1
+-- Changing o level of RelWithDebInfo to match o level of Release (from '-O2 ' to '-O3 ')
+-- CMAKE_CXX_FLAGS_RELWITHDEBINFO = -O3 -g -DNDEBUG
+-- ** Module path: /home/chop/Workspace/Robotics/simox/CMakeModules
+-- qwt_DIR:
+-- qwt-Include: qwt_INCLUDE_DIR-NOTFOUND
+-- qwt-lib: qwt_LIBRARY-NOTFOUND
+-- Found Eigen3: /usr/include/eigen3 (Required is at least version "2.91.0")
+-- Looking for C++ include pthread.h
+-- Looking for C++ include pthread.h - found
+-- Looking for pthread_create
+-- Looking for pthread_create - not found
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE
+-- Boost version: 1.65.1
+-- Found the following Boost libraries:
+--   filesystem
+--   system
+--   program_options
+--   thread
+--   unit_test_framework
+--   regex
+--   chrono
+--   date_time
+--   atomic
+-- Boost found at: /usr/include
+-- Compiler version: 8.4.0
+-- ******************** Configuring Simox ************************
+-- ** SIMOX BUILD SimoxUtility: TRUE (can't be turned off)
+-- ** SIMOX BUILD SimoxQtUtility: TRUE (can't be turned off)
+-- ** SIMOX BUILD VirtualRobot: TRUE
+-- ** SIMOX BUILD Saba        : TRUE
+-- ** SIMOX BUILD GraspStudio : TRUE
+-- ** SIMOX BUILD SimDynamics : TRUE
+-- ** SIMOX LIB DIR: /home/chop/Workspace/Robotics/simox/build/lib
+-- ** SIMOX BIN DIR: /home/chop/Workspace/Robotics/simox/build/bin
+-- ** SIMOX DATA DIR: /home/chop/Workspace/Robotics/simox/VirtualRobot/data
+-- ** SIMOX INSTALL LIB DIR   : lib
+-- ** SIMOX INSTALL BIN DIR   : bin
+-- ** SIMOX INSTALL DATA DIR  : data
+-- ** SIMOX INSTALL HEADER DIR: include
+-- ** Simox build directory: /home/chop/Workspace/Robotics/simox/build
+--  ** Looking for libtinyxml - found
+--  ** Found URDF: /usr/lib/x86_64-linux-gnu/liburdfdom_model.so
+-- Configuring Release build
+-- ** Test output directory: /home/chop/Workspace/Robotics/simox/build/bin/tests
+-- Using rbdl
+-- The C compiler identification is GNU 7.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+Exporting rbdl
+--
+***** CONFIGURING Simox project SimoxUtility *****
+-- ***** Finished CONFIGURING Simox project SimoxUtility *****
+
+--
+***** CONFIGURING Simox project SimoxQtUtility *****
+-- Found Qt5: /usr/include/x86_64-linux-gnu/qt5//usr/include/x86_64-linux-gnu/qt5/QtGui/usr/include/x86_64-linux-gnu/qt5/QtCore/usr/lib/x86_64-linux-gnu/qt5//mkspecs/linux-g++/usr/include/usr/include/x86_64-linux-gnu/qt5//usr/include/x86_64-linux-gnu/qt5/QtOpenGL/usr/include/x86_64-linux-gnu/qt5/QtWidgets/usr/include/x86_64-linux-gnu/qt5/QtGui/usr/include/x86_64-linux-gnu/qt5/QtCore/usr/lib/x86_64-linux-gnu/qt5//mkspecs/linux-g++/usr/include
+-- Did not find Qwt. Disabling Qwt support.
+-- ***** Finished CONFIGURING Simox project SimoxQtUtility *****
+
+-- Found NLOPT: /usr/include (found version "2.4.2")
+-- NLOPT found at: /usr/include
+-- Searching Coin3D, Qt and SoQt...
+-- Found Coin3D: /usr/include, /usr/lib/x86_64-linux-gnu
+-- Found Qt5: /usr/include/x86_64-linux-gnu/qt5//usr/include/x86_64-linux-gnu/qt5/QtGui/usr/include/x86_64-linux-gnu/qt5/QtCore/usr/lib/x86_64-linux-gnu/qt5//mkspecs/linux-g++/usr/include/usr/include/x86_64-linux-gnu/qt5//usr/include/x86_64-linux-gnu/qt5/QtOpenGL/usr/include/x86_64-linux-gnu/qt5/QtWidgets/usr/include/x86_64-linux-gnu/qt5/QtGui/usr/include/x86_64-linux-gnu/qt5/QtCore/usr/lib/x86_64-linux-gnu/qt5//mkspecs/linux-g++/usr/include
+-- Found SoQt:/usr/include,
+-- Enabling Coin3D/Qt/SoQt support
+--
+***** CONFIGURING Simox project VirtualRobot *****
+-- Simox_VISUALIZATION                   : TRUE
+-- Simox_USE_COIN_VISUALIZATION          : ON
+-- Simox_USE_OPENSCENEGRAPH_VISUALIZATION: OFF
+-- adding Coin3d visualzation
+--  ** Including URDF importer
+--  ** COLLISION DETECTION: PQP
+--  ** Directory of collision detection wrapper: /home/chop/Workspace/Robotics/simox/VirtualRobot/CollisionDetection/PQP
+--  ** Simox application InverseDynamics will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application InverseDynamics will be installed into
+--  ** Simox application ConstrainedIKDemo will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application ConstrainedIKDemo will be installed into bin
+--  ** Simox application loadRobot will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application loadRobot will be installed into bin
+-- Found OpenGL: /usr/lib/x86_64-linux-gnu/libOpenGL.so
+--  ** Simox application CameraViewer will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application CameraViewer will be installed into bin
+--  ** Simox application GenericIKDemo will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application GenericIKDemo will be installed into bin
+--  ** Simox application GraspEditor will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application GraspEditor will be installed into bin
+--  ** Simox application JacobiDemo will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application JacobiDemo will be installed into bin
+--  ** Simox application loadURDFRobot will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application loadURDFRobot will be installed into bin
+-- Boost version: 1.65.1
+-- Found the following Boost libraries:
+--   system
+--   filesystem
+--  ** Simox application MujocoMeshReader will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application MujocoMeshReader will be installed into bin
+--  ** Simox application ReachabilityDemo will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application ReachabilityDemo will be installed into bin
+--  ** Simox application ReachabilityMapDemo will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application ReachabilityMapDemo will be installed into bin
+--  ** Simox application RobotViewer will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application RobotViewer will be installed into bin
+--  ** Simox application SimoxSceneViewer will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application SimoxSceneViewer will be installed into bin
+-- Boost version: 1.65.1
+-- Found the following Boost libraries:
+--   system
+--   filesystem
+--  ** Simox application Simox2Mjcf will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application Simox2Mjcf will be installed into bin
+--  ** Simox application StabilityDemo will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application StabilityDemo will be installed into bin
+--  ** Simox application CoinViewer will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application CoinViewer will be installed into bin
+--  ** Simox application RGBOffscreenRendering will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application RGBOffscreenRendering will be installed into bin
+--  ** Simox application DepthOffscreenRendering will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application DepthOffscreenRendering will be installed into bin
+--  ** Simox application RobotFromObjects will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application RobotFromObjects will be installed into bin
+-- Boost version: 1.65.1
+-- Found the following Boost libraries:
+--   system
+--   filesystem
+--  ** Simox application Iv2Wrl will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application Iv2Wrl will be installed into bin
+-- Boost version: 1.65.1
+-- Found the following Boost libraries:
+--   system
+--  ** Simox application HemisphereJoint will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application HemisphereJoint will be installed into bin
+-- Boost version: 1.65.1
+-- Found the following Boost libraries:
+--   system
+--   filesystem
+--  ** Simox application TestObjLoading will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application TestObjLoading will be installed into bin
+--  ** Adding GraspEditor gui
+-- ***** Finished CONFIGURING Simox project VirtualRobot *****
+
+-- ***** CONFIGURING Simox project Saba *****
+-- Boost version: 1.65.1
+-- Found the following Boost libraries:
+--   unit_test_framework
+--  ** Simox application RRTdemo will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application RRTdemo will be installed into bin
+--  ** Simox application RrtGui will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application RrtGui will be installed into bin
+--  ** Simox application IKRRT will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application IKRRT will be installed into bin
+--  ** Simox application GraspRrtDemo will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application GraspRrtDemo will be installed into bin
+--  ** Simox application MultiThreadedPlanning will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application MultiThreadedPlanning will be installed into bin
+--  ** Simox application PlatformDemo will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application PlatformDemo will be installed into bin
+-- ***** Finished CONFIGURING Simox project Saba *****
+
+-- ***** CONFIGURING Simox project GraspStudio *****
+--  ** Simox application GraspQuality will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application GraspQuality will be installed into bin
+--  ** Simox application GraspPlanner will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application GraspPlanner will be installed into bin
+-- ***** Finished CONFIGURING Simox project GraspStudio *****
+
+-- ***** CONFIGURING Simox project SimDynamics *****
+-- Found Bullet: /usr/lib/libBulletDynamics.so
+--  ** Found Bullet at /usr/include/bullet
+-- BULLET_INCLUDE_DIRS /usr/include/bullet
+-- Testing Bullet for use of double precision...
+-- Bullet double precision detected. Automatically defining BT_USE_DOUBLE_PRECISION
+--  ** OPENGL FOUND lib:/usr/lib/x86_64-linux-gnu/libGL.so
+--  ** OPENGL_GLU FOUND lib:/usr/lib/x86_64-linux-gnu/libGLU.so
+-- Found GLUT: /usr/lib/x86_64-linux-gnu/libglut.so
+--  ** GLUT FOUND: /usr/lib/x86_64-linux-gnu/libglut.so
+--  **** Configuring BulletOpenGLSupport
+--  ** BulletOpenGLSupport  will be placed into /home/chop/Workspace/Robotics/simox/build/lib
+GLUT_INCLUDE_DIR:/usr/include
+--  ** Simox application BulletDebugViewer will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application BulletDebugViewer will be installed into bin
+--  ** Simox application SimDynamicsViewer will be placed into /home/chop/Workspace/Robotics/simox/build/bin
+--  ** Simox application SimDynamicsViewer will be installed into bin
+-- ***** Finished CONFIGURING Simox project SimDynamics *****
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE)
+-- ** Simox: Generating CMake files for build and install setup
+INSTALL_CMAKE_DIR:share/Simox/cmake
+-- simox git version: demo/2022-07-14/armar6a-2-116-g563e5d7e-dirty
+simox version: 2
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/chop/Workspace/Robotics/simox/build

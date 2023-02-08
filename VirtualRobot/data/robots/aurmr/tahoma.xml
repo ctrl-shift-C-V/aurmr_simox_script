@@ -2,7 +2,7 @@
 
 <Robot Type='tahoma' RootNode='base_link'>
 
-	<RobotNode name='$hand__end_effector_joint'>
+	<!-- <RobotNode name='$hand__end_effector_joint'>
 		<Transform>
 			<Matrix4x4 units='mm'>
 				<row1 c1='1' c2='0' c3='0' c4='0' />
@@ -19,20 +19,20 @@
 			<MaxTorque value='-1'/>
 		</Joint>
 		<Child name='epick_end_effector'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_base'>
-	</RobotNode>
+	<!-- <RobotNode name='arm_base'>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_base_link'>
+	<!-- <RobotNode name='arm_base_link'>
 		<Child name='arm_base_link-base_fixed_joint'/>
 		<Child name='arm_base_link-base_link_inertia'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_base_link-base_fixed_joint'>
+	<!-- <RobotNode name='arm_base_link-base_fixed_joint'>
 		<Transform>
 			<Matrix4x4 units='mm'>
 				<row1 c1='-1' c2='-1.22465e-16' c3='0' c4='0' />
@@ -49,10 +49,10 @@
 			<MaxTorque value='-1'/>
 		</Joint>
 		<Child name='arm_base'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_base_link-base_link_inertia'>
+	<!-- <RobotNode name='arm_base_link-base_link_inertia'>
 		<Transform>
 			<Matrix4x4 units='mm'>
 				<row1 c1='-1' c2='-1.22465e-16' c3='0' c4='0' />
@@ -69,10 +69,10 @@
 			<MaxTorque value='-1'/>
 		</Joint>
 		<Child name='arm_base_link_inertia'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_base_link_inertia'>
+	<!-- <RobotNode name='arm_base_link_inertia'>
 		<Physics>
 			<Mass unit='kg' value='4'/>
 			<CoM location='Custom' x='0' y='0' z='0'/>
@@ -83,16 +83,16 @@
 			</InertiaMatrix>
 		</Physics>
 		<Visualization>
-			<File type='inventor'>models/arm_base_link_inertia_visu.dae</File>
+			<File type='inventor'>models/arm_base_link_inertia_visu.stl</File>
 		</Visualization>
 		<CollisionModel>
 			<File type='inventor'>models/arm_base_link_inertia_col.stl</File>
 		</CollisionModel>
 		<Child name='arm_shoulder_pan_joint'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_elbow_joint'>
+	<!-- <RobotNode name='arm_elbow_joint'>
 		<Transform>
 			<Matrix4x4 units='mm'>
 				<row1 c1='1' c2='7.854e-06' c3='0.000153993' c4='-478.26' />
@@ -109,10 +109,10 @@
 			<MaxTorque value='150'/>
 		</Joint>
 		<Child name='arm_forearm_link'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_flange'>
+	<!-- <RobotNode name='arm_flange'>
 		<Child name='arm_flange-tool0'/>
 	</RobotNode>
 
@@ -134,10 +134,10 @@
 			<MaxTorque value='-1'/>
 		</Joint>
 		<Child name='arm_tool0'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_forearm_link'>
+	<!-- <RobotNode name='arm_forearm_link'>
 		<Physics>
 			<Mass unit='kg' value='4.321'/>
 			<CoM location='Custom' x='-180' y='0' z='40'/>
@@ -148,16 +148,16 @@
 			</InertiaMatrix>
 		</Physics>
 		<Visualization>
-			<File type='inventor'>models/arm_forearm_link_visu.dae</File>
+			<File type='inventor'>models/arm_forearm_link_visu.stl</File>
 		</Visualization>
 		<CollisionModel>
 			<File type='inventor'>models/arm_forearm_link_col.stl</File>
 		</CollisionModel>
 		<Child name='arm_wrist_1_joint'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_shoulder_lift_joint'>
+	<!-- <RobotNode name='arm_shoulder_lift_joint'>
 		<Transform>
 			<Matrix4x4 units='mm'>
 				<row1 c1='1' c2='-1.00249e-09' c3='-2.84216e-06' c4='0.114649' />
@@ -174,10 +174,10 @@
 			<MaxTorque value='330'/>
 		</Joint>
 		<Child name='arm_upper_arm_link'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_shoulder_link'>
+	<!-- <RobotNode name='arm_shoulder_link'>
 		<Physics>
 			<Mass unit='kg' value='7.369'/>
 			<CoM location='Custom' x='0' y='0' z='0'/>
@@ -188,16 +188,16 @@
 			</InertiaMatrix>
 		</Physics>
 		<Visualization>
-			<File type='inventor'>models/arm_shoulder_link_visu.dae</File>
+			<File type='inventor'>models/arm_shoulder_link_visu.stl</File>
 		</Visualization>
 		<CollisionModel>
 			<File type='inventor'>models/arm_shoulder_link_col.stl</File>
 		</CollisionModel>
 		<Child name='arm_shoulder_lift_joint'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_shoulder_pan_joint'>
+	<!-- <RobotNode name='arm_shoulder_pan_joint'>
 		<Transform>
 			<Matrix4x4 units='mm'>
 				<row1 c1='1' c2='5.22636e-07' c3='0' c4='0' />
@@ -214,10 +214,10 @@
 			<MaxTorque value='330'/>
 		</Joint>
 		<Child name='arm_shoulder_link'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_tool0'>
+	<!-- <RobotNode name='arm_tool0'>
 		<Child name='arm_tool0-coupling_joint'/>
 	</RobotNode>
 
@@ -239,10 +239,10 @@
 			<MaxTorque value='-1'/>
 		</Joint>
 		<Child name='coupling'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_upper_arm_link'>
+	<!-- <RobotNode name='arm_upper_arm_link'>
 		<Physics>
 			<Mass unit='kg' value='10.45'/>
 			<CoM location='Custom' x='-239.2' y='0' z='175'/>
@@ -253,16 +253,16 @@
 			</InertiaMatrix>
 		</Physics>
 		<Visualization>
-			<File type='inventor'>models/arm_upper_arm_link_visu.dae</File>
+			<File type='inventor'>models/arm_upper_arm_link_visu.stl</File>
 		</Visualization>
 		<CollisionModel>
 			<File type='inventor'>models/arm_upper_arm_link_col.stl</File>
 		</CollisionModel>
 		<Child name='arm_elbow_joint'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_wrist_1_joint'>
+	<!-- <RobotNode name='arm_wrist_1_joint'>
 		<Transform>
 			<Matrix4x4 units='mm'>
 				<row1 c1='1' c2='4.65155e-06' c3='0.000933992' c4='-360.03' />
@@ -279,10 +279,10 @@
 			<MaxTorque value='56'/>
 		</Joint>
 		<Child name='arm_wrist_1_link'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_wrist_1_link'>
+	<!-- <RobotNode name='arm_wrist_1_link'>
 		<Physics>
 			<Mass unit='kg' value='2.18'/>
 			<CoM location='Custom' x='0' y='0' z='0'/>
@@ -293,16 +293,16 @@
 			</InertiaMatrix>
 		</Physics>
 		<Visualization>
-			<File type='inventor'>models/arm_wrist_1_link_visu.dae</File>
+			<File type='inventor'>models/arm_wrist_1_link_visu.stl</File>
 		</Visualization>
 		<CollisionModel>
 			<File type='inventor'>models/arm_wrist_1_link_col.stl</File>
 		</CollisionModel>
 		<Child name='arm_wrist_2_joint'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_wrist_2_joint'>
+	<!-- <RobotNode name='arm_wrist_2_joint'>
 		<Transform>
 			<Matrix4x4 units='mm'>
 				<row1 c1='1' c2='-3.31443e-09' c3='1.76182e-06' c4='0.0590031' />
@@ -319,10 +319,10 @@
 			<MaxTorque value='56'/>
 		</Joint>
 		<Child name='arm_wrist_2_link'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_wrist_2_link'>
+	<!-- <RobotNode name='arm_wrist_2_link'>
 		<Physics>
 			<Mass unit='kg' value='2.033'/>
 			<CoM location='Custom' x='0' y='0' z='0'/>
@@ -333,16 +333,16 @@
 			</InertiaMatrix>
 		</Physics>
 		<Visualization>
-			<File type='inventor'>models/arm_wrist_2_link_visu.dae</File>
+			<File type='inventor'>models/arm_wrist_2_link_visu.stl</File>
 		</Visualization>
 		<CollisionModel>
 			<File type='inventor'>models/arm_wrist_2_link_col.stl</File>
 		</CollisionModel>
 		<Child name='arm_wrist_3_joint'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_wrist_3-flange'>
+	<!-- <RobotNode name='arm_wrist_3-flange'>
 		<Transform>
 			<Matrix4x4 units='mm'>
 				<row1 c1='0' c2='1' c3='0' c4='0' />
@@ -359,10 +359,10 @@
 			<MaxTorque value='-1'/>
 		</Joint>
 		<Child name='arm_flange'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_wrist_3_joint'>
+	<!-- <RobotNode name='arm_wrist_3_joint'>
 		<Transform>
 			<Matrix4x4 units='mm'>
 				<row1 c1='1' c2='3.06088e-10' c3='-4.5545e-07' c4='0.095103' />
@@ -379,10 +379,10 @@
 			<MaxTorque value='56'/>
 		</Joint>
 		<Child name='arm_wrist_3_link'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='arm_wrist_3_link'>
+	<!-- <RobotNode name='arm_wrist_3_link'>
 		<Physics>
 			<Mass unit='kg' value='0.907'/>
 			<CoM location='Custom' x='0' y='0' z='-25'/>
@@ -393,13 +393,13 @@
 			</InertiaMatrix>
 		</Physics>
 		<Visualization>
-			<File type='inventor'>models/arm_wrist_3_link_visu.dae</File>
+			<File type='inventor'>models/arm_wrist_3_link_visu.stl</File>
 		</Visualization>
 		<CollisionModel>
 			<File type='inventor'>models/arm_wrist_3_link_col.stl</File>
 		</CollisionModel>
 		<Child name='arm_wrist_3-flange'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
 	<RobotNode name='back_left_caster'>
@@ -726,7 +726,7 @@
 	</RobotNode>
 
 
-	<RobotNode name='coupling'>
+	<!-- <RobotNode name='coupling'>
 		<Visualization>
 			<File type='inventor'>models/coupling_visu.stl</File>
 		</Visualization>
@@ -734,10 +734,10 @@
 			<File type='inventor'>models/coupling_col.stl</File>
 		</CollisionModel>
 		<Child name='coupling_link_gripper_robotiq_arg2f_base_link_joint'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='coupling_link_gripper_robotiq_arg2f_base_link_joint'>
+	<!-- <RobotNode name='coupling_link_gripper_robotiq_arg2f_base_link_joint'>
 		<Transform>
 			<Matrix4x4 units='mm'>
 				<row1 c1='1' c2='0' c3='0' c4='0' />
@@ -754,10 +754,10 @@
 			<MaxTorque value='-1'/>
 		</Joint>
 		<Child name='gripper_base_link'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='epick_end_effector'>
+	<!-- <RobotNode name='epick_end_effector'>
 		<Physics>
 			<Mass unit='kg' value='0.0001'/>
 			<CoM location='Custom' x='0' y='0' z='0'/>
@@ -774,7 +774,7 @@
 			<File type='inventor'>models/epick_end_effector_col.stl</File>
 		</CollisionModel>
 		<Child name='gripper_base_link_gripper_equilibrium_grasp'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
 	<RobotNode name='front_left_caster'>
@@ -815,7 +815,7 @@
 	</RobotNode>
 
 
-	<RobotNode name='gripper_base_link'>
+	<!-- <RobotNode name='gripper_base_link'>
 		<Physics>
 			<Mass unit='kg' value='0.745'/>
 			<CoM location='Custom' x='0' y='0' z='55'/>
@@ -832,10 +832,10 @@
 			<File type='inventor'>models/gripper_base_link_col.stl</File>
 		</CollisionModel>
 		<Child name='$hand__end_effector_joint'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='gripper_base_link_gripper_equilibrium_grasp'>
+	<!-- <RobotNode name='gripper_base_link_gripper_equilibrium_grasp'>
 		<Joint type='prismatic'>
 			<translationdirection x='0' y='0' z='0'/>
 			<limits lo='-3141.59' hi='3141.59' units='mm'/>
@@ -844,11 +844,18 @@
 			<MaxTorque value='-1'/>
 		</Joint>
 		<Child name='gripper_equilibrium_grasp'/>
-	</RobotNode>
+	</RobotNode> -->
 
 
-	<RobotNode name='gripper_equilibrium_grasp'>
-	</RobotNode>
+	<!-- <RobotNode name='gripper_equilibrium_grasp'>
+		<Child name='arm tcp'/>
+	</RobotNode> -->
+
+	<!-- <RobotNode name="arm tcp">
+		<Visualization enable="true">
+			<CoordinateAxis type="Inventor" enable="false" scaling="1"/>
+		</Visualization>
+	</RobotNode> -->
 
 
 	<RobotNode name='kinect_base_joint'>
@@ -991,7 +998,10 @@
 			<MaxVelocity value='-1'/>
 			<MaxTorque value='-1'/>
 		</Joint>
-		<Child name='arm_base_link'/>
+		<!-- <Child name='arm_base_link'/> -->
+		<ChildFromRobot>
+			<File>tahoma_arm.xml</File>
+		</ChildFromRobot>
 	</RobotNode>
 
 
@@ -1282,6 +1292,41 @@
 		<Child name='stand_brace'/>
 	</RobotNode>
 
+	<!-- <RobotNodeSet name="Arm" kinematicRoot="base_link" tcp="arm tcp">
+     <Node name="arm_shoulder_pan_joint"/>
+     <Node name="arm_shoulder_link"/>
+     <Node name="arm_shoulder_lift_joint"/>
+	 <Node name="arm_upper_arm_link" />
+	 <Node name="arm_elbow_joint" />
+	 <Node name="arm_forearm_link" />
+	 <Node name="arm_wrist_1_joint" />
+	 <Node name="arm_wrist_1_link" />
+	 <Node name="arm_wrist_2_joint" />
+	 <Node name="arm_wrist_2_link" />
+	 <Node name="arm_wrist_3_joint" />
+	 <Node name="arm_wrist_3_link" />
+	 <Node name="arm_wrist_3-flange" />
+	 <Node name="arm_flange" />
+	 <Node name="arm_flange-tool0" />
+	 <Node name="arm_tool0" />
+	 <Node name="arm_tool0-coupling_joint" />
+	 <Node name="coupling" />
+	 <Node name="coupling_link_gripper_robotiq_arg2f_base_link_joint" />
+	 <Node name="gripper_base_link" />
+	 <Node name="$hand__end_effector_joint" />
+	 <Node name="epick_end_effector" />
+	 <Node name="gripper_base_link_gripper_equilibrium_grasp" />
+	 <Node name="gripper_equilibrium_grasp" />
+   </RobotNodeSet> -->
 
+   <RobotNodeSet name="col">
+   	<Node name="stand"/>
+   	<Node name="stand_stand_upright_joint"/>
+	<Node name="stand_upright"/>
+	<Node name='stand_cantilever_joint'/>
+	<Node name='cantilever'/>
+	<Node name="cantilever_robot_plate_joint"/>
+	<Node name="robot_plate"/>
+   </RobotNodeSet>
 
 </Robot>

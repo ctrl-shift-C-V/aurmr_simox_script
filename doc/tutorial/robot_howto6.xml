@@ -71,6 +71,17 @@
     <CollisionModel>
       <File type="Inventor">iv/LeftIndexFinger/col_leftIndexFingerTip.iv</File>
     </CollisionModel>
+    <Child name="Finger Joint5"/>
   </RobotNode>
-  
+
+  <RobotNode name="Finger Joint5">
+  </RobotNode>
+
+  <RobotNodeSet name="finger" kinematicRoot="root" tcp="Finger Joint5">
+    <Node name="Finger Joint1"/>
+    <Node name="Finger Joint2"/>
+    <Node name="Finger Joint3"/>
+    <Node name="Finger Joint4" />
+    <Node name="Finger Joint5" />
+   </RobotNodeSet>
 </Robot>

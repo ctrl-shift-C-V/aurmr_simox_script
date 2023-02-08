@@ -103,6 +103,7 @@ namespace VirtualRobot
 
     bool CollisionCheckerPQP::checkCollision(const CollisionModelPtr& model1, const CollisionModelPtr& model2) //, Eigen::Vector3f *storeContact)
     {
+        // std::cout<< "the first collision checker is in use" << std::endl;
         THROW_VR_EXCEPTION_IF(!model1, "model1 is null");
         THROW_VR_EXCEPTION_IF(!model2, "model2 is null");
         const auto& Impl1 = model1->getCollisionModelImplementation();
@@ -153,6 +154,7 @@ namespace VirtualRobot
 
     bool CollisionCheckerPQP::checkCollision(const CollisionModelPtr& model1, const Eigen::Vector3f& point, float tolerance)
     {
+        // std::cout<< "the scond collision checker is in use" << std::endl;
         assert(model1);
         assert(model1->getCollisionModelImplementation());
         std::shared_ptr<PQP::PQP_Model> m1 = model1->getCollisionModelImplementation()->getPQPModel();

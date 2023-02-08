@@ -2898,8 +2898,9 @@ namespace VirtualRobot
         return res;
     }
 
-    SoNode* CoinVisualizationFactory::getCoinVisualization(WorkspaceRepresentationPtr reachSpace, const VirtualRobot::ColorMap cm, bool transformToGlobalPose, float maxZGlobal, float minAngle, float maxAngle)
+    SoNode* CoinVisualizationFactory::getCoinVisualization(WorkspaceRepresentationPtr reachSpace, const VirtualRobot::ColorMap cm, bool transformToGlobalPose, float maxXGlobal, float minAngle, float maxAngle)
     {
+        std::cout<<"this is where zDist gets called"<<std::endl;
         SoSeparator* res = new SoSeparator;
         res->ref();
 
@@ -2961,7 +2962,7 @@ namespace VirtualRobot
                             //voxelPosition = reachSpace->baseNode->toGlobalCoordinateSystemVec(voxelPosition);
                         }
 
-                        if (resPos(2) > maxZGlobal)
+                        if (resPos(0) < maxXGlobal)
                         {
                             continue;
                         }
@@ -3223,11 +3224,11 @@ namespace VirtualRobot
 
     }
 
-    SoNode* CoinVisualizationFactory::getCoinVisualization(WorkspaceRepresentation::WorkspaceCut2DPtr cutXY, VirtualRobot::ColorMap cm, const Eigen::Vector3f& normal, float maxEntry, float minAngle, float maxAngle)
+    SoNode* CoinVisualizationFactory::getCoinVisualization(WorkspaceRepresentation::WorkspaceCut2DPtr cutZY, VirtualRobot::ColorMap cm, const Eigen::Vector3f& normal, float maxEntry, float minAngle, float maxAngle)
     {
         SoSeparator* res = new SoSeparator;
 
-        if (!cutXY)
+        if (!cutZY)
         {
             return res;
         }
@@ -3237,16 +3238,18 @@ namespace VirtualRobot
         u->units = SoUnits::MILLIMETERS;
         res->addChild(u);
 
-        //Eigen::Matrix4f gp = cutXY->referenceGlobalPose;
+        //Eigen::Matrix4f gp = cutZY->referenceGlobalPose;
         Eigen::Matrix4f gp = Eigen::Matrix4f::Identity();
         // set z component
-        gp(2, 3) = cutXY->referenceGlobalPose(2, 3);
+        // gp(2, 3) = cutXY->referenceGlobalPose(2, 3);
 
-        int nX = cutXY->entries.rows();
-        int nY = cutXY->entries.cols();
+        gp(0, 3) = cutZY->referenceGlobalPose(0, 3);
 
-        float sizeX = (cutXY->maxBounds[0] - cutXY->minBounds[0]) / (float)nX;
-        float sizeY = (cutXY->maxBounds[1] - cutXY->minBounds[1]) / (float)nY;
+        int nZ = cutZY->entries.rows();
+        int nY = cutZY->entries.cols();
+
+        float sizeZ = (cutZY->maxBounds[2] - cutZY->minBounds[2]) / (float)nZ;
+        float sizeY = (cutZY->maxBounds[1] - cutZY->minBounds[1]) / (float)nY;
 
 
         float ro, gr, bl;
@@ -3254,26 +3257,26 @@ namespace VirtualRobot
 
         if (normal(0) > 0)
         {
-            cube->width = sizeX;
+            cube->width = sizeZ;
             cube->depth = sizeY;
             cube->height = 1.0;
         }
         else if (normal(1) > 0)
         {
             cube->width = 1.0f;
-            cube->depth = sizeX;
+            cube->depth = sizeZ;
             cube->height = sizeY;
         }
         else
         {
-            cube->width = sizeX;
+            cube->width = sizeZ;
             cube->depth = 1.0f;
             cube->height = sizeY;
         }
 
         if (maxEntry == 0.0f)
         {
-            maxEntry = cutXY->entries.maxCoeff();
+            maxEntry = cutZY->entries.maxCoeff();
             if (maxEntry == 0)
             {
                 maxEntry = 1;
@@ -3298,21 +3301,21 @@ namespace VirtualRobot
         SoLightModel* lightModel = new SoLightModel;
         lightModel->model = SoLightModel::BASE_COLOR;
 
-        for (int x = 0; x < nX; x++)
+        for (int z = 0; z < nZ; z++)
         {
-            float xPos = cutXY->minBounds[0] + (float)x * sizeX + 0.5f * sizeX; // center of voxel
+            float zPos = cutZY->minBounds[2] + (float)z * sizeZ + 0.5f * sizeZ; // center of voxel
 
             for (int y = 0; y < nY; y++)
             {
-                int v = cutXY->entries(x, y);
+                int v = cutZY->entries(z, y);
 
                 if (v > 0)
                 {
-                    float yPos = cutXY->minBounds[1] + (float)y * sizeY + 0.5f * sizeY; // center of voxel
-                    gp(0, 3) = xPos;
+                    float yPos = cutZY->minBounds[1] + (float)y * sizeY + 0.5f * sizeY; // center of voxel
+                    gp(2, 3) = zPos;
                     gp(1, 3) = yPos;
 
-                    float angle = std::atan2(yPos, xPos);
+                    float angle = std::atan2(yPos, zPos);
                     if (minAngle > angle || maxAngle < angle)
                     {
                         continue;

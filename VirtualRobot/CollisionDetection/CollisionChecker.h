@@ -66,6 +66,7 @@ namespace VirtualRobot
         virtual float calculateDistance(const CollisionModelPtr& model1, const SceneObjectSetPtr& model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1 = NULL, int* trID2 = NULL);
         virtual float calculateDistance(const CollisionModelPtr& model1, const CollisionModelPtr& model2, Eigen::Vector3f& P1, Eigen::Vector3f& P2, int* trID1 = NULL, int* trID2 = NULL);
 
+        virtual bool checkCollision(const SceneObjectSetPtr& model1, const SceneObjectSetPtr& model2, const SceneObjectSetPtr& stand);
         /*!
             Test if the two models are colliding.
             Returns true on collision.

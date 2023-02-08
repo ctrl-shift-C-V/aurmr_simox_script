@@ -115,12 +115,15 @@ void reachabilityWindow::setupUI()
     connect(UI.comboBoxJoint, SIGNAL(activated(int)), this, SLOT(selectJoint(int)));
     connect(UI.horizontalSliderPos, SIGNAL(valueChanged(int)), this, SLOT(jointValueChanged(int)));
     connect(UI.sliderCutReach, SIGNAL(sliderReleased()), this, SLOT(reachVisu()));
+    connect(UI.sliderCutReachHorizontal, SIGNAL(sliderReleased()), this, SLOT(reachVisu()));
     connect(UI.sliderCutMinAngle, SIGNAL(sliderReleased()), this, SLOT(updateCutAngleSlider()));
     connect(UI.sliderCutMaxAngle, SIGNAL(sliderReleased()), this, SLOT(updateCutAngleSlider()));
 
 
     UI.sliderCutReach->setValue(50);
     UI.sliderCutReach->setEnabled(false);
+    UI.sliderCutReachHorizontal->setValue(50);
+    UI.sliderCutReachHorizontal->setEnabled(false);
     UI.sliderCutMinAngle->setValue(0);
     UI.sliderCutMinAngle->setEnabled(false);
     UI.sliderCutMaxAngle->setValue(100);
@@ -212,7 +215,7 @@ void reachabilityWindow::reachVisu()
         maxAngle = (2.0f * maxAngle - 1) * static_cast<float>(M_PI);
 
         UI.checkBoxReachabilityCut->setEnabled(true);
-        float heightPercent = 1.0f;
+        float heightPercent = 0.0f;
         if (UI.checkBoxReachabilityCut->checkState() == Qt::Checked)
         {
             UI.sliderCutReach->setEnabled(true);
@@ -223,7 +226,8 @@ void reachabilityWindow::reachVisu()
 
             WorkspaceRepresentation::WorkspaceCut2DPtr cutData = reachSpace->createCut(pos,reachSpace->getDiscretizeParameterTranslation(), true);
             VR_INFO << "Slider pos: " << pos  << ", maxEntry:" << reachSpace->getMaxSummedAngleReachablity() << ", cut maxCoeff:" << cutData->entries.maxCoeff() << std::endl;
-            SoNode *reachvisu2 = CoinVisualizationFactory::getCoinVisualization(cutData, VirtualRobot::ColorMap(VirtualRobot::ColorMap::eHot), Eigen::Vector3f::UnitZ(), reachSpace->getMaxSummedAngleReachablity(), minAngle, maxAngle);
+            // Eigen::Vector3f::UnitX() decide which direction the cube faces. Z means facing up/down, X means facing left/right, Y means facing front/back
+            SoNode *reachvisu2 = CoinVisualizationFactory::getCoinVisualization(cutData, VirtualRobot::ColorMap(VirtualRobot::ColorMap::eHot), Eigen::Vector3f::UnitY(), reachSpace->getMaxSummedAngleReachablity(), minAngle, maxAngle);
             visualisationNode->addChild(reachvisu2);
 
         }
@@ -234,9 +238,13 @@ void reachabilityWindow::reachVisu()
 
         Eigen::Vector3f minBB, maxBB;
         reachSpace->getWorkspaceExtends(minBB, maxBB);
+        float xDist = maxBB(0) - minBB(0);
+        float yDist = maxBB(1) - minBB(1);
         float zDist = maxBB(2) - minBB(2);
+        float maxX =  minBB(0) + heightPercent*xDist; //- reachSpace->getDiscretizeParameterTranslation();
+        float maxY =  minBB(1) + heightPercent*yDist - reachSpace->getDiscretizeParameterTranslation();
         float maxZ =  minBB(2) + heightPercent*zDist - reachSpace->getDiscretizeParameterTranslation();
-        SoNode *reachvisu =  CoinVisualizationFactory::getCoinVisualization(reachSpace, VirtualRobot::ColorMap(VirtualRobot::ColorMap::eHot), true, maxZ, minAngle, maxAngle);
+        SoNode *reachvisu =  CoinVisualizationFactory::getCoinVisualization(reachSpace, VirtualRobot::ColorMap(VirtualRobot::ColorMap::eHot), true, maxX, minAngle, maxAngle);
         visualisationNode->addChild(reachvisu);
 
     } else
@@ -497,11 +505,13 @@ void reachabilityWindow::extendReach()
     int steps = UI.spinBoxExtend->value();
 
     //reachSpace->addRandomTCPPoses(steps, 1, true);
-    reachSpace->addRandomTCPPoses(steps, QThread::idealThreadCount() < 1 ? 1 : QThread::idealThreadCount(), true);
+    // reachSpace->addRandomTCPPoses(steps, QThread::idealThreadCount() < 1 ? 1 : QThread::idealThreadCount(), true);
+    reachSpace->addRandomTCPPoses(steps, true);
 
     reachSpace->print();
     UI.checkBoxReachabilityVisu->setChecked(false);
     UI.sliderCutReach->setEnabled(false);
+    UI.sliderCutReachHorizontal->setEnabled(false);
     UI.sliderCutMinAngle->setEnabled(false);
     UI.sliderCutMaxAngle->setEnabled(false);
     UI.checkBoxReachabilityCut->setEnabled(false);

@@ -12,6 +12,7 @@
       </Joint>
       <Visualization>
         <File type="Inventor">iv/joint.iv</File>
+        <UseAsCollisionModel/>
       </Visualization>
       <Child name="node 1"/>
     </RobotNode>
@@ -22,6 +23,7 @@
       </Transform>
       <Visualization>
         <File type="Inventor">iv/ball.iv</File>
+        <UseAsCollisionModel/>
       </Visualization>
       <Child name="joint 2"/>
     </RobotNode>
@@ -32,6 +34,7 @@
       </Joint>
       <Visualization>
         <File type="Inventor">iv/joint2.iv</File>
+        <UseAsCollisionModel/>
       </Visualization>
       <Child name="node 2"/>
     </RobotNode>
@@ -42,6 +45,7 @@
         </Transform>
         <Visualization>
             <File type="Inventor">iv/ball.iv</File>
+            <UseAsCollisionModel/>
         </Visualization>
         <Child name="joint 3"/>
     </RobotNode>
@@ -52,6 +56,7 @@
         </Joint>
         <Visualization>
           <File type="Inventor">iv/joint.iv</File>
+          <UseAsCollisionModel/>
         </Visualization>
         <Child name="tcp"/>
     </RobotNode>
@@ -62,6 +67,7 @@
         </Transform>
         <Visualization>
           <File type="Inventor">iv/ball.iv</File>
+          <UseAsCollisionModel/>
         </Visualization>
     </RobotNode>
     

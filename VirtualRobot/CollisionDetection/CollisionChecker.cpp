@@ -303,6 +303,7 @@ namespace VirtualRobot
 
     bool CollisionChecker::checkCollision(const std::vector<CollisionModelPtr>& model1, const CollisionModelPtr& model2)
     {
+        std::cout << "this is the one" << std::endl;
         VR_ASSERT(model2);
         VR_ASSERT(isInitialized());
 
@@ -323,8 +324,111 @@ namespace VirtualRobot
         return false;
     }
 
+    bool CollisionChecker::checkCollision(const SceneObjectSetPtr& model1, const SceneObjectSetPtr& model2, const SceneObjectSetPtr& stand)
+    {
+        // std::cout << "this is the two" << std::endl;
+        VR_ASSERT(model1 && model2);
+        VR_ASSERT_MESSAGE(model1->getCollisionChecker() == model2->getCollisionChecker(), "Collision models are linked to different Collision Checker instances");
+        VR_ASSERT_MESSAGE(model1->getCollisionChecker() == shared_from_this(), "Collision models are linked to different Collision Checker instances");
+        VR_ASSERT(isInitialized());
+
+        std::vector< CollisionModelPtr > vColModels1 = model1->getCollisionModels();
+        std::vector< CollisionModelPtr > vColModels2 = model2->getCollisionModels();
+        std::vector< CollisionModelPtr > vColModels3 = stand->getCollisionModels();
+
+        if (vColModels1.size() == 0)
+        {
+            VR_WARNING << "no internal data for " << model1->getName() << std::endl;
+            return false;
+        }
+        if ( vColModels2.size() == 0)
+        {
+            VR_WARNING << "no internal data for " << model2->getName() << std::endl;
+            return false;
+        }
+
+        std::vector< CollisionModelPtr >::iterator it1 = vColModels1.begin();
+
+        while (it1 != vColModels1.end())
+        {
+            std::vector< CollisionModelPtr >::iterator it2 = vColModels2.begin();
+
+            while (it2 != vColModels2.end())
+            {
+                if (checkCollision(*it1, *it2))
+                {
+                    return true;
+                }
+
+                it2++;
+            }
+
+            it1++;
+        }
+
+        std::vector< CollisionModelPtr >::iterator stand_itr = vColModels3.begin();
+
+        while (stand_itr != vColModels3.end())
+        {
+            std::vector< CollisionModelPtr >::iterator arm_itr = vColModels2.begin();
+
+            while (arm_itr != vColModels2.end())
+            {
+                if (checkCollision(*stand_itr, *arm_itr))
+                {
+                    return true;
+                }
+
+                arm_itr++;
+            }
+
+            stand_itr++;
+        }
+
+        // std::vector< CollisionModelPtr >::iterator shoulder_pan_joint = vColModels2.begin();
+        // std::vector< CollisionModelPtr >::iterator end_link = vColModels2.end();
+        // std::vector< CollisionModelPtr >::iterator shoulder_link = shoulder_pan_joint + 1;
+        // std::vector< CollisionModelPtr >::iterator shoulder_lift_joint = shoulder_pan_joint + 2;
+        // std::vector< CollisionModelPtr >::iterator upper_arm_link = shoulder_pan_joint + 3;
+        // bool res_1 = checkCollision(*shoulder_pan_joint, *shoulder_link);
+        // bool res_2 = checkCollision(*shoulder_pan_joint, *shoulder_lift_joint);
+        // bool res_3 = checkCollision(*shoulder_link, *upper_arm_link);
+        // std::cout << "model begin is: " << (*shoulder_pan_joint)->getName() << std::endl;
+        // std::cout << "model second is: " << (*shoulder_link)->getName() << std::endl;
+        // std::cout << "model end is: " << (*end_link)->getName() << std::endl;
+        // std::cout << "shoulder pan joint and shoulder link are considered collision: "<< res_1 << std::endl;
+        // std::cout << "shoulder pan joint and shoulder lift joint are considered collision: "<< res_2 << std::endl;
+        // std::cout << "shoulder_link and upper_arm_link are considered collision: "<< res_3 << std::endl;
+        
+
+
+        std::vector< CollisionModelPtr >::iterator itr1_self_col = vColModels2.begin();
+        while (itr1_self_col != vColModels2.end())
+        {
+            std::vector< CollisionModelPtr >::iterator itr2_self_col = vColModels2.begin();
+
+            while (itr2_self_col != vColModels2.end())
+            {
+                if (!(itr1_self_col == itr2_self_col + 1 || itr2_self_col == itr1_self_col + 1 || itr2_self_col == itr1_self_col)) {
+                    if (checkCollision(*itr1_self_col, *itr2_self_col))
+                    {
+                        return true;
+                    }
+                }
+
+                itr2_self_col++;
+            }
+
+            itr1_self_col++;
+        }
+
+        return false;
+    }
+
+
     bool CollisionChecker::checkCollision(const SceneObjectSetPtr& model1, const SceneObjectSetPtr& model2)
     {
+        // std::cout << "this is the two" << std::endl;
         VR_ASSERT(model1 && model2);
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == model2->getCollisionChecker(), "Collision models are linked to different Collision Checker instances");
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == shared_from_this(), "Collision models are linked to different Collision Checker instances");
@@ -363,11 +467,50 @@ namespace VirtualRobot
             it1++;
         }
 
+
+        // std::vector< CollisionModelPtr >::iterator shoulder_pan_joint = vColModels2.begin();
+        // std::vector< CollisionModelPtr >::iterator end_link = vColModels2.end();
+        // std::vector< CollisionModelPtr >::iterator shoulder_link = shoulder_pan_joint + 1;
+        // std::vector< CollisionModelPtr >::iterator shoulder_lift_joint = shoulder_pan_joint + 2;
+        // std::vector< CollisionModelPtr >::iterator upper_arm_link = shoulder_pan_joint + 3;
+        // bool res_1 = checkCollision(*shoulder_pan_joint, *shoulder_link);
+        // bool res_2 = checkCollision(*shoulder_pan_joint, *shoulder_lift_joint);
+        // bool res_3 = checkCollision(*shoulder_link, *upper_arm_link);
+        // std::cout << "model begin is: " << (*shoulder_pan_joint)->getName() << std::endl;
+        // std::cout << "model second is: " << (*shoulder_link)->getName() << std::endl;
+        // std::cout << "model end is: " << (*end_link)->getName() << std::endl;
+        // std::cout << "shoulder pan joint and shoulder link are considered collision: "<< res_1 << std::endl;
+        // std::cout << "shoulder pan joint and shoulder lift joint are considered collision: "<< res_2 << std::endl;
+        // std::cout << "shoulder_link and upper_arm_link are considered collision: "<< res_3 << std::endl;
+        
+
+
+        std::vector< CollisionModelPtr >::iterator itr1_self_col = vColModels2.begin();
+        while (itr1_self_col != vColModels2.end())
+        {
+            std::vector< CollisionModelPtr >::iterator itr2_self_col = vColModels2.begin();
+
+            while (itr2_self_col != vColModels2.end())
+            {
+                if (!(itr1_self_col == itr2_self_col + 1 || itr2_self_col == itr1_self_col + 1 || itr2_self_col == itr1_self_col)) {
+                    if (checkCollision(*itr1_self_col, *itr2_self_col))
+                    {
+                        return true;
+                    }
+                }
+
+                itr2_self_col++;
+            }
+
+            itr1_self_col++;
+        }
+
         return false;
     }
 
     bool CollisionChecker::checkCollision(const SceneObjectPtr& model1, const SceneObjectSetPtr& model2)
     {
+        std::cout << "this is the three" << std::endl;
         VR_ASSERT(model1 && model2);
         RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
 
@@ -401,6 +544,7 @@ namespace VirtualRobot
 
     bool CollisionChecker::checkCollision(const CollisionModelPtr& model1, const SceneObjectSetPtr& model2)
     {
+        std::cout << "this is the four" << std::endl;
         VR_ASSERT(model1 && model2);
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == model2->getCollisionChecker(), "Collision models are linked to different Collision Checker instances");
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == shared_from_this(), "Collision models are linked to different Collision Checker instances");
@@ -431,6 +575,7 @@ namespace VirtualRobot
 
     bool CollisionChecker::checkCollision(const SceneObjectPtr& model1, const SceneObjectPtr& model2)
     {
+        std::cout << "this is the five" << std::endl;
         VR_ASSERT(model1 && model2);
         RobotPtr r = std::dynamic_pointer_cast<Robot>(model1);
         RobotPtr r2 = std::dynamic_pointer_cast<Robot>(model2);
@@ -459,6 +604,7 @@ namespace VirtualRobot
 
     bool CollisionChecker::checkCollision(const CollisionModelPtr& model, const Eigen::Vector3f &point, float tolerance)
     {
+        std::cout << "this is the six" << std::endl;
         VR_ASSERT(model);
         VR_ASSERT_MESSAGE(model->getCollisionChecker() == shared_from_this(), "Collision models are linked to different Collision Checker instances");
         VR_ASSERT(isInitialized());
@@ -468,6 +614,7 @@ namespace VirtualRobot
 
     bool CollisionChecker::checkCollision(const SceneObjectSetPtr& modelSet, const Eigen::Vector3f &point, float tolerance)
     {
+        std::cout << "this is the seven" << std::endl;
         VR_ASSERT(modelSet);
         VR_ASSERT_MESSAGE(modelSet->getCollisionChecker() == shared_from_this(), "Collision models are linked to different Collision Checker instances");
         VR_ASSERT(isInitialized());
@@ -493,12 +640,13 @@ namespace VirtualRobot
 
     bool CollisionChecker::checkCollision(const CollisionModelPtr& model1, const CollisionModelPtr& model2)
     {
+        // std::cout << "this is the eight" << std::endl;
         THROW_VR_EXCEPTION_IF(!model1, "model1 is null");
         THROW_VR_EXCEPTION_IF(!model2, "model2 is null");
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == model2->getCollisionChecker(), "Collision models are linked to different Collision Checker instances");
         VR_ASSERT_MESSAGE(model1->getCollisionChecker() == shared_from_this(), "Collision models are linked to different Collision Checker instances");
         THROW_VR_EXCEPTION_IF(!isInitialized(), "checker not initialized");
-
+        // std::cout << "collision check status: " << collisionCheckerImplementation->checkCollision(model1, model2) << std:: endl;
         return collisionCheckerImplementation->checkCollision(model1, model2);//, storeContact);
     }
 

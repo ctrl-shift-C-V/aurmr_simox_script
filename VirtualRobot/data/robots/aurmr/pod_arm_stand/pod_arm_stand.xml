@@ -5592,30 +5592,17 @@
    </RobotNodeSet>
 
    <RobotNodeSet name='ThePod'>
+	<Node name='pod_base_link' />
+	<Node name='pod_base_link_pod_brace_joint' />
+	<Node name='pod_brace' />
+	<Node name='pod_brace_pod_fabric_base' />
+	<Node name='pod_fabric_base' />
+	<Node name='pod_fabric_base_pod_shelf_e_joint' />
+	<Node name='pod_shelf_e' />
+	<Node name='pod_shelf_e_pod_bin_1e_joint' />
+    <Node name='pod_bin_1e'/>
 	<Node name='pod_bin_1e_pod_bin_1e_back'/>
 	<Node name='pod_bin_1e_pod_bin_1e_bottom'/>
-	<Node name='pod_bin_1e_pod_bin_1e_flap'/>
-	<Node name='pod_bin_1e_pod_bin_1e_left'/>
-	<Node name='pod_bin_1e_pod_bin_1e_right'/>
-	<Node name='pod_bin_1e_pod_bin_1e_top'/>
-	<Node name='pod_bin_2e_pod_bin_2e_back'/>
-	<Node name='pod_bin_2e_pod_bin_2e_bottom'/>
-	<Node name='pod_bin_2e_pod_bin_2e_flap'/>
-	<Node name='pod_bin_2e_pod_bin_2e_left'/>
-	<Node name='pod_bin_2e_pod_bin_2e_right'/>
-	<Node name='pod_bin_2e_pod_bin_2e_top'/>
-	<Node name='pod_bin_3e_pod_bin_3e_back'/>
-	<Node name='pod_bin_3e_pod_bin_3e_bottom'/>
-	<Node name='pod_bin_3e_pod_bin_3e_flap'/>
-	<Node name='pod_bin_3e_pod_bin_3e_left'/>
-	<Node name='pod_bin_3e_pod_bin_3e_right'/>
-	<Node name='pod_bin_3e_pod_bin_3e_top'/>
-	<Node name='pod_bin_4e_pod_bin_4e_back'/>
-	<Node name='pod_bin_4e_pod_bin_4e_bottom'/>
-	<Node name='pod_bin_4e_pod_bin_4e_flap'/>
-	<Node name='pod_bin_4e_pod_bin_4e_left'/>
-	<Node name='pod_bin_4e_pod_bin_4e_right'/>
-	<Node name='pod_bin_4e_pod_bin_4e_top'/>
 	</RobotNodeSet>
 
 

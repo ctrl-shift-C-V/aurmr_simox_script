@@ -902,8 +902,15 @@ namespace VirtualRobot
 
         int loop = 0;
 
+        // for (unsigned int i = 0; i < nodeSet->getSize(); i++)
+        //     {
+        //         std::cout << "node set has: " << (*nodeSet)[i]->getName() << std::endl;
+        //     }
+
         do
         {
+            // std::cout << "self collision check is set to: " << !(!checkForSelfCollisions || !staticCollisionModel || !dynamicCollisionModel) << std::endl;
+            // std::cout << "node set size is: " << nodeSet->getSize() << std::endl;
             for (unsigned int i = 0; i < nodeSet->getSize(); i++)
             {
                 rndValue = RandomFloat(); // value from 0 to 1
@@ -913,6 +920,7 @@ namespace VirtualRobot
             }
 
             robot->setJointValues(nodeSet, v);
+            SceneObjectSetPtr stand = robot->getRobotNodeSet("TheStand");
 
             // check for collisions
             if (!checkForSelfCollisions || !staticCollisionModel || !dynamicCollisionModel)
@@ -920,11 +928,20 @@ namespace VirtualRobot
                 return true;
             }
 
-            if (!robot->getCollisionChecker()->checkCollision(staticCollisionModel, dynamicCollisionModel))
+            // if (!robot->getCollisionChecker()->checkCollision(staticCollisionModel, dynamicCollisionModel))
+            // {
+            //     // std::cout << "successfully set to random pose" << std::endl;
+            //     // std::cout << "joint values are: " << v << " and no colide" << std::endl;
+            //     return true;
+            // }
+
+            if (!robot->getCollisionChecker()->checkCollision(staticCollisionModel, dynamicCollisionModel, stand))
             {
+                // std::cout << "successfully set to random pose" << std::endl;
+                // std::cout << "joint values are: " << v << " and no colide" << std::endl;
                 return true;
             }
-
+            // std::cout << "joint values are: " << v << " and there is colide" << std::endl;
             collisionConfigs++;
             loop++;
         }
@@ -1200,6 +1217,21 @@ namespace VirtualRobot
 
             THROW_VR_EXCEPTION_IF((numVoxels[i] <= 0), " numVoxels <= 0 in dimension " << i);
         }
+        // std::cout << "minBounds[0]: " << minBounds[0] << std::endl;
+        // std::cout << "minBounds[1]: " << minBounds[1] << std::endl;
+        // std::cout << "minBounds[2]: " << minBounds[2] << std::endl;
+        // std::cout << "maxBounds[0]: " << maxBounds[0] << std::endl;
+        // std::cout << "maxBounds[1]: " << maxBounds[1] << std::endl;
+        // std::cout << "maxBounds[2]: " << maxBounds[2] << std::endl;
+        // std::cout << "discretizeStepTranslation: " << discretizeStepTranslation << std::endl;
+        // std::cout << "discretizeStepRotation: " << discretizeStepRotation << std::endl;
+        // std::cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << std::endl;
+        // std::cout << "numvoxels[0]: " << numVoxels[0] << std::endl;
+        // std::cout << "numvoxels[1]: " << numVoxels[1] << std::endl;
+        // std::cout << "numvoxels[2]: " << numVoxels[2] << std::endl;
+        // std::cout << "numvoxels[3]: " << numVoxels[3] << std::endl;
+        // std::cout << "numvoxels[4]: " << numVoxels[4] << std::endl;
+        // std::cout << "numvoxels[5]: " << numVoxels[5] << std::endl;
 
         data.reset(new WorkspaceDataArray(numVoxels[0], numVoxels[1], numVoxels[2], numVoxels[3], numVoxels[4], numVoxels[5], adjustOnOverflow));
 
@@ -1672,14 +1704,23 @@ namespace VirtualRobot
     {
         WorkspaceCut2DPtr result(new WorkspaceCut2D());
         result->referenceGlobalPose = referencePose;
+        // std::cout << "reference pose is: \n" << referencePose << std::endl;
 
         Eigen::Vector3f minBB, maxBB;
 
         getWorkspaceExtends(minBB, maxBB);
+        // std::cout << "minbb 0 is: " << minBB(0) << std::endl;
+        // std::cout << "maxbb 0 is: " << maxBB(0) << std::endl;
+        // std::cout << "minbb 1 is: " << minBB(1) << std::endl;
+        // std::cout << "maxbb 1 is: " << maxBB(1) << std::endl;
+        // std::cout << "minbb 2 is: " << minBB(2) << std::endl;
+        // std::cout << "maxbb 2 is: " << maxBB(2) << std::endl;
         result->minBounds[0] = minBB(0);
         result->maxBounds[0] = maxBB(0);
         result->minBounds[1] = minBB(1);
         result->maxBounds[1] = maxBB(1);
+        result->minBounds[2] = minBB(2);
+        result->maxBounds[2] = maxBB(2);
 
         THROW_VR_EXCEPTION_IF(cellSize <= 0.0f, "Invalid parameter");
 
@@ -1687,41 +1728,113 @@ namespace VirtualRobot
         int numVoxelsX = (int)(sizeX / cellSize);
         float sizeY = result->maxBounds[1] - result->minBounds[1];
         int numVoxelsY = (int)(sizeY / cellSize);
+        float sizeZ = result->maxBounds[2] - result->minBounds[2];
+        int numVoxelsZ = (int)(sizeZ / cellSize);
 
 
         Eigen::Matrix4f tmpPose = referencePose;
         Eigen::Matrix4f localPose;
+        // float pp[6];
+        // unsigned int kk[6];
+
+        // result->entries.resize(numVoxelsX, numVoxelsY);
+        // result->entries.setZero();
+
+        // for (int a = 0; a < numVoxelsX; a++)
+        // {
+        //     tmpPose(0, 3) = result->minBounds[0] + (float)a * cellSize + 0.5f * cellSize;
+
+        //     for (int b = 0; b < numVoxelsY; b++)
+        //     {
+        //         tmpPose(1, 3) = result->minBounds[1] + (float)b * cellSize + 0.5f * cellSize;
+        //         if (sumAngles)
+        //         {
+        //             localPose = tmpPose;
+        //             toLocal(localPose);
+        //             matrix2Vector(localPose,pp);
+
+        //             if (!getVoxelFromPose(pp, kk))
+        //             {
+        //                 result->entries(a, b) = 0;
+        //             } else
+        //                 result->entries(a, b) = sumAngleReachabilities(kk[0],kk[1],kk[2]);
+        //         } else
+        //         {
+        //             result->entries(a, b) = getEntry(tmpPose);
+        //         }
+        //     }
+        // }
+        // std::cout << "result for x-y plane is: \n" << result->entries << std::endl;
+
+        // tmpPose = referencePose;
         float x[6];
         unsigned int v[6];
 
-        result->entries.resize(numVoxelsX, numVoxelsY);
+        // result->entries.resize(numVoxelsX, numVoxelsY);
 
+        result->entries.resize(numVoxelsZ, numVoxelsY);
+        result->entries.setZero();
+        float zLower = 1043.85;//704.85;
+        float zUpper = 1659.8;//1320.8;
+        float yLower = -469.9;
+        float yUpper = 469.9;
+        Eigen::Matrix4f podPose1 = referencePose;
+        Eigen::Matrix4f podPose2 = referencePose;
+        podPose1(2,3) = zLower;
+        podPose2(2,3) = zLower;
+        toGlobal(podPose1);
+        toLocal(podPose2);
+        std::cout << "global pose is: " << podPose1(2,3)<<std::endl;
+        std::cout << "local pose is: " << podPose2(2,3)<<std::endl;
 
-        for (int a = 0; a < numVoxelsX; a++)
+        for (int a = 0; a < numVoxelsZ; a++)
         {
-            tmpPose(0, 3) = result->minBounds[0] + (float)a * cellSize + 0.5f * cellSize;
-
+            tmpPose(2, 3) = result->minBounds[2] + (float)a * cellSize + 0.5f * cellSize;
+            if (tmpPose(2,3) < zLower || tmpPose(2,3) > zUpper) { continue; }
             for (int b = 0; b < numVoxelsY; b++)
             {
                 tmpPose(1, 3) = result->minBounds[1] + (float)b * cellSize + 0.5f * cellSize;
+                if (tmpPose(1,3) < yLower || tmpPose(1,3) > yUpper) { continue; }
                 if (sumAngles)
                 {
+                    // std::cout << "this should never happen" << std::endl;
                     localPose = tmpPose;
+                    std::cout << "ref pose z is: " << localPose(2,3) <<std::endl;
+                    std::cout << "ref pose y is: " << localPose(1,3) <<std::endl;
                     toLocal(localPose);
+                    // if (localPose(1,3) < yLower || localPose(1,3) > yUpper || localPose(2,3) < zLower || localPose(2,3) > zUpper) { continue; }
+                    std::cout << "local pose z is: " << localPose(2,3) <<std::endl;
+                    std::cout << "local pose y is: " << localPose(1,3) <<std::endl;
                     matrix2Vector(localPose,x);
 
                     if (!getVoxelFromPose(x, v))
                     {
                         result->entries(a, b) = 0;
-                    } else
+                    } else{
+                        // std::cout << "a is: " << a << std::endl;
+                        // std::cout << "b is: " << b << std::endl;
+                        // std::cout << "a should be: " << numVoxelsZ-1-a << std::endl;
+                        // std::cout << "b should be: " << numVoxelsY-b-1 << std::endl;
                         result->entries(a, b) = sumAngleReachabilities(v[0],v[1],v[2]);
+                    }
                 } else
                 {
                     result->entries(a, b) = getEntry(tmpPose);
                 }
             }
         }
-
+        std::cout << "result for z-y is: \n" << result->entries << std::endl;
+        for (int a = numVoxelsZ-1; a >=0; a--) {
+            std::cout<<"[";
+            for (int b = numVoxelsY-1; b >=0; b--) {
+                if (b == 0) {
+                    std::cout << result->entries(a, b);
+                } else {
+                    std::cout<<result->entries(a, b) <<", \t";
+                }
+            }
+            std::cout<<"]"<<endl;
+        }
         return result;
     }
 
@@ -1772,20 +1885,43 @@ namespace VirtualRobot
         result->maxBounds[0] = maxBB(0);
         result->minBounds[1] = minBB(1);
         result->maxBounds[1] = maxBB(1);
+        result->minBounds[2] = minBB(2);
+        result->maxBounds[2] = maxBB(2);
 
         float sizeX = result->maxBounds[0] - result->minBounds[0];
         int numVoxelsX = (int)(sizeX / cellSize);
         float sizeY = result->maxBounds[1] - result->minBounds[1];
         int numVoxelsY = (int)(sizeY / cellSize);
+        float sizeZ = result->maxBounds[2] - result->minBounds[2];
+        int numVoxelsZ = (int)(sizeZ / cellSize);
 
         float sizeZGlobal = maxBB(2) - minBB(2);
         float poseZGlobal = minBB(2) + heightPercent*sizeZGlobal;
 
-        result->entries.resize(numVoxelsX, numVoxelsY);
+        float sizeXGlobal = maxBB(0) - minBB(0);
+        float poseXGlobal = minBB(0) + heightPercent*sizeXGlobal;
+        float sizeYGlobal = maxBB(1) - minBB(1);
+        float poseYGlobal = minBB(1) + heightPercent*sizeYGlobal;
+
+        std::cout << "sizex global is : \n" << sizeXGlobal << std::endl;
+        std::cout << "sizey global is : \n" << sizeYGlobal << std::endl;
+
+        result->entries.resize(numVoxelsZ, numVoxelsY);
         result->entries.setZero();
 
         Eigen::Matrix4f refPose = getToGlobalTransformation();
-        refPose(2,3) = poseZGlobal;
+        Eigen::Matrix4f refPose_2 = getToGlobalTransformation();
+        RobotNodePtr pod = this->robot->getRobotNode("my_random_joint");
+        Eigen::Matrix4f p = pod->getGlobalPose();
+        std::cout << "pod pose is :" << p << std::endl;
+        std::cout << "baseNode is :" << baseNode->getName() << std::endl;
+        std::cout << "baseNode local pose is :\n" << getToLocalTransformation() << std::endl;
+        std::cout << "refPose is : \n" << refPose << std::endl;
+        // refPose_2(2,3) = poseZGlobal;
+        // WorkspaceRepresentation::WorkspaceCut2DPtr x_y_result = createCut(refPose_2, cellSize, sumAngles);
+        refPose(0,3) = p(0,3);
+        std::cout << "posZGlobal is : " << poseZGlobal << std::endl;
+        std::cout << "refPose 2 and 3 now should equal to posZGlobal and is : \n" << refPose << std::endl;
         return createCut(refPose, cellSize, sumAngles);
     }
 
@@ -2210,9 +2346,12 @@ namespace VirtualRobot
         nodeSet->getJointValues(c);
         bool visuSate = robot->getUpdateVisualizationStatus();
         robot->setUpdateVisualization(false);
-
+        // std::cout << "+++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+        // std::cout << "number of poses: " << loops << std::endl;
+        // std::cout << "self collisions is set to " << checkForSelfCollisions << std::endl;
         for (unsigned int i = 0; i < loops; i++)
         {
+            // std::cout << "node set is: " << nodeSet->getName() << std::endl;
             if (setRobotNodesToRandomConfig(nodeSet, checkForSelfCollisions))
             {
                 addCurrentTCPPose();
@@ -2224,7 +2363,7 @@ namespace VirtualRobot
         }
 
         robot->setUpdateVisualization(visuSate);
-        nodeSet->setJointValues(c);
+        // nodeSet->setJointValues(c);
     }
 
     void WorkspaceRepresentation::addRandomTCPPoses(unsigned int loops, unsigned int numThreads, bool checkForSelfCollisions)
@@ -2236,7 +2375,10 @@ namespace VirtualRobot
             VR_ERROR << "Number of threads can not be bigger then number of tcp poses to add.";
             return;
         }
-
+        // std::cout << "+++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+        // std::cout << "Thread ==========" << std::endl;
+        // std::cout << "number of poses: " << loops << std::endl;
+        // std::cout << "self collisions is set to " << checkForSelfCollisions << std::endl;
         std::vector<std::thread> threads(numThreads);
         unsigned int numPosesPerThread = loops / numThreads; // todo
 

@@ -297,8 +297,8 @@ namespace VirtualRobot
             EIGEN_MAKE_ALIGNED_OPERATOR_NEW
             Eigen::Matrix4f referenceGlobalPose;
             Eigen::MatrixXi entries;
-            float minBounds[2]; // in global coord system
-            float maxBounds[2]; // in global coord system
+            float minBounds[3]; // in global coord system
+            float maxBounds[3]; // in global coord system
         };
         typedef std::shared_ptr<WorkspaceCut2D> WorkspaceCut2DPtr;
 

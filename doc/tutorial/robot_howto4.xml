@@ -8,7 +8,7 @@
     
     <RobotNode name="joint 1">
       <Joint type="revolute">
-				<Axis x="0" y="0" z="1"/>
+				<Axis x="1" y="0" z="1"/>
 	    </Joint>
       <Visualization>
 		    <File type="Inventor">iv/joint.iv</File>

@@ -228,24 +228,10 @@
       <material name="blue_aluminum"/>
     </visual>
     <collision>
-      <!-- across -->
-      <origin rpy="0 0 0" xyz=".4050 0 .0281"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size=".09 1.53 .045"/>
-      </geometry>
-    </collision>
-    <collision>
-      <!-- right -->
-      <origin rpy="0 0 0" xyz="0 -.72 -.0225"/>
-      <geometry>
-        <box size=".9 .09 .0562"/>
-      </geometry>
-    </collision>
-    <collision>
-      <!-- left -->
-      <origin rpy="0 0 0" xyz="0 .72 -.0225"/>
-      <geometry>
-        <box size=".9 .09 .0562"/>
+        <!-- <box size=".9 .09 .0562"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/stand_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -253,7 +239,8 @@
     <visual>
       <origin xyz="-0.013 0. 0."/>
       <geometry>
-        <box size="0.026 0.103 0.039"/>
+        <!-- <box size="0.026 0.103 0.039"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/camera_base.stl"/>
       </geometry>
       <material name="grey"/>
     </visual>
@@ -271,24 +258,10 @@
       <material name="blue_aluminum"/>
     </visual>
     <collision>
-      <!-- right upright -->
-      <origin rpy="0 0 0" xyz="-.1709 0.6975 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size=".2298 .0450 1.89"/>
-      </geometry>
-    </collision>
-    <collision>
-      <!-- left upright -->
-      <origin rpy="0 0 0" xyz="-.1709 -0.6975 0"/>
-      <geometry>
-        <box size=".2298 .0450 1.89"/>
-      </geometry>
-    </collision>
-    <collision>
-      <!-- top beam -->
-      <origin rpy="0 0 0" xyz="-.1733 0 .9012"/>
-      <geometry>
-        <box size=".2370 1.44 .0960"/>
+        <!-- <box size=".2298 .0450 1.89"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/stand_upright_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -310,7 +283,8 @@
     <collision>
       <origin rpy="1.56 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.09 0.1040 0.1225"/>
+        <!-- <box size="0.09 0.1040 0.1225"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/caster_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -332,7 +306,8 @@
     <collision>
       <origin rpy="1.56 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.09 0.1040 0.1225"/>
+        <!-- <box size="0.09 0.1040 0.1225"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/caster_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -354,7 +329,8 @@
     <collision>
       <origin rpy="1.56 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.09 0.1040 0.1225"/>
+        <!-- <box size="0.09 0.1040 0.1225"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/caster_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -376,7 +352,8 @@
     <collision>
       <origin rpy="1.56 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.09 0.1040 0.1225"/>
+        <!-- <box size="0.09 0.1040 0.1225"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/caster_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -384,7 +361,8 @@
     <visual>
       <origin xyz="0. 0. 0."/>
       <geometry>
-        <box size="0.0994 0.0996 0.023"/>
+        <!-- <box size="0.0994 0.0996 0.023"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/camera_body.stl"/>
       </geometry>
       <material name="white"/>
     </visual>
@@ -393,7 +371,8 @@
     <visual>
       <origin xyz="-0.0128 0. 0."/>
       <geometry>
-        <box size="0.026 0.101 0.037"/>
+        <!-- <box size="0.026 0.101 0.037"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/camera_visor.stl"/>
       </geometry>
       <material name="black"/>
     </visual>
@@ -413,7 +392,8 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size=".102 1.4390 .4934"/>
+        <!-- <box size=".102 1.4390 .4934"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/stand_brace_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -425,7 +405,8 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="1.21 .602 .01"/>
+        <!-- <box size="1.21 .602 .01"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/light_panel.stl"/>
       </geometry>
       <material name="gray">
         <color rgba=".3 .3 .3 1"/>
@@ -434,7 +415,8 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="1.21 .602 .01"/>
+        <!-- <box size="1.21 .602 .01"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/light_panel.stl"/>
       </geometry>
     </collision>
   </link>
@@ -446,7 +428,8 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="1.21 .602 .01"/>
+        <!-- <box size="1.21 .602 .01"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/light_panel.stl"/>
       </geometry>
       <material name="gray">
         <color rgba=".3 .3 .3 1"/>
@@ -455,7 +438,8 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="1.21 .602 .01"/>
+        <!-- <box size="1.21 .602 .01"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/light_panel.stl"/>
       </geometry>
     </collision>
   </link>
@@ -474,7 +458,8 @@
     <collision>
       <origin xyz="0 0 .0415"/>
       <geometry>
-        <box size=".7260 .225 .09"/>
+        <!-- <box size=".7260 .225 .09"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/cantilever_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -493,7 +478,8 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size=".585 .0602 .1790"/>
+        <!-- <box size=".585 .0602 .1790"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/control_box_mount_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -512,7 +498,8 @@
     <collision>
       <origin rpy="0 0 .022" xyz="0 0 0"/>
       <geometry>
-        <box size="0.045 1.25 0.045"/>
+        <!-- <box size="0.045 1.25 0.045"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/camera_beam_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -520,7 +507,8 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size=".1 .15 .15"/>
+        <!-- <box size=".1 .15 .15"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/camera_lower_left_mount_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -528,7 +516,8 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size=".1 .15 .15"/>
+        <!-- <box size=".1 .15 .15"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/camera_lower_right_mount_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -536,7 +525,8 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 .005"/>
       <geometry>
-        <box size="1.17 .562 .00251"/>
+        <!-- <box size="1.17 .562 .00251"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/light_panel_emitter.stl"/>
       </geometry>
       <material name="white">
         <color rgba=".9 .9 .9 1"/>
@@ -545,7 +535,8 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="1.17 .562 .00251"/>
+        <!-- <box size="1.17 .562 .00251"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/light_panel_emitter.stl"/>
       </geometry>
     </collision>
   </link>
@@ -553,7 +544,8 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 .005"/>
       <geometry>
-        <box size="1.17 .562 .00251"/>
+        <!-- <box size="1.17 .562 .00251"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/light_panel_emitter.stl"/>
       </geometry>
       <material name="white">
         <color rgba=".9 .9 .9 1"/>
@@ -562,7 +554,8 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="1.17 .562 .00251"/>
+        <!-- <box size="1.17 .562 .00251"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/light_panel_emitter.stl"/>
       </geometry>
     </collision>
   </link>
@@ -581,7 +574,8 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size=".225 .225 .0225"/>
+        <!-- <box size=".225 .225 .0225"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/robot_plate_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -600,7 +594,8 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size=".46 .25 .44"/>
+        <!-- <box size=".46 .25 .44"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/control_box_col.stl"/>
       </geometry>
     </collision>
   </link>
@@ -769,29 +764,16 @@
         <color rgba="0.1 0.1 0.1 1"/>
       </material>
     </visual>
-    <visual>
-      <origin rpy="0 0 0" xyz="0.0335 0 0.006"/>
-      <geometry>
-        <mesh filename="package://robotiq_2f_85_gripper_visualization/meshes/visual/connector_cover.stl"/>
-      </geometry>
-      <material name="">
-        <color rgba="0.1 0.1 0.1 1"/>
-      </material>
-    </visual>
+    
     <collision>
       <!-- Primitives are centered, so offset -->
       <origin rpy="0 0 0" xyz="0.041 0 -0.013"/>
       <geometry>
-        <box size=".015 0.033 .056"/>
+        <!-- <box size=".015 0.033 .056"/> -->
+        <mesh filename="package://robotiq_2f_85_gripper_visualization/meshes/visual/coupling_col.stl"/>
       </geometry>
     </collision>
-    <collision>
-      <!-- Primitives are centered, so offset -->
-      <origin rpy="0 0 0" xyz="0 0 0.00845"/>
-      <geometry>
-        <cylinder length=".0169" radius=".0375"/>
-      </geometry>
-    </collision>
+    
   </link>
   <link name="gripper_base_link">
     <inertial>
@@ -800,21 +782,12 @@
       <inertia ixx="0.003084" ixy="0.0" ixz="0.0" iyy="0.002999" iyz="0.0" izz="0.000546"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 1.5707963267948966" xyz="0 0 -0.005"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://robotiq_epick_visualization/meshes/visual/robotiq_epick_std.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://robotiq_epick_visualization/meshes/visual/gripper_base_link_visu.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="mat1">
         <color rgba="1 1 1 1"/>
-      </material>
-    </visual>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0.137"/>
-      <geometry>
-        <cylinder length="0.08" radius="0.006"/>
-      </geometry>
-      <material name="mat2">
-        <color rgba="1 0 0 1"/>
       </material>
     </visual>
     <!-- -0.095 + 0.102/2 = -0.044-->
@@ -826,20 +799,13 @@
       </visual>  -->
     <collision>
       <!-- -0.095 + 0.102/2 = -0.044-->
-      <origin rpy="0 0 0" xyz="0 0 0.0485"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder length="0.114" radius="0.035"/>
+        <!-- <cylinder length="0.114" radius="0.035"/> -->
+        <mesh filename="package://robotiq_epick_visualization/meshes/visual/gripper_base_link_col.stl" />
       </geometry>
     </collision>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0.137"/>
-      <geometry>
-        <cylinder length="0.08" radius="0.006"/>
-      </geometry>
-      <material name="mat2">
-        <color rgba="1 0 0 1"/>
-      </material>
-    </collision>
+
     <!-- -0.095 + 0.102/2 = -0.044-->
     <!-- <collision>
         <origin xyz="0 0 ${-0.044+0.095+0.014+0.09}" rpy="0 0 0"/>
@@ -853,7 +819,8 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 -0.002"/>
       <geometry>
-        <cylinder length="0.017" radius="0.0225"/>
+        <!-- <cylinder length="0.017" radius="0.0225"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/epick_end_effector.stl"/>
       </geometry>
       <material name="transparent">
         <color rgba="0 0 1 1"/>
@@ -862,7 +829,8 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 -0.002"/>
       <geometry>
-        <cylinder length="0.017" radius="0.0225"/>
+        <!-- <cylinder length="0.017" radius="0.0225"/> -->
+        <mesh filename="package://tahoma_description/meshes/stand/epick_end_effector.stl"/>
       </geometry>
       <material name="transparent">
         <color rgba="0 0 1 1"/>

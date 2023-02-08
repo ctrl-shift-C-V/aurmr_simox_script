@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<Robot Type='pod1' RootNode='pod_base_link'>
+
+	<RobotNode name='pod_base_link'>
+		<Physics>
+			<Mass unit='kg' value='30'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_base_link_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_base_link_col.stl</File>
+		</CollisionModel>
+		<Child name='pod_base_link_pod_brace_joint'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_base_link_pod_brace_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='294' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_brace'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_bin_e_to_h'>
+		<Physics>
+			<Mass unit='kg' value='0.01'/>
+			<CoM location='Custom' x='0' y='0' z='0'/>
+			<InertiaMatrix>
+					<row1 c1='0.0002835' c2='0' c3='0'/>
+					<row2 c1='0' c2='0.0002835' c3='0'/>
+					<row3 c1='0' c2='0' c3='0.000324'/>
+			</InertiaMatrix>
+		</Physics>
+		<Visualization>
+			<File type='inventor'>models/pod_bin_e_to_h_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_bin_e_to_h_col.stl</File>
+		</CollisionModel>
+	</RobotNode>
+
+
+	<RobotNode name='pod_brace'>
+		<Child name='pod_brace_pod_fabric_base'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_brace_pod_fabric_base'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='10' />
+				<row2 c1='0' c2='1' c3='0' c4='10' />
+				<row3 c1='0' c2='0' c3='1' c4='45' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_fabric_base'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_fabric_base'>
+		<Child name='pod_fabric_base_pod_shelf_e_joint'/>
+	</RobotNode>
+
+
+	<RobotNode name='pod_fabric_base_pod_shelf_e_joint'>
+		<Transform>
+			<Matrix4x4 units='mm'>
+				<row1 c1='1' c2='0' c3='0' c4='0' />
+				<row2 c1='0' c2='1' c3='0' c4='0' />
+				<row3 c1='0' c2='0' c3='1' c4='704.85' />
+				<row4 c1='0' c2='0' c3='0' c4='1' />
+			</Matrix4x4>
+		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='0' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='pod_bin_e_to_h'/>
+	</RobotNode>
+
+
+
+</Robot>
