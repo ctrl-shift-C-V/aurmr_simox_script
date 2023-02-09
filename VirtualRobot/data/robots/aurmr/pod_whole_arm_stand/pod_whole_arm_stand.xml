@@ -990,6 +990,12 @@
 		<CollisionModel>
 			<File type='inventor'>models/pod_bin_e_to_h_col.stl</File>
 		</CollisionModel>
+		<!-- <Visualization>
+			<File type='inventor'>models/pod_col_test_visu.stl</File>
+		</Visualization>
+		<CollisionModel>
+			<File type='inventor'>models/pod_col_test_visu.stl</File>
+		</CollisionModel> -->
 	</RobotNode>
 
 
@@ -1339,10 +1345,10 @@
 			</InertiaMatrix>
 		</Physics>
 		<Visualization>
-			<File type='inventor'>models/stand_upright_visu.stl</File>
+			<File type='inventor'>models/stand_upright_with_light_panels_visu.stl</File>
 		</Visualization>
 		<CollisionModel>
-			<File type='inventor'>models/stand_upright_col.stl</File>
+			<File type='inventor'>models/stand_upright_with_light_panels_col.stl</File>
 		</CollisionModel>
 		<Child name='stand_cantilever_joint'/>
 		<Child name='stand_left_light_panel_joint'/>

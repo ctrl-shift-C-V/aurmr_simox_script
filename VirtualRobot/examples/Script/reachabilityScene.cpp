@@ -191,7 +191,7 @@ int main(int argc, char* argv[])
     filenameReach = "/home/SMBAD/yamanobe/home/armarx/simox/build_release/ReachabilityData_ENDLESS_2015_04_17__18_03_22__2024.bin";
 #else
     std::cout << "Using ARMAR3" << std::endl;
-    std::string filenameRob("robots/ArmarIII/ArmarIII.xml");
+    std::string filenameRob("robots/aurmr/pod_whole_arm_stand/pod_whole_arm_stand.xml");
     Eigen::Vector3f axisTCP(0, 0, 1.0f);
     //filenameReach = "reachability/ArmarIII_PlatformHipRightArm.bin";
     filenameReach = "reachability/ArmarIII_TorsoRightArm.bin";
@@ -200,6 +200,7 @@ int main(int argc, char* argv[])
 
 
     VirtualRobot::RuntimeEnvironment::considerKey("robot");
+    VirtualRobot::RuntimeEnvironment::considerKey("distance");
     VirtualRobot::RuntimeEnvironment::considerKey("extendReach");
     VirtualRobot::RuntimeEnvironment::considerKey("extendReachStepsSave");
     VirtualRobot::RuntimeEnvironment::considerKey("extendReachStepsThreads");
@@ -211,7 +212,9 @@ int main(int argc, char* argv[])
     std::cout << " --- START --- " << std::endl;
 
     filenameRob = VirtualRobot::RuntimeEnvironment::checkValidFileParameter("robot", filenameRob);
-
+    std::string distance = VirtualRobot::RuntimeEnvironment::checkParameter("distance", "800");
+    float podDistance = std::stof(distance);
+    std::cout << "pod distance set to: " << podDistance<< std::endl;
     filenameReach = VirtualRobot::RuntimeEnvironment::checkValidFileParameter("reachability", filenameReach);
 
     if (VirtualRobot::RuntimeEnvironment::hasValue("visualizationTCPAxis"))
@@ -251,7 +254,7 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    reachabilityWindow rw(filenameRob, filenameReach, axisTCP);
+    reachabilityWindow rw(filenameRob, filenameReach, axisTCP, podDistance);
     rw.main();
 
     return 0;

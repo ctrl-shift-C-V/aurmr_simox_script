@@ -32,7 +32,7 @@ using namespace VirtualRobot;
 float TIMER_MS = 30.0f;
 
 
-reachabilityWindow::reachabilityWindow(std::string& sRobotFile, std::string& reachFile, Eigen::Vector3f& axisTCP)
+reachabilityWindow::reachabilityWindow(std::string& sRobotFile, std::string& reachFile, Eigen::Vector3f& axisTCP, float& distance)
     : QMainWindow(nullptr)
 {
     VR_INFO << " start " << std::endl;
@@ -51,6 +51,17 @@ reachabilityWindow::reachabilityWindow(std::string& sRobotFile, std::string& rea
     setupUI();
 
     loadRobot();
+
+    std::vector< RobotNodePtr > nodes;
+    RobotNodePtr pod = robot->getRobotNode("my_random_joint");
+    std::vector<float> jv(1, distance);
+    robot->setJointValues(nodes, jv);
+    robot->setJointValue(pod, distance);
+    pod->setJointValueNoUpdate(distance);
+
+    robot->applyJointValues();
+    robot->updatePose();
+    updateQualityInfo();
 
     if (!reachFile.empty())
     {
@@ -365,6 +376,7 @@ void reachabilityWindow::updateJointBox()
 void reachabilityWindow::jointValueChanged(int pos)
 {
     int nr = UI.comboBoxJoint->currentIndex();
+    std::cout << "joint number is:" << nr << std::endl; 
 
     if (nr < 0 || nr >= (int)allRobotNodes.size())
     {

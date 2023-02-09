@@ -1773,56 +1773,62 @@ namespace VirtualRobot
         // result->entries.resize(numVoxelsX, numVoxelsY);
 
         result->entries.resize(numVoxelsZ, numVoxelsY);
-        result->entries.setZero();
-        float zLower = 1043.85;//704.85;
-        float zUpper = 1659.8;//1320.8;
-        float yLower = -469.9;
-        float yUpper = 469.9;
-        Eigen::Matrix4f podPose1 = referencePose;
-        Eigen::Matrix4f podPose2 = referencePose;
-        podPose1(2,3) = zLower;
-        podPose2(2,3) = zLower;
-        toGlobal(podPose1);
-        toLocal(podPose2);
-        std::cout << "global pose is: " << podPose1(2,3)<<std::endl;
-        std::cout << "local pose is: " << podPose2(2,3)<<std::endl;
-
+        float xLower = referencePose(0,3);
+        // higher bound of x direction of voxel range
+        float xUpper = xLower + 153.0;
+        // hardcode each bin's range
+        std::vector<float> zBounds = {1043.85, 1158.15, 1380.4, 1507.5, 1659.8};
+        std::vector<float> yBounds = {-457.2, -228.6, 0.0, 228.6, 457.2};
+        // result of 4 * 4 bin reachability
+        Eigen::Matrix4f binReach;
+        binReach.setZero();
+        // float endEfctSize = 22.5;
+        std::cout << "cell size is: " << cellSize <<std::endl;
+        
         for (int a = 0; a < numVoxelsZ; a++)
         {
             tmpPose(2, 3) = result->minBounds[2] + (float)a * cellSize + 0.5f * cellSize;
-            if (tmpPose(2,3) < zLower || tmpPose(2,3) > zUpper) { continue; }
+            if (tmpPose(2,3)  < zLower || tmpPose(2,3)  > zUpper) { continue; }
             for (int b = 0; b < numVoxelsY; b++)
             {
                 tmpPose(1, 3) = result->minBounds[1] + (float)b * cellSize + 0.5f * cellSize;
                 if (tmpPose(1,3) < yLower || tmpPose(1,3) > yUpper) { continue; }
-                if (sumAngles)
-                {
-                    // std::cout << "this should never happen" << std::endl;
-                    localPose = tmpPose;
-                    std::cout << "ref pose z is: " << localPose(2,3) <<std::endl;
-                    std::cout << "ref pose y is: " << localPose(1,3) <<std::endl;
-                    toLocal(localPose);
-                    // if (localPose(1,3) < yLower || localPose(1,3) > yUpper || localPose(2,3) < zLower || localPose(2,3) > zUpper) { continue; }
-                    std::cout << "local pose z is: " << localPose(2,3) <<std::endl;
-                    std::cout << "local pose y is: " << localPose(1,3) <<std::endl;
-                    matrix2Vector(localPose,x);
-
-                    if (!getVoxelFromPose(x, v))
+                int yo = 0;
+                for (int c = (int)(tmpPose(0,3) / cellSize); c < numVoxelsX; c++) {
+                    // std::cout << "x position is: " << c << std::endl;
+                    tmpPose(0, 3) = result->minBounds[0] + (float)c * cellSize + 0.5*cellSize;
+                    if (tmpPose(0,3) < xLower || tmpPose(0,3) > xUpper) { continue; } 
+                    if (sumAngles)
                     {
-                        result->entries(a, b) = 0;
-                    } else{
-                        // std::cout << "a is: " << a << std::endl;
-                        // std::cout << "b is: " << b << std::endl;
-                        // std::cout << "a should be: " << numVoxelsZ-1-a << std::endl;
-                        // std::cout << "b should be: " << numVoxelsY-b-1 << std::endl;
-                        result->entries(a, b) = sumAngleReachabilities(v[0],v[1],v[2]);
+                        localPose = tmpPose;
+                        toLocal(localPose);
+                        matrix2Vector(localPose,x);
+                        if (!getVoxelFromPose(x, v))
+                        {
+                            result->entries(a, b) = 0;
+
+                        } else{
+                            result->entries(a, b) = sumAngleReachabilities(v[0],v[1],v[2]);
+                        }
+                        for(int i=0; i < 4; i++){
+                            if (tmpPose(1,3) >= yBounds[i] && tmpPose(1,3) <= yBounds[i+1]){
+                                for (int j=0; j < 4; j++) {
+                                    if (tmpPose(2,3) >= zBounds[j] && tmpPose(2,3) <= zBounds[j+1]) {
+                                        binReach(3-j, 3-i) = binReach(4-j-1, 4-i-1) + result->entries(a, b);
+                                    }
+                                }
+                            }
+                        }
+                    } else
+                    {
+                        result->entries(a, b) = getEntry(tmpPose);
                     }
-                } else
-                {
-                    result->entries(a, b) = getEntry(tmpPose);
+                    yo++;
                 }
+                std::cout << "x looping " <<yo<<std::endl;
             }
         }
+        std::cout << "bin reach is: \n" << binReach << std::endl;
         std::cout << "result for z-y is: \n" << result->entries << std::endl;
         for (int a = numVoxelsZ-1; a >=0; a--) {
             std::cout<<"[";
