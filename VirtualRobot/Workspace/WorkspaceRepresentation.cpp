@@ -1328,7 +1328,7 @@ namespace VirtualRobot
                         if(voxelPositionX < 0)
                         {
                             data->reset(a,b,c);
-                        }  
+                        }
 
                         // 45 deg to the front for the other hands workspace
                         // if(-voxelPositionY > voxelPositionX)
@@ -1338,11 +1338,11 @@ namespace VirtualRobot
                         }
 
                     }else {
-                    
+
                         if(voxelPositionX > 0)
                         {
                             data->reset(a,b,c);
-                        }   
+                        }
 
                          // 45 deg to the front for the other hands workspace
                         if(voxelPositionY < 0)
@@ -1704,17 +1704,10 @@ namespace VirtualRobot
     {
         WorkspaceCut2DPtr result(new WorkspaceCut2D());
         result->referenceGlobalPose = referencePose;
-        // std::cout << "reference pose is: \n" << referencePose << std::endl;
 
         Eigen::Vector3f minBB, maxBB;
 
         getWorkspaceExtends(minBB, maxBB);
-        // std::cout << "minbb 0 is: " << minBB(0) << std::endl;
-        // std::cout << "maxbb 0 is: " << maxBB(0) << std::endl;
-        // std::cout << "minbb 1 is: " << minBB(1) << std::endl;
-        // std::cout << "maxbb 1 is: " << maxBB(1) << std::endl;
-        // std::cout << "minbb 2 is: " << minBB(2) << std::endl;
-        // std::cout << "maxbb 2 is: " << maxBB(2) << std::endl;
         result->minBounds[0] = minBB(0);
         result->maxBounds[0] = maxBB(0);
         result->minBounds[1] = minBB(1);
@@ -1731,60 +1724,33 @@ namespace VirtualRobot
         float sizeZ = result->maxBounds[2] - result->minBounds[2];
         int numVoxelsZ = (int)(sizeZ / cellSize);
 
-
         Eigen::Matrix4f tmpPose = referencePose;
         Eigen::Matrix4f localPose;
-        // float pp[6];
-        // unsigned int kk[6];
 
-        // result->entries.resize(numVoxelsX, numVoxelsY);
-        // result->entries.setZero();
-
-        // for (int a = 0; a < numVoxelsX; a++)
-        // {
-        //     tmpPose(0, 3) = result->minBounds[0] + (float)a * cellSize + 0.5f * cellSize;
-
-        //     for (int b = 0; b < numVoxelsY; b++)
-        //     {
-        //         tmpPose(1, 3) = result->minBounds[1] + (float)b * cellSize + 0.5f * cellSize;
-        //         if (sumAngles)
-        //         {
-        //             localPose = tmpPose;
-        //             toLocal(localPose);
-        //             matrix2Vector(localPose,pp);
-
-        //             if (!getVoxelFromPose(pp, kk))
-        //             {
-        //                 result->entries(a, b) = 0;
-        //             } else
-        //                 result->entries(a, b) = sumAngleReachabilities(kk[0],kk[1],kk[2]);
-        //         } else
-        //         {
-        //             result->entries(a, b) = getEntry(tmpPose);
-        //         }
-        //     }
-        // }
-        // std::cout << "result for x-y plane is: \n" << result->entries << std::endl;
-
-        // tmpPose = referencePose;
         float x[6];
         unsigned int v[6];
 
-        // result->entries.resize(numVoxelsX, numVoxelsY);
-
         result->entries.resize(numVoxelsZ, numVoxelsY);
+
+        // determine voxel range we want to cut
+        // lower and higher bound of x direction of bins
         float xLower = referencePose(0,3);
-        // higher bound of x direction of voxel range
         float xUpper = xLower + 153.0;
-        // hardcode each bin's range
+        // hardcode each bin's bound in z and y direction
         std::vector<float> zBounds = {1043.85, 1158.15, 1380.4, 1507.5, 1659.8};
         std::vector<float> yBounds = {-457.2, -228.6, 0.0, 228.6, 457.2};
-        // result of 4 * 4 bin reachability
+        float zLower = zBounds[0];
+        float zHigher = zBounds[4];
+        float yLower = yBounds[0];
+        float yHigher = yBounds[4];
+
+        // resulting 4 by 4 bin reachability matrix
         Eigen::Matrix4f binReach;
         binReach.setZero();
-        // float endEfctSize = 22.5;
         std::cout << "cell size is: " << cellSize <<std::endl;
-        
+
+        // loop through all voxels in z, y, and x
+        // tmpPose is the center position of each voxel
         for (int a = 0; a < numVoxelsZ; a++)
         {
             tmpPose(2, 3) = result->minBounds[2] + (float)a * cellSize + 0.5f * cellSize;
@@ -1793,13 +1759,13 @@ namespace VirtualRobot
             {
                 tmpPose(1, 3) = result->minBounds[1] + (float)b * cellSize + 0.5f * cellSize;
                 if (tmpPose(1,3) < yLower || tmpPose(1,3) > yUpper) { continue; }
-                int yo = 0;
                 for (int c = (int)(tmpPose(0,3) / cellSize); c < numVoxelsX; c++) {
-                    // std::cout << "x position is: " << c << std::endl;
                     tmpPose(0, 3) = result->minBounds[0] + (float)c * cellSize + 0.5*cellSize;
-                    if (tmpPose(0,3) < xLower || tmpPose(0,3) > xUpper) { continue; } 
+                    if (tmpPose(0,3) < xLower || tmpPose(0,3) > xUpper) { continue; }
+
                     if (sumAngles)
                     {
+                        // store voxel(a,b)'s reachability in result->entries
                         localPose = tmpPose;
                         toLocal(localPose);
                         matrix2Vector(localPose,x);
@@ -1807,9 +1773,12 @@ namespace VirtualRobot
                         {
                             result->entries(a, b) = 0;
 
-                        } else{
+                        } else {
                             result->entries(a, b) = sumAngleReachabilities(v[0],v[1],v[2]);
                         }
+
+                        // loop through our 4 * 4 matrix to sum all voxels's reachability
+                        // inside a bin as the bin's reachability
                         for(int i=0; i < 4; i++){
                             if (tmpPose(1,3) >= yBounds[i] && tmpPose(1,3) <= yBounds[i+1]){
                                 for (int j=0; j < 4; j++) {
@@ -1823,11 +1792,11 @@ namespace VirtualRobot
                     {
                         result->entries(a, b) = getEntry(tmpPose);
                     }
-                    yo++;
                 }
-                std::cout << "x looping " <<yo<<std::endl;
             }
         }
+
+        // print our 4 by 4 matrix
         std::cout << "bin reach is: \n" << binReach << std::endl;
         std::cout << "result for z-y is: \n" << result->entries << std::endl;
         for (int a = numVoxelsZ-1; a >=0; a--) {
