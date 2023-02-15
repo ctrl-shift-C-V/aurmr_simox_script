@@ -937,8 +937,6 @@ namespace VirtualRobot
 
             if (!robot->getCollisionChecker()->checkCollision(staticCollisionModel, dynamicCollisionModel, stand))
             {
-                // std::cout << "successfully set to random pose" << std::endl;
-                // std::cout << "joint values are: " << v << " and no colide" << std::endl;
                 return true;
             }
             // std::cout << "joint values are: " << v << " and there is colide" << std::endl;
@@ -1739,14 +1737,16 @@ namespace VirtualRobot
         // hardcode each bin's bound in z and y direction
         std::vector<float> zBounds = {1043.85, 1158.15, 1380.4, 1507.5, 1659.8};
         std::vector<float> yBounds = {-457.2, -228.6, 0.0, 228.6, 457.2};
-        float zLower = zBounds[0];
-        float zHigher = zBounds[4];
-        float yLower = yBounds[0];
-        float yHigher = yBounds[4];
-
+        result->entries.setZero();
+        float zLower = 1043.85;//704.85;
+        float zUpper = 1659.8;//1320.8;
+        float yLower = -457.2;
+        float yUpper = 457.2;
         // resulting 4 by 4 bin reachability matrix
-        Eigen::Matrix4f binReach;
-        binReach.setZero();
+        WorkspaceCut2DPtr binReach(new WorkspaceCut2D());
+        // Eigen::Matrix4f binReach;
+        binReach->entries.resize(4,4);
+        binReach->entries.setZero();
         std::cout << "cell size is: " << cellSize <<std::endl;
 
         // loop through all voxels in z, y, and x
@@ -1777,40 +1777,30 @@ namespace VirtualRobot
                             result->entries(a, b) = sumAngleReachabilities(v[0],v[1],v[2]);
                         }
 
-                        // loop through our 4 * 4 matrix to sum all voxels's reachability
-                        // inside a bin as the bin's reachability
-                        for(int i=0; i < 4; i++){
-                            if (tmpPose(1,3) >= yBounds[i] && tmpPose(1,3) <= yBounds[i+1]){
-                                for (int j=0; j < 4; j++) {
-                                    if (tmpPose(2,3) >= zBounds[j] && tmpPose(2,3) <= zBounds[j+1]) {
-                                        binReach(3-j, 3-i) = binReach(4-j-1, 4-i-1) + result->entries(a, b);
-                                    }
-                                }
-                            }
-                        }
+                        
                     } else
                     {
                         result->entries(a, b) = getEntry(tmpPose);
+                    }
+                    // loop through our 4 * 4 matrix to sum all voxels's reachability
+                    // inside a bin as the bin's reachability
+                    for(int i=0; i < 4; i++){
+                        if (tmpPose(1,3) >= yBounds[i] && tmpPose(1,3) <= yBounds[i+1]){
+                            for (int j=0; j < 4; j++) {
+                                if (tmpPose(2,3) >= zBounds[j] && tmpPose(2,3) <= zBounds[j+1]) {
+                                    binReach->entries(3-j, 3-i) = binReach->entries(4-j-1, 4-i-1) + result->entries(a, b);
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
 
         // print our 4 by 4 matrix
-        std::cout << "bin reach is: \n" << binReach << std::endl;
-        std::cout << "result for z-y is: \n" << result->entries << std::endl;
-        for (int a = numVoxelsZ-1; a >=0; a--) {
-            std::cout<<"[";
-            for (int b = numVoxelsY-1; b >=0; b--) {
-                if (b == 0) {
-                    std::cout << result->entries(a, b);
-                } else {
-                    std::cout<<result->entries(a, b) <<", \t";
-                }
-            }
-            std::cout<<"]"<<endl;
-        }
-        return result;
+        // std::cout << "bin reach is: \n" << binReach << std::endl;
+        return result
+        // return binReach;
     }
 
   /*
@@ -1878,8 +1868,8 @@ namespace VirtualRobot
         float sizeYGlobal = maxBB(1) - minBB(1);
         float poseYGlobal = minBB(1) + heightPercent*sizeYGlobal;
 
-        std::cout << "sizex global is : \n" << sizeXGlobal << std::endl;
-        std::cout << "sizey global is : \n" << sizeYGlobal << std::endl;
+        // std::cout << "sizex global is : \n" << sizeXGlobal << std::endl;
+        // std::cout << "sizey global is : \n" << sizeYGlobal << std::endl;
 
         result->entries.resize(numVoxelsZ, numVoxelsY);
         result->entries.setZero();
@@ -1890,13 +1880,13 @@ namespace VirtualRobot
         Eigen::Matrix4f p = pod->getGlobalPose();
         std::cout << "pod pose is :" << p << std::endl;
         std::cout << "baseNode is :" << baseNode->getName() << std::endl;
-        std::cout << "baseNode local pose is :\n" << getToLocalTransformation() << std::endl;
+        // std::cout << "baseNode local pose is :\n" << getToLocalTransformation() << std::endl;
         std::cout << "refPose is : \n" << refPose << std::endl;
         // refPose_2(2,3) = poseZGlobal;
         // WorkspaceRepresentation::WorkspaceCut2DPtr x_y_result = createCut(refPose_2, cellSize, sumAngles);
         refPose(0,3) = p(0,3);
-        std::cout << "posZGlobal is : " << poseZGlobal << std::endl;
-        std::cout << "refPose 2 and 3 now should equal to posZGlobal and is : \n" << refPose << std::endl;
+        // std::cout << "posZGlobal is : " << poseZGlobal << std::endl;
+        // std::cout << "refPose 2 and 3 now should equal to posZGlobal and is : \n" << refPose << std::endl;
         return createCut(refPose, cellSize, sumAngles);
     }
 
@@ -2029,6 +2019,12 @@ namespace VirtualRobot
     {
         THROW_VR_EXCEPTION_IF(!data || !nodeSet || !tcpNode, "No reachability data loaded");
         Eigen::Matrix4f p = tcpNode->getGlobalPose();
+        std::cout << "current pose is: \n" << p << std::endl;
+        const auto& jointValues = nodeSet->getJointValues();
+        std::cout << "joint values are: \n[ ";
+        for (const auto& value : jointValues)
+            std::cout << value << ' ';
+        std::cout << "]\n";
         addPose(p);
     }
 
@@ -2321,14 +2317,21 @@ namespace VirtualRobot
         nodeSet->getJointValues(c);
         bool visuSate = robot->getUpdateVisualizationStatus();
         robot->setUpdateVisualization(false);
-        // std::cout << "+++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
-        // std::cout << "number of poses: " << loops << std::endl;
-        // std::cout << "self collisions is set to " << checkForSelfCollisions << std::endl;
+
+        // Matrix4f res;
         for (unsigned int i = 0; i < loops; i++)
         {
             // std::cout << "node set is: " << nodeSet->getName() << std::endl;
             if (setRobotNodesToRandomConfig(nodeSet, checkForSelfCollisions))
             {
+                //TODO: calculate weight of each pose and add to matrix
+                // x_normal_vector = [1, 0, 0];
+                // weight = currentPose[0,3] dot x_normal_vector 
+                
+                
+                // if weight > 0 {
+                //     res[0][0] += weight;
+                // }
                 addCurrentTCPPose();
             }
             else
