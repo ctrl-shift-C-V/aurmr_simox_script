@@ -2019,12 +2019,12 @@ namespace VirtualRobot
     {
         THROW_VR_EXCEPTION_IF(!data || !nodeSet || !tcpNode, "No reachability data loaded");
         Eigen::Matrix4f p = tcpNode->getGlobalPose();
-        std::cout << "current pose is: \n" << p << std::endl;
-        const auto& jointValues = nodeSet->getJointValues();
-        std::cout << "joint values are: \n[ ";
-        for (const auto& value : jointValues)
-            std::cout << value << ' ';
-        std::cout << "]\n";
+        // std::cout << "current pose is: \n" << p << std::endl;
+        // const auto& jointValues = nodeSet->getJointValues();
+        // std::cout << "joint values are: \n[ ";
+        // for (const auto& value : jointValues)
+        //     std::cout << value << ' ';
+        // std::cout << "]\n";
         addPose(p);
     }
 
@@ -2320,12 +2320,14 @@ namespace VirtualRobot
 
         // resulting bin reachability and a normal vector pointing to pod
         Eigen::Matrix4f bin_reach;
-        Eigen::Vector3f norm_vec(1.0, 0.0, 0.0);
+        Eigen::Vector3f norm_vec(1.0f, 0.0f, 0.0f);
         // hardcode each bin's bound in x, y, z directions
-        // how to know xBounds???
-        std::vector<float> xBounds = {referencePose(0,3), referencePose(0,3) + 153.0};
-        std::vector<float> yBounds = {-457.2, -228.6, 0.0, 228.6, 457.2};
-        std::vector<float> zBounds = {1043.85, 1158.15, 1380.4, 1507.5, 1659.8};
+        // xBounds are based on the pose of the pod which depends on the user input
+        RobotNodePtr pod = this->robot->getRobotNode("my_random_joint");
+        Eigen::Matrix4f pod_pose = pod->getGlobalPose();
+        std::vector<float> xBounds = {pod_pose(0,3), pod_pose(0,3) + 153.0f};
+        std::vector<float> yBounds = {-457.2f, -228.6f, 0.0f, 228.6f, 457.2f};
+        std::vector<float> zBounds = {1043.85f, 1158.15f, 1380.4f, 1507.5f, 1659.8f};
 
         for (unsigned int i = 0; i < loops; i++)
         {
@@ -2336,8 +2338,10 @@ namespace VirtualRobot
                 // I tried both Eigen:all and Eigen::placeholders::all
                 // to represent all entries in a column (like : in python)
                 // but none of them works
-                float weight = norm_vec * cur_pose(Eigen::all, 2);
-                if (weight > 0 && cur_pose(0, 3) > xBounds[0] && cur_pose(0, 3) < xBounds[1])
+                Eigen::Matrix3f orientation_matrix = cur_pose.block<3,3>(0,0);
+                Eigen::Vector3f orientation_matrix_column_3 = cur_pose.block<3,1>(0,2);
+                float weight = norm_vec.dot(orientation_matrix_column_3);
+                if (weight >= 0 && cur_pose(0, 3) > xBounds[0] && cur_pose(0, 3) < xBounds[1])
                 {
                     // loop through y and z bounds
                     // if cur_pose falls inside, add weight to that bin
