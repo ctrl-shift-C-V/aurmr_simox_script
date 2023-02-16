@@ -2320,6 +2320,7 @@ namespace VirtualRobot
 
         // resulting bin reachability and a normal vector pointing to pod
         Eigen::Matrix4f bin_reach;
+        bin_reach.setZero();
         Eigen::Vector3f norm_vec(1.0f, 0.0f, 0.0f);
         // hardcode each bin's bound in x, y, z directions
         // xBounds are based on the pose of the pod which depends on the user input
@@ -2349,7 +2350,7 @@ namespace VirtualRobot
                         if (cur_pose(1, 3) >= yBounds[i] && cur_pose(1, 3) <= yBounds[i+1]){
                             for (int j = 0; j < 4; j++) {
                                 if (cur_pose(2, 3) >= zBounds[j] && cur_pose(2, 3) <= zBounds[j+1]) {
-                                    bin_reach(i, j) += weight;
+                                    bin_reach(3-j, 3-i) += weight;
                                     break;
                                 }
                             }
@@ -2364,6 +2365,7 @@ namespace VirtualRobot
                 VR_WARNING << "Could not find collision-free configuration...";
             }
         }
+        std::cout << "bin reach is : \n" << bin_reach << std::endl;
 
         robot->setUpdateVisualization(visuSate);
         // nodeSet->setJointValues(c);
