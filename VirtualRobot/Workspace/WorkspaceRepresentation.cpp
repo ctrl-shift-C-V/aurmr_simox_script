@@ -1777,7 +1777,7 @@ namespace VirtualRobot
                             result->entries(a, b) = sumAngleReachabilities(v[0],v[1],v[2]);
                         }
 
-                        
+
                     } else
                     {
                         result->entries(a, b) = getEntry(tmpPose);
@@ -1799,7 +1799,7 @@ namespace VirtualRobot
 
         // print our 4 by 4 matrix
         // std::cout << "bin reach is: \n" << binReach << std::endl;
-        return result
+        return result;
         // return binReach;
     }
 
@@ -2318,20 +2318,41 @@ namespace VirtualRobot
         bool visuSate = robot->getUpdateVisualizationStatus();
         robot->setUpdateVisualization(false);
 
-        // Matrix4f res;
+        // resulting bin reachability and a normal vector pointing to pod
+        Eigen::Matrix4f bin_reach;
+        Eigen::Vector3f norm_vec(1.0, 0.0, 0.0);
+        // hardcode each bin's bound in x, y, z directions
+        // how to know xBounds???
+        std::vector<float> xBounds = {referencePose(0,3), referencePose(0,3) + 153.0};
+        std::vector<float> yBounds = {-457.2, -228.6, 0.0, 228.6, 457.2};
+        std::vector<float> zBounds = {1043.85, 1158.15, 1380.4, 1507.5, 1659.8};
+
         for (unsigned int i = 0; i < loops; i++)
         {
-            // std::cout << "node set is: " << nodeSet->getName() << std::endl;
             if (setRobotNodesToRandomConfig(nodeSet, checkForSelfCollisions))
             {
-                //TODO: calculate weight of each pose and add to matrix
-                // x_normal_vector = [1, 0, 0];
-                // weight = currentPose[0,3] dot x_normal_vector 
-                
-                
-                // if weight > 0 {
-                //     res[0][0] += weight;
-                // }
+                // compute weight of each pose and add to bin_reach
+                Eigen::Matrix4f cur_pose = tcpNode->getGlobalPose();
+                // I tried both Eigen:all and Eigen::placeholders::all
+                // to represent all entries in a column (like : in python)
+                // but none of them works
+                float weight = norm_vec * cur_pose(Eigen::all, 2);
+                if (weight > 0 && cur_pose(0, 3) > xBounds[0] && cur_pose(0, 3) < xBounds[1])
+                {
+                    // loop through y and z bounds
+                    // if cur_pose falls inside, add weight to that bin
+                    for (int i = 0; i < 4; i++) {
+                        if (cur_pose(1, 3) >= yBounds[i] && cur_pose(1, 3) <= yBounds[i+1]){
+                            for (int j = 0; j < 4; j++) {
+                                if (cur_pose(2, 3) >= zBounds[j] && cur_pose(2, 3) <= zBounds[j+1]) {
+                                    bin_reach(i, j) += weight;
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
                 addCurrentTCPPose();
             }
             else
