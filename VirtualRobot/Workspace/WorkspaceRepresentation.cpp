@@ -2341,8 +2341,8 @@ namespace VirtualRobot
                 // but none of them works
                 Eigen::Matrix3f orientation_matrix = cur_pose.block<3,3>(0,0);
                 Eigen::Vector3f orientation_matrix_column_3 = cur_pose.block<3,1>(0,2);
-                float weight = norm_vec.dot(orientation_matrix_column_3);
-                if (weight >= 0 && cur_pose(0, 3) > xBounds[0] && cur_pose(0, 3) < xBounds[1])
+                float cos_theta = norm_vec.dot(orientation_matrix_column_3);
+                if (cos_theta >= 0 && cur_pose(0, 3) > xBounds[0] && cur_pose(0, 3) < xBounds[1])
                 {
                     // loop through y and z bounds
                     // if cur_pose falls inside, add weight to that bin
@@ -2350,7 +2350,9 @@ namespace VirtualRobot
                         if (cur_pose(1, 3) >= yBounds[i] && cur_pose(1, 3) <= yBounds[i+1]){
                             for (int j = 0; j < 4; j++) {
                                 if (cur_pose(2, 3) >= zBounds[j] && cur_pose(2, 3) <= zBounds[j+1]) {
+                                    float weight = 1-((acos(cos_theta) * 180 / 3.141592) / 90);
                                     bin_reach(3-j, 3-i) += weight;
+                                    // bin_reach(3-j, 3-i) += cos_theta;
                                     break;
                                 }
                             }
