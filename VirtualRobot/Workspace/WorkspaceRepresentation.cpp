@@ -2336,10 +2336,7 @@ namespace VirtualRobot
             {
                 // compute weight of each pose and add to bin_reach
                 Eigen::Matrix4f cur_pose = tcpNode->getGlobalPose();
-                // I tried both Eigen:all and Eigen::placeholders::all
-                // to represent all entries in a column (like : in python)
-                // but none of them works
-                Eigen::Matrix3f orientation_matrix = cur_pose.block<3,3>(0,0);
+                // Eigen::Matrix3f orientation_matrix = cur_pose.block<3,3>(0,0);
                 Eigen::Vector3f orientation_matrix_column_3 = cur_pose.block<3,1>(0,2);
                 float cos_theta = norm_vec.dot(orientation_matrix_column_3);
                 if (cos_theta >= 0 && cur_pose(0, 3) > xBounds[0] && cur_pose(0, 3) < xBounds[1])
