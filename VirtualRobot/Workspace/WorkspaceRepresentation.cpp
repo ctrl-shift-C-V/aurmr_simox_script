@@ -1876,7 +1876,7 @@ namespace VirtualRobot
 
         Eigen::Matrix4f refPose = getToGlobalTransformation();
         Eigen::Matrix4f refPose_2 = getToGlobalTransformation();
-        RobotNodePtr pod = this->robot->getRobotNode("my_random_joint");
+        RobotNodePtr pod = this->robot->getRobotNode("my_random_joint_x");
         Eigen::Matrix4f p = pod->getGlobalPose();
         std::cout << "pod pose is :" << p << std::endl;
         std::cout << "baseNode is :" << baseNode->getName() << std::endl;
@@ -2324,7 +2324,7 @@ namespace VirtualRobot
         Eigen::Vector3f norm_vec(1.0f, 0.0f, 0.0f);
         // hardcode each bin's bound in x, y, z directions
         // xBounds are based on the pose of the pod which depends on the user input
-        RobotNodePtr pod = this->robot->getRobotNode("my_random_joint");
+        RobotNodePtr pod = this->robot->getRobotNode("my_random_joint_x");
         Eigen::Matrix4f pod_pose = pod->getGlobalPose();
         std::vector<float> xBounds = {pod_pose(0,3), pod_pose(0,3) + 153.0f};
         std::vector<float> yBounds = {-457.2f, -228.6f, 0.0f, 228.6f, 457.2f};
@@ -2364,7 +2364,7 @@ namespace VirtualRobot
                 VR_WARNING << "Could not find collision-free configuration...";
             }
         }
-        std::cout << "bin reach is : \n" << bin_reach << std::endl;
+        // std::cout << "bin reach is : \n" << bin_reach << std::endl;
 
         robot->setUpdateVisualization(visuSate);
         // nodeSet->setJointValues(c);

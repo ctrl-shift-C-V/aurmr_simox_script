@@ -463,7 +463,7 @@
 	<RobotNode name='base_link'>
 		<Child name='base_joint'/>
 		<Child name='kinect_base_joint'/>
-		<Child name='my_random_joint'/>
+		<Child name='my_random_joint_y'/>
 	</RobotNode>
 
 
@@ -913,8 +913,7 @@
 		<Child name='left_light_panel_emitter'/>
 	</RobotNode>
 
-
-	<RobotNode name='my_random_joint'>
+	<RobotNode name='my_random_joint_y'>
 		<Transform>
 			<Matrix4x4 units='mm'>
 				<row1 c1='0.000796258' c2='1' c3='0' c4='0' />
@@ -923,6 +922,17 @@
 				<row4 c1='0' c2='0' c3='0' c4='1' />
 			</Matrix4x4>
 		</Transform>
+		<Joint type='prismatic'>
+			<translationdirection x='1' y='0' z='0'/>
+			<limits lo='-3141.59' hi='3141.59' units='mm'/>
+			<MaxAcceleration value='-1'/>
+			<MaxVelocity value='-1'/>
+			<MaxTorque value='-1'/>
+		</Joint>
+		<Child name='my_random_joint_x'/>
+	</RobotNode>
+
+	<RobotNode name='my_random_joint_x'>
 		<Joint type='prismatic'>
 			<translationdirection x='0' y='1' z='0'/>
 			<limits lo='-3141.59' hi='3141.59' units='mm'/>
