@@ -73,6 +73,12 @@ namespace VirtualRobot
             {
                 return Color(0.0f, 0.0f, 0.0f, 1.0f);
             }
+            static Color CustomColor(float weight)
+            {
+                float blue = 1.0f - weight;
+                float red = weight;
+                return Color(red, 0.0f, blue, 0.0f);
+            }
         };
 
         struct PhongMaterial

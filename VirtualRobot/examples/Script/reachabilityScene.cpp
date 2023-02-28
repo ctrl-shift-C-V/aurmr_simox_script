@@ -200,7 +200,8 @@ int main(int argc, char* argv[])
 
 
     VirtualRobot::RuntimeEnvironment::considerKey("robot");
-    VirtualRobot::RuntimeEnvironment::considerKey("distance");
+    VirtualRobot::RuntimeEnvironment::considerKey("distance_x");
+    VirtualRobot::RuntimeEnvironment::considerKey("distance_y");
     VirtualRobot::RuntimeEnvironment::considerKey("extendReach");
     VirtualRobot::RuntimeEnvironment::considerKey("extendReachStepsSave");
     VirtualRobot::RuntimeEnvironment::considerKey("extendReachStepsThreads");
@@ -212,9 +213,11 @@ int main(int argc, char* argv[])
     std::cout << " --- START --- " << std::endl;
 
     filenameRob = VirtualRobot::RuntimeEnvironment::checkValidFileParameter("robot", filenameRob);
-    std::string distance = VirtualRobot::RuntimeEnvironment::checkParameter("distance", "800");
-    float podDistance = std::stof(distance);
-    std::cout << "pod distance set to: " << podDistance<< std::endl;
+    std::string distance_x = VirtualRobot::RuntimeEnvironment::checkParameter("distance_x", "820");
+    std::string distance_y = VirtualRobot::RuntimeEnvironment::checkParameter("distance_y", "-469.9");
+    float podDistance_x = std::stof(distance_x);
+    float podDistance_y = std::stof(distance_y);
+    std::cout << "pod set to: " << podDistance_x << ", " << podDistance_y << std::endl;
     filenameReach = VirtualRobot::RuntimeEnvironment::checkValidFileParameter("reachability", filenameReach);
 
     if (VirtualRobot::RuntimeEnvironment::hasValue("visualizationTCPAxis"))
@@ -254,7 +257,7 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    reachabilityWindow rw(filenameRob, filenameReach, axisTCP, podDistance);
+    reachabilityWindow rw(filenameRob, filenameReach, axisTCP, podDistance_x, podDistance_y);
     rw.main();
 
     return 0;

@@ -30,7 +30,7 @@ class reachabilityWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    reachabilityWindow(std::string& sRobotFile, std::string& reachFile, Eigen::Vector3f& axisTCP, float& distance);
+    reachabilityWindow(std::string& sRobotFile, std::string& reachFile, Eigen::Vector3f& axisTCP, float& distance_x, float& distance_y);
     ~reachabilityWindow() override;
 
     /*!< Executes the SoQt mainLoop. You need to call this in order to execute the application. */
@@ -58,6 +58,8 @@ public slots:
     void selectJoint(int nr);
     void jointValueChanged(int pos);
     void extendReach();
+
+    void weightVisu();
 
     //void showRobot();
     /*

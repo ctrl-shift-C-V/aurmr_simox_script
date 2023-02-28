@@ -1,6 +1,8 @@
 
 #include "reachabilityWindow.h"
+#include "../../Visualization/ColorMap.h"
 #include "VirtualRobot/EndEffector/EndEffector.h"
+#include "VirtualRobot/CollisionDetection/CollisionChecker.h"
 #include "VirtualRobot/VirtualRobot.h"
 #include "VirtualRobot/Workspace/Reachability.h"
 #include "VirtualRobot/Workspace/Manipulability.h"
@@ -32,7 +34,7 @@ using namespace VirtualRobot;
 float TIMER_MS = 30.0f;
 
 
-reachabilityWindow::reachabilityWindow(std::string& sRobotFile, std::string& reachFile, Eigen::Vector3f& axisTCP, float& distance)
+reachabilityWindow::reachabilityWindow(std::string& sRobotFile, std::string& reachFile, Eigen::Vector3f& axisTCP, float& distance_x, float& distance_y)
     : QMainWindow(nullptr)
 {
     VR_INFO << " start " << std::endl;
@@ -53,15 +55,12 @@ reachabilityWindow::reachabilityWindow(std::string& sRobotFile, std::string& rea
     loadRobot();
 
     std::vector< RobotNodePtr > nodes;
-    RobotNodePtr pod = robot->getRobotNode("my_random_joint");
-    std::vector<float> jv(1, distance);
-    robot->setJointValues(nodes, jv);
-    robot->setJointValue(pod, distance);
-    pod->setJointValueNoUpdate(distance);
-
-    robot->applyJointValues();
-    robot->updatePose();
-    updateQualityInfo();
+    RobotNodePtr pod_x = robot->getRobotNode("my_random_joint_x");
+    RobotNodePtr pod_y = robot->getRobotNode("my_random_joint_y");
+    robot->setJointValue(pod_x, distance_x);
+    robot->setJointValue(pod_y, -1.0*distance_y);
+    Eigen::Matrix4f p = pod_x->getGlobalPose();
+    std::cout << "pod_x pose: \n"<< p << std::endl;
 
     if (!reachFile.empty())
     {
@@ -70,7 +69,15 @@ reachabilityWindow::reachabilityWindow(std::string& sRobotFile, std::string& rea
             loadReachFile(reachFile);
         }
     }
+    // createReach();
+    std::cout << "Calculating bin reachability..." << std::endl;
+    // extendReach();
+    // for (int i=0; i < 10; i++) {
+    //     extendReach();
+    // }
+    // WorkspaceRepresentation::WorkspaceCut2DPtr binReach = reachSpace->createCut(0.8,reachSpace->getDiscretizeParameterTranslation(), true);
 
+    // std::cout << "bin reach is: \n" << binReach->entries<<std::endl;
     m_pExViewer->viewAll();
 }
 
@@ -269,6 +276,53 @@ void reachabilityWindow::reachVisu()
     {
         reachabilityVisuSep->addChild(visualisationNode);
     }
+
+    weightVisu();
+}
+
+void reachabilityWindow::weightVisu()
+{
+    SoSeparator* visualisationNode = new SoSeparator;
+    Eigen::Matrix3f xr, yr, zr;
+    Eigen::Vector3f norm_vec(1.0f, 0.0f, 0.0f);
+    float granularity = 8.0f;
+    float step = M_PI / granularity;
+    float theta;
+    RobotNodePtr tcpNode = currentRobotNodeSet->getTCP();
+    Eigen::Matrix4f p = tcpNode->getGlobalPose();
+    Eigen::Vector3f arrow_start = p.block<3,1>(0,3);
+    for (int i = 0; i <= granularity; ++i) {
+        theta = i * step;
+        xr << 1, 0, 0,
+            0, cos(theta), -sin(theta),
+            0, sin(theta), cos(theta);
+        for (int j = 0; j <= granularity; ++j) {
+            theta = j * step;
+            yr << cos(theta), 0, sin(theta),
+                    0, 1, 0,
+                    -sin(theta), 0, cos(theta);
+            for (int k = 0; k <= granularity; ++k) {
+                theta = k * step;
+                zr << cos(theta), -sin(theta), 0,
+                    sin(theta), cos(theta), 0,
+                    0, 0, 1;
+                // compose rotation matrices around each axis
+                Eigen::Matrix3f rotation = xr * yr * zr;
+                // [x,y,z]=R*[1,0,0]=R's first column
+                Eigen::Vector3f rot_vec = rotation.block<3,1>(0,1);
+                float projection = rot_vec.dot(norm_vec);
+                if (projection >= 0) {
+                    float weight = 1-((acos(projection) * 180 / 3.141592) / 90);
+                    visualisationNode->addChild(CoinVisualizationFactory::CreateArrow(arrow_start, rot_vec, 500.0f, 5.0f, VirtualRobot::VisualizationFactory::Color::CustomColor(weight)));
+                }
+
+            }
+        }
+    }
+    if (visualisationNode)
+    {
+        reachabilityVisuSep->addChild(visualisationNode);
+    }
 }
 
 void reachabilityWindow::closeEvent(QCloseEvent* event)
@@ -376,7 +430,6 @@ void reachabilityWindow::updateJointBox()
 void reachabilityWindow::jointValueChanged(int pos)
 {
     int nr = UI.comboBoxJoint->currentIndex();
-    std::cout << "joint number is:" << nr << std::endl; 
 
     if (nr < 0 || nr >= (int)allRobotNodes.size())
     {
@@ -402,7 +455,7 @@ void reachabilityWindow::selectJoint(int nr)
     }
 
     currentRobotNode = allRobotNodes[nr];
-    currentRobotNode->print();
+    // currentRobotNode->print();
     float mi = currentRobotNode->getJointLimitLo();
     float ma = currentRobotNode->getJointLimitHi();
     QString qMin = QString::number(mi);
@@ -515,19 +568,21 @@ void reachabilityWindow::extendReach()
     }
 
     int steps = UI.spinBoxExtend->value();
+    // int steps = 100;
 
     //reachSpace->addRandomTCPPoses(steps, 1, true);
     // reachSpace->addRandomTCPPoses(steps, QThread::idealThreadCount() < 1 ? 1 : QThread::idealThreadCount(), true);
     reachSpace->addRandomTCPPoses(steps, true);
 
-    reachSpace->print();
-    UI.checkBoxReachabilityVisu->setChecked(false);
+    // reachSpace->print();
+    UI.checkBoxReachabilityVisu->setChecked(true);
     UI.sliderCutReach->setEnabled(false);
     UI.sliderCutReachHorizontal->setEnabled(false);
     UI.sliderCutMinAngle->setEnabled(false);
     UI.sliderCutMaxAngle->setEnabled(false);
-    UI.checkBoxReachabilityCut->setEnabled(false);
-    reachabilityVisuSep->removeAllChildren();
+    UI.checkBoxReachabilityCut->setEnabled(true);
+    UI.checkBoxReachabilityCut->setChecked(true);
+    // reachabilityVisuSep->removeAllChildren();
 }
 
 void reachabilityWindow::createReach()
@@ -593,18 +648,24 @@ void reachabilityWindow::createReach()
         SceneObjectSetPtr staticModel;
         SceneObjectSetPtr dynamicModel;
 
+        UICreate.checkBoxColDetecion->setChecked(true);
+
         if (UICreate.checkBoxColDetecion->isChecked())
         {
-            std::string staticM = std::string(UICreate.comboBoxColModelStatic->currentText().toLatin1());
-            std::string dynM = std::string(UICreate.comboBoxColModelDynamic->currentText().toLatin1());
+            // std::string staticM = std::string(UICreate.comboBoxColModelStatic->currentText().toLatin1());
+            // std::string dynM = std::string(UICreate.comboBoxColModelDynamic->currentText().toLatin1());
+            std::string staticM = "ThePod";
+            std::string dynM = "Arm";
             staticModel = robot->getRobotNodeSet(staticM);
             dynamicModel = robot->getRobotNodeSet(dynM);
         }
 
-        float discrTr = UICreate.doubleSpinBoxDiscrTrans->value();
+        // float discrTr = UICreate.doubleSpinBoxDiscrTrans->value();
+        float discrTr = 100.0;
         float discrRo = UICreate.doubleSpinBoxDiscrRot->value();
 
-        std::string measure = std::string(UICreate.comboBoxQualityMeasure->currentText().toLatin1());
+        // std::string measure = std::string(UICreate.comboBoxQualityMeasure->currentText().toLatin1());
+        std::string measure = "Reachability";
 
         if(measure == "NaturalPosture")
         {
@@ -635,10 +696,15 @@ void reachabilityWindow::createReach()
             }
         }
 
-        reachSpace->print();
+        // reachSpace->print();
 
-        reachSpace->addCurrentTCPPose();
-        reachSpace->print();
+        // reachSpace->addCurrentTCPPose();
+        SceneObjectSetPtr staticCollisionModel = robot->getRobotNodeSet("ThePod");
+        SceneObjectSetPtr dynamicCollisionModel = robot->getRobotNodeSet("Arm");
+        SceneObjectSetPtr stand = robot->getRobotNodeSet("TheStand");
+        bool collision = robot->getCollisionChecker()->checkCollision(staticCollisionModel, dynamicCollisionModel, stand);
+        // reachSpace->print();
+        std::cout << "is colliding : " << collision << std::endl;
     }
 }
 

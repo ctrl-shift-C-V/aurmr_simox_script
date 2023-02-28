@@ -1885,6 +1885,7 @@ namespace VirtualRobot
         // refPose_2(2,3) = poseZGlobal;
         // WorkspaceRepresentation::WorkspaceCut2DPtr x_y_result = createCut(refPose_2, cellSize, sumAngles);
         refPose(0,3) = p(0,3);
+        refPose(1,3) = p(1,3);
         // std::cout << "posZGlobal is : " << poseZGlobal << std::endl;
         // std::cout << "refPose 2 and 3 now should equal to posZGlobal and is : \n" << refPose << std::endl;
         return createCut(refPose, cellSize, sumAngles);
